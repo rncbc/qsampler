@@ -442,7 +442,7 @@
                                     <string> msec</string>
                                 </property>
                                 <property name="maxValue">
-                                    <number>5000</number>
+                                    <number>60000</number>
                                 </property>
                                 <property name="minValue">
                                     <number>100</number>
