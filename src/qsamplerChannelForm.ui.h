@@ -50,7 +50,7 @@ void qsamplerChannelForm::destroy (void)
 
 
 // Channel dialog setup formal initializer.
-void qsamplerChannelForm::setup ( qsamplerChannel *pChannel, bool bNew )
+void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 {
     m_pChannel = pChannel;
 
@@ -60,7 +60,9 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel, bool bNew )
     if (m_pChannel == NULL)
         return;
 
-    setCaption(tr("Channel %1").arg(m_pChannel->channelID()));
+    // It can be a brand new channel, remember?
+    bool bNew = (m_pChannel->channelID() < 0);
+    setCaption(m_pChannel->channelName());
 
     // Check if we're up and connected.
     if (m_pChannel->client() == NULL)
@@ -123,7 +125,7 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel, bool bNew )
     InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
     // MIDI input driver...
     QString sMidiDriver = pChannel->midiDriver();
-    if (sMidiDriver.isEmpty() && bNew)
+    if (sMidiDriver.isEmpty() || bNew)
         sMidiDriver = pOptions->sMidiDriver;
     if (!sMidiDriver.isEmpty()) {
         if (MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
@@ -134,12 +136,13 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel, bool bNew )
     MidiPortSpinBox->setValue(pChannel->midiPort());
     // MIDI input channel...
     int iMidiChannel = pChannel->midiChannel();
-    if (bNew)
-        iMidiChannel = (pChannel->channelID() % 16);
+    // When new, try to suggest a sensible MIDI channel...
+    if (iMidiChannel < 0)
+        iMidiChannel = (::lscp_get_channels(m_pChannel->client()) % 16);
     MidiChannelComboBox->setCurrentItem(iMidiChannel);
     // Audio output driver...
     QString sAudioDriver = pChannel->audioDriver();
-    if (sAudioDriver.isEmpty() && bNew)
+    if (sAudioDriver.isEmpty() || bNew)
         sAudioDriver = pOptions->sAudioDriver;
     if (!sAudioDriver.isEmpty()) {
         if (AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
@@ -165,6 +168,9 @@ void qsamplerChannelForm::accept (void)
     // We'll go for it!
     if (m_iDirtyCount > 0) {
         int iErrors = 0;
+        // Are we a new channel?
+        if (!m_pChannel->addChannel())
+            iErrors++;
         // Audio output driver type...
         if (!m_pChannel->setAudioDriver(AudioDriverComboBox->currentText()))
             iErrors++;

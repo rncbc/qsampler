@@ -3,7 +3,11 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.4   2004-10-11  Work in progress...
+0.0.4   2004-11-16  Work in progress...
+
+* Sampler channels strips are just created if, and only if,
+  the respective channel setup dialog is actually accepted,
+  following common user-interface guidelines.
 
 * Almost complete rewrite of sampler channel strips internal
   control structures.
@@ -12,7 +16,7 @@ ChangeLog
 
 * MIDI channel selection is now a dropdown list, allowing
   the explicit selection for "All" channels input per sampler
-  channel (omni).
+  channel (omni mode).
 
 * Channel strip display glass effect has changed background
   color to black (was green), being now an user option.

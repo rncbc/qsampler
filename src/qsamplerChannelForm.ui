@@ -640,7 +640,7 @@
 <functions>
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
-    <function specifier="non virtual">setup( qsamplerChannel *pChannel, bool bNew )</function>
+    <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="8" margin="8"/>

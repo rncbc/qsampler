@@ -423,7 +423,7 @@
 </signals>
 <slots>
     <slot specifier="non virtual">volumeChanged(int)</slot>
-    <slot specifier="non virtual">channelSetup()</slot>
+    <slot specifier="non virtual" returnType="bool">channelSetup()</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
@@ -439,7 +439,6 @@
     <function specifier="non virtual">updateChannelUsage( void )</function>
     <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
     <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
-    <function specifier="non virtual">showChannelSetup( bool bNew )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>

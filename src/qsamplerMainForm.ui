@@ -789,7 +789,7 @@
     <function access="private" specifier="non virtual">updateMessagesFont( void )</function>
     <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
     <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
-    <function specifier="non virtual">createChannel( int iChannelID, bool bPrompt )</function>
+    <function specifier="non virtual" returnType="qsamplerChannelStrip *">createChannelStrip( int iChannelID )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannelStrip( void )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelStripAt( int iChannel )</function>
     <function access="private" specifier="non virtual">startSchedule( int iStartDelay )</function>

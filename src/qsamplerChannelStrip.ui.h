@@ -71,7 +71,7 @@ void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
     // Create a new one...
     m_pChannel = new qsamplerChannel(pMainForm);
     // And set appropriate settings.
-    if (m_pChannel) {
+    if (m_pChannel && iChannelID >= 0) {
         m_pChannel->setChannelID(iChannelID);
         m_iDirtyChange = 0;
     }
@@ -132,24 +132,23 @@ void qsamplerChannelStrip::setDisplayBackground ( const QPixmap& pm )
 
 
 // Channel setup dialog slot.
-void qsamplerChannelStrip::channelSetup (void)
+bool qsamplerChannelStrip::channelSetup (void)
 {
-    showChannelSetup(false);
-}
+    bool bResult = false;
 
-
-// Channel setup dialog.
-void qsamplerChannelStrip::showChannelSetup ( bool bNew )
-{
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
-        pChannelForm->setup(m_pChannel, bNew);
-        if (pChannelForm->exec()) {
-            updateChannelInfo();
-            emit channelChanged(this);
-        }
+        pChannelForm->setup(m_pChannel);
+        bResult = pChannelForm->exec();
         delete pChannelForm;
     }
+
+    if (bResult) {
+        updateChannelInfo();
+        emit channelChanged(this);
+    }
+
+    return bResult;
 }
 
 
@@ -160,7 +159,7 @@ void qsamplerChannelStrip::updateChannelInfo (void)
         return;
         
     // Update strip caption.
-    QString sText = tr("Channel %1").arg(m_pChannel->channelID());
+    QString sText = m_pChannel->channelName();
     setCaption(sText);
     ChannelSetupPushButton->setText(sText);
 
