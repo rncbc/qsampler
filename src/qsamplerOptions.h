@@ -66,6 +66,7 @@ public:
     bool    bMenubar;
     bool    bToolbar;
     bool    bStatusbar;
+    bool    bAutoArrange;
 
     // Widget geometry persistence helper prototypes.
     void saveWidgetGeometry(QWidget *pWidget);

@@ -55,15 +55,16 @@ qsamplerOptions::qsamplerOptions (void)
     sMessagesFont  = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit = m_settings.readBoolEntry("/MessagesLimit", true);
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
-    bQueryClose    = m_settings.readBoolEntry("/QueryClose",    true);
+    bQueryClose    = m_settings.readBoolEntry("/QueryClose", true);
     bStdoutCapture = m_settings.readBoolEntry("/StdoutCapture", true);
     m_settings.endGroup();
 
     // And go into view options group.
     m_settings.beginGroup("/View");
-    bMenubar       = m_settings.readBoolEntry("/Menubar",   true);
-    bToolbar       = m_settings.readBoolEntry("/Toolbar",   true);
+    bMenubar       = m_settings.readBoolEntry("/Menubar", true);
+    bToolbar       = m_settings.readBoolEntry("/Toolbar", true);
     bStatusbar     = m_settings.readBoolEntry("/Statusbar", true);
+    bAutoArrange   = m_settings.readBoolEntry("/AutoArrange", true);
     m_settings.endGroup();
 
     m_settings.endGroup();
@@ -91,18 +92,19 @@ qsamplerOptions::~qsamplerOptions (void)
 
     // Save display options.
     m_settings.beginGroup("/Display");
-    m_settings.writeEntry("/MessagesFont",  sMessagesFont);
+    m_settings.writeEntry("/MessagesFont", sMessagesFont);
     m_settings.writeEntry("/MessagesLimit", bMessagesLimit);
     m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);
-    m_settings.writeEntry("/QueryClose",    bQueryClose);
+    m_settings.writeEntry("/QueryClose", bQueryClose);
     m_settings.writeEntry("/StdoutCapture", bStdoutCapture);
     m_settings.endGroup();
 
     // View options group.
     m_settings.beginGroup("/View");
-    m_settings.writeEntry("/Menubar",   bMenubar);
-    m_settings.writeEntry("/Toolbar",   bToolbar);
+    m_settings.writeEntry("/Menubar", bMenubar);
+    m_settings.writeEntry("/Toolbar", bToolbar);
     m_settings.writeEntry("/Statusbar", bStatusbar);
+    m_settings.writeEntry("/AutoArrange", bAutoArrange);
     m_settings.endGroup();
 
     m_settings.endGroup();

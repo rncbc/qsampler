@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>qsamplerChannelStrip</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
@@ -28,14 +28,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>527</width>
-            <height>43</height>
+            <width>507</width>
+            <height>38</height>
         </rect>
     </property>
     <property name="sizePolicy">
         <sizepolicy>
             <hsizetype>7</hsizetype>
-            <vsizetype>1</vsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
@@ -53,174 +53,158 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QFrame">
+        <property name="margin">
+            <number>4</number>
+        </property>
+        <property name="spacing">
+            <number>4</number>
+        </property>
+        <widget class="QToolButton">
             <property name="name">
-                <cstring>ChannelStripFrame</cstring>
+                <cstring>ChannelToolButton</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+            <property name="iconSet">
+                <iconset>fileNew.png</iconset>
+            </property>
+            <property name="usesTextLabel">
+                <bool>true</bool>
+            </property>
+            <property name="textLabel">
+                <string>&amp;Channel</string>
+            </property>
+            <property name="autoRaise">
+                <bool>true</bool>
+            </property>
+            <property name="textPosition">
+                <enum>BesideIcon</enum>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Channel setup</string>
+            </property>
+        </widget>
+        <widget class="QSlider">
+            <property name="name">
+                <cstring>VolumeSlider</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Both</enum>
+            </property>
+            <property name="tickInterval">
+                <number>10</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Channel volume</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>VolumeSpinBox</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>60</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="maxValue">
+                <number>100</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Channel volume</string>
+            </property>
+        </widget>
+        <widget class="QProgressBar">
+            <property name="name">
+                <cstring>StreamUsageProgressBar</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>100</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="indicatorFollowsStyle">
+                <bool>false</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Total stream usage (%)</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>VoiceCountTextLabel</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>60</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>32767</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="paletteForegroundColor">
+                <color>
+                    <red>0</red>
+                    <green>255</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
             </property>
             <property name="frameShape">
-                <enum>StyledPanel</enum>
+                <enum>Panel</enum>
             </property>
             <property name="frameShadow">
-                <enum>Raised</enum>
+                <enum>Sunken</enum>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>4</number>
-                </property>
-                <property name="spacing">
-                    <number>4</number>
-                </property>
-                <widget class="QToolButton">
-                    <property name="name">
-                        <cstring>ChannelToolButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string></string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>fileNew.png</iconset>
-                    </property>
-                    <property name="usesTextLabel">
-                        <bool>true</bool>
-                    </property>
-                    <property name="textLabel">
-                        <string>&amp;Channel</string>
-                    </property>
-                    <property name="autoRaise">
-                        <bool>true</bool>
-                    </property>
-                    <property name="textPosition">
-                        <enum>BesideIcon</enum>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Channel setup</string>
-                    </property>
-                </widget>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>VolumeSlider</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>200</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Both</enum>
-                    </property>
-                    <property name="tickInterval">
-                        <number>10</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Channel volume</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>VolumeSpinBox</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>60</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Channel volume</string>
-                    </property>
-                </widget>
-                <widget class="QProgressBar">
-                    <property name="name">
-                        <cstring>StreamUsageProgressBar</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>100</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>24</height>
-                        </size>
-                    </property>
-                    <property name="indicatorFollowsStyle">
-                        <bool>false</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Total stream usage (%)</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>VoiceCountTextLabel</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>60</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>32767</width>
-                            <height>24</height>
-                        </size>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>0</red>
-                            <green>255</green>
-                            <blue>0</blue>
-                        </color>
-                    </property>
-                    <property name="paletteBackgroundColor">
-                        <color>
-                            <red>0</red>
-                            <green>0</green>
-                            <blue>0</blue>
-                        </color>
-                    </property>
-                    <property name="frameShape">
-                        <enum>Panel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Sunken</enum>
-                    </property>
-                    <property name="text">
-                        <string>0</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignCenter</set>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Voice count</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="text">
+                <string>0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Voice count</string>
+            </property>
         </widget>
     </hbox>
 </widget>
@@ -236,12 +220,18 @@
     <tabstop>VolumeSlider</tabstop>
     <tabstop>VolumeSpinBox</tabstop>
 </tabstops>
+<includes>
+    <include location="local" impldecl="in implementation">qsamplerChannelStrip.ui.h</include>
+</includes>
+<signals>
+    <signal>channelChanged( qsamplerChannelStrip * )</signal>
+</signals>
 <slots>
-    <slot specifier="non virtual">channelSetup()</slot>
+    <slot specifier="non virtual">channelSetup( void )</slot>
 </slots>
 <functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
+    <function access="private" specifier="non virtual">init( void )</function>
+    <function access="private" specifier="non virtual">destroy( void )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>

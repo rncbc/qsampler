@@ -23,6 +23,7 @@
 #include <qmessagebox.h>
 #include <qtextstream.h>
 #include <qstatusbar.h>
+#include <qlabel.h>
 
 #include "qsamplerAbout.h"
 
@@ -45,11 +46,26 @@ void qsamplerMainForm::init (void)
 
     // All child forms are to be created later, not earlier than setup.
     m_pMessages = NULL;
+    
+    // We'll start clean.
+    m_iDirtyCount = 0;
 
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);
     m_pWorkspace->setScrollBarsEnabled(true);
+    // Set the activation connection.
+    QObject::connect(m_pWorkspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(stabilizeForm()));
+    // Make it shine :-)
     setCentralWidget(m_pWorkspace);
+    
+    // Create some statusbar labels...
+    m_pStatusLine = new QLabel(this);
+    m_pStatusFlag = new QLabel(tr("MOD"), this);
+    m_pStatusFlag->setAlignment(Qt::AlignHCenter);
+    m_pStatusFlag->setMinimumSize(m_pStatusFlag->sizeHint());
+    // And make them there...
+    statusBar()->addWidget(m_pStatusLine, 1);
+    statusBar()->addWidget(m_pStatusFlag);
 }
 
 
@@ -57,6 +73,10 @@ void qsamplerMainForm::init (void)
 void qsamplerMainForm::destroy (void)
 {
     // Finally drop any widgets around...
+    if (m_pStatusLine)
+        delete m_pStatusLine;
+    if (m_pStatusFlag)
+        delete m_pStatusFlag;
     if (m_pMessages)
         delete m_pMessages;
     if (m_pWorkspace)
@@ -83,6 +103,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     viewMenubarAction->setOn(m_pOptions->bMenubar);
     viewToolbarAction->setOn(m_pOptions->bToolbar);
     viewStatusbarAction->setOn(m_pOptions->bStatusbar);
+    channelsAutoArrangeAction->setOn(m_pOptions->bAutoArrange);
 
     // Initial decorations visibility state.
     viewMenubar(m_pOptions->bMenubar);
@@ -158,6 +179,11 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 void qsamplerMainForm::fileNew (void)
 {
     appendMessages("fileNew()");
+
+    // Of course we'll start clean new.
+    m_iDirtyCount = 0;
+    // Make things stable.
+    stabilizeForm();
 }
 
 
@@ -165,6 +191,11 @@ void qsamplerMainForm::fileNew (void)
 void qsamplerMainForm::fileOpen (void)
 {
     appendMessages("fileOpen()");
+
+    // Of course we'll start clean open.
+    m_iDirtyCount = 0;
+    // Make things stable.
+    stabilizeForm();
 }
 
 
@@ -172,6 +203,11 @@ void qsamplerMainForm::fileOpen (void)
 void qsamplerMainForm::fileSave (void)
 {
     appendMessages("fileSave()");
+    
+    // Maybe we're not dirty anymore.
+    m_iDirtyCount = 0;
+    // Make things stable.
+    stabilizeForm();
 }
 
 
@@ -179,6 +215,11 @@ void qsamplerMainForm::fileSave (void)
 void qsamplerMainForm::fileSaveAs (void)
 {
     appendMessages("fileSaveAs()");
+
+    // Maybe we're not dirty anymore.
+    m_iDirtyCount = 0;
+    // Make things stable.
+    stabilizeForm();
 }
 
 
@@ -198,11 +239,40 @@ void qsamplerMainForm::fileExit (void)
 void qsamplerMainForm::editAddChannel (void)
 {
     appendMessages("editAddChannel()");
-    // FIXME: Add a new channel item.
+
+    // Prepare for auto-arrange?
+    qsamplerChannelStrip *pChannel = NULL;
+    int y = 0;
+    if (m_pOptions && m_pOptions->bAutoArrange) {
+        QWidgetList wlist = m_pWorkspace->windowList();
+        for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+            pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+        //  y += pChannel->height() + pChannel->parentWidget()->baseSize().height();
+            y += pChannel->parentWidget()->frameGeometry().height();
+        }
+    }
+    // FIXME: Arrange a proper method to grab a channel number.
     static int s_iChannel = 0;
-    qsamplerChannelStrip *pChannelStrip = new qsamplerChannelStrip(m_pWorkspace, 0, Qt::WStyle_Tool);
-    pChannelStrip->setCaption("Channel " + QString::number(++s_iChannel));
-    pChannelStrip->show();
+    // Add a new channel itema...
+    WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
+    pChannel = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
+    pChannel->setCaption(tr("Channel") + " " + QString::number(++s_iChannel));
+    // Track channel setup changes.
+    QObject::connect(pChannel, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelChanged(qsamplerChannelStrip *)));
+    // Now we show up us to the world.
+    pChannel->show();
+    // Only then, we'll auto-arrange...
+    if (m_pOptions && m_pOptions->bAutoArrange) {
+        int iWidth  = m_pWorkspace->width();
+    //  int iHeight = pChannel->height() + pChannel->parentWidget()->baseSize().height();
+        int iHeight = pChannel->parentWidget()->frameGeometry().height();
+        pChannel->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+    }
+
+    // We'll be dirty, for sure...
+    m_iDirtyCount++;
+    // Stabilize form anyway.
+    stabilizeForm();
 }
 
 
@@ -210,6 +280,35 @@ void qsamplerMainForm::editAddChannel (void)
 void qsamplerMainForm::editRemoveChannel (void)
 {
     appendMessages("editRemoveChannel()");
+    
+    qsamplerChannelStrip *pChannel = activeChannel();
+    if (pChannel == NULL)
+        return;
+
+    // Just delete the channel strip.
+    delete pChannel;
+    
+    // Do we auto-arrange?
+    if (m_pOptions && m_pOptions->bAutoArrange)
+        channelsArrange();
+
+    // We'll be dirty, for sure...
+    m_iDirtyCount++;
+    stabilizeForm();
+}
+
+
+// Setup current sampler channel.
+void qsamplerMainForm::editSetupChannel (void)
+{
+    appendMessages("editSetupChannel()");
+
+    qsamplerChannelStrip *pChannel = activeChannel();
+    if (pChannel == NULL)
+        return;
+
+    // Just invoque the channel strip procedure.
+    pChannel->channelSetup();
 }
 
 
@@ -217,6 +316,12 @@ void qsamplerMainForm::editRemoveChannel (void)
 void qsamplerMainForm::editResetChannel (void)
 {
     appendMessages("editResetChannel()");
+
+    qsamplerChannelStrip *pChannel = activeChannel();
+    if (pChannel == NULL)
+        return;
+
+    // TODO: The real reset...
 }
 
 
@@ -315,6 +420,60 @@ void qsamplerMainForm::viewOptions (void)
 
 
 //-------------------------------------------------------------------------
+// qsamplerMainForm -- Channels Action slots.
+
+// Arrange channel strips.
+void qsamplerMainForm::channelsArrange (void)
+{
+    appendMessages("channelsArrange()");
+
+    // Full width vertical tiling
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (wlist.isEmpty())
+        return;
+
+    m_pWorkspace->setUpdatesEnabled(false);
+    
+    int y = 0;
+    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+    /*  if (pChannel->testWState(WState_Maximized | WState_Minimized)) {
+            // Prevent flicker...
+            pChannel->hide();
+            pChannel->showNormal();
+        }   */
+        pChannel->adjustSize();
+        int iWidth  = m_pWorkspace->width();
+        if (iWidth < pChannel->width())
+            iWidth = pChannel->width();
+    //  int iHeight = pChannel->height() + pChannel->parentWidget()->baseSize().height();
+        int iHeight = pChannel->parentWidget()->frameGeometry().height();
+        pChannel->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+        y += iHeight;
+    }
+    
+    m_pWorkspace->setUpdatesEnabled(true);
+}
+
+
+// Auto-arrange channel strips.
+void qsamplerMainForm::channelsAutoArrange ( bool bOn )
+{
+    appendMessages("channelsAutoArrange()");
+
+    if (m_pOptions == NULL)
+        return;
+
+    // Toggle the auto-arrange flag.
+    m_pOptions->bAutoArrange = bOn;
+
+    // If on, update whole workspace...
+    if (m_pOptions->bAutoArrange)
+        channelsArrange();
+}
+
+
+//-------------------------------------------------------------------------
 // qsamplerMainForm -- Help Action slots.
 
 // Show information about the Qt toolkit.
@@ -367,13 +526,44 @@ void qsamplerMainForm::helpAbout (void)
 
 void qsamplerMainForm::stabilizeForm (void)
 {
+    qsamplerChannelStrip *pChannel = activeChannel();
+
+    fileSaveAction->setEnabled(m_iDirtyCount > 0);
+
+    bool bHasChannel = (pChannel != 0);
+    editAddChannelAction->setEnabled(true);
+    editRemoveChannelAction->setEnabled(bHasChannel);
+    editSetupChannelAction->setEnabled(bHasChannel);
+    editResetChannelAction->setEnabled(bHasChannel);
+    channelsArrangeAction->setEnabled(bHasChannel);
+
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
+
+
+    if (bHasChannel)
+        m_pStatusLine->setText(pChannel->caption());
+    else
+        m_pStatusLine->clear();
+
+    if (m_iDirtyCount > 0)
+        m_pStatusFlag->setText(tr("MOD"));
+    else
+        m_pStatusFlag->clear();
+}
+
+
+// Channel change receiver slot.
+void qsamplerMainForm::channelChanged( qsamplerChannelStrip * )
+{
+    // Just mark the dirty form.
+    m_iDirtyCount++;
+    // and update the form status...
+    stabilizeForm();
 }
 
 
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Messages window form handlers.
-
 
 // Messages output methods.
 void qsamplerMainForm::appendMessages( const QString& s )
@@ -446,6 +636,59 @@ void qsamplerMainForm::updateMessagesCapture (void)
 
     if (m_pMessages)
         m_pMessages->setCaptureEnabled(m_pOptions->bStdoutCapture);
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- MDI channel strip management.
+
+// Retrieve the active channel strip.
+qsamplerChannelStrip *qsamplerMainForm::activeChannel (void)
+{
+    return (qsamplerChannelStrip *) m_pWorkspace->activeWindow();
+}
+
+
+// Retrieve a channel strip by index.
+qsamplerChannelStrip *qsamplerMainForm::channelAt ( int iChannel )
+{
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (wlist.isEmpty())
+        return 0;
+        
+    return (qsamplerChannelStrip *) wlist.at(iChannel);
+}
+
+
+// Construct the windows menu.
+void qsamplerMainForm::channelsMenuAboutToShow (void)
+{
+    channelsMenu->clear();
+    channelsArrangeAction->addTo(channelsMenu);
+    channelsAutoArrangeAction->addTo(channelsMenu);
+
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (!wlist.isEmpty()) {
+        channelsMenu->insertSeparator();
+        for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+            qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+            int iItemID = channelsMenu->insertItem(pChannel->caption(), this, SLOT(channelsMenuActivated(int)));
+            channelsMenu->setItemParameter(iItemID, iChannel);
+            channelsMenu->setItemChecked(iItemID, activeChannel() == pChannel);
+        }
+    }
+}
+
+
+// Windows menu activation slot
+void qsamplerMainForm::channelsMenuActivated ( int iChannel )
+{
+    appendMessages("channelsMenuActivated(" + QString::number(iChannel) + ")");
+    
+    qsamplerChannelStrip *pChannel = channelAt(iChannel);
+    if (pChannel)
+        pChannel->showNormal();
+    pChannel->setFocus();
 }
 
 

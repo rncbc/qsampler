@@ -69,6 +69,8 @@
         <action name="editAddChannelAction"/>
         <action name="editRemoveChannelAction"/>
         <separator/>
+        <action name="editSetupChannelAction"/>
+        <separator/>
         <action name="editResetChannelAction"/>
     </item>
     <item text="&amp;View" name="viewMenu">
@@ -80,6 +82,8 @@
         <separator/>
         <action name="viewOptionsAction"/>
     </item>
+    <item text="&amp;Channels" name="channelsMenu"/>
+    <separator/>
     <item text="&amp;Help" name="helpMenu">
         <action name="helpAboutAction"/>
         <action name="helpAboutQtAction"/>
@@ -107,6 +111,7 @@
         <action name="editAddChannelAction"/>
         <action name="editRemoveChannelAction"/>
         <separator/>
+        <action name="editSetupChannelAction"/>
         <action name="editResetChannelAction"/>
     </toolbar>
 </toolbars>
@@ -262,6 +267,29 @@
     </action>
     <action>
         <property name="name">
+            <cstring>editSetupChannelAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>editSetupChannel.png</iconset>
+        </property>
+        <property name="text">
+            <string>Setup</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Setup Channel...</string>
+        </property>
+        <property name="toolTip">
+            <string>Setup channel</string>
+        </property>
+        <property name="statusTip">
+            <string>Setup current sampler channel</string>
+        </property>
+        <property name="accel">
+            <string>F2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>editResetChannelAction</cstring>
         </property>
         <property name="iconSet">
@@ -397,6 +425,52 @@
     </action>
     <action>
         <property name="name">
+            <cstring>channelsArrangeAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>Arrange</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Arrange</string>
+        </property>
+        <property name="toolTip">
+            <string>Arrange channels</string>
+        </property>
+        <property name="statusTip">
+            <string>Line up all channel strips</string>
+        </property>
+        <property name="accel">
+            <string>F10</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>channelsAutoArrangeAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Auto Arrange</string>
+        </property>
+        <property name="menuText">
+            <string>A&amp;uto Arrange</string>
+        </property>
+        <property name="toolTip">
+            <string>Auto-arrange channels</string>
+        </property>
+        <property name="statusTip">
+            <string>Auto-arrange channel strips</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>helpAboutAction</cstring>
         </property>
         <property name="text">
@@ -474,6 +548,12 @@
         <slot>editRemoveChannel()</slot>
     </connection>
     <connection>
+        <sender>editSetupChannelAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>editSetupChannel()</slot>
+    </connection>
+    <connection>
         <sender>editResetChannelAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -510,6 +590,24 @@
         <slot>viewOptions()</slot>
     </connection>
     <connection>
+        <sender>channelsArrangeAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>channelsArrange()</slot>
+    </connection>
+    <connection>
+        <sender>channelsAutoArrangeAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>channelsAutoArrange(bool)</slot>
+    </connection>
+    <connection>
+        <sender>channelsMenu</sender>
+        <signal>aboutToShow()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>channelsMenuAboutToShow()</slot>
+    </connection>
+    <connection>
         <sender>helpAboutAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -526,14 +624,17 @@
     <include location="global" impldecl="in declaration">qworkspace.h</include>
     <include location="local" impldecl="in declaration">qsamplerOptions.h</include>
     <include location="local" impldecl="in declaration">qsamplerMessages.h</include>
+    <include location="local" impldecl="in declaration">qsamplerChannelStrip.h</include>
     <include location="local" impldecl="in implementation">qsamplerOptionsForm.h</include>
-    <include location="local" impldecl="in implementation">qsamplerChannelStrip.h</include>
     <include location="local" impldecl="in implementation">qsamplerMainForm.ui.h</include>
 </includes>
 <variables>
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
     <variable access="private">qsamplerMessages *m_pMessages;</variable>
     <variable access="private">QWorkspace *m_pWorkspace;</variable>
+    <variable access="private">QLabel *m_pStatusLine;</variable>
+    <variable access="private">QLabel *m_pStatusFlag;</variable>
+    <variable access="private">int m_iDirtyCount;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">fileNew( void )</slot>
@@ -543,14 +644,20 @@
     <slot specifier="non virtual">fileExit( void )</slot>
     <slot specifier="non virtual">editAddChannel( void )</slot>
     <slot specifier="non virtual">editRemoveChannel( void )</slot>
+    <slot specifier="non virtual">editSetupChannel( void )</slot>
     <slot specifier="non virtual">editResetChannel( void )</slot>
     <slot specifier="non virtual">viewMenubar( bool bOn )</slot>
     <slot specifier="non virtual">viewToolbar( bool bOn )</slot>
     <slot specifier="non virtual">viewStatusbar( bool bOn )</slot>
     <slot specifier="non virtual">viewMessages( bool bOn )</slot>
     <slot specifier="non virtual">viewOptions( void )</slot>
+    <slot specifier="non virtual">channelsArrange( void )</slot>
+    <slot specifier="non virtual">channelsAutoArrange( bool bOn )</slot>
+    <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
+    <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
     <slot specifier="non virtual">helpAboutQt( void )</slot>
     <slot specifier="non virtual">helpAbout( void )</slot>
+    <slot specifier="non virtual">channelChanged( qsamplerChannelStrip * )</slot>
     <slot specifier="non virtual">stabilizeForm( void )</slot>
 </slots>
 <functions>
@@ -566,6 +673,8 @@
     <function access="private" specifier="non virtual">updateMessagesFont( void )</function>
     <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
     <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
+    <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannel( void )</function>
+    <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelAt( int iChannel )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="8"/>
