@@ -118,9 +118,6 @@ void qsamplerMainForm::init (void)
     m_status[QSAMPLER_STATUS_SESSION] = pLabel;
     statusBar()->addWidget(pLabel);
 
-    // Start from scratch.
-    newSession();
-
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
@@ -435,7 +432,7 @@ bool qsamplerMainForm::closeSession ( bool bForce )
 bool qsamplerMainForm::resetSession (void)
 {
     if (m_pClient == NULL)
-        return false;
+        return true;
 
     if (!closeSession(false))
         return false;
@@ -448,10 +445,12 @@ bool qsamplerMainForm::resetSession (void)
     }
 
     // Try to catch (re)create each channel.
+    m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannelID = 0; iChannelID < iChannels; iChannelID++) {
-        createChannel(iChannelID);
+        createChannel(iChannelID, false);
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
+    m_pWorkspace->setUpdatesEnabled(true);
 
     return true;
 }
@@ -469,6 +468,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
         appendMessagesError(tr("Could not open \"%1\" session file.\n\nSorry.").arg(sFilename));
         return false;
     }
+
     // Read the file.
     int iErrors = 0;
     QTextStream ts(&file);
@@ -666,7 +666,7 @@ void qsamplerMainForm::editAddChannel (void)
     }
 
     // Just create the channel strip with given id.
-    createChannel(iChannelID);
+    createChannel(iChannelID, true);
 
     // We'll be dirty, for sure...
     m_iDirtyCount++;
@@ -705,7 +705,6 @@ void qsamplerMainForm::editRemoveChannel (void)
 
     // Just delete the channel strip.
     delete pChannel;
-
     // Do we auto-arrange?
     if (m_pOptions && m_pOptions->bAutoArrange)
         channelsArrange();
@@ -1141,7 +1140,7 @@ void qsamplerMainForm::updateMessagesCapture (void)
 // qsamplerMainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
-void qsamplerMainForm::createChannel ( int iChannelID )
+void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
 {
     if (m_pClient == NULL)
         return;
@@ -1168,6 +1167,10 @@ void qsamplerMainForm::createChannel ( int iChannelID )
         pChannel->setDisplayFont(font);
     // Track channel setup changes.
     QObject::connect(pChannel, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelChanged(qsamplerChannelStrip *)));
+    // Before we show it up, may be we'll
+    // better ask for some initial values?
+    if (bPrompt)
+        pChannel->channelSetup();	
     // Now we show up us to the world.
     pChannel->show();
     // Only then, we'll auto-arrange...
@@ -1234,7 +1237,7 @@ void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 // Set the pseudo-timer delay schedule.
 void qsamplerMainForm::startSchedule ( int iStartDelay )
 {
-    m_iStartDelay  = (iStartDelay + 1) * 1000;
+    m_iStartDelay  = 1 + (iStartDelay * 1000);
     m_iTimerDelay  = 0;
 }
 
@@ -1262,8 +1265,8 @@ void qsamplerMainForm::timerSlot (void)
             }
         }
     }
-
-    // Refresh each channel usage, on each period...
+    
+	// Refresh each channel usage, on each period...
     if (m_pClient && m_pOptions->bAutoRefresh) {
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
         if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
@@ -1271,7 +1274,8 @@ void qsamplerMainForm::timerSlot (void)
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
                 qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-                pChannel->updateChannelUsage();
+                if (pChannel->isVisible())
+                    pChannel->updateChannelUsage();
             }
         }
     }
@@ -1470,11 +1474,7 @@ bool qsamplerMainForm::startClient (void)
     }
 
     // Make a new session
-    resetSession();
-    
-    // OK, we're at it!
-    stabilizeForm();
-    return true;
+    return newSession();
 }
 
 

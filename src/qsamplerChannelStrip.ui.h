@@ -189,7 +189,11 @@ bool qsamplerChannelStrip::setMidiDevice ( int iMidiDevice )
     if (client() == NULL)
         return false;
 
-    // FIXME: call future lscp_set_channel_midi_device()
+//  FIXME: call this when LSCP becomes stable.
+//  if (::lscp_set_channel_midi_device(client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
+//      appendMessagesClient("lscp_set_channel_midi_device");
+//      return false;
+//  }
 
     m_iMidiDevice = iMidiDevice;
     return true;
@@ -207,10 +211,11 @@ bool qsamplerChannelStrip::setMidiPort ( int iMidiPort )
     if (client() == NULL)
         return false;
 
-    if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_port");
-        return false;
-    }
+//  FIXME: call this when LSCP becomes stable.
+//  if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
+//      appendMessagesClient("lscp_set_channel_midi_port");
+//      return false;
+//  }
 
     m_iMidiPort = iMidiPort;
     return true;
@@ -228,10 +233,11 @@ bool qsamplerChannelStrip::setMidiChannel ( int iMidiChannel )
     if (client() == NULL)
         return false;
 
-    if (::lscp_set_channel_midi_channel(client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_channel");
-        return false;
-    }
+//  FIXME: call this when LSCP becomes stable.
+//  if (::lscp_set_channel_midi_channel(client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
+//      appendMessagesClient("lscp_set_channel_midi_channel");
+//      return false;
+//  }
 
     m_iMidiChannel = iMidiChannel;
     return true;
@@ -249,7 +255,11 @@ bool qsamplerChannelStrip::setAudioDevice ( int iAudioDevice )
     if (client() == NULL)
         return false;
 
-    // FIXME: call future lscp_set_channel_audio_device()
+//  FIXME: call this when LSCP becomes stable.
+//  if (::lscp_set_channel_audio_device(client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
+//      appendMessagesClient("lscp_set_channel_audio_device");
+//      return false;
+//  }
 
     m_iAudioDevice = iAudioDevice;
     return true;
@@ -340,8 +350,8 @@ void qsamplerChannelStrip::updateChannelInfo (void)
     // Read channel information.
     lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(client(), m_iChannelID);
     if (pChannelInfo == NULL) {
-        appendMessagesClient("lscp_get_channel_info");
-        appendMessagesError(tr("Could not get channel information.\n\nSorry."));
+        appendMessagesClient("lscp_get_channel_info");     
+    //  appendMessagesError(tr("Could not get channel information.\n\nSorry."));
     } else {
         // Cache in channel information.
         m_sEngineName     = pChannelInfo->engine_name;
@@ -410,8 +420,8 @@ void qsamplerChannelStrip::updateChannelUsage (void)
     // Get current stream count.
     int iStreamCount = ::lscp_get_channel_stream_count(client(), m_iChannelID);
     // Get current channel buffer fill usage.
-    // FIXME: benno has suggested some other rationales,
-    // but for the time being we'll show the average percentage usage.
+//  FIXME: benno has suggested some other rationales,
+//         but for the time being we'll show the average percentage usage.
     int iStreamUsage = 0;
     if (iStreamCount > 0) {
         lscp_buffer_fill_t *pBufferFill = ::lscp_get_channel_buffer_fill(client(), LSCP_USAGE_PERCENTAGE, m_iChannelID);

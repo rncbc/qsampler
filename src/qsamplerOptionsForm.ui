@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>qsamplerOptionsForm</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>522</width>
-            <height>308</height>
+            <width>524</width>
+            <height>336</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -269,6 +269,15 @@
                                 </property>
                                 <property name="suffix">
                                     <string> secs</string>
+                                </property>
+                                <property name="maxValue">
+                                    <number>100</number>
+                                </property>
+                                <property name="minValue">
+                                    <number>1</number>
+                                </property>
+                                <property name="value">
+                                    <number>2</number>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Delay time in seconds after server startup</string>
@@ -524,12 +533,6 @@
                                 <property name="name">
                                     <cstring>AutoRefreshCheckBox</cstring>
                                 </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>100</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
                                 <property name="font">
                                     <font>
                                         <bold>0</bold>
@@ -556,18 +559,6 @@
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>32767</height>
-                                    </size>
                                 </property>
                                 <property name="font">
                                     <font>
@@ -709,12 +700,6 @@
                                 <property name="name">
                                     <cstring>MessagesLimitCheckBox</cstring>
                                 </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>100</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
                                 <property name="font">
                                     <font>
                                         <bold>0</bold>
@@ -733,18 +718,6 @@
                             <widget class="QSpinBox">
                                 <property name="name">
                                     <cstring>MessagesLimitLinesSpinBox</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>80</width>
-                                        <height>32767</height>
-                                    </size>
                                 </property>
                                 <property name="font">
                                     <font>
