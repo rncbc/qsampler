@@ -64,6 +64,7 @@ public:
     QString sDisplayFont;
     bool    bAutoRefresh;
     int     iAutoRefreshTime;
+    int     iMaxVolume;
     QString sMessagesFont;
     bool    bMessagesLimit;
     int     iMessagesLimitLines;

@@ -408,9 +408,7 @@ void qsamplerChannelStrip::updateChannelVolume (void)
 #endif
 
     // And clip...
-    if (iVolume > 100)
-        iVolume = 100;
-    else if (iVolume < 0)
+    if (iVolume < 0)
         iVolume = 0;
 
     // Flag it here, to avoid infinite recursion.
@@ -459,9 +457,7 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
 
     // Convert and clip.
     float fVolume = (float) iVolume / 100.0;
-    if (fVolume > 1.0)
-        fVolume = 1.0;
-    else if (fVolume < 0.0)
+    if (fVolume < 0.001)
         fVolume = 0.0;
 
     // Update the GUI elements.
@@ -505,6 +501,16 @@ void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
     // We'll just show up the main form's edit menu.
     m_pMainForm->stabilizeForm();
     m_pMainForm->editMenu->exec(pEvent->globalPos());
+}
+
+
+// Maximum volume slider accessors.
+void qsamplerChannelStrip::setMaxVolume ( int iMaxVolume )
+{
+    m_iDirtyChange++;
+    VolumeSlider->setRange(0, iMaxVolume);
+    VolumeSpinBox->setRange(0, iMaxVolume);
+    m_iDirtyChange--;
 }
 
 

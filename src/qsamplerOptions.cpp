@@ -57,6 +57,7 @@ qsamplerOptions::qsamplerOptions (void)
     sDisplayFont     = m_settings.readEntry("/DisplayFont", QString::null);
     bAutoRefresh     = m_settings.readBoolEntry("/AutoRefresh", true);
     iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 1000);
+    iMaxVolume       = m_settings.readNumEntry("/MaxVolume", 100);
     sMessagesFont    = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit   = m_settings.readBoolEntry("/MessagesLimit", true);
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
@@ -120,6 +121,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/DisplayFont", sDisplayFont);
     m_settings.writeEntry("/AutoRefresh", bAutoRefresh);
     m_settings.writeEntry("/AutoRefreshTime", iAutoRefreshTime);
+    m_settings.writeEntry("/MaxVolume", iMaxVolume);
     m_settings.writeEntry("/MessagesFont", sMessagesFont);
     m_settings.writeEntry("/MessagesLimit", bMessagesLimit);
     m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);

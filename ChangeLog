@@ -3,7 +3,13 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.2   2004-06-08  Work in progress...
+0.0.2   2004-06-09  Work in progress...
+
+* Maximum channel volume percent setting is now a global option,
+  provided to override the default (which is 100%).
+
+* Client/server transaction timeout option upper limit has been
+  increased from 5000 to 60000 milliseconds.
 
 * A channel context menu is now featured, by right-clicking over
   each sampler channel strip.

@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>529</width>
-            <height>329</height>
+            <width>519</width>
+            <height>321</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -442,7 +442,7 @@
                                     <string> msec</string>
                                 </property>
                                 <property name="maxValue">
-                                    <number>5000</number>
+                                    <number>60000</number>
                                 </property>
                                 <property name="minValue">
                                     <number>100</number>
@@ -493,7 +493,7 @@
                     </property>
                     <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>ChannelDisplayGroupBox</cstring>
+                            <cstring>ChannelsGroupBox</cstring>
                         </property>
                         <property name="font">
                             <font>
@@ -504,16 +504,16 @@
                             <number>4</number>
                         </property>
                         <property name="title">
-                            <string>Channel Display</string>
+                            <string>Channels</string>
                         </property>
                         <property name="flat">
                             <bool>true</bool>
                         </property>
-                        <hbox>
+                        <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QLabel">
+                            <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>DisplayFontTextLabel</cstring>
                                 </property>
@@ -568,7 +568,7 @@
                                     <string>Sample channel display font display</string>
                                 </property>
                             </widget>
-                            <widget class="QPushButton">
+                            <widget class="QPushButton" row="0" column="1">
                                 <property name="name">
                                     <cstring>DisplayFontPushButton</cstring>
                                 </property>
@@ -590,7 +590,7 @@
                                     <string>Select font for the channel display</string>
                                 </property>
                             </widget>
-                            <spacer>
+                            <spacer row="0" column="2">
                                 <property name="name">
                                     <cstring>space21</cstring>
                                 </property>
@@ -602,12 +602,12 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>16</width>
+                                        <width>56</width>
                                         <height>16</height>
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="QCheckBox">
+                            <widget class="QCheckBox" row="0" column="3">
                                 <property name="name">
                                     <cstring>AutoRefreshCheckBox</cstring>
                                 </property>
@@ -626,7 +626,26 @@
                                     <string>Whether to refresh the channels view automatically</string>
                                 </property>
                             </widget>
-                            <widget class="QSpinBox">
+                            <widget class="QLabel" row="1" column="3">
+                                <property name="name">
+                                    <cstring>MaxVolumeTextLabel</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Maximum &amp;volume:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>MaxVolumeSpinBox</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox" row="0" column="4">
                                 <property name="name">
                                     <cstring>AutoRefreshTimeSpinBox</cstring>
                                 </property>
@@ -662,7 +681,57 @@
                                     <string>Time in milliseconds between each auto-refresh cycle</string>
                                 </property>
                             </widget>
-                        </hbox>
+                            <widget class="QSpinBox" row="1" column="4">
+                                <property name="name">
+                                    <cstring>MaxVolumeSpinBox</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>1</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="suffix">
+                                    <string> %</string>
+                                </property>
+                                <property name="maxValue">
+                                    <number>1000</number>
+                                </property>
+                                <property name="lineStep">
+                                    <number>10</number>
+                                </property>
+                                <property name="value">
+                                    <number>100</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Upper limit for the sampler channel volume setting</string>
+                                </property>
+                            </widget>
+                            <spacer row="1" column="0" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>spacer22</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>310</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </grid>
                     </widget>
                     <widget class="QGroupBox">
                         <property name="name">
@@ -677,7 +746,7 @@
                             <number>4</number>
                         </property>
                         <property name="title">
-                            <string>Messages Window</string>
+                            <string>Messages</string>
                         </property>
                         <property name="flat">
                             <bool>true</bool>
@@ -759,7 +828,7 @@
                             </widget>
                             <spacer>
                                 <property name="name">
-                                    <cstring>space22</cstring>
+                                    <cstring>space23</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -769,7 +838,7 @@
                                 </property>
                                 <property name="sizeHint">
                                     <size>
-                                        <width>16</width>
+                                        <width>49</width>
                                         <height>16</height>
                                     </size>
                                 </property>
@@ -952,7 +1021,7 @@
                             </widget>
                             <spacer row="0" column="1">
                                 <property name="name">
-                                    <cstring>space23</cstring>
+                                    <cstring>space24</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -969,7 +1038,7 @@
                             </spacer>
                             <spacer row="1" column="1" rowspan="1" colspan="3">
                                 <property name="name">
-                                    <cstring>space24</cstring>
+                                    <cstring>space25</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -1047,6 +1116,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>MaxVolumeSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>MessagesFontPushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -1112,6 +1187,7 @@
     <tabstop>DisplayFontPushButton</tabstop>
     <tabstop>AutoRefreshCheckBox</tabstop>
     <tabstop>AutoRefreshTimeSpinBox</tabstop>
+    <tabstop>MaxVolumeSpinBox</tabstop>
     <tabstop>MessagesFontPushButton</tabstop>
     <tabstop>MessagesLimitCheckBox</tabstop>
     <tabstop>MessagesLimitLinesSpinBox</tabstop>
