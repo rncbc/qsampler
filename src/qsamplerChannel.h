@@ -1,7 +1,7 @@
 // qsamplerChannel.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -123,6 +123,10 @@ public:
     static QString     getInstrumentName (const QString& sInstrumentFile, int iInstrumentNr);
     static QStringList getInstrumentList (const QString& sInstrumentFile);
 
+    // Instrument name(s) retrieval mode.
+    static bool instrumentNames();
+    static void setInstrumentNames (bool bInstrumentNames);
+
 private:
 
     // Main application form reference.
@@ -143,6 +147,10 @@ private:
     QString m_sAudioDriver;         // DEPRECATED.
     int     m_iAudioDevice;
     float   m_fVolume;
+
+    // Retrieve mode for available instrument name(s)
+	// from an instrument file (.gig).
+	static bool g_bInstrumentNames;
 };
 
 #endif  // __qsamplerChannel_h

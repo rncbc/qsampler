@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -260,6 +260,10 @@ void qsamplerChannelForm::openInstrumentFile (void)
 // Refresh the actual instrument name.
 void qsamplerChannelForm::updateInstrumentName (void)
 {
+    qsamplerOptions *pOptions = m_pChannel->options();
+    if (pOptions == NULL)
+        return;
+
     // Finally this better idea would be to use libgig
     // to retrieve the REAL instrument names.
     InstrumentNrComboBox->clear();

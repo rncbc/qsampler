@@ -2,7 +2,7 @@
 <class>qsamplerOptionsForm</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -1002,6 +1002,25 @@
                                             <string>Whether to show the complete directory path of loaded session files</string>
                                         </property>
                                     </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>InstrumentNamesCheckBox</cstring>
+                                        </property>
+                                        <property name="font">
+                                            <font>
+                                                <bold>0</bold>
+                                            </font>
+                                        </property>
+                                        <property name="text">
+                                            <string>Show actual &amp;instrument names</string>
+                                        </property>
+                                        <property name="accel">
+                                            <string>Alt+I</string>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Whether to show the actual instrument names as read from instrument file (using libgig)</string>
+                                        </property>
+                                    </widget>
                                 </vbox>
                             </widget>
                             <widget class="QSpinBox" row="0" column="3">
@@ -1196,6 +1215,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>InstrumentNamesCheckBox</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>OkPushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -1227,6 +1252,7 @@
     <tabstop>ConfirmRemoveCheckBox</tabstop>
     <tabstop>StdoutCaptureCheckBox</tabstop>
     <tabstop>CompletePathCheckBox</tabstop>
+    <tabstop>InstrumentNamesCheckBox</tabstop>
     <tabstop>MaxRecentFilesSpinBox</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>

@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 //-------------------------------------------------------------------------
 // qsamplerChannel - Sampler channel structure.
 //
+bool qsamplerChannel::g_bInstrumentNames = false;
 
 // Constructor.
 qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
@@ -462,15 +463,18 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
 
     if (fileinfo.exists()) {
 #ifdef CONFIG_LIBGIG
-        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
-        gig::File  *pGig  = new gig::File(pRiff);
-        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
-        while (pInstrument) {
-            instlist.append((pInstrument->pInfo)->Name.c_str());
-            pInstrument = pGig->GetNextInstrument();
-        }
-        delete pGig;
-        delete pRiff;
+		if (g_bInstrumentNames) {
+	        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
+	        gig::File  *pGig  = new gig::File(pRiff);
+	        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
+	        while (pInstrument) {
+	            instlist.append((pInstrument->pInfo)->Name.c_str());
+	            pInstrument = pGig->GetNextInstrument();
+	        }
+	        delete pGig;
+	        delete pRiff;
+		}
+		else
 #else
         for (int iInstrumentNr = 0; iInstrumentNr < QSAMPLER_INSTRUMENT_MAX; iInstrumentNr++)
             instlist.append(sInstrumentName + " [" + QString::number(iInstrumentNr) + "]");
@@ -490,26 +494,41 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile, int 
 
     if (fileinfo.exists()) {
 #ifdef CONFIG_LIBGIG
-        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
-        gig::File  *pGig  = new gig::File(pRiff);
-        int iIndex = 0;
-        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
-        while (pInstrument) {
-            if (iIndex == iInstrumentNr) {
-                sInstrumentName = (pInstrument->pInfo)->Name.c_str();
-                break;
-            }
-            iIndex++;
-            pInstrument = pGig->GetNextInstrument();
-        }
-        delete pGig;
-        delete pRiff;
+		if (g_bInstrumentNames) {
+	        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
+	        gig::File  *pGig  = new gig::File(pRiff);
+	        int iIndex = 0;
+	        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
+	        while (pInstrument) {
+	            if (iIndex == iInstrumentNr) {
+	                sInstrumentName = (pInstrument->pInfo)->Name.c_str();
+	                break;
+	            }
+	            iIndex++;
+	            pInstrument = pGig->GetNextInstrument();
+	        }
+	        delete pGig;
+	        delete pRiff;
+		}
+		else
 #else
         sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
 #endif
     }
 
     return sInstrumentName;
+}
+
+
+// Instrument name(s) retrieval mode--global option.
+bool qsamplerChannel::instrumentNames (void)
+{
+	return g_bInstrumentNames;
+}
+
+void qsamplerChannel::setInstrumentNames ( bool bInstrumentNames )
+{
+	g_bInstrumentNames = bInstrumentNames;
 }
 
 
