@@ -140,7 +140,7 @@ void qsamplerChannelStrip::setChannelVolume ( float fVolume )
         iVolume = 100;
     else if (iVolume < 0)
         iVolume = 0;
-        
+
     // Flag it here, to avoid infinite recursion.
     m_iDirtyChange++;
     VolumeSlider->setValue(iVolume);
@@ -157,7 +157,7 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
     // Avoid recursion.
     if (m_iDirtyChange > 0)
         return;
-        
+
     // Convert and clip.
     float fVolume = (float) iVolume / 100.0;
     if (fVolume > 1.0)
@@ -168,10 +168,10 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
     // Update the GUI elements.
     setChannelVolume(fVolume);
 
-    // Do it for real.
+    // But do it for real.
     if (::lscp_set_channel_volume(m_pMainForm->client(), m_iChannelID, fVolume) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_volume");
-        appendMessagesError(tr("Could not set channel volume. Sorry."));
+    //  appendMessagesError(tr("Could not set channel volume.\n\nSorry."));
     }
 }
 
@@ -192,7 +192,7 @@ void qsamplerChannelStrip::updateChannel (void)
     lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pMainForm->client(), m_iChannelID);
     if (pChannelInfo == NULL) {
         appendMessagesClient("lscp_get_channel_info");
-        appendMessagesError(tr("Could not get channel information. Sorry."));
+        appendMessagesError(tr("Could not get channel information.\n\nSorry."));
         return;
     }
     // Set some proper values.

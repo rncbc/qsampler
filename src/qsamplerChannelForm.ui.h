@@ -59,7 +59,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
     m_iDirtyCount = 0;
 
     setCaption(m_pChannel->caption());
-    
+
     // Check if we're up and connected.
     if (m_pChannel->client() == NULL)
         return;
@@ -73,7 +73,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
 
     // Load combo box history...
     pOptions->loadComboBoxHistory(InstrumentFileComboBox);
-    
+
     // Populate Engines list.
     EngineNameComboBox->clear();
     const char **ppszEngines = ::lscp_get_available_engines(m_pChannel->client());
@@ -124,7 +124,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         AudioTypeComboBox->setCurrentText(pChannelInfo->audio_type);
     } else {
         m_pChannel->appendMessagesClient("lscp_get_channel_info");
-        m_pChannel->appendMessagesError(tr("Could not get channel information. Sorry."));
+        m_pChannel->appendMessagesError(tr("Could not get channel information.\n\nSorry."));
     }
 
     // Done.
@@ -192,7 +192,7 @@ void qsamplerChannelForm::accept (void)
         }
         // Show error messages?
         if (iErrors > 0)
-            m_pChannel->appendMessagesError(tr("Some channel settings could not be set. Sorry."));
+            m_pChannel->appendMessagesError(tr("Some channel settings could not be set.\n\nSorry."));
     }
 
     // Save default instrument directory and history...

@@ -25,6 +25,7 @@
 #include <qworkspace.h>
 #include <qprocess.h>
 #include <qmessagebox.h>
+#include <qdragobject.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qfile.h>
@@ -71,7 +72,7 @@ void qsamplerMainForm::init (void)
 
     // All child forms are to be created later, not earlier than setup.
     m_pMessages = NULL;
-    
+
     // We'll start clean.
     m_iUntitled = 0;
     m_iDirtyCount = 0;
@@ -89,7 +90,7 @@ void qsamplerMainForm::init (void)
     QObject::connect(m_pWorkspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(stabilizeForm()));
     // Make it shine :-)
     setCentralWidget(m_pWorkspace);
-    
+
     // Create some statusbar labels...
     QLabel *pLabel;
     // Client status.
@@ -193,7 +194,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 
     // Final startup stabilization...
     stabilizeForm();
-    
+
     // Make it ready :-)
     statusBar()->message(tr("Ready"), 3000);
 
@@ -230,7 +231,7 @@ bool qsamplerMainForm::queryClose (void)
             m_pOptions->saveWidgetGeometry(this);
         }
     }
-    
+
     return bQueryClose;
 }
 
@@ -242,6 +243,31 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
     else
         pCloseEvent->ignore();
 }
+
+
+void qsamplerMainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
+{
+    bool bAccept = false;
+
+    if (QTextDrag::canDecode(pDragEnterEvent)) {
+        QString sUrl;
+        if (QTextDrag::decode(pDragEnterEvent, sUrl) && m_pClient)
+            bAccept = QFileInfo(QUrl(sUrl).path()).exists();
+    }
+
+    pDragEnterEvent->accept(bAccept);
+}
+
+
+void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
+{
+    if (QTextDrag::canDecode(pDropEvent)) {
+        QString sUrl;
+        if (QTextDrag::decode(pDropEvent, sUrl) && closeSession())
+            loadSessionFile(QUrl(sUrl).path());
+    }
+}
+
 
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Brainless public property accessors.
@@ -283,12 +309,12 @@ bool qsamplerMainForm::newSession (void)
 
     // Ok increment untitled count.
     m_iUntitled++;
-    
+
     // Stabilize form.
     m_sFilename = QString::null;
     m_iDirtyCount = 0;
     stabilizeForm();
-    
+
     return true;
 }
 
@@ -298,7 +324,7 @@ bool qsamplerMainForm::openSession (void)
 {
     if (m_pOptions == NULL)
         return false;
-        
+
     // Ask for the filename to open...
     QString sFilename = QFileDialog::getOpenFileName(
             m_pOptions->sSessionDir,                // Start here.
@@ -306,6 +332,7 @@ bool qsamplerMainForm::openSession (void)
             this, 0,                                // Parent and name (none)
             tr("Open Session")                      // Caption.
     );
+
     // Have we cancelled?
     if (sFilename.isEmpty())
         return false;
@@ -323,7 +350,7 @@ bool qsamplerMainForm::openSession (void)
 bool qsamplerMainForm::saveSession ( bool bPrompt )
 {
     QString sFilename = m_sFilename;
-    
+
     // Ask for the file to save, if there's none...
     if (bPrompt || sFilename.isEmpty()) {
         sFilename = QFileDialog::getSaveFileName(
@@ -339,7 +366,7 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
         if (QFileInfo(sFilename).extension().isEmpty())
             sFilename += ".lscp";
     }
-    
+
     // Save it right away.
     return saveSessionFile(sFilename);
 }
@@ -349,7 +376,7 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
 bool qsamplerMainForm::closeSession (void)
 {
     bool bClose = true;
-    
+
     // Are we dirty enough to prompt it?
     if (m_iDirtyCount > 0) {
         switch (QMessageBox::warning(this, tr("Warning"),
@@ -387,11 +414,11 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 {
     if (m_pClient == NULL)
         return false;
-        
+
     // Open and read from real file.
     QFile file(sFilename);
     if (!file.open(IO_ReadOnly)) {
-        appendMessagesError(tr("Could not open \"%1\" session file. Sorry.").arg(sFilename));
+        appendMessagesError(tr("Could not open \"%1\" session file.\n\nSorry.").arg(sFilename));
         return false;
     }
     // Read the file.
@@ -417,16 +444,16 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 
     // Ok. we've read it.
     file.close();
-    
+
     // Have we any errors?
     if (iErrors > 0)
-        appendMessagesError(tr("Some setttings could not be loaded from \"%1\" session file. Sorry.").arg(sFilename));
+        appendMessagesError(tr("Some setttings could not be loaded\nfrom \"%1\" session file.\n\nSorry.").arg(sFilename));
 
     // Now we'll try to create the whole GUI session.
     int iChannels = ::lscp_get_channels(m_pClient);
     if (iChannels < 0) {
         appendMessagesClient("lscp_client_query");
-        appendMessagesError(tr("could not get current number of channels. Sorry."));
+        appendMessagesError(tr("Could not get current number of channels.\n\nSorry."));
     }
 
     // Try to catch (re)create each channel.
@@ -442,7 +469,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     m_sFilename = sFilename;
     m_iDirtyCount = 0;
     stabilizeForm();
-    
+
     return true;
 }
 
@@ -456,7 +483,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     // Open and write into real file.
     QFile file(sFilename);
     if (!file.open(IO_WriteOnly | IO_Truncate)) {
-        appendMessagesError(tr("Could not open \"%1\" session file. Sorry.").arg(sFilename));
+        appendMessagesError(tr("Could not open \"%1\" session file.\n\nSorry.").arg(sFilename));
         return false;
     }
 
@@ -490,7 +517,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 
     // Have we any errors?
     if (iErrors > 0)
-        appendMessagesError(tr("Some settings could not be saved to \"%1\" session file. Sorry.").arg(sFilename));
+        appendMessagesError(tr("Some settings could not be saved\nto \"%1\" session file.\n\nSorry.").arg(sFilename));
 
     // Save as default session directory.
     if (m_pOptions)
@@ -499,7 +526,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     m_sFilename = sFilename;
     m_iDirtyCount = 0;
     stabilizeForm();
-    
+
     return true;
 }
 
@@ -560,7 +587,7 @@ void qsamplerMainForm::editAddChannel (void)
     int iChannelID = ::lscp_add_channel(m_pClient);
     if (iChannelID < 0) {
         appendMessagesClient("lscp_add_channel");
-        appendMessagesError(tr("Could not create the new channel. Sorry."));
+        appendMessagesError(tr("Could not create the new channel.\n\nSorry."));
         return;
     }
 
@@ -597,13 +624,13 @@ void qsamplerMainForm::editRemoveChannel (void)
     // Remove the existing sampler channel.
     if (::lscp_remove_channel(m_pClient, pChannel->channelID()) != LSCP_OK) {
         appendMessagesClient("lscp_remove_channel");
-        appendMessagesError(tr("Could not remove channel. Sorry."));
+        appendMessagesError(tr("Could not remove channel.\n\nSorry."));
         return;
     }
 
     // Just delete the channel strip.
     delete pChannel;
-    
+
     // Do we auto-arrange?
     if (m_pOptions && m_pOptions->bAutoArrange)
         channelsArrange();
@@ -642,10 +669,10 @@ void qsamplerMainForm::editResetChannel (void)
     // Remove the existing sampler channel.
     if (::lscp_reset_channel(m_pClient, pChannel->channelID()) != LSCP_OK) {
         appendMessagesClient("lscp_reset_channel");
-        appendMessagesError(tr("Could not reset channel. Sorry."));
+        appendMessagesError(tr("Could not reset channel.\n\nSorry."));
         return;
     }
-    
+
     // Refresh channel strip info.
     pChannel->updateChannel();
 }
@@ -667,15 +694,15 @@ void qsamplerMainForm::viewMenubar ( bool bOn )
 // Show/hide the main program window toolbar.
 void qsamplerMainForm::viewToolbar ( bool bOn )
 {
-	if (bOn) {
+    if (bOn) {
         fileToolbar->show();
         editToolbar->show();
         channelsToolbar->show();
-	} else {
+    } else {
         fileToolbar->hide();
         editToolbar->hide();
         channelsToolbar->hide();
-	}
+    }
 }
 
 
@@ -764,7 +791,7 @@ void qsamplerMainForm::viewOptions (void)
         // Done.
         delete pOptionsForm;
     }
-    
+
     // This makes it.
     stabilizeForm();
 }
@@ -782,7 +809,7 @@ void qsamplerMainForm::channelsArrange (void)
         return;
 
     m_pWorkspace->setUpdatesEnabled(false);
-    
+
     int y = 0;
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
         qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
@@ -800,7 +827,7 @@ void qsamplerMainForm::channelsArrange (void)
         pChannel->parentWidget()->setGeometry(0, y, iWidth, iHeight);
         y += iHeight;
     }
-    
+
     m_pWorkspace->setUpdatesEnabled(true);
 }
 
@@ -860,7 +887,7 @@ void qsamplerMainForm::helpAbout (void)
     sText += tr("under the terms of the GNU General Public License version 2 or later.");
     sText += "</small>";
     sText += "</p>\n";
-    
+
     QMessageBox::about(this, tr("About") + " " QSAMPLER_TITLE, sText);
 }
 
@@ -878,7 +905,7 @@ void qsamplerMainForm::stabilizeForm (void)
     // Update the main menu state...
     qsamplerChannelStrip *pChannel = activeChannel();
     bool bHasClient  = (m_pClient != NULL);
-    bool bHasChannel = (pChannel != NULL);
+    bool bHasChannel = (bHasClient && pChannel != NULL);
     fileNewAction->setEnabled(bHasClient);
     fileOpenAction->setEnabled(bHasClient);
     fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
@@ -910,7 +937,7 @@ void qsamplerMainForm::stabilizeForm (void)
         m_status[QSAMPLER_STATUS_SESSION]->setText(tr("MOD"));
     else
         m_status[QSAMPLER_STATUS_SESSION]->clear();
-        
+
     // Always make the latest message visible.
     if (m_pMessages)
         m_pMessages->scrollToBottom();
@@ -986,7 +1013,7 @@ void qsamplerMainForm::appendMessagesError( const QString& s )
     if (m_pMessages)
         m_pMessages->show();
 
-    appendMessagesColor(s, "#ff0000");
+    appendMessagesColor(s.simplifyWhiteSpace(), "#ff0000");
 
     QMessageBox::critical(this, tr("Error"), s, tr("Cancel"));
 }
@@ -1100,7 +1127,7 @@ qsamplerChannelStrip *qsamplerMainForm::channelAt ( int iChannel )
     QWidgetList wlist = m_pWorkspace->windowList();
     if (wlist.isEmpty())
         return 0;
-        
+
     return (qsamplerChannelStrip *) wlist.at(iChannel);
 }
 
@@ -1227,7 +1254,7 @@ void qsamplerMainForm::startServer (void)
 
     // Go jack, go...
     if (!m_pServer->start()) {
-        appendMessagesError(tr("Could not start server. Sorry."));
+        appendMessagesError(tr("Could not start server.\n\nSorry."));
         processServerExit();
         return;
     }
@@ -1287,7 +1314,7 @@ void qsamplerMainForm::processServerExit (void)
         delete m_pServer;
         m_pServer = NULL;
     }
-    
+
     // Again, make status visible stable.
     stabilizeForm();
 }
@@ -1340,7 +1367,7 @@ bool qsamplerMainForm::startClient (void)
         // Is this the first try?
         // maybe we need to start a local server...
         if ((m_pServer && m_pServer->isRunning()) || !m_pOptions->bServerStart)
-            appendMessagesError(tr("Could not connect to server as client. Sorry."));
+            appendMessagesError(tr("Could not connect to server as client.\n\nSorry."));
         else
             startServer();
         // This is always a failure.
@@ -1350,6 +1377,18 @@ bool qsamplerMainForm::startClient (void)
 
     // Log success here.
     appendMessages(tr("Client connected."));
+
+    // We'll accept drops from now on...
+    setAcceptDrops(true);
+
+    // Is any session pending to be loaded?
+    if (!m_pOptions->sSessionFile.isEmpty() && closeSession()) {
+        // Just load the prabably startup session...
+        if (loadSessionFile(m_pOptions->sSessionFile)) {
+            m_pOptions->sSessionFile = QString::null;
+            return true;
+        }
+    }
 
     // OK, we're at it!
     stabilizeForm();
@@ -1365,6 +1404,9 @@ void qsamplerMainForm::stopClient (void)
 
     // Clear timer counters...
     stopSchedule();
+
+    // We'll reject drops from now on...
+    setAcceptDrops(false);
 
     // Log prepare here.
     appendMessages(tr("Client disconnecting..."));

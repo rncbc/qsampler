@@ -43,11 +43,14 @@ public:
 
     // The settings object accessor.
     QSettings& settings();
-    
+
     // Command line arguments parser.
     bool parse_args(int argc, char **argv);
     // Command line usage helper.
     void print_usage(const char *arg0);
+
+    // Startup supplied session file.
+    QString sSessionFile;
 
     // Server options...
     QString sServerHost;
@@ -55,7 +58,7 @@ public:
     bool    bServerStart;
     QString sServerCmdLine;
     int     iStartDelay;
-    
+
     // Display options...
     QString sDisplayFont;
     QString sMessagesFont;

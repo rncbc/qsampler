@@ -151,7 +151,7 @@ void qsamplerOptions::print_usage ( const char *arg0 )
     const QString sEol = "\n\n";
 
     fprintf(stderr, QObject::tr("Usage") + ": %s [" + QObject::tr("options") + "] [" +
-        QObject::tr("command-and-args") + "]" + sEol, arg0);
+        QObject::tr("session-file") + "]" + sEol, arg0);
     fprintf(stderr, QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE) + sEol);
     fprintf(stderr, QObject::tr("Options") + ":" + sEol);
     fprintf(stderr, "  -s, --start" + sEot +
@@ -176,8 +176,8 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
     for (int i = 1; i < argc; i++) {
 
         if (iCmdArgs > 0) {
-            sServerCmdLine += " ";
-            sServerCmdLine += argv[i];
+            sSessionFile += " ";
+            sSessionFile += argv[i];
             iCmdArgs++;
             continue;
         }
@@ -196,7 +196,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
             bServerStart = true;
         }
         else if (sArg == "-h" || sArg == "--hostname") {
-        	if (sVal.isNull()) {
+            if (sVal.isNull()) {
                 fprintf(stderr, QObject::tr("Option -h requires an argument (hostname).") + sEol);
                 return false;
             }
@@ -205,7 +205,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
                 i++;
         }
         else if (sArg == "-p" || sArg == "--port") {
-        	if (sVal.isNull()) {
+            if (sVal.isNull()) {
                 fprintf(stderr, QObject::tr("Option -p requires an argument (port).") + sEol);
                 return false;
             }
@@ -224,15 +224,12 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
             return false;
         }
         else {
-            // Here starts the optional command line...
-            sServerCmdLine += sArg;
+            // If we don't have one by now,
+            // this will be the startup sesion file...
+            sSessionFile += sArg;
             iCmdArgs++;
         }
     }
-
-    // HACK: If there's a command line, it must be spawned on background...
-    if (iCmdArgs > 0)
-        sServerCmdLine += " &";
 
     // Alright with argument parsing.
     return true;
@@ -241,7 +238,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
 
 //---------------------------------------------------------------------------
 // Widget geometry persistence helper methods.
-#include <qmessagebox.h>
+
 void qsamplerOptions::loadWidgetGeometry ( QWidget *pWidget )
 {
     // Try to restore old form window positioning.

@@ -58,7 +58,7 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     // Surely a name is crucial (e.g.for storing geometry settings)
     if (pszName == 0)
         QDockWindow::setName("qsamplerMessages");
-        
+
     // Create local text view widget.
     m_pTextView = new QTextEdit(this);
 //  QFont font(m_pTextView->font());
@@ -142,7 +142,7 @@ void qsamplerMessages::setCaptureEnabled ( bool bCapture )
 {
     // Flush current buffer.
     flushStdoutBuffer();
-    
+
 #if !defined(WIN32)
     // Destroy if already enabled.
     if (!bCapture && m_pStdoutNotifier) {
