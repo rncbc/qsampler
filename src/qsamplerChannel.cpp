@@ -475,10 +475,9 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
 	        delete pRiff;
 		}
 		else
-#else
+#endif
         for (int iInstrumentNr = 0; iInstrumentNr < QSAMPLER_INSTRUMENT_MAX; iInstrumentNr++)
             instlist.append(sInstrumentName + " [" + QString::number(iInstrumentNr) + "]");
-#endif
     }
     else instlist.append(sInstrumentName);
 
@@ -511,9 +510,8 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile, int 
 	        delete pRiff;
 		}
 		else
-#else
-        sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
 #endif
+        sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
     }
 
     return sInstrumentName;
