@@ -676,7 +676,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				deviceParam != device.params().end();
 					++deviceParam) {
 			const qsamplerDeviceParam& param = deviceParam.data();
-			if (!param.fix && !param.value.isEmpty())
+			if (!param.value.isEmpty())
 				ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
@@ -717,7 +717,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				deviceParam != device.params().end();
 					++deviceParam) {
 			const qsamplerDeviceParam& param = deviceParam.data();
-			if (!param.fix && !param.value.isEmpty())
+			if (!param.value.isEmpty())
 				ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
@@ -732,7 +732,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 						++portParam) {
 				const qsamplerDeviceParam& param = portParam.data();
 				if (!param.fix && !param.value.isEmpty()) {
-					ts << "SET MIDI_INPUT_CHANNEL_PARAMETER " << iDevice
+					ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
 					   << " " << iPort << " " << portParam.key()
 					   << "='" << param.value << "'" << endl;
 				}
