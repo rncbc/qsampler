@@ -25,6 +25,7 @@
 #include <qfileinfo.h>
 #include <qtooltip.h>
 #include <qpopupmenu.h>
+#include <qobjectlist.h>
 
 #include <math.h>
 
@@ -98,6 +99,35 @@ void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
     MidiPortChannelTextLabel->setFont(font);
     InstrumentNameTextLabel->setFont(font);
     InstrumentStatusTextLabel->setFont(font);
+}
+
+
+// Channel display background effect.
+void qsamplerChannelStrip::setDisplayEffect ( bool bDisplayEffect )
+{
+    QPixmap pm;
+    if (bDisplayEffect)
+        pm = QPixmap::fromMimeSource("displaybg1.png");
+    setDisplayBackground(pm);
+}
+
+
+// Update main display background pixmap.
+void qsamplerChannelStrip::setDisplayBackground ( const QPixmap& pm )
+{
+    // Set the main origin...
+    ChannelInfoFrame->setPaletteBackgroundPixmap(pm);
+
+    // Iterate for every child text label...
+    QObjectList *pList = ChannelInfoFrame->queryList("QLabel");
+    if (pList) {
+        for (QLabel *pLabel = (QLabel *) pList->first(); pLabel; pLabel = (QLabel *) pList->next())
+            pLabel->setPaletteBackgroundPixmap(pm);
+        delete pList;
+    }
+    
+    // And this standalone too.
+    StreamVoiceCountTextLabel->setPaletteBackgroundPixmap(pm);
 }
 
 

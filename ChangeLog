@@ -15,7 +15,7 @@ ChangeLog
   channel (omni).
 
 * Channel strip display glass effect has changed background
-  color to black (was green).
+  color to black (was green), being now an user option.
 
 * Minor configure fixes.
 

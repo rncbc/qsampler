@@ -86,6 +86,10 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     DisplayFontTextLabel->setFont(font);
     DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
 
+    // Display effect.
+    DisplayEffectCheckBox->setChecked(m_pOptions->bDisplayEffect);
+    toggleDisplayEffect(m_pOptions->bDisplayEffect);
+
     // Auto-refresh and maximum volume options.
     AutoRefreshCheckBox->setChecked(m_pOptions->bAutoRefresh);
     AutoRefreshTimeSpinBox->setValue(m_pOptions->iAutoRefreshTime);
@@ -127,6 +131,7 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->iStartDelay          = StartDelaySpinBox->value();
         // Channels options...
         m_pOptions->sDisplayFont         = DisplayFontTextLabel->font().toString();
+        m_pOptions->bDisplayEffect       = DisplayEffectCheckBox->isChecked();
         m_pOptions->bAutoRefresh         = AutoRefreshCheckBox->isChecked();
         m_pOptions->iAutoRefreshTime     = AutoRefreshTimeSpinBox->value();
         m_pOptions->iMaxVolume           = MaxVolumeSpinBox->value();
@@ -229,6 +234,18 @@ void qsamplerOptionsForm::chooseMessagesFont (void)
         MessagesFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
         optionsChanged();
     }
+}
+
+
+// The channel display effect demo changer.
+void qsamplerOptionsForm::toggleDisplayEffect ( bool bOn )
+{
+    QPixmap pm;
+    if (bOn)
+        pm = QPixmap::fromMimeSource("displaybg1.png");
+    DisplayFontTextLabel->setPaletteBackgroundPixmap(pm);
+
+    optionsChanged();
 }
 
 

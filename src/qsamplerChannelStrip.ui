@@ -432,6 +432,8 @@
     <function specifier="non virtual" returnType="qsamplerChannel *">channel ( void )</function>
     <function specifier="non virtual" returnType="QFont">displayFont( void )</function>
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
+    <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
+    <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
     <function specifier="non virtual">updateChannelInfo( void )</function>
     <function specifier="non virtual">updateChannelVolume( void )</function>
     <function specifier="non virtual">updateChannelUsage( void )</function>
