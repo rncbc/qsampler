@@ -139,7 +139,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel, bool bNew )
     int iMidiChannel = pChannel->midiChannel();
     if (bNew)
         iMidiChannel = (pChannel->channelID() + 1) % 16;
-    MidiChannelSpinBox->setValue(iMidiChannel);
+    MidiChannelComboBox->setCurrentItem(iMidiChannel);
     // Audio output driver...
     QString sAudioDriver = pChannel->audioDriver();
     if (sAudioDriver.isEmpty() && bNew)
@@ -178,7 +178,7 @@ void qsamplerChannelForm::accept (void)
         if (!m_pChannel->setMidiPort(MidiPortSpinBox->value()))
             iErrors++;
         // MIDI input channel...
-        if (!m_pChannel->setMidiChannel(MidiChannelSpinBox->value()))
+        if (!m_pChannel->setMidiChannel(MidiChannelComboBox->currentItem()))
             iErrors++;
         // Engine name...
         if (!m_pChannel->loadEngine(EngineNameComboBox->currentText()))

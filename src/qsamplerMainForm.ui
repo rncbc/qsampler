@@ -63,6 +63,7 @@
         <action name="fileSaveAction"/>
         <action name="fileSaveAsAction"/>
         <separator/>
+        <action name="fileResetAction"/>
         <action name="fileRestartAction"/>
         <separator/>
         <action name="fileExitAction"/>
@@ -106,6 +107,7 @@
         <action name="fileOpenAction"/>
         <action name="fileSaveAction"/>
         <separator/>
+        <action name="fileResetAction"/>
         <action name="fileRestartAction"/>
     </toolbar>
     <toolbar dock="2">
@@ -220,6 +222,29 @@
     </action>
     <action>
         <property name="name">
+            <cstring>fileResetAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>fileReset.png</iconset>
+        </property>
+        <property name="text">
+            <string>Reset</string>
+        </property>
+        <property name="menuText">
+            <string>Rese&amp;t</string>
+        </property>
+        <property name="toolTip">
+            <string>Reset instance</string>
+        </property>
+        <property name="statusTip">
+            <string>Reset sampler instance</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+R</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>fileRestartAction</cstring>
         </property>
         <property name="iconSet">
@@ -238,7 +263,7 @@
             <string>Restart sampler instance</string>
         </property>
         <property name="accel">
-            <string>Ctrl+R</string>
+            <string>Shift+Ctrl+R</string>
         </property>
     </action>
     <action>
@@ -572,6 +597,12 @@
         <slot>fileSaveAs()</slot>
     </connection>
     <connection>
+        <sender>fileResetAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>fileReset()</slot>
+    </connection>
+    <connection>
         <sender>fileRestartAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -700,6 +731,7 @@
     <slot specifier="non virtual">fileOpen( void )</slot>
     <slot specifier="non virtual">fileSave( void )</slot>
     <slot specifier="non virtual">fileSaveAs( void )</slot>
+    <slot specifier="non virtual">fileReset( void )</slot>
     <slot specifier="non virtual">fileRestart( void )</slot>
     <slot specifier="non virtual">fileExit( void )</slot>
     <slot specifier="non virtual">fileOpenRecent( int iIndex )</slot>

@@ -602,7 +602,12 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannel->audioDriver() << endl;
         ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
         ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
-        ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannel->midiChannel() << endl;
+        ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
+        if (pChannel->midiChannel() > 0)
+            ts << pChannel->midiChannel();
+         else
+            ts << "ALL";
+        ts << endl;
         ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
         ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
         ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
@@ -675,6 +680,28 @@ void qsamplerMainForm::fileSaveAs (void)
 {
     // Save it right away, maybe with another name.
     saveSession(true);
+}
+
+
+// Reset the sampler instance.
+void qsamplerMainForm::fileReset (void)
+{
+    if (m_pClient == NULL)
+        return;
+
+    // Ask user whether he/she want's an internal sampler reset...
+    if (QMessageBox::warning(this, tr("Warning"),
+        tr("Resetting the sampler instance will close\n"
+           "all device and channel configurations.\n\n"
+           "Please note that this operation may cause\n"
+           "temporary MIDI and Audio disruption\n\n"
+           "Do you want to reset the sampler engine now?"),
+        tr("Reset"), tr("Cancel")) > 0)
+        return;
+
+    // Just do the reset, after closing down current session...
+    if (closeSession(true) && ::lscp_reset_sampler(m_pClient) != LSCP_OK)
+        appendMessagesClient("lscp_reset_sampler");
 }
 
 
@@ -1069,6 +1096,7 @@ void qsamplerMainForm::stabilizeForm (void)
     fileOpenAction->setEnabled(bHasClient);
     fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
     fileSaveAsAction->setEnabled(bHasClient);
+    fileResetAction->setEnabled(bHasClient);
     fileRestartAction->setEnabled(bHasClient || m_pServer == NULL);
     editAddChannelAction->setEnabled(bHasClient);
     editRemoveChannelAction->setEnabled(bHasChannel);

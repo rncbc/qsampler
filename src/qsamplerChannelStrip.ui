@@ -29,7 +29,7 @@
             <x>0</x>
             <y>0</y>
             <width>694</width>
-            <height>46</height>
+            <height>47</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -157,6 +157,9 @@
                     <property name="alignment">
                         <set>AlignTop</set>
                     </property>
+                    <property name="indent">
+                        <number>4</number>
+                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Engine name</string>
                     </property>
@@ -180,6 +183,9 @@
                     </property>
                     <property name="text">
                         <string>--</string>
+                    </property>
+                    <property name="indent">
+                        <number>4</number>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Instrument file [index]</string>
@@ -386,12 +392,6 @@
 </widget>
 <connections>
     <connection>
-        <sender>ChannelSetupPushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>channelSetup()</slot>
-    </connection>
-    <connection>
         <sender>VolumeSlider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>qsamplerChannelStrip</receiver>
@@ -438,8 +438,8 @@
     <signal>channelChanged( qsamplerChannelStrip * )</signal>
 </signals>
 <slots>
-    <slot specifier="non virtual">channelSetup(bool bNew = false)</slot>
     <slot specifier="non virtual">volumeChanged(int)</slot>
+    <slot specifier="non virtual">channelSetup(bool bNew = false)</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
