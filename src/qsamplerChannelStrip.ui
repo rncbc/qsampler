@@ -440,6 +440,7 @@
     <function specifier="non virtual">appendMessagesText( const QString &amp; s )</function>
     <function specifier="non virtual">appendMessagesError( const QString &amp; s )</function>
     <function specifier="non virtual">appendMessagesClient( const QString &amp; s )</function>
+    <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>
