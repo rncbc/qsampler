@@ -394,23 +394,25 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
         appendMessagesError(tr("Could not open \"%1\" session file. Sorry.").arg(sFilename));
         return false;
     }
-
     // Read the file.
     int iErrors = 0;
     QTextStream ts(&file);
     while (!ts.atEnd()) {
         // Read the line.
-        const QString sCommand = ts.readLine().simplifyWhiteSpace();
+        QString sCommand = ts.readLine().simplifyWhiteSpace();
         // If not empty, nor a comment, call the server...
         if (!sCommand.isEmpty() && sCommand[0] != '#') {
             appendMessagesColor(sCommand, "#996633");
+            // Remember that, no matter what,
+            // all LSCP commands are CR/LF terminated.
+            sCommand += "\r\n";
             if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
                 appendMessagesClient("lscp_client_query");
                 iErrors++;
             }
-            // Try to make it snappy :)
-            QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
         }
+        // Try to make it snappy :)
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
 
     // Ok. we've read it.

@@ -165,14 +165,14 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
     else if (fVolume < 0.0)
         fVolume = 0.0;
 
+    // Update the GUI elements.
+    setChannelVolume(fVolume);
+
     // Do it for real.
     if (::lscp_set_channel_volume(m_pMainForm->client(), m_iChannelID, fVolume) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_volume");
         appendMessagesError(tr("Could not set channel volume. Sorry."));
     }
-    
-    // And update the GUI elements.
-    setChannelVolume(fVolume);
 }
 
 
