@@ -21,6 +21,9 @@
 
 #include "qsamplerDevice.h"
 
+#include <qspinbox.h>
+#include <qlineedit.h>
+
 #include "qsamplerMainForm.h"
 #include "qsamplerDeviceForm.h"
 
@@ -420,7 +423,7 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = params.begin(); iter != params.end(); ++iter) {
 		const qsamplerDeviceParam& param = iter.data();
-		bool fEnabled = (device.deviceID() < 0 || !param.fix);
+		bool bEnabled = (device.deviceID() < 0 || !param.fix);
 		QTable::setText(iRow, 0, iter.key());
 		QTable::setText(iRow, 1, param.description);
 		if (param.type == LSCP_TYPE_BOOL) {
@@ -429,19 +432,29 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 			opts.append(tr("true"));
 			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
 		    pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
-		    pComboItem->setEnabled(fEnabled);
+		    pComboItem->setEnabled(bEnabled);
 			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.possibilities.count() > 0 && !param.multiplicity) {
+		} else if (param.possibilities.count() > 0) {
 			QComboTableItem *pComboItem = new QComboTableItem(this,
 				param.possibilities);
 		    pComboItem->setCurrentItem(param.value);
-		    pComboItem->setEnabled(fEnabled);
+		    pComboItem->setEnabled(bEnabled);
+		    pComboItem->setEditable(bEnabled && param.multiplicity);
 			QTable::setItem(iRow, 2, pComboItem);
+	    } else if (param.type == LSCP_TYPE_INT) {
+        	qsamplerDeviceParamTableSpinBox *pSpinItem =
+				new qsamplerDeviceParamTableSpinBox(this,
+					bEnabled ? QTableItem::OnTyping : QTableItem::Never);
+			pSpinItem->setMinValue(param.range_min.toInt());
+			pSpinItem->setMaxValue(param.range_max.toInt());
+			pSpinItem->setValue(param.value.toInt());
+			QTable::setItem(iRow, 2, pSpinItem);
 		} else {
-			QTableItem* pTableItem = new QTableItem(this,
-				fEnabled ? QTableItem::OnTyping : QTableItem::Never,
-				param.value);
-			QTable::setItem(iRow, 2, pTableItem);
+            qsamplerDeviceParamTableEditBox *pEditItem =
+				new qsamplerDeviceParamTableEditBox(this,
+				    bEnabled ? QTableItem::OnTyping : QTableItem::Never,
+					param.value);
+			QTable::setItem(iRow, 2, pEditItem);
 		}
 		++iRow;
 	}
@@ -452,6 +465,90 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 
 	QTable::setUpdatesEnabled(true);
 	QTable::updateContents();
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
+//
+
+// Constructor.
+qsamplerDeviceParamTableSpinBox::qsamplerDeviceParamTableSpinBox (
+	QTable *pTable, EditType editType )
+	: QTableItem(pTable, editType, QString::null)
+{
+	m_iValue = m_iMinValue = m_iMaxValue = 0;
+}
+
+// Public accessors.
+void qsamplerDeviceParamTableSpinBox::setValue ( int iValue )
+{
+	m_iValue = iValue;
+	QTableItem::setText(QString::number(m_iValue));
+}
+
+void qsamplerDeviceParamTableSpinBox::setMinValue ( int iMinValue )
+{
+	m_iMinValue = iMinValue;
+}
+
+void qsamplerDeviceParamTableSpinBox::setMaxValue ( int iMaxValue )
+{
+	m_iMaxValue = iMaxValue;
+}
+
+// Virtual implemetations.
+QWidget *qsamplerDeviceParamTableSpinBox::createEditor (void) const
+{
+	QSpinBox *pSpinBox = new QSpinBox(QTableItem::table()->viewport());
+	QObject::connect(pSpinBox, SIGNAL(valueChanged(int)),
+		QTableItem::table(), SLOT(doValueChanged()));
+	if (m_iValue >= m_iMinValue && m_iMaxValue >= m_iValue) {
+		pSpinBox->setMinValue(m_iMinValue);
+		pSpinBox->setMaxValue(m_iMaxValue);
+	}
+	pSpinBox->setValue(m_iValue);
+//	pSpinBox->setEnabled(QTableItem::isEnabled());
+	return pSpinBox;
+}
+
+void qsamplerDeviceParamTableSpinBox::setContentFromEditor ( QWidget *pWidget )
+{
+	if (pWidget->inherits("QSpinBox"))
+	    QTableItem::setText(QString::number(((QSpinBox *) pWidget)->value()));
+	else
+	    QTableItem::setContentFromEditor(pWidget);
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerDeviceParamTableEditBox - Custom edit box for parameter table.
+//
+
+// Constructor.
+qsamplerDeviceParamTableEditBox::qsamplerDeviceParamTableEditBox (
+	QTable *pTable, EditType editType, const QString& sText )
+	: QTableItem(pTable, editType, sText)
+{
+}
+
+// Virtual implemetations.
+QWidget *qsamplerDeviceParamTableEditBox::createEditor (void) const
+{
+	QLineEdit *pEditBox = new QLineEdit(QTableItem::table()->viewport());
+	QObject::connect(pEditBox, SIGNAL(returnPressed()),
+		QTableItem::table(), SLOT(doValueChanged()));
+	pEditBox->setText(QTableItem::text());
+//	pEditBox->setEnabled(QTableItem::isEnabled());
+	return pEditBox;
+}
+
+void qsamplerDeviceParamTableEditBox::setContentFromEditor ( QWidget *pWidget )
+{
+	if (pWidget->inherits("QLineEdit"))
+	    QTableItem::setText(((QLineEdit *) pWidget)->text());
+	else
+	    QTableItem::setContentFromEditor(pWidget);
 }
 
 

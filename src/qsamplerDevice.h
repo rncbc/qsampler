@@ -180,6 +180,57 @@ public:
 };
 
 
+//-------------------------------------------------------------------------
+// qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
+//
+
+class qsamplerDeviceParamTableSpinBox : public QTableItem
+{
+public:
+
+	// Constructor.
+	qsamplerDeviceParamTableSpinBox (QTable *pTable, EditType editType);
+
+	// Public accessors.
+	void setMinValue(int iMinValue);
+	void setMaxValue(int iMaxValue);
+	void setValue(int iValue);
+
+protected:
+
+	// Virtual implemetations.
+	QWidget *createEditor() const;
+	void setContentFromEditor(QWidget *pWidget);
+
+private:
+
+	// Initial value holders.
+	int m_iMinValue;
+	int m_iMaxValue;
+	int m_iValue;
+};
+
+
+//-------------------------------------------------------------------------
+// qsamplerDeviceParamTableEditBox - Custom edit box for parameter table.
+//
+
+class qsamplerDeviceParamTableEditBox : public QTableItem
+{
+public:
+
+	// Constructor.
+	qsamplerDeviceParamTableEditBox (QTable *pTable, EditType editType,
+		const QString& sText);
+
+protected:
+
+	// Virtual implemetations.
+	QWidget *createEditor() const;
+	void setContentFromEditor(QWidget *pWidget);
+};
+
+
 #endif  // __qsamplerDevice_h
 
 
