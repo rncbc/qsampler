@@ -80,7 +80,7 @@ class qsamplerDevice
 public:
 
 	// We use the same class for MIDI and audio device management
-	enum qsamplerDeviceType { Midi, Audio };
+	enum qsamplerDeviceType { None, Midi, Audio };
 
 	// Constructor.
 	qsamplerDevice(lscp_client_t *pClient,
