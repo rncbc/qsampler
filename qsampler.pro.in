@@ -1,0 +1,36 @@
+INCLUDEPATH += ./src
+
+SOURCES += src/main.cpp \
+           src/qsamplerOptions.cpp \
+           src/qsamplerMessages.cpp
+
+HEADERS += src/qsamplerAbout.h \
+           src/qsamplerOptions.h \
+           src/qsamplerMessages.h
+
+FORMS    = src/qsamplerMainForm.ui \
+           src/qsamplerChannelStrip.ui \
+           src/qsamplerChannelForm.ui \
+           src/qsamplerOptionsForm.ui
+
+IMAGES   = icons/qsampler.png \
+           icons/qsamplerChannel.png \
+           icons/fileNew.png \
+           icons/fileOpen.png \
+           icons/fileSave.png \
+           icons/fileRestart.png \
+           icons/editAddChannel.png \
+           icons/editRemoveChannel.png \
+           icons/editResetChannel.png \
+           icons/editSetupChannel.png \
+           icons/channelsArrange.png \
+           icons/formAccept.png \
+           icons/formReject.png \
+           icons/displaybg1.png
+
+TEMPLATE = app
+CONFIG  += qt @ac_thread@ warn_on @ac_debug@
+LANGUAGE = C++
+
+LIBS    += -llscp
+
