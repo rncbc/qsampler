@@ -614,10 +614,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
                 ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
                 ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
                 ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
-                if (pChannel->midiChannel() > 0)
-                    ts << pChannel->midiChannel();
-                 else
+                if (pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
                     ts << "ALL";
+                else
+                    ts << pChannel->midiChannel();
                 ts << endl;
                 ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
                 ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
