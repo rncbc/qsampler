@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>qsamplerMainForm</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
@@ -28,9 +28,15 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>504</height>
+            <width>786</width>
+            <height>915</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>320</width>
+            <height>240</height>
+        </size>
     </property>
     <property name="caption">
         <string>qsampler</string>
@@ -47,8 +53,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>29</height>
+            <width>786</width>
+            <height>30</height>
         </rect>
     </property>
     <item text="&amp;File" name="fileMenu">
@@ -67,11 +73,7 @@
     </item>
     <item text="&amp;View" name="viewMenu">
         <action name="viewMenubarAction"/>
-        <action name="viewToolbarsAction"/>
-        <item text="&amp;Toolbars" name="viewToolbarsMenu" accel="">
-            <action name="viewFileToolbarAction"/>
-            <action name="viewEditToolbarAction"/>
-        </item>
+        <action name="viewToolbarAction"/>
         <action name="viewStatusbarAction"/>
         <separator/>
         <action name="viewOptionsAction"/>
@@ -291,7 +293,7 @@
             <string>Show/hide menubar</string>
         </property>
         <property name="statusTip">
-            <string>Show/hide the main program menubar</string>
+            <string>Show/hide the main program window menubar</string>
         </property>
         <property name="accel">
             <string>Ctrl+M</string>
@@ -299,59 +301,25 @@
     </action>
     <action>
         <property name="name">
-            <cstring>viewToolbarsAction</cstring>
+            <cstring>viewToolbarAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
         </property>
         <property name="text">
             <string>viewToolbars</string>
         </property>
         <property name="menuText">
-            <string>&amp;Toolbars</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewFileToolbarAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>fileToolbar</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;File Toolbar</string>
+            <string>&amp;Toolbar</string>
         </property>
         <property name="toolTip">
-            <string>Show/hide file toolbar</string>
+            <string>Show/hide toolbar</string>
         </property>
         <property name="statusTip">
-            <string>Show/hide the file toolbar</string>
+            <string>Show/hide main program window toolbars</string>
         </property>
         <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewEditToolbarAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>editToolbar</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Edit Toolbar</string>
-        </property>
-        <property name="toolTip">
-            <string>Show/hide edit toolbar</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide the edit toolbar</string>
-        </property>
-        <property name="accel">
-            <string></string>
+            <string>Ctrl+T</string>
         </property>
     </action>
     <action>
@@ -371,7 +339,7 @@
             <string>Show/hide statusbar</string>
         </property>
         <property name="statusTip">
-            <string>Show/hide the main program statusbar</string>
+            <string>Show/hide the main program window statusbar</string>
         </property>
         <property name="accel">
             <string></string>
@@ -488,16 +456,10 @@
         <slot>viewMenubar(bool)</slot>
     </connection>
     <connection>
-        <sender>viewFileToolbarAction</sender>
+        <sender>viewToolbarAction</sender>
         <signal>toggled(bool)</signal>
         <receiver>qsamplerMainForm</receiver>
-        <slot>viewFileToolbar(bool)</slot>
-    </connection>
-    <connection>
-        <sender>viewEditToolbarAction</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewEditToolbar(bool)</slot>
+        <slot>viewToolbar(bool)</slot>
     </connection>
     <connection>
         <sender>viewStatusbarAction</sender>
@@ -533,28 +495,27 @@
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
 </variables>
 <slots>
-    <slot>fileNew()</slot>
-    <slot>fileOpen()</slot>
-    <slot>fileSave()</slot>
-    <slot>fileSaveAs()</slot>
-    <slot>fileExit()</slot>
-    <slot>editAddChannel()</slot>
-    <slot>editRemoveChannel()</slot>
-    <slot>editResetChannel()</slot>
+    <slot>fileNew( void )</slot>
+    <slot>fileOpen( void )</slot>
+    <slot>fileSave( void )</slot>
+    <slot>fileSaveAs( void )</slot>
+    <slot>fileExit( void )</slot>
+    <slot>editAddChannel( void )</slot>
+    <slot>editRemoveChannel( void )</slot>
+    <slot>editResetChannel( void )</slot>
     <slot>viewMenubar( bool bOn )</slot>
-    <slot>viewFileToolbar( bool bOn )</slot>
-    <slot>viewEditToolbar( bool bOn )</slot>
+    <slot>viewToolbar( bool bOn )</slot>
     <slot>viewStatusbar( bool bOn )</slot>
-    <slot>viewOptions()</slot>
-    <slot>helpAboutQt()</slot>
-    <slot>helpAbout()</slot>
+    <slot>viewOptions( void )</slot>
+    <slot>helpAboutQt( void )</slot>
+    <slot>helpAbout( void )</slot>
 </slots>
 <functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function specifier="non virtual">setup( qsamplerOptions *pOptions )</function>
+    <function access="private" specifier="non virtual">init( void )</function>
+    <function access="private" specifier="non virtual">destroy( void )</function>
+    <function specifier="non virtual">setup( qsamplerOptions * pOptions )</function>
     <function access="private" specifier="non virtual" returnType="bool">queryClose( void )</function>
-    <function access="private" specifier="non virtual">closeEvent( QCloseEvent *pCloseEvent )</function>
+    <function access="private" specifier="non virtual">closeEvent( QCloseEvent * pCloseEvent )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="8"/>

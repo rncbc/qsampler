@@ -54,14 +54,12 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 
     // Initial decorations toggle state.
     viewMenubarAction->setOn(m_pOptions->bMenubar);
-    viewFileToolbarAction->setOn(m_pOptions->bFileToolbar);
-    viewEditToolbarAction->setOn(m_pOptions->bEditToolbar);
+    viewToolbarAction->setOn(m_pOptions->bToolbar);
     viewStatusbarAction->setOn(m_pOptions->bStatusbar);
 
     // Initial decorations visibility state.
     viewMenubar(m_pOptions->bMenubar);
-    viewFileToolbar(m_pOptions->bFileToolbar);
-    viewEditToolbar(m_pOptions->bEditToolbar);
+    viewToolbar(m_pOptions->bToolbar);
     viewStatusbar(m_pOptions->bStatusbar);
 
     // Try to restore old window positioning.
@@ -78,8 +76,7 @@ bool qsamplerMainForm::queryClose (void)
     if (m_pOptions && bQueryClose) {
         // Save decorations state.
         m_pOptions->bMenubar = MenuBar->isVisible();
-        m_pOptions->bFileToolbar = fileToolbar->isVisible();
-        m_pOptions->bEditToolbar = editToolbar->isVisible();
+        m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible());
         m_pOptions->bStatusbar = statusBar()->isVisible();
         // And main window form...
         m_pOptions->saveWidgetGeometry(this);
@@ -156,7 +153,7 @@ void qsamplerMainForm::editResetChannel (void)
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- View Action slots.
 
-// Show/hide the main program menubar.
+// Show/hide the main program window menubar.
 void qsamplerMainForm::viewMenubar ( bool bOn )
 {
     if (bOn)
@@ -166,27 +163,20 @@ void qsamplerMainForm::viewMenubar ( bool bOn )
 }
 
 
-// Show/hide the file actions toolbar.
-void qsamplerMainForm::viewFileToolbar ( bool bOn )
+// Show/hide the main program window toolbar.
+void qsamplerMainForm::viewToolbar ( bool bOn )
 {
-    if (bOn)
+	if (bOn) {
         fileToolbar->show();
-    else
-        fileToolbar->hide();
-}
-
-
-// Show/hide the edit actions toolbar.
-void qsamplerMainForm::viewEditToolbar ( bool bOn )
-{
-    if (bOn)
         editToolbar->show();
-    else
+	} else {
+        fileToolbar->hide();
         editToolbar->hide();
+	}
 }
 
 
-// Show/hide the main program statusbar.
+// Show/hide the main program window statusbar.
 void qsamplerMainForm::viewStatusbar ( bool bOn )
 {
     if (bOn)

@@ -59,10 +59,9 @@ qsamplerOptions::qsamplerOptions (void)
 
     // And go into view options group.
     m_settings.beginGroup("/View");
-    bMenubar       = m_settings.readBoolEntry("/Menubar",       true);
-    bFileToolbar   = m_settings.readBoolEntry("/FileToolbar",   true);
-    bEditToolbar   = m_settings.readBoolEntry("/EditToolbar",   true);
-    bStatusbar     = m_settings.readBoolEntry("/Statusbar",     true);
+    bMenubar       = m_settings.readBoolEntry("/Menubar",   true);
+    bToolbar       = m_settings.readBoolEntry("/Toolbar",   true);
+    bStatusbar     = m_settings.readBoolEntry("/Statusbar", true);
     m_settings.endGroup();
 
     m_settings.endGroup();
@@ -99,10 +98,9 @@ qsamplerOptions::~qsamplerOptions (void)
 
     // View options group.
     m_settings.beginGroup("/View");
-    m_settings.writeEntry("/Menubar",       bMenubar);
-    m_settings.writeEntry("/FileToolbar",   bFileToolbar);
-    m_settings.writeEntry("/EditToolbar",   bEditToolbar);
-    m_settings.writeEntry("/Statusbar",     bStatusbar);
+    m_settings.writeEntry("/Menubar",   bMenubar);
+    m_settings.writeEntry("/Toolbar",   bToolbar);
+    m_settings.writeEntry("/Statusbar", bStatusbar);
     m_settings.endGroup();
 
     m_settings.endGroup();

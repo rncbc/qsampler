@@ -59,8 +59,7 @@ public:
 
     // View options...
     bool    bMenubar;
-    bool    bFileToolbar;
-    bool    bEditToolbar;
+    bool    bToolbar;
     bool    bStatusbar;
 
     // Widget geometry persistence helper prototypes.
