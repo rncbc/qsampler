@@ -1,7 +1,7 @@
 // qsamplerChannels.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,14 +22,50 @@
 #ifndef __qsamplerChannels_h
 #define __qsamplerChannels_h
 
-#include <qvbox.h>
+#include <qscrollview.h>
+#include <qframe.h>
+#include <qptrlist.h>
+
+class QVBoxLayout;
+class QVBox;
+class QSpacerItem;
+
+class qsamplerChannelForm;
+
+
+//-------------------------------------------------------------------------
+// qsamplerChannelStrip - Channel strip window.
+//
+
+class qsamplerChannelStrip : public QFrame
+{
+    Q_OBJECT
+
+public:
+
+    // Constructor.
+    qsamplerChannelStrip(QWidget *pParent, const char *pszName = 0);
+    // Destructor.
+    ~qsamplerChannelStrip();
+
+    // The form accessor.
+    qsamplerChannelForm *form();
+    
+private:
+
+    // The layout enforcer;
+    QVBoxLayout *m_pVLayout;
+    
+    // The child widgets;
+    qsamplerChannelForm *m_pChannelForm;
+};
 
 
 //-------------------------------------------------------------------------
 // qsamplerChannels - Channels child window.
 //
 
-class qsamplerChannels : public QVBox
+class qsamplerChannels : public QScrollView
 {
     Q_OBJECT
 
@@ -39,6 +75,23 @@ public:
     qsamplerChannels(QWidget *pParent, const char *pszName = 0);
     // Destructor.
     ~qsamplerChannels();
+
+    // Channel list management.
+    qsamplerChannelStrip *addChannel();
+    void removeChannel(qsamplerChannelStrip *pChannel);
+    
+    // Retrive channel form by index.
+    qsamplerChannelStrip *channelAt(int iChannel);
+    
+private:
+
+    // The layout enforcers.
+    QVBoxLayout *m_pVLayout;
+    QVBox       *m_pVBox;
+    QSpacerItem *m_pVSpacer;
+    
+    // The official channel list.
+    QPtrList<qsamplerChannelStrip> m_channels;
 };
 
 

@@ -43,8 +43,9 @@ void qsamplerMainForm::init (void)
     // Initialize some pointer references.
     m_pOptions = NULL;
 
-    // All child forms are to be created later on setup.
+    // All child forms are to be created later, not earlier than setup.
     m_pMessages = NULL;
+    m_pChannels = NULL;
 
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);
@@ -57,6 +58,8 @@ void qsamplerMainForm::init (void)
 void qsamplerMainForm::destroy (void)
 {
     // Finally drop any widgets around...
+    if (m_pChannels)
+        delete m_pChannels;
     if (m_pMessages)
         delete m_pMessages;
     if (m_pWorkspace)
@@ -78,6 +81,10 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     updateMessagesCapture();
     // Set the visibility signal.
     QObject::connect(m_pMessages, SIGNAL(visibilityChanged(bool)), this, SLOT(stabilizeForm()));
+
+    // FIXME: The channels window is an MDI child.
+    m_pChannels = new qsamplerChannels(m_pWorkspace);
+    m_pChannels->showMaximized();
 
     // Initial decorations toggle state.
     viewMenubarAction->setOn(m_pOptions->bMenubar);
@@ -198,6 +205,9 @@ void qsamplerMainForm::fileExit (void)
 void qsamplerMainForm::editAddChannel (void)
 {
     appendMessages("editAddChannel()");
+    // FIXME: Add a new channel item.
+    if (m_pChannels)
+        m_pChannels->addChannel();
 }
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>qsamplerOptionsForm</class>
+<class>qsamplerChannelForm</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
    Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -20,7 +20,6 @@
 
 </comment>
 <author>rncbc aka Rui Nuno Capela</author>
-<class>qsamplerChannelForm</class>
 <widget class="QWidget">
     <property name="name">
         <cstring>qsamplerChannelForm</cstring>
@@ -29,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>752</width>
-            <height>102</height>
+            <width>696</width>
+            <height>119</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -43,6 +42,9 @@
     </property>
     <property name="caption">
         <string>Channel</string>
+    </property>
+    <property name="icon">
+        <pixmap>qsampler.png</pixmap>
     </property>
     <property name="focusPolicy">
         <enum>StrongFocus</enum>
@@ -97,6 +99,9 @@
                     <property name="text">
                         <string>&amp;Type:</string>
                     </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
                     <property name="buddy" stdset="0">
                         <cstring>MidiTypeComboBox</cstring>
                     </property>
@@ -120,6 +125,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Port:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>MidiPortLineEdit</cstring>
@@ -153,6 +161,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Channel:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>MidiChannelSpinBox</cstring>
@@ -198,6 +209,9 @@
                     <property name="text">
                         <string>&amp;Type:</string>
                     </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
                     <property name="buddy" stdset="0">
                         <cstring>AudioTypeComboBox</cstring>
                     </property>
@@ -226,6 +240,9 @@
                     </property>
                     <property name="text">
                         <string>&amp;Channel:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>AudioChannelSpinBox</cstring>
@@ -286,18 +303,21 @@
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>20</width>
+                    <width>22</width>
                     <height>22</height>
                 </size>
             </property>
             <property name="maximumSize">
                 <size>
                     <width>22</width>
-                    <height>24</height>
+                    <height>22</height>
                 </size>
             </property>
             <property name="text">
-                <string>...</string>
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>fileOpen.png</pixmap>
             </property>
         </widget>
         <widget class="QGroupBox" row="0" column="6" rowspan="3" colspan="1">
@@ -313,12 +333,6 @@
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>4</number>
-                </property>
-                <property name="spacing">
-                    <number>4</number>
                 </property>
                 <widget class="QDial">
                     <property name="name">
@@ -477,5 +491,6 @@
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
 </functions>
+<pixmapinproject/>
 <layoutdefaults spacing="8" margin="8"/>
 </UI>

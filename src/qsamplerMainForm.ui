@@ -529,12 +529,14 @@
     <include location="global" impldecl="in declaration">qworkspace.h</include>
     <include location="local" impldecl="in declaration">qsamplerOptions.h</include>
     <include location="local" impldecl="in declaration">qsamplerMessages.h</include>
+    <include location="local" impldecl="in declaration">qsamplerChannels.h</include>
     <include location="local" impldecl="in implementation">qsamplerOptionsForm.h</include>
     <include location="local" impldecl="in implementation">qsamplerMainForm.ui.h</include>
 </includes>
 <variables>
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
     <variable access="private">qsamplerMessages *m_pMessages;</variable>
+    <variable access="private">qsamplerChannels *m_pChannels;</variable>
     <variable access="private">QWorkspace *m_pWorkspace;</variable>
 </variables>
 <slots>
