@@ -24,7 +24,7 @@
 
 #include <qcombobox.h>
 
-#include "lscp/client.h"
+#include <lscp/client.h>
 
 #include "config.h"
 

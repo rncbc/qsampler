@@ -38,21 +38,8 @@
 void qsamplerChannelStrip::init (void)
 {
     // Initialize locals.
-    m_pMainForm  = NULL;
-    m_iChannelID = 0;
-    
-//  m_sEngineName       = tr("(No engine)");
-//  m_sInstrumentFile   = tr("(No instrument)");
-    m_iInstrumentNr     = -1;
-    m_iInstrumentStatus = -1;
-    m_sMidiDriver       = "Alsa";   // DEPRECATED.
-    m_iMidiDevice       = -1;
-    m_iMidiPort         = -1;
-    m_iMidiChannel      = -1;
-    m_sAudioDriver      = "Alsa";   // DEPRECATED.
-    m_iAudioDevice      = -1;
-    m_fVolume           = 0.0;
-    
+    m_pMainForm    = NULL;
+    m_pChannel     = NULL;
     m_iDirtyChange = 0;
 
     // Try to restore normal window positioning.
@@ -63,255 +50,36 @@ void qsamplerChannelStrip::init (void)
 // Kind of destructor.
 void qsamplerChannelStrip::destroy (void)
 {
+    // Destroy existing channel descriptor.
+    if (m_pChannel)
+        delete m_pChannel;
+    m_pChannel = NULL;
 }
 
 
 // Channel strip setup formal initializer.
 void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
 {
-    m_iDirtyChange = 0;
+    // Set main form reference.
     m_pMainForm = pMainForm;
-
-    setChannelID(iChannelID);
-}
-
-
-// The global options settings delegated property.
-qsamplerOptions *qsamplerChannelStrip::options (void)
-{
-    if (m_pMainForm == NULL)
-        return NULL;
-        
-    return m_pMainForm->options();
-}
-
-
-// The client descriptor delegated property.
-lscp_client_t *qsamplerChannelStrip::client (void)
-{
-    if (m_pMainForm == NULL)
-        return NULL;
-
-    return m_pMainForm->client();
-}
-
-
-// Channel-ID (aka Sammpler-Channel) accessors.
-int qsamplerChannelStrip::channelID (void)
-{
-    return m_iChannelID;
-}
-
-void qsamplerChannelStrip::setChannelID ( int iChannelID )
-{
-    m_iChannelID = iChannelID;
-
-    updateChannelInfo();
-}
-
-
-// Engine name accessors.
-QString& qsamplerChannelStrip::engineName (void)
-{
-    return m_sEngineName;
-}
-
-bool qsamplerChannelStrip::loadEngine ( const QString& sEngineName )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_load_engine(client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
-        appendMessagesClient("lscp_load_engine");
-        return false;
-    }
-
-    m_sEngineName = sEngineName;
-    return true;
-}
-
-
-// Instrument filename accessor.
-QString& qsamplerChannelStrip::instrumentFile (void)
-{
-    return m_sInstrumentFile;
-}
-
-// Instrument index accessor.
-int qsamplerChannelStrip::instrumentNr (void)
-{
-    return m_iInstrumentNr;
-}
-
-// Instrument status accessor.
-int qsamplerChannelStrip::instrumentStatus (void)
-{
-    return m_iInstrumentStatus;
-}
-
-// Instrument file loader.
-bool qsamplerChannelStrip::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_load_instrument_non_modal(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
-        appendMessagesClient("lscp_load_instrument");
-        return false;
-    }
-
-    m_sInstrumentFile = sInstrumentFile;
-    m_iInstrumentNr = iInstrumentNr;
-    m_iInstrumentStatus = 0;
     
-    return true;
-}
+    // Destroy any previous channel descriptor.
+    if (m_pChannel)
+        delete m_pChannel;
 
-
-// MIDI driver type accessors (DEPRECATED).
-QString& qsamplerChannelStrip::midiDriver (void)
-{
-    return m_sMidiDriver;
-}
-
-bool qsamplerChannelStrip::setMidiDriver ( const QString& sMidiDriver )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_midi_type(client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_type");
-        return false;
+    // Create a new one...
+    m_pChannel = new qsamplerChannel(pMainForm);
+    // And set appropriate settings.
+    if (m_pChannel) {
+        m_pChannel->setChannelID(iChannelID);
+        m_iDirtyChange = 0;
     }
-
-    m_sMidiDriver = sMidiDriver;
-    return true;
 }
 
-
-// MIDI device accessors.
-int qsamplerChannelStrip::midiDevice (void)
+// Channel secriptor accessor.
+qsamplerChannel *qsamplerChannelStrip::channel (void)
 {
-    return m_iMidiDevice;
-}
-
-bool qsamplerChannelStrip::setMidiDevice ( int iMidiDevice )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_midi_device(client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_device");
-        return false;
-    }
-
-    m_iMidiDevice = iMidiDevice;
-    return true;
-}
-
-
-// MIDI port number accessor.
-int qsamplerChannelStrip::midiPort (void)
-{
-    return m_iMidiPort;
-}
-
-bool qsamplerChannelStrip::setMidiPort ( int iMidiPort )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_port");
-        return false;
-    }
-
-    m_iMidiPort = iMidiPort;
-    return true;
-}
-
-
-// MIDI channel accessor.
-int qsamplerChannelStrip::midiChannel (void)
-{
-    return m_iMidiChannel;
-}
-
-bool qsamplerChannelStrip::setMidiChannel ( int iMidiChannel )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_midi_channel(client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_channel");
-        return false;
-    }
-
-    m_iMidiChannel = iMidiChannel;
-    return true;
-}
-
-
-// Audio device accessor.
-int qsamplerChannelStrip::audioDevice (void)
-{
-    return m_iAudioDevice;
-}
-
-bool qsamplerChannelStrip::setAudioDevice ( int iAudioDevice )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_audio_device(client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_audio_device");
-        return false;
-    }
-
-    m_iAudioDevice = iAudioDevice;
-    return true;
-}
-
-
-// Audio driver type accessors (DEPRECATED).
-QString& qsamplerChannelStrip::audioDriver (void)
-{
-    return m_sAudioDriver;
-}
-
-bool qsamplerChannelStrip::setAudioDriver ( const QString& sAudioDriver )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_audio_type(client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_audio_type");
-        return false;
-    }
-
-    m_sAudioDriver = sAudioDriver;
-    return true;
-}
-
-
-// Channel volume accessors.
-float qsamplerChannelStrip::volume (void)
-{
-    return m_fVolume;
-}
-
-bool qsamplerChannelStrip::setVolume ( float fVolume )
-{
-    if (client() == NULL)
-        return false;
-
-    if (::lscp_set_channel_volume(client(), m_iChannelID, fVolume) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_volume");
-        return false;
-    }
-
-    m_fVolume = fVolume;
-    return true;
+    return m_pChannel;
 }
 
 
@@ -342,7 +110,7 @@ void qsamplerChannelStrip::showChannelSetup ( bool bNew )
 {
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
-        pChannelForm->setup(this, bNew);
+        pChannelForm->setup(m_pChannel, bNew);
         if (pChannelForm->exec()) {
             updateChannelInfo();
             emit channelChanged(this);
@@ -355,68 +123,52 @@ void qsamplerChannelStrip::showChannelSetup ( bool bNew )
 // Update whole channel info state.
 void qsamplerChannelStrip::updateChannelInfo (void)
 {
+    if (m_pChannel == NULL)
+        return;
+        
     // Update strip caption.
-    QString sText = tr("Channel %1").arg(m_iChannelID);
+    QString sText = tr("Channel %1").arg(m_pChannel->channelID());
     setCaption(sText);
     ChannelSetupPushButton->setText(sText);
 
     // Check if we're up and connected.
-    if (client() == NULL)
+    if (m_pChannel->client() == NULL)
         return;
 
-    // Read channel information.
-    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(client(), m_iChannelID);
-    if (pChannelInfo == NULL) {
-        appendMessagesClient("lscp_get_channel_info");     
-        appendMessagesError(tr("Could not get channel information.\n\nSorry."));
-    } else {
-        // Cache in channel information.
-        m_sEngineName       = pChannelInfo->engine_name;
-        m_sInstrumentFile   = pChannelInfo->instrument_file;
-        m_iInstrumentNr     = pChannelInfo->instrument_nr;
-        m_iInstrumentStatus = pChannelInfo->instrument_status;
-        m_iMidiDevice       = pChannelInfo->midi_device;
-        m_iMidiPort         = pChannelInfo->midi_port;
-        m_iMidiChannel      = pChannelInfo->midi_channel;
-        m_iAudioDevice      = pChannelInfo->audio_device;
-        m_fVolume           = pChannelInfo->volume;
-        // Some sanity checks.
-        if (m_sEngineName == "NONE")
-            m_sEngineName = QString::null;
-        if (m_sInstrumentFile == "NONE")
-            m_sInstrumentFile = QString::null;
-    }
+    // Read actual channel information.
+    m_pChannel->updateChannelInfo();
 
     // Set some proper display values.
     const QString sIndent = " ";
 
     // Engine name...
-    if (m_sEngineName.isEmpty())
+    if (m_pChannel->engineName().isEmpty())
         EngineNameTextLabel->setText(sIndent + tr("(No engine)"));
     else
-        EngineNameTextLabel->setText(sIndent + m_sEngineName);
+        EngineNameTextLabel->setText(sIndent + m_pChannel->engineName());
 
     // Instrument name...
-    if (m_sInstrumentFile.isEmpty())
+    if (m_pChannel->instrumentFile().isEmpty())
         InstrumentNameTextLabel->setText(sIndent + tr("(No instrument)"));
     else
         InstrumentNameTextLabel->setText(sIndent + QString("%1 [%2]")
-            .arg(QFileInfo(m_sInstrumentFile).fileName()).arg(m_iInstrumentNr));
+            .arg(QFileInfo(m_pChannel->instrumentFile()).fileName()).arg(m_pChannel->instrumentNr()));
 
     // Instrument status...
-    if (m_iInstrumentStatus < 0) {
+    int iInstrumentStatus = m_pChannel->instrumentStatus();
+    if (iInstrumentStatus < 0) {
         InstrumentStatusTextLabel->setPaletteForegroundColor(Qt::red);
-        InstrumentStatusTextLabel->setText(tr("ERR%1").arg(m_iInstrumentStatus));
+        InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
     } else {
-        InstrumentStatusTextLabel->setPaletteForegroundColor(m_iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
-        InstrumentStatusTextLabel->setText(QString::number(m_iInstrumentStatus) + "%");
+        InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
+        InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + "%");
     }
 
     // MIDI Port/Channel...
-    if (m_iMidiChannel > 0)
-        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_iMidiPort).arg(m_iMidiChannel));
+    if (m_pChannel->midiChannel() > 0)
+        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel()));
     else
-        MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_iMidiPort));
+        MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_pChannel->midiPort()));
 
     // And update the both GUI volume elements.
     updateChannelVolume();
@@ -426,12 +178,15 @@ void qsamplerChannelStrip::updateChannelInfo (void)
 // Do the dirty volume change.
 void qsamplerChannelStrip::updateChannelVolume (void)
 {
+    if (m_pChannel == NULL)
+        return;
+
     // Convert...
 #ifdef CONFIG_ROUND
-    int iVolume = (int) ::round(100.0 * m_fVolume);
+    int iVolume = (int) ::round(100.0 * m_pChannel->volume());
 #else
     double fIPart = 0.0;
-    double fFPart = ::modf(100.0 * m_fVolume, &fIPart);
+    double fFPart = ::modf(100.0 * m_pChannel->volume(), &fIPart);
     int iVolume = (int) fIPart;
     if (fFPart >= +0.5)
         iVolume++;
@@ -455,32 +210,30 @@ void qsamplerChannelStrip::updateChannelVolume (void)
 // Update whole channel usage state.
 void qsamplerChannelStrip::updateChannelUsage (void)
 {
-    if (client() == NULL)
+    if (m_pChannel == NULL)
+        return;
+    if (m_pChannel->client() == NULL)
         return;
 
     // Conditionally update whole channel status info.
-    if (m_iInstrumentStatus >= 0 && m_iInstrumentStatus < 100) {
+    if (m_pChannel->instrumentStatus() >= 0 && m_pChannel->instrumentStatus() < 100) {
         updateChannelInfo();
         // Once we get a complete instrument load, try a implied reset channel....
-        if (m_iInstrumentStatus == 100) {
-            if (::lscp_reset_channel(client(), m_iChannelID) != LSCP_OK)
-                appendMessagesClient("lscp_reset_channel");
-            else
-                appendMessages(tr("Channel %1 reset.").arg(m_iChannelID));
-        }
+        if (m_pChannel->instrumentStatus() == 100)
+            m_pChannel->resetChannel();
     }
     // Leave, if we still have an erroneus or incomplete instrument load.
-    if (m_iInstrumentStatus < 100)
+    if (m_pChannel->instrumentStatus() < 100)
         return;
 
     // Get current channel voice count.
-    int iVoiceCount  = ::lscp_get_channel_voice_count(client(), m_iChannelID);
+    int iVoiceCount  = ::lscp_get_channel_voice_count(m_pChannel->client(), m_pChannel->channelID());
     // Get current stream count.
-    int iStreamCount = ::lscp_get_channel_stream_count(client(), m_iChannelID);
+    int iStreamCount = ::lscp_get_channel_stream_count(m_pChannel->client(), m_pChannel->channelID());
     // Get current channel buffer fill usage.
     // As benno has suggested this is the percentage usage
     // of the least filled buffer stream...
-    int iStreamUsage = ::lscp_get_channel_stream_usage(client(), m_iChannelID);;
+    int iStreamUsage = ::lscp_get_channel_stream_usage(m_pChannel->client(), m_pChannel->channelID());;
 
     // Update the GUI elements...
     StreamUsageProgressBar->setProgress(iStreamUsage);
@@ -491,6 +244,9 @@ void qsamplerChannelStrip::updateChannelUsage (void)
 // Volume change slot.
 void qsamplerChannelStrip::volumeChanged ( int iVolume )
 {
+    if (m_pChannel == NULL)
+        return;
+
     // Avoid recursion.
     if (m_iDirtyChange > 0)
         return;
@@ -501,43 +257,19 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
         fVolume = 0.0;
 
     // Update the GUI elements.
-    if (setVolume(fVolume)) {
+    if (m_pChannel->setVolume(fVolume)) {
         updateChannelVolume();
         emit channelChanged(this);
     }
 }
 
 
-// Redirected messages output methods.
-void qsamplerChannelStrip::appendMessages( const QString& s )
-{
-    m_pMainForm->appendMessages(s);
-}
-
-void qsamplerChannelStrip::appendMessagesColor( const QString& s, const QString& c )
-{
-    m_pMainForm->appendMessagesColor(s, c);
-}
-
-void qsamplerChannelStrip::appendMessagesText( const QString& s )
-{
-    m_pMainForm->appendMessagesText(s);
-}
-
-void qsamplerChannelStrip::appendMessagesError( const QString& s )
-{
-    m_pMainForm->appendMessagesError(s);
-}
-
-void qsamplerChannelStrip::appendMessagesClient( const QString& s )
-{
-    m_pMainForm->appendMessagesClient(s);
-}
-
-
 // Context menu event handler.
 void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
+    if (m_pMainForm == NULL)
+        return;
+        
     // We'll just show up the main form's edit menu.
     m_pMainForm->contextMenuEvent(pEvent);
 }

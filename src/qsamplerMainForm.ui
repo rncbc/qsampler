@@ -708,6 +708,7 @@
     <forward>class QProcess;</forward>
     <forward>class QLabel;</forward>
     <forward>class qsamplerOptions;</forward>
+    <forward>class qsamplerChannel;</forward>
     <forward>class qsamplerMessages;</forward>
     <forward>class qsamplerChannelStrip;</forward>
 </forwards>
@@ -749,7 +750,7 @@
     <slot specifier="non virtual">helpAboutQt( void )</slot>
     <slot specifier="non virtual">helpAbout( void )</slot>
     <slot specifier="non virtual">stabilizeForm( void )</slot>
-    <slot specifier="non virtual">channelChanged( qsamplerChannelStrip * )</slot>
+    <slot specifier="non virtual">channelStripChanged( qsamplerChannelStrip * )</slot>
     <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
     <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
     <slot specifier="non virtual">timerSlot( void )</slot>
@@ -788,8 +789,8 @@
     <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
     <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
     <function specifier="non virtual">createChannel( int iChannelID, bool bPrompt )</function>
-    <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannel( void )</function>
-    <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelAt( int iChannel )</function>
+    <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannelStrip( void )</function>
+    <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelStripAt( int iChannel )</function>
     <function access="private" specifier="non virtual">startSchedule( int iStartDelay )</function>
     <function access="private" specifier="non virtual">stopSchedule( void )</function>
     <function access="private" specifier="non virtual">startServer( void )</function>
