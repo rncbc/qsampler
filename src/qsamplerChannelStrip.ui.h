@@ -143,10 +143,8 @@ bool qsamplerChannelStrip::channelSetup (void)
         delete pChannelForm;
     }
 
-    if (bResult) {
-        updateChannelInfo();
+    if (bResult)
         emit channelChanged(this);
-    }
 
     return bResult;
 }

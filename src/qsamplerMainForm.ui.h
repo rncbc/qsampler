@@ -104,8 +104,9 @@ void qsamplerMainForm::init (void)
     m_pMessages = NULL;
 
     // We'll start clean.
-    m_iUntitled = 0;
-    m_iDirtyCount = 0;
+    m_iUntitled    = 0;
+    m_iDirtyCount  = 0;
+    m_iChangeCount = 0;
 
     m_pServer = NULL;
     m_pClient = NULL;
@@ -767,15 +768,9 @@ void qsamplerMainForm::editAddChannel (void)
     if (m_pClient == NULL)
         return;
 
-    // Just create the channel strip, given an invalid channel id.
-    qsamplerChannelStrip *pChannelStrip = createChannelStrip(-1);
-    if (pChannelStrip == NULL)
-        return;
-        
-    // We'll be dirty, for sure...
-    m_iDirtyCount++;
-    // Stabilize form anyway.
-    stabilizeForm();
+    // Just create the channel strip,
+    // by giving an invalid channel id.
+    createChannelStrip(-1);
 }
 
 
@@ -1142,6 +1137,8 @@ void qsamplerMainForm::stabilizeForm (void)
 // Channel change receiver slot.
 void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip * )
 {
+    // Flag that we're update those channel strips.
+    m_iChangeCount++;
     // Just mark the dirty form.
     m_iDirtyCount++;
     // and update the form status...
@@ -1502,10 +1499,11 @@ void qsamplerMainForm::timerSlot (void)
     }
     
 	// Refresh each channel usage, on each period...
-    if (m_pClient && m_pOptions->bAutoRefresh && m_pWorkspace->isUpdatesEnabled()) {
+    if (m_pClient && (m_iChangeCount > 0 || m_pOptions->bAutoRefresh)) {
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
-        if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
+        if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime && m_pWorkspace->isUpdatesEnabled())  {
             m_iTimerSlot = 0;
+            m_iChangeCount = 0;
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
                 qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);

@@ -3,7 +3,7 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.4   2004-11-16  Work in progress...
+0.0.4   2004-11-17  Work in progress...
 
 * Sampler channels strips are just created if, and only if,
   the respective channel setup dialog is actually accepted,

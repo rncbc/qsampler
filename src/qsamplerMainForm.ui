@@ -719,6 +719,7 @@
     <variable access="private">QString m_sFilename;</variable>
     <variable access="private">int m_iUntitled;</variable>
     <variable access="private">int m_iDirtyCount;</variable>
+    <variable access="private">int m_iChangeCount;</variable>
     <variable access="private">lscp_client_t *m_pClient;</variable>
     <variable access="private">QProcess *m_pServer;</variable>
     <variable access="private">int m_iStartDelay;</variable>
