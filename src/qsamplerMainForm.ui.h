@@ -694,7 +694,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				   << "='" << portParam.data().value << "'" << endl;
 			}
 		}
-		// Set device index/id mapping.
+		// Audio device index/id mapping.
 		audioDeviceMap[device.deviceID()] = iDevice;
         // Try to keep it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
@@ -731,6 +731,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				   << "='" << portParam.data().value << "'" << endl;
 			}
 		}
+		// MIDI device index/id mapping.
+		midiDeviceMap[device.deviceID()] = iDevice;
+        // Try to keep it snappy :)
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
 	ts << endl;
 	// Sampler channel mapping.
@@ -1397,6 +1401,10 @@ void qsamplerMainForm::updateSession (void)
 		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
 	m_pWorkspace->setUpdatesEnabled(true);
+	
+	// Remember to refresh devices
+	if (m_pDeviceForm)
+	    m_pDeviceForm->refreshDevices();
 }
 
 
