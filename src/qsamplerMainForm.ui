@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>786</width>
-            <height>915</height>
+            <width>320</width>
+            <height>243</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -53,8 +53,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>786</width>
-            <height>30</height>
+            <width>320</width>
+            <height>29</height>
         </rect>
     </property>
     <item text="&amp;File" name="fileMenu">
@@ -76,11 +76,13 @@
         <action name="viewToolbarAction"/>
         <action name="viewStatusbarAction"/>
         <separator/>
+        <action name="viewMessagesAction"/>
+        <separator/>
         <action name="viewOptionsAction"/>
     </item>
     <item text="&amp;Help" name="helpMenu">
-        <action name="helpAboutQtAction"/>
         <action name="helpAboutAction"/>
+        <action name="helpAboutQtAction"/>
     </item>
 </menubar>
 <toolbars>
@@ -89,7 +91,7 @@
             <cstring>fileToolbar</cstring>
         </property>
         <property name="label">
-            <string>File tools</string>
+            <string>File Toolbar</string>
         </property>
         <action name="fileNewAction"/>
         <action name="fileOpenAction"/>
@@ -100,7 +102,7 @@
             <cstring>editToolbar</cstring>
         </property>
         <property name="label">
-            <string>Edit tools</string>
+            <string>Edit Toolbar</string>
         </property>
         <action name="editAddChannelAction"/>
         <action name="editRemoveChannelAction"/>
@@ -347,6 +349,32 @@
     </action>
     <action>
         <property name="name">
+            <cstring>viewMessagesAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="iconSet">
+            <iconset>qsamplerMessages.png</iconset>
+        </property>
+        <property name="text">
+            <string>Messages</string>
+        </property>
+        <property name="menuText">
+            <string>M&amp;essages</string>
+        </property>
+        <property name="toolTip">
+            <string>Show/hide messages</string>
+        </property>
+        <property name="statusTip">
+            <string>Show/hide the messages window</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>viewOptionsAction</cstring>
         </property>
         <property name="text">
@@ -367,23 +395,6 @@
     </action>
     <action>
         <property name="name">
-            <cstring>helpAboutQtAction</cstring>
-        </property>
-        <property name="text">
-            <string>About Qt</string>
-        </property>
-        <property name="menuText">
-            <string>About &amp;Qt...</string>
-        </property>
-        <property name="statusTip">
-            <string>Show information about the Qt toolkit</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
             <cstring>helpAboutAction</cstring>
         </property>
         <property name="text">
@@ -394,6 +405,23 @@
         </property>
         <property name="statusTip">
             <string>Show information about this application program</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutQtAction</cstring>
+        </property>
+        <property name="text">
+            <string>About Qt</string>
+        </property>
+        <property name="menuText">
+            <string>About &amp;Qt...</string>
+        </property>
+        <property name="statusTip">
+            <string>Show information about the Qt toolkit</string>
         </property>
         <property name="accel">
             <string></string>
@@ -468,16 +496,16 @@
         <slot>viewStatusbar(bool)</slot>
     </connection>
     <connection>
+        <sender>viewMessagesAction</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>viewMessages(bool)</slot>
+    </connection>
+    <connection>
         <sender>viewOptionsAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
         <slot>viewOptions()</slot>
-    </connection>
-    <connection>
-        <sender>helpAboutQtAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>helpAboutQt()</slot>
     </connection>
     <connection>
         <sender>helpAboutAction</sender>
@@ -485,37 +513,56 @@
         <receiver>qsamplerMainForm</receiver>
         <slot>helpAbout()</slot>
     </connection>
+    <connection>
+        <sender>helpAboutQtAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>helpAboutQt()</slot>
+    </connection>
 </connections>
 <includes>
+    <include location="global" impldecl="in declaration">qworkspace.h</include>
     <include location="local" impldecl="in declaration">qsamplerOptions.h</include>
+    <include location="local" impldecl="in declaration">qsamplerMessages.h</include>
     <include location="local" impldecl="in implementation">qsamplerOptionsForm.h</include>
     <include location="local" impldecl="in implementation">qsamplerMainForm.ui.h</include>
 </includes>
 <variables>
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
+    <variable access="private">qsamplerMessages *m_pMessages;</variable>
+    <variable access="private">QWorkspace *m_pWorkspace;</variable>
 </variables>
 <slots>
-    <slot>fileNew( void )</slot>
-    <slot>fileOpen( void )</slot>
-    <slot>fileSave( void )</slot>
-    <slot>fileSaveAs( void )</slot>
-    <slot>fileExit( void )</slot>
-    <slot>editAddChannel( void )</slot>
-    <slot>editRemoveChannel( void )</slot>
-    <slot>editResetChannel( void )</slot>
-    <slot>viewMenubar( bool bOn )</slot>
-    <slot>viewToolbar( bool bOn )</slot>
-    <slot>viewStatusbar( bool bOn )</slot>
-    <slot>viewOptions( void )</slot>
-    <slot>helpAboutQt( void )</slot>
-    <slot>helpAbout( void )</slot>
+    <slot specifier="non virtual">fileNew( void )</slot>
+    <slot specifier="non virtual">fileOpen( void )</slot>
+    <slot specifier="non virtual">fileSave( void )</slot>
+    <slot specifier="non virtual">fileSaveAs( void )</slot>
+    <slot specifier="non virtual">fileExit( void )</slot>
+    <slot specifier="non virtual">editAddChannel( void )</slot>
+    <slot specifier="non virtual">editRemoveChannel( void )</slot>
+    <slot specifier="non virtual">editResetChannel( void )</slot>
+    <slot specifier="non virtual">viewMenubar( bool bOn )</slot>
+    <slot specifier="non virtual">viewToolbar( bool bOn )</slot>
+    <slot specifier="non virtual">viewStatusbar( bool bOn )</slot>
+    <slot specifier="non virtual">viewMessages( bool bOn )</slot>
+    <slot specifier="non virtual">viewOptions( void )</slot>
+    <slot specifier="non virtual">helpAboutQt( void )</slot>
+    <slot specifier="non virtual">helpAbout( void )</slot>
+    <slot specifier="non virtual">stabilizeForm( void )</slot>
 </slots>
 <functions>
-    <function access="private" specifier="non virtual">init( void )</function>
-    <function access="private" specifier="non virtual">destroy( void )</function>
+    <function access="private" specifier="non virtual">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
     <function specifier="non virtual">setup( qsamplerOptions * pOptions )</function>
     <function access="private" specifier="non virtual" returnType="bool">queryClose( void )</function>
     <function access="private" specifier="non virtual">closeEvent( QCloseEvent * pCloseEvent )</function>
+    <function specifier="non virtual">appendMessages( const QString &amp; s )</function>
+    <function specifier="non virtual">appendMessagesColor( const QString &amp; s, const QString &amp; c )</function>
+    <function specifier="non virtual">appendMessagesText( const QString &amp; s )</function>
+    <function specifier="non virtual">appendMessagesError( const QString &amp; s )</function>
+    <function access="private" specifier="non virtual">updateMessagesFont( void )</function>
+    <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
+    <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="8"/>

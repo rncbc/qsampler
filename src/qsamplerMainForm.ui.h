@@ -29,6 +29,9 @@
 
 #include "config.h"
 
+#if !defined(WIN32)
+#include <unistd.h>
+#endif
 
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window form implementation.
@@ -36,13 +39,27 @@
 // Kind of constructor.
 void qsamplerMainForm::init (void)
 {
+    // Initialize some pointer references.
     m_pOptions = NULL;
+
+    // All child forms are to be created later on setup.
+    m_pMessages = NULL;
+
+    // Make it an MDI workspace.
+    m_pWorkspace = new QWorkspace(this);
+    m_pWorkspace->setScrollBarsEnabled(true);
+    setCentralWidget(m_pWorkspace);
 }
 
 
 // Kind of destructor.
 void qsamplerMainForm::destroy (void)
 {
+    // Finally drop any widgets around...
+    if (m_pMessages)
+        delete m_pMessages;
+    if (m_pWorkspace)
+        delete m_pWorkspace;
 }
 
 
@@ -51,6 +68,17 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 {
     // We got options?
     m_pOptions = pOptions;
+
+    // Some child forms are to be created right now.
+    m_pMessages = new qsamplerMessages(this);
+    // Message window is forced to dock on the bottom.
+    moveDockWindow(m_pMessages, Qt::DockBottom);
+    // Set message defaults...
+    updateMessagesFont();
+    updateMessagesLimit();
+    updateMessagesCapture();
+    // Set the visibility signal.
+    QObject::connect(m_pMessages, SIGNAL(visibilityChanged(bool)), this, SLOT(stabilizeForm()));
 
     // Initial decorations toggle state.
     viewMenubarAction->setOn(m_pOptions->bMenubar);
@@ -63,7 +91,14 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     viewStatusbar(m_pOptions->bStatusbar);
 
     // Try to restore old window positioning.
+    m_pOptions->loadWidgetGeometry(m_pMessages);
     m_pOptions->loadWidgetGeometry(this);
+
+    // Final startup stabilization...
+    stabilizeForm();
+    
+    // Make it ready :-)
+    statusBar()->message(tr("Ready"), 3000);
 }
 
 
@@ -72,16 +107,25 @@ bool qsamplerMainForm::queryClose (void)
 {
     bool bQueryClose = true;
 
-    // Ty to save current positioning.
-    if (m_pOptions && bQueryClose) {
-        // Save decorations state.
-        m_pOptions->bMenubar = MenuBar->isVisible();
-        m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible());
-        m_pOptions->bStatusbar = statusBar()->isVisible();
-        // And main window form...
-        m_pOptions->saveWidgetGeometry(this);
+    // Try to save current general state...
+    if (m_pOptions) {
+        // Some windows default fonts is here on demand too.
+        if (bQueryClose && m_pMessages)
+            m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
+        // Try to save current positioning.
+        if (bQueryClose) {
+            // Save decorations state.
+            m_pOptions->bMenubar = MenuBar->isVisible();
+            m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible());
+            m_pOptions->bStatusbar = statusBar()->isVisible();
+            // And the child windows state.
+            m_pOptions->saveWidgetGeometry(m_pMessages);
+            m_pOptions->saveWidgetGeometry(this);
+            // Close child widgets.
+            m_pMessages->close();
+        }
     }
-
+    
     return bQueryClose;
 }
 
@@ -186,6 +230,16 @@ void qsamplerMainForm::viewStatusbar ( bool bOn )
 }
 
 
+// Show/hide the messages window logger.
+void qsamplerMainForm::viewMessages ( bool bOn )
+{
+    if (bOn)
+        m_pMessages->show();
+    else
+        m_pMessages->hide();
+}
+
+
 // Show options dialog.
 void qsamplerMainForm::viewOptions (void)
 {
@@ -194,10 +248,30 @@ void qsamplerMainForm::viewOptions (void)
 
     qsamplerOptionsForm *pOptionsForm = new qsamplerOptionsForm(this);
     if (pOptionsForm) {
+        // Check out some initial nullities(tm)...
+        if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
+            m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
+        // To track down deferred or immediate changes.
+        QString sOldMessagesFont    = m_pOptions->sMessagesFont;
+        bool    bStdoutCapture      = m_pOptions->bStdoutCapture;
+        int     bMessagesLimit      = m_pOptions->bMessagesLimit;
+        int     iMessagesLimitLines = m_pOptions->iMessagesLimitLines;
         // Load the current setup settings.
         pOptionsForm->setup(m_pOptions);
         // Show the setup dialog...
-        pOptionsForm->exec();
+        if (pOptionsForm->exec()) {
+            // Warn if something will be only effective on next run.
+            if (( bStdoutCapture && !m_pOptions->bStdoutCapture) ||
+                (!bStdoutCapture &&  m_pOptions->bStdoutCapture))
+                updateMessagesCapture();
+            // Check wheather something immediate has changed.
+            if (sOldMessagesFont != m_pOptions->sMessagesFont)
+                updateMessagesFont();
+            if (( bMessagesLimit && !m_pOptions->bMessagesLimit) ||
+                (!bMessagesLimit &&  m_pOptions->bMessagesLimit) ||
+                (iMessagesLimitLines !=  m_pOptions->iMessagesLimitLines))
+                updateMessagesLimit();
+        }
         // Done.
         delete pOptionsForm;
     }
@@ -246,6 +320,88 @@ void qsamplerMainForm::helpAbout (void)
     sText += "</p>\n";
     
     QMessageBox::about(this, tr("About") + " " QSAMPLER_TITLE, sText);
+}
+
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- Main window stabilization.
+
+void qsamplerMainForm::stabilizeForm (void)
+{
+    viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- Messages window form handlers.
+
+
+// Messages output methods.
+void qsamplerMainForm::appendMessages( const QString& s )
+{
+    if (m_pMessages)
+        m_pMessages->appendMessages(s);
+}
+
+void qsamplerMainForm::appendMessagesColor( const QString& s, const QString& c )
+{
+    if (m_pMessages)
+        m_pMessages->appendMessagesColor(s, c);
+}
+
+void qsamplerMainForm::appendMessagesText( const QString& s )
+{
+    if (m_pMessages)
+        m_pMessages->appendMessagesText(s);
+}
+
+void qsamplerMainForm::appendMessagesError( const QString& s )
+{
+    if (m_pMessages)
+        m_pMessages->show();
+
+    appendMessagesColor(s, "#ff0000");
+
+    QMessageBox::critical(this, tr("Error"), s, tr("Cancel"));
+}
+
+
+// Force update of the messages font.
+void qsamplerMainForm::updateMessagesFont (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    if (m_pMessages && !m_pOptions->sMessagesFont.isEmpty()) {
+        QFont font;
+        if (font.fromString(m_pOptions->sMessagesFont))
+            m_pMessages->setMessagesFont(font);
+    }
+}
+
+
+// Update messages window line limit.
+void qsamplerMainForm::updateMessagesLimit (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    if (m_pMessages) {
+        if (m_pOptions->bMessagesLimit)
+            m_pMessages->setMessagesLimit(m_pOptions->iMessagesLimitLines);
+        else
+            m_pMessages->setMessagesLimit(0);
+    }
+}
+
+
+// Enablement of the messages capture feature.
+void qsamplerMainForm::updateMessagesCapture (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    if (m_pMessages)
+        m_pMessages->setCaptureEnabled(m_pOptions->bStdoutCapture);
 }
 
 

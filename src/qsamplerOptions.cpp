@@ -22,6 +22,8 @@
 #include "qsamplerOptions.h"
 #include "qsamplerAbout.h"
 
+#include <qcombobox.h>
+
 #include "lscp/client.h"
 
 #include "config.h"
@@ -210,7 +212,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
 
 //---------------------------------------------------------------------------
 // Widget geometry persistence helper methods.
-
+#include <qmessagebox.h>
 void qsamplerOptions::loadWidgetGeometry ( QWidget *pWidget )
 {
     // Try to restore old form window positioning.
@@ -233,6 +235,8 @@ void qsamplerOptions::loadWidgetGeometry ( QWidget *pWidget )
             pWidget->adjustSize();
         if (bVisible)
             pWidget->show();
+        else
+            pWidget->hide();
     }
 }
 

@@ -6,10 +6,12 @@ name    = qsampler
 headers = config.h \
 	src/qsamplerAbout.h \
 	src/qsamplerOptions.h \
+	src/qsamplerMessages.h \
 	src/qsamplerMainForm.ui.h
 
 sources = src/main.cpp \
 	src/qsamplerOptions.cpp \
+	src/qsamplerMessages.cpp \
 	src/qsamplerMainForm.ui
 
 all:	$(name)

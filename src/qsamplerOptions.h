@@ -23,7 +23,9 @@
 #define __qsamplerOptions_h
 
 #include <qsettings.h>
-#include <qcombobox.h>
+
+class QWidget;
+class QComboBox;
 
 
 //-------------------------------------------------------------------------

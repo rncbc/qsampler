@@ -1,10 +1,12 @@
 INCLUDEPATH += ./src
 
 SOURCES += src/main.cpp \
-           src/qsamplerOptions.cpp
+           src/qsamplerOptions.cpp \
+           src/qsamplerMessages.cpp
 
 HEADERS += src/qsamplerAbout.h \
-           src/qsamplerOptions.h
+           src/qsamplerOptions.h \
+           src/qsamplerMessages.h
 
 FORMS    = src/qsamplerMainForm.ui \
            src/qsamplerOptionsForm.ui
