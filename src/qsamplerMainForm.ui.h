@@ -671,7 +671,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
-		qsamplerDeviceParamMap& params = device.params();
+		const qsamplerDeviceParamMap& params = device.params();
 		qsamplerDeviceParamMap::ConstIterator iter;
 		for (iter = params.begin(); iter != params.end(); ++iter)
 			ts << " " << iter.key() << "='" << iter.data().value << "'";
@@ -689,7 +689,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
-		qsamplerDeviceParamMap& params = device.params();
+		const qsamplerDeviceParamMap& params = device.params();
 		qsamplerDeviceParamMap::ConstIterator iter;
 		for (iter = params.begin(); iter != params.end(); ++iter)
 			ts << " " << iter.key() << "='" << iter.data().value << "'";

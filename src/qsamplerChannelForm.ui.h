@@ -351,7 +351,7 @@ void qsamplerChannelForm::selectMidiDevice ( int iMidiItem )
 {
 	qsamplerDevice *pDevice = m_midiDevices.at(iMidiItem);
 	if (pDevice) {
-		qsamplerDeviceParamMap& params = pDevice->params();
+		const qsamplerDeviceParamMap& params = pDevice->params();
 		int iPorts = params["PORTS"].value.toInt();
 		MidiPortTextLabel->setEnabled(iPorts > 0);
 		MidiPortSpinBox->setEnabled(iPorts > 0);

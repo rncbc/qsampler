@@ -20,7 +20,7 @@
 
 </comment>
 <author>rncbc aka Rui Nuno Capela</author>
-<widget class="QDialog">
+<widget class="QWidget">
     <property name="name">
         <cstring>qsamplerDeviceForm</cstring>
     </property>

@@ -104,10 +104,10 @@ public:
 	const QString&      deviceName() const;
 
 	// Device parameters accessor.
-	qsamplerDeviceParamMap& params();
+	const qsamplerDeviceParamMap& params() const;
 
-	// Update/refresh device/driver data.
-	void refresh();
+	// Set the proper device parameter value.
+	void setParam (const QString& sParam, const QString& sValue);
 
 	// Device ids enumerator.
 	static int *getDevices(lscp_client_t *pClient,
@@ -127,6 +127,45 @@ private:
 	QString            m_sDeviceName;
 
 	// Device parameter list.
+	qsamplerDeviceParamMap m_params;
+};
+
+
+//-------------------------------------------------------------------------
+// qsamplerDevicePort - MIDI/Audio Device port/channel structure.
+//
+
+class qsamplerDevicePort
+{
+public:
+
+	// Constructor.
+	qsamplerDevicePort(lscp_client_t *pClient,
+		const qsamplerDevice& device, int iPortID);
+	// Default destructor.
+	~qsamplerDevicePort();
+
+	// Initializer.
+	void setDevicePort(lscp_client_t *pClient,
+		const qsamplerDevice& device, int iPortID);
+
+	// Device port property accessors.
+	int            portID()   const;
+	const QString& portName() const;
+
+	// Device port parameters accessor.
+	const qsamplerDeviceParamMap& params() const;
+
+	// Set the proper device port/channel parameter value.
+	void setParam (const QString& sParam, const QString& sValue);
+
+private:
+
+	// Instance variables.
+	int     m_iPortID;
+	QString m_sPortName;
+
+	// Device port parameter list.
 	qsamplerDeviceParamMap m_params;
 };
 
@@ -175,8 +214,8 @@ public:
 	// Default destructor.
 	~qsamplerDeviceParamTable();
 
-	// Client/device descriptor selector.
-	void refresh(qsamplerDevice& device);
+	// Common parameter table renderer.
+	void refresh(const qsamplerDeviceParamMap& params, bool bEditable);
 };
 
 
