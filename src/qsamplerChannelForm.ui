@@ -104,7 +104,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&amp;File:</string>
+                <string>&amp;Filename:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
