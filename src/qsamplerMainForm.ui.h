@@ -273,7 +273,7 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 {
     if (QTextDrag::canDecode(pDropEvent)) {
         QString sUrl;
-        if (QTextDrag::decode(pDropEvent, sUrl) && closeSession(false))
+        if (QTextDrag::decode(pDropEvent, sUrl) && closeSession(true))
             loadSessionFile(QUrl(sUrl).path());
     }
 }
@@ -317,7 +317,7 @@ bool qsamplerMainForm::newSession (void)
     appendMessages("qsamplerMainForm::newSession()");
     
     // Check if we can do it.
-    if (!resetSession())
+    if (!closeSession(true))
         return false;
 
     // Ok increment untitled count.
@@ -353,7 +353,7 @@ bool qsamplerMainForm::openSession (void)
         return false;
 
     // Check if we're going to discard safely the current one...
-    if (!closeSession(false))
+    if (!closeSession(true))
         return false;
 
     // Load it right away.
@@ -414,7 +414,7 @@ bool qsamplerMainForm::closeSession ( bool bForce )
     bool bClose = true;
 
     // Are we dirty enough to prompt it?
-    if (m_iDirtyCount > 0 && !bForce) {
+    if (m_iDirtyCount > 0) {
         switch (QMessageBox::warning(this, tr("Warning"),
             tr("The current session has been changed:\n\n"
             "\"%1\"\n\n"
@@ -437,44 +437,18 @@ bool qsamplerMainForm::closeSession ( bool bForce )
         // Remove all channel strips from sight...
         m_pWorkspace->setUpdatesEnabled(false);
         QWidgetList wlist = m_pWorkspace->windowList();
-        for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++)
-            delete (qsamplerChannelStrip *) wlist.at(iChannel);
+        for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+            qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+            if (bForce && ::lscp_remove_channel(m_pClient, pChannel->channelID()) != LSCP_OK)
+                appendMessagesClient("lscp_remove_channel");
+            delete pChannel;
+        }
         m_pWorkspace->setUpdatesEnabled(true);
         // We're now clean, for sure.
         m_iDirtyCount = 0;
     }
 
     return bClose;
-}
-
-
-// Reload current session.
-bool qsamplerMainForm::resetSession (void)
-{
-    appendMessages("qsamplerMainForm::resetSession()");
-
-    if (m_pClient == NULL)
-        return true;
-
-    if (!closeSession(false))
-        return false;
-
-    // Now we'll try to create the whole GUI session.
-    int iChannels = ::lscp_get_channels(m_pClient);
-    if (iChannels < 0) {
-        appendMessagesClient("lscp_get_channels");
-        appendMessagesError(tr("Could not get current number of channels.\n\nSorry."));
-    }
-
-    // Try to catch (re)create each channel.
-    m_pWorkspace->setUpdatesEnabled(false);
-    for (int iChannelID = 0; iChannelID < iChannels; iChannelID++) {
-        createChannel(iChannelID, false);
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
-    }
-    m_pWorkspace->setUpdatesEnabled(true);
-
-    return true;
 }
 
 
@@ -521,8 +495,20 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     if (iErrors > 0)
         appendMessagesError(tr("Some setttings could not be loaded\nfrom \"%1\" session file.\n\nSorry.").arg(sFilename));
 
-    // IMPORTANT: We'll refresh every existing channel.
-    resetSession();
+    // Now we'll try to create the whole GUI session.
+    int iChannels = ::lscp_get_channels(m_pClient);
+    if (iChannels < 0) {
+        appendMessagesClient("lscp_get_channels");
+        appendMessagesError(tr("Could not get current number of channels.\n\nSorry."));
+    }
+    
+    // Try to (re)create each channel.
+    m_pWorkspace->setUpdatesEnabled(false);
+    for (int iChannelID = 0; iChannelID < iChannels; iChannelID++) {
+        createChannel(iChannelID, false);
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+    }
+    m_pWorkspace->setUpdatesEnabled(true);
 
     // Save as default session directory.
     if (m_pOptions)
@@ -626,7 +612,7 @@ void qsamplerMainForm::fileOpen (void)
 void qsamplerMainForm::fileOpenRecent ( int iIndex )
 {
     // Check if we can safely close the current session...
-    if (m_pOptions && closeSession(false)) {
+    if (m_pOptions && closeSession(true)) {
         QString sFilename = m_pOptions->recentFiles[iIndex];
         loadSessionFile(sFilename);
     }
@@ -670,7 +656,7 @@ void qsamplerMainForm::fileRestart (void)
     }
 
     // Are we still for it?
-    if (bRestart && closeSession(false)) {
+    if (bRestart && closeSession(true)) {
         // Stop server, it will force the client too.
         stopServer();
         // Reschedule a restart...
@@ -1110,7 +1096,7 @@ void qsamplerMainForm::updateRecentFilesMenu (void)
     for (int i = 0; i < (int) m_pOptions->recentFiles.count() && i < m_pOptions->iMaxRecentFiles; i++) {
         const QString& sFilename = m_pOptions->recentFiles[i];
         if (QFileInfo(sFilename).exists()) {
-            m_pRecentFilesMenu->insertItem(QString("&%1  %2")
+            m_pRecentFilesMenu->insertItem(QString("&%1 %2")
                 .arg(i + 1).arg(sessionName(sFilename)),
                 this, SLOT(fileOpenRecent(int)), 0, i);
         }
@@ -1372,7 +1358,7 @@ void qsamplerMainForm::timerSlot (void)
     }
     
 	// Refresh each channel usage, on each period...
-    if (m_pClient && m_pOptions->bAutoRefresh) {
+    if (m_pClient && m_pOptions->bAutoRefresh && m_pWorkspace->isUpdatesEnabled()) {
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
         if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
             m_iTimerSlot = 0;
@@ -1428,11 +1414,11 @@ void qsamplerMainForm::startServer (void)
     m_pServer = new QProcess(this);
 
     // Setup stdout/stderr capture...
-    if (m_pOptions->bStdoutCapture) {
+    //if (m_pOptions->bStdoutCapture) {
         m_pServer->setCommunication(QProcess::Stdout | QProcess::Stderr | QProcess::DupStderr);
         QObject::connect(m_pServer, SIGNAL(readyReadStdout()), this, SLOT(readServerStdout()));
         QObject::connect(m_pServer, SIGNAL(readyReadStderr()), this, SLOT(readServerStdout()));
-    }
+    //}
     // The unforgiveable signal communication...
     QObject::connect(m_pServer, SIGNAL(processExited()), this, SLOT(processServerExit()));
 
@@ -1610,8 +1596,11 @@ void qsamplerMainForm::stopClient (void)
     // We'll reject drops from now on...
     setAcceptDrops(false);
 
-    // Force any channel strips around.
-    closeSession(true);
+    // Force any channel strips around, but
+    // but avoid removing the corresponding
+    // channels from the back-end server.
+    m_iDirtyCount = 0;
+    closeSession(false);
     
     // Close us as a client...
     lscp_client_destroy(m_pClient);

@@ -220,23 +220,6 @@
     </action>
     <action>
         <property name="name">
-            <cstring>fileRecentFilesAction</cstring>
-        </property>
-        <property name="text">
-            <string>Recent Files</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Recent Files</string>
-        </property>
-        <property name="toolTip">
-            <string>Recent files</string>
-        </property>
-        <property name="statusTip">
-            <string>Recent files</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
             <cstring>fileRestartAction</cstring>
         </property>
         <property name="iconSet">
@@ -756,7 +739,6 @@
     <function access="private" specifier="non virtual" returnType="bool">openSession( void )</function>
     <function access="private" specifier="non virtual" returnType="bool">saveSession( bool bPrompt )</function>
     <function access="private" specifier="non virtual" returnType="bool">closeSession( bool bForce )</function>
-    <function access="private" specifier="non virtual" returnType="bool">resetSession( void )</function>
     <function access="private" specifier="non virtual" returnType="bool">loadSessionFile( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual" returnType="bool">saveSessionFile( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual">updateRecentFiles( const QString &amp; sFilename )</function>
