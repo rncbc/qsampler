@@ -642,7 +642,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     }
 
     // Write the file.
-    int iErrors = 0;
+    int  iErrors = 0;
     QTextStream ts(&file);
     ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
     ts << "# " << tr("Version")
@@ -653,21 +653,76 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     ts << "# " << tr("File")
        << ": " << QFileInfo(sFilename).fileName() << endl;
     ts << "# " << tr("Date")
-       << ": " << QDate::currentDate().toString("MMMM dd yyyy")
+       << ": " << QDate::currentDate().toString("MMM dd yyyy")
        << " "  << QTime::currentTime().toString("hh:mm:ss") << endl;
     ts << "#"  << endl;
     ts << endl;
+	// It is assumed that this new kind of device+session file
+	// will be loaded from a complete
+	int *piDeviceIDs;
+	int  iDevice;
+	ts << "RESET" << endl;
+	// Audio device mapping.
+	QMap<int, int> audioDeviceMap;
+	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
+	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
+		qsamplerDevice device(m_pClient, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
+		ts << endl;
+        ts << "# " << device.deviceTypeName() << " " << device.driverName()
+		   << " " << tr("Device") << " " << iDevice << endl;
+		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
+		qsamplerDeviceParamMap& params = device.params();
+		qsamplerDeviceParamMap::ConstIterator iter;
+		for (iter = params.begin(); iter != params.end(); ++iter)
+			ts << " " << iter.key() << "='" << iter.data().value << "'";
+		ts << endl;
+		audioDeviceMap[device.deviceID()] = iDevice;
+        // Try to keep it snappy :)
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	}
+	// MIDI device mapping.
+	QMap<int, int> midiDeviceMap;
+	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
+	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
+		qsamplerDevice device(m_pClient, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
+        ts << "# " << device.deviceTypeName() << " " << device.driverName()
+		   << " " << tr("Device") << " " << iDevice << endl;
+		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
+		qsamplerDeviceParamMap& params = device.params();
+		qsamplerDeviceParamMap::ConstIterator iter;
+		for (iter = params.begin(); iter != params.end(); ++iter)
+			ts << " " << iter.key() << "='" << iter.data().value << "'";
+		ts << endl;
+		midiDeviceMap[device.deviceID()] = iDevice;
+        // Try to keep it snappy :)
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	}
+	ts << endl;
+	// Sampler channel mapping.
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
         qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
         if (pChannelStrip) {
             qsamplerChannel *pChannel = pChannelStrip->channel();
             if (pChannel) {
-                ts << "# Channel " << iChannel << endl;
+                ts << "# " << tr("Channel") << " " << iChannel << endl;
                 ts << "ADD CHANNEL" << endl;
-                ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannel << " " << pChannel->audioDriver() << endl;
-                ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannel << " " << pChannel->midiDriver() << endl;
-            //  ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannel << " " << pChannel->midiPort() << endl;
+                if (audioDeviceMap.isEmpty()) {
+	            	ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannel
+					    << " " << pChannel->audioDriver() << endl;
+			    } else {
+	                ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannel
+					   << " " << audioDeviceMap[pChannel->audioDevice()] << endl;
+				}
+                if (midiDeviceMap.isEmpty()) {
+	                ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannel
+				       << " " << pChannel->midiDriver() << endl;
+			    } else {
+	                ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannel
+					   << " " << midiDeviceMap[pChannel->midiDevice()] << endl;
+			    }
+                ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannel
+			       << " " << pChannel->midiPort() << endl;
                 ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannel << " ";
                 if (pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
                     ts << "ALL";
