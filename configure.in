@@ -24,9 +24,9 @@ fi
 
 dnl Enable libgig availability.
 AC_ARG_ENABLE(libgig,
-  [  --enable-libgig         enable libgig (default=no)],
-  [ac_libgig="yes"],
-  [ac_libgig="no"])
+  [  --disable-libgig        disable libgig interface (default=no)],
+  [ac_libgig="no"],
+  [ac_libgig="yes"])
 
 dnl Checks for programs.
 AC_PROG_CC

@@ -39,7 +39,6 @@
 void qsamplerChannelStrip::init (void)
 {
     // Initialize locals.
-    m_pMainForm    = NULL;
     m_pChannel     = NULL;
     m_iDirtyChange = 0;
 
@@ -59,22 +58,15 @@ void qsamplerChannelStrip::destroy (void)
 
 
 // Channel strip setup formal initializer.
-void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
+void qsamplerChannelStrip::setup ( qsamplerChannel *pChannel )
 {
-    // Set main form reference.
-    m_pMainForm = pMainForm;
-    
-    // Destroy any previous channel descriptor.
+    // Destroy any previous channel descriptor;
+    // (remember that once setup we own it!)
     if (m_pChannel)
         delete m_pChannel;
 
-    // Create a new one...
-    m_pChannel = new qsamplerChannel(pMainForm);
-    // And set appropriate settings.
-    if (m_pChannel && iChannelID >= 0) {
-        m_pChannel->setChannelID(iChannelID);
-        m_iDirtyChange = 0;
-    }
+    // Set the new one...
+    m_pChannel = pChannel;
 
     // Stabilize this around.
     updateChannelInfo();
@@ -134,14 +126,7 @@ void qsamplerChannelStrip::setDisplayBackground ( const QPixmap& pm )
 // Channel setup dialog slot.
 bool qsamplerChannelStrip::channelSetup (void)
 {
-    bool bResult = false;
-
-    qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
-    if (pChannelForm) {
-        pChannelForm->setup(m_pChannel);
-        bResult = pChannelForm->exec();
-        delete pChannelForm;
-    }
+    bool bResult = m_pChannel->channelSetup(this);
 
     if (bResult)
         emit channelChanged(this);
@@ -306,11 +291,11 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
 // Context menu event handler.
 void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
-    if (m_pMainForm == NULL)
+    if (m_pChannel == NULL)
         return;
         
-    // We'll just show up the main form's edit menu.
-    m_pMainForm->contextMenuEvent(pEvent);
+    // We'll just show up the main form's edit menu (thru qsamplerChannel).
+    m_pChannel->contextMenuEvent(pEvent);
 }
 
 

@@ -22,6 +22,7 @@
 #include "qsamplerChannel.h"
 
 #include "qsamplerMainForm.h"
+#include "qsamplerChannelForm.h"
 
 #include "config.h"
 
@@ -402,30 +403,53 @@ bool qsamplerChannel::resetChannel (void)
 }
 
 
+// Channel setup dialog form.
+bool qsamplerChannel::channelSetup ( QWidget *pParent )
+{
+    bool bResult = false;
+
+    qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(pParent);
+    if (pChannelForm) {
+        pChannelForm->setup(this);
+        bResult = pChannelForm->exec();
+        delete pChannelForm;
+    }
+
+    return bResult;
+}
+
+
 // Redirected messages output methods.
 void qsamplerChannel::appendMessages( const QString& s )
 {
-    m_pMainForm->appendMessages(s);
+    if (m_pMainForm) m_pMainForm->appendMessages(s);
 }
 
 void qsamplerChannel::appendMessagesColor( const QString& s, const QString& c )
 {
-    m_pMainForm->appendMessagesColor(s, c);
+    if (m_pMainForm) m_pMainForm->appendMessagesColor(s, c);
 }
 
 void qsamplerChannel::appendMessagesText( const QString& s )
 {
-    m_pMainForm->appendMessagesText(s);
+    if (m_pMainForm) m_pMainForm->appendMessagesText(s);
 }
 
 void qsamplerChannel::appendMessagesError( const QString& s )
 {
-    m_pMainForm->appendMessagesError(s);
+    if (m_pMainForm) m_pMainForm->appendMessagesError(s);
 }
 
 void qsamplerChannel::appendMessagesClient( const QString& s )
 {
-    m_pMainForm->appendMessagesClient(s);
+    if (m_pMainForm) m_pMainForm->appendMessagesClient(s);
+}
+
+
+// Context menu event handler.
+void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
+{
+    if (m_pMainForm) m_pMainForm->contextMenuEvent(pEvent);
 }
 
 
