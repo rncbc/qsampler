@@ -153,6 +153,11 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
             AudioDriverComboBox->insertItem(sAudioDriver);
         AudioDriverComboBox->setCurrentText(sAudioDriver);
     }
+	// As convenient, make it ready on stabilizeForm() for
+	// prompt acceptance, if we got the minimum required...
+	if (bNew && sEngineName != qsamplerChannel::noEngineName() &&
+	    sInstrumentFile != qsamplerChannel::noInstrumentName())
+	    m_iDirtyCount++;
     // Done.
     m_iDirtySetup--;
     stabilizeForm();
