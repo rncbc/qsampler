@@ -141,7 +141,7 @@ qsamplerOptions::~qsamplerOptions (void)
 
     // Recent file list.
     m_settings.beginGroup("/RecentFiles");
-    for (int i = 0; i < recentFiles.count(); i++)
+    for (int i = 0; i < (int) recentFiles.count(); i++)
         m_settings.writeEntry("/File" + QString::number(i + 1), recentFiles[i]);
     m_settings.endGroup();
 
