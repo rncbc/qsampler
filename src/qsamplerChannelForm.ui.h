@@ -135,7 +135,7 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel, bool bNew )
     // MIDI input channel...
     int iMidiChannel = pChannel->midiChannel();
     if (bNew)
-        iMidiChannel = (pChannel->channelID() + 1) % 16;
+        iMidiChannel = (pChannel->channelID() % 16);
     MidiChannelComboBox->setCurrentItem(iMidiChannel);
     // Audio output driver...
     QString sAudioDriver = pChannel->audioDriver();

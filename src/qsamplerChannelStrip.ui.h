@@ -198,10 +198,10 @@ void qsamplerChannelStrip::updateChannelInfo (void)
     }
 
     // MIDI Port/Channel...
-    if (m_pChannel->midiChannel() > 0)
-        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel()));
-    else
+    if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
         MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_pChannel->midiPort()));
+    else
+        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel() + 1));
 
     // And update the both GUI volume elements.
     updateChannelVolume();
