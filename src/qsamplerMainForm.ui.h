@@ -36,6 +36,7 @@
 
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
+#include "qsamplerChannel.h"
 #include "qsamplerMessages.h"
 
 #include "qsamplerChannelStrip.h"
@@ -483,10 +484,13 @@ bool qsamplerMainForm::closeSession ( bool bForce )
         m_pWorkspace->setUpdatesEnabled(false);
         QWidgetList wlist = m_pWorkspace->windowList();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-            if (bForce && ::lscp_remove_channel(m_pClient, pChannel->channelID()) != LSCP_OK)
-                appendMessagesClient("lscp_remove_channel");
-            delete pChannel;
+            qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+            if (pChannelStrip) {
+                qsamplerChannel *pChannel = pChannelStrip->channel();
+                if (bForce && pChannel && ::lscp_remove_channel(m_pClient, pChannel->channelID()) != LSCP_OK)
+                    appendMessagesClient("lscp_remove_channel");
+                delete pChannelStrip;
+            }
         }
         m_pWorkspace->setUpdatesEnabled(true);
         // We're now clean, for sure.
@@ -595,23 +599,28 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     ts << endl;
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-        int iChannelID = pChannel->channelID();
-        ts << "# " << pChannel->caption() << endl;
-        ts << "ADD CHANNEL" << endl;
-        ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannel->audioDriver() << endl;
-        ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
-        ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
-        ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
-        if (pChannel->midiChannel() > 0)
-            ts << pChannel->midiChannel();
-         else
-            ts << "ALL";
-        ts << endl;
-        ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
-        ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
-        ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
-        ts << endl;
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannelStrip) {
+            qsamplerChannel *pChannel = pChannelStrip->channel();
+            if (pChannel) {
+                int iChannelID = pChannel->channelID();
+                ts << "# " << pChannelStrip->caption() << endl;
+                ts << "ADD CHANNEL" << endl;
+                ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannel->audioDriver() << endl;
+                ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
+                ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
+                ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
+                if (pChannel->midiChannel() > 0)
+                    ts << pChannel->midiChannel();
+                 else
+                    ts << "ALL";
+                ts << endl;
+                ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
+                ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
+                ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
+                ts << endl;
+            }
+        }
         // Try to keep it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
@@ -785,7 +794,11 @@ void qsamplerMainForm::editRemoveChannel (void)
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannel = activeChannel();
+    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    if (pChannelStrip == NULL)
+        return;
+        
+    qsamplerChannel *pChannel = pChannelStrip->channel();
     if (pChannel == NULL)
         return;
 
@@ -795,7 +808,7 @@ void qsamplerMainForm::editRemoveChannel (void)
             tr("About to remove channel:\n\n"
                "%1\n\n"
                "Are you sure?")
-               .arg(pChannel->caption()),
+               .arg(pChannelStrip->caption()),
             tr("OK"), tr("Cancel")) > 0)
             return;
     }
@@ -828,12 +841,12 @@ void qsamplerMainForm::editSetupChannel (void)
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannel = activeChannel();
-    if (pChannel == NULL)
+    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    if (pChannelStrip == NULL)
         return;
 
     // Just invoque the channel strip procedure.
-    pChannel->showChannelSetup(false);
+    pChannelStrip->showChannelSetup(false);
 }
 
 
@@ -843,7 +856,11 @@ void qsamplerMainForm::editResetChannel (void)
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannel = activeChannel();
+    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    if (pChannelStrip == NULL)
+        return;
+
+    qsamplerChannel *pChannel = pChannelStrip->channel();
     if (pChannel == NULL)
         return;
 
@@ -858,7 +875,7 @@ void qsamplerMainForm::editResetChannel (void)
     appendMessages(tr("Channel %1 reset.").arg(pChannel->channelID()));
 
     // Refresh channel strip info.
-    pChannel->updateChannelInfo();
+    pChannelStrip->updateChannelInfo();
 }
 
 
@@ -919,9 +936,9 @@ void qsamplerMainForm::viewOptions (void)
     qsamplerOptionsForm *pOptionsForm = new qsamplerOptionsForm(this);
     if (pOptionsForm) {
         // Check out some initial nullities(tm)...
-        qsamplerChannelStrip *pChannel = activeChannel();
-        if (m_pOptions->sDisplayFont.isEmpty() && pChannel)
-            m_pOptions->sDisplayFont = pChannel->displayFont().toString();
+        qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+        if (m_pOptions->sDisplayFont.isEmpty() && pChannelStrip)
+            m_pOptions->sDisplayFont = pChannelStrip->displayFont().toString();
         if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
             m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
         // To track down deferred or immediate changes.
@@ -997,19 +1014,19 @@ void qsamplerMainForm::channelsArrange (void)
     m_pWorkspace->setUpdatesEnabled(false);
     int y = 0;
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-    /*  if (pChannel->testWState(WState_Maximized | WState_Minimized)) {
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+    /*  if (pChannelStrip->testWState(WState_Maximized | WState_Minimized)) {
             // Prevent flicker...
-            pChannel->hide();
-            pChannel->showNormal();
+            pChannelStrip->hide();
+            pChannelStrip->showNormal();
         }   */
-        pChannel->adjustSize();
+        pChannelStrip->adjustSize();
         int iWidth  = m_pWorkspace->width();
-        if (iWidth < pChannel->width())
-            iWidth = pChannel->width();
-    //  int iHeight = pChannel->height() + pChannel->parentWidget()->baseSize().height();
-        int iHeight = pChannel->parentWidget()->frameGeometry().height();
-        pChannel->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+        if (iWidth < pChannelStrip->width())
+            iWidth = pChannelStrip->width();
+    //  int iHeight = pChannelStrip->height() + pChannelStrip->parentWidget()->baseSize().height();
+        int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
+        pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
         y += iHeight;
     }
     m_pWorkspace->setUpdatesEnabled(true);
@@ -1095,9 +1112,9 @@ void qsamplerMainForm::stabilizeForm (void)
     setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessioName));
 
     // Update the main menu state...
-    qsamplerChannelStrip *pChannel = activeChannel();
+    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
     bool bHasClient  = (m_pOptions != NULL && m_pClient != NULL);
-    bool bHasChannel = (bHasClient && pChannel != NULL);
+    bool bHasChannel = (bHasClient && pChannelStrip != NULL);
     fileNewAction->setEnabled(bHasClient);
     fileOpenAction->setEnabled(bHasClient);
     fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
@@ -1121,7 +1138,7 @@ void qsamplerMainForm::stabilizeForm (void)
     }
     // Channel status...
     if (bHasChannel)
-        m_status[QSAMPLER_STATUS_CHANNEL]->setText(pChannel->caption());
+        m_status[QSAMPLER_STATUS_CHANNEL]->setText(pChannelStrip->caption());
     else
         m_status[QSAMPLER_STATUS_CHANNEL]->clear();
     // Session status...
@@ -1140,7 +1157,7 @@ void qsamplerMainForm::stabilizeForm (void)
 
 
 // Channel change receiver slot.
-void qsamplerMainForm::channelChanged( qsamplerChannelStrip * )
+void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip * )
 {
     // Just mark the dirty form.
     m_iDirtyCount++;
@@ -1214,8 +1231,9 @@ void qsamplerMainForm::updateDisplayFont (void)
 
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-        pChannel->setDisplayFont(font);
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannelStrip)
+            pChannelStrip->setDisplayFont(font);
     }
     m_pWorkspace->setUpdatesEnabled(true);
 }
@@ -1234,8 +1252,9 @@ void qsamplerMainForm::updateMaxVolume (void)
 
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-        pChannel->setMaxVolume(m_pOptions->iMaxVolume);
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannelStrip)
+            pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
     }
     m_pWorkspace->setUpdatesEnabled(true);
 }
@@ -1340,53 +1359,53 @@ void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
         return;
 
     // Prepare for auto-arrange?
-    qsamplerChannelStrip *pChannel = NULL;
+    qsamplerChannelStrip *pChannelStrip = NULL;
     int y = 0;
     if (m_pOptions && m_pOptions->bAutoArrange) {
         QWidgetList wlist = m_pWorkspace->windowList();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-        //  y += pChannel->height() + pChannel->parentWidget()->baseSize().height();
-            y += pChannel->parentWidget()->frameGeometry().height();
+            pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        //  y += pChannelStrip->height() + pChannelStrip->parentWidget()->baseSize().height();
+            y += pChannelStrip->parentWidget()->frameGeometry().height();
         }
     }
 
     // Add a new channel itema...
     WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
-    pChannel = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
-    pChannel->setMaxVolume(m_pOptions->iMaxVolume);
-    pChannel->setup(this, iChannelID);
+    pChannelStrip = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
+    pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
+    pChannelStrip->setup(this, iChannelID);
     // We'll need a display font.
     QFont font;
     if (m_pOptions && font.fromString(m_pOptions->sDisplayFont))
-        pChannel->setDisplayFont(font);
+        pChannelStrip->setDisplayFont(font);
     // Track channel setup changes.
-    QObject::connect(pChannel, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelChanged(qsamplerChannelStrip *)));
+    QObject::connect(pChannelStrip, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelStripChanged(qsamplerChannelStrip *)));
     // Before we show it up, may be we'll
     // better ask for some initial values?
     if (bPrompt)
-        pChannel->showChannelSetup(true);
+        pChannelStrip->showChannelSetup(true);
     // Now we show up us to the world.
-    pChannel->show();
+    pChannelStrip->show();
     // Only then, we'll auto-arrange...
     if (m_pOptions && m_pOptions->bAutoArrange) {
         int iWidth  = m_pWorkspace->width();
     //  int iHeight = pChannel->height() + pChannel->parentWidget()->baseSize().height();
-        int iHeight = pChannel->parentWidget()->frameGeometry().height();
-        pChannel->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+        int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
+        pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
     }
 }
 
 
 // Retrieve the active channel strip.
-qsamplerChannelStrip *qsamplerMainForm::activeChannel (void)
+qsamplerChannelStrip *qsamplerMainForm::activeChannelStrip (void)
 {
     return (qsamplerChannelStrip *) m_pWorkspace->activeWindow();
 }
 
 
 // Retrieve a channel strip by index.
-qsamplerChannelStrip *qsamplerMainForm::channelAt ( int iChannel )
+qsamplerChannelStrip *qsamplerMainForm::channelStripAt ( int iChannel )
 {
     QWidgetList wlist = m_pWorkspace->windowList();
     if (wlist.isEmpty())
@@ -1407,10 +1426,12 @@ void qsamplerMainForm::channelsMenuAboutToShow (void)
     if (!wlist.isEmpty()) {
         channelsMenu->insertSeparator();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-            int iItemID = channelsMenu->insertItem(pChannel->caption(), this, SLOT(channelsMenuActivated(int)));
-            channelsMenu->setItemParameter(iItemID, iChannel);
-            channelsMenu->setItemChecked(iItemID, activeChannel() == pChannel);
+            qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+            if (pChannelStrip) {
+                int iItemID = channelsMenu->insertItem(pChannelStrip->caption(), this, SLOT(channelsMenuActivated(int)));
+                channelsMenu->setItemParameter(iItemID, iChannel);
+                channelsMenu->setItemChecked(iItemID, activeChannelStrip() == pChannelStrip);
+            }
         }
     }
 }
@@ -1419,10 +1440,10 @@ void qsamplerMainForm::channelsMenuAboutToShow (void)
 // Windows menu activation slot
 void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 {
-    qsamplerChannelStrip *pChannel = channelAt(iChannel);
-    if (pChannel)
-        pChannel->showNormal();
-    pChannel->setFocus();
+    qsamplerChannelStrip *pChannelStrip = channelStripAt(iChannel);
+    if (pChannelStrip)
+        pChannelStrip->showNormal();
+    pChannelStrip->setFocus();
 }
 
 
@@ -1468,9 +1489,9 @@ void qsamplerMainForm::timerSlot (void)
             m_iTimerSlot = 0;
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-                qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-                if (pChannel->isVisible())
-                    pChannel->updateChannelUsage();
+                qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+                if (pChannelStrip && pChannelStrip->isVisible())
+                    pChannelStrip->updateChannelUsage();
             }
         }
     }

@@ -6,6 +6,7 @@ name    = qsampler
 headers = config.h \
 	src/qsamplerAbout.h \
 	src/qsamplerOptions.h \
+	src/qsamplerChannel.h \
 	src/qsamplerMessages.h \
 	src/qsamplerChannelStrip.ui.h \
 	src/qsamplerChannelForm.ui.h \
@@ -14,6 +15,7 @@ headers = config.h \
 
 sources = src/main.cpp \
 	src/qsamplerOptions.cpp \
+	src/qsamplerChannel.cpp \
 	src/qsamplerMessages.cpp \
 	src/qsamplerChannelStrip.ui \
 	src/qsamplerChannelForm.ui \

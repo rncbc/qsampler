@@ -26,9 +26,6 @@
 #include <qfileinfo.h>
 #include <qlistbox.h>
 
-#include "qsamplerOptions.h"
-#include "qsamplerChannelStrip.h"
-
 #include "config.h"
 
 
@@ -53,7 +50,7 @@ void qsamplerChannelForm::destroy (void)
 
 
 // Channel dialog setup formal initializer.
-void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel, bool bNew )
+void qsamplerChannelForm::setup ( qsamplerChannel *pChannel, bool bNew )
 {
     m_pChannel = pChannel;
 
@@ -63,7 +60,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel, bool bNew )
     if (m_pChannel == NULL)
         return;
 
-    setCaption(m_pChannel->caption());
+    setCaption(tr("Channel %1").arg(m_pChannel->channelID()));
 
     // Check if we're up and connected.
     if (m_pChannel->client() == NULL)

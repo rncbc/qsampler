@@ -5,6 +5,9 @@ ChangeLog
 
 0.0.4   2004-09-29  Work in progress...
 
+* Almost complete rewrite of sampler channel strips internal
+  control structures.
+
 * Sampler reset command action added to menu and toolbar.
 
 * MIDI channel selection is now a dropdown list, allowing
