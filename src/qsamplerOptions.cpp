@@ -46,10 +46,10 @@ qsamplerOptions::qsamplerOptions (void)
     m_settings.beginGroup("/Server");
     sServerHost    = m_settings.readEntry("/ServerHost", "localhost");
     iServerPort    = m_settings.readNumEntry("/ServerPort", 8888);
-    iServerTimeout = m_settings.readNumEntry("/ServerTimeout", 500);
+    iServerTimeout = m_settings.readNumEntry("/ServerTimeout", 1000);
     bServerStart   = m_settings.readBoolEntry("/ServerStart", true);
     sServerCmdLine = m_settings.readEntry("/ServerCmdLine", "linuxsampler");
-    iStartDelay    = m_settings.readNumEntry("/StartDelay", 2);
+    iStartDelay    = m_settings.readNumEntry("/StartDelay", 3);
     m_settings.endGroup();
 
     // Load display options...
@@ -57,7 +57,7 @@ qsamplerOptions::qsamplerOptions (void)
     sDisplayFont     = m_settings.readEntry("/DisplayFont", QString::null);
     bDisplayEffect   = m_settings.readBoolEntry("/DisplayEffect", true);
     bAutoRefresh     = m_settings.readBoolEntry("/AutoRefresh", true);
-    iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 1000);
+    iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 2000);
     iMaxVolume       = m_settings.readNumEntry("/MaxVolume", 100);
     sMessagesFont    = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit   = m_settings.readBoolEntry("/MessagesLimit", true);

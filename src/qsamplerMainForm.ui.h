@@ -317,9 +317,8 @@ bool qsamplerMainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList&
 // Window drag-n-drop event handlers.
 void qsamplerMainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
-    QStringList files;
-
-    pDragEnterEvent->accept(decodeDragFiles(pDragEnterEvent, files));
+	QStringList files;
+	pDragEnterEvent->accept(decodeDragFiles(pDragEnterEvent, files));
 }
 
 
@@ -423,6 +422,9 @@ bool qsamplerMainForm::newSession (void)
     // Check if we can do it.
     if (!closeSession(true))
         return false;
+
+	// Give us what the server has, right now...
+	updateSession();
 
     // Ok increment untitled count.
     m_iUntitled++;
@@ -596,20 +598,8 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     if (iErrors > 0)
         appendMessagesError(tr("Session could not be loaded\nfrom \"%1\".\n\nSorry.").arg(sFilename));
 
-    // Now we'll try to create the whole GUI session.
-    int *piChannelIDs = ::lscp_list_channels(m_pClient);
-    if (piChannelIDs == NULL) {
-        appendMessagesClient("lscp_list_channels");
-        appendMessagesError(tr("Could not get current list of channels.\n\nSorry."));
-    } else {
-		// Try to (re)create each channel.
-		m_pWorkspace->setUpdatesEnabled(false);
-		for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
-			createChannelStrip(new qsamplerChannel(this, piChannelIDs[iChannel]));
-			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
-		}
-		m_pWorkspace->setUpdatesEnabled(true);
-	}
+	// Now we'll try to create (update) the whole GUI session.
+	updateSession();
 
     // Save as default session directory.
     if (m_pOptions)
@@ -774,6 +764,9 @@ void qsamplerMainForm::fileReset (void)
 
     // Log this.
     appendMessages(tr("Sampler reset."));
+
+	// Make it a new session...
+	newSession();
 }
 
 
@@ -1230,6 +1223,32 @@ void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip * )
 }
 
 
+// Grab and restore current sampler channels session.
+void qsamplerMainForm::updateSession (void)
+{
+	// Retrieve the current channel list.
+	int *piChannelIDs = ::lscp_list_channels(m_pClient);
+	if (piChannelIDs == NULL) {
+		if (::lscp_client_get_errno(m_pClient)) {
+			appendMessagesClient("lscp_list_channels");
+			appendMessagesError(tr("Could not get current list of channels.\n\nSorry."));
+		}
+		return;
+	}
+
+	// Try to (re)create each channel.
+	m_pWorkspace->setUpdatesEnabled(false);
+	for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
+		// Check if theres already a channel strip for this one...
+		if (!channelStrip(piChannelIDs[iChannel]))
+			createChannelStrip(new qsamplerChannel(this, piChannelIDs[iChannel]));
+		// Make it visibly responsive...
+		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	}
+	m_pWorkspace->setUpdatesEnabled(true);
+}
+
+
 // Update the recent files list and menu.
 void qsamplerMainForm::updateRecentFiles ( const QString& sFilename )
 {
@@ -1469,8 +1488,10 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
         QWidgetList wlist = m_pWorkspace->windowList();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
             pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
-        //  y += pChannelStrip->height() + pChannelStrip->parentWidget()->baseSize().height();
-            y += pChannelStrip->parentWidget()->frameGeometry().height();
+			if (pChannelStrip) {
+			//  y += pChannelStrip->height() + pChannelStrip->parentWidget()->baseSize().height();
+				y += pChannelStrip->parentWidget()->frameGeometry().height();
+			}
         }
     }
 
@@ -1522,9 +1543,30 @@ qsamplerChannelStrip *qsamplerMainForm::channelStripAt ( int iChannel )
 {
     QWidgetList wlist = m_pWorkspace->windowList();
     if (wlist.isEmpty())
-        return 0;
+        return NULL;
 
     return (qsamplerChannelStrip *) wlist.at(iChannel);
+}
+
+
+// Retrieve a channel strip by sampler channel id.
+qsamplerChannelStrip *qsamplerMainForm::channelStrip ( int iChannelID )
+{
+	QWidgetList wlist = m_pWorkspace->windowList();
+	if (wlist.isEmpty())
+		return NULL;
+	
+	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+		qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+		if (pChannelStrip) {
+			qsamplerChannel *pChannel = pChannelStrip->channel();
+			if (pChannel && pChannel->channelID() == iChannelID)
+				return pChannelStrip;
+		}
+	}
+
+	// Not found.
+	return NULL;
 }
 
 

@@ -416,6 +416,7 @@
 <variables>
     <variable access="private">qsamplerChannel *m_pChannel;</variable>
     <variable access="private">int m_iDirtyChange;</variable>
+    <variable access="private">int m_iErrorCount;</variable>
 </variables>
 <signals>
     <signal>channelChanged( qsamplerChannelStrip * )</signal>
@@ -427,18 +428,21 @@
 <functions>
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
+    <function access="private" specifier="non virtual" returnType="bool">decodeDragFile( const QMimeSource * pEvent, QString &amp; sInstrumentFile )</function>
+    <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent *pDragEnterEvent )</function>
+    <function access="private" specifier="non virtual">dropEvent( QDropEvent *pDropEvent )</function>
+    <function access="private" specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
     <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
     <function specifier="non virtual" returnType="qsamplerChannel *">channel ( void )</function>
     <function specifier="non virtual" returnType="QFont">displayFont( void )</function>
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
     <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
     <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
+    <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
     <function specifier="non virtual" returnType="bool">updateInstrumentName( bool bForce )</function>
     <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelVolume( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelUsage( void )</function>
-    <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
-    <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>
