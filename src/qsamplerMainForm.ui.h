@@ -41,6 +41,8 @@
 #include "qsamplerMessages.h"
 
 #include "qsamplerChannelStrip.h"
+
+#include "qsamplerDeviceForm.h"
 #include "qsamplerOptionsForm.h"
 
 #include "config.h"
@@ -105,7 +107,8 @@ void qsamplerMainForm::init (void)
     m_pOptions = NULL;
 
     // All child forms are to be created later, not earlier than setup.
-    m_pMessages = NULL;
+    m_pMessages   = NULL;
+    m_pDeviceForm = NULL;
 
     // We'll start clean.
     m_iUntitled   = 0;
@@ -138,23 +141,23 @@ void qsamplerMainForm::init (void)
     pLabel = new QLabel(tr("Connected"), this);
     pLabel->setAlignment(Qt::AlignLeft);
     pLabel->setMinimumSize(pLabel->sizeHint());
-    m_status[QSAMPLER_STATUS_CLIENT] = pLabel;
+    m_statusItem[QSAMPLER_STATUS_CLIENT] = pLabel;
     statusBar()->addWidget(pLabel);
     // Server address.
     pLabel = new QLabel(this);
     pLabel->setAlignment(Qt::AlignLeft);
-    m_status[QSAMPLER_STATUS_SERVER] = pLabel;
+    m_statusItem[QSAMPLER_STATUS_SERVER] = pLabel;
     statusBar()->addWidget(pLabel, 1);
     // Channel title.
     pLabel = new QLabel(this);
     pLabel->setAlignment(Qt::AlignLeft);
-    m_status[QSAMPLER_STATUS_CHANNEL] = pLabel;
+    m_statusItem[QSAMPLER_STATUS_CHANNEL] = pLabel;
     statusBar()->addWidget(pLabel, 2);
     // Session modification status.
     pLabel = new QLabel(tr("MOD"), this);
     pLabel->setAlignment(Qt::AlignHCenter);
     pLabel->setMinimumSize(pLabel->sizeHint());
-    m_status[QSAMPLER_STATUS_SESSION] = pLabel;
+    m_statusItem[QSAMPLER_STATUS_SESSION] = pLabel;
     statusBar()->addWidget(pLabel);
 
     // Create the recent files sub-menu.
@@ -179,20 +182,22 @@ void qsamplerMainForm::destroy (void)
 #endif
 
     // Finally drop any widgets around...
+    if (m_pDeviceForm)
+        delete m_pDeviceForm;
     if (m_pMessages)
         delete m_pMessages;
     if (m_pWorkspace)
         delete m_pWorkspace;
 
     // Delete status item labels one by one.
-    if (m_status[QSAMPLER_STATUS_CLIENT])
-        delete m_status[QSAMPLER_STATUS_CLIENT];
-    if (m_status[QSAMPLER_STATUS_SERVER])
-        delete m_status[QSAMPLER_STATUS_SERVER];
-    if (m_status[QSAMPLER_STATUS_CHANNEL])
-        delete m_status[QSAMPLER_STATUS_CHANNEL];
-    if (m_status[QSAMPLER_STATUS_SESSION])
-        delete m_status[QSAMPLER_STATUS_SESSION];
+    if (m_statusItem[QSAMPLER_STATUS_CLIENT])
+        delete m_statusItem[QSAMPLER_STATUS_CLIENT];
+    if (m_statusItem[QSAMPLER_STATUS_SERVER])
+        delete m_statusItem[QSAMPLER_STATUS_SERVER];
+    if (m_statusItem[QSAMPLER_STATUS_CHANNEL])
+        delete m_statusItem[QSAMPLER_STATUS_CHANNEL];
+    if (m_statusItem[QSAMPLER_STATUS_SESSION])
+        delete m_statusItem[QSAMPLER_STATUS_SESSION];
 
     // Delete recentfiles menu.
     if (m_pRecentFilesMenu)
@@ -208,6 +213,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
+    m_pDeviceForm = new qsamplerDeviceForm(this);
     // Set message defaults...
     updateMessagesFont();
     updateMessagesLimit();
@@ -236,8 +242,9 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
         QTextIStream istr(&sDockables);
         istr >> *this;
     }
-    // Try to restore old window positioning.
+    // Try to restore old window positioning and initial visibility.
     m_pOptions->loadWidgetGeometry(this);
+    m_pOptions->loadWidgetGeometry(m_pDeviceForm);
 
     // Final startup stabilization...
     updateRecentFilesMenu();
@@ -264,6 +271,9 @@ bool qsamplerMainForm::queryClose (void)
         // Some windows default fonts is here on demand too.
         if (bQueryClose && m_pMessages)
             m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
+		// Other windows just need asking if it can close gracefully...
+    	if (bQueryClose && m_pDeviceForm)
+        	bQueryClose = m_pDeviceForm->queryClose();
         // Try to save current positioning.
         if (bQueryClose) {
             // Save decorations state.
@@ -275,8 +285,12 @@ bool qsamplerMainForm::queryClose (void)
             QTextOStream ostr(&sDockables);
             ostr << *this;
             m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
-            // And the main windows state.
+            // And the children, and the main windows state,.
+        	m_pOptions->saveWidgetGeometry(m_pDeviceForm);
             m_pOptions->saveWidgetGeometry(this);
+	        // Close popup widgets.
+	        if (m_pDeviceForm)
+	            m_pDeviceForm->close();
             // Stop client and/or server, gracefully.
             stopServer();
         }
@@ -977,6 +991,26 @@ void qsamplerMainForm::viewMessages ( bool bOn )
 }
 
 
+// Show/hide the device configurator form.
+void qsamplerMainForm::viewDevices (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    if (m_pDeviceForm) {
+        m_pOptions->saveWidgetGeometry(m_pDeviceForm);
+		m_pDeviceForm->setClient(m_pClient);
+        if (m_pDeviceForm->isVisible()) {
+            m_pDeviceForm->hide();
+        } else {
+            m_pDeviceForm->show();
+            m_pDeviceForm->raise();
+            m_pDeviceForm->setActiveWindow();
+        }
+    }
+}
+
+
 // Show options dialog.
 void qsamplerMainForm::viewOptions (void)
 {
@@ -1189,27 +1223,29 @@ void qsamplerMainForm::stabilizeForm (void)
     editSetupChannelAction->setEnabled(bHasChannel);
     editResetChannelAction->setEnabled(bHasChannel);
     editResetAllChannelsAction->setEnabled(bHasChannel);
-    channelsArrangeAction->setEnabled(bHasChannel);
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
+    viewDevicesAction->setOn(m_pDeviceForm && m_pDeviceForm->isVisible());
+    viewDevicesAction->setEnabled(bHasClient);
+    channelsArrangeAction->setEnabled(bHasChannel);
 
     // Client/Server status...
     if (bHasClient) {
-        m_status[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
-        m_status[QSAMPLER_STATUS_SERVER]->setText(m_pOptions->sServerHost + ":" + QString::number(m_pOptions->iServerPort));
+        m_statusItem[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
+        m_statusItem[QSAMPLER_STATUS_SERVER]->setText(m_pOptions->sServerHost + ":" + QString::number(m_pOptions->iServerPort));
     } else {
-        m_status[QSAMPLER_STATUS_CLIENT]->clear();
-        m_status[QSAMPLER_STATUS_SERVER]->clear();
+        m_statusItem[QSAMPLER_STATUS_CLIENT]->clear();
+        m_statusItem[QSAMPLER_STATUS_SERVER]->clear();
     }
     // Channel status...
     if (bHasChannel)
-        m_status[QSAMPLER_STATUS_CHANNEL]->setText(pChannelStrip->caption());
+        m_statusItem[QSAMPLER_STATUS_CHANNEL]->setText(pChannelStrip->caption());
     else
-        m_status[QSAMPLER_STATUS_CHANNEL]->clear();
+        m_statusItem[QSAMPLER_STATUS_CHANNEL]->clear();
     // Session status...
     if (m_iDirtyCount > 0)
-        m_status[QSAMPLER_STATUS_SESSION]->setText(tr("MOD"));
+        m_statusItem[QSAMPLER_STATUS_SESSION]->setText(tr("MOD"));
     else
-        m_status[QSAMPLER_STATUS_SESSION]->clear();
+        m_statusItem[QSAMPLER_STATUS_SESSION]->clear();
 
     // Recent files menu.
     m_pRecentFilesMenu->setEnabled(bHasClient && m_pOptions->recentFiles.count() > 0);
@@ -1862,6 +1898,11 @@ bool qsamplerMainForm::startClient (void)
     // Log success here.
     appendMessages(tr("Client connected."));
 
+	// Hard-notify device configuration form,
+	// if visible, that we're ready...
+	if (m_pDeviceForm && m_pDeviceForm->isVisible())
+	    m_pDeviceForm->setClient(m_pClient);
+	    
     // Is any session pending to be loaded?
     if (!m_pOptions->sSessionFile.isEmpty()) {
         // Just load the prabably startup session...
@@ -1881,6 +1922,11 @@ void qsamplerMainForm::stopClient (void)
 {
     if (m_pClient == NULL)
         return;
+
+	// Hard-notify device configuration form,
+	// if visible, that we're running out...
+	if (m_pDeviceForm && m_pDeviceForm->isVisible())
+	    m_pDeviceForm->setClient(NULL);
 
     // Log prepare here.
     appendMessages(tr("Client disconnecting..."));

@@ -36,6 +36,29 @@ qsamplerDeviceParameterTable::qsamplerDeviceParameterTable ( QWidget *pParent, c
 	: QTable(pParent, pszName)
 {
 	m_pClient = NULL;
+
+	// Set fixed number of columns.
+	QTable::setNumCols(5);
+	QTable::setShowGrid(false);
+	QTable::setSorting(false);
+	QTable::setFocusStyle(QTable::FollowStyle);
+	QTable::setSelectionMode(QTable::NoSelection);
+	// No vertical header.
+	QTable::verticalHeader()->hide();
+	QTable::setLeftMargin(0);
+	// Initialize the fixed table column headings.
+	QHeader *pHeader = QTable::horizontalHeader();
+	pHeader->setLabel(0, tr("Name"));
+	pHeader->setLabel(1, tr("Description"));
+	pHeader->setLabel(2, tr("Type"));
+	pHeader->setLabel(3, tr("Value"));
+	pHeader->setLabel(4, tr("Default"));
+	// Set read-onlyness of each column
+	QTable::setColumnReadOnly(0, true);
+	QTable::setColumnReadOnly(1, true);
+	QTable::setColumnReadOnly(2, true);
+/*  QTable::setColumnReadOnly(2, true); -- of course not. */
+	QTable::setColumnReadOnly(4, true);
 }
 
 // Default destructor.

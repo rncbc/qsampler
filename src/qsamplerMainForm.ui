@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>qsamplerMainForm</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
@@ -29,7 +29,7 @@
             <x>0</x>
             <y>0</y>
             <width>472</width>
-            <height>293</height>
+            <height>296</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -83,6 +83,7 @@
         <action name="viewStatusbarAction"/>
         <separator/>
         <action name="viewMessagesAction"/>
+        <action name="viewDevicesAction"/>
         <separator/>
         <action name="viewOptionsAction"/>
     </item>
@@ -266,7 +267,7 @@
             <string>Restart sampler instance</string>
         </property>
         <property name="accel">
-            <string>Shift+Ctrl+R</string>
+            <string>Ctrl+Shift+R</string>
         </property>
     </action>
     <action>
@@ -495,6 +496,26 @@
     </action>
     <action>
         <property name="name">
+            <cstring>viewDevicesAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Devices</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Devices</string>
+        </property>
+        <property name="toolTip">
+            <string>Device configuration</string>
+        </property>
+        <property name="statusTip">
+            <string>Show/hide the device configuration window</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>viewOptionsAction</cstring>
         </property>
         <property name="text">
@@ -695,6 +716,12 @@
         <slot>viewMessages(bool)</slot>
     </connection>
     <connection>
+        <sender>viewDevicesAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>viewDevices()</slot>
+    </connection>
+    <connection>
         <sender>viewOptionsAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -724,12 +751,6 @@
         <receiver>qsamplerMainForm</receiver>
         <slot>helpAboutQt()</slot>
     </connection>
-    <connection>
-        <sender>channelsMenu</sender>
-        <signal>aboutToShow()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>channelsMenuAboutToShow()</slot>
-    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">lscp/client.h</include>
@@ -757,19 +778,20 @@
     <variable access="private">int m_iStartDelay;</variable>
     <variable access="private">int m_iTimerDelay;</variable>
     <variable access="private">int m_iTimerSlot;</variable>
-    <variable access="private">QLabel *m_status[5];</variable>
+    <variable access="private">QLabel *m_statusItem[5];</variable>
     <variable access="private">QPopupMenu *m_pRecentFilesMenu;</variable>
     <variable access="private">QPtrList&lt;qsamplerChannelStrip&gt; m_changedStrips;</variable>
+    <variable access="private">qsamplerDeviceForm *m_pDeviceForm;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">fileNew( void )</slot>
     <slot specifier="non virtual">fileOpen( void )</slot>
+    <slot specifier="non virtual">fileOpenRecent( int iIndex )</slot>
     <slot specifier="non virtual">fileSave( void )</slot>
     <slot specifier="non virtual">fileSaveAs( void )</slot>
     <slot specifier="non virtual">fileReset( void )</slot>
     <slot specifier="non virtual">fileRestart( void )</slot>
     <slot specifier="non virtual">fileExit( void )</slot>
-    <slot specifier="non virtual">fileOpenRecent( int iIndex )</slot>
     <slot specifier="non virtual">editAddChannel( void )</slot>
     <slot specifier="non virtual">editRemoveChannel( void )</slot>
     <slot specifier="non virtual">editSetupChannel( void )</slot>
@@ -779,6 +801,7 @@
     <slot specifier="non virtual">viewToolbar( bool bOn )</slot>
     <slot specifier="non virtual">viewStatusbar( bool bOn )</slot>
     <slot specifier="non virtual">viewMessages( bool bOn )</slot>
+    <slot specifier="non virtual">viewDevices( void )</slot>
     <slot specifier="non virtual">viewOptions( void )</slot>
     <slot specifier="non virtual">channelsArrange( void )</slot>
     <slot specifier="non virtual">channelsAutoArrange( bool bOn )</slot>
