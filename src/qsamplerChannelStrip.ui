@@ -434,9 +434,9 @@
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
     <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
     <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
-    <function specifier="non virtual">updateChannelInfo( void )</function>
-    <function specifier="non virtual">updateChannelVolume( void )</function>
-    <function specifier="non virtual">updateChannelUsage( void )</function>
+    <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
+    <function specifier="non virtual" returnType="bool">updateChannelVolume( void )</function>
+    <function specifier="non virtual" returnType="bool">updateChannelUsage( void )</function>
     <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
     <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
 </functions>

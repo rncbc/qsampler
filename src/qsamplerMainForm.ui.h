@@ -1507,8 +1507,11 @@ void qsamplerMainForm::timerSlot (void)
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
                 qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
-                if (pChannelStrip && pChannelStrip->isVisible())
-                    pChannelStrip->updateChannelUsage();
+                if (pChannelStrip && pChannelStrip->isVisible()) {
+                    // If we can't make it clean, try next time.
+                    if (!pChannelStrip->updateChannelUsage())
+                        m_iChangeCount++;
+                }
             }
         }
     }
