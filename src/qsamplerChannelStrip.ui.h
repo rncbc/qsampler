@@ -37,9 +37,20 @@
 void qsamplerChannelStrip::init (void)
 {
     // Initialize locals.
-    m_iDirtyChange = 0;
-    m_pMainForm = NULL;
+    m_pMainForm  = NULL;
     m_iChannelID = 0;
+    
+    m_sEngineName     = tr("(No engine)");
+    m_sInstrumentFile = tr("(No instrument)");
+    m_iInstrumentNr   = 0;
+    m_sMidiDriver     = "ALSA"; // DEPRECATED.
+    m_iMidiDevice     = 0;
+    m_iMidiPort       = 0;
+    m_iMidiChannel    = 0;
+    m_sAudioDriver    = "JACK"; // DEPRECATED.
+    m_iAudioDevice    = 0;
+    
+    m_iDirtyChange = 0;
 
     // Try to restore normal window positioning.
     adjustSize();
@@ -65,6 +76,9 @@ void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
 // The global options settings delegated property.
 qsamplerOptions *qsamplerChannelStrip::options (void)
 {
+    if (m_pMainForm == NULL)
+        return NULL;
+        
     return m_pMainForm->options();
 }
 
@@ -72,6 +86,9 @@ qsamplerOptions *qsamplerChannelStrip::options (void)
 // The client descriptor delegated property.
 lscp_client_t *qsamplerChannelStrip::client (void)
 {
+    if (m_pMainForm == NULL)
+        return NULL;
+
     return m_pMainForm->client();
 }
 
@@ -87,6 +104,196 @@ void qsamplerChannelStrip::setChannelID ( int iChannelID )
     m_iChannelID = iChannelID;
 
     updateChannelInfo();
+}
+
+
+// Engine name accessors.
+QString& qsamplerChannelStrip::engineName (void)
+{
+    return m_sEngineName;
+}
+
+bool qsamplerChannelStrip::loadEngine ( const QString& sEngineName )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_load_engine(client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
+        appendMessagesClient("lscp_load_engine");
+        return false;
+    }
+
+    m_sEngineName = sEngineName;
+    return true;
+}
+
+
+// Instrument filename accessors.
+QString& qsamplerChannelStrip::instrumentFile (void)
+{
+    return m_sInstrumentFile;
+}
+
+// Instrument index accessors.
+int qsamplerChannelStrip::instrumentNr (void)
+{
+    return m_iInstrumentNr;
+}
+
+bool qsamplerChannelStrip::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_load_instrument(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
+        appendMessagesClient("lscp_load_instrument");
+        return false;
+    }
+
+    m_sInstrumentFile = sInstrumentFile;
+    m_iInstrumentNr = iInstrumentNr;
+    return true;
+}
+
+
+// MIDI driver type accessors (DEPRECATED).
+QString& qsamplerChannelStrip::midiDriver (void)
+{
+    return m_sMidiDriver;
+}
+
+bool qsamplerChannelStrip::setMidiDriver ( const QString& sMidiDriver )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_set_channel_midi_type(client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_midi_type");
+        return false;
+    }
+
+    m_sMidiDriver = sMidiDriver;
+    return true;
+}
+
+
+// MIDI device accessors.
+int qsamplerChannelStrip::midiDevice (void)
+{
+    return m_iMidiDevice;
+}
+
+bool qsamplerChannelStrip::setMidiDevice ( int iMidiDevice )
+{
+    if (client() == NULL)
+        return false;
+
+    // FIXME: call future lscp_set_channel_midi_device()
+
+    m_iMidiDevice = iMidiDevice;
+    return true;
+}
+
+
+// MIDI port number accessor.
+int qsamplerChannelStrip::midiPort (void)
+{
+    return m_iMidiPort;
+}
+
+bool qsamplerChannelStrip::setMidiPort ( int iMidiPort )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_midi_port");
+        return false;
+    }
+
+    m_iMidiPort = iMidiPort;
+    return true;
+}
+
+
+// MIDI channel accessor.
+int qsamplerChannelStrip::midiChannel (void)
+{
+    return m_iMidiChannel;
+}
+
+bool qsamplerChannelStrip::setMidiChannel ( int iMidiChannel )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_set_channel_midi_channel(client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_midi_channel");
+        return false;
+    }
+
+    m_iMidiChannel = iMidiChannel;
+    return true;
+}
+
+
+// Audio device accessor.
+int qsamplerChannelStrip::audioDevice (void)
+{
+    return m_iAudioDevice;
+}
+
+bool qsamplerChannelStrip::setAudioDevice ( int iAudioDevice )
+{
+    if (client() == NULL)
+        return false;
+
+    // FIXME: call future lscp_set_channel_audio_device()
+
+    m_iAudioDevice = iAudioDevice;
+    return true;
+}
+
+
+// Audio driver type accessors (DEPRECATED).
+QString& qsamplerChannelStrip::audioDriver (void)
+{
+    return m_sAudioDriver;
+}
+
+bool qsamplerChannelStrip::setAudioDriver ( const QString& sAudioDriver )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_set_channel_audio_type(client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_audio_type");
+        return false;
+    }
+
+    m_sAudioDriver = sAudioDriver;
+    return true;
+}
+
+
+// Channel volume accessors.
+float qsamplerChannelStrip::volume (void)
+{
+    return m_fVolume;
+}
+
+bool qsamplerChannelStrip::setVolume ( float fVolume )
+{
+    if (client() == NULL)
+        return false;
+
+    if (::lscp_set_channel_volume(client(), m_iChannelID, fVolume) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_volume");
+        return false;
+    }
+
+    m_fVolume = fVolume;
+    return true;
 }
 
 
@@ -117,16 +324,53 @@ void qsamplerChannelStrip::channelSetup (void)
 }
 
 
+// Update whole channel info state.
+void qsamplerChannelStrip::updateChannelInfo (void)
+{
+    // Update strip caption.
+    QString sText = tr("Channel %1").arg(m_iChannelID);
+    setCaption(sText);
+    ChannelSetupPushButton->setText(sText);
+
+    // Check if we're up and connected.
+    if (client() == NULL)
+        return;
+
+    // Read channel information.
+    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(client(), m_iChannelID);
+    if (pChannelInfo == NULL) {
+        appendMessagesClient("lscp_get_channel_info");
+        appendMessagesError(tr("Could not get channel information.\n\nSorry."));
+    } else {
+        // Cache in channel information.
+        m_sEngineName     = pChannelInfo->engine_name;
+        m_sInstrumentFile = pChannelInfo->instrument_file;
+        m_iInstrumentNr   = pChannelInfo->instrument_nr;
+        m_iMidiDevice     = pChannelInfo->midi_device;
+        m_iMidiPort       = pChannelInfo->midi_port;
+        m_iMidiChannel    = pChannelInfo->midi_channel;
+        m_iAudioDevice    = pChannelInfo->audio_device;
+        m_fVolume         = pChannelInfo->volume;
+    }
+
+    // Set some proper values.
+    EngineNameTextLabel->setText(m_sEngineName);
+    InstrumentNameTextLabel->setText(QFileInfo(m_sInstrumentFile).fileName()
+         + " [" + QString::number(m_iInstrumentNr) + "]");
+    // And update the both GUI volume elements.
+    updateChannelVolume();
+}
+
 
 // Do the dirty volume change.
-void qsamplerChannelStrip::setChannelVolume ( float fVolume )
+void qsamplerChannelStrip::updateChannelVolume (void)
 {
     // Convert...
 #ifdef CONFIG_ROUND
-    int iVolume = (int) ::round(100.0 * fVolume);
+    int iVolume = (int) ::round(100.0 * m_fVolume);
 #else
     double fIPart = 0.0;
-    double fFPart = ::modf(100.0 * fVolume, &fIPart);
+    double fFPart = ::modf(100.0 * m_fVolume, &fIPart);
     int iVolume = (int) fIPart;
     if (fFPart >= +0.5)
         iVolume++;
@@ -149,11 +393,37 @@ void qsamplerChannelStrip::setChannelVolume ( float fVolume )
 }
 
 
+// Update whole channel usage state.
+void qsamplerChannelStrip::updateChannelUsage (void)
+{
+    if (client() == NULL)
+        return;
+
+    // Get current channel voice count.
+    int iVoiceCount = ::lscp_get_channel_voice_count(client(), m_iChannelID);
+    VoiceCountTextLabel->setText(QString::number(iVoiceCount));
+
+    // Get current stream count.
+    int iStreamCount = ::lscp_get_channel_stream_count(client(), m_iChannelID);
+    // Get current channel buffer fill usage.
+    // FIXME: benno has suggested some other rationales,
+    // but for the time being we'll show the average percentage usage.
+    int iStreamUsage = 0;
+    if (iStreamCount > 0) {
+        lscp_buffer_fill_t *pBufferFill = ::lscp_get_channel_buffer_fill(client(), LSCP_USAGE_PERCENTAGE, m_iChannelID);
+        if (pBufferFill) {
+            for (int iStream = 0; iStream < iStreamCount; iStream++)
+                iStreamUsage += pBufferFill[iStream].stream_usage;
+            iStreamUsage /= iStreamCount;
+        }
+    }
+    StreamUsageProgressBar->setProgress(iStreamUsage);
+}
+
+
 // Volume change slot.
 void qsamplerChannelStrip::volumeChanged ( int iVolume )
 {
-    if (m_pMainForm->client() == NULL)
-        return;
     // Avoid recursion.
     if (m_iDirtyChange > 0)
         return;
@@ -166,70 +436,10 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
         fVolume = 0.0;
 
     // Update the GUI elements.
-    setChannelVolume(fVolume);
-
-    // But do it for real.
-    if (::lscp_set_channel_volume(m_pMainForm->client(), m_iChannelID, fVolume) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_volume");
-    //  appendMessagesError(tr("Could not set channel volume.\n\nSorry."));
+    if (setVolume(fVolume)) {
+        updateChannelVolume();
+        emit channelChanged(this);
     }
-}
-
-
-// Update whole channel info state.
-void qsamplerChannelStrip::updateChannelInfo (void)
-{
-    // Update strip caption.
-    QString sText = tr("Channel %1").arg(m_iChannelID);
-    setCaption(sText);
-    ChannelSetupPushButton->setText(sText);
-
-    // Check if we're up and connected.
-    if (m_pMainForm->client() == NULL)
-        return;
-
-    // Read channel information.
-    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pMainForm->client(), m_iChannelID);
-    if (pChannelInfo == NULL) {
-        appendMessagesClient("lscp_get_channel_info");
-        appendMessagesError(tr("Could not get channel information.\n\nSorry."));
-        return;
-    }
-
-    // Set some proper values.
-    EngineNameTextLabel->setText(pChannelInfo->engine_name);
-    InstrumentNameTextLabel->setText(QFileInfo(pChannelInfo->instrument_file).fileName()
-         + " [" + QString::number(pChannelInfo->instrument_nr) + "]");
-    // And update the both volume elements.
-    setChannelVolume(pChannelInfo->volume);
-}
-
-
-// Update whole channel usage state.
-void qsamplerChannelStrip::updateChannelUsage (void)
-{
-    if (m_pMainForm->client() == NULL)
-        return;
-
-    // Get current channel voice count.
-    int iVoiceCount = ::lscp_get_channel_voice_count(m_pMainForm->client(), m_iChannelID);
-    VoiceCountTextLabel->setText(QString::number(iVoiceCount));
-
-    // Get current stream count.
-    int iStreamCount = ::lscp_get_channel_stream_count(m_pMainForm->client(), m_iChannelID);
-    // Get current channel buffer fill usage.
-    // FIXME: benno has suggested some other rationales,
-    // but for the time being we'll show the average percentage usage.
-    int iStreamUsage = 0;
-    if (iStreamCount > 0) {
-        lscp_buffer_fill_t *pBufferFill = ::lscp_get_channel_buffer_fill(m_pMainForm->client(), LSCP_USAGE_PERCENTAGE, m_iChannelID);
-        if (pBufferFill) {
-            for (int iStream = 0; iStream < iStreamCount; iStream++)
-                iStreamUsage += pBufferFill[iStream].stream_usage;
-            iStreamUsage /= iStreamCount;
-        }
-    }
-    StreamUsageProgressBar->setProgress(iStreamUsage);
 }
 
 

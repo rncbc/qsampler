@@ -310,7 +310,7 @@ QString qsamplerMainForm::sessionName ( bool bFilename )
 bool qsamplerMainForm::newSession (void)
 {
     // Check if we can do it.
-    if (!closeSession())
+    if (!resetSession())
         return false;
 
     // Ok increment untitled count.
@@ -378,6 +378,16 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
         // Enforce .lscp extension...
         if (QFileInfo(sFilename).extension().isEmpty())
             sFilename += ".lscp";
+        // Check if already exists...
+        if (sFilename != m_sFilename && QFileInfo(sFilename).exists()) {
+            if (QMessageBox::warning(this, tr("Warning"),
+                tr("The file already exists:\n\n"
+                   "\"%1\"\n\n"
+                   "Do you want to replace it?")
+                   .arg(sFilename),
+                tr("Replace"), tr("Cancel")) > 0)
+                return false;
+        }
     }
 
     // Save it right away.
@@ -393,9 +403,10 @@ bool qsamplerMainForm::closeSession (void)
     // Are we dirty enough to prompt it?
     if (m_iDirtyCount > 0) {
         switch (QMessageBox::warning(this, tr("Warning"),
-            tr("The current session has been changed:") + "\n\n" +
-            "\"" + sessionName(true) +  "\"\n\n" +
-            tr("Do you want to save the changes?"),
+            tr("The current session has been changed:\n\n"
+            "\"%1\"\n\n"
+            "Do you want to save the changes?")
+            .arg(sessionName(true)),
             tr("Save"), tr("Discard"), tr("Cancel"))) {
         case 0:     // Save...
             bClose = saveSession(false);
@@ -419,6 +430,32 @@ bool qsamplerMainForm::closeSession (void)
     }
 
     return bClose;
+}
+
+
+// Reload current session.
+bool qsamplerMainForm::resetSession (void)
+{
+    if (!closeSession())
+        return false;
+
+    if (m_pClient == NULL)
+        return false;
+
+    // Now we'll try to create the whole GUI session.
+    int iChannels = ::lscp_get_channels(m_pClient);
+    if (iChannels < 0) {
+        appendMessagesClient("lscp_get_channels");
+        appendMessagesError(tr("Could not get current number of channels.\n\nSorry."));
+    }
+
+    // Try to catch (re)create each channel.
+    for (int iChannelID = 0; iChannelID < iChannels; iChannelID++) {
+        createChannel(iChannelID);
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+    }
+
+    return true;
 }
 
 
@@ -462,27 +499,16 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     if (iErrors > 0)
         appendMessagesError(tr("Some setttings could not be loaded\nfrom \"%1\" session file.\n\nSorry.").arg(sFilename));
 
-    // Now we'll try to create the whole GUI session.
-    int iChannels = ::lscp_get_channels(m_pClient);
-    if (iChannels < 0) {
-        appendMessagesClient("lscp_client_query");
-        appendMessagesError(tr("Could not get current number of channels.\n\nSorry."));
-    }
-
-    // Try to catch (re)create each channel.
-    for (int iChannelID = 0; iChannelID < iChannels; iChannelID++) {
-        createChannel(iChannelID);
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
-    }
-
     // Save as default session directory.
     if (m_pOptions)
         m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
+    // We're not dirty anymore.
+    m_iDirtyCount = 0;
+    // IMPORTANT: Ee'll refresh every existing channel.
+    resetSession();
     // Stabilize form...
     m_sFilename = sFilename;
-    m_iDirtyCount = 0;
     stabilizeForm();
-
     return true;
 }
 
@@ -490,9 +516,6 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 // Save current session to specific file path.
 bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 {
-    if (m_pClient == NULL)
-        return false;
-
     // Open and write into real file.
     QFile file(sFilename);
     if (!file.open(IO_WriteOnly | IO_Truncate)) {
@@ -522,19 +545,13 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         int iChannelID = pChannel->channelID();
         ts << "# " << pChannel->caption() << endl;
         ts << "ADD CHANNEL" << endl;
-        lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pClient, iChannelID);
-        if (pChannelInfo) {
-            ts << "LOAD ENGINE " << pChannelInfo->engine_name << " " << iChannelID << endl;
-            ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannelID << " " << pChannelInfo->midi_device << endl;
-            ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannelInfo->midi_port << endl;
-            ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannelInfo->midi_channel << endl;
-            ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannelID << " " << pChannelInfo->audio_device << endl;
-            ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannelInfo->volume << endl;
-            ts << "LOAD INSTRUMENT " << pChannelInfo->instrument_file << " " << pChannelInfo->instrument_nr << " " << iChannelID << endl;
-        } else {
-            appendMessagesClient("lscp_channel_info");
-            iErrors++;
-        }
+        ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
+        ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
+        ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
+        ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannel->midiChannel() << endl;
+        ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannel->audioDriver() << endl;
+        ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
+        ts << "LOAD INSTRUMENT " << pChannel->instrumentFile() << " " << pChannel->instrumentNr() << " " << iChannelID << endl;
         ts << endl;
         // Try to keep it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
@@ -550,11 +567,11 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     // Save as default session directory.
     if (m_pOptions)
         m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
+    // We're not dirty anymore.
+    m_iDirtyCount = 0;
     // Stabilize form...
     m_sFilename = sFilename;
-    m_iDirtyCount = 0;
     stabilizeForm();
-
     return true;
 }
 
@@ -604,10 +621,10 @@ void qsamplerMainForm::fileRestart (void)
     if (m_pClient) {
         bRestart = (QMessageBox::warning(this, tr("Warning"),
             tr("New settings will be effective after\n"
-               "restarting the client/server connection.") + "\n\n" +
-            tr("Please note that this operation may cause\n"
-              "temporary MIDI and Audio disruption.") + "\n\n" +
-            tr("Do you want to restart the connection now?"),
+               "restarting the client/server connection.\n\n"
+               "Please note that this operation may cause\n"
+               "temporary MIDI and Audio disruption\n\n"
+               "Do you want to restart the connection now?"),
             tr("Yes"), tr("No")) == 0);
     }
 
@@ -669,9 +686,10 @@ void qsamplerMainForm::editRemoveChannel (void)
     // Prompt user if he/she's sure about this...
     if (m_pOptions && m_pOptions->bConfirmRemove) {
         if (QMessageBox::warning(this, tr("Warning"),
-            tr("About to remove channel:") + "\n\n" +
-            pChannel->caption() + "\n\n" +
-            tr("Are you sure?"),
+            tr("About to remove channel:\n\n"
+               "%1\n\n"
+               "Are you sure?")
+               .arg(pChannel->caption()),
             tr("OK"), tr("Cancel")) > 0)
             return;
     }
@@ -1274,8 +1292,8 @@ void qsamplerMainForm::startServer (void)
     // Is the server process instance still here?
     if (m_pServer) {
         switch (QMessageBox::warning(this, tr("Warning"),
-            tr("Could not start the LinuxSampler server.") + "\n\n" +
-            tr("Maybe it's already started."),
+            tr("Could not start the LinuxSampler server.\n\n"
+               "Maybe it ss already started."),
             tr("Stop"), tr("Kill"), tr("Cancel"))) {
           case 0:
             m_pServer->tryTerminate();
@@ -1446,6 +1464,9 @@ bool qsamplerMainForm::startClient (void)
         }
     }
 
+    // Make a new session
+    resetSession();
+    
     // OK, we're at it!
     stabilizeForm();
     return true;

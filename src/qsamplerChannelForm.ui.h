@@ -37,6 +37,7 @@ void qsamplerChannelForm::init (void)
 {
     // Initialize locals.
     m_pChannel = NULL;
+
     m_iDirtySetup = 0;
     m_iDirtyCount = 0;
 
@@ -55,8 +56,12 @@ void qsamplerChannelForm::destroy (void)
 void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
 {
     m_pChannel = pChannel;
+
     m_iDirtySetup = 0;
     m_iDirtyCount = 0;
+
+    if (m_pChannel == NULL)
+        return;
 
     setCaption(m_pChannel->caption());
 
@@ -103,31 +108,24 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
 
     // Read proper channel information,
     // and populate the channel form fields.
-    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pChannel->client(), m_pChannel->channelID());
-    if (pChannelInfo) {
-        // Engine name...
-        if (EngineNameComboBox->listBox()->findItem(pChannelInfo->engine_name, Qt::ExactMatch) == NULL)
-            EngineNameComboBox->insertItem(pChannelInfo->engine_name);
-        EngineNameComboBox->setCurrentText(pChannelInfo->engine_name);
-        // Instrument filename and index...
-        InstrumentFileComboBox->setCurrentText(pChannelInfo->instrument_file);
-        InstrumentNrSpinBox->setValue(pChannelInfo->instrument_nr);
-        // MIDI input...
-    //  -- TODO: Get MIDI driver from MIDI device (?midi_driver <- pChannelInfo->midi_device).
-    //  if (MidiDriverComboBox->listBox()->findItem(?midi_driver, Qt::ExactMatch) == NULL)
-    //      MidiDriverComboBox->insertItem(?midi_driver);
-    //  MidiDriverComboBox->setCurrentText(?midi_driver);
-        MidiPortSpinBox->setValue(pChannelInfo->midi_port);
-        MidiChannelSpinBox->setValue(pChannelInfo->midi_channel);
-        // Audio output...
-    //  -- TODO: Get Audio driver from Audio device (?audio_driver <- pChannelInfo->audio_device).
-    //  if (AudioDriverComboBox->listBox()->findItem(?audio_driver, Qt::ExactMatch) == NULL)
-    //      AudioDriverComboBox->insertItem(?audio_driver);
-    //  AudioDriverComboBox->setCurrentText(?audio_driver);
-    } else {
-        m_pChannel->appendMessagesClient("lscp_get_channel_info");
-        m_pChannel->appendMessagesError(tr("Could not get channel information.\n\nSorry."));
-    }
+
+    // Engine name...
+    if (EngineNameComboBox->listBox()->findItem(pChannel->engineName(), Qt::ExactMatch) == NULL)
+        EngineNameComboBox->insertItem(pChannel->engineName());
+    EngineNameComboBox->setCurrentText(pChannel->engineName());
+    // Instrument filename and index...
+    InstrumentFileComboBox->setCurrentText(pChannel->instrumentFile());
+    InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
+    // MIDI input...
+    if (MidiDriverComboBox->listBox()->findItem(pChannel->midiDriver(), Qt::ExactMatch) == NULL)
+        MidiDriverComboBox->insertItem(pChannel->midiDriver());
+    MidiDriverComboBox->setCurrentText(pChannel->midiDriver());
+    MidiPortSpinBox->setValue(pChannel->midiPort());
+    MidiChannelSpinBox->setValue(pChannel->midiChannel());
+    // Audio output...
+    if (AudioDriverComboBox->listBox()->findItem(pChannel->audioDriver(), Qt::ExactMatch) == NULL)
+        AudioDriverComboBox->insertItem(pChannel->audioDriver());
+    AudioDriverComboBox->setCurrentText(pChannel->audioDriver());
 
     // Done.
     m_iDirtySetup--;
@@ -138,8 +136,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
 // Accept settings (OK button slot).
 void qsamplerChannelForm::accept (void)
 {
-    // Check if we're up and connected.
-    if (m_pChannel->client() == NULL)
+    if (m_pChannel == NULL)
         return;
 
     qsamplerOptions *pOptions = m_pChannel->options();
@@ -150,48 +147,23 @@ void qsamplerChannelForm::accept (void)
     if (m_iDirtyCount > 0) {
         int iErrors = 0;
         // Engine name...
-        if (::lscp_load_engine(m_pChannel->client(),
-            EngineNameComboBox->currentText().latin1(),
-            m_pChannel->channelID()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_load_engine");
+        if (!m_pChannel->loadEngine(EngineNameComboBox->currentText()))
             iErrors++;
-        }
-        // MIDI input type...
-        if (::lscp_set_channel_midi_type(m_pChannel->client(),
-            m_pChannel->channelID(),
-            MidiDriverComboBox->currentText().latin1()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_set_channel_midi_type");
+        // MIDI input driver type...
+        if (!m_pChannel->setMidiDriver(MidiDriverComboBox->currentText()))
             iErrors++;
-        }
         // MIDI input port number...
-        if (::lscp_set_channel_midi_port(m_pChannel->client(),
-            m_pChannel->channelID(),
-            MidiPortSpinBox->value()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_set_channel_midi_port");
+        if (!m_pChannel->setMidiPort(MidiPortSpinBox->value()))
             iErrors++;
-        }
-        // MIDI input channel (0=ALL)...
-        if (::lscp_set_channel_midi_channel(m_pChannel->client(),
-            m_pChannel->channelID(),
-            MidiChannelSpinBox->value()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_set_channel_midi_channel");
+        // MIDI input channel...
+        if (!m_pChannel->setMidiChannel(MidiChannelSpinBox->value()))
             iErrors++;
-        }
-        // Audio output type...
-        if (::lscp_set_channel_audio_type(m_pChannel->client(),
-            m_pChannel->channelID(),
-            AudioDriverComboBox->currentText().latin1()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_set_channel_audio_port");
+        // Audio output driver type...
+        if (!m_pChannel->setAudioDriver(AudioDriverComboBox->currentText()))
             iErrors++;
-        }
         // Instrument file and index...
-        if (::lscp_load_instrument(m_pChannel->client(),
-            InstrumentFileComboBox->currentText().latin1(),
-            InstrumentNrSpinBox->value(),
-            m_pChannel->channelID()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_load_instrument");
+        if (!m_pChannel->loadInstrument(InstrumentFileComboBox->currentText(), InstrumentNrSpinBox->value()))
             iErrors++;
-        }
         // Show error messages?
         if (iErrors > 0)
             m_pChannel->appendMessagesError(tr("Some channel settings could not be set.\n\nSorry."));
@@ -214,8 +186,8 @@ void qsamplerChannelForm::reject (void)
     // Check if there's any pending changes...
     if (m_iDirtyCount > 0) {
         switch (QMessageBox::warning(this, tr("Warning"),
-            tr("Some settings have been changed.") + "\n\n" +
-            tr("Do you want to apply the changes?"),
+            tr("Some channel settings have been changed.\n\n"
+               "Do you want to apply the changes?"),
             tr("Apply"), tr("Discard"), tr("Cancel"))) {
         case 0:     // Apply...
             accept();
