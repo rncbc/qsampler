@@ -321,9 +321,6 @@ void qsamplerChannelForm::updateInstrumentName (void)
 // Show device options dialog.
 void qsamplerChannelForm::setupDevice ( qsamplerDevice *pDevice )
 {
-	if (pDevice == NULL)
-	    return;
-
 	// Create the device form if not already...
 	if (m_pDeviceForm == NULL) {
 		m_pDeviceForm = new qsamplerDeviceForm(this, 0,
@@ -336,8 +333,8 @@ void qsamplerChannelForm::setupDevice ( qsamplerDevice *pDevice )
 	// Refresh the device form with selected data.
 	if (m_pDeviceForm) {
 		m_pDeviceForm->setClient(m_pChannel->client()); // <-- refreshDevices().
-		m_pDeviceForm->setDevice(pDevice->deviceType(),
-			pDevice->deviceID());
+		if (pDevice)
+			m_pDeviceForm->setDevice(pDevice->deviceType(),	pDevice->deviceID());
 		m_pDeviceForm->show();
 	}
 }
