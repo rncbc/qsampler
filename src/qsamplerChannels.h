@@ -1,7 +1,7 @@
-// qsamplerAbout.h
+// qsamplerChannels.h
 //
 /****************************************************************************
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2004, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,15 +19,30 @@
 
 *****************************************************************************/
 
-#ifndef __qsamplerAbout_h
-#define __qsamplerAbout_h
+#ifndef __qsamplerChannels_h
+#define __qsamplerChannels_h
 
-#define QSAMPLER_TITLE        "qsampler"
-#define QSAMPLER_SUBTITLE	   "A LinuxSampler Qt GUI Interface"
-#define QSAMPLER_VERSION      "0.0.0.8"
-#define QSAMPLER_WEBSITE      "http://qsampler.sourceforge.net"
-#define QSAMPLER_COPYRIGHT    "Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved."
+#include <qvbox.h>
 
-#endif  // __qsamplerAbout_h
 
-// end of qsamplerAbout.h
+//-------------------------------------------------------------------------
+// qsamplerChannels - Channels child window.
+//
+
+class qsamplerChannels : public QVBox
+{
+    Q_OBJECT
+
+public:
+
+    // Constructor.
+    qsamplerChannels(QWidget *pParent, const char *pszName = 0);
+    // Destructor.
+    ~qsamplerChannels();
+};
+
+
+#endif  // __qsamplerChannels_h
+
+
+// end of qsamplerChannels.h
