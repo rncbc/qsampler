@@ -44,6 +44,9 @@
 
 #include "config.h"
 
+#ifdef HAVE_SIGNAL_H
+#include <signal.h>
+#endif
 
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    200
@@ -115,6 +118,11 @@ void qsamplerMainForm::init (void)
     m_iTimerDelay = 0;
 
     m_iTimerSlot = 0;
+
+#ifdef HAVE_SIGNAL_H
+	// Set to ignore any fatal "Broken pipe" signals.
+	::signal(SIGPIPE, SIG_IGN);
+#endif
 
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);

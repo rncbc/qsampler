@@ -144,7 +144,7 @@ AC_SUBST(ac_libs)
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h)
+AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h signal.h)
 
 dnl AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
 dnl if test "x$ac_lscp_h" = "xno"; then
