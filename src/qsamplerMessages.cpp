@@ -226,6 +226,7 @@ void qsamplerMessages::appendMessagesText ( const QString& s )
 // One time scroll to the most recent message.
 void qsamplerMessages::scrollToBottom (void)
 {
+    flushStdoutBuffer();
     m_pTextView->scrollToBottom();
 }
 

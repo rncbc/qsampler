@@ -24,6 +24,7 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
+#include "qsamplerMainForm.h"
 #include "qsamplerChannelForm.h"
 
 #include "config.h"
@@ -32,6 +33,10 @@
 // Kind of constructor.
 void qsamplerChannelStrip::init (void)
 {
+    // Initialize locals.
+    m_pMainForm = NULL;
+    m_iChannelID = 0;
+    
     // Try to restore normal window positioning.
     adjustSize();
 }
@@ -43,12 +48,58 @@ void qsamplerChannelStrip::destroy (void)
 }
 
 
+// Channel strip setup formal initializer.
+void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
+{
+    m_pMainForm = pMainForm;
+
+    setChannelID(iChannelID);
+    
+    // Read channel information.
+    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pMainForm->client(), m_iChannelID);
+    if (pChannelInfo == NULL) {
+        m_pMainForm->appendMessagesClient("lscp_get_channel_info");
+        m_pMainForm->appendMessagesError(tr("Could not get channel information. Sorry."));
+        return;
+    }
+    // Set some proper values.
+    EngineNameTextLabel->setText(pChannelInfo->engine_name);
+    InstrumentNameTextLabel->setText(pChannelInfo->instrument_file);
+    int iVolume = (int) (100.0 * pChannelInfo->volume);
+    if (iVolume > 100)
+        iVolume = 100;
+    VolumeSlider->setValue(iVolume);
+    VolumeSpinBox->setValue(iVolume);
+}
+
+
+// Channel-ID (aka Sammpler-Channel) accessors.
+int qsamplerChannelStrip::channelID (void)
+{
+    return m_iChannelID;
+}
+
+void qsamplerChannelStrip::setChannelID ( int iChannelID )
+{
+    m_iChannelID = iChannelID;
+
+    QString sText = tr("Channel %1").arg(m_iChannelID);
+    setCaption(sText);
+    ChannelSetupPushButton->setText(sText);
+}
+
+
 // Channel setup dialog.
 void qsamplerChannelStrip::channelSetup (void)
 {
+    if (m_pMainForm == NULL)
+        return;
+    if (m_pMainForm->options() == NULL || m_pMainForm->client() == NULL)
+        return;
+    
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
-        pChannelForm->setCaption(caption());
+        pChannelForm->setup(this);
         if (pChannelForm->exec())
             emit channelChanged(this);
         delete pChannelForm;

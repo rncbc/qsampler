@@ -235,6 +235,21 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
         pCloseEvent->ignore();
 }
 
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- Brainless public property accessors.
+
+// The global options settings property.
+qsamplerOptions *qsamplerMainForm::options (void)
+{
+    return m_pOptions;
+}
+
+// The LSCP client descriptor property.
+lscp_client_t *qsamplerMainForm::client (void)
+{
+    return m_pClient;
+}
+
 
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Session file stuff.
@@ -451,6 +466,17 @@ void qsamplerMainForm::editAddChannel (void)
 {
     appendMessages("qsamplerMainForm::editAddChannel()");
 
+    if (m_pClient == NULL)
+        return;
+
+    // Create the new sampler channel.
+    int iChannelID = ::lscp_add_channel(m_pClient);
+    if (iChannelID < 0) {
+        appendMessagesClient("lscp_add_channel");
+        appendMessagesError(tr("Could not create the new channel. Sorry."));
+        return;
+    }
+
     // Prepare for auto-arrange?
     qsamplerChannelStrip *pChannel = NULL;
     int y = 0;
@@ -463,12 +489,10 @@ void qsamplerMainForm::editAddChannel (void)
         }
     }
 
-    // FIXME: Arrange a proper method to grab a channel number.
-    static int s_iChannel = 0;
     // Add a new channel itema...
     WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
     pChannel = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
-    pChannel->setCaption(tr("Channel") + " " + QString::number(++s_iChannel));
+    pChannel->setup(this, iChannelID);
     // We'll need a display font.
     QFont font;
     if (m_pOptions && font.fromString(m_pOptions->sDisplayFont))
@@ -497,6 +521,9 @@ void qsamplerMainForm::editRemoveChannel (void)
 {
     appendMessages("qsamplerMainForm::editRemoveChannel()");
     
+    if (m_pClient == NULL)
+        return;
+
     qsamplerChannelStrip *pChannel = activeChannel();
     if (pChannel == NULL)
         return;
@@ -510,7 +537,14 @@ void qsamplerMainForm::editRemoveChannel (void)
             tr("OK"), tr("Cancel")) > 0)
             return;
     }
-    
+
+    // Remove the existing sampler channel.
+    if (::lscp_remove_channel(m_pClient, pChannel->channelID()) != LSCP_OK) {
+        appendMessagesClient("lscp_remove_channel");
+        appendMessagesError(tr("Could not remove channel. Sorry."));
+        return;
+    }
+
     // Just delete the channel strip.
     delete pChannel;
     
@@ -529,6 +563,9 @@ void qsamplerMainForm::editSetupChannel (void)
 {
     appendMessages("qsamplerMainForm::editSetupChannel()");
 
+    if (m_pClient == NULL)
+        return;
+
     qsamplerChannelStrip *pChannel = activeChannel();
     if (pChannel == NULL)
         return;
@@ -543,11 +580,19 @@ void qsamplerMainForm::editResetChannel (void)
 {
     appendMessages("qsamplerMainForm::editResetChannel()");
 
+    if (m_pClient == NULL)
+        return;
+
     qsamplerChannelStrip *pChannel = activeChannel();
     if (pChannel == NULL)
         return;
 
-    // TODO: The real reset...
+    // Remove the existing sampler channel.
+    if (::lscp_reset_channel(m_pClient, pChannel->channelID()) != LSCP_OK) {
+        appendMessagesClient("lscp_reset_channel");
+        appendMessagesError(tr("Could not reset channel. Sorry."));
+        return;
+    }
 }
 
 
@@ -795,9 +840,13 @@ void qsamplerMainForm::stabilizeForm (void)
 
     // Update the main menu state...
     qsamplerChannelStrip *pChannel = activeChannel();
-    fileSaveAction->setEnabled(m_iDirtyCount > 0);
-    bool bHasChannel = (pChannel != 0);
-    editAddChannelAction->setEnabled(true);
+    bool bHasClient  = (m_pClient != NULL);
+    bool bHasChannel = (pChannel != NULL);
+    fileNewAction->setEnabled(bHasClient);
+    fileOpenAction->setEnabled(bHasClient);
+    fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
+    fileSaveAsAction->setEnabled(bHasClient);
+    editAddChannelAction->setEnabled(bHasClient);
     editRemoveChannelAction->setEnabled(bHasChannel);
     editSetupChannelAction->setEnabled(bHasChannel);
     editResetChannelAction->setEnabled(bHasChannel);
@@ -805,7 +854,7 @@ void qsamplerMainForm::stabilizeForm (void)
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
 
     // Client status...
-    if (m_pClient)
+    if (bHasClient)
         m_status[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
     else
         m_status[QSAMPLER_STATUS_CLIENT]->clear();
@@ -944,6 +993,18 @@ void qsamplerMainForm::updateMessagesCapture (void)
 
     if (m_pMessages)
         m_pMessages->setCaptureEnabled(m_pOptions->bStdoutCapture);
+}
+
+
+// This is a special message format, just for client results.
+void qsamplerMainForm::appendMessagesClient( const QString& s )
+{
+    if (m_pClient == NULL)
+        return;
+        
+    appendMessagesColor(s + QString(": %1 (errno=%2)")
+        .arg(::lscp_client_get_result(m_pClient))
+        .arg(::lscp_client_get_errno(m_pClient)), "#996666");
 }
 
 

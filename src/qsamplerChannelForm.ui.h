@@ -24,12 +24,17 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
+#include "qsamplerChannelStrip.h"
+
 #include "config.h"
 
 
 // Kind of constructor.
 void qsamplerChannelForm::init (void)
 {
+    // Initialize locals.
+    m_pChannel = NULL;
+
     // Try to restore normal window positioning.
     adjustSize();
 }
@@ -38,6 +43,15 @@ void qsamplerChannelForm::init (void)
 // Kind of destructor.
 void qsamplerChannelForm::destroy (void)
 {
+}
+
+
+// Channel dialog setup formal initializer.
+void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
+{
+    m_pChannel = pChannel;
+
+    setCaption(m_pChannel->caption());
 }
 
 
