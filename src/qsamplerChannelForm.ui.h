@@ -135,6 +135,9 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
             AudioDriverComboBox->insertItem(sAudioDriver);
         AudioDriverComboBox->setCurrentText(sAudioDriver);
     }
+    // FIXME: Disable this while we don't know what to do.
+    MidiPortTextLabel->setEnabled(false);
+    MidiPortSpinBox->setEnabled(false);
     // Done.
     m_iDirtySetup--;
     stabilizeForm();

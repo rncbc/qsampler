@@ -118,6 +118,11 @@ void qsamplerMainForm::init (void)
     m_status[QSAMPLER_STATUS_SESSION] = pLabel;
     statusBar()->addWidget(pLabel);
 
+    // Create the recent files sub-menu.
+    m_pRecentFilesMenu = new QPopupMenu(this);
+    fileMenu->insertSeparator(4);
+    fileMenu->insertItem(tr("Recent &Files"), m_pRecentFilesMenu, 0, 5);
+
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
@@ -127,9 +132,12 @@ void qsamplerMainForm::init (void)
 // Kind of destructor.
 void qsamplerMainForm::destroy (void)
 {
-    // Stop client and/or server, if not already...
-    stopServer();
-
+    // Do final processing anyway.
+    processServerExit();
+    
+    // Delete recentfiles menu.
+    if (m_pRecentFilesMenu)
+        delete m_pRecentFilesMenu;
     // Delete status item labels one by one.
     if (m_status[QSAMPLER_STATUS_CLIENT])
         delete m_status[QSAMPLER_STATUS_CLIENT];
@@ -192,6 +200,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     m_pOptions->loadWidgetGeometry(this);
 
     // Final startup stabilization...
+    updateRecentFilesMenu();
     stabilizeForm();
 
     // Make it ready :-)
@@ -228,6 +237,8 @@ bool qsamplerMainForm::queryClose (void)
             m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
             // And the main windows state.
             m_pOptions->saveWidgetGeometry(this);
+            // Stop client and/or server, gracefully.
+            stopServer();
         }
     }
 
@@ -288,14 +299,15 @@ lscp_client_t *qsamplerMainForm::client (void)
 // qsamplerMainForm -- Session file stuff.
 
 // Format the displayable session filename.
-QString qsamplerMainForm::sessionName ( bool bFilename )
+QString qsamplerMainForm::sessionName ( const QString& sFilename )
 {
-    QString sFilename = m_sFilename;
-    if (sFilename.isEmpty())
-        sFilename = tr("Untitled") + QString::number(m_iUntitled);
-    else if (!bFilename)
-        sFilename = QFileInfo(sFilename).fileName();
-    return sFilename;
+    bool bCompletePath = (m_pOptions && m_pOptions->bCompletePath);
+    QString sSessionName = sFilename;
+    if (sSessionName.isEmpty())
+        sSessionName = tr("Untitled") + QString::number(m_iUntitled);
+    else if (!bCompletePath)
+        sSessionName = QFileInfo(sSessionName).fileName();
+    return sSessionName;
 }
 
 
@@ -407,7 +419,7 @@ bool qsamplerMainForm::closeSession ( bool bForce )
             tr("The current session has been changed:\n\n"
             "\"%1\"\n\n"
             "Do you want to save the changes?")
-            .arg(sessionName(true)),
+            .arg(sessionName(m_sFilename)),
             tr("Save"), tr("Discard"), tr("Cancel"))) {
         case 0:     // Save...
             bClose = saveSession(false);
@@ -519,6 +531,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     m_iDirtyCount = 0;
     // Stabilize form...
     m_sFilename = sFilename;
+    updateRecentFiles(sFilename);
     stabilizeForm();
     return true;
 }
@@ -584,6 +597,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     m_iDirtyCount = 0;
     // Stabilize form...
     m_sFilename = sFilename;
+    updateRecentFiles(sFilename);
     stabilizeForm();
     return true;
 }
@@ -605,6 +619,17 @@ void qsamplerMainForm::fileOpen (void)
 {
     // Open it right away.
     openSession();
+}
+
+
+// Open a recent file session.
+void qsamplerMainForm::fileOpenRecent ( int iIndex )
+{
+    // Check if we can safely close the current session...
+    if (m_pOptions && closeSession(false)) {
+        QString sFilename = m_pOptions->recentFiles[iIndex];
+        loadSessionFile(sFilename);
+    }
 }
 
 
@@ -847,6 +872,8 @@ void qsamplerMainForm::viewOptions (void)
         bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
         int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
         int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
+        bool    bOldCompletePath    = m_pOptions->bCompletePath;
+        int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
         // Load the current setup settings.
         pOptionsForm->setup(m_pOptions);
         // Show the setup dialog...
@@ -860,6 +887,10 @@ void qsamplerMainForm::viewOptions (void)
                 updateMessagesCapture();
             }
             // Check wheather something immediate has changed.
+            if (( bOldCompletePath && !m_pOptions->bCompletePath) ||
+                (!bOldCompletePath &&  m_pOptions->bCompletePath) ||
+                (iOldMaxRecentFiles != m_pOptions->iMaxRecentFiles))
+                updateRecentFilesMenu();
             if (sOldDisplayFont != m_pOptions->sDisplayFont)
                 updateDisplayFont();
             if (sOldMessagesFont != m_pOptions->sMessagesFont)
@@ -979,13 +1010,14 @@ void qsamplerMainForm::helpAbout (void)
     QMessageBox::about(this, tr("About") + " " QSAMPLER_TITLE, sText);
 }
 
+
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window stabilization.
 
 void qsamplerMainForm::stabilizeForm (void)
 {
     // Update the main application caption...
-    QString sSessioName = sessionName(m_pOptions && m_pOptions->bCompletePath);
+    QString sSessioName = sessionName(m_sFilename);
     if (m_iDirtyCount > 0)
         sSessioName += '*';
     setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessioName));
@@ -1026,6 +1058,9 @@ void qsamplerMainForm::stabilizeForm (void)
     else
         m_status[QSAMPLER_STATUS_SESSION]->clear();
 
+    // Recent files menu.
+    m_pRecentFilesMenu->setEnabled(m_pOptions && m_pOptions->recentFiles.count() > 0);
+
     // Always make the latest message visible.
     if (m_pMessages)
         m_pMessages->scrollToBottom();
@@ -1041,6 +1076,45 @@ void qsamplerMainForm::channelChanged( qsamplerChannelStrip *pChannel )
     m_iDirtyCount++;
     // and update the form status...
     stabilizeForm();
+}
+
+
+// Update the recent files list and menu.
+void qsamplerMainForm::updateRecentFiles ( const QString& sFilename )
+{
+    if (m_pOptions == NULL)
+        return;
+
+    // Remove from list if already there (avoid duplicates)
+    QStringList::Iterator iter = m_pOptions->recentFiles.find(sFilename);
+    if (iter != m_pOptions->recentFiles.end())
+        m_pOptions->recentFiles.remove(iter);
+    // Put it to front, but keep the list under limits.
+    if (m_pOptions->iMaxRecentFiles > 0) {
+        while ((int) m_pOptions->recentFiles.count() >= m_pOptions->iMaxRecentFiles)
+            m_pOptions->recentFiles.pop_back();
+        m_pOptions->recentFiles.push_front(sFilename);
+    }
+    // May update the menu.
+    updateRecentFilesMenu();
+}
+
+
+// Update the recent files list and menu.
+void qsamplerMainForm::updateRecentFilesMenu (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    m_pRecentFilesMenu->clear();
+    for (int i = 0; i < (int) m_pOptions->recentFiles.count() && i < m_pOptions->iMaxRecentFiles; i++) {
+        const QString& sFilename = m_pOptions->recentFiles[i];
+        if (QFileInfo(sFilename).exists()) {
+            m_pRecentFilesMenu->insertItem(QString("&%1  %2")
+                .arg(i + 1).arg(sessionName(sFilename)),
+                this, SLOT(fileOpenRecent(int)), 0, i);
+        }
+    }
 }
 
 

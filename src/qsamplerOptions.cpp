@@ -53,31 +53,42 @@ qsamplerOptions::qsamplerOptions (void)
 
     // Load display options...
     m_settings.beginGroup("/Display");
-    sDisplayFont   = m_settings.readEntry("/DisplayFont", QString::null);
-    bAutoRefresh   = m_settings.readBoolEntry("/AutoRefresh", true);
+    sDisplayFont     = m_settings.readEntry("/DisplayFont", QString::null);
+    bAutoRefresh     = m_settings.readBoolEntry("/AutoRefresh", true);
     iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 1000);
-    sMessagesFont  = m_settings.readEntry("/MessagesFont", QString::null);
-    bMessagesLimit = m_settings.readBoolEntry("/MessagesLimit", true);
+    sMessagesFont    = m_settings.readEntry("/MessagesFont", QString::null);
+    bMessagesLimit   = m_settings.readBoolEntry("/MessagesLimit", true);
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
-    bConfirmRemove = m_settings.readBoolEntry("/ConfirmRemove", true);
-    bStdoutCapture = m_settings.readBoolEntry("/StdoutCapture", true);
-    bCompletePath  = m_settings.readBoolEntry("/CompletePath", true);
+    bConfirmRemove   = m_settings.readBoolEntry("/ConfirmRemove", true);
+    bStdoutCapture   = m_settings.readBoolEntry("/StdoutCapture", true);
+    bCompletePath    = m_settings.readBoolEntry("/CompletePath", true);
+    iMaxRecentFiles  = m_settings.readNumEntry("/MaxRecentFiles", 5);
     m_settings.endGroup();
 
     // And go into view options group.
     m_settings.beginGroup("/View");
-    bMenubar       = m_settings.readBoolEntry("/Menubar", true);
-    bToolbar       = m_settings.readBoolEntry("/Toolbar", true);
-    bStatusbar     = m_settings.readBoolEntry("/Statusbar", true);
-    bAutoArrange   = m_settings.readBoolEntry("/AutoArrange", true);
+    bMenubar     = m_settings.readBoolEntry("/Menubar", true);
+    bToolbar     = m_settings.readBoolEntry("/Toolbar", true);
+    bStatusbar   = m_settings.readBoolEntry("/Statusbar", true);
+    bAutoArrange = m_settings.readBoolEntry("/AutoArrange", true);
+    m_settings.endGroup();
+
+    m_settings.endGroup(); // Options group.
+
+    // Recent file list.
+    m_settings.beginGroup("/RecentFiles");
+    recentFiles.clear();
+    for (int i = 0; i < iMaxRecentFiles; i++) {
+        QString sFilename = m_settings.readEntry("/File" + QString::number(i + 1), QString::null);
+        if (!sFilename.isEmpty())
+            recentFiles.append(sFilename);
+    }
     m_settings.endGroup();
 
     // Last but not least, get the default directories.
     m_settings.beginGroup("/Default");
     sSessionDir    = m_settings.readEntry("/SessionDir", QString::null);
     sInstrumentDir = m_settings.readEntry("/InstrumentDir", QString::null);
-    m_settings.endGroup();
-
     m_settings.endGroup();
 }
 
@@ -113,6 +124,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/ConfirmRemove", bConfirmRemove);
     m_settings.writeEntry("/StdoutCapture", bStdoutCapture);
     m_settings.writeEntry("/CompletePath", bCompletePath);
+    m_settings.writeEntry("/MaxRecentFiles", iMaxRecentFiles);
     m_settings.endGroup();
 
     // View options group.
@@ -123,12 +135,18 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/AutoArrange", bAutoArrange);
     m_settings.endGroup();
 
+    m_settings.endGroup(); // Options group.
+
+    // Recent file list.
+    m_settings.beginGroup("/RecentFiles");
+    for (int i = 0; i < recentFiles.count(); i++)
+        m_settings.writeEntry("/File" + QString::number(i + 1), recentFiles[i]);
+    m_settings.endGroup();
+
     // Default directories.
     m_settings.beginGroup("/Default");
     m_settings.writeEntry("/SessionDir", sSessionDir);
     m_settings.writeEntry("/InstrumentDir", sInstrumentDir);
-    m_settings.endGroup();
-
     m_settings.endGroup();
 
     m_settings.endGroup();

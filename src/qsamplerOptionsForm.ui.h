@@ -103,6 +103,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
     StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
     CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
+    MaxRecentFilesSpinBox->setValue(m_pOptions->iMaxRecentFiles);
 
     // Done.
     m_iDirtySetup--;
@@ -133,6 +134,7 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->bConfirmRemove       = ConfirmRemoveCheckBox->isChecked();
         m_pOptions->bStdoutCapture       = StdoutCaptureCheckBox->isChecked();
         m_pOptions->bCompletePath        = CompletePathCheckBox->isChecked();
+        m_pOptions->iMaxRecentFiles      = MaxRecentFilesSpinBox->value();
         // Reset dirty flag.
         m_iDirtyCount = 0;
     }

@@ -80,6 +80,10 @@ public:
     QString sSessionDir;
     QString sInstrumentDir;
 
+    // Recent file list.
+    int     iMaxRecentFiles;
+    QStringList recentFiles;
+
     // Widget geometry persistence helper prototypes.
     void saveWidgetGeometry(QWidget *pWidget);
     void loadWidgetGeometry(QWidget *pWidget);
