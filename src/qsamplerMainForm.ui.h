@@ -173,10 +173,17 @@ void qsamplerMainForm::destroy (void)
 {
     // Do final processing anyway.
     processServerExit();
-    
-    // Delete recentfiles menu.
-    if (m_pRecentFilesMenu)
-        delete m_pRecentFilesMenu;
+
+#if defined(WIN32)
+    WSACleanup();
+#endif
+
+    // Finally drop any widgets around...
+    if (m_pMessages)
+        delete m_pMessages;
+    if (m_pWorkspace)
+        delete m_pWorkspace;
+
     // Delete status item labels one by one.
     if (m_status[QSAMPLER_STATUS_CLIENT])
         delete m_status[QSAMPLER_STATUS_CLIENT];
@@ -187,15 +194,9 @@ void qsamplerMainForm::destroy (void)
     if (m_status[QSAMPLER_STATUS_SESSION])
         delete m_status[QSAMPLER_STATUS_SESSION];
 
-    // Finally drop any widgets around...
-    if (m_pMessages)
-        delete m_pMessages;
-    if (m_pWorkspace)
-        delete m_pWorkspace;
-
-#if defined(WIN32)
-    WSACleanup();
-#endif
+    // Delete recentfiles menu.
+    if (m_pRecentFilesMenu)
+        delete m_pRecentFilesMenu;
 }
 
 
@@ -1168,10 +1169,10 @@ void qsamplerMainForm::helpAbout (void)
 void qsamplerMainForm::stabilizeForm (void)
 {
     // Update the main application caption...
-    QString sSessioName = sessionName(m_sFilename);
+    QString sSessionName = sessionName(m_sFilename);
     if (m_iDirtyCount > 0)
-        sSessioName += '*';
-    setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessioName));
+        sSessionName += '*';
+    setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
 
     // Update the main menu state...
     qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
