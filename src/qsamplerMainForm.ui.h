@@ -218,6 +218,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
     m_pDeviceForm = new qsamplerDeviceForm(this, 0, wflags);
+    m_pDeviceForm->setMainForm(this); // An important life immutable!
     // Set message defaults...
     updateMessagesFont();
     updateMessagesLimit();
