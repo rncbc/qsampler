@@ -127,8 +127,8 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	m_deviceType = deviceType;
 	
 	// Reset device parameters and ports anyway.
-   	m_params.clear();
-   	m_ports.clear();
+	m_params.clear();
+	m_ports.clear();
 
 	// Retrieve device info, if any.
 	lscp_device_info_t *pDeviceInfo = NULL;
@@ -180,8 +180,10 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 		}
 	}
 
-	// Grab port/channel list...
-	refresh(pClient);
+	// Refresh parameter dependencies...
+	refreshParams(pClient);
+	// Set port/channel list...
+	refreshPorts(pClient);
 }
 
 
@@ -194,8 +196,8 @@ void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 		return;
 
 	// Reset device parameters and ports anyway.
-   	m_params.clear();
-   	m_ports.clear();
+	m_params.clear();
+	m_ports.clear();
 
 	// Retrieve driver info, if any.
 	lscp_driver_info_t *pDriverInfo = NULL;
@@ -240,6 +242,11 @@ void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 				pParamInfo->defaultv);
 		}
 	}
+
+	// Refresh parameter dependencies...
+	refreshParams(pClient);
+	// Set port/channel list...
+	refreshPorts(pClient);
 }
 
 
@@ -292,8 +299,21 @@ qsamplerDevicePortList& qsamplerDevice::ports (void)
 }
 
 
+// Device parameter dependencies refreshner.
+int qsamplerDevice::refreshParams ( lscp_client_t *pClient )
+{
+	// Refresh all parameters that have dependencies...
+	int iParams = 0;
+	qsamplerDeviceParamMap::ConstIterator iter;
+	for (iter = m_params.begin(); iter != m_params.end(); ++iter)
+		iParams += refreshParam(pClient, iter.key());
+	// Return how many parameters have been refreshed...
+	return iParams;
+}
+
+
 // Device port/channel list refreshner.
-void qsamplerDevice::refresh ( lscp_client_t *pClient )
+int qsamplerDevice::refreshPorts ( lscp_client_t *pClient )
 {
 	// Port/channel count determination...
 	int iPorts = 0;
@@ -307,11 +327,85 @@ void qsamplerDevice::refresh ( lscp_client_t *pClient )
 	case qsamplerDevice::None:
 		break;
 	}
-
 	// Retrieve port/channel information...
 	m_ports.clear();
 	for (int iPort = 0; iPort < iPorts; iPort++)
 		m_ports.append(new qsamplerDevicePort(pClient, *this, iPort));
+	// Return how many ports have been refreshed...
+	return iPorts;
+}
+
+
+// Refresh/set dependencies given that some parameter has changed.
+int qsamplerDevice::refreshDepends ( lscp_client_t *pClient,
+	const QString& sParam )
+{
+	// Refresh all parameters that depend on this one...
+	int iDepends = 0;
+	qsamplerDeviceParamMap::ConstIterator iter;
+	for (iter = m_params.begin(); iter != m_params.end(); ++iter) {
+		const QStringList& depends = iter.data().depends;
+		if (depends.find(sParam) != depends.end())
+			iDepends += refreshParam(pClient, iter.key());
+	}
+	// Return how many dependencies have been refreshed...
+	return iDepends;
+}
+
+
+// Refresh/set given parameter based on driver supplied dependencies.
+int qsamplerDevice::refreshParam ( lscp_client_t *pClient,
+	const QString& sParam )
+{
+	// Check if we have dependencies...
+	qsamplerDeviceParam& param = m_params[sParam.upper()];
+	if (param.depends.isEmpty())
+		return 0;
+
+	int iRefresh = 0;
+
+	// Build dependency list...
+	lscp_param_t *pDepends = new lscp_param_t [param.depends.count() + 1];
+	int iDepend = 0;
+	QStringList::ConstIterator iter;
+	for (iter = param.depends.begin(); iter != param.depends.end(); ++iter) {
+		const QString& sDepend = *iter;
+		pDepends[iDepend].key   = (char *) sDepend.latin1();
+		pDepends[iDepend].value = (char *) m_params[sDepend.upper()].value.latin1();
+		++iDepend;
+	}
+	// Null terminated.
+	pDepends[iDepend].key   = NULL;
+	pDepends[iDepend].value = NULL;
+
+#if 0
+	// FIXME: Some parameter dependencies (e.g.ALSA CARD)
+	// are blocking for no reason, causing timeout-crashes.
+
+	// Retrieve some modern parameters...
+	lscp_param_info_t *pParamInfo = NULL;
+	switch (m_deviceType) {
+	case qsamplerDevice::Audio:
+		pParamInfo = ::lscp_get_audio_driver_param_info(pClient,
+			m_sDriverName.latin1(), sParam.latin1(), pDepends);
+		break;
+	case qsamplerDevice::Midi:
+		pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
+			m_sDriverName.latin1(), sParam.latin1(), pDepends);
+		break;
+	case qsamplerDevice::None:
+		break;
+	}
+	if (pParamInfo) {
+		param = qsamplerDeviceParam(pParamInfo, QString(param.value));
+		iRefresh++;
+	}
+#endif
+	// Free used parameter array.
+	delete pDepends;
+
+	// Return whether the parameters has been changed...
+	return iRefresh;
 }
 
 
@@ -384,18 +478,18 @@ void qsamplerDevicePort::setDevicePort ( lscp_client_t *pClient,
 	m_iPortID = iPortID;
 
 	// Reset port parameters anyway.
-   	m_params.clear();
+	m_params.clear();
 
 	// Retrieve device port/channel info, if any.
 	QString sPrefix = device.driverName() + ' ';
 	lscp_device_port_info_t *pPortInfo = NULL;
 	switch (device.deviceType()) {
 	case qsamplerDevice::Audio:
-	    sPrefix += QObject::tr("Channel");
+		sPrefix += QObject::tr("Channel");
 		pPortInfo = ::lscp_get_audio_channel_info(pClient, device.deviceID(), iPortID);
 		break;
 	case qsamplerDevice::Midi:
-	    sPrefix += QObject::tr("Port");
+		sPrefix += QObject::tr("Port");
 		pPortInfo = ::lscp_get_midi_port_info(pClient, device.deviceID(), iPortID);
 		break;
 	case qsamplerDevice::None:

@@ -40,125 +40,125 @@ class qsamplerChannel
 {
 public:
 
-    // Constructor.
-    qsamplerChannel(qsamplerMainForm *pMainForm, int iChannelID = -1);
-    // Default destructor.
-    ~qsamplerChannel();
+	// Constructor.
+	qsamplerChannel(qsamplerMainForm *pMainForm, int iChannelID = -1);
+	// Default destructor.
+	~qsamplerChannel();
 
-    // Main application options accessor.
-    qsamplerOptions *options();
+	// Main application options accessor.
+	qsamplerOptions *options();
 
-    // LSCP client descriptor accessor.
-    lscp_client_t * client();
+	// LSCP client descriptor accessor.
+	lscp_client_t * client();
 
-    // Add/remove sampler channel methods.
-    bool     addChannel();
-    bool     removeChannel();
+	// Add/remove sampler channel methods.
+	bool     addChannel();
+	bool     removeChannel();
 
-    // Sampler channel ID accessors.
-    int      channelID();
-    void     setChannelID(int iChannelID);
-    
-    // Readable channel name.
-    QString  channelName();
+	// Sampler channel ID accessors.
+	int      channelID();
+	void     setChannelID(int iChannelID);
 
-    // Engine name property.
-    QString& engineName();
-    bool     loadEngine(const QString& sEngineName);
-    
-    // Instrument file and index.
-    QString& instrumentFile();
-    int      instrumentNr();
-    QString& instrumentName();
-    int      instrumentStatus();
-    bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
+	// Readable channel name.
+	QString  channelName();
+
+	// Engine name property.
+	QString& engineName();
+	bool     loadEngine(const QString& sEngineName);
+
+	// Instrument file and index.
+	QString& instrumentFile();
+	int      instrumentNr();
+	QString& instrumentName();
+	int      instrumentStatus();
+	bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 	// Special instrument file/name/number settler.
-    bool     setInstrument(const QString& sInstrumentFile, int iInstrumentNr);
+	bool     setInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 
-    // MIDI input driver (DEPRECATED).
-    QString& midiDriver();
-    bool     setMidiDriver(const QString& sMidiDriver);
-    
-    // MIDI input device.
-    int      midiDevice();
-    bool     setMidiDevice(int iMidiDevice);
-    
-    // MIDI input port.
-    int      midiPort();
-    bool     setMidiPort(int iMidiPort);
-    
-    // MIDI input channel.
-    int      midiChannel();
-    bool     setMidiChannel(int iMidiChannel);
-    
-    // Audio output driver (DEPRECATED).
-    QString& audioDriver();
-    bool     setAudioDriver(const QString& sAudioDriver);
+	// MIDI input driver (DEPRECATED).
+	QString& midiDriver();
+	bool     setMidiDriver(const QString& sMidiDriver);
 
-    // Audio output device.
-    int      audioDevice();
-    bool     setAudioDevice(int iAudioDevice);
-    
-    // Sampler channel volume.
-    float    volume();
-    bool     setVolume(float fVolume);
+	// MIDI input device.
+	int      midiDevice();
+	bool     setMidiDevice(int iMidiDevice);
 
-    // Istrument name remapper.
-    void     updateInstrumentName();
+	// MIDI input port.
+	int      midiPort();
+	bool     setMidiPort(int iMidiPort);
 
-    // Channel info structure map executive.
-    bool     updateChannelInfo();
+	// MIDI input channel.
+	int      midiChannel();
+	bool     setMidiChannel(int iMidiChannel);
 
-    // Channel setup dialog form.
-    bool     channelSetup(QWidget *pParent);
+	// Audio output driver (DEPRECATED).
+	QString& audioDriver();
+	bool     setAudioDriver(const QString& sAudioDriver);
 
-    // Reset channel method.
-    bool     channelReset();
+	// Audio output device.
+	int      audioDevice();
+	bool     setAudioDevice(int iAudioDevice);
 
-    // Message logging methods (brainlessly mapped to main form's).
-    void     appendMessages       (const QString & s);
-    void     appendMessagesColor  (const QString & s, const QString & c);
-    void     appendMessagesText   (const QString & s);
-    void     appendMessagesError  (const QString & s);
-    void     appendMessagesClient (const QString & s);
+	// Sampler channel volume.
+	float    volume();
+	bool     setVolume(float fVolume);
 
-    // Context menu event handler.
-    void contextMenuEvent(QContextMenuEvent *pEvent);
+	// Istrument name remapper.
+	void     updateInstrumentName();
+
+	// Channel info structure map executive.
+	bool     updateChannelInfo();
+
+	// Channel setup dialog form.
+	bool     channelSetup(QWidget *pParent);
+
+	// Reset channel method.
+	bool     channelReset();
+
+	// Message logging methods (brainlessly mapped to main form's).
+	void     appendMessages       (const QString & s);
+	void     appendMessagesColor  (const QString & s, const QString & c);
+	void     appendMessagesText   (const QString & s);
+	void     appendMessagesError  (const QString & s);
+	void     appendMessagesClient (const QString & s);
+
+	// Context menu event handler.
+	void contextMenuEvent(QContextMenuEvent *pEvent);
 
 	// Common (invalid) name-helpers.
-    static QString noEngineName();
-    static QString noInstrumentName();
+	static QString noEngineName();
+	static QString noInstrumentName();
 
 	// Check whether a given file is an instrument file.
 	static bool isInstrumentFile (const QString& sInstrumentFile);
 
-    // Retrieve the available instrument name(s) of an instrument file (.gig).
-    static QString getInstrumentName (const QString& sInstrumentFile,
+	// Retrieve the available instrument name(s) of an instrument file (.gig).
+	static QString getInstrumentName (const QString& sInstrumentFile,
 							int iInstrumentNr, bool bInstrumentNames);
-    static QStringList getInstrumentList (const QString& sInstrumentFile,
+	static QStringList getInstrumentList (const QString& sInstrumentFile,
 							bool bInstrumentNames);
 
 private:
 
-    // Main application form reference.
-    qsamplerMainForm *m_pMainForm;
+	// Main application form reference.
+	qsamplerMainForm *m_pMainForm;
 
-    // Unique channel identifier.
-    int     m_iChannelID;
+	// Unique channel identifier.
+	int     m_iChannelID;
 
-    // Sampler channel info map.
-    QString m_sEngineName;
-    QString m_sInstrumentName;
-    QString m_sInstrumentFile;
-    int     m_iInstrumentNr;
-    int     m_iInstrumentStatus;
-    QString m_sMidiDriver;          // DEPRECATED.
-    int     m_iMidiDevice;
-    int     m_iMidiPort;
-    int     m_iMidiChannel;
-    QString m_sAudioDriver;         // DEPRECATED.
-    int     m_iAudioDevice;
-    float   m_fVolume;
+	// Sampler channel info map.
+	QString m_sEngineName;
+	QString m_sInstrumentName;
+	QString m_sInstrumentFile;
+	int     m_iInstrumentNr;
+	int     m_iInstrumentStatus;
+	QString m_sMidiDriver;          // DEPRECATED.
+	int     m_iMidiDevice;
+	int     m_iMidiPort;
+	int     m_iMidiChannel;
+	QString m_sAudioDriver;         // DEPRECATED.
+	int     m_iAudioDevice;
+	float   m_fVolume;
 };
 
 #endif  // __qsamplerChannel_h
