@@ -386,6 +386,12 @@
 </widget>
 <connections>
     <connection>
+        <sender>ChannelSetupPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelStrip</receiver>
+        <slot>channelSetup()</slot>
+    </connection>
+    <connection>
         <sender>VolumeSlider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>qsamplerChannelStrip</receiver>
@@ -433,7 +439,7 @@
 </signals>
 <slots>
     <slot specifier="non virtual">volumeChanged(int)</slot>
-    <slot specifier="non virtual">channelSetup(bool bNew = false)</slot>
+    <slot specifier="non virtual">channelSetup()</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
@@ -475,6 +481,7 @@
     <function specifier="non virtual">appendMessagesClient( const QString &amp; s )</function>
     <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
     <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
+    <function specifier="non virtual">showChannelSetup( bool bNew )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>

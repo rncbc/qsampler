@@ -329,8 +329,16 @@ void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
     InstrumentStatusTextLabel->setFont(font);
 }
 
+
+// Channel setup dialog slot.
+void qsamplerChannelStrip::channelSetup (void)
+{
+    showChannelSetup(false);
+}
+
+
 // Channel setup dialog.
-void qsamplerChannelStrip::channelSetup ( bool bNew )
+void qsamplerChannelStrip::showChannelSetup ( bool bNew )
 {
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
