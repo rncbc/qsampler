@@ -123,7 +123,9 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
         sInstrumentFile = tr("(No instrument)");
     InstrumentFileComboBox->setCurrentText(sInstrumentFile);
     InstrumentNrComboBox->clear();
-    InstrumentNrComboBox->insertStringList(qsamplerChannel::getInstrumentList(sInstrumentFile));
+    InstrumentNrComboBox->insertStringList(
+		qsamplerChannel::getInstrumentList(sInstrumentFile,
+		pOptions->bInstrumentNames));
     InstrumentNrComboBox->setCurrentItem(pChannel->instrumentNr());
     // MIDI input driver...
     QString sMidiDriver = pChannel->midiDriver();
@@ -268,7 +270,9 @@ void qsamplerChannelForm::updateInstrumentName (void)
     // to retrieve the REAL instrument names.
     InstrumentNrComboBox->clear();
     InstrumentNrComboBox->insertStringList(
-        qsamplerChannel::getInstrumentList(InstrumentFileComboBox->currentText())
+        qsamplerChannel::getInstrumentList(
+			InstrumentFileComboBox->currentText(),
+			pOptions->bInstrumentNames)
     );
 
     optionsChanged();

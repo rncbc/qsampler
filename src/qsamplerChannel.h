@@ -67,11 +67,12 @@ public:
     bool     loadEngine(const QString& sEngineName);
     
     // Instrument file and index.
+    QString& instrumentName();
     QString& instrumentFile();
     int      instrumentNr();
     int      instrumentStatus();
     bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
-    
+
     // MIDI input driver (DEPRECATED).
     QString& midiDriver();
     bool     setMidiDriver(const QString& sMidiDriver);
@@ -120,12 +121,10 @@ public:
     void contextMenuEvent(QContextMenuEvent *pEvent);
 
     // Retrieve the available instrument name(s) of an instrument file (.gig).
-    static QString     getInstrumentName (const QString& sInstrumentFile, int iInstrumentNr);
-    static QStringList getInstrumentList (const QString& sInstrumentFile);
-
-    // Instrument name(s) retrieval mode.
-    static bool instrumentNames();
-    static void setInstrumentNames (bool bInstrumentNames);
+    static QString     getInstrumentName (const QString& sInstrumentFile,
+							int iInstrumentNr, bool bInstrumentNames);
+    static QStringList getInstrumentList (const QString& sInstrumentFile,
+							bool bInstrumentNames);
 
 private:
 
@@ -137,6 +136,7 @@ private:
 
     // Sampler channel info map.
     QString m_sEngineName;
+    QString m_sInstrumentName;
     QString m_sInstrumentFile;
     int     m_iInstrumentNr;
     int     m_iInstrumentStatus;
@@ -147,10 +147,6 @@ private:
     QString m_sAudioDriver;         // DEPRECATED.
     int     m_iAudioDevice;
     float   m_fVolume;
-
-    // Retrieve mode for available instrument name(s)
-	// from an instrument file (.gig).
-	static bool g_bInstrumentNames;
 };
 
 #endif  // __qsamplerChannel_h

@@ -38,7 +38,6 @@
 //-------------------------------------------------------------------------
 // qsamplerChannel - Sampler channel structure.
 //
-bool qsamplerChannel::g_bInstrumentNames = false;
 
 // Constructor.
 qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
@@ -47,7 +46,8 @@ qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
     m_iChannelID = iChannelID;
 
 //  m_sEngineName       = QObject::tr("(No engine)");
-//  m_sInstrumentFile   = QObject::tr("(No instrument)");
+//  m_sInstrumentName   = QObject::tr("(No instrument)");
+//  m_sInstrumentFile   = m_sInstrumentName;
     m_iInstrumentNr     = -1;
     m_iInstrumentStatus = -1;
     m_sMidiDriver       = "Alsa";   // DEPRECATED.
@@ -170,6 +170,12 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 }
 
 
+// Instrument name accessor.
+QString& qsamplerChannel::instrumentName (void)
+{
+    return m_sInstrumentName;
+}
+
 // Instrument filename accessor.
 QString& qsamplerChannel::instrumentFile (void)
 {
@@ -199,6 +205,7 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
         return false;
     }
 
+    m_sInstrumentName = getInstrumentName(sInstrumentFile, iInstrumentNr, true);
     m_sInstrumentFile = sInstrumentFile;
     m_iInstrumentNr = iInstrumentNr;
     m_iInstrumentStatus = 0;
@@ -368,10 +375,18 @@ bool qsamplerChannel::updateChannelInfo (void)
         return false;
     }
 
-    // Cache in channel information.
+    // First, check if intrument name has changed,
+    // taking care that instrument name lookup might be expensive,
+    // so we better make it only once and when really needed...
+    if ((m_sInstrumentFile != pChannelInfo->instrument_file) ||
+        (m_iInstrumentNr   != pChannelInfo->instrument_nr)) {
+        m_sInstrumentFile = pChannelInfo->instrument_file;
+        m_iInstrumentNr   = pChannelInfo->instrument_nr;
+		m_sInstrumentName = getInstrumentName(m_sInstrumentFile,
+			m_iInstrumentNr, (options() && options()->bInstrumentNames));
+	}
+    // Cache in other channel information.
     m_sEngineName       = pChannelInfo->engine_name;
-    m_sInstrumentFile   = pChannelInfo->instrument_file;
-    m_iInstrumentNr     = pChannelInfo->instrument_nr;
     m_iInstrumentStatus = pChannelInfo->instrument_status;
     m_iMidiDevice       = pChannelInfo->midi_device;
     m_iMidiPort         = pChannelInfo->midi_port;
@@ -381,8 +396,10 @@ bool qsamplerChannel::updateChannelInfo (void)
     // Some sanity checks.
     if (m_sEngineName == "NONE")
         m_sEngineName = QString::null;
-    if (m_sInstrumentFile == "NONE")
+    if (m_sInstrumentFile == "NONE") {
         m_sInstrumentFile = QString::null;
+        m_sInstrumentName = QString::null;
+	}
 
     return true;
 }
@@ -455,7 +472,8 @@ void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
 
 
 // Retrieve the instrument list of a instrument file (.gig).
-QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
+QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
+	bool bInstrumentNames )
 {
     QFileInfo fileinfo(sInstrumentFile);
     QString sInstrumentName = fileinfo.fileName();
@@ -463,7 +481,7 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
 
     if (fileinfo.exists()) {
 #ifdef CONFIG_LIBGIG
-		if (g_bInstrumentNames) {
+		if (bInstrumentNames) {
 	        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
 	        gig::File  *pGig  = new gig::File(pRiff);
 	        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
@@ -486,14 +504,15 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
 
 
 // Retrieve the spacific instrument name of a instrument file (.gig), given its index.
-QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile, int iInstrumentNr )
+QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
+	int iInstrumentNr, bool bInstrumentNames )
 {
     QFileInfo fileinfo(sInstrumentFile);
     QString sInstrumentName = fileinfo.fileName();
 
     if (fileinfo.exists()) {
 #ifdef CONFIG_LIBGIG
-		if (g_bInstrumentNames) {
+		if (bInstrumentNames) {
 	        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
 	        gig::File  *pGig  = new gig::File(pRiff);
 	        int iIndex = 0;
@@ -515,18 +534,6 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile, int 
     }
 
     return sInstrumentName;
-}
-
-
-// Instrument name(s) retrieval mode--global option.
-bool qsamplerChannel::instrumentNames (void)
-{
-	return g_bInstrumentNames;
-}
-
-void qsamplerChannel::setInstrumentNames ( bool bInstrumentNames )
-{
-	g_bInstrumentNames = bInstrumentNames;
 }
 
 

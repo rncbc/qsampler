@@ -163,10 +163,10 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
         EngineNameTextLabel->setText(sIndent + m_pChannel->engineName());
 
     // Instrument name...
-    if (m_pChannel->instrumentFile().isEmpty())
+    if (m_pChannel->instrumentName().isEmpty())
         InstrumentNameTextLabel->setText(sIndent + tr("(No instrument)"));
     else
-        InstrumentNameTextLabel->setText(sIndent + qsamplerChannel::getInstrumentName(m_pChannel->instrumentFile(), m_pChannel->instrumentNr()));
+        InstrumentNameTextLabel->setText(sIndent + m_pChannel->instrumentName());
 
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();
