@@ -928,11 +928,15 @@ void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
 			pComboItem->setEnabled(bEnabled);
 			QTable::setItem(iRow, 2, pComboItem);
 		} else if (param.possibilities.count() > 0 && bEnabled) {
-			QComboTableItem *pComboItem = new QComboTableItem(this,
-				param.possibilities);
-			pComboItem->setCurrentItem(param.value);
+			QStringList opts = param.possibilities;
+			if (param.multiplicity)
+				opts.prepend(tr("(none)"));
+			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
+			if (param.value.isEmpty())
+				pComboItem->setCurrentItem(0);
+			else
+				pComboItem->setCurrentItem(param.value);
 			pComboItem->setEnabled(bEnabled);
-		//	pComboItem->setEditable(bEnabled && param.multiplicity);
 			QTable::setItem(iRow, 2, pComboItem);
 		} else if (param.type == LSCP_TYPE_INT && bEnabled
 				&& !param.range_min.isEmpty()
@@ -1047,3 +1051,4 @@ void qsamplerDeviceParamTableEditBox::setContentFromEditor ( QWidget *pWidget )
 
 
 // end of qsamplerDevice.cpp
+
