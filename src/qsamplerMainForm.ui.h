@@ -211,7 +211,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 // Window close event handlers.
 bool qsamplerMainForm::queryClose (void)
 {
-    bool bQueryClose = closeSession();
+    bool bQueryClose = closeSession(false);
 
     // Try to save current general state...
     if (m_pOptions) {
@@ -265,7 +265,7 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 {
     if (QTextDrag::canDecode(pDropEvent)) {
         QString sUrl;
-        if (QTextDrag::decode(pDropEvent, sUrl) && closeSession())
+        if (QTextDrag::decode(pDropEvent, sUrl) && closeSession(false))
             loadSessionFile(QUrl(sUrl).path());
     }
 }
@@ -340,7 +340,7 @@ bool qsamplerMainForm::openSession (void)
         return false;
 
     // Check if we're going to discard safely the current one...
-    if (!closeSession())
+    if (!closeSession(false))
         return false;
 
     // Load it right away.
@@ -392,12 +392,12 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
 
 
 // Close current session.
-bool qsamplerMainForm::closeSession (void)
+bool qsamplerMainForm::closeSession ( bool bForce )
 {
     bool bClose = true;
 
     // Are we dirty enough to prompt it?
-    if (m_iDirtyCount > 0) {
+    if (m_iDirtyCount > 0 && !bForce) {
         switch (QMessageBox::warning(this, tr("Warning"),
             tr("The current session has been changed:\n\n"
             "\"%1\"\n\n"
@@ -423,6 +423,8 @@ bool qsamplerMainForm::closeSession (void)
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++)
             delete (qsamplerChannelStrip *) wlist.at(iChannel);
         m_pWorkspace->setUpdatesEnabled(true);
+        // We're now clean, for sure.
+        m_iDirtyCount = 0;
     }
 
     return bClose;
@@ -432,10 +434,10 @@ bool qsamplerMainForm::closeSession (void)
 // Reload current session.
 bool qsamplerMainForm::resetSession (void)
 {
-    if (!closeSession())
+    if (m_pClient == NULL)
         return false;
 
-    if (m_pClient == NULL)
+    if (!closeSession(false))
         return false;
 
     // Now we'll try to create the whole GUI session.
@@ -495,13 +497,14 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     if (iErrors > 0)
         appendMessagesError(tr("Some setttings could not be loaded\nfrom \"%1\" session file.\n\nSorry.").arg(sFilename));
 
+    // IMPORTANT: We'll refresh every existing channel.
+    resetSession();
+
     // Save as default session directory.
     if (m_pOptions)
         m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
     // We're not dirty anymore.
     m_iDirtyCount = 0;
-    // IMPORTANT: Ee'll refresh every existing channel.
-    resetSession();
     // Stabilize form...
     m_sFilename = sFilename;
     stabilizeForm();
@@ -610,26 +613,29 @@ void qsamplerMainForm::fileSaveAs (void)
 // Restart the client/server instance.
 void qsamplerMainForm::fileRestart (void)
 {
+    if (m_pOptions == NULL)
+        return;
+        
     bool bRestart = true;
     
     // Ask user whether he/she want's a complete restart...
     // (if we're currently up and running)
-    if (m_pClient) {
+    if (bRestart && m_pClient) {
         bRestart = (QMessageBox::warning(this, tr("Warning"),
             tr("New settings will be effective after\n"
                "restarting the client/server connection.\n\n"
                "Please note that this operation may cause\n"
                "temporary MIDI and Audio disruption\n\n"
                "Do you want to restart the connection now?"),
-            tr("Yes"), tr("No")) == 0);
+            tr("Restart"), tr("Cancel")) == 0);
     }
 
     // Are we still for it?
-    if (bRestart) {
+    if (bRestart && closeSession(false)) {
         // Stop server, it will force the client too.
         stopServer();
         // Reschedule a restart...
-        startSchedule(0);
+        startSchedule(m_pOptions->iStartDelay);
     }
 }
 
@@ -825,8 +831,12 @@ void qsamplerMainForm::viewOptions (void)
         if (pOptionsForm->exec()) {
             // Warn if something will be only effective on next run.
             if (( bOldStdoutCapture && !m_pOptions->bStdoutCapture) ||
-                (!bOldStdoutCapture &&  m_pOptions->bStdoutCapture))
+                (!bOldStdoutCapture &&  m_pOptions->bStdoutCapture)) {
+                QMessageBox::information(this, tr("Information"),
+                    tr("Some settings may be only effective\n"
+                       "next time you start this program."), tr("OK"));
                 updateMessagesCapture();
+            }
             // Check wheather something immediate has changed.
             if (sOldDisplayFont != m_pOptions->sDisplayFont)
                 updateDisplayFont();
@@ -1441,17 +1451,17 @@ bool qsamplerMainForm::startClient (void)
         return false;
     }
 
-    // Log success here.
-    appendMessages(tr("Client connected."));
-
     // We may stop scheduling around.
     stopSchedule();
 
     // We'll accept drops from now on...
     setAcceptDrops(true);
 
+    // Log success here.
+    appendMessages(tr("Client connected."));
+
     // Is any session pending to be loaded?
-    if (!m_pOptions->sSessionFile.isEmpty() && closeSession()) {
+    if (!m_pOptions->sSessionFile.isEmpty()) {
         // Just load the prabably startup session...
         if (loadSessionFile(m_pOptions->sSessionFile)) {
             m_pOptions->sSessionFile = QString::null;
@@ -1474,15 +1484,18 @@ void qsamplerMainForm::stopClient (void)
     if (m_pClient == NULL)
         return;
 
+    // Log prepare here.
+    appendMessages(tr("Client disconnecting..."));
+
     // Clear timer counters...
     stopSchedule();
 
     // We'll reject drops from now on...
     setAcceptDrops(false);
 
-    // Log prepare here.
-    appendMessages(tr("Client disconnecting..."));
-
+    // Force any channel strips around.
+    closeSession(true);
+    
     // Close us as a client...
     lscp_client_destroy(m_pClient);
     m_pClient = NULL;

@@ -110,22 +110,25 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
     // and populate the channel form fields.
 
     // Engine name...
-    if (EngineNameComboBox->listBox()->findItem(pChannel->engineName(), Qt::ExactMatch) == NULL)
-        EngineNameComboBox->insertItem(pChannel->engineName());
-    EngineNameComboBox->setCurrentText(pChannel->engineName());
+    const QString& sEngineName = pChannel->engineName();
+    if (!sEngineName.isEmpty() && EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
+        EngineNameComboBox->insertItem(sEngineName);
+    EngineNameComboBox->setCurrentText(sEngineName);
     // Instrument filename and index...
     InstrumentFileComboBox->setCurrentText(pChannel->instrumentFile());
     InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
     // MIDI input...
-    if (MidiDriverComboBox->listBox()->findItem(pChannel->midiDriver(), Qt::ExactMatch) == NULL)
-        MidiDriverComboBox->insertItem(pChannel->midiDriver());
-    MidiDriverComboBox->setCurrentText(pChannel->midiDriver());
+    const QString& sMidiDriver = pChannel->midiDriver();
+    if (!sMidiDriver.isEmpty() && MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
+        MidiDriverComboBox->insertItem(sMidiDriver);
+    MidiDriverComboBox->setCurrentText(sMidiDriver);
     MidiPortSpinBox->setValue(pChannel->midiPort());
     MidiChannelSpinBox->setValue(pChannel->midiChannel());
     // Audio output...
-    if (AudioDriverComboBox->listBox()->findItem(pChannel->audioDriver(), Qt::ExactMatch) == NULL)
-        AudioDriverComboBox->insertItem(pChannel->audioDriver());
-    AudioDriverComboBox->setCurrentText(pChannel->audioDriver());
+    const QString& sAudioDriver = pChannel->audioDriver();
+    if (!sAudioDriver.isEmpty() && AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
+        AudioDriverComboBox->insertItem(sAudioDriver);
+    AudioDriverComboBox->setCurrentText(sAudioDriver);
 
     // Done.
     m_iDirtySetup--;

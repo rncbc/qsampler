@@ -736,7 +736,7 @@
     <function specifier="non virtual" returnType="bool">newSession( void )</function>
     <function specifier="non virtual" returnType="bool">openSession( void )</function>
     <function specifier="non virtual" returnType="bool">saveSession( bool bPrompt )</function>
-    <function specifier="non virtual" returnType="bool">closeSession( void )</function>
+    <function specifier="non virtual" returnType="bool">closeSession( bool bForce )</function>
     <function specifier="non virtual" returnType="bool">resetSession( void )</function>
     <function specifier="non virtual" returnType="bool">loadSessionFile( const QString &amp; sFilename )</function>
     <function specifier="non virtual" returnType="bool">saveSessionFile( const QString &amp; sFilename )</function>
