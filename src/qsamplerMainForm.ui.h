@@ -851,8 +851,6 @@ void qsamplerMainForm::editResetChannel (void)
     // Reset the existing sampler channel.
     pChannel->resetChannel();
 
-    // Refresh channel strip info.
-    pChannelStrip->updateChannelInfo();
     // And force a deferred update.
     m_iChangeCount++;
 }
