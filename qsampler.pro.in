@@ -18,6 +18,7 @@ IMAGES   = icons/qsampler.png \
            icons/fileNew.png \
            icons/fileOpen.png \
            icons/fileSave.png \
+           icons/fileRestart.png \
            icons/editAddChannel.png \
            icons/editRemoveChannel.png \
            icons/editResetChannel.png \

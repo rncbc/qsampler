@@ -75,27 +75,27 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
     pOptions->loadComboBoxHistory(InstrumentFileComboBox);
 
     // Populate Engines list.
-    EngineNameComboBox->clear();
     const char **ppszEngines = ::lscp_get_available_engines(m_pChannel->client());
     if (ppszEngines) {
+        EngineNameComboBox->clear();
         for (int iEngine = 0; ppszEngines[iEngine]; iEngine++)
             EngineNameComboBox->insertItem(ppszEngines[iEngine]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_engines");
 
     // Populate Audio output type list.
-    AudioDriverComboBox->clear();
     const char **ppszAudioDrivers = ::lscp_get_available_audio_drivers(m_pChannel->client());
     if (ppszAudioDrivers) {
+        AudioDriverComboBox->clear();
         for (int iAudioDriver = 0; ppszAudioDrivers[iAudioDriver]; iAudioDriver++)
             AudioDriverComboBox->insertItem(ppszAudioDrivers[iAudioDriver]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_audio_drivers");
 
     // Populate MIDI input type list.
-    MidiDriverComboBox->clear();
     const char **ppszMidiDrivers = ::lscp_get_available_midi_drivers(m_pChannel->client());
     if (ppszMidiDrivers) {
+        MidiDriverComboBox->clear();
         for (int iMidiDriver = 0; ppszMidiDrivers[iMidiDriver]; iMidiDriver++)
             MidiDriverComboBox->insertItem(ppszMidiDrivers[iMidiDriver]);
     }
@@ -156,14 +156,6 @@ void qsamplerChannelForm::accept (void)
             m_pChannel->appendMessagesClient("lscp_load_engine");
             iErrors++;
         }
-        // Instrument file and index...
-        if (::lscp_load_instrument(m_pChannel->client(),
-            InstrumentFileComboBox->currentText().latin1(),
-            InstrumentNrSpinBox->value(),
-            m_pChannel->channelID()) != LSCP_OK) {
-            m_pChannel->appendMessagesClient("lscp_load_instrument");
-            iErrors++;
-        }
         // MIDI input type...
         if (::lscp_set_channel_midi_type(m_pChannel->client(),
             m_pChannel->channelID(),
@@ -190,6 +182,14 @@ void qsamplerChannelForm::accept (void)
             m_pChannel->channelID(),
             AudioDriverComboBox->currentText().latin1()) != LSCP_OK) {
             m_pChannel->appendMessagesClient("lscp_set_channel_audio_port");
+            iErrors++;
+        }
+        // Instrument file and index...
+        if (::lscp_load_instrument(m_pChannel->client(),
+            InstrumentFileComboBox->currentText().latin1(),
+            InstrumentNrSpinBox->value(),
+            m_pChannel->channelID()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_load_instrument");
             iErrors++;
         }
         // Show error messages?

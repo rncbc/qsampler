@@ -63,6 +63,8 @@
         <action name="fileSaveAction"/>
         <action name="fileSaveAsAction"/>
         <separator/>
+        <action name="fileRestartAction"/>
+        <separator/>
         <action name="fileExitAction"/>
     </item>
     <item text="&amp;Edit" name="editMenu">
@@ -103,6 +105,8 @@
         <action name="fileNewAction"/>
         <action name="fileOpenAction"/>
         <action name="fileSaveAction"/>
+        <separator/>
+        <action name="fileRestartAction"/>
     </toolbar>
     <toolbar dock="2">
         <property name="name">
@@ -216,6 +220,29 @@
     </action>
     <action>
         <property name="name">
+            <cstring>fileRestartAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>fileRestart.png</iconset>
+        </property>
+        <property name="text">
+            <string>Restart</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Restart</string>
+        </property>
+        <property name="toolTip">
+            <string>Restart instance</string>
+        </property>
+        <property name="statusTip">
+            <string>Restart sampler instance</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+R</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>fileExitAction</cstring>
         </property>
         <property name="text">
@@ -320,7 +347,7 @@
             <string>Reset current sampler channel</string>
         </property>
         <property name="accel">
-            <string>Ctrl+R</string>
+            <string></string>
         </property>
     </action>
     <action>
@@ -545,6 +572,12 @@
         <slot>fileSaveAs()</slot>
     </connection>
     <connection>
+        <sender>fileRestartAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>fileRestart()</slot>
+    </connection>
+    <connection>
         <sender>fileExitAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -666,6 +699,7 @@
     <slot specifier="non virtual">fileOpen( void )</slot>
     <slot specifier="non virtual">fileSave( void )</slot>
     <slot specifier="non virtual">fileSaveAs( void )</slot>
+    <slot specifier="non virtual">fileRestart( void )</slot>
     <slot specifier="non virtual">fileExit( void )</slot>
     <slot specifier="non virtual">editAddChannel( void )</slot>
     <slot specifier="non virtual">editRemoveChannel( void )</slot>

@@ -355,12 +355,19 @@ bool qsamplerMainForm::openSession (void)
 // Save current sampler session with another name.
 bool qsamplerMainForm::saveSession ( bool bPrompt )
 {
+    if (m_pOptions == NULL)
+        return false;
+
     QString sFilename = m_sFilename;
 
     // Ask for the file to save, if there's none...
     if (bPrompt || sFilename.isEmpty()) {
+        // If none is given, assume default directory.
+        if (sFilename.isEmpty())
+            sFilename = m_pOptions->sSessionDir;
+        // Prompt the guy...
         sFilename = QFileDialog::getSaveFileName(
-                m_sFilename,                            // Start here.
+                sFilename,                              // Start here.
                 tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
                 this, 0,                                // Parent and name (none)
                 tr("Save Session")                      // Caption.
@@ -496,24 +503,39 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     // Write the file.
     int iErrors = 0;
     QTextStream ts(&file);
+    ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
+    ts << "# " << tr("Version")
+       << ": " QSAMPLER_VERSION << endl;
+    ts << "# " << tr("Build")
+       << ": " __DATE__ " " __TIME__ << endl;
+    ts << "#"  << endl;
+    ts << "# " << tr("File")
+       << ": " << QFileInfo(sFilename).fileName() << endl;
+    ts << "# " << tr("Date")
+       << ": " << QDate::currentDate().toString("MMMM dd yyyy")
+       << " "  << QTime::currentTime().toString("hh:mm:ss") << endl;
+    ts << "#"  << endl;
+    ts << endl;
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
         qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
         int iChannelID = pChannel->channelID();
+        ts << "# " << pChannel->caption() << endl;
         ts << "ADD CHANNEL" << endl;
         lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pClient, iChannelID);
         if (pChannelInfo) {
             ts << "LOAD ENGINE " << pChannelInfo->engine_name << " " << iChannelID << endl;
-            ts << "LOAD INSTRUMENT " << pChannelInfo->instrument_file << " " << pChannelInfo->instrument_nr << " " << iChannelID << endl;
             ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannelID << " " << pChannelInfo->midi_device << endl;
             ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannelInfo->midi_port << endl;
             ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannelInfo->midi_channel << endl;
             ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannelID << " " << pChannelInfo->audio_device << endl;
             ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannelInfo->volume << endl;
+            ts << "LOAD INSTRUMENT " << pChannelInfo->instrument_file << " " << pChannelInfo->instrument_nr << " " << iChannelID << endl;
         } else {
             appendMessagesClient("lscp_channel_info");
             iErrors++;
         }
+        ts << endl;
         // Try to keep it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
@@ -569,6 +591,33 @@ void qsamplerMainForm::fileSaveAs (void)
 {
     // Save it right away, maybe with another name.
     saveSession(true);
+}
+
+
+// Restart the client/server instance.
+void qsamplerMainForm::fileRestart (void)
+{
+    bool bRestart = true;
+    
+    // Ask user whether he/she want's a complete restart...
+    // (if we're currently up and running)
+    if (m_pClient) {
+        bRestart = (QMessageBox::warning(this, tr("Warning"),
+            tr("New settings will be effective after\n"
+               "restarting the client/server connection.") + "\n\n" +
+            tr("Please note that this operation may cause\n"
+              "temporary MIDI and Audio disruption.") + "\n\n" +
+            tr("Do you want to restart the connection now?"),
+            tr("Yes"), tr("No")) == 0);
+    }
+
+    // Are we still for it?
+    if (bRestart) {
+        // Stop server, it will force the client too.
+        stopServer();
+        // Reschedule a restart...
+        startSchedule(0);
+    }
 }
 
 
@@ -778,21 +827,8 @@ void qsamplerMainForm::viewOptions (void)
                 (iOldServerPort != m_pOptions->iServerPort)      ||
                 ( bOldServerStart && !m_pOptions->bServerStart)  ||
                 (!bOldServerStart &&  m_pOptions->bServerStart)  ||
-                (sOldServerCmdLine != m_pOptions->sServerCmdLine && m_pOptions->bServerStart)) {
-                // Ask user whether he/she want's a complete restart...
-                if (QMessageBox::warning(this, tr("Warning"),
-                    tr("New settings will be effective after\n"
-                        "restarting the client/server connection.") + "\n\n" +
-                    tr("Please note that this operation may cause\n"
-                       "temporary MIDI and Audio disruption.") + "\n\n" +
-                    tr("Do you want to restart the connection now?"),
-                    tr("Yes"), tr("No")) == 0) {
-                    // Stop server, it will force the client too.
-                    stopServer();
-                    // Reschedule a restart...
-                    startSchedule(0);
-                }
-            }
+                (sOldServerCmdLine != m_pOptions->sServerCmdLine && m_pOptions->bServerStart))
+                fileRestart();
         }
         // Done.
         delete pOptionsForm;
