@@ -685,6 +685,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		qsamplerDevice device(m_pClient, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
+		ts << endl;
         ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
