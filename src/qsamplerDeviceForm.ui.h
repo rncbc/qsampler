@@ -24,6 +24,7 @@
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlistbox.h>
+#include <qptrlist.h>
 #include <qpopupmenu.h>
 
 #include "qsamplerMainForm.h"
@@ -45,8 +46,10 @@ void qsamplerDeviceForm::init (void)
 
 	// This an outsider (from designer), but rather important.
 	QObject::connect(DeviceParamTable, SIGNAL(valueChanged(int,int)),
-		this, SLOT(changeValue(int,int)));
-	
+		this, SLOT(changeDeviceParam(int,int)));
+	QObject::connect(DevicePortParamTable, SIGNAL(valueChanged(int,int)),
+		this, SLOT(changeDevicePortParam(int,int)));
+
 	// Try to restore normal window positioning.
 	adjustSize();
 }
@@ -300,13 +303,15 @@ void qsamplerDeviceForm::selectDevice (void)
 		m_deviceType = qsamplerDevice::None;
 		DeviceNameTextLabel->setText(QString::null);
 		DeviceParamTable->setNumRows(0);
+		DevicePortComboBox->setEnabled(false);
+		DevicePortParamTable->setEnabled(false);
 		stabilizeForm();
 		return;
 	}
 
-	m_iDirtySetup++;
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
+	m_iDirtySetup++;
 	// Flag whether this is a new device.
 	m_bNewDevice = (device.deviceID() < 0);
 
@@ -333,14 +338,70 @@ void qsamplerDeviceForm::selectDevice (void)
 	DriverNameComboBox->setEnabled(m_bNewDevice);
 	// Fill the device parameter table...
 	DeviceParamTable->refresh(device.params(), m_bNewDevice);
+	// And now the device port/channel parameter table...
+	DevicePortComboBox->clear();
+	DevicePortParamTable->setNumRows(0);
+	if (m_bNewDevice) {
+		DevicePortComboBox->setEnabled(false);
+		DevicePortParamTable->setEnabled(false);
+	} else {
+		QPixmap pixmap;
+		switch (device.deviceType()) {
+		case qsamplerDevice::Audio:
+		    pixmap = QPixmap::fromMimeSource("audio2.png");
+		    break;
+		case qsamplerDevice::Midi:
+		    pixmap = QPixmap::fromMimeSource("midi2.png");
+		    break;
+		case qsamplerDevice::None:
+		    break;
+		}
+		qsamplerDevicePortList& ports = device.ports();
+		qsamplerDevicePort *pPort;
+		for (pPort = ports.first(); pPort; pPort = ports.next()) {
+            DevicePortComboBox->insertItem(pixmap,
+				device.deviceTypeName()	+ ' ' + pPort->portName());
+		}
+		bool bEnabled = (ports.count() > 0);
+		DevicePortComboBox->setEnabled(bEnabled);
+		DevicePortParamTable->setEnabled(bEnabled);
+	}
 	// Done.
 	m_iDirtySetup--;
+	
+	// Make the device port/channel selection effective.
+	selectDevicePort(DevicePortComboBox->currentItem());
+}
+
+
+// Device port/channel selection slot.
+void qsamplerDeviceForm::selectDevicePort ( int iPort )
+{
+	if (m_iDirtySetup > 0)
+		return;
+
+	//
+	//  Device port/channel selection has changed...
+	//
+
+	QListViewItem *pItem = DeviceListView->selectedItem();
+	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+		return;
+
+	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+	qsamplerDevicePort *pPort = device.ports().at(iPort);
+	if (pPort) {
+		m_iDirtySetup++;
+		DevicePortParamTable->refresh(pPort->params(), true);
+		m_iDirtySetup--;
+	}
+	// Done.
 	stabilizeForm();
 }
 
 
-// parameter value change slot.
-void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
+// Device parameter value change slot.
+void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 {
 	if (m_iDirtySetup > 0)
 		return;
@@ -355,9 +416,9 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
 
-	m_iDirtySetup++;
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
+	m_iDirtySetup++;
 	// Table 1st column has the parameter name;
 	const qsamplerDeviceParamMap& params = device.params();
 	const QString sParam = DeviceParamTable->text(iRow, 0);
@@ -373,14 +434,17 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 		param.key   = (char *) sParam.latin1();
 		param.value = (char *) sValue.latin1();
 		// Now it depends on the device type...
+		bool bRefresh = false;
 		lscp_status_t ret = LSCP_FAILED;
 		switch (device.deviceType()) {
 		case qsamplerDevice::Audio:
+		    bRefresh = (sParam == "CHANNELS");
 			if ((ret = ::lscp_set_audio_device_param(m_pClient,
 					device.deviceID(), &param)) != LSCP_OK)
 				m_pMainForm->appendMessagesClient("lscp_set_audio_device_param");
 			break;
 		case qsamplerDevice::Midi:
+		    bRefresh = (sParam == "PORTS");
 			if ((ret = ::lscp_set_midi_device_param(m_pClient,
 					device.deviceID(), &param)) != LSCP_OK)
 				m_pMainForm->appendMessagesClient("lscp_set_midi_device_param");
@@ -391,6 +455,79 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 		// Show result.
 		if (ret == LSCP_OK) {
 			m_pMainForm->appendMessages(device.deviceName() + ' '
+				+ QString("%1: %2.").arg(sParam).arg(sValue));
+			// Special care for specific parameter changes...
+			if (bRefresh)
+			    device.refresh(m_pClient);
+		}
+	}
+
+	// Done.
+	m_iDirtySetup--;
+	stabilizeForm();
+	// Main session should be dirtier...
+	m_pMainForm->sessionDirty();
+}
+
+
+// Device port/channel parameter value change slot.
+void qsamplerDeviceForm::changeDevicePortParam ( int iRow, int iCol )
+{
+	if (m_iDirtySetup > 0)
+		return;
+	if (iRow < 0 || iCol < 0)
+		return;
+
+	//
+	//  Device port/channel parameter change...
+	//
+
+	QListViewItem *pItem = DeviceListView->selectedItem();
+	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+		return;
+
+	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+
+	int iPort = DevicePortComboBox->currentItem();
+	qsamplerDevicePort *pPort = device.ports().at(iPort);
+	if (pPort == NULL)
+	    return;
+
+	m_iDirtySetup++;
+	// Table 1st column has the parameter name;
+	const qsamplerDeviceParamMap& params = pPort->params();
+	const QString sParam = DevicePortParamTable->text(iRow, 0);
+	const QString sValue = DevicePortParamTable->text(iRow, iCol);
+
+	// Set the local device port/channel parameter value.
+	pPort->setParam(sParam, sValue);
+
+	// Set proper device port/channel parameter, if any...
+	if (device.deviceID() >= 0 && pPort->portID() >= 0) {
+		// Prepare parameter struct.
+		lscp_param_t param;
+		param.key   = (char *) sParam.latin1();
+		param.value = (char *) sValue.latin1();
+		// Now it depends on the device type...
+		lscp_status_t ret = LSCP_FAILED;
+		switch (device.deviceType()) {
+		case qsamplerDevice::Audio:
+			if ((ret = ::lscp_set_audio_channel_param(m_pClient,
+					device.deviceID(), pPort->portID(), &param)) != LSCP_OK)
+				m_pMainForm->appendMessagesClient("lscp_set_audio_channel_param");
+			break;
+		case qsamplerDevice::Midi:
+			if ((ret = ::lscp_set_midi_port_param(m_pClient,
+					device.deviceID(), pPort->portID(), &param)) != LSCP_OK)
+				m_pMainForm->appendMessagesClient("lscp_set_midi_port_param");
+			break;
+		case qsamplerDevice::None:
+			break;
+		}
+		// Show result.
+		if (ret == LSCP_OK) {
+			m_pMainForm->appendMessages(device.deviceName() + ' '
+				+ pPort->portName()	+ ' '
 				+ QString("%1: %2.").arg(sParam).arg(sValue));
 		}
 	}
@@ -415,11 +552,11 @@ void qsamplerDeviceForm::contextMenu ( QListViewItem *pItem, const QPoint& pos, 
 	bool bEnabled = (pItem != NULL);
 	iItemID = pContextMenu->insertItem(
 		QIconSet(QPixmap::fromMimeSource("deviceCreate.png")),
-		tr("&Create"), this, SLOT(createDevice()));
+		tr("&Create device"), this, SLOT(createDevice()));
 	pContextMenu->setItemEnabled(iItemID, bEnabled || (bClient && m_bNewDevice));
 	iItemID = pContextMenu->insertItem(
 		QIconSet(QPixmap::fromMimeSource("deviceDelete.png")),
-		tr("&Delete"), this, SLOT(deleteDevice()));
+		tr("&Delete device"), this, SLOT(deleteDevice()));
 	pContextMenu->setItemEnabled(iItemID, bEnabled && !m_bNewDevice);
 	pContextMenu->insertSeparator();
 	iItemID = pContextMenu->insertItem(
@@ -450,3 +587,6 @@ void qsamplerDeviceForm::stabilizeForm (void)
 
 
 // end of qsamplerDeviceForm.ui.h
+
+
+

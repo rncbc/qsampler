@@ -666,16 +666,35 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	QMap<int, int> audioDeviceMap;
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
-		qsamplerDevice device(m_pClient, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
 		ts << endl;
+		qsamplerDevice device(m_pClient, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
+		// Audio device specification...
         ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
-		const qsamplerDeviceParamMap& params = device.params();
-		qsamplerDeviceParamMap::ConstIterator iter;
-		for (iter = params.begin(); iter != params.end(); ++iter)
-			ts << " " << iter.key() << "='" << iter.data().value << "'";
+		qsamplerDeviceParamMap::ConstIterator deviceParam;
+		for (deviceParam = device.params().begin();
+				deviceParam != device.params().end();
+					++deviceParam) {
+			ts << " " << deviceParam.key()
+			   << "='" << deviceParam.data().value << "'";
+		}
 		ts << endl;
+		// Audio channel parameters...
+		int iPort = 0;
+		for (qsamplerDevicePort *pPort = device.ports().first();
+				pPort;
+					pPort = device.ports().next(), ++iPort) {
+			qsamplerDeviceParamMap::ConstIterator portParam;
+			for (portParam = pPort->params().begin();
+					portParam != pPort->params().end();
+						++portParam) {
+				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
+				   << " " << iPort << " " << portParam.key()
+				   << "='" << portParam.data().value << "'" << endl;
+			}
+		}
+		// Set device index/id mapping.
 		audioDeviceMap[device.deviceID()] = iDevice;
         // Try to keep it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
@@ -684,19 +703,34 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	QMap<int, int> midiDeviceMap;
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
-		qsamplerDevice device(m_pClient, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
 		ts << endl;
+		qsamplerDevice device(m_pClient, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
+		// MIDI device specification...
         ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
-		const qsamplerDeviceParamMap& params = device.params();
-		qsamplerDeviceParamMap::ConstIterator iter;
-		for (iter = params.begin(); iter != params.end(); ++iter)
-			ts << " " << iter.key() << "='" << iter.data().value << "'";
+		qsamplerDeviceParamMap::ConstIterator deviceParam;
+		for (deviceParam = device.params().begin();
+				deviceParam != device.params().end();
+					++deviceParam) {
+			ts << " " << deviceParam.key()
+			   << "='" << deviceParam.data().value << "'";
+		}
 		ts << endl;
-		midiDeviceMap[device.deviceID()] = iDevice;
-        // Try to keep it snappy :)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		// MIDI port parameters...
+		int iPort = 0;
+		for (qsamplerDevicePort *pPort = device.ports().first();
+				pPort;
+					pPort = device.ports().next(), ++iPort) {
+			qsamplerDeviceParamMap::ConstIterator portParam;
+			for (portParam = pPort->params().begin();
+					portParam != pPort->params().end();
+						++portParam) {
+				ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
+				   << " " << iPort << " " << portParam.key()
+				   << "='" << portParam.data().value << "'" << endl;
+			}
+		}
 	}
 	ts << endl;
 	// Sampler channel mapping.
