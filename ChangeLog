@@ -3,7 +3,7 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-01-18  Work in progress...
+0.0.5   2005-02-11  Work in progress...
 
 * Actual instrument names are now optionally retrieved
   from the instrument file, even though libgig is available,
