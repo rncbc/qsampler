@@ -246,7 +246,7 @@
                         <iconset>formRefresh.png</iconset>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>refresh device list view</string>
+                        <string>Refresh device list view</string>
                     </property>
                 </widget>
                 <spacer>
@@ -280,7 +280,7 @@
                         <iconset>deviceCreate.png</iconset>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Create current device</string>
+                        <string>Create device</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -297,7 +297,7 @@
                         <iconset>deviceDelete.png</iconset>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Delete current device</string>
+                        <string>Delete device</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
