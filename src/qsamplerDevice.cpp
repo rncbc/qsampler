@@ -404,7 +404,7 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = params.begin(); iter != params.end(); ++iter) {
 		const qsamplerDeviceParam& param = iter.data();
-		bool fEnabled = (device.deviceID() < 0 || param.fix);
+		bool fEnabled = (device.deviceID() < 0 || !param.fix);
 		QTable::setText(iRow, 0, param.description);
 		if (param.type == LSCP_TYPE_BOOL) {
 			QStringList opts;
