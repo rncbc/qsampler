@@ -30,9 +30,9 @@
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
-#else
-#define QSAMPLER_INSTRUMENT_MAX 8
 #endif
+
+#define QSAMPLER_INSTRUMENT_MAX 8
 
 
 //-------------------------------------------------------------------------
