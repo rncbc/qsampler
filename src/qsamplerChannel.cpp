@@ -45,8 +45,8 @@ qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
     m_pMainForm  = pMainForm;
     m_iChannelID = iChannelID;
 
-//  m_sEngineName       = QObject::tr("(No engine)");
-//  m_sInstrumentName   = QObject::tr("(No instrument)");
+//  m_sEngineName       = noEngineName();
+//  m_sInstrumentName   = noInstrumentName();
 //  m_sInstrumentFile   = m_sInstrumentName;
     m_iInstrumentNr     = -1;
     m_iInstrumentStatus = -1;
@@ -199,22 +199,31 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (!isInstrumentFile(sInstrumentFile))
+	    return false;
 
     if (::lscp_load_instrument_non_modal(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
         appendMessagesClient("lscp_load_instrument");
         return false;
     }
 
+    return setInstrument(sInstrumentFile, iInstrumentNr);
+}
+
+
+// Special instrument file/name/number settler.
+bool qsamplerChannel::setInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
+{
     m_sInstrumentFile = sInstrumentFile;
     m_iInstrumentNr = iInstrumentNr;
 #ifdef CONFIG_INSTRUMENT_NAME
-    m_sInstrumentName = QString::null;  // We'll get it later on channel_info...
+    m_sInstrumentName = QString::null;  // We'll get it, maybe later, on channel_info...
 #else
     m_sInstrumentName = getInstrumentName(sInstrumentFile, iInstrumentNr, true);
 #endif
     m_iInstrumentStatus = 0;
 
-    return true;
+	return true;
 }
 
 
@@ -491,15 +500,35 @@ void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
 }
 
 
+// FIXME: Check whether a given file is an instrument file.
+bool qsamplerChannel::isInstrumentFile ( const QString& sInstrumentFile )
+{
+	bool bResult = false;
+
+	QFile file(sInstrumentFile);
+	if (file.open(IO_ReadOnly)) {
+		char achHeader[4];
+		if (file.readBlock(achHeader, 4)) {
+			bResult = (achHeader[0] == 'R'
+					&& achHeader[1] == 'I'
+					&& achHeader[2] == 'F'
+					&& achHeader[3] == 'F');
+		}
+		file.close();
+	}
+
+	return bResult;
+}
+
+
 // Retrieve the instrument list of a instrument file (.gig).
 QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 	bool bInstrumentNames )
 {
-    QFileInfo fileinfo(sInstrumentFile);
-    QString sInstrumentName = fileinfo.fileName();
+    QString sInstrumentName = QFileInfo(sInstrumentFile).fileName();
     QStringList instlist;
 
-    if (fileinfo.exists()) {
+    if (isInstrumentFile(sInstrumentFile)) {
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
 	        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
@@ -517,7 +546,7 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
         for (int iInstrumentNr = 0; iInstrumentNr < QSAMPLER_INSTRUMENT_MAX; iInstrumentNr++)
             instlist.append(sInstrumentName + " [" + QString::number(iInstrumentNr) + "]");
     }
-    else instlist.append(sInstrumentName);
+    else instlist.append(noInstrumentName());
 
     return instlist;
 }
@@ -527,10 +556,10 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 	int iInstrumentNr, bool bInstrumentNames )
 {
-    QFileInfo fileinfo(sInstrumentFile);
-    QString sInstrumentName = fileinfo.fileName();
+    QString sInstrumentName;
 
-    if (fileinfo.exists()) {
+    if (isInstrumentFile(sInstrumentFile)) {
+		sInstrumentName = QFileInfo(sInstrumentFile).fileName();
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
 	        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
@@ -552,8 +581,21 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 #endif
         sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
     }
+    else sInstrumentName = noInstrumentName();
 
     return sInstrumentName;
+}
+
+
+// Common invalid name-helpers.
+QString qsamplerChannel::noEngineName (void)
+{
+	return QObject::tr("(No engine)");
+}
+
+QString qsamplerChannel::noInstrumentName (void)
+{
+	return QObject::tr("(No instrument)");
 }
 
 

@@ -3,7 +3,12 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-02-14  Work in progress...
+0.0.5   2005-02-17  Work in progress...
+
+* Drag-and-drop of either session files (LSCP scripts) or
+  instrument files (GIG) are now supported. Multiple files
+  drop is allowed, but it only makes sense for instrument
+  files, each one prompting to create a new sampler channel.
 
 * Actual instrument names are now optionally retrieved
   from the instrument file, even though libgig is available,

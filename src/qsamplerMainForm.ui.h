@@ -26,6 +26,7 @@
 #include <qprocess.h>
 #include <qmessagebox.h>
 #include <qdragobject.h>
+#include <qregexp.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qfile.h>
@@ -294,27 +295,61 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 }
 
 
+// Drag'n'drop file handler.
+bool qsamplerMainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList& files )
+{
+    bool bDecode = false;
+
+    if (QTextDrag::canDecode(pEvent)) {
+        QString sText;
+        bDecode = QTextDrag::decode(pEvent, sText);
+        if (bDecode) {
+            files = QStringList::split('\n', sText);
+            for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++)
+                *iter = (*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null);
+        }
+    }
+
+    return bDecode;
+}
+
+
 // Window drag-n-drop event handlers.
 void qsamplerMainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
-    bool bAccept = false;
+    QStringList files;
 
-    if (QTextDrag::canDecode(pDragEnterEvent)) {
-        QString sUrl;
-        if (QTextDrag::decode(pDragEnterEvent, sUrl) && m_pClient)
-            bAccept = QFileInfo(QUrl(sUrl).path()).exists();
-    }
-
-    pDragEnterEvent->accept(bAccept);
+    pDragEnterEvent->accept(decodeDragFiles(pDragEnterEvent, files));
 }
 
 
 void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 {
-    if (QTextDrag::canDecode(pDropEvent)) {
-        QString sUrl;
-        if (QTextDrag::decode(pDropEvent, sUrl) && closeSession(true))
-            loadSessionFile(QUrl(sUrl).path());
+    QStringList files;
+    if (decodeDragFiles(pDropEvent, files)) {
+        for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
+   			const QString& sPath = QUrl(*iter).path();
+   			if (qsamplerChannel::isInstrumentFile(sPath)) {
+				// Try to create a new channel from instrument file...
+			    qsamplerChannel *pChannel = new qsamplerChannel(this);
+			    if (pChannel == NULL)
+			        return;
+				// Start setting the instrument filename...
+				pChannel->setInstrument(sPath, 0);
+			    // Before we show it up, may be we'll
+			    // better ask for some initial values?
+			    if (!pChannel->channelSetup(this)) {
+			        delete pChannel;
+			        return;
+			    }
+			    // Make that an overall update.
+			    m_iDirtyCount++;
+			    m_iChangeCount++;
+			    stabilizeForm();
+    		}   // Otherwise, load an usual session file (LSCP script)...
+			else if (closeSession(true))
+				loadSessionFile(sPath);
+		}
     }
 }
 
@@ -538,6 +573,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
             if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
                 appendMessagesClient("lscp_client_query");
                 iErrors++;
+                break;
             }
         }
         // Try to make it snappy :)
@@ -549,7 +585,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 
     // Have we any errors?
     if (iErrors > 0)
-        appendMessagesError(tr("Some setttings could not be loaded\nfrom \"%1\" session file.\n\nSorry.").arg(sFilename));
+        appendMessagesError(tr("Session could not be loaded\nfrom \"%1\".\n\nSorry.").arg(sFilename));
 
     // Now we'll try to create the whole GUI session.
     int *piChannelIDs = ::lscp_list_channels(m_pClient);

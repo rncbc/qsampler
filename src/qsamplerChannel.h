@@ -72,6 +72,8 @@ public:
     QString& instrumentName();
     int      instrumentStatus();
     bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
+	// Special instrument file/name/number settler.
+    bool     setInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 
     // MIDI input driver (DEPRECATED).
     QString& midiDriver();
@@ -123,8 +125,15 @@ public:
     // Context menu event handler.
     void contextMenuEvent(QContextMenuEvent *pEvent);
 
+	// Common (invalid) name-helpers.
+    static QString noEngineName();
+    static QString noInstrumentName();
+
+	// Check whether a given file is an instrument file.
+	static bool isInstrumentFile (const QString& sInstrumentFile);
+
     // Retrieve the available instrument name(s) of an instrument file (.gig).
-    static QString     getInstrumentName (const QString& sInstrumentFile,
+    static QString getInstrumentName (const QString& sInstrumentFile,
 							int iInstrumentNr, bool bInstrumentNames);
     static QStringList getInstrumentList (const QString& sInstrumentFile,
 							bool bInstrumentNames);
