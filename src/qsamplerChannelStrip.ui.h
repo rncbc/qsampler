@@ -86,7 +86,7 @@ void qsamplerChannelStrip::setChannelID ( int iChannelID )
 {
     m_iChannelID = iChannelID;
 
-    updateChannel();
+    updateChannelInfo();
 }
 
 
@@ -109,7 +109,7 @@ void qsamplerChannelStrip::channelSetup (void)
     if (pChannelForm) {
         pChannelForm->setup(this);
         if (pChannelForm->exec()) {
-            updateChannel();
+            updateChannelInfo();
             emit channelChanged(this);
         }
         delete pChannelForm;
@@ -177,7 +177,7 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
 
 
 // Update whole channel info state.
-void qsamplerChannelStrip::updateChannel (void)
+void qsamplerChannelStrip::updateChannelInfo (void)
 {
     // Update strip caption.
     QString sText = tr("Channel %1").arg(m_iChannelID);
@@ -195,12 +195,41 @@ void qsamplerChannelStrip::updateChannel (void)
         appendMessagesError(tr("Could not get channel information.\n\nSorry."));
         return;
     }
+
     // Set some proper values.
     EngineNameTextLabel->setText(pChannelInfo->engine_name);
     InstrumentNameTextLabel->setText(QFileInfo(pChannelInfo->instrument_file).fileName()
          + " [" + QString::number(pChannelInfo->instrument_nr) + "]");
     // And update the both volume elements.
     setChannelVolume(pChannelInfo->volume);
+}
+
+
+// Update whole channel usage state.
+void qsamplerChannelStrip::updateChannelUsage (void)
+{
+    if (m_pMainForm->client() == NULL)
+        return;
+
+    // Get current channel voice count.
+    int iVoiceCount = ::lscp_get_channel_voice_count(m_pMainForm->client(), m_iChannelID);
+    VoiceCountTextLabel->setText(QString::number(iVoiceCount));
+
+    // Get current stream count.
+    int iStreamCount = ::lscp_get_channel_stream_count(m_pMainForm->client(), m_iChannelID);
+    // Get current channel buffer fill usage.
+    // FIXME: benno has suggested some other rationales,
+    // but for the time being we'll show the average percentage usage.
+    int iStreamUsage = 0;
+    if (iStreamCount > 0) {
+        lscp_buffer_fill_t *pBufferFill = ::lscp_get_channel_buffer_fill(m_pMainForm->client(), LSCP_USAGE_PERCENTAGE, m_iChannelID);
+        if (pBufferFill) {
+            for (int iStream = 0; iStream < iStreamCount; iStream++)
+                iStreamUsage += pBufferFill[iStream].stream_usage;
+            iStreamUsage /= iStreamCount;
+        }
+    }
+    StreamUsageProgressBar->setProgress(iStreamUsage);
 }
 
 

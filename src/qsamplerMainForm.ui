@@ -658,6 +658,7 @@
     <variable access="private">QProcess *m_pServer;</variable>
     <variable access="private">int m_iStartDelay;</variable>
     <variable access="private">int m_iTimerDelay;</variable>
+    <variable access="private">int m_iTimerSlot;</variable>
     <variable access="private">QLabel *m_status[5];</variable>
 </variables>
 <slots>

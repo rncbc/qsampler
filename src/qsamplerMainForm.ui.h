@@ -50,6 +50,10 @@
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    500
 
+// Channel usae update period (in msecs).
+// FIXME: this should be an user option.
+#define QSAMPLER_TIMER_PERIOD   5000
+
 // Status bar item indexes
 #define QSAMPLER_STATUS_CLIENT  0       // Client connection state.
 #define QSAMPLER_STATUS_SERVER  1       // Currenr server address (host:port)
@@ -82,6 +86,8 @@ void qsamplerMainForm::init (void)
 
     m_iStartDelay = 0;
     m_iTimerDelay = 0;
+
+    m_iTimerSlot = 0;
 
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);
@@ -674,7 +680,7 @@ void qsamplerMainForm::editResetChannel (void)
     }
 
     // Refresh channel strip info.
-    pChannel->updateChannel();
+    pChannel->updateChannelInfo();
 }
 
 
@@ -1193,6 +1199,20 @@ void qsamplerMainForm::timerSlot (void)
             if (!startClient()) {
                 m_iStartDelay += m_iTimerDelay;
                 m_iTimerDelay  = 0;
+            }
+        }
+    }
+
+    // Refresh each channel usage, on each period...
+    if (m_pClient) {
+        m_iTimerSlot += QSAMPLER_TIMER_MSECS;
+        if (m_iTimerSlot >= QSAMPLER_TIMER_PERIOD)  {
+            m_iTimerSlot = 0;
+            appendMessages("qsamplerMainForm::timerSlot: updateChannelUsage(*)");
+            QWidgetList wlist = m_pWorkspace->windowList();
+            for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+                qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+                pChannel->updateChannelUsage();
             }
         }
     }

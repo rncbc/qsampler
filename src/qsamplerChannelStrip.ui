@@ -371,7 +371,8 @@
     <function specifier="non virtual" returnType="QFont">displayFont( void )</function>
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
     <function specifier="non virtual">setChannelVolume( float fVolume )</function>
-    <function specifier="non virtual">updateChannel( void )</function>
+    <function specifier="non virtual">updateChannelInfo( void )</function>
+    <function specifier="non virtual">updateChannelUsage( void )</function>
     <function specifier="non virtual">appendMessages( const QString &amp; s )</function>
     <function specifier="non virtual">appendMessagesColor( const QString &amp; s, const QString &amp; c )</function>
     <function specifier="non virtual">appendMessagesText( const QString &amp; s )</function>
