@@ -50,11 +50,18 @@ public:
 
     // LSCP client descriptor accessor.
     lscp_client_t * client();
-    
+
+    // Add/remove sampler channel methods.
+    bool     addChannel();
+    bool     removeChannel();
+
     // Sampler channel ID accessors.
     int      channelID();
     void     setChannelID(int iChannelID);
     
+    // Readable channel name.
+    QString  channelName();
+
     // Engine name property.
     QString& engineName();
     bool     loadEngine(const QString& sEngineName);
@@ -94,10 +101,10 @@ public:
     bool     setVolume(float fVolume);
 
     // Channel info structure map executive.
-    void updateChannelInfo();
+    bool updateChannelInfo();
 
     // Reset channel method.
-    void resetChannel();
+    bool resetChannel();
 
     // Message logging methods (brainlessly mapped to main form's).
     void appendMessages       (const QString & s);
