@@ -959,6 +959,7 @@ void qsamplerMainForm::viewOptions (void)
         int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
         int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
         bool    bOldCompletePath    = m_pOptions->bCompletePath;
+        bool    bOldInstrumentNames = m_pOptions->bInstrumentNames;
         int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
         // Load the current setup settings.
         pOptionsForm->setup(m_pOptions);
@@ -977,6 +978,9 @@ void qsamplerMainForm::viewOptions (void)
                 (!bOldCompletePath &&  m_pOptions->bCompletePath) ||
                 (iOldMaxRecentFiles != m_pOptions->iMaxRecentFiles))
                 updateRecentFilesMenu();
+            if (( bOldInstrumentNames && !m_pOptions->bInstrumentNames) ||
+                (!bOldInstrumentNames &&  m_pOptions->bInstrumentNames))
+                updateInstrumentNames();
             if (( bOldDisplayEffect && !m_pOptions->bDisplayEffect) ||
                 (!bOldDisplayEffect &&  m_pOptions->bDisplayEffect))
                 updateDisplayEffect();
@@ -1217,6 +1221,24 @@ void qsamplerMainForm::updateRecentFilesMenu (void)
                 this, SLOT(fileOpenRecent(int)), 0, i);
         }
     }
+}
+
+
+// Force update of the channels instrument names mode.
+void qsamplerMainForm::updateInstrumentNames (void)
+{
+    // Full channel list update...
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (wlist.isEmpty())
+        return;
+
+    m_pWorkspace->setUpdatesEnabled(false);
+    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannelStrip)
+            pChannelStrip->updateInstrumentName(true);
+    }
+    m_pWorkspace->setUpdatesEnabled(true);
 }
 
 

@@ -2,7 +2,7 @@
 <class>qsamplerChannelStrip</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -433,6 +433,7 @@
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
     <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
     <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
+    <function specifier="non virtual" returnType="bool">updateInstrumentName( bool bForce )</function>
     <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelVolume( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelUsage( void )</function>
