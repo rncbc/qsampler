@@ -27,6 +27,7 @@
 #include <qtooltip.h>
 #include <qpopupmenu.h>
 #include <qobjectlist.h>
+#include <qurl.h>
 
 #include <math.h>
 
@@ -67,13 +68,12 @@ bool qsamplerChannelStrip::decodeDragFile ( const QMimeSource *pEvent, QString& 
 {
 	if (m_pChannel == NULL)
 		return false;
-
 	if (QTextDrag::canDecode(pEvent)) {
 		QString sText;
 		if (QTextDrag::decode(pEvent, sText)) {
 			QStringList files = QStringList::split('\n', sText);
 			for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
-				*iter = (*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null);
+				*iter = QUrl((*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null)).path();
 				if (qsamplerChannel::isInstrumentFile(*iter)) {
 					sInstrumentFile = *iter;
 					return true;

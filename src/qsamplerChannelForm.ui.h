@@ -158,6 +158,9 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 	if (sEngineName != qsamplerChannel::noEngineName() &&
 		sInstrumentFile != qsamplerChannel::noInstrumentName())
 		m_iDirtyCount++;
+	// FIXME: These are better leave diabled...
+    MidiPortTextLabel->setEnabled(false);
+    MidiPortSpinBox->setEnabled(false);
     // Done.
     m_iDirtySetup--;
     stabilizeForm();

@@ -3,7 +3,14 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-02-23  Work in progress...
+0.0.5   2005-02-24  Work in progress...
+
+* Channels are now properly renumbered when saving to a
+  session LSCP script, assuming that it should be always
+  loaded from scratch (i.e. zero channels).
+
+* Disabled MIDI port setting on channel dialog, and on
+  session file save, as its use is still troublesome.
 
 * Added new menu and toolbar option: Reset All Channels.
 
