@@ -115,6 +115,12 @@ if test "x$ac_lscp_lib" = "xno"; then
    AC_MSG_ERROR([LSCP library not found.])
 fi
 
+dnl Check for round math function.
+AC_CHECK_LIB(m, round, [ac_round="yes"], [ac_round="no"])
+if test "x$ac_round" = "xyes"; then
+   AC_DEFINE(CONFIG_ROUND, 1, [Define if round is available.])
+fi
+
 dnl Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT

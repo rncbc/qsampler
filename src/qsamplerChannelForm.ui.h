@@ -80,6 +80,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         for (int iEngine = 0; ppszEngines[iEngine]; iEngine++)
             EngineNameComboBox->insertItem(ppszEngines[iEngine]);
     }
+    else m_pChannel->appendMessagesClient("lscp_get_available_engines");
 
     // Populate Audio output type list.
     AudioTypeComboBox->clear();
@@ -88,6 +89,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         for (int iAudioType = 0; ppszAudioTypes[iAudioType]; iAudioType++)
             AudioTypeComboBox->insertItem(ppszAudioTypes[iAudioType]);
     }
+    else m_pChannel->appendMessagesClient("lscp_get_available_audio_types");
 
     // Populate MIDI input type list.
     MidiTypeComboBox->clear();
@@ -96,7 +98,8 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         for (int iMidiType = 0; ppszMidiTypes[iMidiType]; iMidiType++)
             MidiTypeComboBox->insertItem(ppszMidiTypes[iMidiType]);
     }
-    
+    else m_pChannel->appendMessagesClient("lscp_get_available_midi_types");
+
     // Read channel information,
     // and populate the channel form fields.
     lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pChannel->client(), m_pChannel->channelID());
@@ -108,6 +111,9 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         MidiPortSpinBox->setValue(pChannelInfo->midi_port);
         MidiChannelSpinBox->setValue(pChannelInfo->midi_channel);
         AudioTypeComboBox->setCurrentText(pChannelInfo->audio_type);
+    } else {
+        m_pChannel->appendMessagesClient("lscp_get_channel_info");
+        m_pChannel->appendMessagesError(tr("Could not get channel information. Sorry."));
     }
 
     // Done.
@@ -129,31 +135,53 @@ void qsamplerChannelForm::accept (void)
 
     // We'll go for it!
     if (m_iDirtyCount > 0) {
+        int iErrors = 0;
         // Engine name...
-        ::lscp_load_engine(m_pChannel->client(),
+        if (::lscp_load_engine(m_pChannel->client(),
             EngineNameComboBox->currentText().latin1(),
-            m_pChannel->channelID());
+            m_pChannel->channelID()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_load_engine");
+            iErrors++;
+        }
         // Instrument file and index...
-        ::lscp_load_instrument(m_pChannel->client(),
+        if (::lscp_load_instrument(m_pChannel->client(),
             InstrumentFileComboBox->currentText().latin1(),
             InstrumentNrSpinBox->value(),
-            m_pChannel->channelID());
+            m_pChannel->channelID()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_load_instrument");
+            iErrors++;
+        }
         // MIDI input type...
-        ::lscp_set_channel_midi_type(m_pChannel->client(),
+        if (::lscp_set_channel_midi_type(m_pChannel->client(),
             m_pChannel->channelID(),
-            MidiTypeComboBox->currentText().latin1());
+            MidiTypeComboBox->currentText().latin1()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_set_channel_midi_type");
+            iErrors++;
+        }
         // MIDI input port number...
-        ::lscp_set_channel_midi_port(m_pChannel->client(),
+        if (::lscp_set_channel_midi_port(m_pChannel->client(),
             m_pChannel->channelID(),
-            MidiPortSpinBox->value());
+            MidiPortSpinBox->value()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_set_channel_midi_port");
+            iErrors++;
+        }
         // MIDI input channel (0=ALL)...
-        ::lscp_set_channel_midi_channel(m_pChannel->client(),
+        if (::lscp_set_channel_midi_channel(m_pChannel->client(),
             m_pChannel->channelID(),
-            MidiChannelSpinBox->value());
+            MidiChannelSpinBox->value()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_set_channel_midi_channel");
+            iErrors++;
+        }
         // Audio output type...
-        ::lscp_set_channel_audio_type(m_pChannel->client(),
+        if (::lscp_set_channel_audio_type(m_pChannel->client(),
             m_pChannel->channelID(),
-            AudioTypeComboBox->currentText().latin1());
+            AudioTypeComboBox->currentText().latin1()) != LSCP_OK) {
+            m_pChannel->appendMessagesClient("lscp_set_channel_audio_port");
+            iErrors++;
+        }
+        // Show error messages?
+        if (iErrors > 0)
+            m_pChannel->appendMessagesError(tr("Some channel settings could not be set. Sorry."));
     }
     
     // Save combobox history...

@@ -25,6 +25,8 @@
 #include <qfileinfo.h>
 #include <qtooltip.h>
 
+#include <math.h>
+
 #include "qsamplerMainForm.h"
 #include "qsamplerChannelForm.h"
 
@@ -88,6 +90,18 @@ void qsamplerChannelStrip::setChannelID ( int iChannelID )
 }
 
 
+// Messages view font accessors.
+QFont qsamplerChannelStrip::displayFont (void)
+{
+    return EngineNameTextLabel->font();
+}
+
+void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
+{
+    EngineNameTextLabel->setFont(font);
+    InstrumentNameTextLabel->setFont(font);
+}
+
 // Channel setup dialog.
 void qsamplerChannelStrip::channelSetup (void)
 {
@@ -103,24 +117,25 @@ void qsamplerChannelStrip::channelSetup (void)
 }
 
 
-// Messages view font accessors.
-QFont qsamplerChannelStrip::displayFont (void)
-{
-    return EngineNameTextLabel->font();
-}
-
-void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
-{
-    EngineNameTextLabel->setFont(font);
-    InstrumentNameTextLabel->setFont(font);
-}
-
 
 // Do the dirty volume change.
 void qsamplerChannelStrip::setChannelVolume ( float fVolume )
 {
-    // Convert and clip.
-    int iVolume = (int) (100.0 * fVolume);
+    // Convert...
+#ifdef CONFIG_ROUND
+    int iVolume = (int) ::round(100.0 * fVolume);
+#else
+    double fIPart = 0.0;
+    double fFPart = ::modf(100.0 * fVolume, &fIPart);
+    int iVolume = (int) fIPart;
+    if (fFPart >= +0.5)
+        iVolume++;
+    else
+    if (fFPart <= -0.5)
+        iVolume--;
+#endif
+
+    // And clip...
     if (iVolume > 100)
         iVolume = 100;
     else if (iVolume < 0)
@@ -151,7 +166,10 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
         fVolume = 0.0;
 
     // Do it for real.
-    ::lscp_set_channel_volume(m_pMainForm->client(), m_iChannelID, fVolume);
+    if (::lscp_set_channel_volume(m_pMainForm->client(), m_iChannelID, fVolume) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_volume");
+        appendMessagesError(tr("Could not set channel volume. Sorry."));
+    }
     
     // And update the GUI elements.
     setChannelVolume(fVolume);
@@ -173,8 +191,8 @@ void qsamplerChannelStrip::updateChannel (void)
     // Read channel information.
     lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pMainForm->client(), m_iChannelID);
     if (pChannelInfo == NULL) {
-        m_pMainForm->appendMessagesClient("lscp_get_channel_info");
-        m_pMainForm->appendMessagesError(tr("Could not get channel information. Sorry."));
+        appendMessagesClient("lscp_get_channel_info");
+        appendMessagesError(tr("Could not get channel information. Sorry."));
         return;
     }
     // Set some proper values.
@@ -184,6 +202,34 @@ void qsamplerChannelStrip::updateChannel (void)
     // And update the both volume elements.
     setChannelVolume(pChannelInfo->volume);
 }
+
+
+// Redirected messages output methods.
+void qsamplerChannelStrip::appendMessages( const QString& s )
+{
+    m_pMainForm->appendMessages(s);
+}
+
+void qsamplerChannelStrip::appendMessagesColor( const QString& s, const QString& c )
+{
+    m_pMainForm->appendMessagesColor(s, c);
+}
+
+void qsamplerChannelStrip::appendMessagesText( const QString& s )
+{
+    m_pMainForm->appendMessagesText(s);
+}
+
+void qsamplerChannelStrip::appendMessagesError( const QString& s )
+{
+    m_pMainForm->appendMessagesError(s);
+}
+
+void qsamplerChannelStrip::appendMessagesClient( const QString& s )
+{
+    m_pMainForm->appendMessagesClient(s);
+}
+
 
 // end of qsamplerChannelStrip.ui.h
 

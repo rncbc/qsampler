@@ -964,6 +964,18 @@ void qsamplerMainForm::appendMessagesError( const QString& s )
 }
 
 
+// This is a special message format, just for client results.
+void qsamplerMainForm::appendMessagesClient( const QString& s )
+{
+    if (m_pClient == NULL)
+        return;
+
+    appendMessagesColor(s + QString(": %1 (errno=%2)")
+        .arg(::lscp_client_get_result(m_pClient))
+        .arg(::lscp_client_get_errno(m_pClient)), "#996666");
+}
+
+
 // Force update of the messages font.
 void qsamplerMainForm::updateMessagesFont (void)
 {
@@ -1001,18 +1013,6 @@ void qsamplerMainForm::updateMessagesCapture (void)
 
     if (m_pMessages)
         m_pMessages->setCaptureEnabled(m_pOptions->bStdoutCapture);
-}
-
-
-// This is a special message format, just for client results.
-void qsamplerMainForm::appendMessagesClient( const QString& s )
-{
-    if (m_pClient == NULL)
-        return;
-        
-    appendMessagesColor(s + QString(": %1 (errno=%2)")
-        .arg(::lscp_client_get_result(m_pClient))
-        .arg(::lscp_client_get_errno(m_pClient)), "#996666");
 }
 
 
@@ -1286,7 +1286,7 @@ bool qsamplerMainForm::startClient (void)
         // Is this the first try?
         // maybe we need to start a local server...
         if ((m_pServer && m_pServer->isRunning()) || !m_pOptions->bServerStart)
-            appendMessagesError(tr("Could not connect to server as client."));
+            appendMessagesError(tr("Could not connect to server as client. Sorry."));
         else
             startServer();
         // This is always a failure.
