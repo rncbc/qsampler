@@ -29,7 +29,7 @@
             <x>0</x>
             <y>0</y>
             <width>694</width>
-            <height>49</height>
+            <height>46</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -126,30 +126,6 @@
                 <property name="margin">
                     <number>2</number>
                 </property>
-                <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>InstrumentNameTextLabel</cstring>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>0</red>
-                            <green>255</green>
-                            <blue>0</blue>
-                        </color>
-                    </property>
-                    <property name="paletteBackgroundPixmap">
-                        <pixmap>displaybg1.png</pixmap>
-                    </property>
-                    <property name="backgroundOrigin">
-                        <enum>ParentOrigin</enum>
-                    </property>
-                    <property name="text">
-                        <string>--</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Instrument file [index]</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>EngineNameTextLabel</cstring>
@@ -185,6 +161,30 @@
                         <string>Engine name</string>
                     </property>
                 </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>InstrumentNameTextLabel</cstring>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="paletteBackgroundPixmap">
+                        <pixmap>displaybg1.png</pixmap>
+                    </property>
+                    <property name="backgroundOrigin">
+                        <enum>ParentOrigin</enum>
+                    </property>
+                    <property name="text">
+                        <string>--</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Instrument file [index]</string>
+                    </property>
+                </widget>
                 <widget class="QLabel" row="0" column="1">
                     <property name="name">
                         <cstring>MidiPortChannelTextLabel</cstring>
@@ -212,10 +212,43 @@
                         <string>--/--</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignTop</set>
+                        <set>AlignTop|AlignHCenter</set>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>MIDI Port/Channel</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="1">
+                    <property name="name">
+                        <cstring>InstrumentStatusTextLabel</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>20</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="paletteBackgroundPixmap">
+                        <pixmap>displaybg1.png</pixmap>
+                    </property>
+                    <property name="backgroundOrigin">
+                        <enum>ParentOrigin</enum>
+                    </property>
+                    <property name="text">
+                        <string>--</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>IInstrument load status</string>
                     </property>
                 </widget>
             </grid>
@@ -378,6 +411,7 @@
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">lscp/client.h</include>
+    <include location="global" impldecl="in declaration">lscp/device.h</include>
     <include location="local" impldecl="in implementation">qsamplerChannelStrip.ui.h</include>
 </includes>
 <forwards>
@@ -390,6 +424,7 @@
     <variable access="private">QString m_sEngineName;</variable>
     <variable access="private">QString m_sInstrumentFile;</variable>
     <variable access="private">int m_iInstrumentNr;</variable>
+    <variable access="private">int m_iInstrumentStatus;</variable>
     <variable access="private">QString m_sMidiDriver;</variable>
     <variable access="private">int m_iMidiDevice;</variable>
     <variable access="private">int m_iMidiPort;</variable>
@@ -418,6 +453,7 @@
     <function specifier="non virtual" returnType="bool">loadEngine( const QString&amp; sEngineName )</function>
     <function specifier="non virtual" returnType="QString&amp;">instrumentFile( void )</function>
     <function specifier="non virtual" returnType="int">instrumentNr( void )</function>
+    <function specifier="non virtual" returnType="int">instrumentStatus( void )</function>
     <function specifier="non virtual" returnType="bool">loadInstrument( const QString&amp; sInstrumentFile, int iInstrumentNr )</function>
     <function specifier="non virtual" returnType="QString&amp;">midiDriver( void )</function>
     <function specifier="non virtual" returnType="bool">setMidiDriver( const QString&amp; sMidiDriver )</function>
