@@ -67,9 +67,9 @@ public:
     bool     loadEngine(const QString& sEngineName);
     
     // Instrument file and index.
-    QString& instrumentName();
     QString& instrumentFile();
     int      instrumentNr();
+    QString& instrumentName();
     int      instrumentStatus();
     bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 
