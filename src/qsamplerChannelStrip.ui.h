@@ -37,7 +37,6 @@
 
 // Channel status/usage usage limit control.
 #define QSAMPLER_ERROR_LIMIT	3
-#define QSAMPLER_ERROR_CYCLE	33 
 
 
 // Kind of constructor.
@@ -191,15 +190,30 @@ void qsamplerChannelStrip::setMaxVolume ( int iMaxVolume )
 // Channel setup dialog slot.
 bool qsamplerChannelStrip::channelSetup (void)
 {
+	if (m_pChannel == NULL)
+		return false;
+		
 	// Invoke the channel setup dialog.
 	bool bResult = m_pChannel->channelSetup(this);
-
-	if (bResult) {
-		// Reset the error/cycle.
-		m_iErrorCount = 0;
-		// Notify that thie channel has changed.
+	// Notify that thie channel has changed.
+	if (bResult)
 		emit channelChanged(this);
-	}
+
+	return bResult;
+}
+
+
+// Channel reset slot.
+bool qsamplerChannelStrip::channelReset (void)
+{
+	if (m_pChannel == NULL)
+		return false;
+
+	// Invoke the channel reset method.
+	bool bResult = m_pChannel->channelReset();
+	// Notify that thie channel has changed.
+	if (bResult)
+		emit channelChanged(this);
 
 	return bResult;
 }
@@ -222,54 +236,6 @@ bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
 		InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
 
 	return true;    
-}
-
-
-// Update whole channel info state.
-bool qsamplerChannelStrip::updateChannelInfo (void)
-{
-    if (m_pChannel == NULL)
-        return false;
-        
-    // Update strip caption.
-    QString sText = m_pChannel->channelName();
-    setCaption(sText);
-    ChannelSetupPushButton->setText(sText);
-
-    // Check if we're up and connected.
-    if (m_pChannel->client() == NULL)
-        return false;
-
-    // Read actual channel information.
-    m_pChannel->updateChannelInfo();
-
-    // Engine name...
-    if (m_pChannel->engineName().isEmpty())
-        EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
-    else
-        EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
-
-	// Instrument name...
-	updateInstrumentName(false);
-
-    // Instrument status...
-    int iInstrumentStatus = m_pChannel->instrumentStatus();
-    if (iInstrumentStatus < 0) {
-        InstrumentStatusTextLabel->setPaletteForegroundColor(Qt::red);
-        InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
-    } else {
-        InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
-        InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + "%");
-    }
-
-    // MIDI Port/Channel...
-    if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
-        MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_pChannel->midiPort()));
-    else
-        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel() + 1));
-
-    // And update the both GUI volume elements.
-    return updateChannelVolume();
 }
 
 
@@ -302,8 +268,64 @@ bool qsamplerChannelStrip::updateChannelVolume (void)
     VolumeSlider->setValue(iVolume);
     VolumeSpinBox->setValue(iVolume);
     m_iDirtyChange--;
-    
+
     return true;
+}
+
+
+// Update whole channel info state.
+bool qsamplerChannelStrip::updateChannelInfo (void)
+{
+    if (m_pChannel == NULL)
+        return false;
+        
+	// Check for error limit/recycle...
+	if (m_iErrorCount > QSAMPLER_ERROR_LIMIT)
+		return true;
+
+    // Update strip caption.
+    QString sText = m_pChannel->channelName();
+    setCaption(sText);
+    ChannelSetupPushButton->setText(sText);
+
+    // Check if we're up and connected.
+    if (m_pChannel->client() == NULL)
+        return false;
+
+    // Read actual channel information.
+    m_pChannel->updateChannelInfo();
+
+    // Engine name...
+    if (m_pChannel->engineName().isEmpty())
+        EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
+    else
+        EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
+
+	// Instrument name...
+	updateInstrumentName(false);
+
+    // MIDI Port/Channel...
+    if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
+        MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_pChannel->midiPort()));
+    else
+        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel() + 1));
+
+    // Instrument status...
+    int iInstrumentStatus = m_pChannel->instrumentStatus();
+    if (iInstrumentStatus < 0) {
+        InstrumentStatusTextLabel->setPaletteForegroundColor(Qt::red);
+        InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
+        m_iErrorCount++;
+        return false;
+    }
+    // All seems normal...
+    InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
+    InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
+    m_iErrorCount = 0;
+
+    // And update the both GUI volume elements;
+    // return success if, and only if, intrument is fully loaded...
+    return updateChannelVolume() && (iInstrumentStatus == 100);
 }
 
 
@@ -315,33 +337,10 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
     if (m_pChannel->client() == NULL)
         return false;
 
-	// Check for error limit/recycle...
-	if (m_iErrorCount > QSAMPLER_ERROR_LIMIT)
-		m_iErrorCount -= QSAMPLER_ERROR_CYCLE;
-	if (m_iErrorCount < 0) {
-		m_iErrorCount++;
-		return false;
-	}
-
-	// Update whole channel status info,
-	// if instrument load is still pending...
-	if (m_pChannel->instrumentStatus() < 100) {
-		// grab the whole sampler channel data...
-		updateChannelInfo();
-		// Check (updated) status again...
-		int iInstrumentStatus = m_pChannel->instrumentStatus();
-		if (iInstrumentStatus < 100) {
-			if (iInstrumentStatus < 0)
-				m_iErrorCount++;
-			return false;
-		}
-		// Once we get a complete instrument load,
-		// we'll try an implied channel reset...
-		m_pChannel->resetChannel();
-		// Reset error count.
-		m_iErrorCount = 0;
-	}
-    
+	// This only makes sense on fully loaded channels...
+	if (m_pChannel->instrumentStatus() < 100)
+	    return false;
+	    
     // Get current channel voice count.
     int iVoiceCount  = ::lscp_get_channel_voice_count(m_pChannel->client(), m_pChannel->channelID());
     // Get current stream count.

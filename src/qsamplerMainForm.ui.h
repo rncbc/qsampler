@@ -108,9 +108,8 @@ void qsamplerMainForm::init (void)
     m_pMessages = NULL;
 
     // We'll start clean.
-    m_iUntitled    = 0;
-    m_iDirtyCount  = 0;
-    m_iChangeCount = 0;
+    m_iUntitled   = 0;
+    m_iDirtyCount = 0;
 
     m_pServer = NULL;
     m_pClient = NULL;
@@ -351,7 +350,6 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 			}
 		    // Make that an overall update.
 		    m_iDirtyCount++;
-		    m_iChangeCount++;
 		    stabilizeForm();
 		}   // Otherwise, load an usual session file (LSCP script)...
 		else if (closeSession(true))
@@ -612,7 +610,6 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     appendMessages(tr("Open session: \"%1\".").arg(sessionName(m_sFilename)));
     
     // Make that an overall update.
-    m_iChangeCount++;
     stabilizeForm();
     return true;
 }
@@ -837,7 +834,6 @@ void qsamplerMainForm::editAddChannel (void)
 
     // Make that an overall update.
     m_iDirtyCount++;
-    m_iChangeCount++;
     stabilizeForm();
 }
 
@@ -909,15 +905,8 @@ void qsamplerMainForm::editResetChannel (void)
     if (pChannelStrip == NULL)
         return;
 
-    qsamplerChannel *pChannel = pChannelStrip->channel();
-    if (pChannel == NULL)
-        return;
-
-    // Reset the existing sampler channel.
-    pChannel->resetChannel();
-
-    // And force a deferred update.
-    m_iChangeCount++;
+    // Just invoque the channel strip procedure.
+    pChannelStrip->channelReset();
 }
 
 
@@ -1212,10 +1201,12 @@ void qsamplerMainForm::stabilizeForm (void)
 
 
 // Channel change receiver slot.
-void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip * )
+void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip )
 {
-    // Flag that we're update those channel strips.
-    m_iChangeCount++;
+	// Add this strip to the changed list...
+	if (m_changedStrips.containsRef(pChannelStrip) == 0)
+		m_changedStrips.append(pChannelStrip);
+
     // Just mark the dirty form.
     m_iDirtyCount++;
     // and update the form status...
@@ -1525,7 +1516,10 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
         int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
         pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
     }
-    
+
+	// This is pretty new, so we'll watch for it closely.
+	channelStripChanged(pChannelStrip);
+
     // Return our successful reference...
     return pChannelStrip;
 }
@@ -1638,19 +1632,24 @@ void qsamplerMainForm::timerSlot (void)
     }
     
 	// Refresh each channel usage, on each period...
-    if (m_pClient && (m_iChangeCount > 0 || m_pOptions->bAutoRefresh)) {
+    if (m_pClient && (m_changedStrips.count() > 0 || m_pOptions->bAutoRefresh)) {
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
         if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime && m_pWorkspace->isUpdatesEnabled())  {
             m_iTimerSlot = 0;
-            m_iChangeCount = 0;
+            // Update the channel information for each pending strip...
+            for (qsamplerChannelStrip *pChannelStrip = m_changedStrips.first();
+                    pChannelStrip;
+						pChannelStrip = m_changedStrips.next()) {
+				// If successfull, remove from pending list...
+				if (pChannelStrip->updateChannelInfo())
+                    m_changedStrips.remove(pChannelStrip);
+			}
+            // Update the channel stream usage for each strip...
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
                 qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
-                if (pChannelStrip && pChannelStrip->isVisible()) {
-                    // If we can't make it clean, try next time.
-                    if (!pChannelStrip->updateChannelUsage())
-                        m_iChangeCount++;
-                }
+                if (pChannelStrip && pChannelStrip->isVisible())
+                    pChannelStrip->updateChannelUsage();
             }
         }
     }

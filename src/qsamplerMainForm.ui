@@ -719,7 +719,6 @@
     <variable access="private">QString m_sFilename;</variable>
     <variable access="private">int m_iUntitled;</variable>
     <variable access="private">int m_iDirtyCount;</variable>
-    <variable access="private">int m_iChangeCount;</variable>
     <variable access="private">lscp_client_t *m_pClient;</variable>
     <variable access="private">QProcess *m_pServer;</variable>
     <variable access="private">int m_iStartDelay;</variable>
@@ -727,6 +726,7 @@
     <variable access="private">int m_iTimerSlot;</variable>
     <variable access="private">QLabel *m_status[5];</variable>
     <variable access="private">QPopupMenu *m_pRecentFilesMenu;</variable>
+    <variable access="private">QPtrList&lt;qsamplerChannelStrip&gt; m_changedStrips;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">fileNew( void )</slot>
@@ -751,7 +751,7 @@
     <slot specifier="non virtual">helpAboutQt( void )</slot>
     <slot specifier="non virtual">helpAbout( void )</slot>
     <slot specifier="non virtual">stabilizeForm( void )</slot>
-    <slot specifier="non virtual">channelStripChanged( qsamplerChannelStrip * )</slot>
+    <slot specifier="non virtual">channelStripChanged( qsamplerChannelStrip *pChannelStrip )</slot>
     <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
     <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
     <slot specifier="non virtual">timerSlot( void )</slot>

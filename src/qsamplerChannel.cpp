@@ -159,7 +159,9 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
-
+	if (m_iInstrumentStatus == 100 && m_sEngineName == sEngineName)
+	    return true;
+	    
     if (::lscp_load_engine(client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
         appendMessagesClient("lscp_load_engine");
         return false;
@@ -201,6 +203,8 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
         return false;
 	if (!isInstrumentFile(sInstrumentFile))
 	    return false;
+	if (m_iInstrumentStatus == 100 && m_sInstrumentFile == sInstrumentFile && m_iInstrumentNr == iInstrumentNr)
+	    return true;
 
     if (::lscp_load_instrument_non_modal(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
         appendMessagesClient("lscp_load_instrument");
@@ -237,6 +241,8 @@ bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_sMidiDriver == sMidiDriver)
+	    return true;
 
     if (::lscp_set_channel_midi_type(client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_midi_type");
@@ -258,6 +264,8 @@ bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_iMidiDevice == iMidiDevice)
+	    return true;
 
     if (::lscp_set_channel_midi_device(client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_midi_device");
@@ -279,6 +287,8 @@ bool qsamplerChannel::setMidiPort ( int iMidiPort )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_iMidiPort == iMidiPort)
+	    return true;
 
     if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_midi_port");
@@ -300,6 +310,8 @@ bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_iMidiChannel == iMidiChannel)
+	    return true;
 
     if (::lscp_set_channel_midi_channel(client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_midi_channel");
@@ -321,6 +333,8 @@ bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_iAudioDevice == iAudioDevice)
+	    return true;
 
     if (::lscp_set_channel_audio_device(client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_audio_device");
@@ -342,6 +356,8 @@ bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_sAudioDriver == sAudioDriver)
+	    return true;
 
     if (::lscp_set_channel_audio_type(client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_audio_type");
@@ -363,6 +379,8 @@ bool qsamplerChannel::setVolume ( float fVolume )
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;
+	if (m_iInstrumentStatus == 100 && m_fVolume == fVolume)
+	    return true;
 
     if (::lscp_set_channel_volume(client(), m_iChannelID, fVolume) != LSCP_OK) {
         appendMessagesClient("lscp_set_channel_volume");
@@ -435,7 +453,7 @@ bool qsamplerChannel::updateChannelInfo (void)
 
 
 // Reset channel method.
-bool qsamplerChannel::resetChannel (void)
+bool qsamplerChannel::channelReset (void)
 {
     if (client() == NULL || m_iChannelID < 0)
         return false;

@@ -57,7 +57,7 @@ qsamplerOptions::qsamplerOptions (void)
     sDisplayFont     = m_settings.readEntry("/DisplayFont", QString::null);
     bDisplayEffect   = m_settings.readBoolEntry("/DisplayEffect", true);
     bAutoRefresh     = m_settings.readBoolEntry("/AutoRefresh", true);
-    iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 2000);
+    iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 1000);
     iMaxVolume       = m_settings.readNumEntry("/MaxVolume", 100);
     sMessagesFont    = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit   = m_settings.readBoolEntry("/MessagesLimit", true);
