@@ -3,7 +3,12 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.2   2004-06-15  Work in progress...
+0.0.3   2004-06-24  Work in progress...
+
+* Mon-modal intrument file loading and status support.
+
+
+0.0.2   2004-06-15  Pre-revolutionary release.
 
 * The channel context menu is also accessible by right-clicking
   over the empty workspace area.

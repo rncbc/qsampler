@@ -87,7 +87,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
             EngineNameComboBox->insertItem(ppszEngines[iEngine]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_engines");
-/*
+
     // Populate Audio output type list.
     const char **ppszAudioDrivers = ::lscp_get_available_audio_drivers(m_pChannel->client());
     if (ppszAudioDrivers) {
@@ -105,19 +105,22 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
             MidiDriverComboBox->insertItem(ppszMidiDrivers[iMidiDriver]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_midi_drivers");
-*/
+
     // Read proper channel information,
     // and populate the channel form fields.
 
     // Engine name...
-    const QString& sEngineName = pChannel->engineName();
-    if (!sEngineName.isEmpty()) {
-        if (EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
-            EngineNameComboBox->insertItem(sEngineName);
-        EngineNameComboBox->setCurrentText(sEngineName);
-    }
+    QString sEngineName = pChannel->engineName();
+    if (sEngineName.isEmpty())
+        sEngineName = tr("(No engine)");
+    if (EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
+        EngineNameComboBox->insertItem(sEngineName);
+    EngineNameComboBox->setCurrentText(sEngineName);
     // Instrument filename and index...
-    InstrumentFileComboBox->setCurrentText(pChannel->instrumentFile());
+    QString sInstrumentFile = pChannel->instrumentFile();
+    if (sInstrumentFile.isEmpty())
+        sInstrumentFile = tr("(No instrument)");
+    InstrumentFileComboBox->setCurrentText(sInstrumentFile);
     InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
     // MIDI input...
     const QString& sMidiDriver = pChannel->midiDriver();
@@ -265,7 +268,7 @@ void qsamplerChannelForm::optionsChanged (void)
 // Stabilize current form state.
 void qsamplerChannelForm::stabilizeForm (void)
 {
-    const QString sFilename = InstrumentFileComboBox->currentText();
+    const QString& sFilename = InstrumentFileComboBox->currentText();
     OkPushButton->setEnabled(m_iDirtyCount > 0 && !sFilename.isEmpty() && QFileInfo(sFilename).exists());
 }
 

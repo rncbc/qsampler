@@ -559,7 +559,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     //  ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
         ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannel->midiChannel() << endl;
         ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
-        ts << "LOAD INSTRUMENT " << pChannel->instrumentFile() << " " << pChannel->instrumentNr() << " " << iChannelID << endl;
+        ts << "LOAD INSTRUMENT NON_MODAL " << pChannel->instrumentFile() << " " << pChannel->instrumentNr() << " " << iChannelID << endl;
         ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
         ts << endl;
         // Try to keep it snappy :)
@@ -1525,20 +1525,13 @@ void qsamplerMainForm::processServerExit (void)
 
 
 // The LSCP client callback procedure.
-lscp_status_t qsampler_client_callback ( lscp_client_t *pClient, const char *pchBuffer, int cchBuffer, void *pvData )
+lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/, lscp_event_t /*event*/, const char */*pchBuffer*/, int /*cchBuffer*/, void */*pvData*/ )
 {
-    qsamplerMainForm *pMainForm = (qsamplerMainForm *) pvData;
-    if (pMainForm == NULL)
-        return LSCP_FAILED;
-
-    char *pszBuffer = (char *) malloc(cchBuffer + 1);
-    if (pszBuffer == NULL)
-        return LSCP_FAILED;
-
-    memcpy(pszBuffer, pchBuffer, cchBuffer);
-    pszBuffer[cchBuffer] = (char) 0;
-    pMainForm->appendMessagesColor(pszBuffer, "#996699");
-    free(pszBuffer);
+    // FIXME: DO NOT EVER call any GUI code here,
+    // as this is run under some other thread context.
+    // A custom event must be posted here...
+    //
+    // QApplication::postEvent((qjackctlMainForm *) pvData, new QCustomEvent(...));
 
     return LSCP_OK;
 }
