@@ -82,9 +82,6 @@ void qsamplerDeviceForm::setClient ( lscp_client_t *pClient )
 	// Set new reference.
 	m_pClient = pClient;
 	
-	// Set our main client reference.
-    DeviceParameterTable->setClient(m_pClient);
-
 	// OK. Do a whole refresh around.
 	refreshDevices();
 }
@@ -253,28 +250,58 @@ void qsamplerDeviceForm::refreshDevices (void)
     // Avoid nested changes.
     m_iDirtySetup++;
 
-    DeviceListView->clear();
-    if (m_pClient)
-    	new QListViewItem(DeviceListView, tr("<New device>"));
-
 	//
     // TODO: Load device configuration data ...
     //
+    
 	m_pMainForm->appendMessages("qsamplerDeviceForm::refreshDevices()");
 
-	DeviceParameterTable->setNumRows(0);
-	if (m_pClient) {
-		DeviceParameterTable->insertRows(0, 3);
-		for (int c = 0; c < DeviceParameterTable->numCols(); c++) {
-			for (int r = 0; r < DeviceParameterTable->numRows(); r++)
-				DeviceParameterTable->setText(r, c, QString("R%1C%1").arg(r).arg(c));
-			DeviceParameterTable->adjustColumn(c);
+    DeviceListView->clear();
+    if (m_pClient) {
+		qsamplerDeviceItem *pItem;
+		int *piDeviceIDs;
+		// Grab audio devices...
+    	pItem = new qsamplerDeviceItem(DeviceListView, m_pClient,
+			qsamplerDevice::Audio);
+    	if (pItem) {
+			pItem->setText(0, tr("Audio"));
+			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
+			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
+			    new qsamplerDeviceItem(pItem, m_pClient,
+					qsamplerDevice::Audio, piDeviceIDs[i]);
+			}
+		}
+		// Grab MIDI devices...
+    	pItem = new qsamplerDeviceItem(DeviceListView, m_pClient,
+			qsamplerDevice::Midi);
+    	if (pItem) {
+			pItem->setText(0, tr("MIDI"));
+			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
+			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
+			    new qsamplerDeviceItem(pItem, m_pClient,
+					qsamplerDevice::Midi, piDeviceIDs[i]);
+			}
 		}
 	}
 
     // Done.
     m_iDirtySetup--;
 //  stabilizeForm();
+}
+
+// Device selection slot.
+void qsamplerDeviceForm::selectDevice ( QListViewItem *pItem )
+{
+	if (pItem == NULL)
+	    return;
+	if (pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	    return;
+
+	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDevice(" + pItem->text(0) + ")");
+
+	const qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+	DeviceParamTable->setDevice(m_pClient,
+	    device.deviceType(), device.deviceID());
 }
 
 
