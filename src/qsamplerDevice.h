@@ -189,7 +189,8 @@ class qsamplerDeviceParamTableSpinBox : public QTableItem
 public:
 
 	// Constructor.
-	qsamplerDeviceParamTableSpinBox (QTable *pTable, EditType editType);
+	qsamplerDeviceParamTableSpinBox (QTable *pTable, EditType editType,
+		const QString& sText);
 
 	// Public accessors.
 	void setMinValue(int iMinValue);
@@ -205,9 +206,9 @@ protected:
 private:
 
 	// Initial value holders.
+	int m_iValue;
 	int m_iMinValue;
 	int m_iMaxValue;
-	int m_iValue;
 };
 
 
