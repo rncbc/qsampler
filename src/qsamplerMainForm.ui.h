@@ -1234,7 +1234,7 @@ void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 // Set the pseudo-timer delay schedule.
 void qsamplerMainForm::startSchedule ( int iStartDelay )
 {
-    m_iStartDelay  = 1 + (iStartDelay * 1000);
+    m_iStartDelay  = (iStartDelay + 1) * 1000;
     m_iTimerDelay  = 0;
 }
 

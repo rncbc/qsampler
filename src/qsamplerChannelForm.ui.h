@@ -111,25 +111,30 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
 
     // Engine name...
     const QString& sEngineName = pChannel->engineName();
-    if (!sEngineName.isEmpty() && EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
-        EngineNameComboBox->insertItem(sEngineName);
-    EngineNameComboBox->setCurrentText(sEngineName);
+    if (!sEngineName.isEmpty()) {
+        if (EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
+            EngineNameComboBox->insertItem(sEngineName);
+        EngineNameComboBox->setCurrentText(sEngineName);
+    }
     // Instrument filename and index...
     InstrumentFileComboBox->setCurrentText(pChannel->instrumentFile());
     InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
     // MIDI input...
     const QString& sMidiDriver = pChannel->midiDriver();
-    if (!sMidiDriver.isEmpty() && MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
-        MidiDriverComboBox->insertItem(sMidiDriver);
-    MidiDriverComboBox->setCurrentText(sMidiDriver);
+    if (!sMidiDriver.isEmpty()) {
+        if (MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
+            MidiDriverComboBox->insertItem(sMidiDriver);
+        MidiDriverComboBox->setCurrentText(sMidiDriver);
+    }
     MidiPortSpinBox->setValue(pChannel->midiPort());
     MidiChannelSpinBox->setValue(pChannel->midiChannel());
     // Audio output...
     const QString& sAudioDriver = pChannel->audioDriver();
-    if (!sAudioDriver.isEmpty() && AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
-        AudioDriverComboBox->insertItem(sAudioDriver);
-    AudioDriverComboBox->setCurrentText(sAudioDriver);
-
+    if (!sAudioDriver.isEmpty()) {
+        if (AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
+            AudioDriverComboBox->insertItem(sAudioDriver);
+        AudioDriverComboBox->setCurrentText(sAudioDriver);
+    }
     // Done.
     m_iDirtySetup--;
     stabilizeForm();
