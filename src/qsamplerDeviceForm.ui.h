@@ -392,7 +392,7 @@ void qsamplerDeviceForm::selectDevicePort ( int iPort )
 	qsamplerDevicePort *pPort = device.ports().at(iPort);
 	if (pPort) {
 		m_iDirtySetup++;
-		DevicePortParamTable->refresh(pPort->params(), true);
+		DevicePortParamTable->refresh(pPort->params(), false);
 		m_iDirtySetup--;
 	}
 	// Done.

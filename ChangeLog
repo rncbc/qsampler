@@ -5,7 +5,7 @@ ChangeLog
 
 0.1.0   2005-03-15  Device configuration work in progress...
 
-* Device configuration interface preparations.
+* Device configuration is now complete (EXPERIMENTAL).
 
 
 0.0.5   2005-03-04  Fifth alpha-release.
