@@ -3,7 +3,7 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-03-01  Work in progress...
+0.0.5   2005-03-02  Work in progress...
 
 * Fixed device driver type channel information gathering,
   which was severely flawed, dropping all channel session
