@@ -157,9 +157,6 @@
                     <property name="alignment">
                         <set>AlignTop</set>
                     </property>
-                    <property name="indent">
-                        <number>4</number>
-                    </property>
                     <property name="toolTip" stdset="0">
                         <string>Engine name</string>
                     </property>
@@ -183,9 +180,6 @@
                     </property>
                     <property name="text">
                         <string>--</string>
-                    </property>
-                    <property name="indent">
-                        <number>4</number>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Instrument file [index]</string>

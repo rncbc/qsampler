@@ -700,8 +700,14 @@ void qsamplerMainForm::fileReset (void)
         return;
 
     // Just do the reset, after closing down current session...
-    if (closeSession(true) && ::lscp_reset_sampler(m_pClient) != LSCP_OK)
+    if (closeSession(true) && ::lscp_reset_sampler(m_pClient) != LSCP_OK) {
         appendMessagesClient("lscp_reset_sampler");
+        appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
+        return;
+    }
+
+    // Log this.
+    appendMessages(tr("Sampler reset."));
 }
 
 
