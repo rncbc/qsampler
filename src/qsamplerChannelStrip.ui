@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>693</width>
-            <height>43</height>
+            <width>694</width>
+            <height>49</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -262,6 +262,9 @@
                     <height>32767</height>
                 </size>
             </property>
+            <property name="suffix">
+                <string> %</string>
+            </property>
             <property name="maxValue">
                 <number>100</number>
             </property>
@@ -441,6 +444,7 @@
     <function specifier="non virtual">appendMessagesError( const QString &amp; s )</function>
     <function specifier="non virtual">appendMessagesClient( const QString &amp; s )</function>
     <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
+    <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>

@@ -843,6 +843,7 @@ void qsamplerMainForm::viewOptions (void)
         bool    bOldServerStart     = m_pOptions->bServerStart;
         QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
         QString sOldDisplayFont     = m_pOptions->sDisplayFont;
+        int     iOldMaxVolume       = m_pOptions->iMaxVolume;
         QString sOldMessagesFont    = m_pOptions->sMessagesFont;
         bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
         int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
@@ -868,6 +869,8 @@ void qsamplerMainForm::viewOptions (void)
                 updateRecentFilesMenu();
             if (sOldDisplayFont != m_pOptions->sDisplayFont)
                 updateDisplayFont();
+            if (iOldMaxVolume != m_pOptions->iMaxVolume)
+                updateMaxVolume();
             if (sOldMessagesFont != m_pOptions->sMessagesFont)
                 updateMessagesFont();
             if (( bOldMessagesLimit && !m_pOptions->bMessagesLimit) ||
@@ -1124,6 +1127,26 @@ void qsamplerMainForm::updateDisplayFont (void)
 }
 
 
+// Force update of the channels maximum volume setting.
+void qsamplerMainForm::updateMaxVolume (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    // Full channel list update...
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (wlist.isEmpty())
+        return;
+
+    m_pWorkspace->setUpdatesEnabled(false);
+    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+        pChannel->setMaxVolume(m_pOptions->iMaxVolume);
+    }
+    m_pWorkspace->setUpdatesEnabled(true);
+}
+
+
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Messages window form handlers.
 
@@ -1237,6 +1260,7 @@ void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
     // Add a new channel itema...
     WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
     pChannel = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
+    pChannel->setMaxVolume(m_pOptions->iMaxVolume);
     pChannel->setup(this, iChannelID);
     // We'll need a display font.
     QFont font;

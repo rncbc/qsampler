@@ -86,10 +86,11 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     DisplayFontTextLabel->setFont(font);
     DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
 
-    // Auto-refresh option.
+    // Auto-refresh and maximum volume options.
     AutoRefreshCheckBox->setChecked(m_pOptions->bAutoRefresh);
     AutoRefreshTimeSpinBox->setValue(m_pOptions->iAutoRefreshTime);
-    
+    MaxVolumeSpinBox->setValue(m_pOptions->iMaxVolume);
+
     // Messages font.
     if (m_pOptions->sMessagesFont.isEmpty() || !font.fromString(m_pOptions->sMessagesFont))
         font = QFont("Fixed", 8);
@@ -124,11 +125,12 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->bServerStart         = ServerStartCheckBox->isChecked();
         m_pOptions->sServerCmdLine       = ServerCmdLineComboBox->currentText().simplifyWhiteSpace();
         m_pOptions->iStartDelay          = StartDelaySpinBox->value();
-        // Channel display options...
+        // Channels options...
         m_pOptions->sDisplayFont         = DisplayFontTextLabel->font().toString();
         m_pOptions->bAutoRefresh         = AutoRefreshCheckBox->isChecked();
         m_pOptions->iAutoRefreshTime     = AutoRefreshTimeSpinBox->value();
-        // Message window options...
+        m_pOptions->iMaxVolume           = MaxVolumeSpinBox->value();
+        // Messages options...
         m_pOptions->sMessagesFont        = MessagesFontTextLabel->font().toString();
         m_pOptions->bMessagesLimit       = MessagesLimitCheckBox->isChecked();
         m_pOptions->iMessagesLimitLines  = MessagesLimitLinesSpinBox->value();
