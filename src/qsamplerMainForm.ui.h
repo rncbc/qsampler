@@ -1361,8 +1361,10 @@ void qsamplerMainForm::stopServer (void)
     // And try to stop server.
     if (m_pServer) {
         appendMessages(tr("Server is stopping..."));
-        if (m_pServer->isRunning())
+        if (m_pServer->isRunning()) {
             m_pServer->tryTerminate();
+            return;
+        }
      }
 
      // Do final processing anyway.
