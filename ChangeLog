@@ -3,7 +3,12 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.3   2004-07-06  Work in progress...
+0.0.3   2004-09-27  Work in progress...
+
+* Minor configure fixes.
+
+
+0.0.3   2004-07-06  Third alpha-release.
 
 * Mon-modal intrument file loading and status support.
 
