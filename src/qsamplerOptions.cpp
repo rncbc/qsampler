@@ -54,12 +54,14 @@ qsamplerOptions::qsamplerOptions (void)
     // Load display options...
     m_settings.beginGroup("/Display");
     sDisplayFont   = m_settings.readEntry("/DisplayFont", QString::null);
+    bAutoRefresh   = m_settings.readBoolEntry("/AutoRefresh", true);
+    iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 5000);
     sMessagesFont  = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit = m_settings.readBoolEntry("/MessagesLimit", true);
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
     bConfirmRemove = m_settings.readBoolEntry("/ConfirmRemove", true);
     bStdoutCapture = m_settings.readBoolEntry("/StdoutCapture", true);
-    bCompletePath  = m_settings.readBoolEntry("/CompletePath", false);
+    bCompletePath  = m_settings.readBoolEntry("/CompletePath", true);
     m_settings.endGroup();
 
     // And go into view options group.
@@ -103,6 +105,8 @@ qsamplerOptions::~qsamplerOptions (void)
     // Save display options.
     m_settings.beginGroup("/Display");
     m_settings.writeEntry("/DisplayFont", sDisplayFont);
+    m_settings.writeEntry("/AutoRefresh", bAutoRefresh);
+    m_settings.writeEntry("/AutoRefreshTime", iAutoRefreshTime);
     m_settings.writeEntry("/MessagesFont", sMessagesFont);
     m_settings.writeEntry("/MessagesLimit", bMessagesLimit);
     m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);

@@ -40,14 +40,14 @@ void qsamplerChannelStrip::init (void)
     m_pMainForm  = NULL;
     m_iChannelID = 0;
     
-    m_sEngineName     = tr("(No engine)");
-    m_sInstrumentFile = tr("(No instrument)");
+//  m_sEngineName     = "(No engine)";
+//  m_sInstrumentFile = "(No instrument)";
     m_iInstrumentNr   = 0;
     m_sMidiDriver     = "ALSA"; // DEPRECATED.
     m_iMidiDevice     = 0;
     m_iMidiPort       = 0;
     m_iMidiChannel    = 0;
-    m_sAudioDriver    = "JACK"; // DEPRECATED.
+    m_sAudioDriver    = "ALSA"; // DEPRECATED.
     m_iAudioDevice    = 0;
     
     m_iDirtyChange = 0;
@@ -354,9 +354,12 @@ void qsamplerChannelStrip::updateChannelInfo (void)
     }
 
     // Set some proper values.
-    EngineNameTextLabel->setText(m_sEngineName);
-    InstrumentNameTextLabel->setText(QFileInfo(m_sInstrumentFile).fileName()
-         + " [" + QString::number(m_iInstrumentNr) + "]");
+    if (!m_sEngineName.isEmpty())
+        EngineNameTextLabel->setText(m_sEngineName);
+    if (!m_sInstrumentFile.isEmpty()) {
+        InstrumentNameTextLabel->setText(QFileInfo(m_sInstrumentFile).fileName()
+            + " [" + QString::number(m_iInstrumentNr) + "]");
+    }
     // And update the both GUI volume elements.
     updateChannelVolume();
 }

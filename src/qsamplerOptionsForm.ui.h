@@ -41,7 +41,6 @@ void qsamplerOptionsForm::init (void)
 
     // Set dialog validators...
     ServerPortComboBox->setValidator(new QIntValidator(ServerPortComboBox));
-    MessagesLimitLinesComboBox->setValidator(new QIntValidator(MessagesLimitLinesComboBox));
 
     // Try to restore old window positioning.
     adjustSize();
@@ -79,10 +78,18 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
 
     // Load Display options...
     QFont font;
+    
+    // Display font.
     if (m_pOptions->sDisplayFont.isEmpty() || !font.fromString(m_pOptions->sDisplayFont))
         font = QFont("Sans Serif", 8);
     DisplayFontTextLabel->setFont(font);
     DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
+
+    // Auto-refresh option.
+    AutoRefreshCheckBox->setChecked(m_pOptions->bAutoRefresh);
+    AutoRefreshTimeSpinBox->setValue(m_pOptions->iAutoRefreshTime);
+    
+    // Messages font.
     if (m_pOptions->sMessagesFont.isEmpty() || !font.fromString(m_pOptions->sMessagesFont))
         font = QFont("Fixed", 8);
     MessagesFontTextLabel->setFont(font);
@@ -90,7 +97,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
 
     // Messages limit option.
     MessagesLimitCheckBox->setChecked(m_pOptions->bMessagesLimit);
-    MessagesLimitLinesComboBox->setCurrentText(QString::number(m_pOptions->iMessagesLimitLines));
+    MessagesLimitLinesSpinBox->setValue(m_pOptions->iMessagesLimitLines);
 
     // Other options finally.
     ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
@@ -116,10 +123,12 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->iStartDelay          = StartDelaySpinBox->value();
         // Channel display options...
         m_pOptions->sDisplayFont         = DisplayFontTextLabel->font().toString();
+        m_pOptions->bAutoRefresh         = AutoRefreshCheckBox->isChecked();
+        m_pOptions->iAutoRefreshTime     = AutoRefreshTimeSpinBox->value();
         // Message window options...
         m_pOptions->sMessagesFont        = MessagesFontTextLabel->font().toString();
         m_pOptions->bMessagesLimit       = MessagesLimitCheckBox->isChecked();
-        m_pOptions->iMessagesLimitLines  = MessagesLimitLinesComboBox->currentText().toInt();
+        m_pOptions->iMessagesLimitLines  = MessagesLimitLinesSpinBox->value();
         // Other options...
         m_pOptions->bConfirmRemove       = ConfirmRemoveCheckBox->isChecked();
         m_pOptions->bStdoutCapture       = StdoutCaptureCheckBox->isChecked();
@@ -184,7 +193,8 @@ void qsamplerOptionsForm::stabilizeForm (void)
     StartDelayTextLabel->setEnabled(bEnabled);
     StartDelaySpinBox->setEnabled(bEnabled);
 
-    MessagesLimitLinesComboBox->setEnabled(MessagesLimitCheckBox->isChecked());
+    AutoRefreshTimeSpinBox->setEnabled(AutoRefreshCheckBox->isChecked());
+    MessagesLimitLinesSpinBox->setEnabled(MessagesLimitCheckBox->isChecked());
 
     OkPushButton->setEnabled(m_iDirtyCount > 0);
 }

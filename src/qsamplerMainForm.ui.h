@@ -50,10 +50,6 @@
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    500
 
-// Channel usae update period (in msecs).
-// FIXME: this should be an user option.
-#define QSAMPLER_TIMER_PERIOD   5000
-
 // Status bar item indexes
 #define QSAMPLER_STATUS_CLIENT  0       // Client connection state.
 #define QSAMPLER_STATUS_SERVER  1       // Currenr server address (host:port)
@@ -1258,14 +1254,13 @@ void qsamplerMainForm::timerSlot (void)
     }
 
     // Refresh each channel usage, on each period...
-    if (m_pClient) {
+    if (m_pClient && m_pOptions->bAutoRefresh) {
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
-        if (m_iTimerSlot >= QSAMPLER_TIMER_PERIOD)  {
+        if (m_iTimerSlot >= m_pOptions->iTimeRefresh)  {
             m_iTimerSlot = 0;
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
                 qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
-                appendMessages("Channel " + QString::number(pChannel->channelID()) + ": updateChannelUsage()");
                 pChannel->updateChannelUsage();
             }
         }
@@ -1429,9 +1424,6 @@ bool qsamplerMainForm::startClient (void)
     if (m_pClient)
         return true;
 
-    // We may stop scheduling around.
-    stopSchedule();
-
     // Log prepare here.
     appendMessages(tr("Client connecting..."));
 
@@ -1451,6 +1443,9 @@ bool qsamplerMainForm::startClient (void)
 
     // Log success here.
     appendMessages(tr("Client connected."));
+
+    // We may stop scheduling around.
+    stopSchedule();
 
     // We'll accept drops from now on...
     setAcceptDrops(true);
