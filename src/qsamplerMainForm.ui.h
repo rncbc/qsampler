@@ -48,7 +48,7 @@
 #endif
 
 // Timer constant stuff.
-#define QSAMPLER_TIMER_MSECS    200
+#define QSAMPLER_TIMER_MSECS    500
 
 // Status bar item indexes
 #define QSAMPLER_STATUS_CLIENT  0       // Client connection state.
