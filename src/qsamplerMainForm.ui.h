@@ -567,6 +567,9 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     m_sFilename = sFilename;
     updateRecentFiles(sFilename);
     appendMessages(tr("Open session: \"%1\".").arg(sessionName(m_sFilename)));
+    
+    // Make that an overall update.
+    m_iChangeCount++;
     stabilizeForm();
     return true;
 }
