@@ -24,7 +24,8 @@ IMAGES   = icons/qsampler.png \
            icons/editSetupChannel.png \
            icons/channelsArrange.png \
            icons/formAccept.png \
-           icons/formReject.png
+           icons/formReject.png \
+           icons/displaybg1.png
 
 TEMPLATE = app
 CONFIG  += qt @ac_thread@ warn_on @ac_debug@

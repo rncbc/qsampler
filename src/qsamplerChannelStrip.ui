@@ -1,22 +1,40 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>qsamplerChannelStrip</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
+
+
    Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
 
+
+
    This program is free software; you can redistribute it and/or
+
    modify it under the terms of the GNU General Public License
+
    as published by the Free Software Foundation; either version 2
+
    of the License, or (at your option) any later version.
 
+
+
    This program is distributed in the hope that it will be useful,
+
    but WITHOUT ANY WARRANTY; without even the implied warranty of
+
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+
    GNU General Public License for more details.
 
+
+
    You should have received a copy of the GNU General Public License
+
    along with this program; if not, write to the Free Software
+
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
 
 </comment>
 <author>rncbc aka Rui Nuno Capela</author>
@@ -27,15 +45,15 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>3</y>
-            <width>518</width>
-            <height>40</height>
+            <y>0</y>
+            <width>708</width>
+            <height>46</height>
         </rect>
     </property>
     <property name="sizePolicy">
         <sizepolicy>
             <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+            <vsizetype>1</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
@@ -79,13 +97,131 @@
                 <string>Channel setup</string>
             </property>
         </widget>
+        <widget class="QFrame">
+            <property name="name">
+                <cstring>ChannelInfoFrame</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>320</width>
+                    <height>64</height>
+                </size>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </property>
+            <property name="paletteBackgroundPixmap">
+                <pixmap>displaybg1.png</pixmap>
+            </property>
+            <property name="frameShape">
+                <enum>StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>2</number>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>EngineNameTextLabel</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>255</red>
+                            <green>255</green>
+                            <blue>127</blue>
+                        </color>
+                    </property>
+                    <property name="paletteBackgroundPixmap">
+                        <pixmap>displaybg1.png</pixmap>
+                    </property>
+                    <property name="backgroundOrigin">
+                        <enum>ParentOrigin</enum>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>7</pointsize>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>(No engine)</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignTop</set>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Engine name</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>InstrumentFileTextLabel</cstring>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="paletteBackgroundPixmap">
+                        <pixmap>displaybg1.png</pixmap>
+                    </property>
+                    <property name="backgroundOrigin">
+                        <enum>ParentOrigin</enum>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <pointsize>7</pointsize>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>(No instrument)</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Instrument name</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
         <widget class="QSlider">
             <property name="name">
                 <cstring>VolumeSlider</cstring>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>200</width>
+                    <width>180</width>
                     <height>0</height>
                 </size>
             </property>
@@ -132,16 +268,24 @@
             <property name="name">
                 <cstring>StreamUsageProgressBar</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
             <property name="minimumSize">
                 <size>
-                    <width>100</width>
+                    <width>120</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="maximumSize">
                 <size>
                     <width>32767</width>
-                    <height>24</height>
+                    <height>22</height>
                 </size>
             </property>
             <property name="indicatorFollowsStyle">
@@ -164,7 +308,7 @@
             <property name="maximumSize">
                 <size>
                     <width>32767</width>
-                    <height>24</height>
+                    <height>22</height>
                 </size>
             </property>
             <property name="paletteForegroundColor">

@@ -29,7 +29,7 @@
             <x>0</x>
             <y>0</y>
             <width>424</width>
-            <height>262</height>
+            <height>268</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -110,12 +110,12 @@
                 <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>InstrumentComboBox</cstring>
+                <cstring>InstrumentFileComboBox</cstring>
             </property>
         </widget>
         <widget class="QPushButton" row="1" column="3">
             <property name="name">
-                <cstring>InstrumentPushButton</cstring>
+                <cstring>InstrumentFilePushButton</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -149,7 +149,7 @@
         </widget>
         <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>InstrumentComboBox</cstring>
+                <cstring>InstrumentFileComboBox</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -163,7 +163,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Engine name</string>
+                <string>Instrument filename</string>
             </property>
         </widget>
         <spacer row="3" column="0" rowspan="2" colspan="1">
@@ -234,7 +234,7 @@
         </widget>
         <widget class="QSpinBox" row="2" column="1">
             <property name="name">
-                <cstring>IndexSpinBox</cstring>
+                <cstring>InstrumentNrSpinBox</cstring>
             </property>
             <property name="maximumSize">
                 <size>
@@ -248,7 +248,7 @@
         </widget>
         <widget class="QLabel" row="2" column="0">
             <property name="name">
-                <cstring>IndexTextLabel</cstring>
+                <cstring>InstrumentNrTextLabel</cstring>
             </property>
             <property name="text">
                 <string>Inde&amp;x:</string>
@@ -257,7 +257,7 @@
                 <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>IndexSpinBox</cstring>
+                <cstring>InstrumentNrSpinBox</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
@@ -330,6 +330,28 @@
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
+                        <cstring>MidiPortTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Port:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>MidiPortSpinBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QSpinBox">
+                    <property name="name">
+                        <cstring>MidiPortSpinBox</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>MIDI input port number</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
                         <cstring>MidiChannelTextLabel</cstring>
                     </property>
                     <property name="text">
@@ -354,45 +376,6 @@
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>MIDI input channel</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>MidiPortTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Port:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>MidiPortComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <property name="name">
-                        <cstring>MidiPortComboBox</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>60</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="editable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI input port</string>
                     </property>
                 </widget>
             </hbox>
@@ -457,34 +440,6 @@
                         <string>Audio output driver type</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>AudioChannelTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Channel:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>AudioChannelSpinBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>AudioChannelSpinBox</cstring>
-                    </property>
-                    <property name="maxValue">
-                        <number>16</number>
-                    </property>
-                    <property name="minValue">
-                        <number>1</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Audio output channel </string>
-                    </property>
-                </widget>
                 <spacer>
                     <property name="name">
                         <cstring>spacer2</cstring>
@@ -522,14 +477,13 @@
 </connections>
 <tabstops>
     <tabstop>EngineComboBox</tabstop>
-    <tabstop>InstrumentComboBox</tabstop>
-    <tabstop>InstrumentPushButton</tabstop>
-    <tabstop>IndexSpinBox</tabstop>
+    <tabstop>InstrumentFileComboBox</tabstop>
+    <tabstop>InstrumentFilePushButton</tabstop>
+    <tabstop>InstrumentNrSpinBox</tabstop>
     <tabstop>MidiTypeComboBox</tabstop>
+    <tabstop>MidiPortSpinBox</tabstop>
     <tabstop>MidiChannelSpinBox</tabstop>
-    <tabstop>MidiPortComboBox</tabstop>
     <tabstop>AudioTypeComboBox</tabstop>
-    <tabstop>AudioChannelSpinBox</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>
 </tabstops>
