@@ -101,6 +101,9 @@ public:
     float    volume();
     bool     setVolume(float fVolume);
 
+    // Istrument name remapper.
+    void     updateInstrumentName();
+
     // Channel info structure map executive.
     bool     updateChannelInfo();
 

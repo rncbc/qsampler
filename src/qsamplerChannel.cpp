@@ -361,6 +361,14 @@ bool qsamplerChannel::setVolume ( float fVolume )
 }
 
 
+// Istrument name remapper.
+void qsamplerChannel::updateInstrumentName (void)
+{
+	m_sInstrumentName = getInstrumentName(m_sInstrumentFile,
+		m_iInstrumentNr, (options() && options()->bInstrumentNames));
+}
+
+
 // Update whole channel info state.
 bool qsamplerChannel::updateChannelInfo (void)
 {
@@ -375,15 +383,14 @@ bool qsamplerChannel::updateChannelInfo (void)
         return false;
     }
 
-    // First, check if intrument name has changed,
-    // taking care that instrument name lookup might be expensive,
-    // so we better make it only once and when really needed...
-    if ((m_sInstrumentFile != pChannelInfo->instrument_file) ||
-        (m_iInstrumentNr   != pChannelInfo->instrument_nr)) {
-        m_sInstrumentFile = pChannelInfo->instrument_file;
-        m_iInstrumentNr   = pChannelInfo->instrument_nr;
-		m_sInstrumentName = getInstrumentName(m_sInstrumentFile,
-			m_iInstrumentNr, (options() && options()->bInstrumentNames));
+	// First, check if intrument name has changed,
+	// taking care that instrument name lookup might be expensive,
+	// so we better make it only once and when really needed...
+	if ((m_sInstrumentFile != pChannelInfo->instrument_file) ||
+		(m_iInstrumentNr   != pChannelInfo->instrument_nr)) {
+		m_sInstrumentFile = pChannelInfo->instrument_file;
+		m_iInstrumentNr   = pChannelInfo->instrument_nr;
+		updateInstrumentName();
 	}
     // Cache in other channel information.
     m_sEngineName       = pChannelInfo->engine_name;

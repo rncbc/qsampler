@@ -135,6 +135,26 @@ bool qsamplerChannelStrip::channelSetup (void)
 }
 
 
+// Update the channel instrument name.
+bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
+{
+	if (m_pChannel == NULL)
+		return false;
+
+	// Do we refersh the actual name?
+	if (bForce)
+		m_pChannel->updateInstrumentName();
+
+	// Instrument name...
+	if (m_pChannel->instrumentName().isEmpty())
+		InstrumentNameTextLabel->setText(' ' + tr("(No instrument)"));
+	else
+		InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
+
+	return true;    
+}
+
+
 // Update whole channel info state.
 bool qsamplerChannelStrip::updateChannelInfo (void)
 {
@@ -153,20 +173,14 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     // Read actual channel information.
     m_pChannel->updateChannelInfo();
 
-    // Set some proper display values.
-    const QString sIndent = " ";
-
     // Engine name...
     if (m_pChannel->engineName().isEmpty())
-        EngineNameTextLabel->setText(sIndent + tr("(No engine)"));
+        EngineNameTextLabel->setText(' ' + tr("(No engine)"));
     else
-        EngineNameTextLabel->setText(sIndent + m_pChannel->engineName());
+        EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
 
-    // Instrument name...
-    if (m_pChannel->instrumentName().isEmpty())
-        InstrumentNameTextLabel->setText(sIndent + tr("(No instrument)"));
-    else
-        InstrumentNameTextLabel->setText(sIndent + m_pChannel->instrumentName());
+	// Instrument name...
+	updateInstrumentName(false);
 
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();

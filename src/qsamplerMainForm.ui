@@ -2,7 +2,7 @@
 <class>qsamplerMainForm</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -779,6 +779,7 @@
     <function access="private" specifier="non virtual" returnType="bool">saveSessionFile( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual">updateRecentFiles( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual">updateRecentFilesMenu( void )</function>
+    <function access="private" specifier="non virtual">updateInstrumentNames( void )</function>
     <function access="private" specifier="non virtual">updateDisplayFont( void )</function>
     <function access="private" specifier="non virtual">updateDisplayEffect( void )</function>
     <function access="private" specifier="non virtual">updateMaxVolume( void )</function>
