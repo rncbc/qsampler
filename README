@@ -1,7 +1,7 @@
-qsampler - A LinuxSampler Qt GUI Interface
+Qsampler - A LinuxSampler Qt GUI Interface
 ------------------------------------------
 
-QSampler is a LinuxSampler GUI front-end application written in C++ around
+Qsampler is a LinuxSampler GUI front-end application written in C++ around
 the Qt3 toolkit using Qt Designer. At the moment it just wraps as a client
 reference interface for the LinuxSampler Control Protocol (LSCP).
 
@@ -46,7 +46,7 @@ Note that the default installation path ${prefix} is /usr/local.
 Configuration
 -------------
 
-QSampler holds its settings and configuration state per user, in a file
+Qsampler holds its settings and configuration state per user, in a file
 located as $HOME/.qt/qsamplerrc. Normally, there's no need to edit this file,
 as it is recreated and rewritten everytime qsampler is run.
 
@@ -59,7 +59,7 @@ Plenty still, after all this is early alpha software ;)
 Support
 -------
 
-QSampler is open source free software. For bug reports, feature requests,
+Qsampler is open source free software. For bug reports, feature requests,
 discussion forums, mailling lists, or any other matter related to the
 development of this piece of software, please use the Sourceforge
 project page (http://sourceforge.net/projects/qsampler).
