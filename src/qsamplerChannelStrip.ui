@@ -297,12 +297,12 @@
                 <bool>false</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Total stream usage (%)</string>
+                <string>Least buffer fill stream usage (%)</string>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>VoiceCountTextLabel</cstring>
+                <cstring>StreamVoiceCountTextLabel</cstring>
             </property>
             <property name="minimumSize">
                 <size>
@@ -337,13 +337,13 @@
                 <enum>Sunken</enum>
             </property>
             <property name="text">
-                <string>0</string>
+                <string>--/--</string>
             </property>
             <property name="alignment">
                 <set>AlignCenter</set>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Voice count</string>
+                <string>Stream / Voice count</string>
             </property>
         </widget>
     </hbox>

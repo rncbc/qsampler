@@ -427,24 +427,25 @@ void qsamplerChannelStrip::updateChannelUsage (void)
         return;
 
     // Get current channel voice count.
-    int iVoiceCount = ::lscp_get_channel_voice_count(client(), m_iChannelID);
-    VoiceCountTextLabel->setText(QString::number(iVoiceCount));
-
+    int iVoiceCount  = ::lscp_get_channel_voice_count(client(), m_iChannelID);
     // Get current stream count.
     int iStreamCount = ::lscp_get_channel_stream_count(client(), m_iChannelID);
     // Get current channel buffer fill usage.
-//  FIXME: benno has suggested some other rationales,
-//         but for the time being we'll show the average percentage usage.
+    // As benno has suggested this is the percentage usage
+    // of the least filled buffer stream...
     int iStreamUsage = 0;
     if (iStreamCount > 0) {
         lscp_buffer_fill_t *pBufferFill = ::lscp_get_channel_buffer_fill(client(), LSCP_USAGE_PERCENTAGE, m_iChannelID);
         if (pBufferFill) {
-            for (int iStream = 0; iStream < iStreamCount; iStream++)
-                iStreamUsage += pBufferFill[iStream].stream_usage;
-            iStreamUsage /= iStreamCount;
+            for (int iStream = 0; iStream < iStreamCount; iStream++) {
+                if (iStreamUsage > (int) pBufferFill[iStream].stream_usage || iStream == 0)
+                    iStreamUsage = pBufferFill[iStream].stream_usage;
+            }
         }
-    }
+    }    
+    // Update the GUI elements...
     StreamUsageProgressBar->setProgress(iStreamUsage);
+    StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
 }
 
 

@@ -314,8 +314,6 @@ QString qsamplerMainForm::sessionName ( const QString& sFilename )
 // Create a new session file from scratch.
 bool qsamplerMainForm::newSession (void)
 {
-    appendMessages("qsamplerMainForm::newSession()");
-    
     // Check if we can do it.
     if (!closeSession(true))
         return false;
@@ -326,6 +324,7 @@ bool qsamplerMainForm::newSession (void)
     // Stabilize form.
     m_sFilename = QString::null;
     m_iDirtyCount = 0;
+    appendMessages(tr("New session: \"%1\".").arg(sessionName(m_sFilename)));
     stabilizeForm();
 
     return true;
@@ -335,8 +334,6 @@ bool qsamplerMainForm::newSession (void)
 // Open an existing sampler session.
 bool qsamplerMainForm::openSession (void)
 {
-    appendMessages("qsamplerMainForm::openSession()");
-
     if (m_pOptions == NULL)
         return false;
 
@@ -364,8 +361,6 @@ bool qsamplerMainForm::openSession (void)
 // Save current sampler session with another name.
 bool qsamplerMainForm::saveSession ( bool bPrompt )
 {
-    appendMessages("qsamplerMainForm::saveSession(" + QString::number((int) bPrompt) + ")");
-
     if (m_pOptions == NULL)
         return false;
 
@@ -409,8 +404,6 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
 // Close current session.
 bool qsamplerMainForm::closeSession ( bool bForce )
 {
-    appendMessages("qsamplerMainForm::closeSession(" + QString::number((int) bForce) + ")");
-
     bool bClose = true;
 
     // Are we dirty enough to prompt it?
@@ -455,8 +448,6 @@ bool qsamplerMainForm::closeSession ( bool bForce )
 // Load a session from specific file path.
 bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 {
-    appendMessages("qsamplerMainForm::loadSessionFile(\"" + sFilename + "\")");
-
     if (m_pClient == NULL)
         return false;
 
@@ -518,6 +509,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     // Stabilize form...
     m_sFilename = sFilename;
     updateRecentFiles(sFilename);
+    appendMessages(tr("Open session: \"%1\".").arg(sessionName(m_sFilename)));
     stabilizeForm();
     return true;
 }
@@ -526,8 +518,6 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 // Save current session to specific file path.
 bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 {
-    appendMessages("qsamplerMainForm::saveSessionFile(\"" + sFilename + "\")");
-
     // Open and write into real file.
     QFile file(sFilename);
     if (!file.open(IO_WriteOnly | IO_Truncate)) {
@@ -584,6 +574,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     // Stabilize form...
     m_sFilename = sFilename;
     updateRecentFiles(sFilename);
+    appendMessages(tr("Save session: \"%1\".").arg(sessionName(m_sFilename)));
     stabilizeForm();
     return true;
 }
@@ -1055,10 +1046,8 @@ void qsamplerMainForm::stabilizeForm (void)
 
 
 // Channel change receiver slot.
-void qsamplerMainForm::channelChanged( qsamplerChannelStrip *pChannel )
+void qsamplerMainForm::channelChanged( qsamplerChannelStrip * )
 {
-    appendMessages("qsamplerMainForm::channelChanged(" + QString::number(pChannel->channelID()) + ")");
-    
     // Just mark the dirty form.
     m_iDirtyCount++;
     // and update the form status...
@@ -1233,8 +1222,6 @@ void qsamplerMainForm::updateMessagesCapture (void)
 // The channel strip creation executive.
 void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
 {
-    appendMessages("qsamplerMainForm::createChannel(" + QString::number(iChannelID) + ")");
-
     if (m_pClient == NULL)
         return;
 
@@ -1330,8 +1317,6 @@ void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 // Set the pseudo-timer delay schedule.
 void qsamplerMainForm::startSchedule ( int iStartDelay )
 {
-    appendMessages("qsamplerMainForm::startSchedule(" + QString::number(iStartDelay) + ")");
-
     m_iStartDelay  = 1 + (iStartDelay * 1000);
     m_iTimerDelay  = 0;
 }
@@ -1339,8 +1324,6 @@ void qsamplerMainForm::startSchedule ( int iStartDelay )
 // Suspend the pseudo-timer delay schedule.
 void qsamplerMainForm::stopSchedule (void)
 {
-    appendMessages("qsamplerMainForm::stopSchedule()");
-
     m_iStartDelay  = 0;
     m_iTimerDelay  = 0;
 }
@@ -1388,8 +1371,6 @@ void qsamplerMainForm::timerSlot (void)
 // Start linuxsampler server...
 void qsamplerMainForm::startServer (void)
 {
-    appendMessages("qsamplerMainForm::startServer()");
-
     if (m_pOptions == NULL)
         return;
 
@@ -1454,8 +1435,6 @@ void qsamplerMainForm::startServer (void)
 // Stop linuxsampler server...
 void qsamplerMainForm::stopServer (void)
 {
-    appendMessages("qsamplerMainForm::stopServer()");
-    
     // Stop client code.
     stopClient();
 
@@ -1484,8 +1463,6 @@ void qsamplerMainForm::readServerStdout (void)
 // Linuxsampler server cleanup.
 void qsamplerMainForm::processServerExit (void)
 {
-    appendMessages("qsamplerMainForm::processServerExit()");
-
     // Force client code cleanup.
     stopClient();
 
@@ -1535,8 +1512,6 @@ lscp_status_t qsampler_client_callback ( lscp_client_t *pClient, const char *pch
 // Start our almighty client...
 bool qsamplerMainForm::startClient (void)
 {
-    appendMessages("qsamplerMainForm::startClient()");
-
     // Have it a setup?
     if (m_pOptions == NULL)
         return false;
@@ -1591,8 +1566,6 @@ bool qsamplerMainForm::startClient (void)
 // Stop client...
 void qsamplerMainForm::stopClient (void)
 {
-    appendMessages("qsamplerMainForm::stopClient()");
-
     if (m_pClient == NULL)
         return;
 
