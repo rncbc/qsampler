@@ -833,7 +833,7 @@ void qsamplerMainForm::editSetupChannel (void)
         return;
 
     // Just invoque the channel strip procedure.
-    pChannel->channelSetup(false);
+    pChannel->showChannelSetup(false);
 }
 
 
@@ -1365,7 +1365,7 @@ void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
     // Before we show it up, may be we'll
     // better ask for some initial values?
     if (bPrompt)
-        pChannel->channelSetup(true);
+        pChannel->showChannelSetup(true);
     // Now we show up us to the world.
     pChannel->show();
     // Only then, we'll auto-arrange...
