@@ -147,7 +147,7 @@ bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
 
 	// Instrument name...
 	if (m_pChannel->instrumentName().isEmpty())
-		InstrumentNameTextLabel->setText(' ' + tr("(No instrument)"));
+		InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
 	else
 		InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
 
@@ -175,7 +175,7 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 
     // Engine name...
     if (m_pChannel->engineName().isEmpty())
-        EngineNameTextLabel->setText(' ' + tr("(No engine)"));
+        EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
     else
         EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
 

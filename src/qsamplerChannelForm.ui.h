@@ -113,14 +113,14 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
     if (sEngineName.isEmpty() && bNew)
         sEngineName = pOptions->sEngineName;
     if (sEngineName.isEmpty())
-        sEngineName = tr("(No engine)");
+        sEngineName = qsamplerChannel::noEngineName();
     if (EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
         EngineNameComboBox->insertItem(sEngineName);
     EngineNameComboBox->setCurrentText(sEngineName);
     // Instrument filename and index...
     QString sInstrumentFile = pChannel->instrumentFile();
     if (sInstrumentFile.isEmpty())
-        sInstrumentFile = tr("(No instrument)");
+        sInstrumentFile = qsamplerChannel::noInstrumentName();
     InstrumentFileComboBox->setCurrentText(sInstrumentFile);
     InstrumentNrComboBox->clear();
     InstrumentNrComboBox->insertStringList(

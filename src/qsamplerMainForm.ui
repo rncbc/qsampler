@@ -764,6 +764,7 @@
     <function specifier="non virtual">setup( qsamplerOptions * pOptions )</function>
     <function access="private" specifier="non virtual" returnType="bool">queryClose( void )</function>
     <function access="private" specifier="non virtual">closeEvent( QCloseEvent * pCloseEvent )</function>
+    <function access="private" specifier="non virtual" returnType="bool">decodeDragFiles( const QMimeSource * pEvent, QStringList &amp; files )</function>
     <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent *pDragEnterEvent )</function>
     <function access="private" specifier="non virtual">dropEvent( QDropEvent *pDropEvent )</function>
     <function access="private" specifier="non virtual">customEvent( QCustomEvent *pCustomEvent )</function>
