@@ -35,5 +35,5 @@ TEMPLATE = app
 CONFIG  += qt @ac_thread@ warn_on @ac_debug@
 LANGUAGE = C++
 
-LIBS    += -llscp
+LIBS    += @ac_libs@
 

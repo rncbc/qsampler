@@ -5,6 +5,10 @@ ChangeLog
 
 0.0.4   2004-11-17  Work in progress...
 
+* Instrument index selection now made via combo box widget;
+  actual instrument names are now properly retrieved from
+  the instrument file, provided if libgig is available.
+
 * Sampler channels strips are just created if, and only if,
   the respective channel setup dialog is actually accepted,
   following common user-interface guidelines.

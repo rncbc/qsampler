@@ -25,6 +25,14 @@
 
 #include "config.h"
 
+#include <qfileinfo.h>
+
+#ifdef CONFIG_LIBGIG
+#include "gig.h"
+#else
+#define QSAMPLER_INSTRUMENT_MAX 10
+#endif
+
 
 //-------------------------------------------------------------------------
 // qsamplerChannel - Sampler channel structure.
@@ -418,6 +426,67 @@ void qsamplerChannel::appendMessagesError( const QString& s )
 void qsamplerChannel::appendMessagesClient( const QString& s )
 {
     m_pMainForm->appendMessagesClient(s);
+}
+
+
+// Retrieve the instrument list of a instrument file (.gig).
+QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
+{
+    QFileInfo fileinfo(sInstrumentFile);
+    QString sInstrumentName = fileinfo.fileName();
+    QStringList instlist;
+
+    if (fileinfo.exists()) {
+#ifdef CONFIG_LIBGIG
+        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
+        gig::File  *pGig  = new gig::File(pRiff);
+        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
+        while (pInstrument) {
+            sInstrumentName = (pInstrument->pInfo)->Name;
+            instlist.append(sInstrumentName);
+            pInstrument = pGig->GetNextInstrument();
+        }
+        delete pGig;
+        delete pRiff;
+#else
+        for (int iInstrumentNr = 0; iInstrumentNr < QSAMPLER_INSTRUMENT_MAX; iInstrumentNr++)
+            instlist.append(sInstrumentName + " [" + QString::number(iInstrumentNr) + "]");
+#endif
+    }
+    else instlist.append(sInstrumentName);
+    
+    return instlist;
+}
+
+
+// Retrieve the spacific instrument name of a instrument file (.gig), given its index.
+QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile, int iInstrumentNr )
+{
+    QFileInfo fileinfo(sInstrumentFile);
+    QString sInstrumentName = fileinfo.fileName();
+
+    if (fileinfo.exists()) {
+#ifdef CONFIG_LIBGIG
+        RIFF::File *pRiff = new RIFF::File(sInstrumentFile);
+        gig::File  *pGig  = new gig::File(pRiff);
+        int iIndex = 0;
+        gig::Instrument *pInstrument = pGig->GetFirstInstrument();
+        while (pInstrument) {
+            if (iIndex == iInstrumentNr) {
+                sInstrumentName = (pInstrument->pInfo)->Name;
+                break;
+            }
+            iIndex++;
+            pInstrument = pGig->GetNextInstrument();
+        }
+        delete pGig;
+        delete pRiff;
+#else
+        sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
+#endif
+    }
+
+    return sInstrumentName;
 }
 
 

@@ -93,7 +93,7 @@
         </widget>
         <widget class="QLabel" row="1" column="0">
             <property name="name">
-                <cstring>InstrumentTextLabel</cstring>
+                <cstring>InstrumentFileTextLabel</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -104,7 +104,7 @@
                 </sizepolicy>
             </property>
             <property name="text">
-                <string>&amp;Instrument:</string>
+                <string>&amp;File:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
@@ -221,18 +221,26 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="QSpinBox" row="2" column="1">
+        <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>InstrumentNrSpinBox</cstring>
+                <cstring>InstrumentNrComboBox</cstring>
             </property>
-            <property name="maximumSize">
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
                 <size>
-                    <width>40</width>
-                    <height>32767</height>
+                    <width>320</width>
+                    <height>0</height>
                 </size>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Instrument index</string>
+                <string>Instrument name</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
@@ -240,29 +248,13 @@
                 <cstring>InstrumentNrTextLabel</cstring>
             </property>
             <property name="text">
-                <string>Inde&amp;x:</string>
+                <string>&amp;Instrument:</string>
             </property>
             <property name="alignment">
                 <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>InstrumentNrSpinBox</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>InstrumentNameTextLabel</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Instrument name</string>
+                <cstring>InstrumentNrComboBox</cstring>
             </property>
         </widget>
         <widget class="QGroupBox" row="3" column="1" rowspan="1" colspan="3">
@@ -566,12 +558,6 @@
         <slot>openInstrumentFile()</slot>
     </connection>
     <connection>
-        <sender>InstrumentNrSpinBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>qsamplerChannelForm</receiver>
-        <slot>updateInstrumentName()</slot>
-    </connection>
-    <connection>
         <sender>MidiDriverComboBox</sender>
         <signal>activated(int)</signal>
         <receiver>qsamplerChannelForm</receiver>
@@ -612,7 +598,7 @@
     <tabstop>EngineNameComboBox</tabstop>
     <tabstop>InstrumentFileComboBox</tabstop>
     <tabstop>InstrumentFilePushButton</tabstop>
-    <tabstop>InstrumentNrSpinBox</tabstop>
+    <tabstop>InstrumentNrComboBox</tabstop>
     <tabstop>MidiDriverComboBox</tabstop>
     <tabstop>MidiPortSpinBox</tabstop>
     <tabstop>MidiChannelComboBox</tabstop>
