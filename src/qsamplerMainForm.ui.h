@@ -544,16 +544,16 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
         appendMessagesError(tr("Some setttings could not be loaded\nfrom \"%1\" session file.\n\nSorry.").arg(sFilename));
 
     // Now we'll try to create the whole GUI session.
-    int iChannels = ::lscp_get_channels(m_pClient);
-    if (iChannels < 0) {
-        appendMessagesClient("lscp_get_channels");
-        appendMessagesError(tr("Could not get current number of channels.\n\nSorry."));
+    int *piChannelIDs = ::lscp_list_channels(m_pClient);
+    if (piChannelIDs == NULL) {
+        appendMessagesClient("lscp_list_channels");
+        appendMessagesError(tr("Could not get current list of channels.\n\nSorry."));
     }
     
     // Try to (re)create each channel.
     m_pWorkspace->setUpdatesEnabled(false);
-    for (int iChannelID = 0; iChannelID < iChannels; iChannelID++) {
-        createChannelStrip(iChannelID);
+    for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
+        createChannelStrip(new qsamplerChannel(this, piChannelIDs[iChannel]));
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
     m_pWorkspace->setUpdatesEnabled(true);
@@ -771,9 +771,28 @@ void qsamplerMainForm::editAddChannel (void)
     if (m_pClient == NULL)
         return;
 
-    // Just create the channel strip,
-    // by giving an invalid channel id.
-    createChannelStrip(-1);
+    // Just create the channel instance...
+    qsamplerChannel *pChannel = new qsamplerChannel(this);
+    if (pChannel == NULL)
+        return;
+
+    // Before we show it up, may be we'll
+    // better ask for some initial values?
+    if (!pChannel->channelSetup(this)) {
+        delete pChannel;
+        return;
+    }
+    
+    // And give it to the strip (will own the channel instance, if successful).
+    if (!createChannelStrip(pChannel)) {
+        delete pChannel;
+        return;
+    }
+
+    // Make that an overall update.
+    m_iDirtyCount++;
+    m_iChangeCount++;
+    stabilizeForm();
 }
 
 
@@ -1358,9 +1377,9 @@ void qsamplerMainForm::updateMessagesCapture (void)
 // qsamplerMainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
-qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( int iChannelID )
+qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pChannel )
 {
-    if (m_pClient == NULL)
+    if (m_pClient == NULL || pChannel == NULL)
         return NULL;
 
     // Prepare for auto-arrange?
@@ -1378,17 +1397,12 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( int iChannelID )
     // Add a new channel itema...
     WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
     pChannelStrip = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
-    // Actual channel setup.
-    pChannelStrip->setup(this, iChannelID);
-    QObject::connect(pChannelStrip, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelStripChanged(qsamplerChannelStrip *)));
-    // Before we show it up, may be we'll
-    // better ask for some initial values?
-    if (iChannelID < 0 && !pChannelStrip->channelSetup()) {
-        // No luck, bail out...
-        delete pChannelStrip;
+    if (pChannelStrip == NULL)
         return NULL;
-    }
-
+        
+    // Actual channel strip setup...
+    pChannelStrip->setup(pChannel);
+    QObject::connect(pChannelStrip, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelStripChanged(qsamplerChannelStrip *)));
     // Set some initial aesthetic options...
     if (m_pOptions) {
         // Background display effect...

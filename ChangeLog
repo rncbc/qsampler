@@ -3,7 +3,7 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.4   2004-11-17  Fourth alpha-release.
+0.0.4   2004-11-19  Fourth alpha-release.
 
 * Instrument index selection now made via combo box widget;
   actual instrument names are now properly retrieved from

@@ -101,17 +101,23 @@ public:
     bool     setVolume(float fVolume);
 
     // Channel info structure map executive.
-    bool updateChannelInfo();
+    bool     updateChannelInfo();
 
     // Reset channel method.
-    bool resetChannel();
+    bool     resetChannel();
+
+    // Channel setup dialog form.
+    bool     channelSetup(QWidget *pParent);
 
     // Message logging methods (brainlessly mapped to main form's).
-    void appendMessages       (const QString & s);
-    void appendMessagesColor  (const QString & s, const QString & c);
-    void appendMessagesText   (const QString & s);
-    void appendMessagesError  (const QString & s);
-    void appendMessagesClient (const QString & s);
+    void     appendMessages       (const QString & s);
+    void     appendMessagesColor  (const QString & s, const QString & c);
+    void     appendMessagesText   (const QString & s);
+    void     appendMessagesError  (const QString & s);
+    void     appendMessagesClient (const QString & s);
+
+    // Context menu event handler.
+    void contextMenuEvent(QContextMenuEvent *pEvent);
 
     // Retrieve the available instrument name(s) of an instrument file (.gig).
     static QString     getInstrumentName (const QString& sInstrumentFile, int iInstrumentNr);
