@@ -110,7 +110,7 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 
     // Engine name...
     QString sEngineName = pChannel->engineName();
-    if (sEngineName.isEmpty() && bNew)
+    if (sEngineName.isEmpty() || bNew)
         sEngineName = pOptions->sEngineName;
     if (sEngineName.isEmpty())
         sEngineName = qsamplerChannel::noEngineName();

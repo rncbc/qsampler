@@ -109,11 +109,11 @@ public:
     // Channel info structure map executive.
     bool     updateChannelInfo();
 
-    // Reset channel method.
-    bool     resetChannel();
-
     // Channel setup dialog form.
     bool     channelSetup(QWidget *pParent);
+
+    // Reset channel method.
+    bool     channelReset();
 
     // Message logging methods (brainlessly mapped to main form's).
     void     appendMessages       (const QString & s);

@@ -424,6 +424,7 @@
 <slots>
     <slot specifier="non virtual">volumeChanged(int)</slot>
     <slot specifier="non virtual" returnType="bool">channelSetup()</slot>
+    <slot specifier="non virtual" returnType="bool">channelReset()</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
@@ -440,8 +441,8 @@
     <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
     <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
     <function specifier="non virtual" returnType="bool">updateInstrumentName( bool bForce )</function>
-    <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelVolume( void )</function>
+    <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelUsage( void )</function>
 </functions>
 <pixmapinproject/>
