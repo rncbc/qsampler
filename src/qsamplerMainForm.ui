@@ -743,6 +743,7 @@
     <forward>class qsamplerChannel;</forward>
     <forward>class qsamplerMessages;</forward>
     <forward>class qsamplerChannelStrip;</forward>
+    <forward>class qsamplerDeviceForm;</forward>
 </forwards>
 <variables>
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
