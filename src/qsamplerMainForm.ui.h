@@ -1208,10 +1208,10 @@ void qsamplerMainForm::timerSlot (void)
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
         if (m_iTimerSlot >= QSAMPLER_TIMER_PERIOD)  {
             m_iTimerSlot = 0;
-            appendMessages("qsamplerMainForm::timerSlot: updateChannelUsage(*)");
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
                 qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+                appendMessages("Channel " + QString::number(pChannel->channelID()) + ": updateChannelUsage()");
                 pChannel->updateChannelUsage();
             }
         }

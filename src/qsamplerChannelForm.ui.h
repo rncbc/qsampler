@@ -99,7 +99,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         for (int iMidiDriver = 0; ppszMidiDrivers[iMidiDriver]; iMidiDriver++)
             MidiDriverComboBox->insertItem(ppszMidiDrivers[iMidiDriver]);
     }
-    else m_pChannel->appendMessagesClient("lscp_get_available_midi_types");
+    else m_pChannel->appendMessagesClient("lscp_get_available_midi_drivers");
 
     // Read proper channel information,
     // and populate the channel form fields.
