@@ -34,10 +34,10 @@ IMAGES   = ../icons/qsampler.png \
            ../icons/channelsArrange.png \
            ../icons/formAccept.png \
            ../icons/formReject.png \
+           ../icons/displaybg1.png \
            ../icons/formRefresh.png \
            ../icons/deviceCreate.png \
            ../icons/deviceDelete.png \
-           ../icons/displaybg1.png \
            ../icons/midi1.png \
            ../icons/midi2.png \
            ../icons/audio1.png \

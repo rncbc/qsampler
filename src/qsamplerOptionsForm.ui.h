@@ -107,6 +107,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
 
     // Other options finally.
     ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
+    KeepOnTopCheckBox->setChecked(m_pOptions->bKeepOnTop);
     StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
     CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
     InstrumentNamesCheckBox->setChecked(m_pOptions->bInstrumentNames);
@@ -128,28 +129,29 @@ void qsamplerOptionsForm::accept (void)
     // Save options...
     if (m_iDirtyCount > 0) {
         // Server settings....
-        m_pOptions->sServerHost          = ServerHostComboBox->currentText().stripWhiteSpace();
-        m_pOptions->iServerPort          = ServerPortComboBox->currentText().toInt();
-        m_pOptions->iServerTimeout       = ServerTimeoutSpinBox->value();
-        m_pOptions->bServerStart         = ServerStartCheckBox->isChecked();
-        m_pOptions->sServerCmdLine       = ServerCmdLineComboBox->currentText().simplifyWhiteSpace();
-        m_pOptions->iStartDelay          = StartDelaySpinBox->value();
+        m_pOptions->sServerHost         = ServerHostComboBox->currentText().stripWhiteSpace();
+        m_pOptions->iServerPort         = ServerPortComboBox->currentText().toInt();
+        m_pOptions->iServerTimeout      = ServerTimeoutSpinBox->value();
+        m_pOptions->bServerStart        = ServerStartCheckBox->isChecked();
+        m_pOptions->sServerCmdLine      = ServerCmdLineComboBox->currentText().simplifyWhiteSpace();
+        m_pOptions->iStartDelay         = StartDelaySpinBox->value();
         // Channels options...
-        m_pOptions->sDisplayFont         = DisplayFontTextLabel->font().toString();
-        m_pOptions->bDisplayEffect       = DisplayEffectCheckBox->isChecked();
-        m_pOptions->bAutoRefresh         = AutoRefreshCheckBox->isChecked();
-        m_pOptions->iAutoRefreshTime     = AutoRefreshTimeSpinBox->value();
-        m_pOptions->iMaxVolume           = MaxVolumeSpinBox->value();
+        m_pOptions->sDisplayFont        = DisplayFontTextLabel->font().toString();
+        m_pOptions->bDisplayEffect      = DisplayEffectCheckBox->isChecked();
+        m_pOptions->bAutoRefresh        = AutoRefreshCheckBox->isChecked();
+        m_pOptions->iAutoRefreshTime    = AutoRefreshTimeSpinBox->value();
+        m_pOptions->iMaxVolume          = MaxVolumeSpinBox->value();
         // Messages options...
-        m_pOptions->sMessagesFont        = MessagesFontTextLabel->font().toString();
-        m_pOptions->bMessagesLimit       = MessagesLimitCheckBox->isChecked();
-        m_pOptions->iMessagesLimitLines  = MessagesLimitLinesSpinBox->value();
+        m_pOptions->sMessagesFont       = MessagesFontTextLabel->font().toString();
+        m_pOptions->bMessagesLimit      = MessagesLimitCheckBox->isChecked();
+        m_pOptions->iMessagesLimitLines = MessagesLimitLinesSpinBox->value();
         // Other options...
-        m_pOptions->bConfirmRemove       = ConfirmRemoveCheckBox->isChecked();
-        m_pOptions->bStdoutCapture       = StdoutCaptureCheckBox->isChecked();
-        m_pOptions->bCompletePath        = CompletePathCheckBox->isChecked();
-        m_pOptions->bInstrumentNames     = InstrumentNamesCheckBox->isChecked();
-        m_pOptions->iMaxRecentFiles      = MaxRecentFilesSpinBox->value();
+        m_pOptions->bConfirmRemove      = ConfirmRemoveCheckBox->isChecked();
+        m_pOptions->bKeepOnTop          = KeepOnTopCheckBox->isChecked();
+        m_pOptions->bStdoutCapture      = StdoutCaptureCheckBox->isChecked();
+        m_pOptions->bCompletePath       = CompletePathCheckBox->isChecked();
+        m_pOptions->bInstrumentNames    = InstrumentNamesCheckBox->isChecked();
+        m_pOptions->iMaxRecentFiles     = MaxRecentFilesSpinBox->value();
         // Reset dirty flag.
         m_iDirtyCount = 0;
     }

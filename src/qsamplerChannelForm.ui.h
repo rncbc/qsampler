@@ -316,6 +316,8 @@ void qsamplerChannelForm::updateInstrumentName (void)
 // Refresh MIDI device options.
 void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 {
+	const QString sDriverName = sMidiDriver.upper();
+	
 	MidiDeviceComboBox->clear();
 	m_audioDevices.clear();
 
@@ -325,7 +327,7 @@ void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		qsamplerDevice *pDevice = new qsamplerDevice(m_pChannel->client(),
 			qsamplerDevice::Midi, piDeviceIDs[i]);
-		if (pDevice->driverName() == sMidiDriver) {
+		if (pDevice->driverName().upper() == sDriverName) {
 			MidiDeviceComboBox->insertItem(midiPixmap, pDevice->deviceName());
 			m_midiDevices.append(pDevice);
 		} else {
@@ -334,6 +336,8 @@ void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 	}
 
 	bool bEnabled = !m_midiDevices.isEmpty();
+	if (!bEnabled)
+		MidiDeviceComboBox->insertItem(tr("(New MIDI device)"));
 	MidiDeviceTextLabel->setEnabled(bEnabled);
 	MidiDeviceComboBox->setEnabled(bEnabled);
 	optionsChanged();
@@ -343,6 +347,8 @@ void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 // Refresh Audio device options.
 void qsamplerChannelForm::selectAudioDriver ( const QString& sAudioDriver )
 {
+	const QString sDriverName = sAudioDriver.upper();
+
 	AudioDeviceComboBox->clear();
 	m_audioDevices.clear();
 
@@ -352,7 +358,7 @@ void qsamplerChannelForm::selectAudioDriver ( const QString& sAudioDriver )
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		qsamplerDevice *pDevice = new qsamplerDevice(m_pChannel->client(),
 			qsamplerDevice::Audio, piDeviceIDs[i]);
-		if (pDevice->driverName() == sAudioDriver) {
+		if (pDevice->driverName().upper() == sDriverName) {
 			AudioDeviceComboBox->insertItem(audioPixmap, pDevice->deviceName());
 			m_audioDevices.append(pDevice);
 		} else {
@@ -361,6 +367,8 @@ void qsamplerChannelForm::selectAudioDriver ( const QString& sAudioDriver )
 	}
 
 	bool bEnabled = !m_audioDevices.isEmpty();
+	if (!bEnabled)
+		AudioDeviceComboBox->insertItem(tr("(New Audio device)"));
 	AudioDeviceTextLabel->setEnabled(bEnabled);
 	AudioDeviceComboBox->setEnabled(bEnabled);
 	optionsChanged();

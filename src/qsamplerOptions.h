@@ -70,6 +70,7 @@ public:
     bool    bMessagesLimit;
     int     iMessagesLimitLines;
     bool    bConfirmRemove;
+    bool    bKeepOnTop;
     bool    bStdoutCapture;
     bool    bCompletePath;
     bool    bInstrumentNames;

@@ -938,15 +938,34 @@
                                             </font>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Confirm channel removal</string>
+                                            <string>&amp;Confirm channel and device removal</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+C</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Whether to ask for confirmation on channel removal</string>
+                                            <string>Whether to ask for confirmation on channel or device removal</string>
                                         </property>
                                     </widget>
+		                            <widget class="QCheckBox">
+		                                <property name="name">
+		                                    <cstring>KeepOnTopCheckBox</cstring>
+		                                </property>
+		                                <property name="font">
+		                                    <font>
+		                                        <bold>0</bold>
+		                                    </font>
+		                                </property>
+		                                <property name="text">
+		                                    <string>&amp;Keep child windows always on top</string>
+		                                </property>
+		                                <property name="accel">
+		                                    <string>Alt+K</string>
+		                                </property>
+		                                <property name="toolTip" stdset="0">
+		                                    <string>Whether to keep all child windows on top of the main window</string>
+		                                </property>
+		                            </widget>
                                     <widget class="QCheckBox">
                                         <property name="name">
                                             <cstring>StdoutCaptureCheckBox</cstring>
@@ -1180,6 +1199,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>KeepOnTopCheckBox</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>StdoutCaptureCheckBox</sender>
         <signal>stateChanged(int)</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -1233,6 +1258,7 @@
     <tabstop>MessagesLimitCheckBox</tabstop>
     <tabstop>MessagesLimitLinesSpinBox</tabstop>
     <tabstop>ConfirmRemoveCheckBox</tabstop>
+    <tabstop>KeepOnTopCheckBox</tabstop>
     <tabstop>StdoutCaptureCheckBox</tabstop>
     <tabstop>CompletePathCheckBox</tabstop>
     <tabstop>InstrumentNamesCheckBox</tabstop>
