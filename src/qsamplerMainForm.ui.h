@@ -54,9 +54,41 @@
 #define QSAMPLER_STATUS_SESSION 3       // Current session modification state.
 
 
+// All winsock apps needs this.
 #if defined(WIN32)
 static WSADATA _wsaData;
 #endif
+
+
+//-------------------------------------------------------------------------
+// qsamplerCustomEvent -- specialty for callback comunication.
+
+#define QSAMPLER_CUSTOM_EVENT   1000
+
+class qsamplerCustomEvent : public QCustomEvent
+{
+public:
+
+    // Constructor.
+    qsamplerCustomEvent(lscp_event_t event, const char *pchData, int cchData)
+        : QCustomEvent(QSAMPLER_CUSTOM_EVENT)
+    {
+        m_event = event;
+        m_data.setLatin1(pchData, cchData);
+    }
+
+    // Accessors.
+    lscp_event_t event() { return m_event; }
+    QString&     data()  { return m_data;  }
+
+private:
+
+    // The proper event type.
+    lscp_event_t m_event;
+    // The event data as a string.
+    QString      m_data;
+};
+
 
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window form implementation.
@@ -273,6 +305,19 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
         QString sUrl;
         if (QTextDrag::decode(pDropEvent, sUrl) && closeSession(true))
             loadSessionFile(QUrl(sUrl).path());
+    }
+}
+
+
+// Custome event handler.
+void qsamplerMainForm::customEvent ( QCustomEvent *pCustomEvent )
+{
+    // For the time being, just pump it to messages.
+    if (pCustomEvent->type() == QSAMPLER_CUSTOM_EVENT) {
+        qsamplerCustomEvent *pEvent = (qsamplerCustomEvent *) pCustomEvent;
+        appendMessagesColor(tr("Notify event: %1 data: %2")
+            .arg(::lscp_event_to_text(pEvent->event()))
+            .arg(pEvent->data()), "#996699"); 
     }
 }
 
@@ -1523,15 +1568,17 @@ void qsamplerMainForm::processServerExit (void)
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Client stuff.
 
-
 // The LSCP client callback procedure.
-lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/, lscp_event_t /*event*/, const char */*pchBuffer*/, int /*cchBuffer*/, void */*pvData*/ )
+lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/, lscp_event_t event, const char *pchData, int cchData, void *pvData )
 {
-    // FIXME: DO NOT EVER call any GUI code here,
+    qsamplerMainForm *pMainForm = (qsamplerMainForm *) pvData;
+    if (pMainForm == NULL)
+        return LSCP_FAILED;
+
+    // ATTN: DO NOT EVER call any GUI code here,
     // as this is run under some other thread context.
     // A custom event must be posted here...
-    //
-    // QApplication::postEvent((qjackctlMainForm *) pvData, new QCustomEvent(...));
+    QApplication::postEvent(pMainForm, new qsamplerCustomEvent(event, pchData, cchData));
 
     return LSCP_OK;
 }
