@@ -54,43 +54,43 @@ void qsamplerDeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 {
 	if (pParamInfo == NULL)
 		return;
-		
+
 	// Info structure field members.
-	
+
 	type = pParamInfo->type;
-	
+
 	if (pParamInfo->description)
 		description = pParamInfo->description;
 	else
 		description = QString::null;
-	
+
 	mandatory = (bool) pParamInfo->mandatory;
 	fix = (bool) pParamInfo->fix;
 	multiplicity = (bool) pParamInfo->multiplicity;
-	
+
 	depends.clear();
 	for (int i = 0; pParamInfo->depends && pParamInfo->depends[i]; i++)
 		depends.append(pParamInfo->depends[i]);
-	
+
 	if (pParamInfo->defaultv)
 		defaultv = pParamInfo->defaultv;
 	else
 		defaultv = QString::null;
-	
+
 	if (pParamInfo->range_min)
 		range_min = pParamInfo->range_min;
 	else
 		range_min = QString::null;
-	
+
 	if (pParamInfo->range_max)
 		range_max = pParamInfo->range_max;
 	else
 		range_max = QString::null;
-	
+
 	possibilities.clear();
 	for (int i = 0; pParamInfo->possibilities && pParamInfo->possibilities[i]; i++)
 		possibilities.append(pParamInfo->possibilities[i]);
-		
+
 	// The current parameter value.
 	if (pszValue)
 		value = pszValue;
@@ -110,7 +110,7 @@ qsamplerDevice::qsamplerDevice ( qsamplerMainForm *pMainForm,
 	m_pMainForm = pMainForm;
 
 	m_ports.setAutoDelete(true);
-	
+
 	setDevice(deviceType, iDeviceID);
 }
 
@@ -138,7 +138,7 @@ void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 	// Device id and type should be always set.
 	m_iDeviceID  = iDeviceID;
 	m_deviceType = deviceType;
-	
+
 	// Reset device parameters and ports anyway.
 	m_params.clear();
 	m_ports.clear();
@@ -318,7 +318,7 @@ bool qsamplerDevice::setParam ( const QString& sParam,
 {
 	// Set proper device parameter.
 	m_params[sParam.upper()].value = sValue;
-	
+
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
 	if (m_iDeviceID >= 0) {
@@ -357,7 +357,7 @@ bool qsamplerDevice::setParam ( const QString& sParam,
 				QObject::tr("Could not set device parameter value.\n\nSorry."));
 		}
 	}
-	
+
 	// Return whether we're need a view refresh.
 	return (iRefresh > 0);
 }
@@ -417,11 +417,13 @@ bool qsamplerDevice::createDevice (void)
 
 	// Show result.
 	if (m_iDeviceID >= 0) {
+		// Refresh our own stuff...
+		setDevice(m_deviceType, m_iDeviceID);
 		appendMessages(QObject::tr("created."));
 	} else {
 		appendMessagesError(QObject::tr("Could not create device.\n\nSorry."));
 	}
-		
+
 	// Return whether we're a valid device...
 	return (m_iDeviceID >= 0);
 }
@@ -454,7 +456,7 @@ bool qsamplerDevice::deleteDevice (void)
 	} else {
 		appendMessagesError(QObject::tr("Could not delete device.\n\nSorry."));
 	}
-	
+
 	// Return whether we've done it..
 	return (ret == LSCP_OK);
 }
@@ -637,7 +639,7 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 	qsamplerDeviceType deviceType )
 {
 	QStringList drivers;
-	
+
 	const char **ppszDrivers = NULL;
 	switch (deviceType) {
 	case qsamplerDevice::Audio:
@@ -649,7 +651,7 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 	case qsamplerDevice::None:
 		break;
 	}
-	
+
 	for (int iDriver = 0; ppszDrivers[iDriver]; iDriver++)
 		drivers.append(ppszDrivers[iDriver]);
 

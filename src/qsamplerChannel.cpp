@@ -50,11 +50,11 @@ qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
 //  m_sInstrumentFile   = m_sInstrumentName;
 	m_iInstrumentNr     = -1;
 	m_iInstrumentStatus = -1;
-	m_sMidiDriver       = "Alsa";   // DEPRECATED.
+	m_sMidiDriver       = "ALSA";
 	m_iMidiDevice       = -1;
 	m_iMidiPort         = -1;
 	m_iMidiChannel      = -1;
-	m_sAudioDriver      = "Alsa";   // DEPRECATED.
+	m_sAudioDriver      = "ALSA";
 	m_iAudioDevice      = -1;
 	m_fVolume           = 0.0;
 
@@ -131,7 +131,7 @@ bool qsamplerChannel::removeChannel (void)
 			m_iChannelID = -1;
 		}
 	}
-	
+
 	// Return whether we've removed the channel...
 	return (m_iChannelID < 0);
 }
@@ -168,7 +168,7 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sEngineName == sEngineName)
 		return true;
-		
+
 	if (::lscp_load_engine(client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_load_engine");
 		return false;
@@ -221,7 +221,7 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 
 	appendMessages(QObject::tr("Instrument: \"%1\" (%2).")
 		.arg(sInstrumentFile).arg(iInstrumentNr));
-		
+
 	return setInstrument(sInstrumentFile, iInstrumentNr);
 }
 
@@ -472,8 +472,8 @@ bool qsamplerChannel::updateChannelInfo (void)
 		m_sInstrumentFile = QString::null;
 		m_sInstrumentName = QString::null;
 	}
-	
-	// FIXME: DEPRECATED...
+
+	// Time for device info grabbing...
 	lscp_device_info_t *pDeviceInfo;
 	const QString sNone = QObject::tr("(none)");
 	// Audio device driver type.
@@ -520,7 +520,7 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 	bool bResult = false;
 
 	appendMessages(QObject::tr("setup..."));
-	
+
 	qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(pParent);
 	if (pChannelForm) {
 		pChannelForm->setup(this);

@@ -828,7 +828,7 @@
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
     <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
-    <function specifier="non virtual">setupDevice( qsamplerDevice *pDevice )</function>
+	<function specifier="non virtual">setupDevice( qsamplerDevice *pDevice, qsamplerDevice::qsamplerDeviceType deviceTypeMode, const QString &amp; sDriverName )</function>
     <function specifier="non virtual">selectMidiDriverItem( const QString &amp; sMidiDriver )</function>
     <function specifier="non virtual">selectMidiDeviceItem( int iMidiItem )</function>
     <function specifier="non virtual">selectAudioDriverItem( const QString &amp; sAudioDriver )</function>
