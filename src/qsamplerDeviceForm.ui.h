@@ -234,7 +234,6 @@ void qsamplerDeviceForm::refreshDevices (void)
 		m_pAudioItems = new qsamplerDeviceItem(DeviceListView, m_pClient,
 			qsamplerDevice::Audio);
 		if (m_pAudioItems) {
-			m_pAudioItems->setText(0, tr("Audio"));
 			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
 			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 				new qsamplerDeviceItem(m_pAudioItems, m_pClient,
@@ -246,7 +245,6 @@ void qsamplerDeviceForm::refreshDevices (void)
 		m_pMidiItems = new qsamplerDeviceItem(DeviceListView, m_pClient,
 			qsamplerDevice::Midi);
 		if (m_pMidiItems) {
-			m_pMidiItems->setText(0, tr("MIDI"));
 			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 				new qsamplerDeviceItem(m_pMidiItems, m_pClient,
@@ -307,6 +305,7 @@ void qsamplerDeviceForm::selectDevice (void)
 		m_deviceType = qsamplerDevice::None;
 		DeviceNameTextLabel->setText(QString::null);
 		DeviceParamTable->setNumRows(0);
+		DevicePortComboBox->clear();
 		DevicePortParamTable->setNumRows(0);
 		DevicePortComboBox->setEnabled(false);
 		DevicePortParamTable->setEnabled(false);

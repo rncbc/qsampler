@@ -302,6 +302,9 @@ qsamplerDevicePortList& qsamplerDevice::ports (void)
 // Device parameter dependencies refreshner.
 int qsamplerDevice::refreshParams ( lscp_client_t *pClient )
 {
+	// This should only make sense for scratch devices...
+	if (m_iDeviceID >= 0)
+	    return 0;
 	// Refresh all parameters that have dependencies...
 	int iParams = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
@@ -315,6 +318,9 @@ int qsamplerDevice::refreshParams ( lscp_client_t *pClient )
 // Device port/channel list refreshner.
 int qsamplerDevice::refreshPorts ( lscp_client_t *pClient )
 {
+	// This should only make sense for actual devices...
+	if (m_iDeviceID < 0)
+	    return 0;
 	// Port/channel count determination...
 	int iPorts = 0;
 	switch (m_deviceType) {
@@ -340,6 +346,9 @@ int qsamplerDevice::refreshPorts ( lscp_client_t *pClient )
 int qsamplerDevice::refreshDepends ( lscp_client_t *pClient,
 	const QString& sParam )
 {
+	// This should only make sense for scratch devices...
+	if (m_iDeviceID >= 0)
+	    return 0;
 	// Refresh all parameters that depend on this one...
 	int iDepends = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
@@ -378,9 +387,10 @@ int qsamplerDevice::refreshParam ( lscp_client_t *pClient,
 	pDepends[iDepend].key   = NULL;
 	pDepends[iDepend].value = NULL;
 
-#if 0
 	// FIXME: Some parameter dependencies (e.g.ALSA CARD)
-	// are blocking for no reason, causing timeout-crashes.
+	// are blocking for no reason, causing potential timeout-crashes.
+	// hopefully this gets mitigated if this dependency hell is only
+	// carried out for scratch devices...
 
 	// Retrieve some modern parameters...
 	lscp_param_info_t *pParamInfo = NULL;
@@ -400,7 +410,7 @@ int qsamplerDevice::refreshParam ( lscp_client_t *pClient,
 		param = qsamplerDeviceParam(pParamInfo, QString(param.value));
 		iRefresh++;
 	}
-#endif
+
 	// Free used parameter array.
 	delete pDepends;
 
@@ -644,7 +654,7 @@ qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent,
 	// Set read-onlyness of each column
 	QTable::setColumnReadOnly(0, true);
 	QTable::setColumnReadOnly(1, true);
-//  QTable::setColumnReadOnly(2, true); -- of course not.
+//  QTable::setColumnReadOnly(2, false); -- of course not.
 	QTable::setColumnStretchable(1, true);
 }
 
