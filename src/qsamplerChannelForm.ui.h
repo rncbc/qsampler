@@ -84,20 +84,20 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
     else m_pChannel->appendMessagesClient("lscp_get_available_engines");
 
     // Populate Audio output type list.
-    AudioTypeComboBox->clear();
-    const char **ppszAudioTypes = ::lscp_get_available_audio_types(m_pChannel->client());
-    if (ppszAudioTypes) {
-        for (int iAudioType = 0; ppszAudioTypes[iAudioType]; iAudioType++)
-            AudioTypeComboBox->insertItem(ppszAudioTypes[iAudioType]);
+    AudioDriverComboBox->clear();
+    const char **ppszAudioDrivers = ::lscp_get_available_audio_drivers(m_pChannel->client());
+    if (ppszAudioDrivers) {
+        for (int iAudioDriver = 0; ppszAudioDrivers[iAudioDriver]; iAudioDriver++)
+            AudioDriverComboBox->insertItem(ppszAudioDrivers[iAudioDriver]);
     }
-    else m_pChannel->appendMessagesClient("lscp_get_available_audio_types");
+    else m_pChannel->appendMessagesClient("lscp_get_available_audio_drivers");
 
     // Populate MIDI input type list.
-    MidiTypeComboBox->clear();
-    const char **ppszMidiTypes = ::lscp_get_available_midi_types(m_pChannel->client());
-    if (ppszMidiTypes) {
-        for (int iMidiType = 0; ppszMidiTypes[iMidiType]; iMidiType++)
-            MidiTypeComboBox->insertItem(ppszMidiTypes[iMidiType]);
+    MidiDriverComboBox->clear();
+    const char **ppszMidiDrivers = ::lscp_get_available_midi_drivers(m_pChannel->client());
+    if (ppszMidiDrivers) {
+        for (int iMidiDriver = 0; ppszMidiDrivers[iMidiDriver]; iMidiDriver++)
+            MidiDriverComboBox->insertItem(ppszMidiDrivers[iMidiDriver]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_midi_types");
 
@@ -113,15 +113,17 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         InstrumentFileComboBox->setCurrentText(pChannelInfo->instrument_file);
         InstrumentNrSpinBox->setValue(pChannelInfo->instrument_nr);
         // MIDI input...
-        if (MidiTypeComboBox->listBox()->findItem(pChannelInfo->midi_type, Qt::ExactMatch) == NULL)
-            MidiTypeComboBox->insertItem(pChannelInfo->midi_type);
-        MidiTypeComboBox->setCurrentText(pChannelInfo->midi_type);
+    //  -- TODO: Get MIDI driver from MIDI device (?midi_driver <- pChannelInfo->midi_device).
+    //  if (MidiDriverComboBox->listBox()->findItem(?midi_driver, Qt::ExactMatch) == NULL)
+    //      MidiDriverComboBox->insertItem(?midi_driver);
+    //  MidiDriverComboBox->setCurrentText(?midi_driver);
         MidiPortSpinBox->setValue(pChannelInfo->midi_port);
         MidiChannelSpinBox->setValue(pChannelInfo->midi_channel);
         // Audio output...
-        if (AudioTypeComboBox->listBox()->findItem(pChannelInfo->audio_type, Qt::ExactMatch) == NULL)
-            AudioTypeComboBox->insertItem(pChannelInfo->audio_type);
-        AudioTypeComboBox->setCurrentText(pChannelInfo->audio_type);
+    //  -- TODO: Get Audio driver from Audio device (?audio_driver <- pChannelInfo->audio_device).
+    //  if (AudioDriverComboBox->listBox()->findItem(?audio_driver, Qt::ExactMatch) == NULL)
+    //      AudioDriverComboBox->insertItem(?audio_driver);
+    //  AudioDriverComboBox->setCurrentText(?audio_driver);
     } else {
         m_pChannel->appendMessagesClient("lscp_get_channel_info");
         m_pChannel->appendMessagesError(tr("Could not get channel information.\n\nSorry."));
@@ -165,7 +167,7 @@ void qsamplerChannelForm::accept (void)
         // MIDI input type...
         if (::lscp_set_channel_midi_type(m_pChannel->client(),
             m_pChannel->channelID(),
-            MidiTypeComboBox->currentText().latin1()) != LSCP_OK) {
+            MidiDriverComboBox->currentText().latin1()) != LSCP_OK) {
             m_pChannel->appendMessagesClient("lscp_set_channel_midi_type");
             iErrors++;
         }
@@ -186,7 +188,7 @@ void qsamplerChannelForm::accept (void)
         // Audio output type...
         if (::lscp_set_channel_audio_type(m_pChannel->client(),
             m_pChannel->channelID(),
-            AudioTypeComboBox->currentText().latin1()) != LSCP_OK) {
+            AudioDriverComboBox->currentText().latin1()) != LSCP_OK) {
             m_pChannel->appendMessagesClient("lscp_set_channel_audio_port");
             iErrors++;
         }

@@ -303,7 +303,7 @@
                 </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>MidiTypeTextLabel</cstring>
+                        <cstring>MidiDriverTextLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Type:</string>
@@ -312,7 +312,7 @@
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>MidiTypeComboBox</cstring>
+                        <cstring>MidiDriverComboBox</cstring>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -322,7 +322,7 @@
                         </property>
                     </item>
                     <property name="name">
-                        <cstring>MidiTypeComboBox</cstring>
+                        <cstring>MidiDriverComboBox</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>MIDI input driver type</string>
@@ -427,7 +427,7 @@
                 </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>AudioTypeTextLabel</cstring>
+                        <cstring>AudioDriverTextLabel</cstring>
                     </property>
                     <property name="text">
                         <string>&amp;Type:</string>
@@ -436,7 +436,7 @@
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>AudioTypeComboBox</cstring>
+                        <cstring>AudioDriverComboBox</cstring>
                     </property>
                 </widget>
                 <widget class="QComboBox">
@@ -451,7 +451,7 @@
                         </property>
                     </item>
                     <property name="name">
-                        <cstring>AudioTypeComboBox</cstring>
+                        <cstring>AudioDriverComboBox</cstring>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Audio output driver type</string>
@@ -504,7 +504,7 @@
         <slot>updateInstrumentName()</slot>
     </connection>
     <connection>
-        <sender>MidiTypeComboBox</sender>
+        <sender>MidiDriverComboBox</sender>
         <signal>activated(int)</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>optionsChanged()</slot>
@@ -522,7 +522,7 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
-        <sender>AudioTypeComboBox</sender>
+        <sender>AudioDriverComboBox</sender>
         <signal>activated(int)</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>optionsChanged()</slot>
@@ -545,10 +545,10 @@
     <tabstop>InstrumentFileComboBox</tabstop>
     <tabstop>InstrumentFilePushButton</tabstop>
     <tabstop>InstrumentNrSpinBox</tabstop>
-    <tabstop>MidiTypeComboBox</tabstop>
+    <tabstop>MidiDriverComboBox</tabstop>
     <tabstop>MidiPortSpinBox</tabstop>
     <tabstop>MidiChannelSpinBox</tabstop>
-    <tabstop>AudioTypeComboBox</tabstop>
+    <tabstop>AudioDriverComboBox</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>
 </tabstops>

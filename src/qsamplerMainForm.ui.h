@@ -505,10 +505,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         if (pChannelInfo) {
             ts << "LOAD ENGINE " << pChannelInfo->engine_name << " " << iChannelID << endl;
             ts << "LOAD INSTRUMENT " << pChannelInfo->instrument_file << " " << pChannelInfo->instrument_nr << " " << iChannelID << endl;
-            ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannelInfo->midi_type << endl;
+            ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannelID << " " << pChannelInfo->midi_device << endl;
             ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannelInfo->midi_port << endl;
             ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannelInfo->midi_channel << endl;
-            ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannelInfo->audio_type << endl;
+            ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannelID << " " << pChannelInfo->audio_device << endl;
             ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannelInfo->volume << endl;
         } else {
             appendMessagesClient("lscp_channel_info");
