@@ -39,6 +39,13 @@
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    500
 
+// Status bar item indexes
+#define QSAMPLER_STATUS_CLIENT  0       // Client connection state.
+#define QSAMPLER_STATUS_SERVER  1       // Currenr server address (host:port)
+#define QSAMPLER_STATUS_CHANNEL 2       // Active channel caption.
+#define QSAMPLER_STATUS_SESSION 3       // Current session modification state.
+
+
 #if defined(WIN32)
 static WSADATA _wsaData;
 #endif
@@ -73,13 +80,29 @@ void qsamplerMainForm::init (void)
     setCentralWidget(m_pWorkspace);
     
     // Create some statusbar labels...
-    m_pStatusLine = new QLabel(this);
-    m_pStatusFlag = new QLabel(tr("Modified"), this);
-    m_pStatusFlag->setAlignment(Qt::AlignHCenter);
-    m_pStatusFlag->setMinimumSize(m_pStatusFlag->sizeHint());
-    // And make them there...
-    statusBar()->addWidget(m_pStatusLine, 1);
-    statusBar()->addWidget(m_pStatusFlag);
+    QLabel *pLabel;
+    // Client status.
+    pLabel = new QLabel(tr("Connected"), this);
+    pLabel->setAlignment(Qt::AlignLeft);
+    pLabel->setMinimumSize(pLabel->sizeHint());
+    m_status[QSAMPLER_STATUS_CLIENT] = pLabel;
+    statusBar()->addWidget(pLabel);
+    // Server address.
+    pLabel = new QLabel(this);
+    pLabel->setAlignment(Qt::AlignLeft);
+    m_status[QSAMPLER_STATUS_SERVER] = pLabel;
+    statusBar()->addWidget(pLabel, 1);
+    // Channel title.
+    pLabel = new QLabel(this);
+    pLabel->setAlignment(Qt::AlignLeft);
+    m_status[QSAMPLER_STATUS_CHANNEL] = pLabel;
+    statusBar()->addWidget(pLabel, 2);
+    // Session modification status.
+    pLabel = new QLabel(tr("MOD"), this);
+    pLabel->setAlignment(Qt::AlignHCenter);
+    pLabel->setMinimumSize(pLabel->sizeHint());
+    m_status[QSAMPLER_STATUS_SESSION] = pLabel;
+    statusBar()->addWidget(pLabel);
 
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
@@ -93,11 +116,17 @@ void qsamplerMainForm::destroy (void)
     // Stop client and/or server, if not already...
     stopServer();
 
+    // Delete status item labels one by one.
+    if (m_status[QSAMPLER_STATUS_CLIENT])
+        delete m_status[QSAMPLER_STATUS_CLIENT];
+    if (m_status[QSAMPLER_STATUS_SERVER])
+        delete m_status[QSAMPLER_STATUS_SERVER];
+    if (m_status[QSAMPLER_STATUS_CHANNEL])
+        delete m_status[QSAMPLER_STATUS_CHANNEL];
+    if (m_status[QSAMPLER_STATUS_SESSION])
+        delete m_status[QSAMPLER_STATUS_SESSION];
+
     // Finally drop any widgets around...
-    if (m_pStatusLine)
-        delete m_pStatusLine;
-    if (m_pStatusFlag)
-        delete m_pStatusFlag;
     if (m_pMessages)
         delete m_pMessages;
     if (m_pWorkspace)
@@ -617,16 +646,26 @@ void qsamplerMainForm::stabilizeForm (void)
 
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
 
-
+    // Client status.
+    if (m_pClient)
+        m_status[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
+    else
+        m_status[QSAMPLER_STATUS_CLIENT]->clear();
+    // Server status.
+    if (m_pOptions)
+        m_status[QSAMPLER_STATUS_SERVER]->setText(m_pOptions->sServerHost + ":" + QString::number(m_pOptions->iServerPort));
+    else
+        m_status[QSAMPLER_STATUS_SERVER]->clear();
+    // Channel status.
     if (bHasChannel)
-        m_pStatusLine->setText(pChannel->caption());
+        m_status[QSAMPLER_STATUS_CHANNEL]->setText(pChannel->caption());
     else
-        m_pStatusLine->clear();
-
+        m_status[QSAMPLER_STATUS_CHANNEL]->clear();
+    // Session status.
     if (m_iDirtyCount > 0)
-        m_pStatusFlag->setText(tr("Modified"));
+        m_status[QSAMPLER_STATUS_SESSION]->setText(tr("MOD"));
     else
-        m_pStatusFlag->clear();
+        m_status[QSAMPLER_STATUS_SESSION]->clear();
 }
 
 
@@ -907,6 +946,7 @@ void qsamplerMainForm::startServer (void)
 
     // Reset (yet again) the timer counters...
     startSchedule(m_pOptions->iStartDelay);
+    stabilizeForm();
 }
 
 
@@ -959,6 +999,9 @@ void qsamplerMainForm::processServerExit (void)
         delete m_pServer;
         m_pServer = NULL;
     }
+    
+    // Again, make status visible stable.
+    stabilizeForm();
 }
 
 
@@ -1015,6 +1058,7 @@ bool qsamplerMainForm::startClient (void)
         else
             startServer();
         // This is always a failure.
+        stabilizeForm();
         return false;
     }
 
@@ -1022,6 +1066,7 @@ bool qsamplerMainForm::startClient (void)
     appendMessages(tr("Client connected."));
 
     // OK, we're at it!
+    stabilizeForm();
     return true;
 }
 
@@ -1046,6 +1091,9 @@ void qsamplerMainForm::stopClient (void)
 
     // Log final here.
     appendMessages(tr("Client disconnected."));
+
+    // Make visible status.
+    stabilizeForm();
 }
 
 

@@ -649,13 +649,12 @@
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
     <variable access="private">qsamplerMessages *m_pMessages;</variable>
     <variable access="private">QWorkspace *m_pWorkspace;</variable>
-    <variable access="private">QLabel *m_pStatusLine;</variable>
-    <variable access="private">QLabel *m_pStatusFlag;</variable>
     <variable access="private">int m_iDirtyCount;</variable>
     <variable access="private">QProcess *m_pServer;</variable>
     <variable access="private">lscp_client_t *m_pClient;</variable>
     <variable access="private">int m_iStartDelay;</variable>
     <variable access="private">int m_iTimerDelay;</variable>
+    <variable access="private">QLabel *m_status[5];</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">fileNew( void )</slot>
