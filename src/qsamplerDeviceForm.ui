@@ -138,7 +138,7 @@
                         </property>
                         <property name="minimumSize">
                             <size>
-                                <width>320</width>
+                                <width>360</width>
                                 <height>260</height>
                             </size>
                         </property>
@@ -342,6 +342,7 @@
     <variable access="private">int m_iDirtyCount;</variable>
     <variable access="private">lscp_client_t *m_pClient;</variable>
     <variable access="private">bool m_bNewDevice;</variable>
+    <variable access="private">qsamplerDevice::qsamplerDeviceType m_deviceType;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">createDevice()</slot>

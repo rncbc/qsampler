@@ -132,7 +132,7 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 		m_sDeviceType = QObject::tr("MIDI");
 		pDeviceInfo = ::lscp_get_midi_device_info(pClient, iDeviceID);
 		break;
-	default:
+	case qsamplerDevice::None:
 		m_sDeviceType = QString::null;
 		break;
 	}
@@ -163,10 +163,13 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 			pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
 				m_sDriverName.latin1(), pszParam, NULL);
 			break;
+		case qsamplerDevice::None:
+			break;
 		}
-		if (pParamInfo)
+		if (pParamInfo) {
 			m_params[pszParam] = qsamplerDeviceParam(pParamInfo,
 				pDeviceInfo->params[i].value);
+		}
 	}
 }
 
@@ -189,6 +192,8 @@ void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 	case qsamplerDevice::Midi:
 		pDriverInfo = ::lscp_get_midi_driver_info(pClient,
 			sDriverName.latin1());
+		break;
+	case qsamplerDevice::None:
 		break;
 	}
 
@@ -213,8 +218,11 @@ void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 			pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
 				sDriverName.latin1(), pszParam, NULL);
 			break;
+		case qsamplerDevice::None:
+			break;
 		}
-		m_params[pszParam] = qsamplerDeviceParam(pParamInfo, pParamInfo->defaultv);
+		if (pParamInfo)
+			m_params[pszParam] = qsamplerDeviceParam(pParamInfo, pParamInfo->defaultv);
 	}
 }
 
@@ -269,6 +277,8 @@ int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
 	case qsamplerDevice::Midi:
 		piDeviceIDs = ::lscp_list_midi_devices(pClient);
 		break;
+	case qsamplerDevice::None:
+		break;
 	}
 	return piDeviceIDs;
 }
@@ -287,6 +297,8 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 		break;
 	case qsamplerDevice::Midi:
 		ppszDrivers = ::lscp_get_available_midi_drivers(pClient);
+		break;
+	case qsamplerDevice::None:
 		break;
 	}
 	
@@ -315,6 +327,8 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView,
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi1.png"));
 		QListViewItem::setText(0, QObject::tr("MIDI devices"));
 		break;
+	case qsamplerDevice::None:
+		break;
 	}
 }
 
@@ -329,6 +343,8 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QListViewItem *pItem,
 		break;
 	case qsamplerDevice::Midi:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi2.png"));
+		break;
+	case qsamplerDevice::None:
 		break;
 	}
 
@@ -374,14 +390,14 @@ qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent,
 	QTable::setLeftMargin(0);
 	// Initialize the fixed table column headings.
 	QHeader *pHeader = QTable::horizontalHeader();
-	pHeader->setLabel(0, tr("Description"));
-	pHeader->setLabel(1, tr("Value"));
-	pHeader->setLabel(2, tr("Parameter"));
+	pHeader->setLabel(0, tr("Parameter"));
+	pHeader->setLabel(1, tr("Description"));
+	pHeader->setLabel(2, tr("Value"));
 	// Set read-onlyness of each column
 	QTable::setColumnReadOnly(0, true);
-//  QTable::setColumnReadOnly(1, true); -- of course not.
-	QTable::setColumnReadOnly(2, true);
-	QTable::setColumnStretchable(0, true);
+	QTable::setColumnReadOnly(1, true);
+//  QTable::setColumnReadOnly(2, true); -- of course not.
+	QTable::setColumnStretchable(1, true);
 }
 
 // Default destructor.
@@ -405,7 +421,8 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 	for (iter = params.begin(); iter != params.end(); ++iter) {
 		const qsamplerDeviceParam& param = iter.data();
 		bool fEnabled = (device.deviceID() < 0 || !param.fix);
-		QTable::setText(iRow, 0, param.description);
+		QTable::setText(iRow, 0, iter.key());
+		QTable::setText(iRow, 1, param.description);
 		if (param.type == LSCP_TYPE_BOOL) {
 			QStringList opts;
 			opts.append(tr("false"));
@@ -413,27 +430,26 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
 		    pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
 		    pComboItem->setEnabled(fEnabled);
-			QTable::setItem(iRow, 1, pComboItem);
+			QTable::setItem(iRow, 2, pComboItem);
 		} else if (param.possibilities.count() > 0 && !param.multiplicity) {
 			QComboTableItem *pComboItem = new QComboTableItem(this,
 				param.possibilities);
 		    pComboItem->setCurrentItem(param.value);
 		    pComboItem->setEnabled(fEnabled);
-			QTable::setItem(iRow, 1, pComboItem);
+			QTable::setItem(iRow, 2, pComboItem);
 		} else {
 			QTableItem* pTableItem = new QTableItem(this,
-				fEnabled ? QTableItem::Never : QTableItem::OnTyping,
+				fEnabled ? QTableItem::OnTyping : QTableItem::Never,
 				param.value);
-			QTable::setItem(iRow, 1, pTableItem);
+			QTable::setItem(iRow, 2, pTableItem);
 		}
-		QTable::setText(iRow, 2, iter.key());
 		++iRow;
 	}
 
 	// Adjust optimal column widths.
-	QTable::adjustColumn(1);
+	QTable::adjustColumn(0);
 	QTable::adjustColumn(2);
-	
+
 	QTable::setUpdatesEnabled(true);
 	QTable::updateContents();
 }
