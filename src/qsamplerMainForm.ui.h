@@ -24,6 +24,7 @@
 #include <qtextstream.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
+#include <qtimer.h>
 
 #include "qsamplerAbout.h"
 
@@ -33,6 +34,13 @@
 
 #if !defined(WIN32)
 #include <unistd.h>
+#endif
+
+// Timer constant stuff.
+#define QSAMPLER_TIMER_MSECS    500
+
+#if defined(WIN32)
+static WSADATA _wsaData;
 #endif
 
 //-------------------------------------------------------------------------
@@ -50,6 +58,12 @@ void qsamplerMainForm::init (void)
     // We'll start clean.
     m_iDirtyCount = 0;
 
+    m_pServer = NULL;
+    m_pClient = NULL;
+
+    m_iStartDelay = 0;
+    m_iTimerDelay = 0;
+
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);
     m_pWorkspace->setScrollBarsEnabled(true);
@@ -66,12 +80,19 @@ void qsamplerMainForm::init (void)
     // And make them there...
     statusBar()->addWidget(m_pStatusLine, 1);
     statusBar()->addWidget(m_pStatusFlag);
+
+#if defined(WIN32)
+    WSAStartup(MAKEWORD(1, 1), &_wsaData);
+#endif
 }
 
 
 // Kind of destructor.
 void qsamplerMainForm::destroy (void)
 {
+    // Stop client and/or server, if not already...
+    stopServer();
+
     // Finally drop any widgets around...
     if (m_pStatusLine)
         delete m_pStatusLine;
@@ -81,6 +102,10 @@ void qsamplerMainForm::destroy (void)
         delete m_pMessages;
     if (m_pWorkspace)
         delete m_pWorkspace;
+
+#if defined(WIN32)
+    WSACleanup();
+#endif
 }
 
 
@@ -128,6 +153,14 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     
     // Make it ready :-)
     statusBar()->message(tr("Ready"), 3000);
+
+    // Try to find if we can start as client,
+    // just in case there's a linuxsampler server already running.
+    if (!startClient() && m_pOptions->bServerStart)
+        startServer();
+
+    // Register the first timer slot.
+    QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
 }
 
 
@@ -741,6 +774,222 @@ void qsamplerMainForm::channelsMenuActivated ( int iChannel )
     if (pChannel)
         pChannel->showNormal();
     pChannel->setFocus();
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- Server stuff.
+
+// Start linuxsampler server...
+void qsamplerMainForm::startServer (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    // Aren't already a client, are we?
+    if (!m_pOptions->bServerStart || m_pClient)
+        return;
+
+    // Is the server process instance still here?
+    if (m_pServer) {
+        switch (QMessageBox::warning(this, tr("Warning"),
+            tr("Could not start the LinuxSampler server.") + "\n\n" +
+            tr("Maybe it's already started."),
+            tr("Stop"), tr("Kill"), tr("Cancel"))) {
+          case 0:
+            m_pServer->tryTerminate();
+            break;
+          case 1:
+            m_pServer->kill();
+            break;
+        }
+        return;
+    }
+
+    // Reset our timer counters...
+    m_iStartDelay  = 0;
+    m_iTimerDelay  = 0;
+
+    // OK. Let's build the startup process...
+    m_pServer = new QProcess(this);
+
+    // Setup stdout/stderr capture...
+    if (m_pOptions->bStdoutCapture) {
+        m_pServer->setCommunication(QProcess::Stdout | QProcess::Stderr | QProcess::DupStderr);
+        QObject::connect(m_pServer, SIGNAL(readyReadStdout()), this, SLOT(readServerStdout()));
+        QObject::connect(m_pServer, SIGNAL(readyReadStderr()), this, SLOT(readServerStdout()));
+    }
+    // The unforgiveable signal communication...
+    QObject::connect(m_pServer, SIGNAL(processExited()), this, SLOT(processServerExit()));
+
+    // Build process arguments...
+    m_pServer->setArguments(QStringList::split(' ', m_pOptions->sServerCmdLine));
+
+    appendMessages(tr("Server is starting..."));
+    appendMessagesColor(m_pOptions->sServerCmdLine, "#990099");
+
+    // Go jack, go...
+    if (!m_pServer->start()) {
+        appendMessagesError(tr("Could not start server. Sorry."));
+        processServerExit();
+        return;
+    }
+
+    // Show startup results...
+    appendMessages(tr("Server was started with PID=%1.").arg((long) m_pServer->processIdentifier()));
+
+    // Reset (yet again) the timer counters...
+    m_iStartDelay  = 1 + (m_pOptions->iStartDelay * 1000);
+    m_iTimerDelay  = 0;
+}
+
+
+// Stop linuxsampler server...
+void qsamplerMainForm::stopServer (void)
+{
+    // Clear timer counters...
+    m_iStartDelay  = 0;
+    m_iTimerDelay  = 0;
+
+    // Stop client code.
+    stopClient();
+
+    // And try to stop server.
+    if (m_pServer) {
+        appendMessages(tr("Server is stopping..."));
+        if (m_pServer->isRunning())
+            m_pServer->tryTerminate();
+     }
+
+     // Do final processing anyway.
+     processServerExit();
+}
+
+
+// Stdout handler...
+void qsamplerMainForm::readServerStdout (void)
+{
+    if (m_pMessages)
+        m_pMessages->appendStdoutBuffer(m_pServer->readStdout());
+}
+
+
+// Linuxsampler server cleanup.
+void qsamplerMainForm::processServerExit (void)
+{
+    // Force client code cleanup.
+    stopClient();
+
+    // Flush anything that maybe pending...
+    if (m_pMessages)
+        m_pMessages->flushStdoutBuffer();
+
+    if (m_pServer) {
+        // Force final server shutdown...
+        appendMessages(tr("Server was stopped with exit status %1.").arg(m_pServer->exitStatus()));
+        if (!m_pServer->normalExit())
+            m_pServer->kill();
+        // Destroy it.
+        delete m_pServer;
+        m_pServer = NULL;
+    }
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- Timer stuff.
+
+// Timer slot funtion.
+void qsamplerMainForm::timerSlot (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    // Is it the first shot on server start after a few delay?
+    if (m_iTimerDelay < m_iStartDelay) {
+        m_iTimerDelay += QSAMPLER_TIMER_MSECS;
+        if (m_iTimerDelay >= m_iStartDelay) {
+            // If we cannot start it now, maybe a lil'mo'later ;)
+            if (!startClient() && m_pServer && m_pServer->isRunning()) {
+                m_iStartDelay += m_iTimerDelay;
+                m_iTimerDelay  = 0;
+            }
+        }
+    }
+
+    // Register the next timer slot.
+    QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerMainForm -- Client stuff.
+
+
+// The LSCP client callback procedure.
+lscp_status_t qsampler_client_callback ( lscp_client_t *pClient, const char *pchBuffer, int cchBuffer, void *pvData )
+{
+    qsamplerMainForm *pMainForm = (qsamplerMainForm *) pvData;
+    if (pMainForm == NULL)
+        return LSCP_FAILED;
+
+    char *pszBuffer = (char *) malloc(cchBuffer + 1);
+    if (pszBuffer == NULL)
+        return LSCP_FAILED;
+
+    memcpy(pszBuffer, pchBuffer, cchBuffer);
+    pszBuffer[cchBuffer] = (char) 0;
+    pMainForm->appendMessagesColor(pszBuffer, "#996699");
+    free(pszBuffer);
+
+    return LSCP_OK;
+}
+
+
+// Start our almighty client...
+bool qsamplerMainForm::startClient (void)
+{
+    // Have it a setup?
+    if (m_pOptions == NULL)
+        return false;
+
+    // Aren't we already started, are we?
+    if (m_pClient)
+        return true;
+
+    // Log prepare here.
+    appendMessages(tr("Client connecting..."));
+
+    // Create the client handle...
+    m_pClient = ::lscp_client_create(m_pOptions->sServerHost.latin1(), m_pOptions->iServerPort, qsampler_client_callback, this);
+    if (m_pClient == NULL) {
+        appendMessagesError(tr("Could not connect to server as client."));
+        return false;
+    }
+
+    // Log success here.
+    appendMessages(tr("Client connected."));
+
+    // OK, we're at it!
+    return true;
+}
+
+
+// Stop client...
+void qsamplerMainForm::stopClient (void)
+{
+    if (m_pClient == NULL)
+        return;
+
+    // Log prepare here.
+    appendMessages(tr("Client disconnecting..."));
+
+    // Close us as a client...
+    lscp_client_destroy(m_pClient);
+    m_pClient = NULL;
+
+    // Log final here.
+    appendMessages(tr("Client disconnected."));
 }
 
 

@@ -54,6 +54,7 @@ public:
     int     iServerPort;
     bool    bServerStart;
     QString sServerCmdLine;
+    int     iStartDelay;
     
     // Display options...
     QString sDisplayFont;

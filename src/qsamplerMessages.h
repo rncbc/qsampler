@@ -60,8 +60,6 @@ public:
     void appendMessagesColor(const QString& s, const QString &c);
     void appendMessagesText(const QString& s);
 
-protected:
-
     // Stdout capture functions.
     void appendStdoutBuffer(const QString& s);
     void flushStdoutBuffer();

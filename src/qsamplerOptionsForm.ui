@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>461</width>
-            <height>245</height>
+            <width>484</width>
+            <height>291</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -45,9 +45,6 @@
     </property>
     <property name="sizeGripEnabled">
         <bool>true</bool>
-    </property>
-    <property name="toolTip" stdset="0">
-        <string>Server listener port number</string>
     </property>
     <grid>
         <property name="name">
@@ -142,7 +139,7 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="3">
+                            <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="4">
                                 <item>
                                     <property name="text">
                                         <string>linuxsampler</string>
@@ -171,79 +168,7 @@
                                     <string>Command line to start LinuxSampler server locally</string>
                                 </property>
                             </widget>
-                            <widget class="QComboBox" row="0" column="3">
-                                <item>
-                                    <property name="text">
-                                        <string>8888</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>ServerPortComboBox</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="editable">
-                                    <bool>true</bool>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="0" column="2">
-                                <property name="name">
-                                    <cstring>ServerPortTextLabel</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Port:</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>ServerPortComboBox</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QComboBox" row="0" column="1">
-                                <item>
-                                    <property name="text">
-                                        <string>localhost</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>ServerHostComboBox</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>100</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="editable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>LinuxSampler server hostname</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="1" rowspan="1" colspan="3">
+                            <widget class="QCheckBox" row="1" column="1" rowspan="1" colspan="4">
                                 <property name="name">
                                     <cstring>ServerStartCheckBox</cstring>
                                 </property>
@@ -272,7 +197,10 @@
                                     </font>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Hostname:</string>
+                                    <string>&amp;Host:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>ServerHostComboBox</cstring>
@@ -288,10 +216,177 @@
                                     </font>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Command Line:</string>
+                                    <string>&amp;Command line:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
                                 </property>
                                 <property name="buddy" stdset="0">
                                     <cstring>ServerCmdLineComboBox</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="4" column="0">
+                                <property name="name">
+                                    <cstring>StartDelayTextLabel</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Start &amp;delay:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>StartDelaySpinBox</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox" row="4" column="1">
+                                <property name="name">
+                                    <cstring>StartDelaySpinBox</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>40</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="suffix">
+                                    <string> secs</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Delay time in seconds after server startup</string>
+                                </property>
+                            </widget>
+                            <spacer row="3" column="1">
+                                <property name="name">
+                                    <cstring>spacer11</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>16</width>
+                                        <height>93</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="4" column="2" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>spacer12</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>320</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QComboBox" row="0" column="4">
+                                <item>
+                                    <property name="text">
+                                        <string>8888</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>ServerPortComboBox</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>60</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>LinuxSampler server listener port number</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="0" column="3">
+                                <property name="name">
+                                    <cstring>ServerPortTextLabel</cstring>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>60</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Port:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>ServerPortComboBox</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
+                                <item>
+                                    <property name="text">
+                                        <string>localhost</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>ServerHostComboBox</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>LinuxSampler server host name or address</string>
                                 </property>
                             </widget>
                         </grid>
@@ -383,7 +478,7 @@
                                     <set>AlignCenter</set>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Sample messages text font display</string>
+                                    <string>Sample channel display font display</string>
                                 </property>
                             </widget>
                             <widget class="QPushButton">
@@ -405,7 +500,7 @@
                                     <bool>false</bool>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Select font for the messages text display</string>
+                                    <string>Select font for the channel display</string>
                                 </property>
                             </widget>
                             <spacer>
@@ -697,6 +792,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>StartDelaySpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>DisplayFontPushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -751,6 +852,7 @@
     <tabstop>ServerPortComboBox</tabstop>
     <tabstop>ServerStartCheckBox</tabstop>
     <tabstop>ServerCmdLineComboBox</tabstop>
+    <tabstop>StartDelaySpinBox</tabstop>
     <tabstop>DisplayFontPushButton</tabstop>
     <tabstop>MessagesFontPushButton</tabstop>
     <tabstop>MessagesLimitCheckBox</tabstop>

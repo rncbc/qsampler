@@ -73,6 +73,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     ServerPortComboBox->setCurrentText(QString::number(m_pOptions->iServerPort));
     ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
     ServerCmdLineComboBox->setCurrentText(m_pOptions->sServerCmdLine);
+    StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
 
     // Load Display options...
     QFont font;
@@ -105,10 +106,11 @@ void qsamplerOptionsForm::accept (void)
     // Save options...
     if (m_iDirtyCount > 0) {
         // Server settings....
-        m_pOptions->sServerHost          = ServerHostComboBox->currentText();
+        m_pOptions->sServerHost          = ServerHostComboBox->currentText().stripWhiteSpace();
         m_pOptions->iServerPort          = ServerPortComboBox->currentText().toInt();
         m_pOptions->bServerStart         = ServerStartCheckBox->isChecked();
-        m_pOptions->sServerCmdLine       = ServerCmdLineComboBox->currentText();
+        m_pOptions->sServerCmdLine       = ServerCmdLineComboBox->currentText().simplifyWhiteSpace();
+        m_pOptions->iStartDelay          = StartDelaySpinBox->value();
         // Channel display options...
         m_pOptions->sDisplayFont         = DisplayFontTextLabel->font().toString();
         // Message window options...
@@ -175,6 +177,8 @@ void qsamplerOptionsForm::stabilizeForm()
     bool bEnabled = ServerStartCheckBox->isChecked();
     ServerCmdLineTextLabel->setEnabled(bEnabled);
     ServerCmdLineComboBox->setEnabled(bEnabled);
+    StartDelayTextLabel->setEnabled(bEnabled);
+    StartDelaySpinBox->setEnabled(bEnabled);
 
     MessagesLimitLinesComboBox->setEnabled(MessagesLimitCheckBox->isChecked());
 

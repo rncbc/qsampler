@@ -48,6 +48,7 @@ qsamplerOptions::qsamplerOptions (void)
     iServerPort    = m_settings.readNumEntry("/ServerPort", 8888);
     bServerStart   = m_settings.readBoolEntry("/ServerStart", true);
     sServerCmdLine = m_settings.readEntry("/ServerCmdLine", "linuxsampler");
+    iStartDelay    = m_settings.readNumEntry("/StartDelay", 2);
     m_settings.endGroup();
 
     // Load display options...
@@ -89,6 +90,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/ServerPort", iServerPort);
     m_settings.writeEntry("/ServerStart", bServerStart);
     m_settings.writeEntry("/ServerCmdLine", sServerCmdLine);
+    m_settings.writeEntry("/StartDelay", iStartDelay);
     m_settings.endGroup();
 
     // Save display options.
