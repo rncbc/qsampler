@@ -420,7 +420,6 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 
 	m_iDirtySetup++;
 	// Table 1st column has the parameter name;
-	const qsamplerDeviceParamMap& params = device.params();
 	const QString sParam = DeviceParamTable->text(iRow, 0);
 	const QString sValue = DeviceParamTable->text(iRow, iCol);
 	
@@ -495,7 +494,6 @@ void qsamplerDeviceForm::changeDevicePortParam ( int iRow, int iCol )
 
 	m_iDirtySetup++;
 	// Table 1st column has the parameter name;
-	const qsamplerDeviceParamMap& params = pPort->params();
 	const QString sParam = DevicePortParamTable->text(iRow, 0);
 	const QString sValue = DevicePortParamTable->text(iRow, iCol);
 
