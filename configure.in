@@ -110,7 +110,7 @@ AC_CHECK_LIB(m, main)
 AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 AC_CHECK_LIB($ac_qtlib, main)
-AC_CHECK_LIB(liblscp, main, [ac_lscp_lib="yes"], [ac_lscp_lib="no"])
+AC_CHECK_LIB(lscp, main, [ac_lscp_lib="yes"], [ac_lscp_lib="no"])
 if test "x$ac_lscp_lib" = "xno"; then
    AC_MSG_ERROR([LSCP library not found.])
 fi
@@ -120,10 +120,10 @@ AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h)
 
-AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
-if test "x$ac_lscp_h" = "xno"; then
-   AC_MSG_ERROR([LSCP headers not found.])
-fi
+dnl AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
+dnl if test "x$ac_lscp_h" = "xno"; then
+dnl    AC_MSG_ERROR([LSCP headers not found.])
+dnl fi
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl AC_C_CONST
