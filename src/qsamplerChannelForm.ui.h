@@ -53,7 +53,7 @@ void qsamplerChannelForm::destroy (void)
 
 
 // Channel dialog setup formal initializer.
-void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
+void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel, bool bNew )
 {
     m_pChannel = pChannel;
 
@@ -111,6 +111,8 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
 
     // Engine name...
     QString sEngineName = pChannel->engineName();
+    if (sEngineName.isEmpty() && bNew)
+        sEngineName = pOptions->sEngineName;
     if (sEngineName.isEmpty())
         sEngineName = tr("(No engine)");
     if (EngineNameComboBox->listBox()->findItem(sEngineName, Qt::ExactMatch) == NULL)
@@ -122,17 +124,26 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
         sInstrumentFile = tr("(No instrument)");
     InstrumentFileComboBox->setCurrentText(sInstrumentFile);
     InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
-    // MIDI input...
-    const QString& sMidiDriver = pChannel->midiDriver();
+    // MIDI input driver...
+    QString sMidiDriver = pChannel->midiDriver();
+    if (sMidiDriver.isEmpty() && bNew)
+        sMidiDriver = pOptions->sMidiDriver;
     if (!sMidiDriver.isEmpty()) {
         if (MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
             MidiDriverComboBox->insertItem(sMidiDriver);
         MidiDriverComboBox->setCurrentText(sMidiDriver);
     }
+    // MIDI input port...
     MidiPortSpinBox->setValue(pChannel->midiPort());
-    MidiChannelSpinBox->setValue(pChannel->midiChannel());
-    // Audio output...
-    const QString& sAudioDriver = pChannel->audioDriver();
+    // MIDI input channel...
+    int iMidiChannel = pChannel->midiChannel();
+    if (bNew)
+        iMidiChannel = (pChannel->channelID() + 1) % 16;
+    MidiChannelSpinBox->setValue(iMidiChannel);
+    // Audio output driver...
+    QString sAudioDriver = pChannel->audioDriver();
+    if (sAudioDriver.isEmpty() && bNew)
+        sAudioDriver = pOptions->sAudioDriver;
     if (!sAudioDriver.isEmpty()) {
         if (AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
             AudioDriverComboBox->insertItem(sAudioDriver);
@@ -180,8 +191,11 @@ void qsamplerChannelForm::accept (void)
             m_pChannel->appendMessagesError(tr("Some channel settings could not be set.\n\nSorry."));
     }
 
-    // Save default instrument directory and history...
+    // Save default engine name, instrument directory and history...
     pOptions->sInstrumentDir = QFileInfo(InstrumentFileComboBox->currentText()).dirPath(true);
+    pOptions->sEngineName  = EngineNameComboBox->currentText();
+    pOptions->sAudioDriver = AudioDriverComboBox->currentText();
+    pOptions->sMidiDriver  = MidiDriverComboBox->currentText();
     pOptions->saveComboBoxHistory(InstrumentFileComboBox);
 
     // Just go with dialog acceptance.
@@ -195,7 +209,7 @@ void qsamplerChannelForm::reject (void)
     bool bReject = true;
 
     // Check if there's any pending changes...
-    if (m_iDirtyCount > 0) {
+    if (m_iDirtyCount > 0 && OkPushButton->isEnabled()) {
         switch (QMessageBox::warning(this, tr("Warning"),
             tr("Some channel settings have been changed.\n\n"
                "Do you want to apply the changes?"),

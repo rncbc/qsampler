@@ -81,6 +81,9 @@ public:
     // Default options...
     QString sSessionDir;
     QString sInstrumentDir;
+    QString sEngineName;
+    QString sAudioDriver;
+    QString sMidiDriver;
 
     // Recent file list.
     int     iMaxRecentFiles;

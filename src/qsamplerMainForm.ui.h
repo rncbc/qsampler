@@ -800,7 +800,7 @@ void qsamplerMainForm::editSetupChannel (void)
         return;
 
     // Just invoque the channel strip procedure.
-    pChannel->channelSetup();
+    pChannel->channelSetup(false);
 }
 
 
@@ -1022,6 +1022,11 @@ void qsamplerMainForm::helpAbout (void)
 #ifdef CONFIG_DEBUG
     sText += "<small><font color=\"red\">";
     sText += tr("Debugging option enabled.");
+    sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_LIBGIG
+    sText += "<small><font color=\"red\">";
+    sText += tr("GIG (libgig) file support disabled.");
     sText += "</font></small><br />";
 #endif
     sText += "<br />\n";
@@ -1326,7 +1331,7 @@ void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
     // Before we show it up, may be we'll
     // better ask for some initial values?
     if (bPrompt)
-        pChannel->channelSetup();	
+        pChannel->channelSetup(true);
     // Now we show up us to the world.
     pChannel->show();
     // Only then, we'll auto-arrange...

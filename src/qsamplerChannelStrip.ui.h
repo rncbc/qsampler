@@ -330,11 +330,11 @@ void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
 }
 
 // Channel setup dialog.
-void qsamplerChannelStrip::channelSetup (void)
+void qsamplerChannelStrip::channelSetup ( bool bNew )
 {
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
-        pChannelForm->setup(this);
+        pChannelForm->setup(this, bNew);
         if (pChannelForm->exec()) {
             updateChannelInfo();
             emit channelChanged(this);
@@ -448,8 +448,14 @@ void qsamplerChannelStrip::updateChannelUsage (void)
         return;
 
     // Conditionally update whole channel status info.
-    if (m_iInstrumentStatus >= 0 && m_iInstrumentStatus < 100)
+    if (m_iInstrumentStatus >= 0 && m_iInstrumentStatus < 100) {
         updateChannelInfo();
+        // Once we get a complete instrument load, try a implied reset channel....
+        if (m_iInstrumentStatus == 100) {
+            if (::lscp_reset_channel(client(), m_iChannelID) != LSCP_OK)
+                appendMessagesClient("lscp_reset_channel");
+        }
+    }
     // Leave, if we still have an erroneus or incomplete instrument load.
     if (m_iInstrumentStatus < 100)
         return;
@@ -461,16 +467,8 @@ void qsamplerChannelStrip::updateChannelUsage (void)
     // Get current channel buffer fill usage.
     // As benno has suggested this is the percentage usage
     // of the least filled buffer stream...
-    int iStreamUsage = 0;
-    if (iStreamCount > 0) {
-        lscp_buffer_fill_t *pBufferFill = ::lscp_get_channel_buffer_fill(client(), LSCP_USAGE_PERCENTAGE, m_iChannelID);
-        if (pBufferFill) {
-            for (int iStream = 0; iStream < iStreamCount; iStream++) {
-                if (iStreamUsage > (int) pBufferFill[iStream].stream_usage || iStream == 0)
-                    iStreamUsage = pBufferFill[iStream].stream_usage;
-            }
-        }
-    }    
+    int iStreamUsage = ::lscp_get_channel_stream_usage(client(), m_iChannelID);;
+
     // Update the GUI elements...
     StreamUsageProgressBar->setProgress(iStreamUsage);
     StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));

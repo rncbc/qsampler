@@ -91,6 +91,9 @@ qsamplerOptions::qsamplerOptions (void)
     m_settings.beginGroup("/Default");
     sSessionDir    = m_settings.readEntry("/SessionDir", QString::null);
     sInstrumentDir = m_settings.readEntry("/InstrumentDir", QString::null);
+    sEngineName    = m_settings.readEntry("/EngineName", QString::null);
+    sAudioDriver   = m_settings.readEntry("/AudioDriver", QString::null);
+    sMidiDriver    = m_settings.readEntry("/MidiDriver", QString::null);
     m_settings.endGroup();
 }
 
@@ -151,6 +154,9 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.beginGroup("/Default");
     m_settings.writeEntry("/SessionDir", sSessionDir);
     m_settings.writeEntry("/InstrumentDir", sInstrumentDir);
+    m_settings.writeEntry("/EngineName", sEngineName);
+    m_settings.writeEntry("/AudioDriver", sAudioDriver);
+    m_settings.writeEntry("/MidiDriver", sMidiDriver);
     m_settings.endGroup();
 
     m_settings.endGroup();

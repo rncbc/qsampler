@@ -438,7 +438,7 @@
     <signal>channelChanged( qsamplerChannelStrip * )</signal>
 </signals>
 <slots>
-    <slot specifier="non virtual">channelSetup()</slot>
+    <slot specifier="non virtual">channelSetup(bool bNew = false)</slot>
     <slot specifier="non virtual">volumeChanged(int)</slot>
 </slots>
 <functions>
