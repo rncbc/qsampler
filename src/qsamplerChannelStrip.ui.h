@@ -24,6 +24,7 @@
 #include <qmessagebox.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
+#include <qpopupmenu.h>
 
 #include <math.h>
 
@@ -495,6 +496,15 @@ void qsamplerChannelStrip::appendMessagesError( const QString& s )
 void qsamplerChannelStrip::appendMessagesClient( const QString& s )
 {
     m_pMainForm->appendMessagesClient(s);
+}
+
+
+// Context menu event handler.
+void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
+{
+    // We'll just show up the main form's edit menu.
+    m_pMainForm->stabilizeForm();
+    m_pMainForm->editMenu->exec(pEvent->globalPos());
 }
 
 

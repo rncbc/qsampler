@@ -3,16 +3,19 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.2   2004-06-07  Work in progress...
+0.0.2   2004-06-08  Work in progress...
 
-* Comment SET CHANNEL MIDI_INPUT_PORT command from
-  saveSessionFile(), it has no effect.
+* A channel context menu is now featured, by right-clicking over
+  each sampler channel strip.
 
-* Insert a n #include <unistd.h> on qsamplerMessages.h, between
+* Commented SET CHANNEL MIDI_INPUT_PORT command from
+  qsamplerMainForm::saveSessionFile(), it has no effect.
+
+* Insert a n #include <unistd.h> on qsamplerMessages.cpp, between
   a #if !defined(WIN32) clause.
 
-* An initial non zero value (0.8) should be set for the channel
-  volume, while GET CHANNEL INFO command is pending implementation.
+* An initial non zero value (0.8) is now set for volume of every
+  new sampler channel strip.
 
 * The order to load/save and setup channel settings is now as
   suggested in the following lines:
