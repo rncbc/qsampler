@@ -93,6 +93,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     // Other options finally.
     ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
     StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
+    CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
 
     // Done.
     m_iDirtySetup--;
@@ -120,6 +121,7 @@ void qsamplerOptionsForm::accept (void)
         // Other options...
         m_pOptions->bConfirmRemove       = ConfirmRemoveCheckBox->isChecked();
         m_pOptions->bStdoutCapture       = StdoutCaptureCheckBox->isChecked();
+        m_pOptions->bCompletePath        = CompletePathCheckBox->isChecked();
         // Reset dirty flag.
         m_iDirtyCount = 0;
     }

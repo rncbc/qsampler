@@ -649,9 +649,11 @@
     <variable access="private">qsamplerOptions *m_pOptions;</variable>
     <variable access="private">qsamplerMessages *m_pMessages;</variable>
     <variable access="private">QWorkspace *m_pWorkspace;</variable>
+    <variable access="private">QString m_sFilename;</variable>
     <variable access="private">int m_iDirtyCount;</variable>
-    <variable access="private">QProcess *m_pServer;</variable>
+    <variable access="private">int m_iUntitled;</variable>
     <variable access="private">lscp_client_t *m_pClient;</variable>
+    <variable access="private">QProcess *m_pServer;</variable>
     <variable access="private">int m_iStartDelay;</variable>
     <variable access="private">int m_iTimerDelay;</variable>
     <variable access="private">QLabel *m_status[5];</variable>
@@ -679,8 +681,6 @@
     <slot specifier="non virtual">channelChanged( qsamplerChannelStrip * )</slot>
     <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
     <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
-    <slot specifier="non virtual">startServer( void )</slot>
-    <slot specifier="non virtual">stopServer( void )</slot>
     <slot specifier="non virtual">readServerStdout( void )</slot>
     <slot specifier="non virtual">processServerExit( void )</slot>
     <slot specifier="non virtual">timerSlot( void )</slot>
@@ -691,20 +691,29 @@
     <function specifier="non virtual">setup( qsamplerOptions * pOptions )</function>
     <function access="private" specifier="non virtual" returnType="bool">queryClose( void )</function>
     <function access="private" specifier="non virtual">closeEvent( QCloseEvent * pCloseEvent )</function>
+    <function specifier="non virtual" returnType="QString">sessionName( bool bFilename )</function>
+    <function specifier="non virtual" returnType="bool">newSession( void )</function>
+    <function specifier="non virtual" returnType="bool">openSession( void )</function>
+    <function specifier="non virtual" returnType="bool">saveSession( bool bPrompt )</function>
+    <function specifier="non virtual" returnType="bool">closeSession( void )</function>
+    <function specifier="non virtual" returnType="bool">loadSessionFile( const QString &amp; sFilename )</function>
+    <function specifier="non virtual" returnType="bool">saveSessionFile( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual">updateDisplayFont( void )</function>
+    <function access="private" specifier="non virtual">updateMessagesFont( void )</function>
+    <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
+    <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
     <function specifier="non virtual">appendMessages( const QString &amp; s )</function>
     <function specifier="non virtual">appendMessagesColor( const QString &amp; s, const QString &amp; c )</function>
     <function specifier="non virtual">appendMessagesText( const QString &amp; s )</function>
     <function specifier="non virtual">appendMessagesError( const QString &amp; s )</function>
-    <function access="private" specifier="non virtual">updateMessagesFont( void )</function>
-    <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
-    <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannel( void )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelAt( int iChannel )</function>
     <function access="private" specifier="non virtual">startSchedule( int iStartDelay )</function>
     <function access="private" specifier="non virtual">stopSchedule( void )</function>
     <function access="private" specifier="non virtual" returnType="bool">startClient( void )</function>
     <function access="private" specifier="non virtual">stopClient( void )</function>
+    <function access="private" specifier="non virtual">startServer( void )</function>
+    <function access="private" specifier="non virtual">stopServer( void )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="8"/>

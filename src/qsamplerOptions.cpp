@@ -59,6 +59,7 @@ qsamplerOptions::qsamplerOptions (void)
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
     bConfirmRemove = m_settings.readBoolEntry("/ConfirmRemove", true);
     bStdoutCapture = m_settings.readBoolEntry("/StdoutCapture", true);
+    bCompletePath  = m_settings.readBoolEntry("/CompletePath", false);
     m_settings.endGroup();
 
     // And go into view options group.
@@ -101,6 +102,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);
     m_settings.writeEntry("/ConfirmRemove", bConfirmRemove);
     m_settings.writeEntry("/StdoutCapture", bStdoutCapture);
+    m_settings.writeEntry("/CompletePath", bCompletePath);
     m_settings.endGroup();
 
     // View options group.

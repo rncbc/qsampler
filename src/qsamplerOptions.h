@@ -63,6 +63,7 @@ public:
     int     iMessagesLimitLines;
     bool    bConfirmRemove;
     bool    bStdoutCapture;
+    bool    bCompletePath;
 
     // View options...
     bool    bMenubar;

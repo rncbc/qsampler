@@ -759,6 +759,25 @@
                                     <string>Whether to capture standard output (stdout/stderr) into messages window</string>
                                 </property>
                             </widget>
+                            <widget class="QCheckBox">
+                                <property name="name">
+                                    <cstring>CompletePathCheckBox</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Show complete path of session files</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+S</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Whether to show the complete directory path of loaded session files</string>
+                                </property>
+                            </widget>
                         </vbox>
                     </widget>
                 </vbox>
@@ -834,6 +853,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>CompletePathCheckBox</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>OkPushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -859,6 +884,7 @@
     <tabstop>MessagesLimitLinesComboBox</tabstop>
     <tabstop>ConfirmRemoveCheckBox</tabstop>
     <tabstop>StdoutCaptureCheckBox</tabstop>
+    <tabstop>CompletePathCheckBox</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>
 </tabstops>

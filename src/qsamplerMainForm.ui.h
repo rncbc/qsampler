@@ -21,6 +21,8 @@
 *****************************************************************************/
 
 #include <qmessagebox.h>
+#include <qfiledialog.h>
+#include <qfileinfo.h>
 #include <qtextstream.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
@@ -63,6 +65,7 @@ void qsamplerMainForm::init (void)
     m_pMessages = NULL;
     
     // We'll start clean.
+    m_iUntitled = 0;
     m_iDirtyCount = 0;
 
     m_pServer = NULL;
@@ -103,6 +106,9 @@ void qsamplerMainForm::init (void)
     pLabel->setMinimumSize(pLabel->sizeHint());
     m_status[QSAMPLER_STATUS_SESSION] = pLabel;
     statusBar()->addWidget(pLabel);
+
+    // Start from scratch.
+    newSession();
 
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
@@ -194,7 +200,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 // Window close event handlers.
 bool qsamplerMainForm::queryClose (void)
 {
-    bool bQueryClose = true;
+    bool bQueryClose = closeSession();
 
     // Try to save current general state...
     if (m_pOptions) {
@@ -214,8 +220,6 @@ bool qsamplerMainForm::queryClose (void)
             m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
             // And the main windows state.
             m_pOptions->saveWidgetGeometry(this);
-            // Close child widgets.
-            m_pMessages->close();
         }
     }
     
@@ -233,6 +237,160 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 
 
 //-------------------------------------------------------------------------
+// qsamplerMainForm -- Session file stuff.
+
+// Format the displayable session filename.
+QString qsamplerMainForm::sessionName ( bool bFilename )
+{
+    QString sFilename = m_sFilename;
+    if (sFilename.isEmpty())
+        sFilename = tr("Untitled") + QString::number(m_iUntitled);
+    else if (!bFilename)
+        sFilename = QFileInfo(sFilename).fileName();
+    return sFilename;
+}
+
+
+// Create a new session file from scratch.
+bool qsamplerMainForm::newSession (void)
+{
+    // Check if we can do it.
+    if (!closeSession())
+        return false;
+
+    // Ok increment untitled count.
+    m_iUntitled++;
+    
+    // Stabilize form.
+    m_sFilename = QString::null;
+    m_iDirtyCount = 0;
+    stabilizeForm();
+    
+    return true;
+}
+
+
+// Open an existing sampler session.
+bool qsamplerMainForm::openSession (void)
+{
+    // Ask for the filename to open...
+    QString sFilename = QFileDialog::getOpenFileName(
+            m_sFilename,                            // Start here.
+            tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
+            this, 0,                                // Parent and name (none)
+            tr("Open Session")                      // Caption.
+    );
+    // Have we cancelled?
+    if (sFilename.isEmpty())
+        return false;
+
+    // Check if we're going to discard safely the current one...
+    if (!closeSession())
+        return false;
+
+    // Load it right away.
+    return loadSessionFile(sFilename);
+}
+
+
+// Save current sampler session with another name.
+bool qsamplerMainForm::saveSession ( bool bPrompt )
+{
+    QString sFilename = m_sFilename;
+    
+    // Ask for the file to save, if there's none...
+    if (bPrompt || sFilename.isEmpty()) {
+        sFilename = QFileDialog::getSaveFileName(
+                m_sFilename,                            // Start here.
+                tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
+                this, 0,                                // Parent and name (none)
+                tr("Save Session")                      // Caption.
+        );
+        // Have we cancelled it?
+        if (sFilename.isEmpty())
+            return false;
+        // Enforce .lscp extension...
+        if (QFileInfo(sFilename).extension().isEmpty())
+            sFilename += ".lscp";
+    }
+    
+    // Save it right away.
+    return saveSessionFile(sFilename);
+}
+
+
+// Close current session.
+bool qsamplerMainForm::closeSession (void)
+{
+    bool bClose = true;
+    
+    // Are we dirty enough to prompt it?
+    if (m_iDirtyCount > 0) {
+        switch (QMessageBox::warning(this, tr("Warning"),
+            tr("The current session has been changed:") + "\n\n" +
+            "\"" + sessionName(true) +  "\"\n\n" +
+            tr("Do you want to save the changes?"),
+            tr("Save"), tr("Discard"), tr("Cancel"))) {
+        case 0:     // Save...
+            bClose = saveSession(false);
+            // Fall thru....
+        case 1:     // Discard
+            break;
+        default:    // Cancel.
+            bClose = false;
+            break;
+        }
+    }
+
+    // If we may close it, dot it.
+    if (bClose) {
+        // Remove all channel strips from sight...
+        m_pWorkspace->setUpdatesEnabled(false);
+        QWidgetList wlist = m_pWorkspace->windowList();
+        for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++)
+            delete (qsamplerChannelStrip *) wlist.at(iChannel);
+        m_pWorkspace->setUpdatesEnabled(true);
+    }
+
+    return bClose;
+}
+
+
+// Load a session from specific file path.
+bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
+{
+    // TODO: Open and read from real file.
+    // .
+    // .
+    // .
+
+    // Stabilize form...
+    m_sFilename = sFilename;
+    m_iDirtyCount = 0;
+    stabilizeForm();
+    
+    return true;
+}
+
+
+// Save current session to specific file path.
+bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
+{
+    // TODO: Open and write into real file.
+    // .
+    // .
+    // .
+
+    // Stabilize form...
+    m_sFilename = sFilename;
+    m_iDirtyCount = 0;
+    stabilizeForm();
+    
+    return true;
+}
+
+
+//-------------------------------------------------------------------------
 // qsamplerMainForm -- File Action slots.
 
 // Create a new sampler session.
@@ -241,9 +399,7 @@ void qsamplerMainForm::fileNew (void)
     appendMessages("qsamplerMainForm::fileNew()");
 
     // Of course we'll start clean new.
-    m_iDirtyCount = 0;
-    // Make things stable.
-    stabilizeForm();
+    newSession();
 }
 
 
@@ -252,10 +408,8 @@ void qsamplerMainForm::fileOpen (void)
 {
     appendMessages("qsamplerMainForm::fileOpen()");
 
-    // Of course we'll start clean open.
-    m_iDirtyCount = 0;
-    // Make things stable.
-    stabilizeForm();
+    // Open it right away.
+    openSession();
 }
 
 
@@ -264,10 +418,8 @@ void qsamplerMainForm::fileSave (void)
 {
     appendMessages("qsamplerMainForm::fileSave()");
     
-    // Maybe we're not dirty anymore.
-    m_iDirtyCount = 0;
-    // Make things stable.
-    stabilizeForm();
+    // Save it right away.
+    saveSession(false);
 }
 
 
@@ -275,11 +427,9 @@ void qsamplerMainForm::fileSave (void)
 void qsamplerMainForm::fileSaveAs (void)
 {
     appendMessages("qsamplerMainForm::fileSaveAs()");
-
-    // Maybe we're not dirty anymore.
-    m_iDirtyCount = 0;
-    // Make things stable.
-    stabilizeForm();
+    
+    // Save it right away, maybe with another name.
+    saveSession(true);
 }
 
 
@@ -288,6 +438,7 @@ void qsamplerMainForm::fileExit (void)
 {
     appendMessages("qsamplerMainForm::fileExit()");
 
+    // Go for close the whole thing.
     close();
 }
 
@@ -353,7 +504,7 @@ void qsamplerMainForm::editRemoveChannel (void)
     // Prompt user if he/she's sure about this...
     if (m_pOptions && m_pOptions->bConfirmRemove) {
         if (QMessageBox::warning(this, tr("Warning"),
-            tr("Remove channel:") + "\n\n" +
+            tr("About to remove channel:") + "\n\n" +
             pChannel->caption() + "\n\n" +
             tr("Are you sure?"),
             tr("OK"), tr("Cancel")) > 0)
@@ -523,6 +674,9 @@ void qsamplerMainForm::viewOptions (void)
         // Done.
         delete pOptionsForm;
     }
+    
+    // This makes it.
+    stabilizeForm();
 }
 
 
@@ -633,39 +787,47 @@ void qsamplerMainForm::helpAbout (void)
 
 void qsamplerMainForm::stabilizeForm (void)
 {
+    // Update the main application caption...
+    QString sSessioName = sessionName(m_pOptions && m_pOptions->bCompletePath);
+    if (m_iDirtyCount > 0)
+        sSessioName += '*';
+    setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessioName));
+
+    // Update the main menu state...
     qsamplerChannelStrip *pChannel = activeChannel();
-
     fileSaveAction->setEnabled(m_iDirtyCount > 0);
-
     bool bHasChannel = (pChannel != 0);
     editAddChannelAction->setEnabled(true);
     editRemoveChannelAction->setEnabled(bHasChannel);
     editSetupChannelAction->setEnabled(bHasChannel);
     editResetChannelAction->setEnabled(bHasChannel);
     channelsArrangeAction->setEnabled(bHasChannel);
-
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
 
-    // Client status.
+    // Client status...
     if (m_pClient)
         m_status[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
     else
         m_status[QSAMPLER_STATUS_CLIENT]->clear();
-    // Server status.
+    // Server status...
     if (m_pOptions)
         m_status[QSAMPLER_STATUS_SERVER]->setText(m_pOptions->sServerHost + ":" + QString::number(m_pOptions->iServerPort));
     else
         m_status[QSAMPLER_STATUS_SERVER]->clear();
-    // Channel status.
+    // Channel status...
     if (bHasChannel)
         m_status[QSAMPLER_STATUS_CHANNEL]->setText(pChannel->caption());
     else
         m_status[QSAMPLER_STATUS_CHANNEL]->clear();
-    // Session status.
+    // Session status...
     if (m_iDirtyCount > 0)
         m_status[QSAMPLER_STATUS_SESSION]->setText(tr("MOD"));
     else
         m_status[QSAMPLER_STATUS_SESSION]->clear();
+        
+    // Always make the latest message visible.
+    if (m_pMessages)
+        m_pMessages->scrollToBottom();
 }
 
 
