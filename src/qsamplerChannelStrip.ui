@@ -1,40 +1,22 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>qsamplerChannelStrip</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-
-
    Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
 
-
-
    This program is free software; you can redistribute it and/or
-
    modify it under the terms of the GNU General Public License
-
    as published by the Free Software Foundation; either version 2
-
    of the License, or (at your option) any later version.
 
-
-
    This program is distributed in the hope that it will be useful,
-
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-
    GNU General Public License for more details.
 
-
-
    You should have received a copy of the GNU General Public License
-
    along with this program; if not, write to the Free Software
-
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-
-
 
 </comment>
 <author>rncbc aka Rui Nuno Capela</author>
@@ -46,7 +28,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>708</width>
+            <width>688</width>
             <height>46</height>
         </rect>
     </property>
@@ -132,7 +114,7 @@
                 <pixmap>displaybg1.png</pixmap>
             </property>
             <property name="frameShape">
-                <enum>StyledPanel</enum>
+                <enum>Panel</enum>
             </property>
             <property name="frameShadow">
                 <enum>Sunken</enum>
@@ -169,11 +151,6 @@
                     <property name="backgroundOrigin">
                         <enum>ParentOrigin</enum>
                     </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>7</pointsize>
-                        </font>
-                    </property>
                     <property name="text">
                         <string>(No engine)</string>
                     </property>
@@ -200,11 +177,6 @@
                     </property>
                     <property name="backgroundOrigin">
                         <enum>ParentOrigin</enum>
-                    </property>
-                    <property name="font">
-                        <font>
-                            <pointsize>7</pointsize>
-                        </font>
                     </property>
                     <property name="text">
                         <string>(No instrument)</string>
@@ -278,7 +250,7 @@
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>120</width>
+                    <width>100</width>
                     <height>0</height>
                 </size>
             </property>
