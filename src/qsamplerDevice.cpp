@@ -431,30 +431,30 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 			opts.append(tr("false"));
 			opts.append(tr("true"));
 			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
-		    pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
-		    pComboItem->setEnabled(bEnabled);
+			pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
+			pComboItem->setEnabled(bEnabled);
 			QTable::setItem(iRow, 2, pComboItem);
 		} else if (param.possibilities.count() > 0) {
 			QComboTableItem *pComboItem = new QComboTableItem(this,
 				param.possibilities);
-		    pComboItem->setCurrentItem(param.value);
-		    pComboItem->setEnabled(bEnabled);
-		    pComboItem->setEditable(bEnabled && param.multiplicity);
+			pComboItem->setCurrentItem(param.value);
+			pComboItem->setEnabled(bEnabled);
+			pComboItem->setEditable(bEnabled && param.multiplicity);
 			QTable::setItem(iRow, 2, pComboItem);
-	    } else if (param.type == LSCP_TYPE_INT) {
-        	qsamplerDeviceParamTableSpinBox *pSpinItem =
+		} else if (param.type == LSCP_TYPE_INT
+				&& !param.range_min.isEmpty()
+				&& !param.range_max.isEmpty()) {
+			qsamplerDeviceParamTableSpinBox *pSpinItem =
 				new qsamplerDeviceParamTableSpinBox(this,
-				    bEnabled ? QTableItem::OnTyping : QTableItem::Never,
+					bEnabled ? QTableItem::OnTyping : QTableItem::Never,
 					param.value);
-			if (!param.range_min.isEmpty())
-				pSpinItem->setMinValue(param.range_min.toInt());
-			if (!param.range_max.isEmpty())
-				pSpinItem->setMaxValue(param.range_max.toInt());
+			pSpinItem->setMinValue(param.range_min.toInt());
+			pSpinItem->setMaxValue(param.range_max.toInt());
 			QTable::setItem(iRow, 2, pSpinItem);
 		} else {
-            qsamplerDeviceParamTableEditBox *pEditItem =
+			qsamplerDeviceParamTableEditBox *pEditItem =
 				new qsamplerDeviceParamTableEditBox(this,
-				    bEnabled ? QTableItem::OnTyping : QTableItem::Never,
+					bEnabled ? QTableItem::OnTyping : QTableItem::Never,
 					param.value);
 			QTable::setItem(iRow, 2, pEditItem);
 		}
@@ -479,9 +479,8 @@ qsamplerDeviceParamTableSpinBox::qsamplerDeviceParamTableSpinBox (
 	QTable *pTable, EditType editType, const QString& sText )
 	: QTableItem(pTable, editType, sText)
 {
-	m_iValue    = sText.toInt();
-    m_iMinValue = 0;
-    m_iMaxValue = 999999;
+	m_iValue = sText.toInt();
+	m_iMinValue = m_iMaxValue = 0;
 }
 
 // Public accessors.
@@ -518,9 +517,9 @@ QWidget *qsamplerDeviceParamTableSpinBox::createEditor (void) const
 void qsamplerDeviceParamTableSpinBox::setContentFromEditor ( QWidget *pWidget )
 {
 	if (pWidget->inherits("QSpinBox"))
-	    QTableItem::setText(QString::number(((QSpinBox *) pWidget)->value()));
+		QTableItem::setText(QString::number(((QSpinBox *) pWidget)->value()));
 	else
-	    QTableItem::setContentFromEditor(pWidget);
+		QTableItem::setContentFromEditor(pWidget);
 }
 
 
@@ -548,9 +547,9 @@ QWidget *qsamplerDeviceParamTableEditBox::createEditor (void) const
 void qsamplerDeviceParamTableEditBox::setContentFromEditor ( QWidget *pWidget )
 {
 	if (pWidget->inherits("QLineEdit"))
-	    QTableItem::setText(((QLineEdit *) pWidget)->text());
+		QTableItem::setText(((QLineEdit *) pWidget)->text());
 	else
-	    QTableItem::setContentFromEditor(pWidget);
+		QTableItem::setContentFromEditor(pWidget);
 }
 
 
