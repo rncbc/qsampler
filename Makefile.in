@@ -1,0 +1,42 @@
+prefix  = @ac_prefix@
+qmake   = @ac_qmake@
+
+name    = qsampler
+
+headers = config.h \
+	src/qsamplerAbout.h \
+	src/qsamplerOptions.h \
+	src/qsamplerMessages.h \
+	src/qsamplerChannelStrip.ui.h \
+	src/qsamplerChannelForm.ui.h \
+	src/qsamplerOptionsForm.ui.h \
+	src/qsamplerMainForm.ui.h
+
+sources = src/main.cpp \
+	src/qsamplerOptions.cpp \
+	src/qsamplerMessages.cpp \
+	src/qsamplerChannelStrip.ui \
+	src/qsamplerChannelForm.ui \
+	src/qsamplerOptionsForm.ui \
+	src/qsamplerMainForm.ui
+
+all:	$(name)
+
+$(name).mak:	$(name).pro
+	@$(qmake) -o $(name).mak $(name).pro
+
+$(name):	$(name).mak $(sources) $(headers)
+	@make -f $(name).mak $(name)
+
+install:	$(name) icons/$(name).png
+	@install -vD $(name) $(prefix)/bin/$(name)
+	@install -vD icons/$(name).png $(prefix)/share/icons/$(name).png
+
+uninstall:	$(prefix)/bin/$(name)
+	@rm -vf $(prefix)/bin/$(name)
+	@rm -vf $(prefix)/share/icons/$(name).xpm
+
+clean:	$(name).mak
+	@make -f $(name).mak clean
+	@rm -f $(name) $(name).mak
+	@rm -rf *.cache *.log *.status
