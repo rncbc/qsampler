@@ -47,7 +47,7 @@ public:
 
 	// Main application form accessor.
 	qsamplerMainForm *mainForm() const;
-	
+
 	// Main application options accessor.
 	qsamplerOptions *options() const;
 
@@ -74,7 +74,7 @@ public:
 	int      instrumentNr() const;
 	const QString& instrumentName() const;
 	int      instrumentStatus() const;
-	
+
 	// Instrument file loader.
 	bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 	// Special instrument file/name/number settler.
@@ -157,11 +157,11 @@ private:
 	QString m_sInstrumentFile;
 	int     m_iInstrumentNr;
 	int     m_iInstrumentStatus;
-	QString m_sMidiDriver;          // DEPRECATED.
+	QString m_sMidiDriver;
 	int     m_iMidiDevice;
 	int     m_iMidiPort;
 	int     m_iMidiChannel;
-	QString m_sAudioDriver;         // DEPRECATED.
+	QString m_sAudioDriver;
 	int     m_iAudioDevice;
 	float   m_fVolume;
 };

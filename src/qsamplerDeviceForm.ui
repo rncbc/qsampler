@@ -419,6 +419,7 @@
     <variable access="private">int m_iDirtyCount;</variable>
     <variable access="private">bool m_bNewDevice;</variable>
     <variable access="private">qsamplerDevice::qsamplerDeviceType m_deviceType;</variable>
+	<variable access="private">qsamplerDevice::qsamplerDeviceType m_deviceTypeMode;</variable>
     <variable access="private">qsamplerDeviceItem *m_pAudioItems;</variable>
     <variable access="private">qsamplerDeviceItem *m_pMidiItems;</variable>
 </variables>
@@ -443,8 +444,10 @@
     <function access="private" specifier="non virtual">showEvent( QShowEvent * pShowEvent )</function>
     <function access="private" specifier="non virtual">hideEvent( QHideEvent * pHideEvent )</function>
     <function specifier="non virtual">setMainForm( qsamplerMainForm *pMainForm )</function>
+    <function specifier="non virtual">setDeviceTypeMode( qsamplerDevice::qsamplerDeviceType deviceType )</function>
+    <function specifier="non virtual">setDriverName( const QString &amp; sDriverName )</function>
+    <function specifier="non virtual">setDevice( qsamplerDevice *pDevice )</function>
     <function specifier="non virtual">setClient( lscp_client_t *pClient )</function>
-    <function specifier="non virtual">setDevice( qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="4"/>
