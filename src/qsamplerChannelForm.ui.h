@@ -138,9 +138,6 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
             AudioDriverComboBox->insertItem(sAudioDriver);
         AudioDriverComboBox->setCurrentText(sAudioDriver);
     }
-    // FIXME: Disable this while we don't know what to do.
-    MidiPortTextLabel->setEnabled(false);
-    MidiPortSpinBox->setEnabled(false);
     // Done.
     m_iDirtySetup--;
     stabilizeForm();
@@ -167,8 +164,9 @@ void qsamplerChannelForm::accept (void)
         if (!m_pChannel->setMidiDriver(MidiDriverComboBox->currentText()))
             iErrors++;
         // MIDI input port number...
+        // FIXME: Should increment error count, when properly implemented.
         if (!m_pChannel->setMidiPort(MidiPortSpinBox->value()))
-            iErrors++;
+        /*  iErrors++ */;
         // MIDI input channel...
         if (!m_pChannel->setMidiChannel(MidiChannelSpinBox->value()))
             iErrors++;
