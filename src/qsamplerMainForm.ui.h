@@ -326,31 +326,40 @@ void qsamplerMainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 {
     QStringList files;
-    if (decodeDragFiles(pDropEvent, files)) {
-        for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
-   			const QString& sPath = QUrl(*iter).path();
-   			if (qsamplerChannel::isInstrumentFile(sPath)) {
-				// Try to create a new channel from instrument file...
-			    qsamplerChannel *pChannel = new qsamplerChannel(this);
-			    if (pChannel == NULL)
-			        return;
-				// Start setting the instrument filename...
-				pChannel->setInstrument(sPath, 0);
-			    // Before we show it up, may be we'll
-			    // better ask for some initial values?
-			    if (!pChannel->channelSetup(this)) {
-			        delete pChannel;
-			        return;
-			    }
-			    // Make that an overall update.
-			    m_iDirtyCount++;
-			    m_iChangeCount++;
-			    stabilizeForm();
-    		}   // Otherwise, load an usual session file (LSCP script)...
-			else if (closeSession(true))
-				loadSessionFile(sPath);
-		}
-    }
+
+    if (!decodeDragFiles(pDropEvent, files))
+        return;
+
+    for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
+		const QString& sPath = QUrl(*iter).path();
+		if (qsamplerChannel::isInstrumentFile(sPath)) {
+			// Try to create a new channel from instrument file...
+		    qsamplerChannel *pChannel = new qsamplerChannel(this);
+		    if (pChannel == NULL)
+		        return;
+			// Start setting the instrument filename...
+			pChannel->setInstrument(sPath, 0);
+		    // Before we show it up, may be we'll
+		    // better ask for some initial values?
+		    if (!pChannel->channelSetup(this)) {
+		        delete pChannel;
+		        return;
+		    }
+		    // Finally, give it to a new channel strip...
+			if (!createChannelStrip(pChannel)) {
+		        delete pChannel;
+		        return;
+			}
+		    // Make that an overall update.
+		    m_iDirtyCount++;
+		    m_iChangeCount++;
+		    stabilizeForm();
+		}   // Otherwise, load an usual session file (LSCP script)...
+		else if (closeSession(true))
+			loadSessionFile(sPath);
+		// Make it look responsive...:)
+		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	}
 }
 
 
