@@ -51,12 +51,6 @@
 qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     : QDockWindow(pParent, pszName)
 {
-#if QT_VERSION >= 0x030200
-    m_pTextView->setTextFormat(Qt::LogText);
-#endif
-    // Initialize default message limit.
-    setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
-
     // Intialize stdout capture stuff.
     m_pStdoutNotifier = NULL;
     m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
@@ -74,6 +68,11 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     m_pTextView->setWordWrap(QTextEdit::NoWrap);
     m_pTextView->setReadOnly(true);
     m_pTextView->setUndoRedoEnabled(false);
+#if QT_VERSION >= 0x030200
+    m_pTextView->setTextFormat(Qt::LogText);
+#endif
+    // Initialize default message limit.
+    setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
 
     // Prepare the dockable window stuff.
     QDockWindow::setWidget(m_pTextView);
