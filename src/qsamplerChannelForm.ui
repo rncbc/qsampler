@@ -599,6 +599,12 @@
         <slot>selectMidiDriver(const QString&amp;)</slot>
     </connection>
     <connection>
+        <sender>MidiDeviceComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>selectMidiDevice(int)</slot>
+    </connection>
+    <connection>
         <sender>MidiPortSpinBox</sender>
         <signal>valueChanged(int)</signal>
         <receiver>qsamplerChannelForm</receiver>
@@ -615,6 +621,12 @@
         <signal>activated(const QString &amp;)</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>selectAudioDriver(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>AudioDeviceComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>selectAudioDevice(int)</slot>
     </connection>
     <connection>
         <sender>OkPushButton</sender>
@@ -661,7 +673,9 @@
     <slot specifier="non virtual">openInstrumentFile()</slot>
     <slot specifier="non virtual">updateInstrumentName()</slot>
     <slot specifier="non virtual">selectMidiDriver( const QString &amp; sMidiDriver )</slot>
+    <slot specifier="non virtual">selectMidiDevice( int iMidiItem )</slot>
     <slot specifier="non virtual">selectAudioDriver( const QString &amp; sAudioDriver )</slot>
+    <slot specifier="non virtual">selectAudioDevice( int iAudioItem )</slot>
     <slot specifier="non virtual">optionsChanged()</slot>
     <slot specifier="non virtual">stabilizeForm()</slot>
 </slots>
