@@ -70,6 +70,12 @@ qsamplerOptions::qsamplerOptions (void)
     bAutoArrange   = m_settings.readBoolEntry("/AutoArrange", true);
     m_settings.endGroup();
 
+    // Last but not least, get the default directories.
+    m_settings.beginGroup("/Default");
+    sSessionDir    = m_settings.readEntry("/SessionDir", QString::null);
+    sInstrumentDir = m_settings.readEntry("/InstrumentDir", QString::null);
+    m_settings.endGroup();
+
     m_settings.endGroup();
 }
 
@@ -111,6 +117,12 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/Toolbar", bToolbar);
     m_settings.writeEntry("/Statusbar", bStatusbar);
     m_settings.writeEntry("/AutoArrange", bAutoArrange);
+    m_settings.endGroup();
+
+    // Default directories.
+    m_settings.beginGroup("/Default");
+    m_settings.writeEntry("/SessionDir", sSessionDir);
+    m_settings.writeEntry("/InstrumentDir", sInstrumentDir);
     m_settings.endGroup();
 
     m_settings.endGroup();

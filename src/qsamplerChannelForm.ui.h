@@ -24,6 +24,7 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
+#include <qlistbox.h>
 
 #include "qsamplerOptions.h"
 #include "qsamplerChannelStrip.h"
@@ -100,16 +101,26 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_midi_types");
 
-    // Read channel information,
+    // Read proper channel information,
     // and populate the channel form fields.
     lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pChannel->client(), m_pChannel->channelID());
     if (pChannelInfo) {
+        // Engine name...
+        if (EngineNameComboBox->listBox()->findItem(pChannelInfo->engine_name, Qt::ExactMatch) == NULL)
+            EngineNameComboBox->insertItem(pChannelInfo->engine_name);
         EngineNameComboBox->setCurrentText(pChannelInfo->engine_name);
+        // Instrument filename and index...
         InstrumentFileComboBox->setCurrentText(pChannelInfo->instrument_file);
         InstrumentNrSpinBox->setValue(pChannelInfo->instrument_nr);
+        // MIDI input...
+        if (MidiTypeComboBox->listBox()->findItem(pChannelInfo->midi_type, Qt::ExactMatch) == NULL)
+            MidiTypeComboBox->insertItem(pChannelInfo->midi_type);
         MidiTypeComboBox->setCurrentText(pChannelInfo->midi_type);
         MidiPortSpinBox->setValue(pChannelInfo->midi_port);
         MidiChannelSpinBox->setValue(pChannelInfo->midi_channel);
+        // Audio output...
+        if (AudioTypeComboBox->listBox()->findItem(pChannelInfo->audio_type, Qt::ExactMatch) == NULL)
+            AudioTypeComboBox->insertItem(pChannelInfo->audio_type);
         AudioTypeComboBox->setCurrentText(pChannelInfo->audio_type);
     } else {
         m_pChannel->appendMessagesClient("lscp_get_channel_info");
@@ -183,8 +194,9 @@ void qsamplerChannelForm::accept (void)
         if (iErrors > 0)
             m_pChannel->appendMessagesError(tr("Some channel settings could not be set. Sorry."));
     }
-    
-    // Save combobox history...
+
+    // Save default instrument directory and history...
+    pOptions->sInstrumentDir = QFileInfo(InstrumentFileComboBox->currentText()).dirPath(true);
     pOptions->saveComboBoxHistory(InstrumentFileComboBox);
 
     // Just go with dialog acceptance.
@@ -221,13 +233,14 @@ void qsamplerChannelForm::reject (void)
 // Browse and open an instrument file.
 void qsamplerChannelForm::openInstrumentFile (void)
 {
-    if (m_pChannel->options() == NULL)
+    qsamplerOptions *pOptions = m_pChannel->options();
+    if (pOptions == NULL)
         return;
 
     // FIXME: the instrument file filters should be restricted,
     // depending on the current engine.
     QString sInstrumentFile = QFileDialog::getOpenFileName(
-            InstrumentFileComboBox->currentText(),      // Start here.
+            pOptions->sInstrumentDir,                   // Start here.
             tr("Instrument files") + " (*.gig *.dls)",  // Filter (GIG and DLS files)
             this, 0,                                    // Parent and name (none)
             tr("Instrument files")                      // Caption.
@@ -267,7 +280,8 @@ void qsamplerChannelForm::optionsChanged (void)
 // Stabilize current form state.
 void qsamplerChannelForm::stabilizeForm (void)
 {
-    OkPushButton->setEnabled(m_iDirtyCount > 0);
+    const QString sFilename = InstrumentFileComboBox->currentText();
+    OkPushButton->setEnabled(m_iDirtyCount > 0 && !sFilename.isEmpty() && QFileInfo(sFilename).exists());
 }
 
 

@@ -71,6 +71,10 @@ public:
     bool    bStatusbar;
     bool    bAutoArrange;
 
+    // Default options...
+    QString sSessionDir;
+    QString sInstrumentDir;
+
     // Widget geometry persistence helper prototypes.
     void saveWidgetGeometry(QWidget *pWidget);
     void loadWidgetGeometry(QWidget *pWidget);
