@@ -732,6 +732,7 @@
     <function access="private" specifier="non virtual">closeEvent( QCloseEvent * pCloseEvent )</function>
     <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent *pDragEnterEvent )</function>
     <function access="private" specifier="non virtual">dropEvent( QDropEvent *pDropEvent )</function>
+    <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
     <function specifier="non virtual" returnType="qsamplerOptions *">options( void )</function>
     <function specifier="non virtual" returnType="lscp_client_t *">client( void )</function>
     <function specifier="non virtual" returnType="QString">sessionName( const QString &amp; sFilename )</function>

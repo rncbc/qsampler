@@ -499,8 +499,7 @@ void qsamplerChannelStrip::appendMessagesClient( const QString& s )
 void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
     // We'll just show up the main form's edit menu.
-    m_pMainForm->stabilizeForm();
-    m_pMainForm->editMenu->exec(pEvent->globalPos());
+    m_pMainForm->contextMenuEvent(pEvent);
 }
 
 

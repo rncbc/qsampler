@@ -252,6 +252,7 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 }
 
 
+// Window drag-n-drop event handlers.
 void qsamplerMainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
     bool bAccept = false;
@@ -273,6 +274,15 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
         if (QTextDrag::decode(pDropEvent, sUrl) && closeSession(true))
             loadSessionFile(QUrl(sUrl).path());
     }
+}
+
+
+// Context menu event handler.
+void qsamplerMainForm::contextMenuEvent( QContextMenuEvent *pEvent )
+{
+    stabilizeForm();
+    
+    editMenu->exec(pEvent->globalPos());
 }
 
 
