@@ -64,7 +64,7 @@ void qsamplerDeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 	else
 		description = QString::null;
 	
-	mandatory = (bool) pParamInfo->multiplicity;
+	mandatory = (bool) pParamInfo->mandatory;
 	fix = (bool) pParamInfo->fix;
 	multiplicity = (bool) pParamInfo->multiplicity;
 	
@@ -690,7 +690,7 @@ void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
 				param.possibilities);
 			pComboItem->setCurrentItem(param.value);
 			pComboItem->setEnabled(bEnabled);
-			pComboItem->setEditable(bEnabled && param.multiplicity);
+		//	pComboItem->setEditable(bEnabled && param.multiplicity);
 			QTable::setItem(iRow, 2, pComboItem);
 		} else if (param.type == LSCP_TYPE_INT && bEnabled
 				&& !param.range_min.isEmpty()
