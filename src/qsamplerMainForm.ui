@@ -702,6 +702,8 @@
     <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannel( void )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelAt( int iChannel )</function>
+    <function access="private" specifier="non virtual">startSchedule( int iStartDelay )</function>
+    <function access="private" specifier="non virtual">stopSchedule( void )</function>
     <function access="private" specifier="non virtual" returnType="bool">startClient( void )</function>
     <function access="private" specifier="non virtual">stopClient( void )</function>
 </functions>

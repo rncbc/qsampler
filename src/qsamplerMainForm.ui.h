@@ -154,10 +154,8 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     // Make it ready :-)
     statusBar()->message(tr("Ready"), 3000);
 
-    // Try to find if we can start as client,
-    // just in case there's a linuxsampler server already running.
-    if (!startClient() && m_pOptions->bServerStart)
-        startServer();
+    // We'll start scheduling...
+    startSchedule(m_pOptions->iStartDelay);
 
     // Register the first timer slot.
     QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
@@ -211,7 +209,7 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 // Create a new sampler session.
 void qsamplerMainForm::fileNew (void)
 {
-    appendMessages("fileNew()");
+    appendMessages("qsamplerMainForm::fileNew()");
 
     // Of course we'll start clean new.
     m_iDirtyCount = 0;
@@ -223,7 +221,7 @@ void qsamplerMainForm::fileNew (void)
 // Open an existing sampler session.
 void qsamplerMainForm::fileOpen (void)
 {
-    appendMessages("fileOpen()");
+    appendMessages("qsamplerMainForm::fileOpen()");
 
     // Of course we'll start clean open.
     m_iDirtyCount = 0;
@@ -235,7 +233,7 @@ void qsamplerMainForm::fileOpen (void)
 // Save current sampler session.
 void qsamplerMainForm::fileSave (void)
 {
-    appendMessages("fileSave()");
+    appendMessages("qsamplerMainForm::fileSave()");
     
     // Maybe we're not dirty anymore.
     m_iDirtyCount = 0;
@@ -247,7 +245,7 @@ void qsamplerMainForm::fileSave (void)
 // Save current sampler session with another name.
 void qsamplerMainForm::fileSaveAs (void)
 {
-    appendMessages("fileSaveAs()");
+    appendMessages("qsamplerMainForm::fileSaveAs()");
 
     // Maybe we're not dirty anymore.
     m_iDirtyCount = 0;
@@ -259,7 +257,7 @@ void qsamplerMainForm::fileSaveAs (void)
 // Exit application program.
 void qsamplerMainForm::fileExit (void)
 {
-    appendMessages("fileExit()");
+    appendMessages("qsamplerMainForm::fileExit()");
 
     close();
 }
@@ -271,7 +269,7 @@ void qsamplerMainForm::fileExit (void)
 // Add a new sampler channel.
 void qsamplerMainForm::editAddChannel (void)
 {
-    appendMessages("editAddChannel()");
+    appendMessages("qsamplerMainForm::editAddChannel()");
 
     // Prepare for auto-arrange?
     qsamplerChannelStrip *pChannel = NULL;
@@ -317,7 +315,7 @@ void qsamplerMainForm::editAddChannel (void)
 // Remove current sampler channel.
 void qsamplerMainForm::editRemoveChannel (void)
 {
-    appendMessages("editRemoveChannel()");
+    appendMessages("qsamplerMainForm::editRemoveChannel()");
     
     qsamplerChannelStrip *pChannel = activeChannel();
     if (pChannel == NULL)
@@ -349,7 +347,7 @@ void qsamplerMainForm::editRemoveChannel (void)
 // Setup current sampler channel.
 void qsamplerMainForm::editSetupChannel (void)
 {
-    appendMessages("editSetupChannel()");
+    appendMessages("qsamplerMainForm::editSetupChannel()");
 
     qsamplerChannelStrip *pChannel = activeChannel();
     if (pChannel == NULL)
@@ -363,7 +361,7 @@ void qsamplerMainForm::editSetupChannel (void)
 // Reset current sampler channel.
 void qsamplerMainForm::editResetChannel (void)
 {
-    appendMessages("editResetChannel()");
+    appendMessages("qsamplerMainForm::editResetChannel()");
 
     qsamplerChannelStrip *pChannel = activeChannel();
     if (pChannel == NULL)
@@ -379,7 +377,7 @@ void qsamplerMainForm::editResetChannel (void)
 // Show/hide the main program window menubar.
 void qsamplerMainForm::viewMenubar ( bool bOn )
 {
-    appendMessages("viewMenubar(" + QString::number((int) bOn) + ")");
+    appendMessages("qsamplerMainForm::viewMenubar(" + QString::number((int) bOn) + ")");
     
     if (bOn)
         MenuBar->show();
@@ -391,7 +389,7 @@ void qsamplerMainForm::viewMenubar ( bool bOn )
 // Show/hide the main program window toolbar.
 void qsamplerMainForm::viewToolbar ( bool bOn )
 {
-    appendMessages("viewToolbar(" + QString::number((int) bOn) + ")");
+    appendMessages("qsamplerMainForm::viewToolbar(" + QString::number((int) bOn) + ")");
 
 	if (bOn) {
         fileToolbar->show();
@@ -408,7 +406,7 @@ void qsamplerMainForm::viewToolbar ( bool bOn )
 // Show/hide the main program window statusbar.
 void qsamplerMainForm::viewStatusbar ( bool bOn )
 {
-    appendMessages("viewStatusbar(" + QString::number((int) bOn) + ")");
+    appendMessages("qsamplerMainForm::viewStatusbar(" + QString::number((int) bOn) + ")");
 
     if (bOn)
         statusBar()->show();
@@ -420,7 +418,7 @@ void qsamplerMainForm::viewStatusbar ( bool bOn )
 // Show/hide the messages window logger.
 void qsamplerMainForm::viewMessages ( bool bOn )
 {
-    appendMessages("viewMessages(" + QString::number((int) bOn) + ")");
+    appendMessages("qsamplerMainForm::viewMessages(" + QString::number((int) bOn) + ")");
 
     if (bOn)
         m_pMessages->show();
@@ -432,7 +430,7 @@ void qsamplerMainForm::viewMessages ( bool bOn )
 // Show options dialog.
 void qsamplerMainForm::viewOptions (void)
 {
-    appendMessages("viewOptions()");
+    appendMessages("qsamplerMainForm::viewOptions()");
 
     if (m_pOptions == NULL)
         return;
@@ -446,28 +444,52 @@ void qsamplerMainForm::viewOptions (void)
         if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
             m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
         // To track down deferred or immediate changes.
+        QString sOldServerHost      = m_pOptions->sServerHost;
+        int     iOldServerPort      = m_pOptions->iServerPort;
+        bool    bOldServerStart     = m_pOptions->bServerStart;
+        QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
         QString sOldDisplayFont     = m_pOptions->sDisplayFont;
         QString sOldMessagesFont    = m_pOptions->sMessagesFont;
-        bool    bStdoutCapture      = m_pOptions->bStdoutCapture;
-        int     bMessagesLimit      = m_pOptions->bMessagesLimit;
-        int     iMessagesLimitLines = m_pOptions->iMessagesLimitLines;
+        bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
+        int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
+        int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
         // Load the current setup settings.
         pOptionsForm->setup(m_pOptions);
         // Show the setup dialog...
         if (pOptionsForm->exec()) {
             // Warn if something will be only effective on next run.
-            if (( bStdoutCapture && !m_pOptions->bStdoutCapture) ||
-                (!bStdoutCapture &&  m_pOptions->bStdoutCapture))
+            if (( bOldStdoutCapture && !m_pOptions->bStdoutCapture) ||
+                (!bOldStdoutCapture &&  m_pOptions->bStdoutCapture))
                 updateMessagesCapture();
             // Check wheather something immediate has changed.
             if (sOldDisplayFont != m_pOptions->sDisplayFont)
                 updateDisplayFont();
             if (sOldMessagesFont != m_pOptions->sMessagesFont)
                 updateMessagesFont();
-            if (( bMessagesLimit && !m_pOptions->bMessagesLimit) ||
-                (!bMessagesLimit &&  m_pOptions->bMessagesLimit) ||
-                (iMessagesLimitLines !=  m_pOptions->iMessagesLimitLines))
+            if (( bOldMessagesLimit && !m_pOptions->bMessagesLimit) ||
+                (!bOldMessagesLimit &&  m_pOptions->bMessagesLimit) ||
+                (iOldMessagesLimitLines !=  m_pOptions->iMessagesLimitLines))
                 updateMessagesLimit();
+            // And now the main thing, whether we'll do client/server recycling?
+            if ((sOldServerHost != m_pOptions->sServerHost)      ||
+                (iOldServerPort != m_pOptions->iServerPort)      ||
+                ( bOldServerStart && !m_pOptions->bServerStart)  ||
+                (!bOldServerStart &&  m_pOptions->bServerStart)  ||
+                (sOldServerCmdLine != m_pOptions->sServerCmdLine && m_pOptions->bServerStart)) {
+                // Ask user whether he/she want's a complete restart...
+                if (QMessageBox::warning(this, tr("Warning"),
+                    tr("New settings will be effective after\n"
+                        "restarting the client/server connection.") + "\n\n" +
+                    tr("Please note that this operation may cause\n"
+                       "temporary MIDI and Audio disruption.") + "\n\n" +
+                    tr("Do you want to restart the connection now?"),
+                    tr("Yes"), tr("No")) == 0) {
+                    // Stop server, it will force the client too.
+                    stopServer();
+                    // Reschedule a restart...
+                    startSchedule(m_pOptions->iStartDelay);
+                }
+            }
         }
         // Done.
         delete pOptionsForm;
@@ -481,7 +503,7 @@ void qsamplerMainForm::viewOptions (void)
 // Arrange channel strips.
 void qsamplerMainForm::channelsArrange (void)
 {
-    appendMessages("channelsArrange()");
+    appendMessages("qsamplerMainForm::channelsArrange()");
 
     // Full width vertical tiling
     QWidgetList wlist = m_pWorkspace->windowList();
@@ -515,7 +537,7 @@ void qsamplerMainForm::channelsArrange (void)
 // Auto-arrange channel strips.
 void qsamplerMainForm::channelsAutoArrange ( bool bOn )
 {
-    appendMessages("channelsAutoArrange()");
+    appendMessages("qsamplerMainForm::channelsAutoArrange()");
 
     if (m_pOptions == NULL)
         return;
@@ -535,7 +557,7 @@ void qsamplerMainForm::channelsAutoArrange ( bool bOn )
 // Show information about the Qt toolkit.
 void qsamplerMainForm::helpAboutQt (void)
 {
-    appendMessages("helpAboutQt()");
+    appendMessages("qsamplerMainForm::helpAboutQt()");
     
     QMessageBox::aboutQt(this);
 }
@@ -544,7 +566,7 @@ void qsamplerMainForm::helpAboutQt (void)
 // Show information about application program.
 void qsamplerMainForm::helpAbout (void)
 {
-    appendMessages("helpAbout()");
+    appendMessages("qsamplerMainForm::helpAbout()");
 
     // Stuff the about box text...
     QString sText = "<p>\n";
@@ -768,7 +790,7 @@ void qsamplerMainForm::channelsMenuAboutToShow (void)
 // Windows menu activation slot
 void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 {
-    appendMessages("channelsMenuActivated(" + QString::number(iChannel) + ")");
+    appendMessages("qsamplerMainForm::channelsMenuActivated(" + QString::number(iChannel) + ")");
     
     qsamplerChannelStrip *pChannel = channelAt(iChannel);
     if (pChannel)
@@ -778,11 +800,57 @@ void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 
 
 //-------------------------------------------------------------------------
+// qsamplerMainForm -- Timer stuff.
+
+// Set the pseudo-timer delay schedule.
+void qsamplerMainForm::startSchedule ( int iStartDelay )
+{
+    appendMessages("qsamplerMainForm::startSchedule(" + QString::number(iStartDelay) + ")");
+    
+    m_iStartDelay  = 1 + (iStartDelay * 1000);
+    m_iTimerDelay  = 0;
+}
+
+// Suspend the pseudo-timer delay schedule.
+void qsamplerMainForm::stopSchedule (void)
+{
+    appendMessages("qsamplerMainForm::stopSchedule()");
+    
+    m_iStartDelay  = 0;
+    m_iTimerDelay  = 0;
+}
+
+// Timer slot funtion.
+void qsamplerMainForm::timerSlot (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    // Is it the first shot on server start after a few delay?
+    if (m_iTimerDelay < m_iStartDelay) {
+        m_iTimerDelay += QSAMPLER_TIMER_MSECS;
+        if (m_iTimerDelay >= m_iStartDelay) {
+            // If we cannot start it now, maybe a lil'mo'later ;)
+            if (!startClient()) {
+                m_iStartDelay += m_iTimerDelay;
+                m_iTimerDelay  = 0;
+            }
+        }
+    }
+
+    // Register the next timer slot.
+    QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
+}
+
+
+//-------------------------------------------------------------------------
 // qsamplerMainForm -- Server stuff.
 
 // Start linuxsampler server...
 void qsamplerMainForm::startServer (void)
 {
+    appendMessages("qsamplerMainForm::startServer()");
+    
     if (m_pOptions == NULL)
         return;
 
@@ -807,8 +875,7 @@ void qsamplerMainForm::startServer (void)
     }
 
     // Reset our timer counters...
-    m_iStartDelay  = 0;
-    m_iTimerDelay  = 0;
+    stopSchedule();
 
     // OK. Let's build the startup process...
     m_pServer = new QProcess(this);
@@ -839,18 +906,15 @@ void qsamplerMainForm::startServer (void)
     appendMessages(tr("Server was started with PID=%1.").arg((long) m_pServer->processIdentifier()));
 
     // Reset (yet again) the timer counters...
-    m_iStartDelay  = 1 + (m_pOptions->iStartDelay * 1000);
-    m_iTimerDelay  = 0;
+    startSchedule(m_pOptions->iStartDelay);
 }
 
 
 // Stop linuxsampler server...
 void qsamplerMainForm::stopServer (void)
 {
-    // Clear timer counters...
-    m_iStartDelay  = 0;
-    m_iTimerDelay  = 0;
-
+    appendMessages("qsamplerMainForm::stopServer()");
+    
     // Stop client code.
     stopClient();
 
@@ -877,6 +941,8 @@ void qsamplerMainForm::readServerStdout (void)
 // Linuxsampler server cleanup.
 void qsamplerMainForm::processServerExit (void)
 {
+    appendMessages("qsamplerMainForm::processServerExit()");
+
     // Force client code cleanup.
     stopClient();
 
@@ -893,32 +959,6 @@ void qsamplerMainForm::processServerExit (void)
         delete m_pServer;
         m_pServer = NULL;
     }
-}
-
-
-//-------------------------------------------------------------------------
-// qsamplerMainForm -- Timer stuff.
-
-// Timer slot funtion.
-void qsamplerMainForm::timerSlot (void)
-{
-    if (m_pOptions == NULL)
-        return;
-
-    // Is it the first shot on server start after a few delay?
-    if (m_iTimerDelay < m_iStartDelay) {
-        m_iTimerDelay += QSAMPLER_TIMER_MSECS;
-        if (m_iTimerDelay >= m_iStartDelay) {
-            // If we cannot start it now, maybe a lil'mo'later ;)
-            if (!startClient() && m_pServer && m_pServer->isRunning()) {
-                m_iStartDelay += m_iTimerDelay;
-                m_iTimerDelay  = 0;
-            }
-        }
-    }
-
-    // Register the next timer slot.
-    QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
 }
 
 
@@ -949,6 +989,8 @@ lscp_status_t qsampler_client_callback ( lscp_client_t *pClient, const char *pch
 // Start our almighty client...
 bool qsamplerMainForm::startClient (void)
 {
+    appendMessages("qsamplerMainForm::startClient()");
+    
     // Have it a setup?
     if (m_pOptions == NULL)
         return false;
@@ -957,13 +999,22 @@ bool qsamplerMainForm::startClient (void)
     if (m_pClient)
         return true;
 
+    // We may stop scheduling around.
+    stopSchedule();
+
     // Log prepare here.
     appendMessages(tr("Client connecting..."));
 
     // Create the client handle...
     m_pClient = ::lscp_client_create(m_pOptions->sServerHost.latin1(), m_pOptions->iServerPort, qsampler_client_callback, this);
     if (m_pClient == NULL) {
-        appendMessagesError(tr("Could not connect to server as client."));
+        // Is this the first try?
+        // maybe we need to start a local server...
+        if ((m_pServer && m_pServer->isRunning()) || !m_pOptions->bServerStart)
+            appendMessagesError(tr("Could not connect to server as client."));
+        else
+            startServer();
+        // This is always a failure.
         return false;
     }
 
@@ -978,8 +1029,13 @@ bool qsamplerMainForm::startClient (void)
 // Stop client...
 void qsamplerMainForm::stopClient (void)
 {
+    appendMessages("qsamplerMainForm::stopClient()");
+
     if (m_pClient == NULL)
         return;
+
+    // Clear timer counters...
+    stopSchedule();
 
     // Log prepare here.
     appendMessages(tr("Client disconnecting..."));
