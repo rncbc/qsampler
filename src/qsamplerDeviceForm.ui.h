@@ -24,6 +24,7 @@
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlistbox.h>
+#include <qpopupmenu.h>
 
 #include "qsamplerMainForm.h"
 
@@ -310,7 +311,10 @@ void qsamplerDeviceForm::selectDevice (void)
 	m_bNewDevice = (device.deviceID() < 0);
 
 	// Fill the device/driver heading...
-	DeviceNameTextLabel->setText(device.deviceTypeName() + ' ' + device.deviceName());
+	QString sPrefix;
+	if (!m_bNewDevice)
+		sPrefix += device.deviceTypeName() + ' ';
+	DeviceNameTextLabel->setText(sPrefix + device.deviceName());
 	// The driver combobox is only rebuilt if device type has changed...
 	if (device.deviceType() != m_deviceType) {
 		DriverNameComboBox->clear();
@@ -397,16 +401,48 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 }
 
 
+// Device list view context menu handler.
+void qsamplerDeviceForm::contextMenu ( QListViewItem *pItem, const QPoint& pos, int )
+{
+	int iItemID;
+	
+	// Build the device context menu...
+	QPopupMenu* pContextMenu = new QPopupMenu(this);
+	
+	bool bClient = (m_pClient != NULL);
+	bool bEnabled = (pItem != NULL);
+	iItemID = pContextMenu->insertItem(
+		QIconSet(QPixmap::fromMimeSource("deviceCreate.png")),
+		tr("&Create"), this, SLOT(createDevice()));
+	pContextMenu->setItemEnabled(iItemID, bEnabled || (bClient && m_bNewDevice));
+	iItemID = pContextMenu->insertItem(
+		QIconSet(QPixmap::fromMimeSource("deviceDelete.png")),
+		tr("&Delete"), this, SLOT(deleteDevice()));
+	pContextMenu->setItemEnabled(iItemID, bEnabled && !m_bNewDevice);
+	pContextMenu->insertSeparator();
+	iItemID = pContextMenu->insertItem(
+		QIconSet(QPixmap::fromMimeSource("formRefresh.png")),
+		tr("&Refresh"), this, SLOT(refreshDevices()));
+	pContextMenu->setItemEnabled(iItemID, bClient);
+	
+	pContextMenu->exec(pos);
+	
+	delete pContextMenu;
+}
+
+
 // Stabilize current form state.
 void qsamplerDeviceForm::stabilizeForm (void)
 {
 	QListViewItem *pItem = DeviceListView->selectedItem();
+	bool bClient = (m_pClient != NULL);
 	bool bEnabled = (pItem != NULL);
 	DeviceNameTextLabel->setEnabled(bEnabled && !m_bNewDevice);
 	DriverNameTextLabel->setEnabled(bEnabled &&  m_bNewDevice);
 	DriverNameComboBox->setEnabled(bEnabled && m_bNewDevice);
 	DeviceParamTable->setEnabled(bEnabled);
-	CreateDevicePushButton->setEnabled(bEnabled ||  m_bNewDevice);
+	RefreshDevicesPushButton->setEnabled(bClient);
+	CreateDevicePushButton->setEnabled(bEnabled || (bClient && m_bNewDevice));
 	DeleteDevicePushButton->setEnabled(bEnabled && !m_bNewDevice);
 }
 

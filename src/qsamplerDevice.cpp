@@ -143,7 +143,7 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	// If we're bogus, bail out...
 	if (pDeviceInfo == NULL) {
 		m_sDriverName = QString::null;
-		m_sDeviceName = QObject::tr("New device");
+		m_sDeviceName = QObject::tr("New %1 device").arg(m_sDeviceType);
 		return;
 	}
 
