@@ -3,6 +3,13 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+0.0.5   2004-12-21  Work in progress...
+
+- Messages window limit is now enforced only when the line
+  count exceeds in one third the user configured line count
+  maximum.
+
+
 0.0.4   2004-11-19  Fourth alpha-release.
 
 * Instrument index selection now made via combo box widget;
