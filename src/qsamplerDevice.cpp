@@ -426,7 +426,7 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 		bool bEnabled = (device.deviceID() < 0 || !param.fix);
 		QTable::setText(iRow, 0, iter.key());
 		QTable::setText(iRow, 1, param.description);
-		if (param.type == LSCP_TYPE_BOOL) {
+		if (param.type == LSCP_TYPE_BOOL && bEnabled) {
 			QStringList opts;
 			opts.append(tr("false"));
 			opts.append(tr("true"));
@@ -434,14 +434,14 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 			pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
 			pComboItem->setEnabled(bEnabled);
 			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.possibilities.count() > 0) {
+		} else if (param.possibilities.count() > 0 && bEnabled) {
 			QComboTableItem *pComboItem = new QComboTableItem(this,
 				param.possibilities);
 			pComboItem->setCurrentItem(param.value);
 			pComboItem->setEnabled(bEnabled);
 			pComboItem->setEditable(bEnabled && param.multiplicity);
 			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.type == LSCP_TYPE_INT
+		} else if (param.type == LSCP_TYPE_INT && bEnabled
 				&& !param.range_min.isEmpty()
 				&& !param.range_max.isEmpty()) {
 			qsamplerDeviceParamTableSpinBox *pSpinItem =
