@@ -75,7 +75,7 @@ void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
         m_pChannel->setChannelID(iChannelID);
         m_iDirtyChange = 0;
     }
-    
+
     // Stabilize this around.
     updateChannelInfo();
 }
@@ -246,14 +246,19 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
     if (m_pChannel->client() == NULL)
         return false;
 
-    // Conditionally update whole channel status info.
-    if (m_pChannel->instrumentStatus() >= 0 && m_pChannel->instrumentStatus() < 100) {
+    // Update whole channel status info,
+    // if instrument load is still pending...
+    if (m_pChannel->instrumentStatus() < 100) {
         updateChannelInfo();
-        // Once we get a complete instrument load, try a implied reset channel....
-        if (m_pChannel->instrumentStatus() == 100)
-            m_pChannel->resetChannel();
+        // Check (updated) status again...
+        if (m_pChannel->instrumentStatus() < 100)
+            return false;
+        // Once we get a complete instrument load,
+        // we'll try an implied channel reset...
+        m_pChannel->resetChannel();
     }
-    // Leave, if we still have an erroneus or incomplete instrument load.
+    
+    // Check again that we're clean.
     if (m_pChannel->instrumentStatus() < 100)
         return false;
 
