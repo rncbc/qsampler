@@ -20,6 +20,8 @@
 
 *****************************************************************************/
 
+#include <qworkspace.h>
+#include <qprocess.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
@@ -29,8 +31,11 @@
 #include <qtimer.h>
 
 #include "qsamplerAbout.h"
+#include "qsamplerOptions.h"
+#include "qsamplerMessages.h"
 
-#include "lscp/client.h"
+#include "qsamplerChannelStrip.h"
+#include "qsamplerOptionsForm.h"
 
 #include "config.h"
 
@@ -189,8 +194,8 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     // Make it ready :-)
     statusBar()->message(tr("Ready"), 3000);
 
-    // We'll start scheduling...
-    startSchedule(m_pOptions->iStartDelay);
+    // We'll try to start immediately...
+    startSchedule(0);
 
     // Register the first timer slot.
     QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
@@ -593,6 +598,9 @@ void qsamplerMainForm::editResetChannel (void)
         appendMessagesError(tr("Could not reset channel. Sorry."));
         return;
     }
+    
+    // Refresh channel strip info.
+    pChannel->updateChannel();
 }
 
 
@@ -712,7 +720,7 @@ void qsamplerMainForm::viewOptions (void)
                     // Stop server, it will force the client too.
                     stopServer();
                     // Reschedule a restart...
-                    startSchedule(m_pOptions->iStartDelay);
+                    startSchedule(0);
                 }
             }
         }
@@ -1167,7 +1175,8 @@ void qsamplerMainForm::startServer (void)
     // Show startup results...
     appendMessages(tr("Server was started with PID=%1.").arg((long) m_pServer->processIdentifier()));
 
-    // Reset (yet again) the timer counters...
+    // Reset (yet again) the timer counters,
+    // but this time is deferred as the user opted.
     startSchedule(m_pOptions->iStartDelay);
     stabilizeForm();
 }

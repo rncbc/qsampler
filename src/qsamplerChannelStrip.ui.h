@@ -22,7 +22,8 @@
 
 #include <qvalidator.h>
 #include <qmessagebox.h>
-#include <qfiledialog.h>
+#include <qfileinfo.h>
+#include <qtooltip.h>
 
 #include "qsamplerMainForm.h"
 #include "qsamplerChannelForm.h"
@@ -34,9 +35,10 @@
 void qsamplerChannelStrip::init (void)
 {
     // Initialize locals.
+    m_iDirtyChange = 0;
     m_pMainForm = NULL;
     m_iChannelID = 0;
-    
+
     // Try to restore normal window positioning.
     adjustSize();
 }
@@ -51,25 +53,24 @@ void qsamplerChannelStrip::destroy (void)
 // Channel strip setup formal initializer.
 void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
 {
+    m_iDirtyChange = 0;
     m_pMainForm = pMainForm;
 
     setChannelID(iChannelID);
-    
-    // Read channel information.
-    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pMainForm->client(), m_iChannelID);
-    if (pChannelInfo == NULL) {
-        m_pMainForm->appendMessagesClient("lscp_get_channel_info");
-        m_pMainForm->appendMessagesError(tr("Could not get channel information. Sorry."));
-        return;
-    }
-    // Set some proper values.
-    EngineNameTextLabel->setText(pChannelInfo->engine_name);
-    InstrumentNameTextLabel->setText(pChannelInfo->instrument_file);
-    int iVolume = (int) (100.0 * pChannelInfo->volume);
-    if (iVolume > 100)
-        iVolume = 100;
-    VolumeSlider->setValue(iVolume);
-    VolumeSpinBox->setValue(iVolume);
+}
+
+
+// The global options settings delegated property.
+qsamplerOptions *qsamplerChannelStrip::options (void)
+{
+    return m_pMainForm->options();
+}
+
+
+// The client descriptor delegated property.
+lscp_client_t *qsamplerChannelStrip::client (void)
+{
+    return m_pMainForm->client();
 }
 
 
@@ -83,25 +84,20 @@ void qsamplerChannelStrip::setChannelID ( int iChannelID )
 {
     m_iChannelID = iChannelID;
 
-    QString sText = tr("Channel %1").arg(m_iChannelID);
-    setCaption(sText);
-    ChannelSetupPushButton->setText(sText);
+    updateChannel();
 }
 
 
 // Channel setup dialog.
 void qsamplerChannelStrip::channelSetup (void)
 {
-    if (m_pMainForm == NULL)
-        return;
-    if (m_pMainForm->options() == NULL || m_pMainForm->client() == NULL)
-        return;
-    
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
         pChannelForm->setup(this);
-        if (pChannelForm->exec())
+        if (pChannelForm->exec()) {
+            updateChannel();
             emit channelChanged(this);
+        }
         delete pChannelForm;
     }
 }
@@ -119,6 +115,75 @@ void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
     InstrumentNameTextLabel->setFont(font);
 }
 
+
+// Do the dirty volume change.
+void qsamplerChannelStrip::setChannelVolume ( float fVolume )
+{
+    // Convert and clip.
+    int iVolume = (int) (100.0 * fVolume);
+    if (iVolume > 100)
+        iVolume = 100;
+    else if (iVolume < 0)
+        iVolume = 0;
+        
+    // Flag it here, to avoid infinite recursion.
+    m_iDirtyChange++;
+    VolumeSlider->setValue(iVolume);
+    VolumeSpinBox->setValue(iVolume);
+    m_iDirtyChange--;
+}
+
+
+// Volume change slot.
+void qsamplerChannelStrip::volumeChanged ( int iVolume )
+{
+    if (m_pMainForm->client() == NULL)
+        return;
+    // Avoid recursion.
+    if (m_iDirtyChange > 0)
+        return;
+        
+    // Convert and clip.
+    float fVolume = (float) iVolume / 100.0;
+    if (fVolume > 1.0)
+        fVolume = 1.0;
+    else if (fVolume < 0.0)
+        fVolume = 0.0;
+
+    // Do it for real.
+    ::lscp_set_channel_volume(m_pMainForm->client(), m_iChannelID, fVolume);
+    
+    // And update the GUI elements.
+    setChannelVolume(fVolume);
+}
+
+
+// Update whole channel info state.
+void qsamplerChannelStrip::updateChannel (void)
+{
+    // Update strip caption.
+    QString sText = tr("Channel %1").arg(m_iChannelID);
+    setCaption(sText);
+    ChannelSetupPushButton->setText(sText);
+
+    // Check if we're up and connected.
+    if (m_pMainForm->client() == NULL)
+        return;
+
+    // Read channel information.
+    lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(m_pMainForm->client(), m_iChannelID);
+    if (pChannelInfo == NULL) {
+        m_pMainForm->appendMessagesClient("lscp_get_channel_info");
+        m_pMainForm->appendMessagesError(tr("Could not get channel information. Sorry."));
+        return;
+    }
+    // Set some proper values.
+    EngineNameTextLabel->setText(pChannelInfo->engine_name);
+    InstrumentNameTextLabel->setText(QFileInfo(pChannelInfo->instrument_file).fileName()
+         + " [" + QString::number(pChannelInfo->instrument_nr) + "]");
+    // And update the both volume elements.
+    setChannelVolume(pChannelInfo->volume);
+}
 
 // end of qsamplerChannelStrip.ui.h
 

@@ -24,6 +24,8 @@
 #include <qmessagebox.h>
 #include <qfontdialog.h>
 
+#include "qsamplerOptions.h"
+
 #include "config.h"
 
 
@@ -163,7 +165,7 @@ void qsamplerOptionsForm::reject (void)
 
 
 // Dirty up settings.
-void qsamplerOptionsForm::optionsChanged()
+void qsamplerOptionsForm::optionsChanged (void)
 {
     if (m_iDirtySetup > 0)
         return;
@@ -174,7 +176,7 @@ void qsamplerOptionsForm::optionsChanged()
 
 
 // Stabilize current form state.
-void qsamplerOptionsForm::stabilizeForm()
+void qsamplerOptionsForm::stabilizeForm (void)
 {
     bool bEnabled = ServerStartCheckBox->isChecked();
     ServerCmdLineTextLabel->setEnabled(bEnabled);
@@ -189,7 +191,7 @@ void qsamplerOptionsForm::stabilizeForm()
 
 
 // The channel display font selection dialog.
-void qsamplerOptionsForm::chooseDisplayFont()
+void qsamplerOptionsForm::chooseDisplayFont (void)
 {
     bool  bOk  = false;
     QFont font = QFontDialog::getFont(&bOk, DisplayFontTextLabel->font(), this);
@@ -202,7 +204,7 @@ void qsamplerOptionsForm::chooseDisplayFont()
 
 
 // The messages font selection dialog.
-void qsamplerOptionsForm::chooseMessagesFont()
+void qsamplerOptionsForm::chooseMessagesFont (void)
 {
     bool  bOk  = false;
     QFont font = QFontDialog::getFont(&bOk, MessagesFontTextLabel->font(), this);

@@ -55,7 +55,7 @@
         </property>
         <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>EngineComboBox</cstring>
+                <cstring>EngineNameComboBox</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -71,7 +71,7 @@
         </widget>
         <widget class="QLabel" row="0" column="0">
             <property name="name">
-                <cstring>EngineTextLabel</cstring>
+                <cstring>EngineNameTextLabel</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -88,7 +88,7 @@
                 <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
-                <cstring>EngineComboBox</cstring>
+                <cstring>EngineNameComboBox</cstring>
             </property>
         </widget>
         <widget class="QLabel" row="1" column="0">
@@ -133,8 +133,8 @@
             </property>
             <property name="maximumSize">
                 <size>
-                    <width>24</width>
-                    <height>24</height>
+                    <width>26</width>
+                    <height>26</height>
                 </size>
             </property>
             <property name="text">
@@ -238,7 +238,7 @@
             </property>
             <property name="maximumSize">
                 <size>
-                    <width>60</width>
+                    <width>40</width>
                     <height>32767</height>
                 </size>
             </property>
@@ -372,12 +372,29 @@
                         <number>16</number>
                     </property>
                     <property name="minValue">
-                        <number>1</number>
+                        <number>0</number>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>MIDI input channel</string>
                     </property>
                 </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>8</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
             </hbox>
         </widget>
         <widget class="QGroupBox" row="4" column="1" rowspan="1" colspan="3">
@@ -442,7 +459,7 @@
                 </widget>
                 <spacer>
                     <property name="name">
-                        <cstring>spacer2</cstring>
+                        <cstring>spacer3</cstring>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -463,6 +480,54 @@
 </widget>
 <connections>
     <connection>
+        <sender>EngineNameComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>InstrumentFileComboBox</sender>
+        <signal>textChanged(const QString &amp;)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>updateInstrumentName()</slot>
+    </connection>
+    <connection>
+        <sender>InstrumentFilePushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>openInstrumentFile()</slot>
+    </connection>
+    <connection>
+        <sender>InstrumentNrSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>updateInstrumentName()</slot>
+    </connection>
+    <connection>
+        <sender>MidiTypeComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>MidiPortSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>MidiChannelSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
+        <sender>AudioTypeComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>OkPushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerChannelForm</receiver>
@@ -476,7 +541,7 @@
     </connection>
 </connections>
 <tabstops>
-    <tabstop>EngineComboBox</tabstop>
+    <tabstop>EngineNameComboBox</tabstop>
     <tabstop>InstrumentFileComboBox</tabstop>
     <tabstop>InstrumentFilePushButton</tabstop>
     <tabstop>InstrumentNrSpinBox</tabstop>
@@ -495,14 +560,20 @@
 </forwards>
 <variables>
     <variable access="private">qsamplerChannelStrip *m_pChannel;</variable>
+    <variable access="private">int m_iDirtySetup;</variable>
+    <variable access="private">int m_iDirtyCount;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">accept()</slot>
     <slot specifier="non virtual">reject()</slot>
+    <slot specifier="non virtual">openInstrumentFile()</slot>
+    <slot specifier="non virtual">updateInstrumentName()</slot>
+    <slot specifier="non virtual">optionsChanged()</slot>
+    <slot specifier="non virtual">stabilizeForm()</slot>
 </slots>
 <functions>
-    <function access="private" specifier="non virtual">init( void )</function>
-    <function access="private" specifier="non virtual">destroy( void )</function>
+    <function access="private" specifier="non virtual">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
     <function specifier="non virtual">setup( qsamplerChannelStrip *pChannel )</function>
 </functions>
 <pixmapinproject/>
