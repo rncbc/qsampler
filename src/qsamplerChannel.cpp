@@ -459,11 +459,31 @@ bool qsamplerChannel::updateChannelInfo (void)
     m_iAudioDevice      = pChannelInfo->audio_device;
     m_fVolume           = pChannelInfo->volume;
     // Some sanity checks.
-    if (m_sEngineName == "NONE")
+    if (m_sEngineName == "NONE" || m_sEngineName.isEmpty())
         m_sEngineName = QString::null;
-    if (m_sInstrumentFile == "NONE") {
+    if (m_sInstrumentFile == "NONE" || m_sInstrumentFile.isEmpty()) {
         m_sInstrumentFile = QString::null;
         m_sInstrumentName = QString::null;
+	}
+	
+	// FIXME: DEPRECATED...
+	lscp_device_info_t *pDeviceInfo;
+	const QString sNone = QObject::tr("(none)");
+	// Audio device driver type.
+	pDeviceInfo = ::lscp_get_audio_device_info(client(), m_iAudioDevice);
+	if (pDeviceInfo == NULL) {
+        appendMessagesClient("lscp_get_audio_device_info");
+		m_sAudioDriver = sNone;
+	} else {
+		m_sAudioDriver = pDeviceInfo->driver;
+	}
+	// MIDI device driver type.
+	pDeviceInfo = ::lscp_get_midi_device_info(client(), m_iMidiDevice);
+	if (pDeviceInfo == NULL) {
+        appendMessagesClient("lscp_get_midi_device_info");
+		m_sMidiDriver = sNone;
+	} else {
+		m_sMidiDriver = pDeviceInfo->driver;
 	}
 
     return true;
