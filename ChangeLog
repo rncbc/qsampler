@@ -3,11 +3,11 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.2   2004-06-14  Work in progress...
+0.0.2   2004-06-15  Work in progress...
 
 * The channel context menu is also accessible by right-clicking
   over the empty workspace area.
-  
+
 * Added small wait event loop on qsamplerMainForm::stopServer(),
   so let local server terminate gracefully and stabilize, and
   avoiding a probable segfault on exit, which was preventing the
