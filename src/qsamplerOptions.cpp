@@ -66,6 +66,7 @@ qsamplerOptions::qsamplerOptions (void)
     bStdoutCapture   = m_settings.readBoolEntry("/StdoutCapture", true);
     bCompletePath    = m_settings.readBoolEntry("/CompletePath", true);
     iMaxRecentFiles  = m_settings.readNumEntry("/MaxRecentFiles", 5);
+    bInstrumentNames = m_settings.readBoolEntry("/InstrumentNames", false);
     m_settings.endGroup();
 
     // And go into view options group.
@@ -134,6 +135,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/StdoutCapture", bStdoutCapture);
     m_settings.writeEntry("/CompletePath", bCompletePath);
     m_settings.writeEntry("/MaxRecentFiles", iMaxRecentFiles);
+    m_settings.writeEntry("/InstrumentNames", bInstrumentNames);
     m_settings.endGroup();
 
     // View options group.

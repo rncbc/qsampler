@@ -3,13 +3,18 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-01-14  Work in progress...
+0.0.5   2005-01-18  Work in progress...
 
-- Set to ignore the SIGPIPE ("Broken pipe") signal, where
+* Actual instrument names are now optionally retrieved
+  from the instrument file, even though libgig is available,
+  avoiding excessively annoying load times while on the
+  channel dialog, when huge instrument files are selected.
+
+* Set to ignore the SIGPIPE ("Broken pipe") signal, where
   available, as the default handler is usually fatal when
   a JACK client is zombified abruptly.
 
-- Messages window limit is now enforced only when the line
+* Messages window limit is now enforced only when the line
   count exceeds in one third the user configured line count
   maximum; if Qt 3.2.0+ is in use, the QTextView widget is
   otherwise set to the optimized Qt::LogText format.

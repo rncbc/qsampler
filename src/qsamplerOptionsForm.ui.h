@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -109,7 +109,12 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
     StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
     CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
+    InstrumentNamesCheckBox->setChecked(m_pOptions->bInstrumentNames);
     MaxRecentFilesSpinBox->setValue(m_pOptions->iMaxRecentFiles);
+
+#ifndef CONFIG_LIBGIG
+    InstrumentNamesCheckBox->setEnabled(false);
+#endif
 
     // Done.
     m_iDirtySetup--;
@@ -143,6 +148,7 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->bConfirmRemove       = ConfirmRemoveCheckBox->isChecked();
         m_pOptions->bStdoutCapture       = StdoutCaptureCheckBox->isChecked();
         m_pOptions->bCompletePath        = CompletePathCheckBox->isChecked();
+        m_pOptions->bInstrumentNames     = InstrumentNamesCheckBox->isChecked();
         m_pOptions->iMaxRecentFiles      = MaxRecentFilesSpinBox->value();
         // Reset dirty flag.
         m_iDirtyCount = 0;

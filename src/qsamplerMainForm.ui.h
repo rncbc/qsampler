@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -204,6 +204,9 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 {
     // We got options?
     m_pOptions = pOptions;
+
+	// Set initial instrument name display mode.
+    qsamplerChannel::setInstrumentNames(m_pOptions->bInstrumentNames);
 
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
@@ -960,6 +963,7 @@ void qsamplerMainForm::viewOptions (void)
         int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
         bool    bOldCompletePath    = m_pOptions->bCompletePath;
         int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
+        bool    bOldInstrumentNames = m_pOptions->bInstrumentNames;
         // Load the current setup settings.
         pOptionsForm->setup(m_pOptions);
         // Show the setup dialog...
@@ -973,6 +977,9 @@ void qsamplerMainForm::viewOptions (void)
                 updateMessagesCapture();
             }
             // Check wheather something immediate has changed.
+            if (( bOldInstrumentNames && !m_pOptions->bInstrumentNames) ||
+                (!bOldInstrumentNames &&  m_pOptions->bInstrumentNames))
+                qsamplerChannel::setInstrumentNames(m_pOptions->bInstrumentNames);
             if (( bOldCompletePath && !m_pOptions->bCompletePath) ||
                 (!bOldCompletePath &&  m_pOptions->bCompletePath) ||
                 (iOldMaxRecentFiles != m_pOptions->iMaxRecentFiles))
