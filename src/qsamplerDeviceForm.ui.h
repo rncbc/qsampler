@@ -39,6 +39,7 @@ void qsamplerDeviceForm::init (void)
 	m_pMainForm   = NULL;
 	m_pClient     = NULL;
 	m_iDirtySetup = 0;
+	m_iDirtyCount = 0;
 	m_bNewDevice  = false;
 	m_deviceType  = qsamplerDevice::None;
 	m_pAudioItems = NULL;
@@ -82,6 +83,12 @@ void qsamplerDeviceForm::hideEvent ( QHideEvent *pHideEvent )
 
 	if (m_pMainForm)
 		m_pMainForm->stabilizeForm();
+		
+	// Signal special whether we changed the device set.
+	if (m_iDirtyCount > 0) {
+		m_iDirtyCount = 0;
+		emit devicesChanged();
+	}
 }
 
 
@@ -175,6 +182,7 @@ void qsamplerDeviceForm::createDevice (void)
 		DeviceListView->setSelected(pDeviceItem, true);
 		// Main session should be marked dirty.
 		m_pMainForm->sessionDirty();
+		m_iDirtyCount++;
 	}
 }
 
@@ -209,6 +217,7 @@ void qsamplerDeviceForm::deleteDevice (void)
 		delete pItem;
 		// Main session should be marked dirty.
 		m_pMainForm->sessionDirty();
+		m_iDirtyCount++;
 	}
 }
 

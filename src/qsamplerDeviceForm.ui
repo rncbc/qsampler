@@ -416,11 +416,15 @@
     <variable access="private">qsamplerMainForm *m_pMainForm;</variable>
     <variable access="private">lscp_client_t *m_pClient;</variable>
     <variable access="private">int m_iDirtySetup;</variable>
+    <variable access="private">int m_iDirtyCount;</variable>
     <variable access="private">bool m_bNewDevice;</variable>
     <variable access="private">qsamplerDevice::qsamplerDeviceType m_deviceType;</variable>
     <variable access="private">qsamplerDeviceItem *m_pAudioItems;</variable>
     <variable access="private">qsamplerDeviceItem *m_pMidiItems;</variable>
 </variables>
+<signals>
+	<signal>devicesChanged()</signal>
+</signals>
 <slots>
     <slot specifier="non virtual">createDevice()</slot>
     <slot specifier="non virtual">deleteDevice()</slot>
