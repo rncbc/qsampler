@@ -48,6 +48,7 @@ void qsamplerChannelStrip::channelSetup (void)
 {
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
     if (pChannelForm) {
+        pChannelForm->setCaption(caption());
         if (pChannelForm->exec())
             emit channelChanged(this);
         delete pChannelForm;

@@ -59,7 +59,7 @@ public:
     QString sMessagesFont;
     bool    bMessagesLimit;
     int     iMessagesLimitLines;
-    bool    bQueryClose;
+    bool    bConfirmRemove;
     bool    bStdoutCapture;
 
     // View options...

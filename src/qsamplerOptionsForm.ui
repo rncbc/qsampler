@@ -498,7 +498,7 @@
                             </property>
                             <widget class="QCheckBox">
                                 <property name="name">
-                                    <cstring>QueryCloseCheckBox</cstring>
+                                    <cstring>ConfirmRemoveCheckBox</cstring>
                                 </property>
                                 <property name="font">
                                     <font>
@@ -506,13 +506,13 @@
                                     </font>
                                 </property>
                                 <property name="text">
-                                    <string>&amp;Confirm application close</string>
+                                    <string>&amp;Confirm channel removal</string>
                                 </property>
                                 <property name="accel">
                                     <string>Alt+C</string>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Whether to ask for confirmation on application exit</string>
+                                    <string>Whether to ask for confirmation on channel removal</string>
                                 </property>
                             </widget>
                             <widget class="QCheckBox">
@@ -585,7 +585,7 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
-        <sender>QueryCloseCheckBox</sender>
+        <sender>ConfirmRemoveCheckBox</sender>
         <signal>stateChanged(int)</signal>
         <receiver>qsamplerOptionsForm</receiver>
         <slot>optionsChanged()</slot>
@@ -618,7 +618,7 @@
     <tabstop>MessagesFontPushButton</tabstop>
     <tabstop>MessagesLimitCheckBox</tabstop>
     <tabstop>MessagesLimitLinesComboBox</tabstop>
-    <tabstop>QueryCloseCheckBox</tabstop>
+    <tabstop>ConfirmRemoveCheckBox</tabstop>
     <tabstop>StdoutCaptureCheckBox</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>

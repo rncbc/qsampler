@@ -145,7 +145,7 @@ bool qsamplerMainForm::queryClose (void)
         if (bQueryClose) {
             // Save decorations state.
             m_pOptions->bMenubar = MenuBar->isVisible();
-            m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible());
+            m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible() || channelsToolbar->isVisible());
             m_pOptions->bStatusbar = statusBar()->isVisible();
             // Save the dock windows state.
             QString sDockables;
@@ -285,6 +285,16 @@ void qsamplerMainForm::editRemoveChannel (void)
     if (pChannel == NULL)
         return;
 
+    // Prompt user if he/she's sure about this...
+    if (m_pOptions && m_pOptions->bConfirmRemove) {
+        if (QMessageBox::warning(this, tr("Warning"),
+            tr("Remove channel:") + "\n\n" +
+            pChannel->caption() + "\n\n" +
+            tr("Are you sure?"),
+            tr("OK"), tr("Cancel")) > 0)
+            return;
+    }
+    
     // Just delete the channel strip.
     delete pChannel;
     
@@ -348,9 +358,11 @@ void qsamplerMainForm::viewToolbar ( bool bOn )
 	if (bOn) {
         fileToolbar->show();
         editToolbar->show();
+        channelsToolbar->show();
 	} else {
         fileToolbar->hide();
         editToolbar->hide();
+        channelsToolbar->hide();
 	}
 }
 

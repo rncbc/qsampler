@@ -55,7 +55,7 @@ qsamplerOptions::qsamplerOptions (void)
     sMessagesFont  = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit = m_settings.readBoolEntry("/MessagesLimit", true);
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
-    bQueryClose    = m_settings.readBoolEntry("/QueryClose", true);
+    bConfirmRemove = m_settings.readBoolEntry("/ConfirmRemove", true);
     bStdoutCapture = m_settings.readBoolEntry("/StdoutCapture", true);
     m_settings.endGroup();
 
@@ -95,7 +95,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/MessagesFont", sMessagesFont);
     m_settings.writeEntry("/MessagesLimit", bMessagesLimit);
     m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);
-    m_settings.writeEntry("/QueryClose", bQueryClose);
+    m_settings.writeEntry("/ConfirmRemove", bConfirmRemove);
     m_settings.writeEntry("/StdoutCapture", bStdoutCapture);
     m_settings.endGroup();
 

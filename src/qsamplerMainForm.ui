@@ -28,14 +28,14 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>320</width>
-            <height>243</height>
+            <width>472</width>
+            <height>290</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
-            <width>320</width>
-            <height>240</height>
+            <width>21</width>
+            <height>284</height>
         </size>
     </property>
     <property name="caption">
@@ -53,7 +53,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>320</width>
+            <width>472</width>
             <height>29</height>
         </rect>
     </property>
@@ -82,7 +82,10 @@
         <separator/>
         <action name="viewOptionsAction"/>
     </item>
-    <item text="&amp;Channels" name="channelsMenu"/>
+    <item text="&amp;Channels" name="channelsMenu">
+        <action name="channelsArrangeAction"/>
+        <action name="channelsAutoArrangeAction"/>
+    </item>
     <separator/>
     <item text="&amp;Help" name="helpMenu">
         <action name="helpAboutAction"/>
@@ -113,6 +116,15 @@
         <separator/>
         <action name="editSetupChannelAction"/>
         <action name="editResetChannelAction"/>
+    </toolbar>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>channelsToolbar</cstring>
+        </property>
+        <property name="label">
+            <string>Channels Toolbar</string>
+        </property>
+        <action name="channelsArrangeAction"/>
     </toolbar>
 </toolbars>
 <actions>
@@ -427,6 +439,9 @@
         <property name="name">
             <cstring>channelsArrangeAction</cstring>
         </property>
+        <property name="iconSet">
+            <iconset>channelsArrange.png</iconset>
+        </property>
         <property name="toggleAction">
             <bool>false</bool>
         </property>
@@ -602,12 +617,6 @@
         <slot>channelsAutoArrange(bool)</slot>
     </connection>
     <connection>
-        <sender>channelsMenu</sender>
-        <signal>aboutToShow()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>channelsMenuAboutToShow()</slot>
-    </connection>
-    <connection>
         <sender>helpAboutAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -618,6 +627,12 @@
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
         <slot>helpAboutQt()</slot>
+    </connection>
+    <connection>
+        <sender>channelsMenu</sender>
+        <signal>aboutToShow()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>channelsMenuAboutToShow()</slot>
     </connection>
 </connections>
 <includes>
@@ -653,12 +668,12 @@
     <slot specifier="non virtual">viewOptions( void )</slot>
     <slot specifier="non virtual">channelsArrange( void )</slot>
     <slot specifier="non virtual">channelsAutoArrange( bool bOn )</slot>
-    <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
-    <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
     <slot specifier="non virtual">helpAboutQt( void )</slot>
     <slot specifier="non virtual">helpAbout( void )</slot>
-    <slot specifier="non virtual">channelChanged( qsamplerChannelStrip * )</slot>
     <slot specifier="non virtual">stabilizeForm( void )</slot>
+    <slot specifier="non virtual">channelChanged( qsamplerChannelStrip * )</slot>
+    <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
+    <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>

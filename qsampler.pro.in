@@ -14,6 +14,7 @@ FORMS    = src/qsamplerMainForm.ui \
            src/qsamplerOptionsForm.ui
 
 IMAGES   = icons/qsampler.png \
+           icons/qsamplerChannel.png \
            icons/fileNew.png \
            icons/fileOpen.png \
            icons/fileSave.png \
@@ -21,6 +22,7 @@ IMAGES   = icons/qsampler.png \
            icons/editRemoveChannel.png \
            icons/editResetChannel.png \
            icons/editSetupChannel.png \
+           icons/channelsArrange.png \
            icons/formAccept.png \
            icons/formReject.png
 

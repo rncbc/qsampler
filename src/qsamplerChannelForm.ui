@@ -29,7 +29,7 @@
             <x>0</x>
             <y>0</y>
             <width>424</width>
-            <height>259</height>
+            <height>262</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -44,7 +44,7 @@
         <string>Channel</string>
     </property>
     <property name="icon">
-        <pixmap>editSetupChannel.png</pixmap>
+        <pixmap>qsamplerChannel.png</pixmap>
     </property>
     <property name="focusPolicy">
         <enum>StrongFocus</enum>
@@ -142,6 +142,9 @@
             </property>
             <property name="pixmap">
                 <pixmap>fileOpen.png</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Browse for instrument filename</string>
             </property>
         </widget>
         <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">

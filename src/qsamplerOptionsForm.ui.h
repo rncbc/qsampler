@@ -86,7 +86,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     MessagesLimitLinesComboBox->setCurrentText(QString::number(m_pOptions->iMessagesLimitLines));
 
     // Other options finally.
-    QueryCloseCheckBox->setChecked(m_pOptions->bQueryClose);
+    ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
     StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
 
     // Done.
@@ -110,7 +110,7 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->bMessagesLimit       = MessagesLimitCheckBox->isChecked();
         m_pOptions->iMessagesLimitLines  = MessagesLimitLinesComboBox->currentText().toInt();
         // Other options...
-        m_pOptions->bQueryClose          = QueryCloseCheckBox->isChecked();
+        m_pOptions->bConfirmRemove       = ConfirmRemoveCheckBox->isChecked();
         m_pOptions->bStdoutCapture       = StdoutCaptureCheckBox->isChecked();
         // Reset dirty flag.
         m_iDirtyCount = 0;
