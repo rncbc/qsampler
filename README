@@ -1,0 +1,73 @@
+qsampler - A LinuxSampler Qt GUI Interface
+------------------------------------------
+
+QSampler is a LinuxSampler GUI front-end application written in C++ around
+the Qt3 toolkit using Qt Designer. At the moment it just wraps as a client
+reference interface for the LinuxSampler Control Protocol (LSCP).
+
+LinuxSampler is a work in progress. The goal is to produce a free, open source
+pure software audio sampler with professional grade features, comparable to
+both hardware and commercial Windows/Mac software samplers.
+
+The initial platform will be Linux because it is one of the most promising
+open source multimedia operating systems. Thanks to various kernel patches
+and the Jack Audio Connection Kit, Linux is currently able to deliver rock
+solid sub-5 millisecond MIDI-to-Audio response.
+
+Homepage: http://qsampler.sourceforge.net
+See also: http://www.linuxsampler.org
+
+License: GNU General Public License (GPL)
+
+
+Installation
+------------
+
+The installation procedure follows the standard for source distributions.
+Unpack the tarball and in the extracted source directory:
+
+    ./configure [--prefix=/usr/local]
+    make
+
+and optionally as root:
+
+    make install
+
+This procedure will end installing the following couple of files:
+
+    ${prefix}/bin/qsampler
+    ${prefix}/share/icons/qsampler.png
+
+Just launch ${prefix}/bin/qsampler and you're off (hopefully).
+
+Note that the default installation path ${prefix} is /usr/local.
+
+
+Configuration
+-------------
+
+QSampler holds its settings and configuration state per user, in a file
+located as $HOME/.qt/qsamplerrc. Normally, there's no need to edit this file,
+as it is recreated and rewritten everytime qsampler is run.
+
+Bugs
+----
+
+Plenty still, after all this is early alpha software ;)
+
+
+Support
+-------
+
+QSampler is open source free software. For bug reports, feature requests,
+discussion forums, mailling lists, or any other matter related to the
+development of this piece of software, please use the Sourceforge
+project page (http://sourceforge.net/projects/qsampler).
+
+
+
+Enjoy.
+
+rncbc aka Rui Nuno Capela
+rncbc at rncbc dot org
+
