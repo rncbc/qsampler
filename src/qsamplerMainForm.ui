@@ -106,6 +106,8 @@
         </property>
         <action name="editAddChannelAction"/>
         <action name="editRemoveChannelAction"/>
+        <separator/>
+        <action name="editResetChannelAction"/>
     </toolbar>
 </toolbars>
 <actions>
@@ -261,6 +263,9 @@
     <action>
         <property name="name">
             <cstring>editResetChannelAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>editResetChannel.png</iconset>
         </property>
         <property name="text">
             <string>Reset</string>

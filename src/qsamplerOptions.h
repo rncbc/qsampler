@@ -41,6 +41,9 @@ public:
     // Default destructor.
     ~qsamplerOptions();
 
+    // The settings object accessor.
+    QSettings& settings();
+    
     // Command line arguments parser.
     bool parse_args(int argc, char **argv);
     // Command line usage helper.

@@ -61,9 +61,9 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
         
     // Create local text view widget.
     m_pTextView = new QTextEdit(this);
-    QFont font(m_pTextView->font());
-    font.setFamily("Fixed");
-    m_pTextView->setFont(font);
+//  QFont font(m_pTextView->font());
+//  font.setFamily("Fixed");
+//  m_pTextView->setFont(font);
     m_pTextView->setWordWrap(QTextEdit::NoWrap);
     m_pTextView->setReadOnly(true);
     m_pTextView->setUndoRedoEnabled(false);

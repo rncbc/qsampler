@@ -110,6 +110,15 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.endGroup();
 }
 
+//-------------------------------------------------------------------------
+// Settings accessor.
+//
+
+QSettings& qsamplerOptions::settings (void)
+{
+    return m_settings;
+}
+
 
 //-------------------------------------------------------------------------
 // Command-line argument stuff.

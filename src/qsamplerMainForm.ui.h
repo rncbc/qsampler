@@ -21,6 +21,7 @@
 *****************************************************************************/
 
 #include <qmessagebox.h>
+#include <qtextstream.h>
 #include <qstatusbar.h>
 
 #include "qsamplerAbout.h"
@@ -71,8 +72,6 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
-    // Message window is forced to dock on the bottom.
-    moveDockWindow(m_pMessages, Qt::DockBottom);
     // Set message defaults...
     updateMessagesFont();
     updateMessagesLimit();
@@ -90,8 +89,17 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     viewToolbar(m_pOptions->bToolbar);
     viewStatusbar(m_pOptions->bStatusbar);
 
+    // Restore whole dock windows state.
+    QString sDockables = m_pOptions->settings().readEntry("/Layout/DockWindows" , QString::null);
+    if (sDockables.isEmpty()) {
+        // Message window is forced to dock on the bottom.
+        moveDockWindow(m_pMessages, Qt::DockBottom);
+    } else {
+        // Make it as the last time.
+        QTextIStream istr(&sDockables);
+        istr >> *this;
+    }
     // Try to restore old window positioning.
-    m_pOptions->loadWidgetGeometry(m_pMessages);
     m_pOptions->loadWidgetGeometry(this);
 
     // Final startup stabilization...
@@ -118,8 +126,12 @@ bool qsamplerMainForm::queryClose (void)
             m_pOptions->bMenubar = MenuBar->isVisible();
             m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible());
             m_pOptions->bStatusbar = statusBar()->isVisible();
-            // And the child windows state.
-            m_pOptions->saveWidgetGeometry(m_pMessages);
+            // Save the dock windows state.
+            QString sDockables;
+            QTextOStream ostr(&sDockables);
+            ostr << *this;
+            m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
+            // And the main windows state.
             m_pOptions->saveWidgetGeometry(this);
             // Close child widgets.
             m_pMessages->close();
@@ -145,30 +157,36 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 // Create a new sampler session.
 void qsamplerMainForm::fileNew (void)
 {
+    appendMessages("fileNew()");
 }
 
 
 // Open an existing sampler session.
 void qsamplerMainForm::fileOpen (void)
 {
+    appendMessages("fileOpen()");
 }
 
 
 // Save current sampler session.
 void qsamplerMainForm::fileSave (void)
 {
+    appendMessages("fileSave()");
 }
 
 
 // Save current sampler session with another name.
 void qsamplerMainForm::fileSaveAs (void)
 {
+    appendMessages("fileSaveAs()");
 }
 
 
 // Exit application program.
 void qsamplerMainForm::fileExit (void)
 {
+    appendMessages("fileExit()");
+
     close();
 }
 
@@ -179,18 +197,21 @@ void qsamplerMainForm::fileExit (void)
 // Add a new sampler channel.
 void qsamplerMainForm::editAddChannel (void)
 {
+    appendMessages("editAddChannel()");
 }
 
 
 // Remove current sampler channel.
 void qsamplerMainForm::editRemoveChannel (void)
 {
+    appendMessages("editRemoveChannel()");
 }
 
 
 // Reset current sampler channel.
 void qsamplerMainForm::editResetChannel (void)
 {
+    appendMessages("editResetChannel()");
 }
 
 
@@ -200,6 +221,8 @@ void qsamplerMainForm::editResetChannel (void)
 // Show/hide the main program window menubar.
 void qsamplerMainForm::viewMenubar ( bool bOn )
 {
+    appendMessages("viewMenubar(" + QString::number((int) bOn) + ")");
+    
     if (bOn)
         MenuBar->show();
     else
@@ -210,6 +233,8 @@ void qsamplerMainForm::viewMenubar ( bool bOn )
 // Show/hide the main program window toolbar.
 void qsamplerMainForm::viewToolbar ( bool bOn )
 {
+    appendMessages("viewToolbar(" + QString::number((int) bOn) + ")");
+
 	if (bOn) {
         fileToolbar->show();
         editToolbar->show();
@@ -223,6 +248,8 @@ void qsamplerMainForm::viewToolbar ( bool bOn )
 // Show/hide the main program window statusbar.
 void qsamplerMainForm::viewStatusbar ( bool bOn )
 {
+    appendMessages("viewStatusbar(" + QString::number((int) bOn) + ")");
+
     if (bOn)
         statusBar()->show();
     else
@@ -233,6 +260,8 @@ void qsamplerMainForm::viewStatusbar ( bool bOn )
 // Show/hide the messages window logger.
 void qsamplerMainForm::viewMessages ( bool bOn )
 {
+    appendMessages("viewMessages(" + QString::number((int) bOn) + ")");
+
     if (bOn)
         m_pMessages->show();
     else
@@ -243,6 +272,8 @@ void qsamplerMainForm::viewMessages ( bool bOn )
 // Show options dialog.
 void qsamplerMainForm::viewOptions (void)
 {
+    appendMessages("viewOptions()");
+
     if (m_pOptions == NULL)
         return;
 
@@ -284,6 +315,8 @@ void qsamplerMainForm::viewOptions (void)
 // Show information about the Qt toolkit.
 void qsamplerMainForm::helpAboutQt (void)
 {
+    appendMessages("helpAboutQt()");
+    
     QMessageBox::aboutQt(this);
 }
 
@@ -291,6 +324,8 @@ void qsamplerMainForm::helpAboutQt (void)
 // Show information about application program.
 void qsamplerMainForm::helpAbout (void)
 {
+    appendMessages("helpAbout()");
+
     // Stuff the about box text...
     QString sText = "<p>\n";
     sText += "<b>" QSAMPLER_TITLE " - " + tr(QSAMPLER_SUBTITLE) + "</b><br />\n";
@@ -340,12 +375,16 @@ void qsamplerMainForm::appendMessages( const QString& s )
 {
     if (m_pMessages)
         m_pMessages->appendMessages(s);
+
+    statusBar()->message(s, 3000);
 }
 
 void qsamplerMainForm::appendMessagesColor( const QString& s, const QString& c )
 {
     if (m_pMessages)
         m_pMessages->appendMessagesColor(s, c);
+
+    statusBar()->message(s, 3000);
 }
 
 void qsamplerMainForm::appendMessagesText( const QString& s )
