@@ -366,6 +366,30 @@ void qsamplerDeviceForm::selectDevice (void)
 }
 
 
+// parameter value change slot.
+void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
+{
+	//
+	//  TODO: Device parameter change...
+	//
+	m_pMainForm->appendMessages("qsamplerDeviceForm::changeValue()");
+	
+	QListViewItem *pItem = DeviceListView->selectedItem();
+	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+		return;
+
+	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+
+	// Table 3rd column has the parameter name;
+	qsamplerDeviceParamMap& params = device.params();
+	QString sParam = DeviceParamTable->text(iRow, 2);
+	params[sParam].value = DeviceParamTable->text(iRow, iCol);
+
+	m_iDirtyCount++;
+	stabilizeForm();
+}
+
+
 // Stabilize current form state.
 void qsamplerDeviceForm::stabilizeForm (void)
 {

@@ -442,6 +442,12 @@
         <slot>selectDriver(const QString&amp;)</slot>
     </connection>
     <connection>
+        <sender>DeviceParamTable</sender>
+        <signal>valueChanged(int,int)</signal>
+        <receiver>qsamplerDeviceForm</receiver>
+        <slot>changeValue(int,int)</slot>
+    </connection>
+    <connection>
         <sender>CreateDevicePushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerDeviceForm</receiver>
@@ -503,6 +509,7 @@
     <slot specifier="non virtual">refreshDevices()</slot>
     <slot specifier="non virtual">selectDriver( const QString &amp; sDriverName )</slot>
     <slot specifier="non virtual">selectDevice()</slot>
+    <slot specifier="non virtual">changeValue( int iRow, int iCol )</slot>
     <slot specifier="non virtual">stabilizeForm()</slot>
 </slots>
 <functions>
