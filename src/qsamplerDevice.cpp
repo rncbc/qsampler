@@ -444,10 +444,12 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 	    } else if (param.type == LSCP_TYPE_INT) {
         	qsamplerDeviceParamTableSpinBox *pSpinItem =
 				new qsamplerDeviceParamTableSpinBox(this,
-					bEnabled ? QTableItem::OnTyping : QTableItem::Never);
-			pSpinItem->setMinValue(param.range_min.toInt());
-			pSpinItem->setMaxValue(param.range_max.toInt());
-			pSpinItem->setValue(param.value.toInt());
+				    bEnabled ? QTableItem::OnTyping : QTableItem::Never,
+					param.value);
+			if (!param.range_min.isEmpty())
+				pSpinItem->setMinValue(param.range_min.toInt());
+			if (!param.range_max.isEmpty())
+				pSpinItem->setMaxValue(param.range_max.toInt());
 			QTable::setItem(iRow, 2, pSpinItem);
 		} else {
             qsamplerDeviceParamTableEditBox *pEditItem =
@@ -474,10 +476,12 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 
 // Constructor.
 qsamplerDeviceParamTableSpinBox::qsamplerDeviceParamTableSpinBox (
-	QTable *pTable, EditType editType )
-	: QTableItem(pTable, editType, QString::null)
+	QTable *pTable, EditType editType, const QString& sText )
+	: QTableItem(pTable, editType, sText)
 {
-	m_iValue = m_iMinValue = m_iMaxValue = 0;
+	m_iValue    = sText.toInt();
+    m_iMinValue = 0;
+    m_iMaxValue = 999999;
 }
 
 // Public accessors.
@@ -508,7 +512,6 @@ QWidget *qsamplerDeviceParamTableSpinBox::createEditor (void) const
 		pSpinBox->setMaxValue(m_iMaxValue);
 	}
 	pSpinBox->setValue(m_iValue);
-//	pSpinBox->setEnabled(QTableItem::isEnabled());
 	return pSpinBox;
 }
 
@@ -539,7 +542,6 @@ QWidget *qsamplerDeviceParamTableEditBox::createEditor (void) const
 	QObject::connect(pEditBox, SIGNAL(returnPressed()),
 		QTableItem::table(), SLOT(doValueChanged()));
 	pEditBox->setText(QTableItem::text());
-//	pEditBox->setEnabled(QTableItem::isEnabled());
 	return pEditBox;
 }
 
