@@ -34,6 +34,9 @@
 // Special QListViewItem::rtti() unique return value.
 #define	QSAMPLER_DEVICE_ITEM    1001
 
+// Early forward declaration.
+class qsamplerDevicePort;
+
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceParam - MIDI/Audio Device parameter structure.
@@ -67,8 +70,11 @@ public:
 	QString 	value;
 };
 
-// A typedef'd parameter QMap.
+// Typedef'd parameter QMap.
 typedef QMap<QString, qsamplerDeviceParam> qsamplerDeviceParamMap;
+
+// Typedef'd device port/channels QptrList.
+typedef QPtrList<qsamplerDevicePort> qsamplerDevicePortList;
 
 
 //-------------------------------------------------------------------------
@@ -103,12 +109,18 @@ public:
 	const QString&      driverName() const;
 	const QString&      deviceName() const;
 
-	// Device parameters accessor.
-	const qsamplerDeviceParamMap& params() const;
-
 	// Set the proper device parameter value.
 	void setParam (const QString& sParam, const QString& sValue);
 
+	// Device parameters accessor.
+	const qsamplerDeviceParamMap& params() const;
+
+	// Device port/channel list accessor.
+	qsamplerDevicePortList& ports();
+
+	// Device port/channel list refreshner.
+	void refresh(lscp_client_t *pClient);
+	
 	// Device ids enumerator.
 	static int *getDevices(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType);
@@ -128,6 +140,9 @@ private:
 
 	// Device parameter list.
 	qsamplerDeviceParamMap m_params;
+	
+	// Device port/channel list.
+	qsamplerDevicePortList m_ports;
 };
 
 

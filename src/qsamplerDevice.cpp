@@ -107,6 +107,8 @@ void qsamplerDeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 qsamplerDevice::qsamplerDevice ( lscp_client_t *pClient,
 	qsamplerDeviceType deviceType, int iDeviceID )
 {
+	m_ports.setAutoDelete(true);
+	
 	setDevice(pClient, deviceType, iDeviceID);
 }
 
@@ -123,6 +125,10 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	// Device id and type should be always set.
 	m_iDeviceID  = iDeviceID;
 	m_deviceType = deviceType;
+	
+	// Reset device parameters and ports anyway.
+   	m_params.clear();
+   	m_ports.clear();
 
 	// Retrieve device info, if any.
 	lscp_device_info_t *pDeviceInfo = NULL;
@@ -153,27 +159,29 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 		+ QObject::tr("Device %1").arg(m_iDeviceID);
 
 	// Grab device parameters...
-	m_params.clear();
 	for (int i = 0; pDeviceInfo->params && pDeviceInfo->params[i].key; i++) {
-		const char *pszParam = pDeviceInfo->params[i].key;
+		const QString sParam = pDeviceInfo->params[i].key;
 		lscp_param_info_t *pParamInfo = NULL;
 		switch (deviceType) {
 		case qsamplerDevice::Audio:
 			pParamInfo = ::lscp_get_audio_driver_param_info(pClient,
-				m_sDriverName.latin1(), pszParam, NULL);
+				m_sDriverName.latin1(), sParam.latin1(), NULL);
 			break;
 		case qsamplerDevice::Midi:
 			pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
-				m_sDriverName.latin1(), pszParam, NULL);
+				m_sDriverName.latin1(), sParam.latin1(), NULL);
 			break;
 		case qsamplerDevice::None:
 			break;
 		}
 		if (pParamInfo) {
-			m_params[pszParam] = qsamplerDeviceParam(pParamInfo,
+			m_params[sParam.upper()] = qsamplerDeviceParam(pParamInfo,
 				pDeviceInfo->params[i].value);
 		}
 	}
+
+	// Grab port/channel list...
+	refresh(pClient);
 }
 
 
@@ -184,6 +192,10 @@ void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 	// Valid only for scratch devices.
 	if (m_sDriverName == sDriverName)
 		return;
+
+	// Reset device parameters and ports anyway.
+   	m_params.clear();
+   	m_ports.clear();
 
 	// Retrieve driver info, if any.
 	lscp_driver_info_t *pDriverInfo = NULL;
@@ -208,24 +220,25 @@ void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 	m_sDriverName = sDriverName;
 
 	// Grab driver parameters...
-	m_params.clear();
 	for (int i = 0; pDriverInfo->parameters && pDriverInfo->parameters[i]; i++) {
-		const char *pszParam = pDriverInfo->parameters[i];
+		const QString sParam = pDriverInfo->parameters[i];
 		lscp_param_info_t *pParamInfo = NULL;
 		switch (m_deviceType) {
 		case qsamplerDevice::Audio:
 			pParamInfo = ::lscp_get_audio_driver_param_info(pClient,
-				sDriverName.latin1(), pszParam, NULL);
+				sDriverName.latin1(), sParam.latin1(), NULL);
 			break;
 		case qsamplerDevice::Midi:
 			pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
-				sDriverName.latin1(), pszParam, NULL);
+				sDriverName.latin1(), sParam.latin1(), NULL);
 			break;
 		case qsamplerDevice::None:
 			break;
 		}
-		if (pParamInfo)
-			m_params[pszParam] = qsamplerDeviceParam(pParamInfo, pParamInfo->defaultv);
+		if (pParamInfo) {
+			m_params[sParam.upper()] = qsamplerDeviceParam(pParamInfo,
+				pParamInfo->defaultv);
+		}
 	}
 }
 
@@ -256,6 +269,15 @@ const QString& qsamplerDevice::deviceName (void) const
 	return m_sDeviceName;
 }
 
+
+// Set the proper device parameter value.
+void qsamplerDevice::setParam ( const QString& sParam,
+	const QString& sValue )
+{
+	m_params[sParam.upper()].value = sValue;
+}
+
+
 // Device parameter accessor.
 const qsamplerDeviceParamMap& qsamplerDevice::params (void) const
 {
@@ -263,11 +285,33 @@ const qsamplerDeviceParamMap& qsamplerDevice::params (void) const
 }
 
 
-// Set the proper device parameter value.
-void qsamplerDevice::setParam ( const QString& sParam,
-	const QString& sValue )
+// Device port/channel list accessor.
+qsamplerDevicePortList& qsamplerDevice::ports (void)
 {
-	m_params[sParam].value = sValue;
+	return m_ports;
+}
+
+
+// Device port/channel list refreshner.
+void qsamplerDevice::refresh ( lscp_client_t *pClient )
+{
+	// Port/channel count determination...
+	int iPorts = 0;
+	switch (m_deviceType) {
+	case qsamplerDevice::Audio:
+		iPorts = m_params["CHANNELS"].value.toInt();
+		break;
+	case qsamplerDevice::Midi:
+		iPorts = m_params["PORTS"].value.toInt();
+		break;
+	case qsamplerDevice::None:
+		break;
+	}
+
+	// Retrieve port/channel information...
+	m_ports.clear();
+	for (int iPort = 0; iPort < iPorts; iPort++)
+		m_ports.append(new qsamplerDevicePort(pClient, *this, iPort));
 }
 
 
@@ -339,13 +383,19 @@ void qsamplerDevicePort::setDevicePort ( lscp_client_t *pClient,
 	// Device port id should be always set.
 	m_iPortID = iPortID;
 
+	// Reset port parameters anyway.
+   	m_params.clear();
+
 	// Retrieve device port/channel info, if any.
+	QString sPrefix = device.driverName() + ' ';
 	lscp_device_port_info_t *pPortInfo = NULL;
 	switch (device.deviceType()) {
 	case qsamplerDevice::Audio:
+	    sPrefix += QObject::tr("Channel");
 		pPortInfo = ::lscp_get_audio_channel_info(pClient, device.deviceID(), iPortID);
 		break;
 	case qsamplerDevice::Midi:
+	    sPrefix += QObject::tr("Port");
 		pPortInfo = ::lscp_get_midi_port_info(pClient, device.deviceID(), iPortID);
 		break;
 	case qsamplerDevice::None:
@@ -359,27 +409,28 @@ void qsamplerDevicePort::setDevicePort ( lscp_client_t *pClient,
 	}
 
 	// Set device port/channel properties...
-	m_sPortName = pPortInfo->name;
+	sPrefix += " %1:";
+	m_sPortName = sPrefix.arg(m_iPortID)  + ' ' + pPortInfo->name;
 
 	// Grab device port/channel parameters...
 	m_params.clear();
 	for (int i = 0; pPortInfo->params && pPortInfo->params[i].key; i++) {
-		const char *pszParam = pPortInfo->params[i].key;
+		const QString sParam = pPortInfo->params[i].key;
 		lscp_param_info_t *pParamInfo = NULL;
 		switch (device.deviceType()) {
 		case qsamplerDevice::Audio:
 			pParamInfo = ::lscp_get_audio_channel_param_info(pClient,
-				device.deviceID(), iPortID, pszParam);
+				device.deviceID(), iPortID, sParam.latin1());
 			break;
 		case qsamplerDevice::Midi:
 			pParamInfo = ::lscp_get_midi_port_param_info(pClient,
-				device.deviceID(), iPortID, pszParam);
+				device.deviceID(), iPortID, sParam.latin1());
 			break;
 		case qsamplerDevice::None:
 			break;
 		}
 		if (pParamInfo) {
-			m_params[pszParam] = qsamplerDeviceParam(pParamInfo,
+			m_params[sParam.upper()] = qsamplerDeviceParam(pParamInfo,
 				pPortInfo->params[i].value);
 		}
 	}
@@ -408,7 +459,7 @@ const qsamplerDeviceParamMap& qsamplerDevicePort::params (void) const
 void qsamplerDevicePort::setParam ( const QString& sParam,
 	const QString& sValue )
 {
-	m_params[sParam].value = sValue;
+	m_params[sParam.upper()].value = sValue;
 }
 
 
@@ -528,8 +579,8 @@ void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
 		QTable::setText(iRow, 1, param.description);
 		if (param.type == LSCP_TYPE_BOOL) {
 			QStringList opts;
-			opts.append(tr("False"));
-			opts.append(tr("True"));
+			opts.append(tr("false"));
+			opts.append(tr("true"));
 			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
 			pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
 			pComboItem->setEnabled(bEnabled);
