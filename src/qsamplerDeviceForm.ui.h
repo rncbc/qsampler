@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
+#include <qlistbox.h>
 
 #include "qsamplerMainForm.h"
 
@@ -38,6 +39,7 @@ void qsamplerDeviceForm::init (void)
 	m_iDirtySetup = 0;
     m_iDirtyCount = 0;
     m_iUntitled   = 1;
+    m_bNewDevice  = false;
 
     // Try to restore normal window positioning.
     adjustSize();
@@ -221,6 +223,9 @@ void qsamplerDeviceForm::createDevice (void)
     // TODO: Create a new device from current table view...
     //
 	m_pMainForm->appendMessages("qsamplerDeviceForm::createDevice()...");
+	
+	m_iDirtyCount++;
+	stabilizeForm();
 }
 
 
@@ -231,6 +236,9 @@ void qsamplerDeviceForm::updateDevice (void)
     // TODO: Update current device in table view...
     //
 	m_pMainForm->appendMessages("qsamplerDeviceForm::updateDevice()...");
+
+	m_iDirtyCount++;
+	stabilizeForm();
 }
 
 
@@ -241,6 +249,9 @@ void qsamplerDeviceForm::deleteDevice (void)
     // TODO: Delete current device in table view...
     //
 	m_pMainForm->appendMessages("qsamplerDeviceForm::deleteDevice()...");
+
+	m_iDirtyCount++;
+	stabilizeForm();
 }
 
 
@@ -253,14 +264,13 @@ void qsamplerDeviceForm::refreshDevices (void)
 	//
     // TODO: Load device configuration data ...
     //
-    
 	m_pMainForm->appendMessages("qsamplerDeviceForm::refreshDevices()");
 
     DeviceListView->clear();
     if (m_pClient) {
 		qsamplerDeviceItem *pItem;
 		int *piDeviceIDs;
-		// Grab audio devices...
+		// Grab and pop Audio devices...
     	pItem = new qsamplerDeviceItem(DeviceListView, m_pClient,
 			qsamplerDevice::Audio);
     	if (pItem) {
@@ -270,8 +280,9 @@ void qsamplerDeviceForm::refreshDevices (void)
 			    new qsamplerDeviceItem(pItem, m_pClient,
 					qsamplerDevice::Audio, piDeviceIDs[i]);
 			}
+			pItem->setOpen(true);
 		}
-		// Grab MIDI devices...
+		// Grab and pop MIDI devices...
     	pItem = new qsamplerDeviceItem(DeviceListView, m_pClient,
 			qsamplerDevice::Midi);
     	if (pItem) {
@@ -281,27 +292,67 @@ void qsamplerDeviceForm::refreshDevices (void)
 			    new qsamplerDeviceItem(pItem, m_pClient,
 					qsamplerDevice::Midi, piDeviceIDs[i]);
 			}
+			pItem->setOpen(true);
 		}
 	}
 
     // Done.
+    selectDevice();
     m_iDirtySetup--;
-//  stabilizeForm();
 }
 
-// Device selection slot.
-void qsamplerDeviceForm::selectDevice ( QListViewItem *pItem )
-{
-	if (pItem == NULL)
-	    return;
-	if (pItem->rtti() != QSAMPLER_DEVICE_ITEM)
-	    return;
 
-	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDevice(" + pItem->text(0) + ")");
+// Driver selection slot.
+void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
+{
+	//
+	//  TODO: Driver name has changed for a new device...
+	//
+	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDriver(\"" + sDriverName + "\")");
+
+	m_iDirtyCount++;
+	stabilizeForm();
+}
+
+
+// Device selection slot.
+void qsamplerDeviceForm::selectDevice (void)
+{
+	//
+	//  TODO: Device selection has changed...
+	//
+	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDevice()");
+
+    QListViewItem *pItem = DeviceListView->selectedItem();
+	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM) {
+		stabilizeForm();
+		return;
+	}
 
 	const qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+	m_bNewDevice = (device.deviceID() < 0);
+
+	// Fill the device heading...
+	DeviceNameTextLabel->setText(' ' + device.deviceName());
+	DriverNameComboBox->clear();
+	DriverNameComboBox->insertStringList(
+		qsamplerDevice::getDrivers(m_pClient, device.deviceType()));
+	const QString& sDriverName = device.driverName();
+    if (!sDriverName.isEmpty()) {
+        if (DriverNameComboBox->listBox()->findItem(sDriverName, Qt::ExactMatch) == NULL)
+            DriverNameComboBox->insertItem(sDriverName);
+        DriverNameComboBox->setCurrentText(sDriverName);
+    }
+	DriverNameTextLabel->setEnabled(m_bNewDevice);
+	DriverNameComboBox->setEnabled(m_bNewDevice);
+	
+	// Fill the device parameter table...
+	DeviceParamTable->setEnabled(true);
 	DeviceParamTable->setDevice(m_pClient,
 	    device.deviceType(), device.deviceID());
+
+	// Done.
+	stabilizeForm();
 }
 
 
@@ -320,10 +371,16 @@ void qsamplerDeviceForm::stabilizeForm (void)
 	m_pMainForm->appendMessages("qsamplerDeviceForm::stabilizeForm()");
 
     SaveDevicesPushButton->setEnabled(m_iDirtyCount > 0);
-    
-    CreateDevicePushButton->setEnabled(m_iDirtyCount > 0);
-    UpdateDevicePushButton->setEnabled(m_iDirtyCount > 0);
-    DeleteDevicePushButton->setEnabled(m_iDirtyCount > 0);
+
+    QListViewItem *pItem = DeviceListView->selectedItem();
+    bool bEnabled = (pItem != NULL);
+	DeviceNameTextLabel->setEnabled(bEnabled);
+	DriverNameTextLabel->setEnabled(bEnabled && m_bNewDevice);
+	DriverNameComboBox->setEnabled(bEnabled && m_bNewDevice);
+	DeviceParamTable->setEnabled(bEnabled);
+    CreateDevicePushButton->setEnabled(bEnabled && (m_iDirtyCount > 0 ||  m_bNewDevice));
+    UpdateDevicePushButton->setEnabled(bEnabled && (m_iDirtyCount > 0 && !m_bNewDevice));
+    DeleteDevicePushButton->setEnabled(bEnabled && (m_iDirtyCount > 0 && !m_bNewDevice));
 }
 
 

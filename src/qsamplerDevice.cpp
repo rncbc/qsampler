@@ -1,7 +1,7 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -117,31 +117,35 @@ qsamplerDevice::~qsamplerDevice (void)
 void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	qsamplerDeviceType deviceType, int iDeviceID )
 {
-	if (pClient == NULL || iDeviceID < 0)
-	    return;
-	    
+	// Device id and type should be always set.
+	m_iDeviceID   = iDeviceID;
+	m_deviceType  = deviceType;
+
+	// Retrieve device info, if any.
+	QString sDeviceType;
 	lscp_device_info_t *pDeviceInfo = NULL;
 	switch (deviceType) {
 	  case qsamplerDevice::Audio:
-		m_sDeviceName = QObject::tr("Audio");
+	    sDeviceType = QObject::tr("Audio");
 	    pDeviceInfo = ::lscp_get_audio_device_info(pClient, iDeviceID);
   		break;
 	  case qsamplerDevice::Midi:
-		m_sDeviceName = QObject::tr("MIDI");
+	    sDeviceType = QObject::tr("MIDI");
 		pDeviceInfo = ::lscp_get_midi_device_info(pClient, iDeviceID);
 		break;
 	}
-	if (pDeviceInfo == NULL)
-	    return;
-
-	// Device properties...
-	m_iDeviceID   = iDeviceID;
-	m_deviceType  = deviceType;
-	m_sDriverName = pDeviceInfo->driver;
 	
-	// Complete fake device name...
-	m_sDeviceName += ' ' + m_sDriverName + ' ';
-	m_sDeviceName += QObject::tr("Device %1").arg(m_iDeviceID);
+	// If we're bogus, bail out...
+	if (pDeviceInfo == NULL) {
+		m_sDriverName = QString::null;
+		m_sDeviceName = QObject::tr("New %1 device").arg(sDeviceType);
+	    return;
+	}
+	
+	// Other device properties...
+	m_sDriverName = pDeviceInfo->driver;
+	m_sDeviceName = m_sDriverName + ' '
+		+ QObject::tr("Device %1").arg(m_iDeviceID);
 
 	// Grab device/driver parameters...
 	m_params.clear();
@@ -196,7 +200,7 @@ void qsamplerDevice::refresh (void)
 {
 }
 
-// Device enumerator.
+// Device ids enumerator.
 int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
 	qsamplerDeviceType deviceType )
 {
@@ -211,6 +215,30 @@ int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
 	}
 	return piDeviceIDs;
 }
+
+
+// Driver names enumerator.
+QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
+	qsamplerDeviceType deviceType )
+{
+	QStringList drivers;
+	
+	const char **ppszDrivers = NULL;
+	switch (deviceType) {
+	  case qsamplerDevice::Audio:
+	    ppszDrivers = ::lscp_get_available_audio_drivers(pClient);
+  		break;
+	  case qsamplerDevice::Midi:
+	    ppszDrivers = ::lscp_get_available_midi_drivers(pClient);
+		break;
+	}
+	
+    for (int iDriver = 0; ppszDrivers[iDriver]; iDriver++)
+        drivers.append(ppszDrivers[iDriver]);
+
+	return drivers;
+}
+
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceItem - QListView device item.

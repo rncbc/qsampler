@@ -26,6 +26,8 @@
 #include <qfileinfo.h>
 #include <qlistbox.h>
 
+#include "qsamplerDevice.h"
+
 #include "config.h"
 
 
@@ -88,22 +90,14 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
     else m_pChannel->appendMessagesClient("lscp_get_available_engines");
 
     // Populate Audio output type list.
-    const char **ppszAudioDrivers = ::lscp_get_available_audio_drivers(m_pChannel->client());
-    if (ppszAudioDrivers) {
-        AudioDriverComboBox->clear();
-        for (int iAudioDriver = 0; ppszAudioDrivers[iAudioDriver]; iAudioDriver++)
-            AudioDriverComboBox->insertItem(ppszAudioDrivers[iAudioDriver]);
-    }
-    else m_pChannel->appendMessagesClient("lscp_get_available_audio_drivers");
+    AudioDriverComboBox->clear();
+    AudioDriverComboBox->insertStringList(
+		qsamplerDevice::getDrivers(m_pChannel->client(), qsamplerDevice::Audio));
 
     // Populate MIDI input type list.
-    const char **ppszMidiDrivers = ::lscp_get_available_midi_drivers(m_pChannel->client());
-    if (ppszMidiDrivers) {
-        MidiDriverComboBox->clear();
-        for (int iMidiDriver = 0; ppszMidiDrivers[iMidiDriver]; iMidiDriver++)
-            MidiDriverComboBox->insertItem(ppszMidiDrivers[iMidiDriver]);
-    }
-    else m_pChannel->appendMessagesClient("lscp_get_available_midi_drivers");
+    MidiDriverComboBox->clear();
+    MidiDriverComboBox->insertStringList(
+		qsamplerDevice::getDrivers(m_pChannel->client(), qsamplerDevice::Midi));
 
     // Read proper channel information,
     // and populate the channel form fields.

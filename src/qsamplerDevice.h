@@ -1,7 +1,7 @@
 // qsamplerDevice.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 #include "qsamplerOptions.h"
 
 
-// Special QListViewItem::rtti() return values.
+// Special QListViewItem::rtti() unique return value.
 #define	QSAMPLER_DEVICE_ITEM    1001
 
 
@@ -104,8 +104,12 @@ public:
 	// Update/refresh device/driver data.
 	void refresh();
 
-	// Device enumerator.
+	// Device ids enumerator.
     static int *getDevices(lscp_client_t *pClient,
+		qsamplerDeviceType deviceType);
+
+	// Driver names enumerator.
+    static QStringList getDrivers(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType);
 
 private:
