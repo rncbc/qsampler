@@ -62,6 +62,7 @@ public:
 
     // Display options...
     QString sDisplayFont;
+    bool    bDisplayEffect;
     bool    bAutoRefresh;
     int     iAutoRefreshTime;
     int     iMaxVolume;

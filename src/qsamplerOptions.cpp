@@ -55,6 +55,7 @@ qsamplerOptions::qsamplerOptions (void)
     // Load display options...
     m_settings.beginGroup("/Display");
     sDisplayFont     = m_settings.readEntry("/DisplayFont", QString::null);
+    bDisplayEffect   = m_settings.readBoolEntry("/DisplayEffect", true);
     bAutoRefresh     = m_settings.readBoolEntry("/AutoRefresh", true);
     iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 1000);
     iMaxVolume       = m_settings.readNumEntry("/MaxVolume", 100);
@@ -122,6 +123,7 @@ qsamplerOptions::~qsamplerOptions (void)
     // Save display options.
     m_settings.beginGroup("/Display");
     m_settings.writeEntry("/DisplayFont", sDisplayFont);
+    m_settings.writeEntry("/DisplayEffect", bDisplayEffect);
     m_settings.writeEntry("/AutoRefresh", bAutoRefresh);
     m_settings.writeEntry("/AutoRefreshTime", iAutoRefreshTime);
     m_settings.writeEntry("/MaxVolume", iMaxVolume);

@@ -949,6 +949,7 @@ void qsamplerMainForm::viewOptions (void)
         bool    bOldServerStart     = m_pOptions->bServerStart;
         QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
         QString sOldDisplayFont     = m_pOptions->sDisplayFont;
+        bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
         int     iOldMaxVolume       = m_pOptions->iMaxVolume;
         QString sOldMessagesFont    = m_pOptions->sMessagesFont;
         bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
@@ -973,6 +974,9 @@ void qsamplerMainForm::viewOptions (void)
                 (!bOldCompletePath &&  m_pOptions->bCompletePath) ||
                 (iOldMaxRecentFiles != m_pOptions->iMaxRecentFiles))
                 updateRecentFilesMenu();
+            if (( bOldDisplayEffect && !m_pOptions->bDisplayEffect) ||
+                (!bOldDisplayEffect &&  m_pOptions->bDisplayEffect))
+                updateDisplayEffect();
             if (sOldDisplayFont != m_pOptions->sDisplayFont)
                 updateDisplayFont();
             if (iOldMaxVolume != m_pOptions->iMaxVolume)
@@ -1240,6 +1244,28 @@ void qsamplerMainForm::updateDisplayFont (void)
 }
 
 
+// Update channel strips background effect.
+void qsamplerMainForm::updateDisplayEffect (void)
+{
+   QPixmap pm;
+    if (m_pOptions->bDisplayEffect)
+        pm = QPixmap::fromMimeSource("displaybg1.png");
+
+    // Full channel list update...
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (wlist.isEmpty())
+        return;
+
+    m_pWorkspace->setUpdatesEnabled(false);
+    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannelStrip)
+            pChannelStrip->setDisplayBackground(pm);
+    }
+    m_pWorkspace->setUpdatesEnabled(true);
+}
+
+
 // Force update of the channels maximum volume setting.
 void qsamplerMainForm::updateMaxVolume (void)
 {
@@ -1374,13 +1400,19 @@ void qsamplerMainForm::createChannel ( int iChannelID, bool bPrompt )
     // Add a new channel itema...
     WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
     pChannelStrip = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
-    pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
+    // Set some initial aesthetic options...
+    if (m_pOptions) {
+        // Background display effect...
+        pChannelStrip->setDisplayEffect(m_pOptions->bDisplayEffect);
+        // We'll need a display font.
+        QFont font;
+        if (font.fromString(m_pOptions->sDisplayFont))
+            pChannelStrip->setDisplayFont(font);
+        // Maximum allowed volume setting.
+        pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
+    }
+    // Actual channel setup.
     pChannelStrip->setup(this, iChannelID);
-    // We'll need a display font.
-    QFont font;
-    if (m_pOptions && font.fromString(m_pOptions->sDisplayFont))
-        pChannelStrip->setDisplayFont(font);
-    // Track channel setup changes.
     QObject::connect(pChannelStrip, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelStripChanged(qsamplerChannelStrip *)));
     // Before we show it up, may be we'll
     // better ask for some initial values?
