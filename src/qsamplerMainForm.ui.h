@@ -1091,6 +1091,11 @@ void qsamplerMainForm::helpAbout (void)
     sText += tr("GIG (libgig) file support disabled.");
     sText += "</font></small><br />";
 #endif
+#ifndef CONFIG_INSTRUMENT_NAME
+    sText += "<small><font color=\"red\">";
+    sText += tr("LSCP (liblscp) instrument_name support disabled.");
+    sText += "</font></small><br />";
+#endif
     sText += "<br />\n";
     sText += tr("Using") + ": ";
     sText += ::lscp_client_package();

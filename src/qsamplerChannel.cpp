@@ -170,12 +170,6 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 }
 
 
-// Instrument name accessor.
-QString& qsamplerChannel::instrumentName (void)
-{
-    return m_sInstrumentName;
-}
-
 // Instrument filename accessor.
 QString& qsamplerChannel::instrumentFile (void)
 {
@@ -186,6 +180,12 @@ QString& qsamplerChannel::instrumentFile (void)
 int qsamplerChannel::instrumentNr (void)
 {
     return m_iInstrumentNr;
+}
+
+// Instrument name accessor.
+QString& qsamplerChannel::instrumentName (void)
+{
+    return m_sInstrumentName;
 }
 
 // Instrument status accessor.
@@ -205,9 +205,13 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
         return false;
     }
 
-    m_sInstrumentName = getInstrumentName(sInstrumentFile, iInstrumentNr, true);
     m_sInstrumentFile = sInstrumentFile;
     m_iInstrumentNr = iInstrumentNr;
+#ifdef CONFIG_INSTRUMENT_NAME
+    m_sInstrumentName = QString::null;  // We'll get it later on channel_info...
+#else
+    m_sInstrumentName = getInstrumentName(sInstrumentFile, iInstrumentNr, true);
+#endif
     m_iInstrumentStatus = 0;
 
     return true;
@@ -364,8 +368,10 @@ bool qsamplerChannel::setVolume ( float fVolume )
 // Istrument name remapper.
 void qsamplerChannel::updateInstrumentName (void)
 {
+#ifndef CONFIG_INSTRUMENT_NAME
 	m_sInstrumentName = getInstrumentName(m_sInstrumentFile,
 		m_iInstrumentNr, (options() && options()->bInstrumentNames));
+#endif
 }
 
 
@@ -383,6 +389,12 @@ bool qsamplerChannel::updateChannelInfo (void)
         return false;
     }
 
+#ifdef CONFIG_INSTRUMENT_NAME
+	// We got all actual instrument datum...
+	m_sInstrumentFile = pChannelInfo->instrument_file;
+	m_iInstrumentNr   = pChannelInfo->instrument_nr;
+	m_sInstrumentName = pChannelInfo->instrument_name;
+#else
 	// First, check if intrument name has changed,
 	// taking care that instrument name lookup might be expensive,
 	// so we better make it only once and when really needed...
@@ -392,6 +404,7 @@ bool qsamplerChannel::updateChannelInfo (void)
 		m_iInstrumentNr   = pChannelInfo->instrument_nr;
 		updateInstrumentName();
 	}
+#endif
     // Cache in other channel information.
     m_sEngineName       = pChannelInfo->engine_name;
     m_iInstrumentStatus = pChannelInfo->instrument_status;

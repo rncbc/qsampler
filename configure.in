@@ -130,6 +130,17 @@ if test "x$ac_liblscp" = "xno"; then
 fi
 ac_libs="-llscp"
 
+AC_CACHE_CHECK([for instrument_name in lscp_channel_info_t],
+  ac_instrument_name, [
+  AC_TRY_COMPILE([#include "lscp/client.h"], [
+	lscp_channel_info_t info;
+	info.instrument_name = 0;
+    ], ac_instrument_name="yes", ac_instrument_name="no")
+])
+if test "x$ac_instrument_name" = "xyes"; then
+   AC_DEFINE(CONFIG_INSTRUMENT_NAME, 1, [Define if instrument_name is available.])
+fi
+
 dnl Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
@@ -160,7 +171,7 @@ AC_CHECK_FUNCS(system)
 dnl Finally produce a configure header file and the makefiles.
 AC_OUTPUT(Makefile qsampler.pro)
 
-make clean > /dev/null 2>&1
+dnl make clean > /dev/null 2>&1
 
 echo ""
 echo "Now type 'make', followed by 'make install' as root."
