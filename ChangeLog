@@ -3,7 +3,21 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.3   2004-07-06  Work in progress...
+0.0.4   2004-09-28  Work in progress...
+
+* Sampler reset command action added to menu and toolbar.
+
+* MIDI channel selection is now a dropdown list, allowing
+  the explicit selection for "All" channels input per sampler
+  channel (omni).
+
+* Channel strip display glass effect has changed background
+  color to black (was green).
+
+* Minor configure fixes.
+
+
+0.0.3   2004-07-06  Third alpha-release.
 
 * Mon-modal intrument file loading and status support.
 
