@@ -50,6 +50,8 @@ void qsamplerDeviceForm::init (void)
 	QObject::connect(DevicePortParamTable, SIGNAL(valueChanged(int,int)),
 		this, SLOT(changeDevicePortParam(int,int)));
 
+	// Initial contents.
+	refreshDevices();
 	// Try to restore normal window positioning.
 	adjustSize();
 }
@@ -152,8 +154,9 @@ void qsamplerDeviceForm::createDevice (void)
 		// Just make it the new selection...
 		DeviceListView->setSelected(pDeviceItem, true);
 		// Done.
-		m_pMainForm->appendMessages(pDeviceItem->device().deviceName() + ' '
-			+ tr("created."));
+		m_pMainForm->appendMessages(pDeviceItem->device().deviceTypeName()
+			+ ' ' + pDeviceItem->device().deviceName()
+			+ ' ' + tr("created."));
 		// Main session should be marked dirty.
 		m_pMainForm->sessionDirty();
 	}
@@ -202,8 +205,9 @@ void qsamplerDeviceForm::deleteDevice (void)
 	// Show result.
 	if (ret == LSCP_OK) {
 		// Show log message before loosing it.
-		m_pMainForm->appendMessages(device.deviceName() + ' '
-			+ tr("deleted."));
+		m_pMainForm->appendMessages(device.deviceTypeName()
+			+ ' ' + device.deviceName()
+			+ ' ' + tr("deleted."));
 		// Done.
 		delete pItem;
 		// Main session should be marked dirty.
@@ -303,6 +307,7 @@ void qsamplerDeviceForm::selectDevice (void)
 		m_deviceType = qsamplerDevice::None;
 		DeviceNameTextLabel->setText(QString::null);
 		DeviceParamTable->setNumRows(0);
+		DevicePortParamTable->setNumRows(0);
 		DevicePortComboBox->setEnabled(false);
 		DevicePortParamTable->setEnabled(false);
 		stabilizeForm();
@@ -422,6 +427,7 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 	// Table 1st column has the parameter name;
 	const QString sParam = DeviceParamTable->text(iRow, 0);
 	const QString sValue = DeviceParamTable->text(iRow, iCol);
+	int iRefresh = 0;
 	
 	// Set the local device parameter value.
 	device.setParam(sParam, sValue);
@@ -433,17 +439,16 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 		param.key   = (char *) sParam.latin1();
 		param.value = (char *) sValue.latin1();
 		// Now it depends on the device type...
-		bool bRefresh = false;
 		lscp_status_t ret = LSCP_FAILED;
 		switch (device.deviceType()) {
 		case qsamplerDevice::Audio:
-		    bRefresh = (sParam == "CHANNELS");
+		    if (sParam == "CHANNELS") iRefresh++;
 			if ((ret = ::lscp_set_audio_device_param(m_pClient,
 					device.deviceID(), &param)) != LSCP_OK)
 				m_pMainForm->appendMessagesClient("lscp_set_audio_device_param");
 			break;
 		case qsamplerDevice::Midi:
-		    bRefresh = (sParam == "PORTS");
+		    if (sParam == "PORTS") iRefresh++;
 			if ((ret = ::lscp_set_midi_device_param(m_pClient,
 					device.deviceID(), &param)) != LSCP_OK)
 				m_pMainForm->appendMessagesClient("lscp_set_midi_device_param");
@@ -453,17 +458,23 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 		}
 		// Show result.
 		if (ret == LSCP_OK) {
-			m_pMainForm->appendMessages(device.deviceName() + ' '
-				+ QString("%1: %2.").arg(sParam).arg(sValue));
+			m_pMainForm->appendMessages(device.deviceTypeName()
+				+ ' ' + device.deviceName()
+				+ ' ' + QString("%1: %2.").arg(sParam).arg(sValue));
 			// Special care for specific parameter changes...
-			if (bRefresh)
-			    device.refresh(m_pClient);
+			if (iRefresh > 0)
+				iRefresh += device.refreshPorts(m_pClient);
+			iRefresh += device.refreshDepends(m_pClient, sParam);
 		}
 	}
 
 	// Done.
 	m_iDirtySetup--;
-	stabilizeForm();
+	// Finally, we might need refreshing...
+	if (iRefresh > 0)
+		selectDevice();
+	else
+		stabilizeForm();
 	// Main session should be dirtier...
 	m_pMainForm->sessionDirty();
 }
@@ -524,9 +535,9 @@ void qsamplerDeviceForm::changeDevicePortParam ( int iRow, int iCol )
 		}
 		// Show result.
 		if (ret == LSCP_OK) {
-			m_pMainForm->appendMessages(device.deviceName() + ' '
-				+ pPort->portName()	+ ' '
-				+ QString("%1: %2.").arg(sParam).arg(sValue));
+			m_pMainForm->appendMessages(device.deviceTypeName()
+				+ ' ' + device.deviceName() + ' ' + pPort->portName()
+				+ ' ' + QString("%1: %2.").arg(sParam).arg(sValue));
 		}
 	}
 

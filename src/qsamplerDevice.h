@@ -118,9 +118,13 @@ public:
 	// Device port/channel list accessor.
 	qsamplerDevicePortList& ports();
 
+	// Device parameter dependency list refreshner.
+	int refreshParams(lscp_client_t *pClient);
 	// Device port/channel list refreshner.
-	void refresh(lscp_client_t *pClient);
-	
+	int refreshPorts(lscp_client_t *pClient);
+	// Refresh/set dependencies given that some parameter has changed.
+	int refreshDepends(lscp_client_t *pClient, const QString& sParam);
+
 	// Device ids enumerator.
 	static int *getDevices(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType);
@@ -130,6 +134,9 @@ public:
 		qsamplerDeviceType deviceType);
 
 private:
+
+	// Refresh/set given parameter based on driver supplied dependencies.
+	int refreshParam(lscp_client_t *pClient, const QString& sParam);
 
 	// Instance variables.
 	int                m_iDeviceID;
