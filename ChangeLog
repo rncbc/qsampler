@@ -3,7 +3,12 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-02-24  Work in progress...
+0.0.5   2005-03-01  Work in progress...
+
+* Fixed device driver type channel information gathering,
+  which was severely flawed, dropping all channel session
+  configurations to the default audio driver type (which
+  is ALSA) unexpectedly.
 
 * Channels are now properly renumbered when saving to a
   session LSCP script, assuming that it should be always
