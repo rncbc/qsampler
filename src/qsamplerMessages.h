@@ -75,7 +75,8 @@ private:
 
     // The maximum number of message lines.
     int m_iMessagesLimit;
-    
+    int m_iMessagesHigh;
+
     // The textview main widget.
     QTextEdit *m_pTextView;
     

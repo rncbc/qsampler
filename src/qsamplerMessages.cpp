@@ -52,7 +52,7 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     : QDockWindow(pParent, pszName)
 {
     // Initialize default message limit.
-    m_iMessagesLimit = QSAMPLER_MESSAGES_MAXLINES;
+    setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
 
     // Intialize stdout capture stuff.
     m_pStdoutNotifier = NULL;
@@ -194,6 +194,7 @@ int qsamplerMessages::messagesLimit (void)
 void qsamplerMessages::setMessagesLimit ( int iMessagesLimit )
 {
     m_iMessagesLimit = iMessagesLimit;
+    m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
 }
 
 
@@ -213,7 +214,7 @@ void qsamplerMessages::appendMessagesText ( const QString& s )
     // Check for message line limit...
     if (m_iMessagesLimit > 0) {
         int iParagraphs = m_pTextView->paragraphs();
-        if (iParagraphs > m_iMessagesLimit) {
+        if (iParagraphs > m_iMessagesHigh) {
             m_pTextView->setUpdatesEnabled(false);
             while (iParagraphs > m_iMessagesLimit) {
                 m_pTextView->removeParagraph(0);
