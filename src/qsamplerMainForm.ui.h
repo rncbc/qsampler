@@ -604,7 +604,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     //  ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
         ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannel->midiChannel() << endl;
         ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
-        ts << "LOAD INSTRUMENT NON_MODAL " << pChannel->instrumentFile() << " " << pChannel->instrumentNr() << " " << iChannelID << endl;
+        ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
         ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
         ts << endl;
         // Try to keep it snappy :)
