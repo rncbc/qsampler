@@ -556,15 +556,15 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     if (piChannelIDs == NULL) {
         appendMessagesClient("lscp_list_channels");
         appendMessagesError(tr("Could not get current list of channels.\n\nSorry."));
-    }
-    
-    // Try to (re)create each channel.
-    m_pWorkspace->setUpdatesEnabled(false);
-    for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
-        createChannelStrip(new qsamplerChannel(this, piChannelIDs[iChannel]));
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
-    }
-    m_pWorkspace->setUpdatesEnabled(true);
+    } else {
+		// Try to (re)create each channel.
+		m_pWorkspace->setUpdatesEnabled(false);
+		for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
+			createChannelStrip(new qsamplerChannel(this, piChannelIDs[iChannel]));
+			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		}
+		m_pWorkspace->setUpdatesEnabled(true);
+	}
 
     // Save as default session directory.
     if (m_pOptions)
