@@ -380,18 +380,19 @@ void qsamplerChannelStrip::updateChannelInfo (void)
     }
 
     // Set some proper display values.
+    const QString sIndent = " ";
 
     // Engine name...
     if (m_sEngineName.isEmpty())
-        EngineNameTextLabel->setText(tr("(No engine)"));
+        EngineNameTextLabel->setText(sIndent + tr("(No engine)"));
     else
-        EngineNameTextLabel->setText(m_sEngineName);
+        EngineNameTextLabel->setText(sIndent + m_sEngineName);
 
     // Instrument name...
     if (m_sInstrumentFile.isEmpty())
-        InstrumentNameTextLabel->setText(tr("(No instrument)"));
+        InstrumentNameTextLabel->setText(sIndent + tr("(No instrument)"));
     else
-        InstrumentNameTextLabel->setText(QString("%1 [%2]")
+        InstrumentNameTextLabel->setText(sIndent + QString("%1 [%2]")
             .arg(QFileInfo(m_sInstrumentFile).fileName()).arg(m_iInstrumentNr));
 
     // Instrument status...
@@ -404,9 +405,11 @@ void qsamplerChannelStrip::updateChannelInfo (void)
     }
 
     // MIDI Port/Channel...
-    MidiPortChannelTextLabel->setText(QString("%1 / %2")
-        .arg(m_iMidiPort).arg(m_iMidiChannel));
-        
+    if (m_iMidiChannel > 0)
+        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_iMidiPort).arg(m_iMidiChannel));
+    else
+        MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_iMidiPort));
+
     // And update the both GUI volume elements.
     updateChannelVolume();
 }
