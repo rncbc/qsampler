@@ -3,7 +3,13 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2005-02-21  Work in progress...
+0.0.5   2005-02-23  Work in progress...
+
+* Added new menu and toolbar option: Reset All Channels.
+
+* Channel setup changes are now properly filtered, as for
+  only those settings that are actually changed gets applied;
+  change information are now also posted to messages window.
 
 * Drag-and-drop of either session files (LSCP scripts) or
   instrument files (GIG) are now supported. Multiple files

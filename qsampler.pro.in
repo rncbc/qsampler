@@ -24,8 +24,9 @@ IMAGES   = icons/qsampler.png \
            icons/fileReset.png \
            icons/editAddChannel.png \
            icons/editRemoveChannel.png \
-           icons/editResetChannel.png \
            icons/editSetupChannel.png \
+           icons/editResetChannel.png \
+           icons/editResetAllChannels.png \
            icons/channelsArrange.png \
            icons/formAccept.png \
            icons/formReject.png \

@@ -97,9 +97,9 @@ bool qsamplerChannel::addChannel (void)
         m_iChannelID = ::lscp_add_channel(client());
         if (m_iChannelID < 0) {
             appendMessagesClient("lscp_add_channel");
-            appendMessagesError(QObject::tr("Could not create the new channel.\n\nSorry."));
+            appendMessagesError(QObject::tr("Could not add channel.\n\nSorry."));
         }   // Otherwise it's created...
-        else appendMessages(QObject::tr("Channel %1 created.").arg(m_iChannelID));
+        else appendMessages(QObject::tr("added."));
     }
 
     // Return whether we're a valid channel...
@@ -120,7 +120,7 @@ bool qsamplerChannel::removeChannel (void)
             appendMessagesError(QObject::tr("Could not remove channel.\n\nSorry."));
         } else {
             // Otherwise it's removed.
-            appendMessages(QObject::tr("Channel %1 removed.").arg(m_iChannelID));
+            appendMessages(QObject::tr("removed."));
             m_iChannelID = -1;
         }
     }
@@ -166,6 +166,7 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
         appendMessagesClient("lscp_load_engine");
         return false;
     }
+    appendMessages(QObject::tr("Engine: %1.").arg(sEngineName));
 
     m_sEngineName = sEngineName;
     return true;
@@ -211,6 +212,9 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
         return false;
     }
 
+    appendMessages(QObject::tr("Instrument: \"%1\" (%2).")
+		.arg(sInstrumentFile).arg(iInstrumentNr));
+		
     return setInstrument(sInstrumentFile, iInstrumentNr);
 }
 
@@ -249,6 +253,8 @@ bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
         return false;
     }
 
+    appendMessages(QObject::tr("MIDI driver: %1.").arg(sMidiDriver));
+
     m_sMidiDriver = sMidiDriver;
     return true;
 }
@@ -271,6 +277,8 @@ bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
         appendMessagesClient("lscp_set_channel_midi_device");
         return false;
     }
+
+    appendMessages(QObject::tr("MIDI device: %1.").arg(iMidiDevice));
 
     m_iMidiDevice = iMidiDevice;
     return true;
@@ -295,6 +303,8 @@ bool qsamplerChannel::setMidiPort ( int iMidiPort )
         return false;
     }
 
+    appendMessages(QObject::tr("MIDI port: %1.").arg(iMidiPort));
+
     m_iMidiPort = iMidiPort;
     return true;
 }
@@ -317,6 +327,8 @@ bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
         appendMessagesClient("lscp_set_channel_midi_channel");
         return false;
     }
+
+    appendMessages(QObject::tr("MIDI channel: %1.").arg(iMidiChannel));
 
     m_iMidiChannel = iMidiChannel;
     return true;
@@ -341,6 +353,8 @@ bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
         return false;
     }
 
+    appendMessages(QObject::tr("Audio device: %1.").arg(iAudioDevice));
+
     m_iAudioDevice = iAudioDevice;
     return true;
 }
@@ -364,6 +378,8 @@ bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
         return false;
     }
 
+    appendMessages(QObject::tr("Audio driver: %1.").arg(sAudioDriver));
+
     m_sAudioDriver = sAudioDriver;
     return true;
 }
@@ -386,6 +402,8 @@ bool qsamplerChannel::setVolume ( float fVolume )
         appendMessagesClient("lscp_set_channel_volume");
         return false;
     }
+
+    appendMessages(QObject::tr("Volume: %1.").arg(fVolume));
 
     m_fVolume = fVolume;
     return true;
@@ -463,7 +481,8 @@ bool qsamplerChannel::channelReset (void)
         return false;
     }
 
-    appendMessages(QObject::tr("Channel %1 reset.").arg(m_iChannelID));
+    appendMessages(QObject::tr("reset."));
+
     return true;
 }
 
@@ -473,6 +492,8 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 {
     bool bResult = false;
 
+    appendMessages(QObject::tr("setup..."));
+    
     qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(pParent);
     if (pChannelForm) {
         pChannelForm->setup(this);
@@ -487,34 +508,40 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 // Redirected messages output methods.
 void qsamplerChannel::appendMessages( const QString& s )
 {
-    if (m_pMainForm) m_pMainForm->appendMessages(s);
+    if (m_pMainForm)
+		m_pMainForm->appendMessages(channelName() + ' ' + s);
 }
 
 void qsamplerChannel::appendMessagesColor( const QString& s, const QString& c )
 {
-    if (m_pMainForm) m_pMainForm->appendMessagesColor(s, c);
+    if (m_pMainForm)
+		m_pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
 }
 
 void qsamplerChannel::appendMessagesText( const QString& s )
 {
-    if (m_pMainForm) m_pMainForm->appendMessagesText(s);
+    if (m_pMainForm)
+		m_pMainForm->appendMessagesText(channelName() + ' ' + s);
 }
 
 void qsamplerChannel::appendMessagesError( const QString& s )
 {
-    if (m_pMainForm) m_pMainForm->appendMessagesError(s);
+    if (m_pMainForm)
+		m_pMainForm->appendMessagesError(channelName() + "\n\n" + s);
 }
 
 void qsamplerChannel::appendMessagesClient( const QString& s )
 {
-    if (m_pMainForm) m_pMainForm->appendMessagesClient(s);
+    if (m_pMainForm)
+		m_pMainForm->appendMessagesClient(channelName() + ' ' + s);
 }
 
 
 // Context menu event handler.
 void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
 {
-    if (m_pMainForm) m_pMainForm->contextMenuEvent(pEvent);
+    if (m_pMainForm)
+		m_pMainForm->contextMenuEvent(pEvent);
 }
 
 
