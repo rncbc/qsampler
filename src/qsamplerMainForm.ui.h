@@ -1462,11 +1462,15 @@ void qsamplerMainForm::stopServer (void)
     // And try to stop server.
     if (m_pServer) {
         appendMessages(tr("Server is stopping..."));
-        if (m_pServer->isRunning()) {
+        if (m_pServer->isRunning())
             m_pServer->tryTerminate();
-            return;
-        }
      }
+
+    // Give it some time to terminate gracefully and stabilize...
+    QTime t;
+    t.start();
+    while (t.elapsed() < QSAMPLER_TIMER_MSECS)
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 
      // Do final processing anyway.
      processServerExit();
