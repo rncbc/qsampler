@@ -24,7 +24,7 @@
 
 #define QSAMPLER_TITLE        "qsampler"
 #define QSAMPLER_SUBTITLE     "A LinuxSampler Qt GUI Interface"
-#define QSAMPLER_VERSION      "0.0.2.97"
+#define QSAMPLER_VERSION      "0.0.2.98"
 #define QSAMPLER_WEBSITE      "http://qsampler.sourceforge.net"
 #define QSAMPLER_COPYRIGHT    "Copyright (C) 2004, rncbc aka Rui Nuno Capela. All rights reserved."
 

@@ -3,11 +3,17 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.3   2004-06-29  Work in progress...
+0.0.3   2004-07-06  Work in progress...
 
 * Mon-modal intrument file loading and status support.
 
-* Effective MIDI input port setting on channel dialog.
+* Effective MIDI input port setting on channel dialog,
+  and on session file save.
+
+* Channel dialog gets sensible engine and driver defaults
+  on create time.
+
+* Implied channel reset on successful instrument load.
 
 
 0.0.2   2004-06-15  Pre-revolutionary release.

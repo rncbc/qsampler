@@ -110,9 +110,15 @@ AC_CHECK_LIB(m, main)
 AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 AC_CHECK_LIB($ac_qtlib, main)
-AC_CHECK_LIB(lscp, main, [ac_lscp_lib="yes"], [ac_lscp_lib="no"])
-if test "x$ac_lscp_lib" = "xno"; then
+
+AC_CHECK_LIB(lscp, main, [ac_liblscp="yes"], [ac_liblscp="no"])
+if test "x$ac_liblscp" = "xno"; then
    AC_MSG_ERROR([LSCP library not found.])
+fi
+
+AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
+if test "x$ac_libgig" = "xyes"; then
+   AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
 fi
 
 dnl Check for round math function.
