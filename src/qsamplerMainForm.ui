@@ -807,6 +807,7 @@
     <slot specifier="non virtual">channelsAutoArrange( bool bOn )</slot>
     <slot specifier="non virtual">helpAboutQt( void )</slot>
     <slot specifier="non virtual">helpAbout( void )</slot>
+    <slot specifier="non virtual">sessionDirty( void )</slot>
     <slot specifier="non virtual">stabilizeForm( void )</slot>
     <slot specifier="non virtual">channelStripChanged( qsamplerChannelStrip *pChannelStrip )</slot>
     <slot specifier="non virtual">channelsMenuAboutToShow()</slot>

@@ -271,9 +271,6 @@ bool qsamplerMainForm::queryClose (void)
         // Some windows default fonts is here on demand too.
         if (bQueryClose && m_pMessages)
             m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
-		// Other windows just need asking if it can close gracefully...
-    	if (bQueryClose && m_pDeviceForm)
-        	bQueryClose = m_pDeviceForm->queryClose();
         // Try to save current positioning.
         if (bQueryClose) {
             // Save decorations state.
@@ -701,6 +698,16 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
     appendMessages(tr("Save session: \"%1\".").arg(sessionName(m_sFilename)));
     stabilizeForm();
     return true;
+}
+
+
+// Session change receiver slot.
+void qsamplerMainForm::sessionDirty (void)
+{
+    // Just mark the dirty form.
+    m_iDirtyCount++;
+    // and update the form status...
+    stabilizeForm();
 }
 
 

@@ -122,23 +122,25 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	m_deviceType  = deviceType;
 
 	// Retrieve device info, if any.
-	QString sDeviceType;
 	lscp_device_info_t *pDeviceInfo = NULL;
 	switch (deviceType) {
 	case qsamplerDevice::Audio:
-		sDeviceType = QObject::tr("Audio");
+		m_sDeviceType = QObject::tr("Audio");
 		pDeviceInfo = ::lscp_get_audio_device_info(pClient, iDeviceID);
 		break;
 	case qsamplerDevice::Midi:
-		sDeviceType = QObject::tr("MIDI");
+		m_sDeviceType = QObject::tr("MIDI");
 		pDeviceInfo = ::lscp_get_midi_device_info(pClient, iDeviceID);
+		break;
+	default:
+		m_sDeviceType = QString::null;
 		break;
 	}
 
 	// If we're bogus, bail out...
 	if (pDeviceInfo == NULL) {
 		m_sDriverName = QString::null;
-		m_sDeviceName = QObject::tr("New %1 device").arg(sDeviceType);
+		m_sDeviceName = QObject::tr("New device");
 		return;
 	}
 
@@ -162,7 +164,9 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 				m_sDriverName.latin1(), pszParam, NULL);
 			break;
 		}
-		m_params[pszParam] = qsamplerDeviceParam(pParamInfo, pDeviceInfo->params[i].value);
+		if (pParamInfo)
+			m_params[pszParam] = qsamplerDeviceParam(pParamInfo,
+				pDeviceInfo->params[i].value);
 	}
 }
 
@@ -224,6 +228,11 @@ int qsamplerDevice::deviceID (void) const
 qsamplerDevice::qsamplerDeviceType qsamplerDevice::deviceType (void) const
 {
 	return m_deviceType;
+}
+
+const QString& qsamplerDevice::deviceTypeName (void) const
+{
+	return m_sDeviceType;
 }
 
 const QString& qsamplerDevice::driverName (void) const
@@ -293,8 +302,8 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 //
 
 // Constructors.
-qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView, lscp_client_t *pClient,
-	qsamplerDevice::qsamplerDeviceType deviceType )
+qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView,
+	lscp_client_t *pClient,	qsamplerDevice::qsamplerDeviceType deviceType )
 	: QListViewItem(pListView), m_device(pClient, deviceType)
 {
 	switch(m_device.deviceType()) {
@@ -309,8 +318,9 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView, lscp_client_t *pC
 	}
 }
 
-qsamplerDeviceItem::qsamplerDeviceItem ( QListViewItem *pItem, lscp_client_t *pClient,
-	qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID )
+qsamplerDeviceItem::qsamplerDeviceItem ( QListViewItem *pItem,
+	lscp_client_t *pClient, qsamplerDevice::qsamplerDeviceType deviceType,
+	int iDeviceID )
 	: QListViewItem(pItem), m_device(pClient, deviceType, iDeviceID)
 {
 	switch(m_device.deviceType()) {
@@ -349,7 +359,8 @@ int qsamplerDeviceItem::rtti() const
 //
 
 // Constructor.
-qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent, const char *pszName )
+qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent,
+	const char *pszName )
 	: QTable(pParent, pszName)
 {
 	// Set fixed number of columns.
@@ -383,6 +394,7 @@ qsamplerDeviceParamTable::~qsamplerDeviceParamTable (void)
 void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 {
 	// Always (re)start it empty.
+	QTable::setUpdatesEnabled(false);
 	QTable::setNumRows(0);
 
 	// Now fill the parameter table...
@@ -392,6 +404,7 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = params.begin(); iter != params.end(); ++iter) {
 		const qsamplerDeviceParam& param = iter.data();
+		bool fEnabled = (device.deviceID() < 0 || param.fix);
 		QTable::setText(iRow, 0, param.description);
 		if (param.type == LSCP_TYPE_BOOL) {
 			QStringList opts;
@@ -399,17 +412,17 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 			opts.append(tr("true"));
 			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
 		    pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
-		    pComboItem->setEnabled(param.fix);
+		    pComboItem->setEnabled(fEnabled);
 			QTable::setItem(iRow, 1, pComboItem);
-		} else if (param.possibilities.count() > 0) {
+		} else if (param.possibilities.count() > 0 && !param.multiplicity) {
 			QComboTableItem *pComboItem = new QComboTableItem(this,
 				param.possibilities);
 		    pComboItem->setCurrentItem(param.value);
-		    pComboItem->setEnabled(param.fix);
+		    pComboItem->setEnabled(fEnabled);
 			QTable::setItem(iRow, 1, pComboItem);
 		} else {
 			QTableItem* pTableItem = new QTableItem(this,
-				param.fix ? QTableItem::Never : QTableItem::OnTyping,
+				fEnabled ? QTableItem::Never : QTableItem::OnTyping,
 				param.value);
 			QTable::setItem(iRow, 1, pTableItem);
 		}
@@ -417,9 +430,12 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 		++iRow;
 	}
 
-	// Adjust optimal column width.
-	for (int iCol = 0; iCol < QTable::numCols(); iCol++)
-		QTable::adjustColumn(iCol);
+	// Adjust optimal column widths.
+	QTable::adjustColumn(1);
+	QTable::adjustColumn(2);
+	
+	QTable::setUpdatesEnabled(true);
+	QTable::updateContents();
 }
 
 

@@ -38,9 +38,12 @@ void qsamplerDeviceForm::init (void)
 	m_pClient     = NULL;
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
-	m_iUntitled   = 1;
 	m_bNewDevice  = false;
 
+	// This an outsider (from designer), but rather important.
+	QObject::connect(DeviceParamTable, SIGNAL(valueChanged(int,int)),
+	    this, SLOT(changeValue(int,int)));
+	
 	// Try to restore normal window positioning.
 	adjustSize();
 }
@@ -89,156 +92,59 @@ void qsamplerDeviceForm::setClient ( lscp_client_t *pClient )
 }
 
 
-// Format the displayable device configuration filename.
-QString qsamplerDeviceForm::devicesName ( const QString& sFilename )
-{
-	QString sDevicesName = sFilename;
-	qsamplerOptions *pOptions = m_pMainForm->options();
-	if (pOptions) {
-		bool bCompletePath = (pOptions && pOptions->bCompletePath);
-		if (sDevicesName.isEmpty())
-			sDevicesName = tr("Untitled") + QString::number(m_iUntitled);
-		else if (!bCompletePath)
-			sDevicesName = QFileInfo(sDevicesName).fileName();
-	}
-	return sDevicesName;
-}
-
-
-// Window close event handlers.
-bool qsamplerDeviceForm::queryClose (void)
-{
-	bool bQueryClose = true;
-
-	if (m_iDirtyCount > 0) {
-		switch (QMessageBox::warning(this, tr("Warning"),
-			tr("The device configuration has been changed.\n\n"
-			"\"%1\"\n\n"
-			"Do you want to save the changes?")
-			.arg(devicesName(m_sFilename)),
-			tr("Save"), tr("Discard"), tr("Cancel"))) {
-		case 0:     // Save...
-			saveDevices();
-			// Fall thru....
-		case 1:     // Discard
-			break;
-		default:    // Cancel.
-			bQueryClose = false;
-		}
-	}
-
-	return bQueryClose;
-}
-
-
-
-// Dirty up settings.
-void qsamplerDeviceForm::contentsChanged (void)
-{
-	if (m_iDirtySetup > 0)
-		return;
-
-	m_iDirtyCount++;
-	stabilizeForm();
-}
-
-
-// Load device configuration slot.
-void qsamplerDeviceForm::loadDevices (void)
-{
-	QString sFilename = QFileDialog::getOpenFileName(
-			m_sFilename,                                    // Start here.
-			tr("Device Configuration files") + " (*.lscp)", // Filter (XML files)
-			this, 0,                                        // Parent and name (none)
-			tr("Load Device Configuration")                 // Caption.
-	);
-
-	if (sFilename.isEmpty())
-		return;
-
-	// Check if we're going to discard safely the current one...
-	if (!queryClose())
-		return;
-
-	// Load it right away...
-	loadDevicesFile(sFilename);
-}
-
-
-// Save device configuration slot.
-void qsamplerDeviceForm::saveDevices (void)
-{
-	QString sFilename = QFileDialog::getSaveFileName(
-			m_sFilename,                                    // Start here.
-			tr("Device Configuration files") + " (*.lscp)", // Filter (XML files)
-			this, 0,                                        // Parent and name (none)
-			tr("Save Device Configuration")                 // Caption.
-	);
-
-	if (sFilename.isEmpty())
-		return;
-
-	// Enforce .xml extension...
-	if (QFileInfo(sFilename).extension().isEmpty())
-		sFilename += ".lscp";
-
-	// Save it right away...
-	saveDevicesFile(sFilename);
-}
-
-
-// Load device configuration from file.
-void qsamplerDeviceForm::loadDevicesFile ( const QString& sFilename )
-{
-	//
-	// TODO: Load device configuration from file...
-	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::loadDevicesFile(\"" + sFilename + "\")...");
-
-	m_sFilename   = sFilename;
-	m_iDirtyCount = 0;
-
-	refreshDevices();
-}
-
-
-// Save device configuration into file.
-void qsamplerDeviceForm::saveDevicesFile ( const QString& sFilename )
-{
-	//
-	// TODO: Save device configuration into file...
-	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::saveDevicesFile(\"" + sFilename + "\")...");
-
-	m_sFilename   = sFilename;
-	m_iDirtyCount = 0;
-	stabilizeForm();
-}
-
-
 // Create a new device from current table view.
 void qsamplerDeviceForm::createDevice (void)
 {
 	//
 	// TODO: Create a new device from current table view...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::createDevice()...");
-	
-	m_iDirtyCount++;
-	stabilizeForm();
-}
+	m_pMainForm->appendMessages("qsamplerDeviceForm::createDevice()");
 
+	QListViewItem *pItem = DeviceListView->selectedItem();
+	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+		return;
 
-// Update current device in table view.
-void qsamplerDeviceForm::updateDevice (void)
-{
-	//
-	// TODO: Update current device in table view...
-	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::updateDevice()...");
+	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
-	m_iDirtyCount++;
-	stabilizeForm();
+	// Build the parameter list...
+	qsamplerDeviceParamMap& params = device.params();
+	lscp_param_t *pParams = new lscp_param_t [params.count() + 1];
+	int i = 0;
+	qsamplerDeviceParamMap::ConstIterator iter;
+	for (iter = params.begin(); iter != params.end(); ++iter) {
+		pParams[i].key   = (char *) iter.key().latin1();
+		pParams[i].value = (char *) iter.data().value.latin1();
+	}
+	// Null terminated.
+	pParams[i].key   = NULL;
+	pParams[i].value = NULL;
+
+	// Now it depends on the device type...
+	int iDeviceID = -1;
+	switch (device.deviceType()) {
+	case qsamplerDevice::Audio:
+	    if ((iDeviceID = ::lscp_create_audio_device(m_pClient,
+				device.driverName().latin1(), pParams)) < 0)
+			m_pMainForm->appendMessagesClient("lscp_create_audio_device");
+		break;
+	case qsamplerDevice::Midi:
+	    if ((iDeviceID = ::lscp_create_midi_device(m_pClient,
+				device.driverName().latin1(), pParams)) < 0)
+			m_pMainForm->appendMessagesClient("lscp_create_midi_device");
+		break;
+	}
+
+	// Free used parameter array.
+	delete [] pParams;
+
+	// Show result.
+	if (iDeviceID >= 0) {
+		m_pMainForm->appendMessages(device.deviceName() + ' ' +	tr("created."));
+		// Done.
+		refreshDevices();
+		// Main session should be marked dirty.
+		m_pMainForm->sessionDirty();
+	}
 }
 
 
@@ -248,10 +154,37 @@ void qsamplerDeviceForm::deleteDevice (void)
 	//
 	// TODO: Delete current device in table view...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::deleteDevice()...");
+	m_pMainForm->appendMessages("qsamplerDeviceForm::deleteDevice()");
 
-	m_iDirtyCount++;
-	stabilizeForm();
+	QListViewItem *pItem = DeviceListView->selectedItem();
+	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+		return;
+
+	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+
+	// Now it depends on the device type...
+	lscp_status_t ret = LSCP_FAILED;
+	switch (device.deviceType()) {
+	case qsamplerDevice::Audio:
+	    if ((ret = ::lscp_destroy_audio_device(m_pClient,
+				device.deviceID())) != LSCP_OK)
+			m_pMainForm->appendMessagesClient("lscp_destroy_audio_device");
+		break;
+	case qsamplerDevice::Midi:
+	    if ((ret = ::lscp_destroy_midi_device(m_pClient,
+				device.deviceID())) != LSCP_OK)
+			m_pMainForm->appendMessagesClient("lscp_destroy_midi_device");
+		break;
+	}
+
+	// Show result.
+	if (ret == LSCP_OK) {
+		m_pMainForm->appendMessages(device.deviceName() + ' ' +	tr("deleted."));
+		// Done.
+		refreshDevices();
+		// Main session should be marked dirty.
+		m_pMainForm->sessionDirty();
+	}
 }
 
 
@@ -297,18 +230,24 @@ void qsamplerDeviceForm::refreshDevices (void)
 	}
 
 	// Done.
-	selectDevice();
+	m_iDirtyCount = 0;
 	m_iDirtySetup--;
+	
+	// Show something.
+	selectDevice();
 }
 
 
 // Driver selection slot.
 void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 {
+	if (m_iDirtySetup > 0)
+	    return;
+
 	//
 	//  TODO: Driver name has changed for a new device...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDriver(\"" + sDriverName + "\")");
+	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDriver()");
 
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
@@ -328,6 +267,9 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 // Device selection slot.
 void qsamplerDeviceForm::selectDevice (void)
 {
+	if (m_iDirtySetup > 0)
+	    return;
+
 	//
 	//  TODO: Device selection has changed...
 	//
@@ -335,6 +277,8 @@ void qsamplerDeviceForm::selectDevice (void)
 
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM) {
+	    DeviceNameTextLabel->setText(QString::null);
+	    DeviceParamTable->setNumRows(0);
 		stabilizeForm();
 		return;
 	}
@@ -342,8 +286,8 @@ void qsamplerDeviceForm::selectDevice (void)
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 	m_bNewDevice = (device.deviceID() < 0);
 
-	// Fill the device heading...
-	DeviceNameTextLabel->setText(' ' + device.deviceName());
+	// Fill the device/driver heading...
+	DeviceNameTextLabel->setText(device.deviceTypeName() + ' ' + device.deviceName());
 	DriverNameComboBox->clear();
 	DriverNameComboBox->insertStringList(
 		qsamplerDevice::getDrivers(m_pClient, device.deviceType()));
@@ -357,7 +301,7 @@ void qsamplerDeviceForm::selectDevice (void)
 	}
 	DriverNameTextLabel->setEnabled(m_bNewDevice);
 	DriverNameComboBox->setEnabled(m_bNewDevice);
-	
+
 	// Fill the device parameter table...
 	DeviceParamTable->refresh(device);
 
@@ -382,39 +326,56 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 
 	// Table 3rd column has the parameter name;
 	qsamplerDeviceParamMap& params = device.params();
-	QString sParam = DeviceParamTable->text(iRow, 2);
-	params[sParam].value = DeviceParamTable->text(iRow, iCol);
+	const QString sParam = DeviceParamTable->text(iRow, 2);
+	const QString sValue = DeviceParamTable->text(iRow, iCol);
+	params[sParam].value = sValue;
 
+	// Set proper device parameter, on existing device ...
+	if (device.deviceID() >= 0) {
+		// Prepare parameter struct.
+		lscp_param_t param;
+		param.key   = (char *) sParam.latin1();
+		param.value = (char *) sValue.latin1();
+		// Now it depends on the device type...
+		lscp_status_t ret = LSCP_FAILED;
+		switch (device.deviceType()) {
+		case qsamplerDevice::Audio:
+		    if ((ret = ::lscp_set_audio_device_param(m_pClient,
+					device.deviceID(), &param)) != LSCP_OK)
+				m_pMainForm->appendMessagesClient("lscp_set_audio_device_param");
+			break;
+		case qsamplerDevice::Midi:
+		    if ((ret = ::lscp_set_midi_device_param(m_pClient,
+					device.deviceID(), &param)) != LSCP_OK)
+				m_pMainForm->appendMessagesClient("lscp_set_midi_device_param");
+			break;
+		}
+		// Show result.
+		if (ret == LSCP_OK) {
+			m_pMainForm->appendMessages(device.deviceName() + ' ' +
+				QString("%1: %2.").arg(sParam).arg(sValue));
+		}
+	}
+	
+	// Done.
 	m_iDirtyCount++;
 	stabilizeForm();
+	// Main session should be dirtier...
+	m_pMainForm->sessionDirty();
 }
 
 
 // Stabilize current form state.
 void qsamplerDeviceForm::stabilizeForm (void)
 {
-	// Update the main caption...
-	QString sDevicesName = devicesName(m_sFilename);
-	if (m_iDirtyCount > 0)
-		sDevicesName += '*';
-	setCaption(tr("Devices - [%1]").arg(sDevicesName));
-
-	//
-	// TODO: Enable/disable available command buttons.
-	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::stabilizeForm()");
-
-	SaveDevicesPushButton->setEnabled(m_iDirtyCount > 0);
-
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	bool bEnabled = (pItem != NULL);
-	DeviceNameTextLabel->setEnabled(bEnabled);
-	DriverNameTextLabel->setEnabled(bEnabled && m_bNewDevice);
+	DeviceNameTextLabel->setEnabled(bEnabled && !m_bNewDevice);
+	DriverNameTextLabel->setEnabled(bEnabled &&  m_bNewDevice);
 	DriverNameComboBox->setEnabled(bEnabled && m_bNewDevice);
 	DeviceParamTable->setEnabled(bEnabled);
-	CreateDevicePushButton->setEnabled(bEnabled && (m_iDirtyCount > 0 ||  m_bNewDevice));
-	UpdateDevicePushButton->setEnabled(bEnabled && (m_iDirtyCount > 0 && !m_bNewDevice));
-	DeleteDevicePushButton->setEnabled(bEnabled && (m_iDirtyCount > 0 && !m_bNewDevice));
+	CreateDevicePushButton->setEnabled(bEnabled ||  m_bNewDevice);
+	DeleteDevicePushButton->setEnabled(bEnabled && !m_bNewDevice);
 }
 
 
