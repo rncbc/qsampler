@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>688</width>
-            <height>46</height>
+            <width>693</width>
+            <height>43</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -119,14 +119,38 @@
             <property name="frameShadow">
                 <enum>Sunken</enum>
             </property>
-            <vbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
                 <property name="margin">
                     <number>2</number>
                 </property>
-                <widget class="QLabel">
+                <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>InstrumentNameTextLabel</cstring>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="paletteBackgroundPixmap">
+                        <pixmap>displaybg1.png</pixmap>
+                    </property>
+                    <property name="backgroundOrigin">
+                        <enum>ParentOrigin</enum>
+                    </property>
+                    <property name="text">
+                        <string>--</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Instrument file [index]</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>EngineNameTextLabel</cstring>
                     </property>
@@ -152,7 +176,7 @@
                         <enum>ParentOrigin</enum>
                     </property>
                     <property name="text">
-                        <string>(No engine)</string>
+                        <string>--</string>
                     </property>
                     <property name="alignment">
                         <set>AlignTop</set>
@@ -161,15 +185,21 @@
                         <string>Engine name</string>
                     </property>
                 </widget>
-                <widget class="QLabel">
+                <widget class="QLabel" row="0" column="1">
                     <property name="name">
-                        <cstring>InstrumentNameTextLabel</cstring>
+                        <cstring>MidiPortChannelTextLabel</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>20</width>
+                            <height>0</height>
+                        </size>
                     </property>
                     <property name="paletteForegroundColor">
                         <color>
-                            <red>0</red>
+                            <red>255</red>
                             <green>255</green>
-                            <blue>0</blue>
+                            <blue>127</blue>
                         </color>
                     </property>
                     <property name="paletteBackgroundPixmap">
@@ -179,13 +209,16 @@
                         <enum>ParentOrigin</enum>
                     </property>
                     <property name="text">
-                        <string>(No instrument)</string>
+                        <string>--/--</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignTop</set>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Instrument file [index]</string>
+                        <string>MIDI Port/Channel</string>
                     </property>
                 </widget>
-            </vbox>
+            </grid>
         </widget>
         <widget class="QSlider">
             <property name="name">

@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>525</width>
-            <height>319</height>
+            <width>529</width>
+            <height>329</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -52,7 +52,7 @@
         </property>
         <widget class="QLayoutWidget" row="1" column="0">
             <property name="name">
-                <cstring>layout7</cstring>
+                <cstring>FooterLayout</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -139,54 +139,6 @@
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
-                            <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="4">
-                                <item>
-                                    <property name="text">
-                                        <string>linuxsampler</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>ServerCmdLineComboBox</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="editable">
-                                    <bool>true</bool>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Command line to start LinuxSampler server locally</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="1" rowspan="1" colspan="4">
-                                <property name="name">
-                                    <cstring>ServerStartCheckBox</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Start server locally</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+S</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Whether to start the LinuxSampler server on local machine</string>
-                                </property>
-                            </widget>
                             <widget class="QLabel" row="0" column="0">
                                 <property name="name">
                                     <cstring>ServerHostTextLabel</cstring>
@@ -206,117 +158,6 @@
                                     <cstring>ServerHostComboBox</cstring>
                                 </property>
                             </widget>
-                            <widget class="QLabel" row="2" column="0">
-                                <property name="name">
-                                    <cstring>ServerCmdLineTextLabel</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Command line:</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>ServerCmdLineComboBox</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QLabel" row="4" column="0">
-                                <property name="name">
-                                    <cstring>StartDelayTextLabel</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>Start &amp;delay:</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>AlignVCenter|AlignRight</set>
-                                </property>
-                                <property name="buddy" stdset="0">
-                                    <cstring>StartDelaySpinBox</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QSpinBox" row="4" column="1">
-                                <property name="name">
-                                    <cstring>StartDelaySpinBox</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>5</hsizetype>
-                                        <vsizetype>0</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>40</width>
-                                        <height>0</height>
-                                    </size>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="suffix">
-                                    <string> secs</string>
-                                </property>
-                                <property name="maxValue">
-                                    <number>100</number>
-                                </property>
-                                <property name="minValue">
-                                    <number>1</number>
-                                </property>
-                                <property name="value">
-                                    <number>2</number>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Delay time in seconds after server startup</string>
-                                </property>
-                            </widget>
-                            <spacer row="3" column="1">
-                                <property name="name">
-                                    <cstring>spacer11</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Vertical</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>16</width>
-                                        <height>93</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <spacer row="4" column="2" rowspan="1" colspan="3">
-                                <property name="name">
-                                    <cstring>spacer12</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>320</width>
-                                        <height>16</height>
-                                    </size>
-                                </property>
-                            </spacer>
                             <widget class="QComboBox" row="0" column="4">
                                 <item>
                                     <property name="text">
@@ -396,6 +237,243 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>LinuxSampler server host name or address</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="4" column="0">
+                                <property name="name">
+                                    <cstring>ServerCmdLineTextLabel</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Command line:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>ServerCmdLineComboBox</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QCheckBox" row="3" column="1" rowspan="1" colspan="4">
+                                <property name="name">
+                                    <cstring>ServerStartCheckBox</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Start server locally</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+S</string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Whether to start the LinuxSampler server on local machine</string>
+                                </property>
+                            </widget>
+                            <widget class="QComboBox" row="4" column="1" rowspan="1" colspan="4">
+                                <item>
+                                    <property name="text">
+                                        <string>linuxsampler</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>ServerCmdLineComboBox</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>7</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="editable">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Command line to start LinuxSampler server locally</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="5" column="0">
+                                <property name="name">
+                                    <cstring>StartDelayTextLabel</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>Start &amp;delay:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>StartDelaySpinBox</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QSpinBox" row="5" column="1">
+                                <property name="name">
+                                    <cstring>StartDelaySpinBox</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>40</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="suffix">
+                                    <string> secs</string>
+                                </property>
+                                <property name="maxValue">
+                                    <number>100</number>
+                                </property>
+                                <property name="minValue">
+                                    <number>1</number>
+                                </property>
+                                <property name="value">
+                                    <number>2</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Delay time in seconds after server startup</string>
+                                </property>
+                            </widget>
+                            <spacer row="5" column="2" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>spacer13</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>320</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="2" column="1">
+                                <property name="name">
+                                    <cstring>spacer12</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>20</width>
+                                        <height>80</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <spacer row="1" column="2" rowspan="1" colspan="3">
+                                <property name="name">
+                                    <cstring>spacer11</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>320</width>
+                                        <height>16</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QSpinBox" row="1" column="1">
+                                <property name="name">
+                                    <cstring>ServerTimeoutSpinBox</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>5</hsizetype>
+                                        <vsizetype>0</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>40</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="suffix">
+                                    <string> msec</string>
+                                </property>
+                                <property name="maxValue">
+                                    <number>5000</number>
+                                </property>
+                                <property name="minValue">
+                                    <number>100</number>
+                                </property>
+                                <property name="lineStep">
+                                    <number>100</number>
+                                </property>
+                                <property name="value">
+                                    <number>500</number>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Receive timeout in milliseconds</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel" row="1" column="0">
+                                <property name="name">
+                                    <cstring>ServerTimeoutTextLabel</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Timeout:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter|AlignRight</set>
+                                </property>
+                                <property name="buddy" stdset="0">
+                                    <cstring>ServerTimeoutSpinBox</cstring>
                                 </property>
                             </widget>
                         </grid>
@@ -581,7 +659,7 @@
                                     <number>1000</number>
                                 </property>
                                 <property name="toolTip" stdset="0">
-                                    <string>Time in miliseconds between each auto-refresh cycle</string>
+                                    <string>Time in milliseconds between each auto-refresh cycle</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -927,6 +1005,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>ServerTimeoutSpinBox</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>ServerStartCheckBox</sender>
         <signal>stateChanged(int)</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -1021,6 +1105,7 @@
     <tabstop>OptionsTabWidget</tabstop>
     <tabstop>ServerHostComboBox</tabstop>
     <tabstop>ServerPortComboBox</tabstop>
+    <tabstop>ServerTimeoutSpinBox</tabstop>
     <tabstop>ServerStartCheckBox</tabstop>
     <tabstop>ServerCmdLineComboBox</tabstop>
     <tabstop>StartDelaySpinBox</tabstop>

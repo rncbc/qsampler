@@ -851,6 +851,7 @@ void qsamplerMainForm::viewOptions (void)
         // To track down deferred or immediate changes.
         QString sOldServerHost      = m_pOptions->sServerHost;
         int     iOldServerPort      = m_pOptions->iServerPort;
+        int     iOldServerTimeout   = m_pOptions->iServerTimeout;
         bool    bOldServerStart     = m_pOptions->bServerStart;
         QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
         QString sOldDisplayFont     = m_pOptions->sDisplayFont;
@@ -886,10 +887,11 @@ void qsamplerMainForm::viewOptions (void)
                 (iOldMessagesLimitLines !=  m_pOptions->iMessagesLimitLines))
                 updateMessagesLimit();
             // And now the main thing, whether we'll do client/server recycling?
-            if ((sOldServerHost != m_pOptions->sServerHost)      ||
-                (iOldServerPort != m_pOptions->iServerPort)      ||
-                ( bOldServerStart && !m_pOptions->bServerStart)  ||
-                (!bOldServerStart &&  m_pOptions->bServerStart)  ||
+            if ((sOldServerHost != m_pOptions->sServerHost) ||
+                (iOldServerPort != m_pOptions->iServerPort) ||
+                (iOldServerTimeout != m_pOptions->iServerTimeout) ||
+                ( bOldServerStart && !m_pOptions->bServerStart) ||
+                (!bOldServerStart &&  m_pOptions->bServerStart) ||
                 (sOldServerCmdLine != m_pOptions->sServerCmdLine && m_pOptions->bServerStart))
                 fileRestart();
         }
@@ -914,7 +916,6 @@ void qsamplerMainForm::channelsArrange (void)
         return;
 
     m_pWorkspace->setUpdatesEnabled(false);
-
     int y = 0;
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
         qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
@@ -932,8 +933,9 @@ void qsamplerMainForm::channelsArrange (void)
         pChannel->parentWidget()->setGeometry(0, y, iWidth, iHeight);
         y += iHeight;
     }
-
     m_pWorkspace->setUpdatesEnabled(true);
+    
+    stabilizeForm();
 }
 
 
@@ -1010,12 +1012,13 @@ void qsamplerMainForm::stabilizeForm (void)
 
     // Update the main menu state...
     qsamplerChannelStrip *pChannel = activeChannel();
-    bool bHasClient  = (m_pClient != NULL);
+    bool bHasClient  = (m_pOptions != NULL && m_pClient != NULL);
     bool bHasChannel = (bHasClient && pChannel != NULL);
     fileNewAction->setEnabled(bHasClient);
     fileOpenAction->setEnabled(bHasClient);
     fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
     fileSaveAsAction->setEnabled(bHasClient);
+    fileRestartAction->setEnabled(bHasClient || m_pServer == NULL);
     editAddChannelAction->setEnabled(bHasClient);
     editRemoveChannelAction->setEnabled(bHasChannel);
     editSetupChannelAction->setEnabled(bHasChannel);
@@ -1023,16 +1026,14 @@ void qsamplerMainForm::stabilizeForm (void)
     channelsArrangeAction->setEnabled(bHasChannel);
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
 
-    // Client status...
-    if (bHasClient)
+    // Client/Server status...
+    if (bHasClient) {
         m_status[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
-    else
-        m_status[QSAMPLER_STATUS_CLIENT]->clear();
-    // Server status...
-    if (m_pOptions)
         m_status[QSAMPLER_STATUS_SERVER]->setText(m_pOptions->sServerHost + ":" + QString::number(m_pOptions->iServerPort));
-    else
+    } else {
+        m_status[QSAMPLER_STATUS_CLIENT]->clear();
         m_status[QSAMPLER_STATUS_SERVER]->clear();
+    }
     // Channel status...
     if (bHasChannel)
         m_status[QSAMPLER_STATUS_CHANNEL]->setText(pChannel->caption());
@@ -1045,7 +1046,7 @@ void qsamplerMainForm::stabilizeForm (void)
         m_status[QSAMPLER_STATUS_SESSION]->clear();
 
     // Recent files menu.
-    m_pRecentFilesMenu->setEnabled(m_pOptions && m_pOptions->recentFiles.count() > 0);
+    m_pRecentFilesMenu->setEnabled(bHasClient && m_pOptions->recentFiles.count() > 0);
 
     // Always make the latest message visible.
     if (m_pMessages)
@@ -1075,12 +1076,9 @@ void qsamplerMainForm::updateRecentFiles ( const QString& sFilename )
     QStringList::Iterator iter = m_pOptions->recentFiles.find(sFilename);
     if (iter != m_pOptions->recentFiles.end())
         m_pOptions->recentFiles.remove(iter);
-    // Put it to front, but keep the list under limits.
-    if (m_pOptions->iMaxRecentFiles > 0) {
-        while ((int) m_pOptions->recentFiles.count() >= m_pOptions->iMaxRecentFiles)
-            m_pOptions->recentFiles.pop_back();
-        m_pOptions->recentFiles.push_front(sFilename);
-    }
+    // Put it to front...
+    m_pOptions->recentFiles.push_front(sFilename);
+
     // May update the menu.
     updateRecentFilesMenu();
 }
@@ -1092,8 +1090,16 @@ void qsamplerMainForm::updateRecentFilesMenu (void)
     if (m_pOptions == NULL)
         return;
 
+    // Time to keep the list under limits.
+    int iRecentFiles = m_pOptions->recentFiles.count();
+    while (iRecentFiles > m_pOptions->iMaxRecentFiles) {
+        m_pOptions->recentFiles.pop_back();
+        iRecentFiles--;
+    }
+    
+    // rebuild the recent files menu...
     m_pRecentFilesMenu->clear();
-    for (int i = 0; i < (int) m_pOptions->recentFiles.count() && i < m_pOptions->iMaxRecentFiles; i++) {
+    for (int i = 0; i < iRecentFiles; i++) {
         const QString& sFilename = m_pOptions->recentFiles[i];
         if (QFileInfo(sFilename).exists()) {
             m_pRecentFilesMenu->insertItem(QString("&%1 %2")
@@ -1555,6 +1561,9 @@ bool qsamplerMainForm::startClient (void)
         stabilizeForm();
         return false;
     }
+    // Just set receive timeout value, blindly.
+    ::lscp_client_set_timeout(m_pClient, m_pOptions->iServerTimeout);
+    appendMessages(tr("Client receive timeout is set to %1 msec.").arg(::lscp_client_get_timeout(m_pClient)));
 
     // We may stop scheduling around.
     stopSchedule();

@@ -55,6 +55,7 @@ public:
     // Server options...
     QString sServerHost;
     int     iServerPort;
+    int     iServerTimeout;
     bool    bServerStart;
     QString sServerCmdLine;
     int     iStartDelay;

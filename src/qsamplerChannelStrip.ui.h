@@ -318,6 +318,7 @@ void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
 {
     EngineNameTextLabel->setFont(font);
     InstrumentNameTextLabel->setFont(font);
+    MidiPortChannelTextLabel->setFont(font);
 }
 
 // Channel setup dialog.
@@ -364,13 +365,25 @@ void qsamplerChannelStrip::updateChannelInfo (void)
         m_fVolume         = pChannelInfo->volume;
     }
 
-    // Set some proper values.
-    if (!m_sEngineName.isEmpty())
+    // Set some proper display values.
+
+    // Engine name...
+    if (m_sEngineName.isEmpty())
+        EngineNameTextLabel->setText(tr("(No engine)"));
+    else
         EngineNameTextLabel->setText(m_sEngineName);
-    if (!m_sInstrumentFile.isEmpty()) {
-        InstrumentNameTextLabel->setText(QFileInfo(m_sInstrumentFile).fileName()
-            + " [" + QString::number(m_iInstrumentNr) + "]");
-    }
+
+    // Instrument name...
+    if (m_sInstrumentFile.isEmpty())
+        InstrumentNameTextLabel->setText(tr("(No instrument)"));
+    else
+        InstrumentNameTextLabel->setText(QString("%1 [%2]")
+            .arg(QFileInfo(m_sInstrumentFile).fileName()).arg(m_iInstrumentNr));
+
+    // MIDI Port/Channel...
+    MidiPortChannelTextLabel->setText(QString("%1 / %2")
+        .arg(m_iMidiPort).arg(m_iMidiChannel));
+        
     // And update the both GUI volume elements.
     updateChannelVolume();
 }

@@ -46,6 +46,7 @@ qsamplerOptions::qsamplerOptions (void)
     m_settings.beginGroup("/Server");
     sServerHost    = m_settings.readEntry("/ServerHost", "localhost");
     iServerPort    = m_settings.readNumEntry("/ServerPort", 8888);
+    iServerTimeout = m_settings.readNumEntry("/ServerTimeout", 500);
     bServerStart   = m_settings.readBoolEntry("/ServerStart", true);
     sServerCmdLine = m_settings.readEntry("/ServerCmdLine", "linuxsampler");
     iStartDelay    = m_settings.readNumEntry("/StartDelay", 2);
@@ -108,6 +109,7 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.beginGroup("/Server");
     m_settings.writeEntry("/ServerHost", sServerHost);
     m_settings.writeEntry("/ServerPort", iServerPort);
+    m_settings.writeEntry("/ServerTimeout", iServerTimeout);
     m_settings.writeEntry("/ServerStart", bServerStart);
     m_settings.writeEntry("/ServerCmdLine", sServerCmdLine);
     m_settings.writeEntry("/StartDelay", iStartDelay);

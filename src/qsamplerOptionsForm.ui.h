@@ -72,6 +72,7 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
     // Load Server settings...
     ServerHostComboBox->setCurrentText(m_pOptions->sServerHost);
     ServerPortComboBox->setCurrentText(QString::number(m_pOptions->iServerPort));
+    ServerTimeoutSpinBox->setValue(m_pOptions->iServerTimeout);
     ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
     ServerCmdLineComboBox->setCurrentText(m_pOptions->sServerCmdLine);
     StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
@@ -119,6 +120,7 @@ void qsamplerOptionsForm::accept (void)
         // Server settings....
         m_pOptions->sServerHost          = ServerHostComboBox->currentText().stripWhiteSpace();
         m_pOptions->iServerPort          = ServerPortComboBox->currentText().toInt();
+        m_pOptions->iServerTimeout       = ServerTimeoutSpinBox->value();
         m_pOptions->bServerStart         = ServerStartCheckBox->isChecked();
         m_pOptions->sServerCmdLine       = ServerCmdLineComboBox->currentText().simplifyWhiteSpace();
         m_pOptions->iStartDelay          = StartDelaySpinBox->value();
