@@ -155,7 +155,7 @@ bool qsamplerChannelStrip::loadInstrument ( const QString& sInstrumentFile, int 
     if (client() == NULL)
         return false;
 
-    if (::lscp_load_instrument(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
+    if (::lscp_load_instrument_non_modal(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
         appendMessagesClient("lscp_load_instrument");
         return false;
     }
@@ -200,11 +200,10 @@ bool qsamplerChannelStrip::setMidiDevice ( int iMidiDevice )
     if (client() == NULL)
         return false;
 
-//  FIXME: Enable this when liblscp implements the device interface.
-//  if (::lscp_set_channel_midi_device(client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
-//      appendMessagesClient("lscp_set_channel_midi_device");
-//      return false;
-//  }
+    if (::lscp_set_channel_midi_device(client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_midi_device");
+        return false;
+    }
 
     m_iMidiDevice = iMidiDevice;
     return true;
@@ -222,11 +221,10 @@ bool qsamplerChannelStrip::setMidiPort ( int iMidiPort )
     if (client() == NULL)
         return false;
 
-//  FIXME: Enable this when liblscp implements the device interface.
-//  if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
-//      appendMessagesClient("lscp_set_channel_midi_port");
-//      return false;
-//  }
+    if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_midi_port");
+        return false;
+    }
 
     m_iMidiPort = iMidiPort;
     return true;
@@ -265,11 +263,10 @@ bool qsamplerChannelStrip::setAudioDevice ( int iAudioDevice )
     if (client() == NULL)
         return false;
 
-//  FIXME: Enable this when liblscp implements the device interface.
-//  if (::lscp_set_channel_audio_device(client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
-//      appendMessagesClient("lscp_set_channel_audio_device");
-//      return false;
-//  }
+    if (::lscp_set_channel_audio_device(client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
+        appendMessagesClient("lscp_set_channel_audio_device");
+        return false;
+    }
 
     m_iAudioDevice = iAudioDevice;
     return true;
