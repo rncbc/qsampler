@@ -450,6 +450,9 @@ void qsamplerChannelStrip::updateChannelUsage (void)
     // Conditionally update whole channel status info.
     if (m_iInstrumentStatus >= 0 && m_iInstrumentStatus < 100)
         updateChannelInfo();
+    // Leave, if we still have an erroneus or incomplete instrument load.
+    if (m_iInstrumentStatus < 100)
+        return;
 
     // Get current channel voice count.
     int iVoiceCount  = ::lscp_get_channel_voice_count(client(), m_iChannelID);
