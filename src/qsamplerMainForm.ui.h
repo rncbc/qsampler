@@ -1256,7 +1256,7 @@ void qsamplerMainForm::timerSlot (void)
     // Refresh each channel usage, on each period...
     if (m_pClient && m_pOptions->bAutoRefresh) {
         m_iTimerSlot += QSAMPLER_TIMER_MSECS;
-        if (m_iTimerSlot >= m_pOptions->iTimeRefresh)  {
+        if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
             m_iTimerSlot = 0;
             QWidgetList wlist = m_pWorkspace->windowList();
             for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
