@@ -598,7 +598,6 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
             if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
                 appendMessagesClient("lscp_client_query");
                 iErrors++;
-                break;
             }
         }
         // Try to make it snappy :)
@@ -608,18 +607,18 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     // Ok. we've read it.
     file.close();
 
-    // Have we any errors?
-    if (iErrors > 0)
-        appendMessagesError(tr("Session could not be loaded\nfrom \"%1\".\n\nSorry.").arg(sFilename));
-
 	// Now we'll try to create (update) the whole GUI session.
 	updateSession();
+
+	// Have we any errors?
+	if (iErrors > 0)
+		appendMessagesError(tr("Session loaded with errors\nfrom \"%1\".\n\nSorry.").arg(sFilename));
 
     // Save as default session directory.
     if (m_pOptions)
         m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
-    // We're not dirty anymore.
-    m_iDirtyCount = 0;
+	// We're not dirty anymore, if loaded without errors, 
+	m_iDirtyCount = iErrors;
     // Stabilize form...
     m_sFilename = sFilename;
     updateRecentFiles(sFilename);
@@ -669,15 +668,16 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		ts << endl;
 		qsamplerDevice device(m_pClient, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
 		// Audio device specification...
-        ts << "# " << device.deviceTypeName() << " " << device.driverName()
+		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
 		qsamplerDeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
 				deviceParam != device.params().end();
 					++deviceParam) {
-			ts << " " << deviceParam.key()
-			   << "='" << deviceParam.data().value << "'";
+			const qsamplerDeviceParam& param = deviceParam.data();
+			if (!param.fix && !param.value.isEmpty())
+				ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// Audio channel parameters...
@@ -689,9 +689,12 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 			for (portParam = pPort->params().begin();
 					portParam != pPort->params().end();
 						++portParam) {
-				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
-				   << " " << iPort << " " << portParam.key()
-				   << "='" << portParam.data().value << "'" << endl;
+				const qsamplerDeviceParam& param = portParam.data();
+				if (!param.fix && !param.value.isEmpty()) {
+					ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
+					   << " " << iPort << " " << portParam.key()
+					   << "='" << param.value << "'" << endl;
+				}
 			}
 		}
 		// Audio device index/id mapping.
@@ -713,8 +716,9 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		for (deviceParam = device.params().begin();
 				deviceParam != device.params().end();
 					++deviceParam) {
-			ts << " " << deviceParam.key()
-			   << "='" << deviceParam.data().value << "'";
+			const qsamplerDeviceParam& param = deviceParam.data();
+			if (!param.fix && !param.value.isEmpty())
+				ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// MIDI port parameters...
@@ -726,9 +730,12 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 			for (portParam = pPort->params().begin();
 					portParam != pPort->params().end();
 						++portParam) {
-				ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
-				   << " " << iPort << " " << portParam.key()
-				   << "='" << portParam.data().value << "'" << endl;
+				const qsamplerDeviceParam& param = portParam.data();
+				if (!param.fix && !param.value.isEmpty()) {
+					ts << "SET MIDI_INPUT_CHANNEL_PARAMETER " << iDevice
+					   << " " << iPort << " " << portParam.key()
+					   << "='" << param.value << "'" << endl;
+				}
 			}
 		}
 		// MIDI device index/id mapping.
