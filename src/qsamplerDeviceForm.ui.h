@@ -36,14 +36,14 @@
 void qsamplerDeviceForm::init (void)
 {
 	// Initialize locals.
-	m_pMainForm   = (qsamplerMainForm *) QWidget::parentWidget();
+	m_pMainForm   = NULL;
 	m_pClient     = NULL;
 	m_iDirtySetup = 0;
 	m_bNewDevice  = false;
 	m_deviceType  = qsamplerDevice::None;
 	m_pAudioItems = NULL;
 	m_pMidiItems  = NULL;
-
+	
 	// This an outsider (from designer), but rather important.
 	QObject::connect(DeviceParamTable, SIGNAL(valueChanged(int,int)),
 		this, SLOT(changeDeviceParam(int,int)));
@@ -85,6 +85,13 @@ void qsamplerDeviceForm::hideEvent ( QHideEvent *pHideEvent )
 }
 
 
+// Application main form settler (life depends on it).
+void qsamplerDeviceForm::setMainForm ( qsamplerMainForm *pMainForm )
+{
+   m_pMainForm = pMainForm;
+}
+
+
 // Device configuration dialog setup formal initializer.
 void qsamplerDeviceForm::setClient ( lscp_client_t *pClient )
 {
@@ -100,9 +107,48 @@ void qsamplerDeviceForm::setClient ( lscp_client_t *pClient )
 }
 
 
+// Set current selected device by type and id.
+void qsamplerDeviceForm::setDevice (
+	qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID )
+{
+	// Get the device view root item...
+	qsamplerDeviceItem *pRootItem = NULL;
+	switch (deviceType) {
+	case qsamplerDevice::Audio:
+		pRootItem = m_pAudioItems;
+		break;
+	case qsamplerDevice::Midi:
+		pRootItem = m_pMidiItems;
+		break;
+	case qsamplerDevice::None:
+		break;
+	}
+	
+	// Is the root present?
+	if (pRootItem == NULL)
+	    return;
+
+	// For each child, test for identity...
+	qsamplerDeviceItem *pDeviceItem =
+		(qsamplerDeviceItem *) pRootItem->firstChild();
+	while (pDeviceItem) {
+		// If identities match, select as current device item.
+		if (pDeviceItem->device().deviceID() == iDeviceID) {
+			DeviceListView->setSelected(pDeviceItem, true);
+			break;
+		}
+		pDeviceItem = (qsamplerDeviceItem *) pDeviceItem->nextSibling();
+	}
+}
+
+
+
 // Create a new device from current table view.
 void qsamplerDeviceForm::createDevice (void)
 {
+	if (m_pMainForm == NULL)
+	    return;
+
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
@@ -136,6 +182,9 @@ void qsamplerDeviceForm::createDevice (void)
 // Delete current device in table view.
 void qsamplerDeviceForm::deleteDevice (void)
 {
+	if (m_pMainForm == NULL)
+	    return;
+
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
@@ -167,6 +216,9 @@ void qsamplerDeviceForm::deleteDevice (void)
 // Refresh all device list and views.
 void qsamplerDeviceForm::refreshDevices (void)
 {
+	if (m_pMainForm == NULL)
+	    return;
+
 	// Avoid nested changes.
 	m_iDirtySetup++;
 
@@ -179,8 +231,8 @@ void qsamplerDeviceForm::refreshDevices (void)
 	if (m_pClient) {
 		int *piDeviceIDs;
 		// Grab and pop Audio devices...
-		m_pAudioItems = new qsamplerDeviceItem(DeviceListView, m_pMainForm,
-			qsamplerDevice::Audio);
+		m_pAudioItems = new qsamplerDeviceItem(DeviceListView,
+			m_pMainForm, qsamplerDevice::Audio);
 		if (m_pAudioItems) {
 			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
 			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
@@ -190,8 +242,8 @@ void qsamplerDeviceForm::refreshDevices (void)
 			m_pAudioItems->setOpen(true);
 		}
 		// Grab and pop MIDI devices...
-		m_pMidiItems = new qsamplerDeviceItem(DeviceListView, m_pMainForm,
-			qsamplerDevice::Midi);
+		m_pMidiItems = new qsamplerDeviceItem(DeviceListView,
+			m_pMainForm, qsamplerDevice::Midi);
 		if (m_pMidiItems) {
 			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
@@ -353,6 +405,8 @@ void qsamplerDeviceForm::selectDevicePort ( int iPort )
 // Device parameter value change slot.
 void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 {
+	if (m_pMainForm == NULL)
+	    return;
 	if (m_iDirtySetup > 0)
 		return;
 	if (iRow < 0 || iCol < 0)
@@ -385,6 +439,8 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 // Device port/channel parameter value change slot.
 void qsamplerDeviceForm::changeDevicePortParam ( int iRow, int iCol )
 {
+	if (m_pMainForm == NULL)
+	    return;
 	if (m_iDirtySetup > 0)
 		return;
 	if (iRow < 0 || iCol < 0)

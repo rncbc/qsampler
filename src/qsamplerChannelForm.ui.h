@@ -26,6 +26,8 @@
 #include <qfileinfo.h>
 #include <qlistbox.h>
 
+#include "qsamplerDeviceForm.h"
+
 #include "config.h"
 
 
@@ -41,6 +43,8 @@ void qsamplerChannelForm::init (void)
 	m_midiDevices.setAutoDelete(true);
 	m_audioDevices.setAutoDelete(true);
 
+	m_pDeviceForm = NULL;
+	
     // Try to restore normal window positioning.
     adjustSize();
 }
@@ -49,6 +53,9 @@ void qsamplerChannelForm::init (void)
 // Kind of destructor.
 void qsamplerChannelForm::destroy (void)
 {
+	if (m_pDeviceForm)
+	    delete m_pDeviceForm;
+	m_pDeviceForm = NULL;
 }
 
 
@@ -311,6 +318,29 @@ void qsamplerChannelForm::updateInstrumentName (void)
     optionsChanged();
 }
 
+// Show device options dialog.
+void qsamplerChannelForm::setupDevice ( qsamplerDevice *pDevice )
+{
+	if (pDevice == NULL)
+	    return;
+
+	// Create the device form if not already...
+	if (m_pDeviceForm == NULL) {
+		m_pDeviceForm = new qsamplerDeviceForm(this, 0,
+			WType_Dialog | WShowModal);
+		m_pDeviceForm->setMainForm(m_pChannel->mainForm());
+		m_pDeviceForm->move(QDialog::pos() + QPoint(32, 32));
+	}
+
+	// Refresh the device form with selected data.
+	if (m_pDeviceForm) {
+		m_pDeviceForm->setClient(m_pChannel->client()); // <-- refreshDevices().
+		m_pDeviceForm->setDevice(pDevice->deviceType(),
+			pDevice->deviceID());
+		m_pDeviceForm->show();
+	}
+}
+
 
 // Refresh MIDI device options.
 void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
@@ -339,6 +369,7 @@ void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 		MidiDeviceComboBox->insertItem(tr("(New MIDI device)"));
 	MidiDeviceTextLabel->setEnabled(bEnabled);
 	MidiDeviceComboBox->setEnabled(bEnabled);
+	MidiDevicePushButton->setEnabled(bEnabled);
 	optionsChanged();
 }
 
@@ -356,6 +387,13 @@ void qsamplerChannelForm::selectMidiDevice ( int iMidiItem )
 			MidiPortSpinBox->setMaxValue(iPorts - 1);
 	}
 	optionsChanged();
+}
+
+
+// MIDI device options.
+void qsamplerChannelForm::setupMidiDevice (void)
+{
+	setupDevice(m_midiDevices.at(MidiDeviceComboBox->currentItem()));
 }
 
 
@@ -386,6 +424,7 @@ void qsamplerChannelForm::selectAudioDriver ( const QString& sAudioDriver )
 		AudioDeviceComboBox->insertItem(tr("(New Audio device)"));
 	AudioDeviceTextLabel->setEnabled(bEnabled);
 	AudioDeviceComboBox->setEnabled(bEnabled);
+	AudioDevicePushButton->setEnabled(bEnabled);
 	optionsChanged();
 }
 
@@ -398,6 +437,13 @@ void qsamplerChannelForm::selectAudioDevice ( int iAudioItem )
 		// Is there anything to do here?
 	}
 	optionsChanged();
+}
+
+
+// Audio device options.
+void qsamplerChannelForm::setupAudioDevice (void)
+{
+	setupDevice(m_audioDevices.at(AudioDeviceComboBox->currentItem()));
 }
 
 

@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>455</width>
-            <height>303</height>
+            <width>435</width>
+            <height>330</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -73,14 +73,6 @@
             <property name="name">
                 <cstring>EngineNameTextLabel</cstring>
             </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
             <property name="text">
                 <string>&amp;Engine:</string>
             </property>
@@ -94,14 +86,6 @@
         <widget class="QLabel" row="1" column="0">
             <property name="name">
                 <cstring>InstrumentFileTextLabel</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
             </property>
             <property name="text">
                 <string>&amp;Filename:</string>
@@ -174,7 +158,7 @@
         </widget>
         <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="4">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>layout01</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -263,7 +247,7 @@
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>1</hsizetype>
+                    <hsizetype>7</hsizetype>
                     <vsizetype>5</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
@@ -282,14 +266,6 @@
                 <property name="spacing">
                     <number>8</number>
                 </property>
-                <widget class="QComboBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>MidiDriverComboBox</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI input driver type</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>MidiDriverTextLabel</cstring>
@@ -302,14 +278,6 @@
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>MidiDriverComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="6">
-                    <property name="name">
-                        <cstring>MidiDeviceComboBox</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI input device</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -326,151 +294,237 @@
                         <cstring>MidiDeviceComboBox</cstring>
                     </property>
                 </widget>
-                <widget class="QSpinBox" row="0" column="4">
+                <widget class="QLayoutWidget" row="0" column="1">
                     <property name="name">
-                        <cstring>MidiPortSpinBox</cstring>
+                        <cstring>layout11</cstring>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI input port number</string>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>MidiDriverComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input driver type</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>25</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>MidiPortTextLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Port:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>MidiPortSpinBox</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox">
+                            <property name="name">
+                                <cstring>MidiPortSpinBox</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input port number</string>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>MidiChannelTextLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Channel:</string>
+                            </property>
+                            <property name="alignment">
+                                <set>AlignVCenter|AlignRight</set>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>MidiChannelComboBox</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <item>
+                                <property name="text">
+                                    <string>1</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>2</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>3</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>4</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>5</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>6</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>7</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>8</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>9</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>10</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>11</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>12</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>13</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>14</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>15</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>16</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>All</string>
+                                </property>
+                            </item>
+                            <property name="name">
+                                <cstring>MidiChannelComboBox</cstring>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input channel</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
-                <widget class="QComboBox" row="0" column="6">
-                    <item>
-                        <property name="text">
-                            <string>1</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>2</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>3</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>4</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>5</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>6</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>7</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>8</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>9</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>10</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>11</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>12</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>13</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>14</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>15</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>16</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>All</string>
-                        </property>
-                    </item>
+                <widget class="QLayoutWidget" row="1" column="1">
                     <property name="name">
-                        <cstring>MidiChannelComboBox</cstring>
+                        <cstring>layout12</cstring>
                     </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI input channel</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="5">
-                    <property name="name">
-                        <cstring>MidiChannelTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Channel:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>MidiChannelComboBox</cstring>
-                    </property>
-                </widget>
-                <spacer row="0" column="2">
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>16</width>
-                            <height>8</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLabel" row="0" column="3">
-                    <property name="name">
-                        <cstring>MidiPortTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Port:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>MidiPortSpinBox</cstring>
-                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>MidiDeviceComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input device</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>MidiDevicePushButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>24</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>26</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>midi1.png</pixmap>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input device setup</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
             </grid>
         </widget>
@@ -480,7 +534,7 @@
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>1</hsizetype>
+                    <hsizetype>7</hsizetype>
                     <vsizetype>5</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
@@ -502,22 +556,6 @@
                 <property name="spacing">
                     <number>8</number>
                 </property>
-                <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>AudioDeviceComboBox</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Audio output device</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="0" column="1">
-                    <property name="name">
-                        <cstring>AudioDriverComboBox</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Audio output driver type</string>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>AudioDriverTextLabel</cstring>
@@ -546,23 +584,109 @@
                         <cstring>AudioDeviceComboBox</cstring>
                     </property>
                 </widget>
-                <spacer row="0" column="2">
+                <widget class="QLayoutWidget" row="0" column="1">
                     <property name="name">
-                        <cstring>spacer2</cstring>
+                        <cstring>layout21</cstring>
                     </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>AudioDriverComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Audio output driver type</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer2</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>210</width>
+                                    <height>16</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>layout22</cstring>
                     </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>210</width>
-                            <height>8</height>
-                        </size>
-                    </property>
-                </spacer>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>AudioDeviceComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Audio output device</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>AudioDevicePushButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>24</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>26</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="pixmap">
+                                <pixmap>audio1.png</pixmap>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Audio output device setup</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
             </grid>
         </widget>
     </grid>
@@ -576,7 +700,7 @@
     </connection>
     <connection>
         <sender>InstrumentFileComboBox</sender>
-        <signal>textChanged(const QString &amp;)</signal>
+        <signal>activated(const QString&amp;)</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>updateInstrumentName()</slot>
     </connection>
@@ -594,7 +718,7 @@
     </connection>
     <connection>
         <sender>MidiDriverComboBox</sender>
-        <signal>activated(const QString &amp;)</signal>
+        <signal>activated(const QString&amp;)</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>selectMidiDriver(const QString&amp;)</slot>
     </connection>
@@ -618,7 +742,7 @@
     </connection>
     <connection>
         <sender>AudioDriverComboBox</sender>
-        <signal>activated(const QString &amp;)</signal>
+        <signal>activated(const QString&amp;)</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>selectAudioDriver(const QString&amp;)</slot>
     </connection>
@@ -640,6 +764,18 @@
         <receiver>qsamplerChannelForm</receiver>
         <slot>reject()</slot>
     </connection>
+    <connection>
+        <sender>MidiDevicePushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>setupMidiDevice()</slot>
+    </connection>
+    <connection>
+        <sender>AudioDevicePushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>setupAudioDevice()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>EngineNameComboBox</tabstop>
@@ -650,8 +786,10 @@
     <tabstop>MidiPortSpinBox</tabstop>
     <tabstop>MidiChannelComboBox</tabstop>
     <tabstop>MidiDeviceComboBox</tabstop>
+    <tabstop>MidiDevicePushButton</tabstop>
     <tabstop>AudioDriverComboBox</tabstop>
     <tabstop>AudioDeviceComboBox</tabstop>
+    <tabstop>AudioDevicePushButton</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>
 </tabstops>
@@ -660,12 +798,16 @@
     <include location="local" impldecl="in declaration">qsamplerChannel.h</include>
     <include location="local" impldecl="in implementation">qsamplerChannelForm.ui.h</include>
 </includes>
+<forwards>
+    <forward>class qsamplerDeviceForm;</forward>
+</forwards>
 <variables>
     <variable access="private">qsamplerChannel *m_pChannel;</variable>
     <variable access="private">int m_iDirtySetup;</variable>
     <variable access="private">int m_iDirtyCount;</variable>
     <variable access="private">QPtrList &lt; qsamplerDevice &gt; m_audioDevices;</variable>
     <variable access="private">QPtrList &lt; qsamplerDevice &gt; m_midiDevices;</variable>
+    <variable access="private">qsamplerDeviceForm *m_pDeviceForm;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">accept()</slot>
@@ -674,8 +816,10 @@
     <slot specifier="non virtual">updateInstrumentName()</slot>
     <slot specifier="non virtual">selectMidiDriver( const QString &amp; sMidiDriver )</slot>
     <slot specifier="non virtual">selectMidiDevice( int iMidiItem )</slot>
+    <slot specifier="non virtual">setupMidiDevice()</slot>
     <slot specifier="non virtual">selectAudioDriver( const QString &amp; sAudioDriver )</slot>
     <slot specifier="non virtual">selectAudioDevice( int iAudioItem )</slot>
+    <slot specifier="non virtual">setupAudioDevice()</slot>
     <slot specifier="non virtual">optionsChanged()</slot>
     <slot specifier="non virtual">stabilizeForm()</slot>
 </slots>
@@ -683,6 +827,7 @@
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
     <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
+    <function specifier="non virtual">setupDevice( qsamplerDevice *pDevice )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="8" margin="8"/>
