@@ -99,6 +99,7 @@ public:
 	// Device property accessors.
 	int                 deviceID()   const;
 	qsamplerDeviceType  deviceType() const;
+	const QString&      deviceTypeName() const;
 	const QString&      driverName() const;
 	const QString&      deviceName() const;
 
@@ -121,6 +122,7 @@ private:
 	// Instance variables.
 	int                m_iDeviceID;
 	qsamplerDeviceType m_deviceType;
+	QString            m_sDeviceType;
 	QString            m_sDriverName;
 	QString            m_sDeviceName;
 
