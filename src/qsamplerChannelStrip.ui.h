@@ -151,10 +151,10 @@ bool qsamplerChannelStrip::channelSetup (void)
 
 
 // Update whole channel info state.
-void qsamplerChannelStrip::updateChannelInfo (void)
+bool qsamplerChannelStrip::updateChannelInfo (void)
 {
     if (m_pChannel == NULL)
-        return;
+        return false;
         
     // Update strip caption.
     QString sText = m_pChannel->channelName();
@@ -163,7 +163,7 @@ void qsamplerChannelStrip::updateChannelInfo (void)
 
     // Check if we're up and connected.
     if (m_pChannel->client() == NULL)
-        return;
+        return false;
 
     // Read actual channel information.
     m_pChannel->updateChannelInfo();
@@ -201,15 +201,15 @@ void qsamplerChannelStrip::updateChannelInfo (void)
         MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel() + 1));
 
     // And update the both GUI volume elements.
-    updateChannelVolume();
+    return updateChannelVolume();
 }
 
 
 // Do the dirty volume change.
-void qsamplerChannelStrip::updateChannelVolume (void)
+bool qsamplerChannelStrip::updateChannelVolume (void)
 {
     if (m_pChannel == NULL)
-        return;
+        return false;
 
     // Convert...
 #ifdef CONFIG_ROUND
@@ -234,16 +234,18 @@ void qsamplerChannelStrip::updateChannelVolume (void)
     VolumeSlider->setValue(iVolume);
     VolumeSpinBox->setValue(iVolume);
     m_iDirtyChange--;
+    
+    return true;
 }
 
 
 // Update whole channel usage state.
-void qsamplerChannelStrip::updateChannelUsage (void)
+bool qsamplerChannelStrip::updateChannelUsage (void)
 {
     if (m_pChannel == NULL)
-        return;
+        return false;
     if (m_pChannel->client() == NULL)
-        return;
+        return false;
 
     // Conditionally update whole channel status info.
     if (m_pChannel->instrumentStatus() >= 0 && m_pChannel->instrumentStatus() < 100) {
@@ -254,7 +256,7 @@ void qsamplerChannelStrip::updateChannelUsage (void)
     }
     // Leave, if we still have an erroneus or incomplete instrument load.
     if (m_pChannel->instrumentStatus() < 100)
-        return;
+        return false;
 
     // Get current channel voice count.
     int iVoiceCount  = ::lscp_get_channel_voice_count(m_pChannel->client(), m_pChannel->channelID());
@@ -268,6 +270,9 @@ void qsamplerChannelStrip::updateChannelUsage (void)
     // Update the GUI elements...
     StreamUsageProgressBar->setProgress(iStreamUsage);
     StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
+    
+    // We're clean.
+    return true;
 }
 
 
