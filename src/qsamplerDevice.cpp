@@ -363,13 +363,14 @@ qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent, const cha
 	QTable::setLeftMargin(0);
 	// Initialize the fixed table column headings.
 	QHeader *pHeader = QTable::horizontalHeader();
-	pHeader->setLabel(0, tr("Parameter"));
+	pHeader->setLabel(0, tr("Description"));
 	pHeader->setLabel(1, tr("Value"));
-	pHeader->setLabel(2, tr("Description"));
+	pHeader->setLabel(2, tr("Parameter"));
 	// Set read-onlyness of each column
 	QTable::setColumnReadOnly(0, true);
 //  QTable::setColumnReadOnly(1, true); -- of course not.
 	QTable::setColumnReadOnly(2, true);
+	QTable::setColumnStretchable(0, true);
 }
 
 // Default destructor.
@@ -390,9 +391,29 @@ void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 	int iRow = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = params.begin(); iter != params.end(); ++iter) {
-		QTable::setText(iRow, 0, iter.key());
-		QTable::setText(iRow, 1, iter.data().value);
-		QTable::setText(iRow, 2, iter.data().description);
+		const qsamplerDeviceParam& param = iter.data();
+		QTable::setText(iRow, 0, param.description);
+		if (param.type == LSCP_TYPE_BOOL) {
+			QStringList opts;
+			opts.append(tr("false"));
+			opts.append(tr("true"));
+			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
+		    pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
+		    pComboItem->setEnabled(param.fix);
+			QTable::setItem(iRow, 1, pComboItem);
+		} else if (param.possibilities.count() > 0) {
+			QComboTableItem *pComboItem = new QComboTableItem(this,
+				param.possibilities);
+		    pComboItem->setCurrentItem(param.value);
+		    pComboItem->setEnabled(param.fix);
+			QTable::setItem(iRow, 1, pComboItem);
+		} else {
+			QTableItem* pTableItem = new QTableItem(this,
+				param.fix ? QTableItem::Never : QTableItem::OnTyping,
+				param.value);
+			QTable::setItem(iRow, 1, pTableItem);
+		}
+		QTable::setText(iRow, 2, iter.key());
 		++iRow;
 	}
 
