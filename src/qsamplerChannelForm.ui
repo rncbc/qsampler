@@ -820,6 +820,7 @@
     <slot specifier="non virtual">selectAudioDriver( const QString &amp; sAudioDriver )</slot>
     <slot specifier="non virtual">selectAudioDevice( int iAudioItem )</slot>
     <slot specifier="non virtual">setupAudioDevice()</slot>
+    <slot specifier="non virtual">updateDevices()</slot>
     <slot specifier="non virtual">optionsChanged()</slot>
     <slot specifier="non virtual">stabilizeForm()</slot>
 </slots>
@@ -828,6 +829,10 @@
     <function access="private" specifier="non virtual">destroy()</function>
     <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
     <function specifier="non virtual">setupDevice( qsamplerDevice *pDevice )</function>
+    <function specifier="non virtual">selectMidiDriverItem( const QString &amp; sMidiDriver )</function>
+    <function specifier="non virtual">selectMidiDeviceItem( int iMidiItem )</function>
+    <function specifier="non virtual">selectAudioDriverItem( const QString &amp; sAudioDriver )</function>
+    <function specifier="non virtual">selectAudioDeviceItem( int iAudioItem )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="8" margin="8"/>
