@@ -211,9 +211,13 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     // We got options?
     m_pOptions = pOptions;
 
+    // What style do we create these forms?
+    WFlags wflags = Qt::WType_TopLevel;
+    if (m_pOptions->bKeepOnTop)
+        wflags |= Qt::WStyle_Tool;
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
-    m_pDeviceForm = new qsamplerDeviceForm(this);
+    m_pDeviceForm = new qsamplerDeviceForm(this, 0, wflags);
     // Set message defaults...
     updateMessagesFont();
     updateMessagesLimit();
@@ -1042,6 +1046,7 @@ void qsamplerMainForm::viewOptions (void)
         bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
         int     iOldMaxVolume       = m_pOptions->iMaxVolume;
         QString sOldMessagesFont    = m_pOptions->sMessagesFont;
+        bool    bOldKeepOnTop       = m_pOptions->bKeepOnTop;
         bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
         int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
         int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
@@ -1054,7 +1059,9 @@ void qsamplerMainForm::viewOptions (void)
         if (pOptionsForm->exec()) {
             // Warn if something will be only effective on next run.
             if (( bOldStdoutCapture && !m_pOptions->bStdoutCapture) ||
-                (!bOldStdoutCapture &&  m_pOptions->bStdoutCapture)) {
+                (!bOldStdoutCapture &&  m_pOptions->bStdoutCapture) ||
+                ( bOldKeepOnTop     && !m_pOptions->bKeepOnTop)     ||
+                (!bOldKeepOnTop     &&  m_pOptions->bKeepOnTop)) {
                 QMessageBox::information(this, tr("Information"),
                     tr("Some settings may be only effective\n"
                        "next time you start this program."), tr("OK"));
