@@ -56,5 +56,18 @@ void qsamplerChannelStrip::channelSetup (void)
 }
 
 
+// Messages view font accessors.
+QFont qsamplerChannelStrip::displayFont (void)
+{
+    return EngineNameTextLabel->font();
+}
+
+void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
+{
+    EngineNameTextLabel->setFont(font);
+    InstrumentNameTextLabel->setFont(font);
+}
+
+
 // end of qsamplerChannelStrip.ui.h
 

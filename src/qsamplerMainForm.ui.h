@@ -251,12 +251,17 @@ void qsamplerMainForm::editAddChannel (void)
             y += pChannel->parentWidget()->frameGeometry().height();
         }
     }
+
     // FIXME: Arrange a proper method to grab a channel number.
     static int s_iChannel = 0;
     // Add a new channel itema...
     WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
     pChannel = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
     pChannel->setCaption(tr("Channel") + " " + QString::number(++s_iChannel));
+    // We'll need a display font.
+    QFont font;
+    if (m_pOptions && font.fromString(m_pOptions->sDisplayFont))
+        pChannel->setDisplayFont(font);
     // Track channel setup changes.
     QObject::connect(pChannel, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelChanged(qsamplerChannelStrip *)));
     // Now we show up us to the world.
@@ -402,9 +407,13 @@ void qsamplerMainForm::viewOptions (void)
     qsamplerOptionsForm *pOptionsForm = new qsamplerOptionsForm(this);
     if (pOptionsForm) {
         // Check out some initial nullities(tm)...
+        qsamplerChannelStrip *pChannel = activeChannel();
+        if (m_pOptions->sDisplayFont.isEmpty() && pChannel)
+            m_pOptions->sDisplayFont = pChannel->displayFont().toString();
         if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
             m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
         // To track down deferred or immediate changes.
+        QString sOldDisplayFont     = m_pOptions->sDisplayFont;
         QString sOldMessagesFont    = m_pOptions->sMessagesFont;
         bool    bStdoutCapture      = m_pOptions->bStdoutCapture;
         int     bMessagesLimit      = m_pOptions->bMessagesLimit;
@@ -418,6 +427,8 @@ void qsamplerMainForm::viewOptions (void)
                 (!bStdoutCapture &&  m_pOptions->bStdoutCapture))
                 updateMessagesCapture();
             // Check wheather something immediate has changed.
+            if (sOldDisplayFont != m_pOptions->sDisplayFont)
+                updateDisplayFont();
             if (sOldMessagesFont != m_pOptions->sMessagesFont)
                 updateMessagesFont();
             if (( bMessagesLimit && !m_pOptions->bMessagesLimit) ||
@@ -571,6 +582,35 @@ void qsamplerMainForm::channelChanged( qsamplerChannelStrip * )
     m_iDirtyCount++;
     // and update the form status...
     stabilizeForm();
+}
+
+
+// Force update of the channels display font.
+void qsamplerMainForm::updateDisplayFont (void)
+{
+    if (m_pOptions == NULL)
+        return;
+
+    // Check if display font is legal.
+    if (m_pOptions->sDisplayFont.isEmpty())
+        return;
+    // Realize it.
+    QFont font;
+    if (!font.fromString(m_pOptions->sDisplayFont))
+        return;
+
+    // Full channel list update...
+    QWidgetList wlist = m_pWorkspace->windowList();
+    if (wlist.isEmpty())
+        return;
+
+    m_pWorkspace->setUpdatesEnabled(false);
+    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+        qsamplerChannelStrip *pChannel = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannel)
+            pChannel->setDisplayFont(font);
+    }
+    m_pWorkspace->setUpdatesEnabled(true);
 }
 
 

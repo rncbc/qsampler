@@ -76,6 +76,10 @@ void qsamplerOptionsForm::setup ( qsamplerOptions *pOptions )
 
     // Load Display options...
     QFont font;
+    if (m_pOptions->sDisplayFont.isEmpty() || !font.fromString(m_pOptions->sDisplayFont))
+        font = QFont("Sans Serif", 8);
+    DisplayFontTextLabel->setFont(font);
+    DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
     if (m_pOptions->sMessagesFont.isEmpty() || !font.fromString(m_pOptions->sMessagesFont))
         font = QFont("Fixed", 8);
     MessagesFontTextLabel->setFont(font);
@@ -105,6 +109,8 @@ void qsamplerOptionsForm::accept (void)
         m_pOptions->iServerPort          = ServerPortComboBox->currentText().toInt();
         m_pOptions->bServerStart         = ServerStartCheckBox->isChecked();
         m_pOptions->sServerCmdLine       = ServerCmdLineComboBox->currentText();
+        // Channel display options...
+        m_pOptions->sDisplayFont         = DisplayFontTextLabel->font().toString();
         // Message window options...
         m_pOptions->sMessagesFont        = MessagesFontTextLabel->font().toString();
         m_pOptions->bMessagesLimit       = MessagesLimitCheckBox->isChecked();
@@ -173,6 +179,19 @@ void qsamplerOptionsForm::stabilizeForm()
     MessagesLimitLinesComboBox->setEnabled(MessagesLimitCheckBox->isChecked());
 
     OkPushButton->setEnabled(m_iDirtyCount > 0);
+}
+
+
+// The channel display font selection dialog.
+void qsamplerOptionsForm::chooseDisplayFont()
+{
+    bool  bOk  = false;
+    QFont font = QFontDialog::getFont(&bOk, DisplayFontTextLabel->font(), this);
+    if (bOk) {
+        DisplayFontTextLabel->setFont(font);
+        DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
+        optionsChanged();
+    }
 }
 
 

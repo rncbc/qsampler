@@ -52,6 +52,7 @@ qsamplerOptions::qsamplerOptions (void)
 
     // Load display options...
     m_settings.beginGroup("/Display");
+    sDisplayFont   = m_settings.readEntry("/DisplayFont", QString::null);
     sMessagesFont  = m_settings.readEntry("/MessagesFont", QString::null);
     bMessagesLimit = m_settings.readBoolEntry("/MessagesLimit", true);
     iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
@@ -92,6 +93,7 @@ qsamplerOptions::~qsamplerOptions (void)
 
     // Save display options.
     m_settings.beginGroup("/Display");
+    m_settings.writeEntry("/DisplayFont", sDisplayFont);
     m_settings.writeEntry("/MessagesFont", sMessagesFont);
     m_settings.writeEntry("/MessagesLimit", bMessagesLimit);
     m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);

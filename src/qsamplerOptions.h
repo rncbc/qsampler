@@ -56,6 +56,7 @@ public:
     QString sServerCmdLine;
     
     // Display options...
+    QString sDisplayFont;
     QString sMessagesFont;
     bool    bMessagesLimit;
     int     iMessagesLimitLines;

@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>504</width>
-            <height>244</height>
+            <width>461</width>
+            <height>245</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -225,6 +225,12 @@
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>100</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
                                 <property name="font">
                                     <font>
                                         <bold>0</bold>
@@ -305,6 +311,124 @@
                     </property>
                     <widget class="QGroupBox">
                         <property name="name">
+                            <cstring>ChannelDisplayGroupBox</cstring>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="margin">
+                            <number>4</number>
+                        </property>
+                        <property name="title">
+                            <string>Channel Display</string>
+                        </property>
+                        <property name="flat">
+                            <bool>true</bool>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>DisplayFontTextLabel</cstring>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>3</hsizetype>
+                                        <vsizetype>1</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>180</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>180</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                                <property name="paletteForegroundColor">
+                                    <color>
+                                        <red>0</red>
+                                        <green>255</green>
+                                        <blue>0</blue>
+                                    </color>
+                                </property>
+                                <property name="paletteBackgroundPixmap">
+                                    <pixmap>displaybg1.png</pixmap>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="frameShape">
+                                    <enum>Panel</enum>
+                                </property>
+                                <property name="frameShadow">
+                                    <enum>Sunken</enum>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>1</number>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignCenter</set>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Sample messages text font display</string>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton">
+                                <property name="name">
+                                    <cstring>DisplayFontPushButton</cstring>
+                                </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
+                                </property>
+                                <property name="text">
+                                    <string>&amp;Font...</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+F</string>
+                                </property>
+                                <property name="autoDefault">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Select font for the messages text display</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>space21</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>8</width>
+                                        <height>8</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </hbox>
+                    </widget>
+                    <widget class="QGroupBox">
+                        <property name="name">
                             <cstring>MessagesGroupBox</cstring>
                         </property>
                         <property name="font">
@@ -332,7 +456,7 @@
                                 <property name="sizePolicy">
                                     <sizepolicy>
                                         <hsizetype>3</hsizetype>
-                                        <vsizetype>5</vsizetype>
+                                        <vsizetype>1</vsizetype>
                                         <horstretch>0</horstretch>
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
@@ -341,6 +465,12 @@
                                     <size>
                                         <width>180</width>
                                         <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>180</width>
+                                        <height>32767</height>
                                     </size>
                                 </property>
                                 <property name="paletteBackgroundColor">
@@ -392,7 +522,7 @@
                             </widget>
                             <spacer>
                                 <property name="name">
-                                    <cstring>space51</cstring>
+                                    <cstring>space22</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -567,6 +697,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>DisplayFontPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerOptionsForm</receiver>
+        <slot>chooseDisplayFont()</slot>
+    </connection>
+    <connection>
         <sender>MessagesFontPushButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerOptionsForm</receiver>
@@ -615,6 +751,7 @@
     <tabstop>ServerPortComboBox</tabstop>
     <tabstop>ServerStartCheckBox</tabstop>
     <tabstop>ServerCmdLineComboBox</tabstop>
+    <tabstop>DisplayFontPushButton</tabstop>
     <tabstop>MessagesFontPushButton</tabstop>
     <tabstop>MessagesLimitCheckBox</tabstop>
     <tabstop>MessagesLimitLinesComboBox</tabstop>
@@ -638,6 +775,7 @@
     <slot specifier="non virtual">reject()</slot>
     <slot specifier="non virtual">optionsChanged()</slot>
     <slot specifier="non virtual">stabilizeForm()</slot>
+    <slot specifier="non virtual">chooseDisplayFont()</slot>
     <slot specifier="non virtual">chooseMessagesFont()</slot>
 </slots>
 <functions>
