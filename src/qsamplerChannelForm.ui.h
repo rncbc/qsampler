@@ -87,7 +87,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
             EngineNameComboBox->insertItem(ppszEngines[iEngine]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_engines");
-
+/*
     // Populate Audio output type list.
     const char **ppszAudioDrivers = ::lscp_get_available_audio_drivers(m_pChannel->client());
     if (ppszAudioDrivers) {
@@ -105,7 +105,7 @@ void qsamplerChannelForm::setup ( qsamplerChannelStrip *pChannel )
             MidiDriverComboBox->insertItem(ppszMidiDrivers[iMidiDriver]);
     }
     else m_pChannel->appendMessagesClient("lscp_get_available_midi_drivers");
-
+*/
     // Read proper channel information,
     // and populate the channel form fields.
 
