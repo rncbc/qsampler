@@ -122,13 +122,13 @@ void qsamplerDeviceForm::createDevice (void)
 	int iDeviceID = -1;
 	switch (device.deviceType()) {
 	case qsamplerDevice::Audio:
-	    pRootItem = m_pAudioItems;
+		pRootItem = m_pAudioItems;
 		if ((iDeviceID = ::lscp_create_audio_device(m_pClient,
 				device.driverName().latin1(), pParams)) < 0)
 			m_pMainForm->appendMessagesClient("lscp_create_audio_device");
 		break;
 	case qsamplerDevice::Midi:
-	    pRootItem = m_pMidiItems;
+		pRootItem = m_pMidiItems;
 		if ((iDeviceID = ::lscp_create_midi_device(m_pClient,
 				device.driverName().latin1(), pParams)) < 0)
 			m_pMainForm->appendMessagesClient("lscp_create_midi_device");
@@ -167,16 +167,16 @@ void qsamplerDeviceForm::deleteDevice (void)
 
 	// Prompt user if this is for real...
 	qsamplerOptions *pOptions = m_pMainForm->options();
-    if (pOptions && pOptions->bConfirmRemove) {
-        if (QMessageBox::warning(this, tr("Warning"),
-            tr("Delete %1 device:\n\n"
-               "%2\n\n"
-               "Are you sure?")
-               .arg(device.deviceTypeName())
-               .arg(device.deviceName()),
-            tr("OK"), tr("Cancel")) > 0)
-            return;
-    }
+	if (pOptions && pOptions->bConfirmRemove) {
+		if (QMessageBox::warning(this, tr("Warning"),
+			tr("Delete %1 device:\n\n"
+			"%2\n\n"
+			"Are you sure?")
+			.arg(device.deviceTypeName())
+			.arg(device.deviceName()),
+			tr("OK"), tr("Cancel")) > 0)
+			return;
+	}
 
 	// Now it depends on the device type...
 	lscp_status_t ret = LSCP_FAILED;
@@ -339,10 +339,10 @@ void qsamplerDeviceForm::selectDevice (void)
 void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 {
 	if (m_iDirtySetup > 0)
-	    return;
+		return;
 	if (iRow < 0 || iCol < 0)
-	    return;
-	    
+		return;
+		
 	//
 	//  Device parameter change...
 	//
