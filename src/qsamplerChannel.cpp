@@ -552,12 +552,10 @@ bool qsamplerChannel::isInstrumentFile ( const QString& sInstrumentFile )
 
 	QFile file(sInstrumentFile);
 	if (file.open(IO_ReadOnly)) {
-		char achHeader[4];
-		if (file.readBlock(achHeader, 4)) {
-			bResult = (achHeader[0] == 'R'
-					&& achHeader[1] == 'I'
-					&& achHeader[2] == 'F'
-					&& achHeader[3] == 'F');
+		char achHeader[16];
+		if (file.readBlock(achHeader, 16)) {
+			bResult = (::memcmp(&achHeader[0], "RIFF", 4)     == 0
+					&& ::memcmp(&achHeader[8], "DLS LIST", 8) == 0);
 		}
 		file.close();
 	}

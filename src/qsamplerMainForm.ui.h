@@ -305,7 +305,7 @@ bool qsamplerMainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList&
         if (bDecode) {
             files = QStringList::split('\n', sText);
             for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++)
-                *iter = (*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null);
+                *iter = QUrl((*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null)).path();
         }
     }
 
@@ -329,7 +329,7 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
         return;
 
     for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
-		const QString& sPath = QUrl(*iter).path();
+		const QString& sPath = *iter;
 		if (qsamplerChannel::isInstrumentFile(sPath)) {
 			// Try to create a new channel from instrument file...
 		    qsamplerChannel *pChannel = new qsamplerChannel(this);
@@ -647,21 +647,20 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         if (pChannelStrip) {
             qsamplerChannel *pChannel = pChannelStrip->channel();
             if (pChannel) {
-                int iChannelID = pChannel->channelID();
-                ts << "# " << pChannelStrip->caption() << endl;
+                ts << "# Channel " << iChannel << endl;
                 ts << "ADD CHANNEL" << endl;
-                ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannel->audioDriver() << endl;
-                ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
-                ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
-                ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
+                ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannel << " " << pChannel->audioDriver() << endl;
+                ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannel << " " << pChannel->midiDriver() << endl;
+            //  ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannel << " " << pChannel->midiPort() << endl;
+                ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannel << " ";
                 if (pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
                     ts << "ALL";
                 else
                     ts << pChannel->midiChannel();
                 ts << endl;
-                ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
-                ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
-                ts << "SET CHANNEL VOLUME " << iChannelID << " " << pChannel->volume() << endl;
+                ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannel << endl;
+                ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannel << endl;
+                ts << "SET CHANNEL VOLUME " << iChannel << " " << pChannel->volume() << endl;
                 ts << endl;
             }
         }
