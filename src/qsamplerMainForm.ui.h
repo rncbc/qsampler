@@ -676,8 +676,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				deviceParam != device.params().end();
 					++deviceParam) {
 			const qsamplerDeviceParam& param = deviceParam.data();
-			if (!param.value.isEmpty())
-				ts << " " << deviceParam.key() << "='" << param.value << "'";
+			if (param.value.isEmpty()) ts << "# ";
+			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// Audio channel parameters...
@@ -690,11 +690,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 					portParam != pPort->params().end();
 						++portParam) {
 				const qsamplerDeviceParam& param = portParam.data();
-				if (!param.fix && !param.value.isEmpty()) {
-					ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
-					   << " " << iPort << " " << portParam.key()
-					   << "='" << param.value << "'" << endl;
-				}
+				if (param.fix || param.value.isEmpty()) ts << "# ";
+				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
+				   << " " << iPort << " " << portParam.key()
+				   << "='" << param.value << "'" << endl;
 			}
 		}
 		// Audio device index/id mapping.
@@ -717,8 +716,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				deviceParam != device.params().end();
 					++deviceParam) {
 			const qsamplerDeviceParam& param = deviceParam.data();
-			if (!param.value.isEmpty())
-				ts << " " << deviceParam.key() << "='" << param.value << "'";
+			if (param.value.isEmpty()) ts << "# ";
+			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// MIDI port parameters...
@@ -731,11 +730,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 					portParam != pPort->params().end();
 						++portParam) {
 				const qsamplerDeviceParam& param = portParam.data();
-				if (!param.fix && !param.value.isEmpty()) {
-					ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
-					   << " " << iPort << " " << portParam.key()
-					   << "='" << param.value << "'" << endl;
-				}
+				if (param.fix || param.value.isEmpty()) ts << "# ";
+				ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
+				   << " " << iPort << " " << portParam.key()
+				   << "='" << param.value << "'" << endl;
 			}
 		}
 		// MIDI device index/id mapping.
