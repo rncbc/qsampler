@@ -3,7 +3,7 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.4   2004-09-29  Work in progress...
+0.0.4   2004-10-06  Work in progress...
 
 * Almost complete rewrite of sampler channel strips internal
   control structures.
