@@ -498,6 +498,9 @@
         <property name="name">
             <cstring>viewDevicesAction</cstring>
         </property>
+        <property name="iconSet">
+            <iconset>qsamplerDevice.png</iconset>
+        </property>
         <property name="toggleAction">
             <bool>true</bool>
         </property>
@@ -512,6 +515,9 @@
         </property>
         <property name="statusTip">
             <string>Show/hide the device configuration window</string>
+        </property>
+        <property name="accel">
+            <string>F11</string>
         </property>
     </action>
     <action>

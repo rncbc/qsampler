@@ -26,8 +26,6 @@
 #include <qfileinfo.h>
 #include <qlistbox.h>
 
-#include "qsamplerDevice.h"
-
 #include "config.h"
 
 
@@ -39,6 +37,9 @@ void qsamplerChannelForm::init (void)
 
     m_iDirtySetup = 0;
     m_iDirtyCount = 0;
+
+	m_midiDevices.setAutoDelete(true);
+	m_audioDevices.setAutoDelete(true);
 
     // Try to restore normal window positioning.
     adjustSize();
@@ -121,15 +122,22 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 		qsamplerChannel::getInstrumentList(sInstrumentFile,
 		pOptions->bInstrumentNames));
     InstrumentNrComboBox->setCurrentItem(pChannel->instrumentNr());
+    
+	// MIDI input device...
+	qsamplerDevice midiDevice(m_pChannel->client(),
+		qsamplerDevice::Midi, m_pChannel->midiDevice());
     // MIDI input driver...
-    QString sMidiDriver = pChannel->midiDriver();
-    if (sMidiDriver.isEmpty() || bNew)
-        sMidiDriver = pOptions->sMidiDriver;
-    if (!sMidiDriver.isEmpty()) {
-        if (MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
-            MidiDriverComboBox->insertItem(sMidiDriver);
-        MidiDriverComboBox->setCurrentText(sMidiDriver);
-    }
+	QString sMidiDriver = midiDevice.driverName();
+	if (sMidiDriver.isEmpty() || bNew)
+		sMidiDriver = pOptions->sMidiDriver;
+	if (!sMidiDriver.isEmpty()) {
+		if (MidiDriverComboBox->listBox()->findItem(sMidiDriver, Qt::ExactMatch) == NULL)
+			MidiDriverComboBox->insertItem(sMidiDriver);
+		MidiDriverComboBox->setCurrentText(sMidiDriver);
+	}
+	selectMidiDriver(sMidiDriver);
+	if (!bNew)
+		MidiDeviceComboBox->setCurrentText(midiDevice.deviceName());
     // MIDI input port...
     MidiPortSpinBox->setValue(pChannel->midiPort());
     // MIDI input channel...
@@ -138,15 +146,23 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
     if (iMidiChannel < 0)
         iMidiChannel = (::lscp_get_channels(m_pChannel->client()) % 16);
     MidiChannelComboBox->setCurrentItem(iMidiChannel);
-    // Audio output driver...
-    QString sAudioDriver = pChannel->audioDriver();
-    if (sAudioDriver.isEmpty() || bNew)
-        sAudioDriver = pOptions->sAudioDriver;
-    if (!sAudioDriver.isEmpty()) {
-        if (AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
-            AudioDriverComboBox->insertItem(sAudioDriver);
-        AudioDriverComboBox->setCurrentText(sAudioDriver);
-    }
+    
+	// Audio output device...
+	qsamplerDevice audioDevice(m_pChannel->client(),
+		qsamplerDevice::Audio, m_pChannel->audioDevice());
+	// Audio output driver...
+	QString sAudioDriver = audioDevice.driverName();
+	if (sAudioDriver.isEmpty() || bNew)
+		sAudioDriver = pOptions->sAudioDriver;
+	if (!sAudioDriver.isEmpty()) {
+		if (AudioDriverComboBox->listBox()->findItem(sAudioDriver, Qt::ExactMatch) == NULL)
+			AudioDriverComboBox->insertItem(sAudioDriver);
+		AudioDriverComboBox->setCurrentText(sAudioDriver);
+	}
+	selectAudioDriver(sAudioDriver);
+	if (!bNew)
+		AudioDeviceComboBox->setCurrentText(audioDevice.deviceName());
+
 	// As convenient, make it ready on stabilizeForm() for
 	// prompt acceptance, if we got the minimum required...
 	if (sEngineName != qsamplerChannel::noEngineName() &&
@@ -177,12 +193,28 @@ void qsamplerChannelForm::accept (void)
         // Are we a new channel?
         if (!m_pChannel->addChannel())
             iErrors++;
-        // Audio output driver type...
-        if (!m_pChannel->setAudioDriver(AudioDriverComboBox->currentText()))
-            iErrors++;
-        // MIDI input driver type...
-        if (!m_pChannel->setMidiDriver(MidiDriverComboBox->currentText()))
-            iErrors++;
+		// Accept Audio driver or device selection...
+		if (m_audioDevices.isEmpty()) {
+			if (!m_pChannel->setAudioDriver(AudioDriverComboBox->currentText()))
+				iErrors++;
+		} else {
+			qsamplerDevice *pDevice = m_audioDevices.at(AudioDeviceComboBox->currentItem());
+			if (pDevice == NULL)
+				iErrors++;
+			else if (!m_pChannel->setAudioDevice(pDevice->deviceID()))
+				iErrors++;
+		}
+		// Accept MIDI driver or device selection...
+		if (m_midiDevices.isEmpty()) {
+			if (!m_pChannel->setMidiDriver(MidiDriverComboBox->currentText()))
+				iErrors++;
+		} else {
+			qsamplerDevice *pDevice = m_midiDevices.at(MidiDeviceComboBox->currentItem());
+			if (pDevice == NULL)
+				iErrors++;
+			else if (!m_pChannel->setMidiDevice(pDevice->deviceID()))
+				iErrors++;
+		}
         // MIDI input port number...
         if (!m_pChannel->setMidiPort(MidiPortSpinBox->value()))
             iErrors++;
@@ -280,6 +312,59 @@ void qsamplerChannelForm::updateInstrumentName (void)
     optionsChanged();
 }
 
+
+// Refresh MIDI device options.
+void qsamplerChannelForm::selectMidiDriver ( const QString& sMidiDriver )
+{
+	MidiDeviceComboBox->clear();
+	m_audioDevices.clear();
+
+	const QPixmap& midiPixmap = QPixmap::fromMimeSource("midi2.png");
+	int *piDeviceIDs = qsamplerDevice::getDevices(m_pChannel->client(),
+		qsamplerDevice::Midi);
+	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
+		qsamplerDevice *pDevice = new qsamplerDevice(m_pChannel->client(),
+			qsamplerDevice::Midi, piDeviceIDs[i]);
+		if (pDevice->driverName() == sMidiDriver) {
+			MidiDeviceComboBox->insertItem(midiPixmap, pDevice->deviceName());
+			m_midiDevices.append(pDevice);
+		} else {
+			delete pDevice;
+		}
+	}
+
+	bool bEnabled = !m_midiDevices.isEmpty();
+	MidiDeviceTextLabel->setEnabled(bEnabled);
+	MidiDeviceComboBox->setEnabled(bEnabled);
+	optionsChanged();
+}
+
+
+// Refresh Audio device options.
+void qsamplerChannelForm::selectAudioDriver ( const QString& sAudioDriver )
+{
+	AudioDeviceComboBox->clear();
+	m_audioDevices.clear();
+
+	const QPixmap& audioPixmap = QPixmap::fromMimeSource("audio2.png");
+	int *piDeviceIDs = qsamplerDevice::getDevices(m_pChannel->client(),
+		qsamplerDevice::Audio);
+	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
+		qsamplerDevice *pDevice = new qsamplerDevice(m_pChannel->client(),
+			qsamplerDevice::Audio, piDeviceIDs[i]);
+		if (pDevice->driverName() == sAudioDriver) {
+			AudioDeviceComboBox->insertItem(audioPixmap, pDevice->deviceName());
+			m_audioDevices.append(pDevice);
+		} else {
+			delete pDevice;
+		}
+	}
+
+	bool bEnabled = !m_audioDevices.isEmpty();
+	AudioDeviceTextLabel->setEnabled(bEnabled);
+	AudioDeviceComboBox->setEnabled(bEnabled);
+	optionsChanged();
+}
 
 
 // Dirty up settings.
