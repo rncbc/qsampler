@@ -42,29 +42,29 @@ class qsamplerDeviceParam
 {
 public:
 
-    // Constructor.
-    qsamplerDeviceParam(lscp_param_info_t *pParamInfo = NULL,
+	// Constructor.
+	qsamplerDeviceParam(lscp_param_info_t *pParamInfo = NULL,
 		const char *pszValue = NULL);
-    // Default destructor.
-    ~qsamplerDeviceParam();
+	// Default destructor.
+	~qsamplerDeviceParam();
 
 	// Initializer.
 	void setParam(lscp_param_info_t *pParamInfo,
 		const char *pszValue = NULL);
 
-    // Info structure field members.
-    lscp_type_t	type;
-    QString 	description;
-    bool    	mandatory;
-    bool    	fix;
-    bool    	multiplicity;
-    QStringList depends;
-    QString 	defaultv;
-    QString 	range_min;
-    QString 	range_max;
-    QStringList possibilities;
-    // The current parameter value.
-    QString 	value;
+	// Info structure field members.
+	lscp_type_t	type;
+	QString 	description;
+	bool    	mandatory;
+	bool    	fix;
+	bool    	multiplicity;
+	QStringList depends;
+	QString 	defaultv;
+	QString 	range_min;
+	QString 	range_max;
+	QStringList possibilities;
+	// The current parameter value.
+	QString 	value;
 };
 
 // A typedef'd parameter QMap.
@@ -79,24 +79,28 @@ class qsamplerDevice
 {
 public:
 
-    // We use the same class for MIDI and audio device management
-    enum qsamplerDeviceType { Midi, Audio };
+	// We use the same class for MIDI and audio device management
+	enum qsamplerDeviceType { Midi, Audio };
 
-    // Constructor.
-    qsamplerDevice(lscp_client_t *pClient,
+	// Constructor.
+	qsamplerDevice(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType, int iDeviceID = -1);
-    // Default destructor.
-    ~qsamplerDevice();
+	// Default destructor.
+	~qsamplerDevice();
 
 	// Initializer.
 	void setDevice(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType, int iDeviceID = -1);
-		
+
+	// Driver name initializer.
+	void setDriver(lscp_client_t *pClient,
+		const QString& sDriverName);
+
 	// Device property accessors.
-    int                 deviceID()   const;
-    qsamplerDeviceType  deviceType() const;
-    const QString&      driverName() const;
-    const QString&      deviceName() const;
+	int                 deviceID()   const;
+	qsamplerDeviceType  deviceType() const;
+	const QString&      driverName() const;
+	const QString&      deviceName() const;
 
 	// Device parameters accessor.
 	qsamplerDeviceParamMap& params();
@@ -105,20 +109,20 @@ public:
 	void refresh();
 
 	// Device ids enumerator.
-    static int *getDevices(lscp_client_t *pClient,
+	static int *getDevices(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType);
 
 	// Driver names enumerator.
-    static QStringList getDrivers(lscp_client_t *pClient,
+	static QStringList getDrivers(lscp_client_t *pClient,
 		qsamplerDeviceType deviceType);
 
 private:
 
 	// Instance variables.
-    int                m_iDeviceID;
-    qsamplerDeviceType m_deviceType;
-    QString            m_sDriverName;
-    QString            m_sDeviceName;
+	int                m_iDeviceID;
+	qsamplerDeviceType m_deviceType;
+	QString            m_sDriverName;
+	QString            m_sDeviceName;
 
 	// Device parameter list.
 	qsamplerDeviceParamMap m_params;
@@ -133,24 +137,24 @@ class qsamplerDeviceItem : public QListViewItem
 {
 public:
 
-    // Constructors.
-    qsamplerDeviceItem(QListView *pListView, lscp_client_t *pClient,
+	// Constructors.
+	qsamplerDeviceItem(QListView *pListView, lscp_client_t *pClient,
 		qsamplerDevice::qsamplerDeviceType deviceType);
-    qsamplerDeviceItem(QListViewItem *pItem, lscp_client_t *pClient,
+	qsamplerDeviceItem(QListViewItem *pItem, lscp_client_t *pClient,
 		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID);
-    // Default destructor.
-    ~qsamplerDeviceItem();
+	// Default destructor.
+	~qsamplerDeviceItem();
 
-    // Instance accessors.
-    const qsamplerDevice& device();
+	// Instance accessors.
+	qsamplerDevice& device();
 
-    // To virtually distinguish between list view items.
-    virtual int rtti() const;
+	// To virtually distinguish between list view items.
+	virtual int rtti() const;
 
 private:
 
-    // Instance variables.
-    qsamplerDevice m_device;
+	// Instance variables.
+	qsamplerDevice m_device;
 };
 
 
@@ -160,32 +164,17 @@ private:
 
 class qsamplerDeviceParamTable : public QTable
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    // Constructor.
-    qsamplerDeviceParamTable(QWidget *pParent = 0, const char *pszName = 0);
-    // Default destructor.
-    ~qsamplerDeviceParamTable();
+	// Constructor.
+	qsamplerDeviceParamTable(QWidget *pParent = 0, const char *pszName = 0);
+	// Default destructor.
+	~qsamplerDeviceParamTable();
 
-    // Client/device descriptor selector.
-	void setDevice(lscp_client_t *pClient,
-		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID = -1);
-
-    // Client/device descriptor accessors.
-	lscp_client_t *client();
-	int deviceID();
-
-	// The main table refresher.
-	void refresh();
-	
-private:
-
-    // LSCP client/device references.
-    lscp_client_t *m_pClient;
-    qsamplerDevice::qsamplerDeviceType m_deviceType;
-    int m_iDeviceID;
+	// Client/device descriptor selector.
+	void refresh(qsamplerDevice& device);
 };
 
 

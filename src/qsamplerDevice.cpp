@@ -50,47 +50,47 @@ void qsamplerDeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 	const char *pszValue )
 {
 	if (pParamInfo == NULL)
-	    return;
-	    
-    // Info structure field members.
-
+		return;
+		
+	// Info structure field members.
+	
 	type = pParamInfo->type;
-
+	
 	if (pParamInfo->description)
 		description = pParamInfo->description;
 	else
 		description = QString::null;
-
-    mandatory = (bool) pParamInfo->multiplicity;
-    fix = (bool) pParamInfo->fix;
-    multiplicity = (bool) pParamInfo->multiplicity;
-
-  	depends.clear();
-  	for (int i = 0; pParamInfo->depends && pParamInfo->depends[i]; i++)
-   	    depends.append(pParamInfo->depends[i]);
-
+	
+	mandatory = (bool) pParamInfo->multiplicity;
+	fix = (bool) pParamInfo->fix;
+	multiplicity = (bool) pParamInfo->multiplicity;
+	
+	depends.clear();
+	for (int i = 0; pParamInfo->depends && pParamInfo->depends[i]; i++)
+		depends.append(pParamInfo->depends[i]);
+	
 	if (pParamInfo->defaultv)
 		defaultv = pParamInfo->defaultv;
 	else
 		defaultv = QString::null;
-
+	
 	if (pParamInfo->range_min)
-    	range_min = pParamInfo->range_min;
+		range_min = pParamInfo->range_min;
 	else
 		range_min = QString::null;
-
+	
 	if (pParamInfo->range_max)
-    	range_max = pParamInfo->range_max;
+		range_max = pParamInfo->range_max;
 	else
 		range_max = QString::null;
-
+	
 	possibilities.clear();
-  	for (int i = 0; pParamInfo->possibilities && pParamInfo->possibilities[i]; i++)
-   	    possibilities.append(pParamInfo->possibilities[i]);
-   	    
-    // The current parameter value.
+	for (int i = 0; pParamInfo->possibilities && pParamInfo->possibilities[i]; i++)
+		possibilities.append(pParamInfo->possibilities[i]);
+		
+	// The current parameter value.
 	if (pszValue)
-	    value = pszValue;
+		value = pszValue;
 	else
 		value = QString::null;
 }
@@ -125,44 +125,92 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	QString sDeviceType;
 	lscp_device_info_t *pDeviceInfo = NULL;
 	switch (deviceType) {
-	  case qsamplerDevice::Audio:
-	    sDeviceType = QObject::tr("Audio");
-	    pDeviceInfo = ::lscp_get_audio_device_info(pClient, iDeviceID);
-  		break;
-	  case qsamplerDevice::Midi:
-	    sDeviceType = QObject::tr("MIDI");
+	case qsamplerDevice::Audio:
+		sDeviceType = QObject::tr("Audio");
+		pDeviceInfo = ::lscp_get_audio_device_info(pClient, iDeviceID);
+		break;
+	case qsamplerDevice::Midi:
+		sDeviceType = QObject::tr("MIDI");
 		pDeviceInfo = ::lscp_get_midi_device_info(pClient, iDeviceID);
 		break;
 	}
-	
+
 	// If we're bogus, bail out...
 	if (pDeviceInfo == NULL) {
 		m_sDriverName = QString::null;
 		m_sDeviceName = QObject::tr("New %1 device").arg(sDeviceType);
-	    return;
+		return;
 	}
-	
+
 	// Other device properties...
 	m_sDriverName = pDeviceInfo->driver;
 	m_sDeviceName = m_sDriverName + ' '
 		+ QObject::tr("Device %1").arg(m_iDeviceID);
 
-	// Grab device/driver parameters...
+	// Grab device parameters...
 	m_params.clear();
 	for (int i = 0; pDeviceInfo->params && pDeviceInfo->params[i].key; i++) {
 		const char *pszParam = pDeviceInfo->params[i].key;
 		lscp_param_info_t *pParamInfo = NULL;
 		switch (deviceType) {
-		  case qsamplerDevice::Audio:
-		    pParamInfo = ::lscp_get_audio_driver_param_info(pClient,
+		case qsamplerDevice::Audio:
+			pParamInfo = ::lscp_get_audio_driver_param_info(pClient,
 				m_sDriverName.latin1(), pszParam, NULL);
-	  		break;
-		  case qsamplerDevice::Midi:
-		    pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
+			break;
+		case qsamplerDevice::Midi:
+			pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
 				m_sDriverName.latin1(), pszParam, NULL);
 			break;
 		}
 		m_params[pszParam] = qsamplerDeviceParam(pParamInfo, pDeviceInfo->params[i].value);
+	}
+}
+
+
+// Driver name initializer.
+void qsamplerDevice::setDriver ( lscp_client_t *pClient,
+	const QString& sDriverName )
+{
+	// Valid only for scratch devices.
+	if (m_sDriverName == sDriverName)
+		return;
+
+	// Retrieve driver info, if any.
+	lscp_driver_info_t *pDriverInfo = NULL;
+	switch (m_deviceType) {
+	case qsamplerDevice::Audio:
+		pDriverInfo = ::lscp_get_audio_driver_info(pClient,
+			sDriverName.latin1());
+		break;
+	case qsamplerDevice::Midi:
+		pDriverInfo = ::lscp_get_midi_driver_info(pClient,
+			sDriverName.latin1());
+		break;
+	}
+
+	// If we're bogus, bail out...
+	if (pDriverInfo == NULL)
+		return;
+
+	// Remember device parameters...
+	m_sDriverName = sDriverName;
+
+	// Grab driver parameters...
+	m_params.clear();
+	for (int i = 0; pDriverInfo->parameters && pDriverInfo->parameters[i]; i++) {
+		const char *pszParam = pDriverInfo->parameters[i];
+		lscp_param_info_t *pParamInfo = NULL;
+		switch (m_deviceType) {
+		case qsamplerDevice::Audio:
+			pParamInfo = ::lscp_get_audio_driver_param_info(pClient,
+				sDriverName.latin1(), pszParam, NULL);
+			break;
+		case qsamplerDevice::Midi:
+			pParamInfo = ::lscp_get_midi_driver_param_info(pClient,
+				sDriverName.latin1(), pszParam, NULL);
+			break;
+		}
+		m_params[pszParam] = qsamplerDeviceParam(pParamInfo, pParamInfo->defaultv);
 	}
 }
 
@@ -206,11 +254,11 @@ int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
 {
 	int *piDeviceIDs = NULL;
 	switch (deviceType) {
-	  case qsamplerDevice::Audio:
-	    piDeviceIDs = ::lscp_list_audio_devices(pClient);
-  		break;
-	  case qsamplerDevice::Midi:
-	    piDeviceIDs = ::lscp_list_midi_devices(pClient);
+	case qsamplerDevice::Audio:
+		piDeviceIDs = ::lscp_list_audio_devices(pClient);
+		break;
+	case qsamplerDevice::Midi:
+		piDeviceIDs = ::lscp_list_midi_devices(pClient);
 		break;
 	}
 	return piDeviceIDs;
@@ -225,16 +273,16 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 	
 	const char **ppszDrivers = NULL;
 	switch (deviceType) {
-	  case qsamplerDevice::Audio:
-	    ppszDrivers = ::lscp_get_available_audio_drivers(pClient);
-  		break;
-	  case qsamplerDevice::Midi:
-	    ppszDrivers = ::lscp_get_available_midi_drivers(pClient);
+	case qsamplerDevice::Audio:
+		ppszDrivers = ::lscp_get_available_audio_drivers(pClient);
+		break;
+	case qsamplerDevice::Midi:
+		ppszDrivers = ::lscp_get_available_midi_drivers(pClient);
 		break;
 	}
 	
-    for (int iDriver = 0; ppszDrivers[iDriver]; iDriver++)
-        drivers.append(ppszDrivers[iDriver]);
+	for (int iDriver = 0; ppszDrivers[iDriver]; iDriver++)
+		drivers.append(ppszDrivers[iDriver]);
 
 	return drivers;
 }
@@ -250,11 +298,11 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView, lscp_client_t *pC
 	: QListViewItem(pListView), m_device(pClient, deviceType)
 {
 	switch(m_device.deviceType()) {
-	  case qsamplerDevice::Audio:
+	case qsamplerDevice::Audio:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio1.png"));
 		QListViewItem::setText(0, QObject::tr("Audio devices"));
 		break;
-	  case qsamplerDevice::Midi:
+	case qsamplerDevice::Midi:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi1.png"));
 		QListViewItem::setText(0, QObject::tr("MIDI devices"));
 		break;
@@ -266,10 +314,10 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QListViewItem *pItem, lscp_client_t *pC
 	: QListViewItem(pItem), m_device(pClient, deviceType, iDeviceID)
 {
 	switch(m_device.deviceType()) {
-	  case qsamplerDevice::Audio:
+	case qsamplerDevice::Audio:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio2.png"));
 		break;
-	  case qsamplerDevice::Midi:
+	case qsamplerDevice::Midi:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi2.png"));
 		break;
 	}
@@ -283,7 +331,7 @@ qsamplerDeviceItem::~qsamplerDeviceItem (void)
 }
 
 // Instance accessors.
-const qsamplerDevice& qsamplerDeviceItem::device (void)
+qsamplerDevice& qsamplerDeviceItem::device (void)
 {
 	return m_device;
 }
@@ -304,9 +352,6 @@ int qsamplerDeviceItem::rtti() const
 qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent, const char *pszName )
 	: QTable(pParent, pszName)
 {
-	m_pClient = NULL;
-	m_iDeviceID = -1;
-
 	// Set fixed number of columns.
 	QTable::setNumCols(3);
 	QTable::setShowGrid(false);
@@ -319,12 +364,12 @@ qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent, const cha
 	// Initialize the fixed table column headings.
 	QHeader *pHeader = QTable::horizontalHeader();
 	pHeader->setLabel(0, tr("Parameter"));
-	pHeader->setLabel(1, tr("Description"));
-	pHeader->setLabel(2, tr("Value"));
+	pHeader->setLabel(1, tr("Value"));
+	pHeader->setLabel(2, tr("Description"));
 	// Set read-onlyness of each column
 	QTable::setColumnReadOnly(0, true);
-	QTable::setColumnReadOnly(1, true);
-//  QTable::setColumnReadOnly(2, true); -- of course not.
+//  QTable::setColumnReadOnly(1, true); -- of course not.
+	QTable::setColumnReadOnly(2, true);
 }
 
 // Default destructor.
@@ -333,60 +378,22 @@ qsamplerDeviceParamTable::~qsamplerDeviceParamTable (void)
 }
 
 
-// Client/device descriptor selector.
-void qsamplerDeviceParamTable::setDevice ( lscp_client_t *pClient,
-		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID )
-{
-	if (m_pClient
-		&& m_pClient    == pClient
-		&& m_deviceType == deviceType
-		&& m_iDeviceID  == iDeviceID)
-	    return;
-	    
-    m_pClient = pClient;
-    m_deviceType = deviceType;
-    m_iDeviceID = iDeviceID;
-    
-    refresh();
-}
-
-
-// Client/device descriptor accessors.
-lscp_client_t *qsamplerDeviceParamTable::client (void)
-{
-    return m_pClient;
-}
-
-int qsamplerDeviceParamTable::deviceID (void)
-{
-    return m_iDeviceID;
-}
-
-
 // The main table refresher.
-void qsamplerDeviceParamTable::refresh (void)
+void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
 {
 	// Always (re)start it empty.
 	QTable::setNumRows(0);
 
-	if (m_pClient == NULL)
-	    return;
-	    
-	// Construct the local device object here.
-	qsamplerDevice device(m_pClient, m_deviceType, m_iDeviceID);
-
-
 	// Now fill the parameter table...
-	QHeader *pHeader = QTable::verticalHeader();
-    qsamplerDeviceParamMap& params = device.params();
+	qsamplerDeviceParamMap& params = device.params();
 	QTable::insertRows(0, params.count());
 	int iRow = 0;
-	qsamplerDeviceParamMap::Iterator iter;
+	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = params.begin(); iter != params.end(); ++iter) {
-        QTable::setText(iRow, 0, iter.key());
-	    QTable::setText(iRow, 1, iter.data().description);
-	    QTable::setText(iRow, 2, iter.data().value);
-	    ++iRow;
+		QTable::setText(iRow, 0, iter.key());
+		QTable::setText(iRow, 1, iter.data().value);
+		QTable::setText(iRow, 2, iter.data().description);
+		++iRow;
 	}
 
 	// Adjust optimal column width.
