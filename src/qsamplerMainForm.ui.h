@@ -666,7 +666,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		ts << endl;
-		qsamplerDevice device(m_pClient, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
+		qsamplerDevice device(this, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
 		// Audio device specification...
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;
@@ -706,7 +706,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		ts << endl;
-		qsamplerDevice device(m_pClient, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
+		qsamplerDevice device(this, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
 		// MIDI device specification...
         ts << "# " << device.deviceTypeName() << " " << device.driverName()
 		   << " " << tr("Device") << " " << iDevice << endl;

@@ -66,8 +66,15 @@ qsamplerChannel::~qsamplerChannel (void)
 }
 
 
+// Main application form accessor.
+qsamplerMainForm *qsamplerChannel::mainForm(void) const
+{
+	return m_pMainForm;
+}
+
+
 // The global options settings delegated property.
-qsamplerOptions *qsamplerChannel::options (void)
+qsamplerOptions *qsamplerChannel::options (void) const
 {
 	if (m_pMainForm == NULL)
 		return NULL;
@@ -77,7 +84,7 @@ qsamplerOptions *qsamplerChannel::options (void)
 
 
 // The client descriptor delegated property.
-lscp_client_t *qsamplerChannel::client (void)
+lscp_client_t *qsamplerChannel::client (void) const
 {
 	if (m_pMainForm == NULL)
 		return NULL;
@@ -131,7 +138,7 @@ bool qsamplerChannel::removeChannel (void)
 
 
 // Channel-ID (aka Sammpler-Channel) accessors.
-int qsamplerChannel::channelID (void)
+int qsamplerChannel::channelID (void) const
 {
 	return m_iChannelID;
 }
@@ -143,14 +150,14 @@ void qsamplerChannel::setChannelID ( int iChannelID )
 
 
 // Readable channel name.
-QString qsamplerChannel::channelName (void)
+QString qsamplerChannel::channelName (void) const
 {
 	return (m_iChannelID < 0 ? QObject::tr("New Channel") : QObject::tr("Channel %1").arg(m_iChannelID));
 }
 
 
 // Engine name accessors.
-QString& qsamplerChannel::engineName (void)
+const QString& qsamplerChannel::engineName (void) const
 {
 	return m_sEngineName;
 }
@@ -174,25 +181,25 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 
 
 // Instrument filename accessor.
-QString& qsamplerChannel::instrumentFile (void)
+const QString& qsamplerChannel::instrumentFile (void) const
 {
 	return m_sInstrumentFile;
 }
 
 // Instrument index accessor.
-int qsamplerChannel::instrumentNr (void)
+int qsamplerChannel::instrumentNr (void) const
 {
 	return m_iInstrumentNr;
 }
 
 // Instrument name accessor.
-QString& qsamplerChannel::instrumentName (void)
+const QString& qsamplerChannel::instrumentName (void) const
 {
 	return m_sInstrumentName;
 }
 
 // Instrument status accessor.
-int qsamplerChannel::instrumentStatus (void)
+int qsamplerChannel::instrumentStatus (void) const
 {
 	return m_iInstrumentStatus;
 }
@@ -236,7 +243,7 @@ bool qsamplerChannel::setInstrument ( const QString& sInstrumentFile, int iInstr
 
 
 // MIDI driver type accessors (DEPRECATED).
-QString& qsamplerChannel::midiDriver (void)
+const QString& qsamplerChannel::midiDriver (void) const
 {
 	return m_sMidiDriver;
 }
@@ -261,7 +268,7 @@ bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 
 
 // MIDI device accessors.
-int qsamplerChannel::midiDevice (void)
+int qsamplerChannel::midiDevice (void) const
 {
 	return m_iMidiDevice;
 }
@@ -286,7 +293,7 @@ bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
 
 
 // MIDI port number accessor.
-int qsamplerChannel::midiPort (void)
+int qsamplerChannel::midiPort (void) const
 {
 	return m_iMidiPort;
 }
@@ -311,7 +318,7 @@ bool qsamplerChannel::setMidiPort ( int iMidiPort )
 
 
 // MIDI channel accessor.
-int qsamplerChannel::midiChannel (void)
+int qsamplerChannel::midiChannel (void) const
 {
 	return m_iMidiChannel;
 }
@@ -336,7 +343,7 @@ bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
 
 
 // Audio device accessor.
-int qsamplerChannel::audioDevice (void)
+int qsamplerChannel::audioDevice (void) const
 {
 	return m_iAudioDevice;
 }
@@ -361,7 +368,7 @@ bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
 
 
 // Audio driver type accessors (DEPRECATED).
-QString& qsamplerChannel::audioDriver (void)
+const QString& qsamplerChannel::audioDriver (void) const
 {
 	return m_sAudioDriver;
 }
@@ -386,7 +393,7 @@ bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 
 
 // Channel volume accessors.
-float qsamplerChannel::volume (void)
+float qsamplerChannel::volume (void) const
 {
 	return m_fVolume;
 }
@@ -526,31 +533,32 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 
 
 // Redirected messages output methods.
-void qsamplerChannel::appendMessages( const QString& s )
+void qsamplerChannel::appendMessages( const QString& s ) const
 {
 	if (m_pMainForm)
 		m_pMainForm->appendMessages(channelName() + ' ' + s);
 }
 
-void qsamplerChannel::appendMessagesColor( const QString& s, const QString& c )
+void qsamplerChannel::appendMessagesColor( const QString& s,
+	const QString& c ) const
 {
 	if (m_pMainForm)
 		m_pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
 }
 
-void qsamplerChannel::appendMessagesText( const QString& s )
+void qsamplerChannel::appendMessagesText( const QString& s ) const
 {
 	if (m_pMainForm)
 		m_pMainForm->appendMessagesText(channelName() + ' ' + s);
 }
 
-void qsamplerChannel::appendMessagesError( const QString& s )
+void qsamplerChannel::appendMessagesError( const QString& s ) const
 {
 	if (m_pMainForm)
 		m_pMainForm->appendMessagesError(channelName() + "\n\n" + s);
 }
 
-void qsamplerChannel::appendMessagesClient( const QString& s )
+void qsamplerChannel::appendMessagesClient( const QString& s ) const
 {
 	if (m_pMainForm)
 		m_pMainForm->appendMessagesClient(channelName() + ' ' + s);
