@@ -45,62 +45,67 @@ public:
 	// Default destructor.
 	~qsamplerChannel();
 
+	// Main application form accessor.
+	qsamplerMainForm *mainForm() const;
+	
 	// Main application options accessor.
-	qsamplerOptions *options();
+	qsamplerOptions *options() const;
 
 	// LSCP client descriptor accessor.
-	lscp_client_t * client();
+	lscp_client_t * client() const;
 
 	// Add/remove sampler channel methods.
 	bool     addChannel();
 	bool     removeChannel();
 
 	// Sampler channel ID accessors.
-	int      channelID();
+	int      channelID() const;
 	void     setChannelID(int iChannelID);
 
 	// Readable channel name.
-	QString  channelName();
+	QString  channelName() const;
 
 	// Engine name property.
-	QString& engineName();
+	const QString& engineName() const;
 	bool     loadEngine(const QString& sEngineName);
 
 	// Instrument file and index.
-	QString& instrumentFile();
-	int      instrumentNr();
-	QString& instrumentName();
-	int      instrumentStatus();
+	const QString& instrumentFile() const;
+	int      instrumentNr() const;
+	const QString& instrumentName() const;
+	int      instrumentStatus() const;
+	
+	// Instrument file loader.
 	bool     loadInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 	// Special instrument file/name/number settler.
 	bool     setInstrument(const QString& sInstrumentFile, int iInstrumentNr);
 
 	// MIDI input driver (DEPRECATED).
-	QString& midiDriver();
+	const QString& midiDriver() const;
 	bool     setMidiDriver(const QString& sMidiDriver);
 
 	// MIDI input device.
-	int      midiDevice();
+	int      midiDevice() const;
 	bool     setMidiDevice(int iMidiDevice);
 
 	// MIDI input port.
-	int      midiPort();
+	int      midiPort() const;
 	bool     setMidiPort(int iMidiPort);
 
 	// MIDI input channel.
-	int      midiChannel();
+	int      midiChannel() const;
 	bool     setMidiChannel(int iMidiChannel);
 
 	// Audio output driver (DEPRECATED).
-	QString& audioDriver();
+	const QString& audioDriver() const;
 	bool     setAudioDriver(const QString& sAudioDriver);
 
 	// Audio output device.
-	int      audioDevice();
+	int      audioDevice() const;
 	bool     setAudioDevice(int iAudioDevice);
 
 	// Sampler channel volume.
-	float    volume();
+	float    volume() const;
 	bool     setVolume(float fVolume);
 
 	// Istrument name remapper.
@@ -116,11 +121,11 @@ public:
 	bool     channelReset();
 
 	// Message logging methods (brainlessly mapped to main form's).
-	void     appendMessages       (const QString & s);
-	void     appendMessagesColor  (const QString & s, const QString & c);
-	void     appendMessagesText   (const QString & s);
-	void     appendMessagesError  (const QString & s);
-	void     appendMessagesClient (const QString & s);
+	void     appendMessages       (const QString & s) const;
+	void     appendMessagesColor  (const QString & s, const QString & c) const;
+	void     appendMessagesText   (const QString & s) const;
+	void     appendMessagesError  (const QString & s) const;
+	void     appendMessagesClient (const QString & s) const;
 
 	// Context menu event handler.
 	void contextMenuEvent(QContextMenuEvent *pEvent);

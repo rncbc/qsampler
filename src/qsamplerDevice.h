@@ -34,7 +34,8 @@
 // Special QListViewItem::rtti() unique return value.
 #define	QSAMPLER_DEVICE_ITEM    1001
 
-// Early forward declaration.
+// Early forward declarations.
+class qsamplerMainForm;
 class qsamplerDevicePort;
 
 
@@ -89,28 +90,32 @@ public:
 	enum qsamplerDeviceType { None, Midi, Audio };
 
 	// Constructor.
-	qsamplerDevice(lscp_client_t *pClient,
+	qsamplerDevice(qsamplerMainForm *pMainForm,
 		qsamplerDeviceType deviceType, int iDeviceID = -1);
+	// Copy constructor.
+    qsamplerDevice(const qsamplerDevice& device);
 	// Default destructor.
 	~qsamplerDevice();
 
 	// Initializer.
-	void setDevice(lscp_client_t *pClient,
-		qsamplerDeviceType deviceType, int iDeviceID = -1);
+	void setDevice(qsamplerDeviceType deviceType, int iDeviceID = -1);
 
 	// Driver name initializer.
-	void setDriver(lscp_client_t *pClient,
-		const QString& sDriverName);
+	void setDriver(const QString& sDriverName);
+
+	// LSCP client descriptor accessor.
+	lscp_client_t *client() const;
 
 	// Device property accessors.
 	int                 deviceID()   const;
 	qsamplerDeviceType  deviceType() const;
 	const QString&      deviceTypeName() const;
 	const QString&      driverName() const;
-	const QString&      deviceName() const;
+	// Special device name formatter.
+	QString deviceName() const;
 
 	// Set the proper device parameter value.
-	void setParam (const QString& sParam, const QString& sValue);
+	bool setParam (const QString& sParam, const QString& sValue);
 
 	// Device parameters accessor.
 	const qsamplerDeviceParamMap& params() const;
@@ -119,11 +124,22 @@ public:
 	qsamplerDevicePortList& ports();
 
 	// Device parameter dependency list refreshner.
-	int refreshParams(lscp_client_t *pClient);
+	int refreshParams();
 	// Device port/channel list refreshner.
-	int refreshPorts(lscp_client_t *pClient);
+	int refreshPorts();
 	// Refresh/set dependencies given that some parameter has changed.
-	int refreshDepends(lscp_client_t *pClient, const QString& sParam);
+	int refreshDepends(const QString& sParam);
+
+	// Create/destroy device methods.
+	bool createDevice();
+	bool deleteDevice();
+
+	// Message logging methods (brainlessly mapped to main form's).
+	void appendMessages       (const QString& s) const;
+	void appendMessagesColor  (const QString& s, const QString & c) const;
+	void appendMessagesText   (const QString& s) const;
+	void appendMessagesError  (const QString& s) const;
+	void appendMessagesClient (const QString& s) const;
 
 	// Device ids enumerator.
 	static int *getDevices(lscp_client_t *pClient,
@@ -136,7 +152,10 @@ public:
 private:
 
 	// Refresh/set given parameter based on driver supplied dependencies.
-	int refreshParam(lscp_client_t *pClient, const QString& sParam);
+	int refreshParam(const QString& sParam);
+
+	// Main application form reference.
+	qsamplerMainForm  *m_pMainForm;
 
 	// Instance variables.
 	int                m_iDeviceID;
@@ -162,14 +181,12 @@ class qsamplerDevicePort
 public:
 
 	// Constructor.
-	qsamplerDevicePort(lscp_client_t *pClient,
-		const qsamplerDevice& device, int iPortID);
+	qsamplerDevicePort(qsamplerDevice& device, int iPortID);
 	// Default destructor.
 	~qsamplerDevicePort();
 
 	// Initializer.
-	void setDevicePort(lscp_client_t *pClient,
-		const qsamplerDevice& device, int iPortID);
+	void setDevicePort(int iPortID);
 
 	// Device port property accessors.
 	int            portID()   const;
@@ -179,10 +196,13 @@ public:
 	const qsamplerDeviceParamMap& params() const;
 
 	// Set the proper device port/channel parameter value.
-	void setParam (const QString& sParam, const QString& sValue);
+	bool setParam (const QString& sParam, const QString& sValue);
 
 private:
 
+	// Device reference.
+	qsamplerDevice& m_device;
+	
 	// Instance variables.
 	int     m_iPortID;
 	QString m_sPortName;
@@ -201,9 +221,9 @@ class qsamplerDeviceItem : public QListViewItem
 public:
 
 	// Constructors.
-	qsamplerDeviceItem(QListView *pListView, lscp_client_t *pClient,
+	qsamplerDeviceItem(QListView *pListView, qsamplerMainForm *pMainForm,
 		qsamplerDevice::qsamplerDeviceType deviceType);
-	qsamplerDeviceItem(QListViewItem *pItem, lscp_client_t *pClient,
+	qsamplerDeviceItem(QListViewItem *pItem, qsamplerMainForm *pMainForm,
 		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID);
 	// Default destructor.
 	~qsamplerDeviceItem();
