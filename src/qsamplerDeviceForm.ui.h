@@ -37,9 +37,10 @@ void qsamplerDeviceForm::init (void)
 	m_pMainForm   = (qsamplerMainForm *) QWidget::parentWidget();
 	m_pClient     = NULL;
 	m_iDirtySetup = 0;
-	m_iDirtyCount = 0;
 	m_bNewDevice  = false;
 	m_deviceType  = qsamplerDevice::None;
+	m_pAudioItems = NULL;
+	m_pMidiItems  = NULL;
 
 	// This an outsider (from designer), but rather important.
 	QObject::connect(DeviceParamTable, SIGNAL(valueChanged(int,int)),
@@ -96,11 +97,6 @@ void qsamplerDeviceForm::setClient ( lscp_client_t *pClient )
 // Create a new device from current table view.
 void qsamplerDeviceForm::createDevice (void)
 {
-	//
-	// TODO: Create a new device from current table view...
-	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::createDevice()");
-
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
@@ -122,14 +118,17 @@ void qsamplerDeviceForm::createDevice (void)
 	pParams[iParam].value = NULL;
 
 	// Now it depends on the device type...
+	qsamplerDeviceItem *pRootItem = NULL;
 	int iDeviceID = -1;
 	switch (device.deviceType()) {
 	case qsamplerDevice::Audio:
+	    pRootItem = m_pAudioItems;
 		if ((iDeviceID = ::lscp_create_audio_device(m_pClient,
 				device.driverName().latin1(), pParams)) < 0)
 			m_pMainForm->appendMessagesClient("lscp_create_audio_device");
 		break;
 	case qsamplerDevice::Midi:
+	    pRootItem = m_pMidiItems;
 		if ((iDeviceID = ::lscp_create_midi_device(m_pClient,
 				device.driverName().latin1(), pParams)) < 0)
 			m_pMainForm->appendMessagesClient("lscp_create_midi_device");
@@ -141,11 +140,16 @@ void qsamplerDeviceForm::createDevice (void)
 	// Free used parameter array.
 	delete pParams;
 
-	// Show result.
+	// We're on to create the new device item.
 	if (iDeviceID >= 0) {
-		m_pMainForm->appendMessages(device.deviceName() + ' ' +	tr("created."));
+		// Append the new device item.
+		qsamplerDeviceItem *pDeviceItem = new qsamplerDeviceItem(pRootItem,
+			m_pClient, device.deviceType(), iDeviceID);
+		// Just make it the new selection...
+		DeviceListView->setSelected(pDeviceItem, true);
 		// Done.
-		refreshDevices();
+		m_pMainForm->appendMessages(pDeviceItem->device().deviceName() + ' '
+			+ tr("created."));
 		// Main session should be marked dirty.
 		m_pMainForm->sessionDirty();
 	}
@@ -155,16 +159,24 @@ void qsamplerDeviceForm::createDevice (void)
 // Delete current device in table view.
 void qsamplerDeviceForm::deleteDevice (void)
 {
-	//
-	// TODO: Delete current device in table view...
-	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::deleteDevice()");
-
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+
+	// Prompt user if this is for real...
+	qsamplerOptions *pOptions = m_pMainForm->options();
+    if (pOptions && pOptions->bConfirmRemove) {
+        if (QMessageBox::warning(this, tr("Warning"),
+            tr("Delete %1 device:\n\n"
+               "%2\n\n"
+               "Are you sure?")
+               .arg(device.deviceTypeName())
+               .arg(device.deviceName()),
+            tr("OK"), tr("Cancel")) > 0)
+            return;
+    }
 
 	// Now it depends on the device type...
 	lscp_status_t ret = LSCP_FAILED;
@@ -185,9 +197,11 @@ void qsamplerDeviceForm::deleteDevice (void)
 
 	// Show result.
 	if (ret == LSCP_OK) {
-		m_pMainForm->appendMessages(device.deviceName() + ' ' +	tr("deleted."));
+		// Show log message before loosing it.
+		m_pMainForm->appendMessages(device.deviceName() + ' '
+			+ tr("deleted."));
 		// Done.
-		refreshDevices();
+		delete pItem;
 		// Main session should be marked dirty.
 		m_pMainForm->sessionDirty();
 	}
@@ -201,42 +215,40 @@ void qsamplerDeviceForm::refreshDevices (void)
 	m_iDirtySetup++;
 
 	//
-	// TODO: Load device configuration data ...
+	// (Re)Load complete device configuration data ...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::refreshDevices()");
-
+	m_pAudioItems = NULL;
+	m_pMidiItems = NULL;
 	DeviceListView->clear();
 	if (m_pClient) {
-		qsamplerDeviceItem *pItem;
 		int *piDeviceIDs;
 		// Grab and pop Audio devices...
-		pItem = new qsamplerDeviceItem(DeviceListView, m_pClient,
+		m_pAudioItems = new qsamplerDeviceItem(DeviceListView, m_pClient,
 			qsamplerDevice::Audio);
-		if (pItem) {
-			pItem->setText(0, tr("Audio"));
+		if (m_pAudioItems) {
+			m_pAudioItems->setText(0, tr("Audio"));
 			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
 			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
-				new qsamplerDeviceItem(pItem, m_pClient,
+				new qsamplerDeviceItem(m_pAudioItems, m_pClient,
 					qsamplerDevice::Audio, piDeviceIDs[i]);
 			}
-			pItem->setOpen(true);
+			m_pAudioItems->setOpen(true);
 		}
 		// Grab and pop MIDI devices...
-		pItem = new qsamplerDeviceItem(DeviceListView, m_pClient,
+		m_pMidiItems = new qsamplerDeviceItem(DeviceListView, m_pClient,
 			qsamplerDevice::Midi);
-		if (pItem) {
-			pItem->setText(0, tr("MIDI"));
+		if (m_pMidiItems) {
+			m_pMidiItems->setText(0, tr("MIDI"));
 			piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 			for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
-				new qsamplerDeviceItem(pItem, m_pClient,
+				new qsamplerDeviceItem(m_pMidiItems, m_pClient,
 					qsamplerDevice::Midi, piDeviceIDs[i]);
 			}
-			pItem->setOpen(true);
+			m_pMidiItems->setOpen(true);
 		}
 	}
 
 	// Done.
-	m_iDirtyCount = 0;
 	m_iDirtySetup--;
 
 	// Show something.
@@ -251,9 +263,8 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 		return;
 
 	//
-	//  TODO: Driver name has changed for a new device...
+	//  Driver name has changed for a new device...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDriver()");
 
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
@@ -263,9 +274,10 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 
 	// Driver change is only valid for scratch devices...
 	if (m_bNewDevice) {
+		m_iDirtySetup++;
 		device.setDriver(m_pClient, sDriverName);
 		DeviceParamTable->refresh(device);
-		m_iDirtyCount++;
+		m_iDirtySetup--;
 		// Done.
 		stabilizeForm();
 	}
@@ -279,9 +291,8 @@ void qsamplerDeviceForm::selectDevice (void)
 		return;
 
 	//
-	//  TODO: Device selection has changed...
+	//  Device selection has changed...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::selectDevice()");
 
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM) {
@@ -292,6 +303,7 @@ void qsamplerDeviceForm::selectDevice (void)
 		return;
 	}
 
+	m_iDirtySetup++;
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	// Flag whether this is a new device.
@@ -318,6 +330,7 @@ void qsamplerDeviceForm::selectDevice (void)
 	// Fill the device parameter table...
 	DeviceParamTable->refresh(device);
 	// Done.
+	m_iDirtySetup--;
 	stabilizeForm();
 }
 
@@ -325,15 +338,20 @@ void qsamplerDeviceForm::selectDevice (void)
 // parameter value change slot.
 void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 {
+	if (m_iDirtySetup > 0)
+	    return;
+	if (iRow < 0 || iCol < 0)
+	    return;
+	    
 	//
-	//  TODO: Device parameter change...
+	//  Device parameter change...
 	//
-	m_pMainForm->appendMessages("qsamplerDeviceForm::changeValue()");
-	
+
 	QListViewItem *pItem = DeviceListView->selectedItem();
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
 
+	m_iDirtySetup++;
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	// Table 1st column has the parameter name;
@@ -366,13 +384,13 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 		}
 		// Show result.
 		if (ret == LSCP_OK) {
-			m_pMainForm->appendMessages(device.deviceName() + ' ' +
-				QString("%1: %2.").arg(sParam).arg(sValue));
+			m_pMainForm->appendMessages(device.deviceName() + ' '
+				+ QString("%1: %2.").arg(sParam).arg(sValue));
 		}
 	}
 
 	// Done.
-	m_iDirtyCount++;
+	m_iDirtySetup--;
 	stabilizeForm();
 	// Main session should be dirtier...
 	m_pMainForm->sessionDirty();
