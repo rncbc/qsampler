@@ -148,20 +148,20 @@ void qsamplerMessages::setCaptureEnabled ( bool bCapture )
         delete m_pStdoutNotifier;
         m_pStdoutNotifier = NULL;
         // Close the notification pipes.
-        if (m_fdPort[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
+        if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
             ::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
             m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
         }
-        if (m_fdPort[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
+        if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
             ::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
             m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
         }
     }
     // Are we going to make up the capture?
-    if (bCapture && m_pStdoutCapture == NULL && ::pipe(m_fdStdout) == 0) {
-        ::dup2(m_fdStdout[QSAMPLER_FDWRITE], STDOUT_FILENO);
-        ::dup2(m_fdStdout[QSAMPLER_FDWRITE], STDERR_FILENO);
-        m_pStdoutNotifier = new QSocketNotifier(m_fdStdout[QSAMPLER_FDREAD], QSocketNotifier::Read, this);
+    if (bCapture && m_pStdoutNotifier == NULL && ::pipe(m_fdStdout) == 0) {
+        ::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDOUT_FILENO);
+        ::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDERR_FILENO);
+        m_pStdoutNotifier = new QSocketNotifier(m_fdStdout[QSAMPLER_MESSAGES_FDREAD], QSocketNotifier::Read, this);
         QObject::connect(m_pStdoutNotifier, SIGNAL(activated(int)), this, SLOT(stdoutNotify(int)));
     }
 #endif
