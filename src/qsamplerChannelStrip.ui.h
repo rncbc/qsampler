@@ -454,6 +454,8 @@ void qsamplerChannelStrip::updateChannelUsage (void)
         if (m_iInstrumentStatus == 100) {
             if (::lscp_reset_channel(client(), m_iChannelID) != LSCP_OK)
                 appendMessagesClient("lscp_reset_channel");
+            else
+                appendMessages(tr("Channel %1 reset.").arg(m_iChannelID));
         }
     }
     // Leave, if we still have an erroneus or incomplete instrument load.
@@ -541,4 +543,3 @@ void qsamplerChannelStrip::setMaxVolume ( int iMaxVolume )
 
 
 // end of qsamplerChannelStrip.ui.h
-
