@@ -850,6 +850,8 @@ void qsamplerMainForm::editResetChannel (void)
 
     // Refresh channel strip info.
     pChannelStrip->updateChannelInfo();
+    // And force a deferred update.
+    m_iChangeCount++;
 }
 
 
