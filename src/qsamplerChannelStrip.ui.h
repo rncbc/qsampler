@@ -1,4 +1,4 @@
-// qsamplerChannelForm.ui.h
+// qsamplerChannelStrip.ui.h
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
@@ -24,11 +24,13 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
+#include "qsamplerChannelForm.h"
+
 #include "config.h"
 
 
 // Kind of constructor.
-void qsamplerChannelForm::init (void)
+void qsamplerChannelStrip::init (void)
 {
     // Try to restore normal window positioning.
     adjustSize();
@@ -36,25 +38,21 @@ void qsamplerChannelForm::init (void)
 
 
 // Kind of destructor.
-void qsamplerChannelForm::destroy (void)
+void qsamplerChannelStrip::destroy (void)
 {
 }
 
 
-// Accept settings (OK button slot).
-void qsamplerChannelForm::accept (void)
+// Channel setup dialog.
+void qsamplerChannelStrip::channelSetup (void)
 {
-    // Just go with dialog acceptance.
-    QDialog::accept();
+    qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(this);
+    if (pChannelForm) {
+        pChannelForm->exec();
+        delete pChannelForm;
+    }
 }
 
 
-// Reject settings (Cancel button slot).
-void qsamplerChannelForm::reject (void)
-{
-    QDialog::reject();
-}
-
-
-// end of qsamplerChannelForm.ui.h
+// end of qsamplerChannelStrip.ui.h
 

@@ -20,7 +20,7 @@
 
 </comment>
 <author>rncbc aka Rui Nuno Capela</author>
-<widget class="QWidget">
+<widget class="QDialog">
     <property name="name">
         <cstring>qsamplerChannelForm</cstring>
     </property>
@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>696</width>
-            <height>119</height>
+            <width>388</width>
+            <height>256</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -44,7 +44,7 @@
         <string>Channel</string>
     </property>
     <property name="icon">
-        <pixmap>qsampler.png</pixmap>
+        <pixmap>fileNew.png</pixmap>
     </property>
     <property name="focusPolicy">
         <enum>StrongFocus</enum>
@@ -53,6 +53,22 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>EngineComboBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Engine name</string>
+            </property>
+        </widget>
         <widget class="QLabel" row="0" column="0">
             <property name="name">
                 <cstring>EngineTextLabel</cstring>
@@ -69,15 +85,205 @@
                 <string>&amp;Engine:</string>
             </property>
             <property name="alignment">
-                <set>AlignVCenter</set>
+                <set>AlignVCenter|AlignRight</set>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>EngineComboBox</cstring>
             </property>
         </widget>
-        <widget class="QGroupBox" row="1" column="0" rowspan="2" colspan="4">
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>InstrumentTextLabel</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="text">
+                <string>&amp;Instrument:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>InstrumentComboBox</cstring>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="3">
+            <property name="name">
+                <cstring>InstrumentPushButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>24</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>24</width>
+                    <height>24</height>
+                </size>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>fileOpen.png</pixmap>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>InstrumentComboBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Engine name</string>
+            </property>
+        </widget>
+        <spacer row="3" column="0" rowspan="2" colspan="1">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>8</width>
+                    <height>8</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>8</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>OkPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>formAccept.png</iconset>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>CancelPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>formReject.png</iconset>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QSpinBox" row="2" column="1">
+            <property name="name">
+                <cstring>IndexSpinBox</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>60</width>
+                    <height>32767</height>
+                </size>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Instrument index</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>IndexTextLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Inde&amp;x:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>IndexSpinBox</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="2" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>InstrumentNameTextLabel</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Instrument name</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="3" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>MidiGroupBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="title">
                 <string>&amp;MIDI/Input</string>
@@ -121,42 +327,6 @@
                 </widget>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>MidiPortTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Port:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>MidiPortLineEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>MidiPortLineEdit</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>30</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI input port</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
                         <cstring>MidiChannelTextLabel</cstring>
                     </property>
                     <property name="text">
@@ -183,14 +353,64 @@
                         <string>MIDI input channel</string>
                     </property>
                 </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>MidiPortTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Port:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>MidiPortComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>MidiPortComboBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>1</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>60</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>MIDI input port</string>
+                    </property>
+                </widget>
             </hbox>
         </widget>
-        <widget class="QGroupBox" row="1" column="4" rowspan="2" colspan="2">
+        <widget class="QGroupBox" row="4" column="1" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>AudioGroupBox</cstring>
             </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
             <property name="title">
                 <string>&amp;Audio/Output</string>
+            </property>
+            <property name="alignment">
+                <set>AlignAuto</set>
             </property>
             <hbox>
                 <property name="name">
@@ -262,231 +482,58 @@
                         <string>Audio output channel </string>
                     </property>
                 </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>8</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
             </hbox>
-        </widget>
-        <widget class="QLabel" row="0" column="2">
-            <property name="name">
-                <cstring>InstrumentTextLabel</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>&amp;Instrument:</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>InstrumentLineEdit</cstring>
-            </property>
-        </widget>
-        <widget class="QLineEdit" row="0" column="3" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>InstrumentLineEdit</cstring>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Instrument filename</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="0" column="5">
-            <property name="name">
-                <cstring>InstrumentPushButton</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>22</width>
-                    <height>22</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>22</width>
-                    <height>22</height>
-                </size>
-            </property>
-            <property name="text">
-                <string></string>
-            </property>
-            <property name="pixmap">
-                <pixmap>fileOpen.png</pixmap>
-            </property>
-        </widget>
-        <widget class="QGroupBox" row="0" column="6" rowspan="3" colspan="1">
-            <property name="name">
-                <cstring>VolumeGroupBox</cstring>
-            </property>
-            <property name="title">
-                <string>&amp;Volume</string>
-            </property>
-            <property name="alignment">
-                <set>AlignAuto</set>
-            </property>
-            <vbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QDial">
-                    <property name="name">
-                        <cstring>VolumeDial</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>40</width>
-                            <height>40</height>
-                        </size>
-                    </property>
-                    <property name="notchTarget">
-                        <number>10</number>
-                    </property>
-                    <property name="notchesVisible">
-                        <bool>true</bool>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Channel volume</string>
-                    </property>
-                </widget>
-                <widget class="QSpinBox">
-                    <property name="name">
-                        <cstring>VolumeSpinBox</cstring>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>40</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="maxValue">
-                        <number>100</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Channel volume</string>
-                    </property>
-                </widget>
-            </vbox>
-        </widget>
-        <widget class="QProgressBar" row="2" column="7" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>StreamUsageProgressBar</cstring>
-            </property>
-            <property name="indicatorFollowsStyle">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Total stream usage (%)</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="7">
-            <property name="name">
-                <cstring>VoiceCountTextLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Voice count:</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="0" column="8">
-            <property name="name">
-                <cstring>VoiceCountTextValue</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>30</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>60</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>0</red>
-                    <green>255</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>Panel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="text">
-                <string>0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-        </widget>
-        <widget class="QLabel" row="1" column="7" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>StreamUsageTextLabel</cstring>
-            </property>
-            <property name="text">
-                <string>Stream usage:</string>
-            </property>
-            <property name="alignment">
-                <set>AlignBottom</set>
-            </property>
-        </widget>
-        <widget class="QComboBox" row="0" column="1">
-            <property name="name">
-                <cstring>EngineComboBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Engine name</string>
-            </property>
         </widget>
     </grid>
 </widget>
+<connections>
+    <connection>
+        <sender>OkPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>CancelPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
 <tabstops>
     <tabstop>EngineComboBox</tabstop>
-    <tabstop>InstrumentLineEdit</tabstop>
+    <tabstop>InstrumentComboBox</tabstop>
     <tabstop>InstrumentPushButton</tabstop>
+    <tabstop>IndexSpinBox</tabstop>
     <tabstop>MidiTypeComboBox</tabstop>
-    <tabstop>MidiPortLineEdit</tabstop>
     <tabstop>MidiChannelSpinBox</tabstop>
+    <tabstop>MidiPortComboBox</tabstop>
     <tabstop>AudioTypeComboBox</tabstop>
     <tabstop>AudioChannelSpinBox</tabstop>
-    <tabstop>VolumeDial</tabstop>
-    <tabstop>VolumeSpinBox</tabstop>
+    <tabstop>OkPushButton</tabstop>
+    <tabstop>CancelPushButton</tabstop>
 </tabstops>
+<slots>
+    <slot specifier="non virtual">accept()</slot>
+    <slot specifier="non virtual">reject()</slot>
+</slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
