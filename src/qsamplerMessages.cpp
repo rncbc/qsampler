@@ -22,6 +22,7 @@
 #include "qsamplerMessages.h"
 
 #include <qsocketnotifier.h>
+#include <qstringlist.h>
 #include <qtextedit.h>
 #include <qdatetime.h>
 #include <qtooltip.h>
