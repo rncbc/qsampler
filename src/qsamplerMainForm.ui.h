@@ -601,7 +601,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         ts << "ADD CHANNEL" << endl;
         ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID << " " << pChannel->audioDriver() << endl;
         ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID << " " << pChannel->midiDriver() << endl;
-    //  ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
+        ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID << " " << pChannel->midiPort() << endl;
         ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " " << pChannel->midiChannel() << endl;
         ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannelID << endl;
         ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannelID << endl;
