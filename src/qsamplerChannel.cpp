@@ -466,8 +466,7 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
         gig::File  *pGig  = new gig::File(pRiff);
         gig::Instrument *pInstrument = pGig->GetFirstInstrument();
         while (pInstrument) {
-            sInstrumentName = (pInstrument->pInfo)->Name;
-            instlist.append(sInstrumentName);
+            instlist.append((pInstrument->pInfo)->Name.c_str());
             pInstrument = pGig->GetNextInstrument();
         }
         delete pGig;
@@ -478,7 +477,7 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile )
 #endif
     }
     else instlist.append(sInstrumentName);
-    
+
     return instlist;
 }
 
@@ -497,7 +496,7 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile, int 
         gig::Instrument *pInstrument = pGig->GetFirstInstrument();
         while (pInstrument) {
             if (iIndex == iInstrumentNr) {
-                sInstrumentName = (pInstrument->pInfo)->Name;
+                sInstrumentName = (pInstrument->pInfo)->Name.c_str();
                 break;
             }
             iIndex++;
