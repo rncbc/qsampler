@@ -166,7 +166,7 @@ private:
 
 	// Device parameter list.
 	qsamplerDeviceParamMap m_params;
-	
+
 	// Device port/channel list.
 	qsamplerDevicePortList m_ports;
 };
@@ -202,7 +202,7 @@ private:
 
 	// Device reference.
 	qsamplerDevice& m_device;
-	
+
 	// Instance variables.
 	int     m_iPortID;
 	QString m_sPortName;
