@@ -3,5 +3,27 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+0.0.2   2004-06-07  Work in progress...
+
+* Comment SET CHANNEL MIDI_INPUT_PORT command from
+  saveSessionFile(), it has no effect.
+
+* Insert a n #include <unistd.h> on qsamplerMessages.h, between
+  a #if !defined(WIN32) clause.
+
+* An initial non zero value (0.8) should be set for the channel
+  volume, while GET CHANNEL INFO command is pending implementation.
+
+* The order to load/save and setup channel settings is now as
+  suggested in the following lines:
+
+    SET CHANNEL AUDIO_OUTPUT_TYPE ...
+    SET CHANNEL MIDI_INPUT_TYPE ...
+    SET CHANNEL MIDI_INPUT_CHANNEL ...
+    LOAD ENGINE ...
+    LOAD INSTRUMENT ...
+    SET CHANNEL VOLUME ...
+
+
 0.0.1   2004-06-05  Primordial alpha release.
 
