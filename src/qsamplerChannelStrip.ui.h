@@ -22,6 +22,7 @@
 
 #include <qvalidator.h>
 #include <qmessagebox.h>
+#include <qdragobject.h>
 #include <qfileinfo.h>
 #include <qtooltip.h>
 #include <qpopupmenu.h>
@@ -34,6 +35,10 @@
 
 #include "config.h"
 
+// Channel status/usage usage limit control.
+#define QSAMPLER_ERROR_LIMIT	3
+#define QSAMPLER_ERROR_CYCLE	33 
+
 
 // Kind of constructor.
 void qsamplerChannelStrip::init (void)
@@ -41,6 +46,7 @@ void qsamplerChannelStrip::init (void)
     // Initialize locals.
     m_pChannel     = NULL;
     m_iDirtyChange = 0;
+	m_iErrorCount  = 0;
 
     // Try to restore normal window positioning.
     adjustSize();
@@ -57,6 +63,51 @@ void qsamplerChannelStrip::destroy (void)
 }
 
 
+// Drag'n'drop file handler.
+bool qsamplerChannelStrip::decodeDragFile ( const QMimeSource *pEvent, QString& sInstrumentFile )
+{
+	if (m_pChannel == NULL)
+		return false;
+
+	if (QTextDrag::canDecode(pEvent)) {
+		QString sText;
+		if (QTextDrag::decode(pEvent, sText)) {
+			QStringList files = QStringList::split('\n', sText);
+			for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
+				*iter = (*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null);
+				if (qsamplerChannel::isInstrumentFile(*iter)) {
+					sInstrumentFile = *iter;
+					return true;
+				}
+			}
+		}
+	}
+	// Fail.
+	return false;
+}
+
+
+// Window drag-n-drop event handlers.
+void qsamplerChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
+{
+	QString sInstrumentFile;
+	pDragEnterEvent->accept(decodeDragFile(pDragEnterEvent, sInstrumentFile));
+}
+
+
+void qsamplerChannelStrip::dropEvent ( QDropEvent* pDropEvent )
+{
+	QString sInstrumentFile;
+
+	if (decodeDragFile(pDropEvent, sInstrumentFile)) {
+		// Go and set the dropped instrument filename...
+		m_pChannel->setInstrument(sInstrumentFile, 0);
+		// Open up the channel dialog.
+		channelSetup();
+	}
+}
+
+
 // Channel strip setup formal initializer.
 void qsamplerChannelStrip::setup ( qsamplerChannel *pChannel )
 {
@@ -67,9 +118,13 @@ void qsamplerChannelStrip::setup ( qsamplerChannel *pChannel )
 
     // Set the new one...
     m_pChannel = pChannel;
-
+    
     // Stabilize this around.
     updateChannelInfo();
+
+	// We'll accept drops from now on...
+	if (m_pChannel)
+		setAcceptDrops(true);
 }
 
 // Channel secriptor accessor.
@@ -123,15 +178,30 @@ void qsamplerChannelStrip::setDisplayBackground ( const QPixmap& pm )
 }
 
 
+// Maximum volume slider accessors.
+void qsamplerChannelStrip::setMaxVolume ( int iMaxVolume )
+{
+    m_iDirtyChange++;
+    VolumeSlider->setRange(0, iMaxVolume);
+    VolumeSpinBox->setRange(0, iMaxVolume);
+    m_iDirtyChange--;
+}
+
+
 // Channel setup dialog slot.
 bool qsamplerChannelStrip::channelSetup (void)
 {
-    bool bResult = m_pChannel->channelSetup(this);
+	// Invoke the channel setup dialog.
+	bool bResult = m_pChannel->channelSetup(this);
 
-    if (bResult)
-        emit channelChanged(this);
+	if (bResult) {
+		// Reset the error/cycle.
+		m_iErrorCount = 0;
+		// Notify that thie channel has changed.
+		emit channelChanged(this);
+	}
 
-    return bResult;
+	return bResult;
 }
 
 
@@ -245,22 +315,33 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
     if (m_pChannel->client() == NULL)
         return false;
 
-    // Update whole channel status info,
-    // if instrument load is still pending...
-    if (m_pChannel->instrumentStatus() < 100) {
-        updateChannelInfo();
-        // Check (updated) status again...
-        if (m_pChannel->instrumentStatus() < 100)
-            return false;
-        // Once we get a complete instrument load,
-        // we'll try an implied channel reset...
-        m_pChannel->resetChannel();
-    }
-    
-    // Check again that we're clean.
-    if (m_pChannel->instrumentStatus() < 100)
-        return false;
+	// Check for error limit/recycle...
+	if (m_iErrorCount > QSAMPLER_ERROR_LIMIT)
+		m_iErrorCount -= QSAMPLER_ERROR_CYCLE;
+	if (m_iErrorCount < 0) {
+		m_iErrorCount++;
+		return false;
+	}
 
+	// Update whole channel status info,
+	// if instrument load is still pending...
+	if (m_pChannel->instrumentStatus() < 100) {
+		// grab the whole sampler channel data...
+		updateChannelInfo();
+		// Check (updated) status again...
+		int iInstrumentStatus = m_pChannel->instrumentStatus();
+		if (iInstrumentStatus < 100) {
+			if (iInstrumentStatus < 0)
+				m_iErrorCount++;
+			return false;
+		}
+		// Once we get a complete instrument load,
+		// we'll try an implied channel reset...
+		m_pChannel->resetChannel();
+		// Reset error count.
+		m_iErrorCount = 0;
+	}
+    
     // Get current channel voice count.
     int iVoiceCount  = ::lscp_get_channel_voice_count(m_pChannel->client(), m_pChannel->channelID());
     // Get current stream count.
@@ -310,16 +391,6 @@ void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
         
     // We'll just show up the main form's edit menu (thru qsamplerChannel).
     m_pChannel->contextMenuEvent(pEvent);
-}
-
-
-// Maximum volume slider accessors.
-void qsamplerChannelStrip::setMaxVolume ( int iMaxVolume )
-{
-    m_iDirtyChange++;
-    VolumeSlider->setRange(0, iMaxVolume);
-    VolumeSpinBox->setRange(0, iMaxVolume);
-    m_iDirtyChange--;
 }
 
 

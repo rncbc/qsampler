@@ -778,6 +778,7 @@
     <function access="private" specifier="non virtual" returnType="bool">closeSession( bool bForce )</function>
     <function access="private" specifier="non virtual" returnType="bool">loadSessionFile( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual" returnType="bool">saveSessionFile( const QString &amp; sFilename )</function>
+    <function access="private" specifier="non virtual">updateSession()</function>
     <function access="private" specifier="non virtual">updateRecentFiles( const QString &amp; sFilename )</function>
     <function access="private" specifier="non virtual">updateRecentFilesMenu( void )</function>
     <function access="private" specifier="non virtual">updateInstrumentNames( void )</function>
@@ -795,6 +796,7 @@
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">createChannelStrip( qsamplerChannel *pChannel )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannelStrip( void )</function>
     <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelStripAt( int iChannel )</function>
+    <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelStrip( int iChannelID )</function>
     <function access="private" specifier="non virtual">startSchedule( int iStartDelay )</function>
     <function access="private" specifier="non virtual">stopSchedule( void )</function>
     <function access="private" specifier="non virtual">startServer( void )</function>
