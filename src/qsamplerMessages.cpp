@@ -30,6 +30,10 @@
 
 #include "config.h"
 
+#if !defined(WIN32)
+#include <unistd.h>
+#endif
+
 // The default maximum number of message lines.
 #define QSAMPLER_MESSAGES_MAXLINES  1000
 

@@ -49,7 +49,7 @@ void qsamplerChannelStrip::init (void)
     m_iMidiChannel    = 0;
     m_sAudioDriver    = "ALSA"; // DEPRECATED.
     m_iAudioDevice    = 0;
-    m_fVolume         = 0.0;
+    m_fVolume         = 0.8;
     
     m_iDirtyChange = 0;
 
