@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>519</width>
-            <height>321</height>
+            <width>520</width>
+            <height>323</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -111,7 +111,7 @@
                     <cstring>ServerTabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Server</string>
+                    <string>&amp;Server</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -358,7 +358,7 @@
                                     <number>1</number>
                                 </property>
                                 <property name="value">
-                                    <number>2</number>
+                                    <number>3</number>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Delay time in seconds after server startup</string>
@@ -451,7 +451,7 @@
                                     <number>100</number>
                                 </property>
                                 <property name="value">
-                                    <number>500</number>
+                                    <number>1000</number>
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Receive timeout in milliseconds</string>
@@ -485,7 +485,7 @@
                     <cstring>DisplayTabPage</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Display</string>
+                    <string>&amp;Display</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -599,7 +599,7 @@
                             </widget>
                             <spacer row="0" column="2">
                                 <property name="name">
-                                    <cstring>space21</cstring>
+                                    <cstring>spacer21</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -631,25 +631,6 @@
                                 </property>
                                 <property name="toolTip" stdset="0">
                                     <string>Whether to refresh the channels view automatically</string>
-                                </property>
-                            </widget>
-                            <widget class="QCheckBox" row="1" column="0" colspan="2">
-                                <property name="name">
-                                    <cstring>DisplayEffectCheckBox</cstring>
-                                </property>
-                                <property name="font">
-                                    <font>
-                                        <bold>0</bold>
-                                    </font>
-                                </property>
-                                <property name="text">
-                                    <string>&amp;Display shiny glass light effect</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+D</string>
-                                </property>
-                                <property name="toolTip" stdset="0">
-                                    <string>Whether to enable a shiny glass light effect on the channel display</string>
                                 </property>
                             </widget>
                             <widget class="QLabel" row="1" column="3">
@@ -740,23 +721,25 @@
                                     <string>Upper limit for the sampler channel volume setting</string>
                                 </property>
                             </widget>
-                            <spacer row="1" column="0" rowspan="1" colspan="3">
+                            <widget class="QCheckBox" row="1" column="0" rowspan="1" colspan="2">
                                 <property name="name">
-                                    <cstring>spacer22</cstring>
+                                    <cstring>DisplayEffectCheckBox</cstring>
                                 </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                <property name="font">
+                                    <font>
+                                        <bold>0</bold>
+                                    </font>
                                 </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
+                                <property name="text">
+                                    <string>Display shiny glass light &amp;effect</string>
                                 </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>310</width>
-                                        <height>16</height>
-                                    </size>
+                                <property name="accel">
+                                    <string>Alt+E</string>
                                 </property>
-                            </spacer>
+                                <property name="toolTip" stdset="0">
+                                    <string>Whether to enable a shiny glass light effect on the channel display</string>
+                                </property>
+                            </widget>
                         </grid>
                     </widget>
                     <widget class="QGroupBox">
@@ -854,7 +837,7 @@
                             </widget>
                             <spacer>
                                 <property name="name">
-                                    <cstring>space23</cstring>
+                                    <cstring>spacer22</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -993,10 +976,10 @@
                                             </font>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Show complete path of session files</string>
+                                            <string>Show complete &amp;path of session files</string>
                                         </property>
                                         <property name="accel">
-                                            <string>Alt+S</string>
+                                            <string>Alt+P</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
                                             <string>Whether to show the complete directory path of loaded session files</string>
@@ -1066,7 +1049,7 @@
                             </widget>
                             <spacer row="0" column="1">
                                 <property name="name">
-                                    <cstring>space24</cstring>
+                                    <cstring>spacer23</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>
@@ -1083,7 +1066,7 @@
                             </spacer>
                             <spacer row="1" column="1" rowspan="1" colspan="3">
                                 <property name="name">
-                                    <cstring>space25</cstring>
+                                    <cstring>spacer24</cstring>
                                 </property>
                                 <property name="orientation">
                                     <enum>Horizontal</enum>

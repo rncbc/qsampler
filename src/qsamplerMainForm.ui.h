@@ -910,6 +910,25 @@ void qsamplerMainForm::editResetChannel (void)
 }
 
 
+// Reset all sampler channels.
+void qsamplerMainForm::editResetAllChannels (void)
+{
+    if (m_pClient == NULL)
+        return;
+
+    // Invoque the channel strip procedure,
+	// for all channels out there...
+    m_pWorkspace->setUpdatesEnabled(false);
+    QWidgetList wlist = m_pWorkspace->windowList();
+    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        if (pChannelStrip)
+    		pChannelStrip->channelReset();
+    }
+    m_pWorkspace->setUpdatesEnabled(true);
+}
+
+
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- View Action slots.
 
@@ -1169,6 +1188,7 @@ void qsamplerMainForm::stabilizeForm (void)
     editRemoveChannelAction->setEnabled(bHasChannel);
     editSetupChannelAction->setEnabled(bHasChannel);
     editResetChannelAction->setEnabled(bHasChannel);
+    editResetAllChannelsAction->setEnabled(bHasChannel);
     channelsArrangeAction->setEnabled(bHasChannel);
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
 

@@ -75,6 +75,7 @@
         <action name="editSetupChannelAction"/>
         <separator/>
         <action name="editResetChannelAction"/>
+        <action name="editResetAllChannelsAction"/>
     </item>
     <item text="&amp;View" name="viewMenu">
         <action name="viewMenubarAction"/>
@@ -121,7 +122,9 @@
         <action name="editRemoveChannelAction"/>
         <separator/>
         <action name="editSetupChannelAction"/>
+        <separator/>
         <action name="editResetChannelAction"/>
+        <action name="editResetAllChannelsAction"/>
     </toolbar>
     <toolbar dock="2">
         <property name="name">
@@ -331,29 +334,6 @@
     </action>
     <action>
         <property name="name">
-            <cstring>editSetupChannelAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editSetupChannel.png</iconset>
-        </property>
-        <property name="text">
-            <string>Setup</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Setup Channel...</string>
-        </property>
-        <property name="toolTip">
-            <string>Setup channel</string>
-        </property>
-        <property name="statusTip">
-            <string>Setup current sampler channel</string>
-        </property>
-        <property name="accel">
-            <string>F2</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
             <cstring>editResetChannelAction</cstring>
         </property>
         <property name="iconSet">
@@ -373,6 +353,52 @@
         </property>
         <property name="accel">
             <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editResetAllChannelsAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>editResetAllChannels.png</iconset>
+        </property>
+        <property name="text">
+            <string>Reset All</string>
+        </property>
+        <property name="menuText">
+            <string>R&amp;eset All Channels</string>
+        </property>
+        <property name="toolTip">
+            <string>Reset all channels</string>
+        </property>
+        <property name="statusTip">
+            <string>Reset all sampler channels</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editSetupChannelAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>editSetupChannel.png</iconset>
+        </property>
+        <property name="text">
+            <string>Setup</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Setup Channel...</string>
+        </property>
+        <property name="toolTip">
+            <string>Setup channel</string>
+        </property>
+        <property name="statusTip">
+            <string>Setup current sampler channel</string>
+        </property>
+        <property name="accel">
+            <string>F2</string>
         </property>
     </action>
     <action>
@@ -639,6 +665,12 @@
         <slot>editResetChannel()</slot>
     </connection>
     <connection>
+        <sender>editResetAllChannelsAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>editResetAllChannels()</slot>
+    </connection>
+    <connection>
         <sender>viewMenubarAction</sender>
         <signal>toggled(bool)</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -741,6 +773,7 @@
     <slot specifier="non virtual">editRemoveChannel( void )</slot>
     <slot specifier="non virtual">editSetupChannel( void )</slot>
     <slot specifier="non virtual">editResetChannel( void )</slot>
+    <slot specifier="non virtual">editResetAllChannels( void )</slot>
     <slot specifier="non virtual">viewMenubar( bool bOn )</slot>
     <slot specifier="non virtual">viewToolbar( bool bOn )</slot>
     <slot specifier="non virtual">viewStatusbar( bool bOn )</slot>
