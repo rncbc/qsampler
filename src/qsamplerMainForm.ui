@@ -359,9 +359,6 @@
         <property name="toggleAction">
             <bool>true</bool>
         </property>
-        <property name="iconSet">
-            <iconset>qsamplerMessages.png</iconset>
-        </property>
         <property name="text">
             <string>Messages</string>
         </property>

@@ -41,11 +41,11 @@ qsamplerChannelStrip::qsamplerChannelStrip ( QWidget *pParent, const char *pszNa
     QFrame::setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     // Create main widget and layout enforcer.
-    m_pVLayout     = new QVBoxLayout(this, 4, 4);
+    m_pVBoxLayout  = new QVBoxLayout(this, 4, 4);
     m_pChannelForm = new qsamplerChannelForm(this);
-    
+
     // Adjust to layout and show up immediately.
-    m_pVLayout->addWidget(m_pChannelForm);
+    m_pVBoxLayout->addWidget(m_pChannelForm);
     m_pChannelForm->adjustSize();
 }
 
@@ -77,22 +77,16 @@ qsamplerChannels::qsamplerChannels ( QWidget *pParent, const char *pszName )
         setName("qsamplerChannels");
 
     // Create the forced layout widgets.
-    m_pVLayout = new QVBoxLayout(this, 4, 4);
-    m_pVBox    = new QVBox(QScrollView::viewport());
-    m_pVSpacer = new QSpacerItem(4, 4, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-//  QScrollView::setResizePolicy(QScrollView::AutoOneFit);
-
+    m_pVBox = new QVBox(QScrollView::viewport());
     // Build the layout.
     QScrollView::addChild(m_pVBox);
-    m_pVLayout->addWidget(m_pVBox);
-    m_pVLayout->addItem(m_pVSpacer);
+//  QScrollView::setResizePolicy(QScrollView::AutoOneFit);
 
     // Finally set the default caption and tooltip.
     QString sCaption = tr("Channels");
     QToolTip::add(this, sCaption);
     setCaption(sCaption);
-    
+
     // The channel forms are auto-destructable.
     m_channels.setAutoDelete(true);
 }

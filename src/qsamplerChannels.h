@@ -28,7 +28,6 @@
 
 class QVBoxLayout;
 class QVBox;
-class QSpacerItem;
 
 class qsamplerChannelForm;
 
@@ -50,12 +49,12 @@ public:
 
     // The form accessor.
     qsamplerChannelForm *form();
-    
+
 private:
 
     // The layout enforcer;
-    QVBoxLayout *m_pVLayout;
-    
+    QVBoxLayout *m_pVBoxLayout;
+
     // The child widgets;
     qsamplerChannelForm *m_pChannelForm;
 };
@@ -79,17 +78,15 @@ public:
     // Channel list management.
     qsamplerChannelStrip *addChannel();
     void removeChannel(qsamplerChannelStrip *pChannel);
-    
+
     // Retrive channel form by index.
     qsamplerChannelStrip *channelAt(int iChannel);
-    
+
 private:
 
-    // The layout enforcers.
-    QVBoxLayout *m_pVLayout;
-    QVBox       *m_pVBox;
-    QSpacerItem *m_pVSpacer;
-    
+    // The vertical layout enforcer.
+    QVBox *m_pVBox;
+
     // The official channel list.
     QPtrList<qsamplerChannelStrip> m_channels;
 };
