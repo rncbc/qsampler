@@ -44,7 +44,7 @@
         <string>Channel</string>
     </property>
     <property name="icon">
-        <pixmap>fileNew.png</pixmap>
+        <pixmap>qsampler.png</pixmap>
     </property>
     <property name="focusPolicy">
         <enum>StrongFocus</enum>
@@ -70,7 +70,7 @@
                 <string></string>
             </property>
             <property name="iconSet">
-                <iconset>fileNew.png</iconset>
+                <iconset>editSetupChannel.png</iconset>
             </property>
             <property name="usesTextLabel">
                 <bool>true</bool>

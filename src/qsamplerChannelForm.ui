@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>388</width>
-            <height>256</height>
+            <width>424</width>
+            <height>259</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -44,7 +44,7 @@
         <string>Channel</string>
     </property>
     <property name="icon">
-        <pixmap>fileNew.png</pixmap>
+        <pixmap>editSetupChannel.png</pixmap>
     </property>
     <property name="focusPolicy">
         <enum>StrongFocus</enum>

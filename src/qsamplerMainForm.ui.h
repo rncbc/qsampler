@@ -60,7 +60,7 @@ void qsamplerMainForm::init (void)
     
     // Create some statusbar labels...
     m_pStatusLine = new QLabel(this);
-    m_pStatusFlag = new QLabel(tr("MOD"), this);
+    m_pStatusFlag = new QLabel(tr("Modified"), this);
     m_pStatusFlag->setAlignment(Qt::AlignHCenter);
     m_pStatusFlag->setMinimumSize(m_pStatusFlag->sizeHint());
     // And make them there...
@@ -546,7 +546,7 @@ void qsamplerMainForm::stabilizeForm (void)
         m_pStatusLine->clear();
 
     if (m_iDirtyCount > 0)
-        m_pStatusFlag->setText(tr("MOD"));
+        m_pStatusFlag->setText(tr("Modified"));
     else
         m_pStatusFlag->clear();
 }
