@@ -491,15 +491,12 @@ void qsamplerDevicePort::setDevicePort ( lscp_client_t *pClient,
 	m_params.clear();
 
 	// Retrieve device port/channel info, if any.
-	QString sPrefix = device.driverName() + ' ';
 	lscp_device_port_info_t *pPortInfo = NULL;
 	switch (device.deviceType()) {
 	case qsamplerDevice::Audio:
-		sPrefix += QObject::tr("Channel");
 		pPortInfo = ::lscp_get_audio_channel_info(pClient, device.deviceID(), iPortID);
 		break;
 	case qsamplerDevice::Midi:
-		sPrefix += QObject::tr("Port");
 		pPortInfo = ::lscp_get_midi_port_info(pClient, device.deviceID(), iPortID);
 		break;
 	case qsamplerDevice::None:
@@ -513,8 +510,7 @@ void qsamplerDevicePort::setDevicePort ( lscp_client_t *pClient,
 	}
 
 	// Set device port/channel properties...
-	sPrefix += " %1:";
-	m_sPortName = sPrefix.arg(m_iPortID)  + ' ' + pPortInfo->name;
+	m_sPortName += device.driverName() + ' ' + pPortInfo->name;
 
 	// Grab device port/channel parameters...
 	m_params.clear();
@@ -579,11 +575,11 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView,
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio1.png"));
-		QListViewItem::setText(0, QObject::tr("Audio devices"));
+		QListViewItem::setText(0, QObject::tr("Audio Devices"));
 		break;
 	case qsamplerDevice::Midi:
 		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi1.png"));
-		QListViewItem::setText(0, QObject::tr("MIDI devices"));
+		QListViewItem::setText(0, QObject::tr("MIDI Devices"));
 		break;
 	case qsamplerDevice::None:
 		break;
