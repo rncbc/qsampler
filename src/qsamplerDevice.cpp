@@ -121,8 +121,8 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 	qsamplerDeviceType deviceType, int iDeviceID )
 {
 	// Device id and type should be always set.
-	m_iDeviceID   = iDeviceID;
-	m_deviceType  = deviceType;
+	m_iDeviceID  = iDeviceID;
+	m_deviceType = deviceType;
 
 	// Retrieve device info, if any.
 	lscp_device_info_t *pDeviceInfo = NULL;
@@ -177,7 +177,7 @@ void qsamplerDevice::setDevice ( lscp_client_t *pClient,
 }
 
 
-// Driver name initializer.
+// Driver name initializer/settler.
 void qsamplerDevice::setDriver ( lscp_client_t *pClient,
 	const QString& sDriverName )
 {
@@ -257,16 +257,19 @@ const QString& qsamplerDevice::deviceName (void) const
 }
 
 // Device parameter accessor.
-qsamplerDeviceParamMap& qsamplerDevice::params (void)
+const qsamplerDeviceParamMap& qsamplerDevice::params (void) const
 {
 	return m_params;
 }
 
 
-// Update/refresh device/driver data.
-void qsamplerDevice::refresh (void)
+// Set the proper device parameter value.
+void qsamplerDevice::setParam ( const QString& sParam,
+	const QString& sValue )
 {
+	m_params[sParam].value = sValue;
 }
+
 
 // Device ids enumerator.
 int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
@@ -309,6 +312,103 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 		drivers.append(ppszDrivers[iDriver]);
 
 	return drivers;
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerDevicePort - MIDI/Audio Device port/channel structure.
+//
+
+// Constructor.
+qsamplerDevicePort::qsamplerDevicePort ( lscp_client_t *pClient,
+	const qsamplerDevice& device, int iPortID )
+{
+	setDevicePort(pClient, device, iPortID);
+}
+
+// Default destructor.
+qsamplerDevicePort::~qsamplerDevicePort (void)
+{
+}
+
+
+// Initializer.
+void qsamplerDevicePort::setDevicePort ( lscp_client_t *pClient,
+	const qsamplerDevice& device, int iPortID )
+{
+	// Device port id should be always set.
+	m_iPortID = iPortID;
+
+	// Retrieve device port/channel info, if any.
+	lscp_device_port_info_t *pPortInfo = NULL;
+	switch (device.deviceType()) {
+	case qsamplerDevice::Audio:
+		pPortInfo = ::lscp_get_audio_channel_info(pClient, device.deviceID(), iPortID);
+		break;
+	case qsamplerDevice::Midi:
+		pPortInfo = ::lscp_get_midi_port_info(pClient, device.deviceID(), iPortID);
+		break;
+	case qsamplerDevice::None:
+		break;
+	}
+
+	// If we're bogus, bail out...
+	if (pPortInfo == NULL) {
+		m_sPortName = QString::null;
+		return;
+	}
+
+	// Set device port/channel properties...
+	m_sPortName = pPortInfo->name;
+
+	// Grab device port/channel parameters...
+	m_params.clear();
+	for (int i = 0; pPortInfo->params && pPortInfo->params[i].key; i++) {
+		const char *pszParam = pPortInfo->params[i].key;
+		lscp_param_info_t *pParamInfo = NULL;
+		switch (device.deviceType()) {
+		case qsamplerDevice::Audio:
+			pParamInfo = ::lscp_get_audio_channel_param_info(pClient,
+				device.deviceID(), iPortID, pszParam);
+			break;
+		case qsamplerDevice::Midi:
+			pParamInfo = ::lscp_get_midi_port_param_info(pClient,
+				device.deviceID(), iPortID, pszParam);
+			break;
+		case qsamplerDevice::None:
+			break;
+		}
+		if (pParamInfo) {
+			m_params[pszParam] = qsamplerDeviceParam(pParamInfo,
+				pPortInfo->params[i].value);
+		}
+	}
+}
+
+
+// Device port/channel property accessors.
+int qsamplerDevicePort::portID (void) const
+{
+	return m_iPortID;
+}
+
+const QString& qsamplerDevicePort::portName (void) const
+{
+	return m_sPortName;
+}
+
+// Device port/channel parameter accessor.
+const qsamplerDeviceParamMap& qsamplerDevicePort::params (void) const
+{
+	return m_params;
+}
+
+
+// Set the proper device port/channel parameter value.
+void qsamplerDevicePort::setParam ( const QString& sParam,
+	const QString& sValue )
+{
+	m_params[sParam].value = sValue;
 }
 
 
@@ -409,27 +509,27 @@ qsamplerDeviceParamTable::~qsamplerDeviceParamTable (void)
 }
 
 
-// The main table refresher.
-void qsamplerDeviceParamTable::refresh ( qsamplerDevice& device )
+// Common parameter table renderer.
+void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
+	bool bEditable )
 {
 	// Always (re)start it empty.
 	QTable::setUpdatesEnabled(false);
 	QTable::setNumRows(0);
 
-	// Now fill the parameter table...
-	qsamplerDeviceParamMap& params = device.params();
+	// Fill the parameter table...
 	QTable::insertRows(0, params.count());
 	int iRow = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = params.begin(); iter != params.end(); ++iter) {
 		const qsamplerDeviceParam& param = iter.data();
-		bool bEnabled = (device.deviceID() < 0 || !param.fix);
+		bool bEnabled = (bEditable || !param.fix);
 		QTable::setText(iRow, 0, iter.key());
 		QTable::setText(iRow, 1, param.description);
-		if (param.type == LSCP_TYPE_BOOL && bEnabled) {
+		if (param.type == LSCP_TYPE_BOOL) {
 			QStringList opts;
-			opts.append(tr("false"));
-			opts.append(tr("true"));
+			opts.append(tr("False"));
+			opts.append(tr("True"));
 			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
 			pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
 			pComboItem->setEnabled(bEnabled);

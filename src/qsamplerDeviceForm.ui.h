@@ -102,10 +102,10 @@ void qsamplerDeviceForm::createDevice (void)
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
 
-	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+	const qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	// Build the parameter list...
-	qsamplerDeviceParamMap& params = device.params();
+	const qsamplerDeviceParamMap& params = device.params();
 	lscp_param_t *pParams = new lscp_param_t [params.count() + 1];
 	int iParam = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
@@ -164,7 +164,7 @@ void qsamplerDeviceForm::deleteDevice (void)
 	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
 		return;
 
-	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
+	const qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	// Prompt user if this is for real...
 	qsamplerOptions *pOptions = m_pMainForm->options();
@@ -277,7 +277,7 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 	if (m_bNewDevice) {
 		m_iDirtySetup++;
 		device.setDriver(m_pClient, sDriverName);
-		DeviceParamTable->refresh(device);
+		DeviceParamTable->refresh(device.params(), m_bNewDevice);
 		m_iDirtySetup--;
 		// Done.
 		stabilizeForm();
@@ -332,7 +332,7 @@ void qsamplerDeviceForm::selectDevice (void)
 	DriverNameTextLabel->setEnabled(m_bNewDevice);
 	DriverNameComboBox->setEnabled(m_bNewDevice);
 	// Fill the device parameter table...
-	DeviceParamTable->refresh(device);
+	DeviceParamTable->refresh(device.params(), m_bNewDevice);
 	// Done.
 	m_iDirtySetup--;
 	stabilizeForm();
@@ -359,10 +359,12 @@ void qsamplerDeviceForm::changeValue ( int iRow, int iCol )
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	// Table 1st column has the parameter name;
-	qsamplerDeviceParamMap& params = device.params();
+	const qsamplerDeviceParamMap& params = device.params();
 	const QString sParam = DeviceParamTable->text(iRow, 0);
 	const QString sValue = DeviceParamTable->text(iRow, iCol);
-	params[sParam].value = sValue;
+	
+	// Set the local device parameter value.
+	device.setParam(sParam, sValue);
 
 	// Set proper device parameter, on existing device ...
 	if (device.deviceID() >= 0) {
