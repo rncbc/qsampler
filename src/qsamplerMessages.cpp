@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2004, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -51,6 +51,9 @@
 qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     : QDockWindow(pParent, pszName)
 {
+#if QT_VERSION >= 0x030200
+    m_pTextView->setTextFormat(Qt::LogText);
+#endif
     // Initialize default message limit.
     setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
 
@@ -195,6 +198,9 @@ void qsamplerMessages::setMessagesLimit ( int iMessagesLimit )
 {
     m_iMessagesLimit = iMessagesLimit;
     m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
+#if QT_VERSION >= 0x030200
+	m_pTextView->setMaxLogLines(iMessagesLimit);
+#endif
 }
 
 
@@ -211,6 +217,7 @@ void qsamplerMessages::appendMessagesColor ( const QString& s, const QString &c 
 
 void qsamplerMessages::appendMessagesText ( const QString& s )
 {
+#if QT_VERSION < 0x030200
     // Check for message line limit...
     if (m_iMessagesLimit > 0) {
         int iParagraphs = m_pTextView->paragraphs();
@@ -224,6 +231,7 @@ void qsamplerMessages::appendMessagesText ( const QString& s )
             m_pTextView->setUpdatesEnabled(true);
         }
     }
+#endif
     m_pTextView->append(s);
 }
 

@@ -3,11 +3,12 @@ qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.0.5   2004-12-21  Work in progress...
+0.0.5   2005-01-12  Work in progress...
 
 - Messages window limit is now enforced only when the line
   count exceeds in one third the user configured line count
-  maximum.
+  maximum; if Qt 3.2.0+ is in use, the QTextView widget is
+  otherwise set to the optimized Qt::LogText format.
 
 
 0.0.4   2004-11-19  Fourth alpha-release.
