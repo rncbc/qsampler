@@ -85,8 +85,6 @@ int qsamplerChannel::channelID (void)
 void qsamplerChannel::setChannelID ( int iChannelID )
 {
     m_iChannelID = iChannelID;
-
-    updateChannelInfo();
 }
 
 

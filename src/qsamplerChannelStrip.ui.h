@@ -74,6 +74,9 @@ void qsamplerChannelStrip::setup ( qsamplerMainForm *pMainForm, int iChannelID )
         m_pChannel->setChannelID(iChannelID);
         m_iDirtyChange = 0;
     }
+    
+    // Stabilize this around.
+    updateChannelInfo();
 }
 
 // Channel secriptor accessor.

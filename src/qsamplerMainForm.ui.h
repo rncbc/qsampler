@@ -824,7 +824,8 @@ void qsamplerMainForm::editRemoveChannel (void)
     appendMessages(tr("Channel %1 removed.").arg(pChannel->channelID()));
     
     // Just delete the channel strip.
-    delete pChannel;
+    delete pChannelStrip;
+    
     // Do we auto-arrange?
     if (m_pOptions && m_pOptions->bAutoArrange)
         channelsArrange();
