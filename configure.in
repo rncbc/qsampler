@@ -22,6 +22,12 @@ if test "x$ac_debug" = "xdebug"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
 fi
 
+dnl Enable libgig availability.
+AC_ARG_ENABLE(libgig,
+  [  --enable-libgig         enable libgig (default=no)],
+  [ac_libgig="yes"],
+  [ac_libgig="no"])
+
 dnl Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
@@ -111,21 +117,29 @@ AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 AC_CHECK_LIB($ac_qtlib, main)
 
-AC_CHECK_LIB(lscp, main, [ac_liblscp="yes"], [ac_liblscp="no"])
-if test "x$ac_liblscp" = "xno"; then
-   AC_MSG_ERROR([LSCP library not found.])
-fi
-
-AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
-if test "x$ac_libgig" = "xyes"; then
-   AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
-fi
-
 dnl Check for round math function.
 AC_CHECK_LIB(m, round, [ac_round="yes"], [ac_round="no"])
 if test "x$ac_round" = "xyes"; then
    AC_DEFINE(CONFIG_ROUND, 1, [Define if round is available.])
 fi
+
+dnl Check for mandatory libraries.
+AC_CHECK_LIB(lscp, main, [ac_liblscp="yes"], [ac_liblscp="no"])
+if test "x$ac_liblscp" = "xno"; then
+   AC_MSG_ERROR([LSCP library not found.])
+fi
+ac_libs="-llscp"
+
+dnl Check for optional libraries.
+if test "x$ac_libgig" = "xyes"; then
+   AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
+   if test "x$ac_libgig" = "xyes"; then
+      AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
+      ac_libs="-lgig $ac_libs"
+   fi
+fi
+
+AC_SUBST(ac_libs)
 
 dnl Checks for header files.
 AC_HEADER_STDC

@@ -122,7 +122,9 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
     if (sInstrumentFile.isEmpty())
         sInstrumentFile = tr("(No instrument)");
     InstrumentFileComboBox->setCurrentText(sInstrumentFile);
-    InstrumentNrSpinBox->setValue(pChannel->instrumentNr());
+    InstrumentNrComboBox->clear();
+    InstrumentNrComboBox->insertStringList(qsamplerChannel::getInstrumentList(sInstrumentFile));
+    InstrumentNrComboBox->setCurrentItem(pChannel->instrumentNr());
     // MIDI input driver...
     QString sMidiDriver = pChannel->midiDriver();
     if (sMidiDriver.isEmpty() || bNew)
@@ -187,7 +189,7 @@ void qsamplerChannelForm::accept (void)
         if (!m_pChannel->loadEngine(EngineNameComboBox->currentText()))
             iErrors++;
         // Instrument file and index...
-        if (!m_pChannel->loadInstrument(InstrumentFileComboBox->currentText(), InstrumentNrSpinBox->value()))
+        if (!m_pChannel->loadInstrument(InstrumentFileComboBox->currentText(), InstrumentNrComboBox->currentItem()))
             iErrors++;
         // Show error messages?
         if (iErrors > 0)
@@ -258,10 +260,12 @@ void qsamplerChannelForm::openInstrumentFile (void)
 // Refresh the actual instrument name.
 void qsamplerChannelForm::updateInstrumentName (void)
 {
-    // FIXME: A better idea would be to use libgig
-    // to retrieve the REAL instrument name.
-    InstrumentNameTextLabel->setText(QFileInfo(InstrumentFileComboBox->currentText()).fileName()
-        + " [" + QString::number(InstrumentNrSpinBox->value()) + "]");
+    // Finally this better idea would be to use libgig
+    // to retrieve the REAL instrument names.
+    InstrumentNrComboBox->clear();
+    InstrumentNrComboBox->insertStringList(
+        qsamplerChannel::getInstrumentList(InstrumentFileComboBox->currentText())
+    );
 
     optionsChanged();
 }

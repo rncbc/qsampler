@@ -181,8 +181,7 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     if (m_pChannel->instrumentFile().isEmpty())
         InstrumentNameTextLabel->setText(sIndent + tr("(No instrument)"));
     else
-        InstrumentNameTextLabel->setText(sIndent + QString("%1 [%2]")
-            .arg(QFileInfo(m_pChannel->instrumentFile()).fileName()).arg(m_pChannel->instrumentNr()));
+        InstrumentNameTextLabel->setText(sIndent + qsamplerChannel::getInstrumentName(m_pChannel->instrumentFile(), m_pChannel->instrumentNr()));
 
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();

@@ -113,6 +113,10 @@ public:
     void appendMessagesError  (const QString & s);
     void appendMessagesClient (const QString & s);
 
+    // Retrieve the available instrument name(s) of an instrument file (.gig).
+    static QString     getInstrumentName (const QString& sInstrumentFile, int iInstrumentNr);
+    static QStringList getInstrumentList (const QString& sInstrumentFile);
+
 private:
 
     // Main application form reference.

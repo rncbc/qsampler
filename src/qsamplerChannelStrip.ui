@@ -182,7 +182,7 @@
                         <string>--</string>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Instrument file [index]</string>
+                        <string>Instrument name</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="0" column="1">
