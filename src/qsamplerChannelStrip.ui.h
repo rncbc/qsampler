@@ -222,10 +222,11 @@ bool qsamplerChannelStrip::setMidiPort ( int iMidiPort )
     if (client() == NULL)
         return false;
 
-    if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
-        appendMessagesClient("lscp_set_channel_midi_port");
-        return false;
-    }
+//  FIXME: Enable this when liblscp implements the device interface.
+//  if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
+//      appendMessagesClient("lscp_set_channel_midi_port");
+//      return false;
+//  }
 
     m_iMidiPort = iMidiPort;
     return true;
