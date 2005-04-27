@@ -3,7 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.1.0   2005-04-01  Device configuration work in progress...
+0.1.0   2005-04-27  Device configuration work in progress...
 
 * Device configuration is now complete (EXPERIMENTAL).
 
