@@ -230,9 +230,12 @@ bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
 		m_pChannel->updateInstrumentName();
 
 	// Instrument name...
-	if (m_pChannel->instrumentName().isEmpty())
-		InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
-	else
+	if (m_pChannel->instrumentName().isEmpty()) {
+		if (m_pChannel->instrumentStatus() >= 0)
+			InstrumentNameTextLabel->setText(' ' + qsamplerChannel::loadingInstrument());
+		else
+			InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
+	} else
 		InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
 
 	return true;    
