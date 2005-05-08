@@ -51,6 +51,10 @@
 #include <signal.h>
 #endif
 
+#if CONFIG_LIBGIG
+# include <gig.h>
+#endif
+
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    200
 
@@ -1295,6 +1299,12 @@ void qsamplerMainForm::helpAbout (void)
     sText += ::lscp_client_package();
     sText += " ";
     sText += ::lscp_client_version();
+#if CONFIG_LIBGIG
+    sText += ", ";
+    sText += gig::libraryName();
+    sText += " ";
+    sText += gig::libraryVersion();
+#endif
     sText += "<br />\n";
     sText += "<br />\n";
     sText += tr("Website") + ": <a href=\"" QSAMPLER_WEBSITE "\">" QSAMPLER_WEBSITE "</a><br />\n";

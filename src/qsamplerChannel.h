@@ -133,6 +133,7 @@ public:
 	// Common (invalid) name-helpers.
 	static QString noEngineName();
 	static QString noInstrumentName();
+	static QString loadingInstrument();
 
 	// Check whether a given file is an instrument file.
 	static bool isInstrumentFile (const QString& sInstrumentFile);

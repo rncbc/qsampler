@@ -669,5 +669,9 @@ QString qsamplerChannel::noInstrumentName (void)
 	return QObject::tr("(No instrument)");
 }
 
+QString qsamplerChannel::loadingInstrument (void) {
+	return QObject::tr("(Loading instrument...)");
+}
+
 
 // end of qsamplerChannel.cpp
