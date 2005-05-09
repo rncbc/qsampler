@@ -643,10 +643,10 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 	const char **ppszDrivers = NULL;
 	switch (deviceType) {
 	case qsamplerDevice::Audio:
-		ppszDrivers = ::lscp_get_available_audio_drivers(pClient);
+		ppszDrivers = ::lscp_list_available_audio_drivers(pClient);
 		break;
 	case qsamplerDevice::Midi:
-		ppszDrivers = ::lscp_get_available_midi_drivers(pClient);
+		ppszDrivers = ::lscp_list_available_midi_drivers(pClient);
 		break;
 	case qsamplerDevice::None:
 		break;

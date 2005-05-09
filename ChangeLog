@@ -3,15 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-CVS HEAD
-
-* Show appropriate message in channel strip while loading an
-  instrument.
-
-* Show libgig version in About box (in case libgig is used).
-
-
-0.1.0   2005-04-27  Device configuration work in progress...
+0.1.0   2005-05-09  Device configuration breakthrough.
 
 * Device configuration is now complete (EXPERIMENTAL).
 
