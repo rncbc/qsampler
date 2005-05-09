@@ -32,16 +32,15 @@ $(name).mak:	$(name).pro
 	@$(qmake) -o $(name).mak $(name).pro
 
 $(name):	$(name).mak $(sources) $(headers)
-	@make -f $(name).mak $(name)
+	@make -f $(name).mak
 
-# Note: $(DESTDIR) is needed here for Debian packaging!
 install:	$(name) icons/$(name).png
-	@install -vD $(name) $(DESTDIR)$(prefix)/bin/$(name)
-	@install -vD icons/$(name).png $(DESTDIR)$(prefix)/share/icons/$(name).png
+	@install -vD $(name) $(prefix)/bin/$(name)
+	@install -vD icons/$(name).png $(prefix)/share/icons/$(name).png
 
-uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
-	@rm -vf $(DESTDIR)$(prefix)/bin/$(name)
-	@rm -vf $(DESTDIR)$(prefix)/share/icons/$(name).png
+uninstall:	$(prefix)/bin/$(name)
+	@rm -vf $(prefix)/bin/$(name)
+	@rm -vf $(prefix)/share/icons/$(name).png
 
 clean:	$(name).mak
 	@make -f $(name).mak clean

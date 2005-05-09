@@ -89,13 +89,13 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 	pOptions->loadComboBoxHistory(InstrumentFileComboBox);
 
 	// Populate Engines list.
-	const char **ppszEngines = ::lscp_get_available_engines(m_pChannel->client());
+	const char **ppszEngines = ::lscp_list_available_engines(m_pChannel->client());
 	if (ppszEngines) {
 		EngineNameComboBox->clear();
 		for (int iEngine = 0; ppszEngines[iEngine]; iEngine++)
 			EngineNameComboBox->insertItem(ppszEngines[iEngine]);
 	}
-	else m_pChannel->appendMessagesClient("lscp_get_available_engines");
+	else m_pChannel->appendMessagesClient("lscp_list_available_engines");
 
 	// Populate Audio output type list.
 	AudioDriverComboBox->clear();
@@ -302,6 +302,7 @@ void qsamplerChannelForm::openInstrumentFile (void)
 		return;
 
 	InstrumentFileComboBox->setCurrentText(sInstrumentFile);
+	updateInstrumentName();
 }
 
 
