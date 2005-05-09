@@ -7,6 +7,18 @@ ChangeLog
 
 * Device configuration is now complete (EXPERIMENTAL).
 
+* [bug #9] Fixed for a LSCP command syntax convention
+  consistency, regarding the enumeration of available 
+  sampler engines, Audio and MIDI drivers.
+  
+* [bug #13] Update instrument names list when a new 
+  instrument file is select on the channel setup dialog. 
+
+* Show appropriate message in channel strip while loading 
+  an instrument. 
+  
+* Show libgig version in About box (in case libgig is used). 
+
 
 0.0.5   2005-03-04  Fifth alpha-release.
 
