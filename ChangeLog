@@ -3,20 +3,20 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.1.0   2005-05-09  Device configuration breakthrough.
+0.1.0   2005-05-23  Device configuration breakthrough.
 
 * Device configuration is now complete (EXPERIMENTAL).
 
 * [bug #9] Fixed for a LSCP command syntax convention
   consistency, regarding the enumeration of available 
   sampler engines, Audio and MIDI drivers.
-  
+
 * [bug #13] Update instrument names list when a new 
   instrument file is select on the channel setup dialog. 
 
 * Show appropriate message in channel strip while loading 
   an instrument. 
-  
+
 * Show libgig version in About box (in case libgig is used). 
 
 
