@@ -117,7 +117,7 @@ void qsamplerChannelStrip::setup ( qsamplerChannel *pChannel )
 
     // Set the new one...
     m_pChannel = pChannel;
-    
+
     // Stabilize this around.
     updateChannelInfo();
 
@@ -171,7 +171,7 @@ void qsamplerChannelStrip::setDisplayBackground ( const QPixmap& pm )
             pLabel->setPaletteBackgroundPixmap(pm);
         delete pList;
     }
-    
+
     // And this standalone too.
     StreamVoiceCountTextLabel->setPaletteBackgroundPixmap(pm);
 }
@@ -281,7 +281,7 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 {
     if (m_pChannel == NULL)
         return false;
-        
+
 	// Check for error limit/recycle...
 	if (m_iErrorCount > QSAMPLER_ERROR_LIMIT)
 		return true;
@@ -343,7 +343,7 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
 	// This only makes sense on fully loaded channels...
 	if (m_pChannel->instrumentStatus() < 100)
 	    return false;
-	    
+
     // Get current channel voice count.
     int iVoiceCount  = ::lscp_get_channel_voice_count(m_pChannel->client(), m_pChannel->channelID());
     // Get current stream count.
@@ -356,7 +356,7 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
     // Update the GUI elements...
     StreamUsageProgressBar->setProgress(iStreamUsage);
     StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
-    
+
     // We're clean.
     return true;
 }
@@ -390,9 +390,16 @@ void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
     if (m_pChannel == NULL)
         return;
-        
+
     // We'll just show up the main form's edit menu (thru qsamplerChannel).
     m_pChannel->contextMenuEvent(pEvent);
+}
+
+
+// Error count hackish accessors.
+void qsamplerChannelStrip::resetErrorCount (void)
+{
+	m_iErrorCount = 0;
 }
 
 
