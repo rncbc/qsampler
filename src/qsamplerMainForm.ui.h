@@ -292,11 +292,11 @@ bool qsamplerMainForm::queryClose (void)
             ostr << *this;
             m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
             // And the children, and the main windows state,.
-        	m_pOptions->saveWidgetGeometry(m_pDeviceForm);
-            m_pOptions->saveWidgetGeometry(this);
-	        // Close popup widgets.
-	        if (m_pDeviceForm)
-	            m_pDeviceForm->close();
+			m_pOptions->saveWidgetGeometry(m_pDeviceForm);
+			m_pOptions->saveWidgetGeometry(this);
+			// Close popup widgets.
+			if (m_pDeviceForm)
+				m_pDeviceForm->close();
             // Stop client and/or server, gracefully.
             stopServer();
         }
@@ -349,29 +349,29 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
     if (!decodeDragFiles(pDropEvent, files))
         return;
 
-    for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
+	for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
 		const QString& sPath = *iter;
 		if (qsamplerChannel::isInstrumentFile(sPath)) {
 			// Try to create a new channel from instrument file...
-		    qsamplerChannel *pChannel = new qsamplerChannel(this);
-		    if (pChannel == NULL)
-		        return;
+			qsamplerChannel *pChannel = new qsamplerChannel(this);
+			if (pChannel == NULL)
+				return;
 			// Start setting the instrument filename...
 			pChannel->setInstrument(sPath, 0);
-		    // Before we show it up, may be we'll
-		    // better ask for some initial values?
-		    if (!pChannel->channelSetup(this)) {
-		        delete pChannel;
-		        return;
-		    }
-		    // Finally, give it to a new channel strip...
-			if (!createChannelStrip(pChannel)) {
-		        delete pChannel;
-		        return;
+			// Before we show it up, may be we'll
+			// better ask for some initial values?
+			if (!pChannel->channelSetup(this)) {
+				delete pChannel;
+				return;
 			}
-		    // Make that an overall update.
-		    m_iDirtyCount++;
-		    stabilizeForm();
+			// Finally, give it to a new channel strip...
+			if (!createChannelStrip(pChannel)) {
+				delete pChannel;
+				return;
+			}
+			// Make that an overall update.
+			m_iDirtyCount++;
+			stabilizeForm();
 		}   // Otherwise, load an usual session file (LSCP script)...
 		else if (closeSession(true))
 			loadSessionFile(sPath);
@@ -398,7 +398,7 @@ void qsamplerMainForm::customEvent ( QCustomEvent *pCustomEvent )
 void qsamplerMainForm::contextMenuEvent( QContextMenuEvent *pEvent )
 {
     stabilizeForm();
-    
+
     editMenu->exec(pEvent->globalPos());
 }
 
@@ -628,7 +628,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     m_sFilename = sFilename;
     updateRecentFiles(sFilename);
     appendMessages(tr("Open session: \"%1\".").arg(sessionName(m_sFilename)));
-    
+
     // Make that an overall update.
     stabilizeForm();
     return true;
@@ -674,7 +674,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		qsamplerDevice device(this, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
 		// Audio device specification...
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
-		   << " " << tr("Device") << " " << iDevice << endl;
+			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
 		qsamplerDeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
@@ -697,8 +697,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				const qsamplerDeviceParam& param = portParam.data();
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
-				   << " " << iPort << " " << portParam.key()
-				   << "='" << param.value << "'" << endl;
+					<< " " << iPort << " " << portParam.key()
+					<< "='" << param.value << "'" << endl;
 			}
 		}
 		// Audio device index/id mapping.
@@ -713,8 +713,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		ts << endl;
 		qsamplerDevice device(this, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
 		// MIDI device specification...
-        ts << "# " << device.deviceTypeName() << " " << device.driverName()
-		   << " " << tr("Device") << " " << iDevice << endl;
+		ts << "# " << device.deviceTypeName() << " " << device.driverName()
+			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
 		qsamplerDeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
@@ -756,22 +756,22 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
             if (pChannel) {
                 ts << "# " << tr("Channel") << " " << iChannel << endl;
                 ts << "ADD CHANNEL" << endl;
-                if (audioDeviceMap.isEmpty()) {
-	            	ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannel
-					    << " " << pChannel->audioDriver() << endl;
-			    } else {
-	                ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannel
-					   << " " << audioDeviceMap[pChannel->audioDevice()] << endl;
+				if (audioDeviceMap.isEmpty()) {
+					ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannel
+						<< " " << pChannel->audioDriver() << endl;
+				} else {
+					ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannel
+						<< " " << audioDeviceMap[pChannel->audioDevice()] << endl;
 				}
-                if (midiDeviceMap.isEmpty()) {
-	                ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannel
-				       << " " << pChannel->midiDriver() << endl;
-			    } else {
-	                ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannel
-					   << " " << midiDeviceMap[pChannel->midiDevice()] << endl;
-			    }
-                ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannel
-			       << " " << pChannel->midiPort() << endl;
+				if (midiDeviceMap.isEmpty()) {
+					ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannel
+						<< " " << pChannel->midiDriver() << endl;
+				} else {
+					ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannel
+						<< " " << midiDeviceMap[pChannel->midiDevice()] << endl;
+				}
+				ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannel
+					<< " " << pChannel->midiPort() << endl;
                 ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannel << " ";
                 if (pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
                     ts << "ALL";
@@ -876,7 +876,7 @@ void qsamplerMainForm::fileReset (void)
         tr("Resetting the sampler instance will close\n"
            "all device and channel configurations.\n\n"
            "Please note that this operation may cause\n"
-           "temporary MIDI and Audio disruption\n\n"
+           "temporary MIDI and Audio disruption.\n\n"
            "Do you want to reset the sampler engine now?"),
         tr("Reset"), tr("Cancel")) > 0)
         return;
@@ -901,9 +901,9 @@ void qsamplerMainForm::fileRestart (void)
 {
     if (m_pOptions == NULL)
         return;
-        
+
     bool bRestart = true;
-    
+
     // Ask user whether he/she want's a complete restart...
     // (if we're currently up and running)
     if (bRestart && m_pClient) {
@@ -911,7 +911,7 @@ void qsamplerMainForm::fileRestart (void)
             tr("New settings will be effective after\n"
                "restarting the client/server connection.\n\n"
                "Please note that this operation may cause\n"
-               "temporary MIDI and Audio disruption\n\n"
+               "temporary MIDI and Audio disruption.\n\n"
                "Do you want to restart the connection now?"),
             tr("Restart"), tr("Cancel")) == 0);
     }
@@ -954,7 +954,7 @@ void qsamplerMainForm::editAddChannel (void)
         delete pChannel;
         return;
     }
-    
+
     // And give it to the strip (will own the channel instance, if successful).
     if (!createChannelStrip(pChannel)) {
         delete pChannel;
@@ -976,7 +976,7 @@ void qsamplerMainForm::editRemoveChannel (void)
     qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
     if (pChannelStrip == NULL)
         return;
-        
+
     qsamplerChannel *pChannel = pChannelStrip->channel();
     if (pChannel == NULL)
         return;
@@ -998,7 +998,7 @@ void qsamplerMainForm::editRemoveChannel (void)
 
     // Just delete the channel strip.
     delete pChannelStrip;
-    
+
     // Do we auto-arrange?
     if (m_pOptions && m_pOptions->bAutoArrange)
         channelsArrange();
@@ -1042,19 +1042,19 @@ void qsamplerMainForm::editResetChannel (void)
 // Reset all sampler channels.
 void qsamplerMainForm::editResetAllChannels (void)
 {
-    if (m_pClient == NULL)
-        return;
+	if (m_pClient == NULL)
+		return;
 
-    // Invoque the channel strip procedure,
+	// Invoque the channel strip procedure,
 	// for all channels out there...
-    m_pWorkspace->setUpdatesEnabled(false);
-    QWidgetList wlist = m_pWorkspace->windowList();
-    for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
-        if (pChannelStrip)
-    		pChannelStrip->channelReset();
-    }
-    m_pWorkspace->setUpdatesEnabled(true);
+	m_pWorkspace->setUpdatesEnabled(false);
+	QWidgetList wlist = m_pWorkspace->windowList();
+	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+		qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+		if (pChannelStrip)
+			pChannelStrip->channelReset();
+	}
+	m_pWorkspace->setUpdatesEnabled(true);
 }
 
 
@@ -1109,20 +1109,20 @@ void qsamplerMainForm::viewMessages ( bool bOn )
 // Show/hide the device configurator form.
 void qsamplerMainForm::viewDevices (void)
 {
-    if (m_pOptions == NULL)
-        return;
+	if (m_pOptions == NULL)
+		return;
 
-    if (m_pDeviceForm) {
-        m_pOptions->saveWidgetGeometry(m_pDeviceForm);
+	if (m_pDeviceForm) {
+		m_pOptions->saveWidgetGeometry(m_pDeviceForm);
 		m_pDeviceForm->setClient(m_pClient);
-        if (m_pDeviceForm->isVisible()) {
-            m_pDeviceForm->hide();
-        } else {
-            m_pDeviceForm->show();
-            m_pDeviceForm->raise();
-            m_pDeviceForm->setActiveWindow();
-        }
-    }
+		if (m_pDeviceForm->isVisible()) {
+			m_pDeviceForm->hide();
+		} else {
+			m_pDeviceForm->show();
+			m_pDeviceForm->raise();
+			m_pDeviceForm->setActiveWindow();
+		}
+	}
 }
 
 
@@ -1240,7 +1240,7 @@ void qsamplerMainForm::channelsArrange (void)
         y += iHeight;
     }
     m_pWorkspace->setUpdatesEnabled(true);
-    
+
     stabilizeForm();
 }
 
@@ -1384,8 +1384,10 @@ void qsamplerMainForm::stabilizeForm (void)
 void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip )
 {
 	// Add this strip to the changed list...
-	if (m_changedStrips.containsRef(pChannelStrip) == 0)
+	if (m_changedStrips.containsRef(pChannelStrip) == 0) {
 		m_changedStrips.append(pChannelStrip);
+		pChannelStrip->resetErrorCount();
+	}
 
     // Just mark the dirty form.
     m_iDirtyCount++;
@@ -1675,7 +1677,7 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
     pChannelStrip = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
     if (pChannelStrip == NULL)
         return NULL;
-        
+
     // Actual channel strip setup...
     pChannelStrip->setup(pChannel);
     QObject::connect(pChannelStrip, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelStripChanged(qsamplerChannelStrip *)));
@@ -1733,7 +1735,7 @@ qsamplerChannelStrip *qsamplerMainForm::channelStrip ( int iChannelID )
 	QWidgetList wlist = m_pWorkspace->windowList();
 	if (wlist.isEmpty())
 		return NULL;
-	
+
 	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
 		qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
 		if (pChannelStrip) {
@@ -1814,29 +1816,29 @@ void qsamplerMainForm::timerSlot (void)
             }
         }
     }
-    
+
 	// Refresh each channel usage, on each period...
-    if (m_pClient && (m_changedStrips.count() > 0 || m_pOptions->bAutoRefresh)) {
-        m_iTimerSlot += QSAMPLER_TIMER_MSECS;
-        if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime && m_pWorkspace->isUpdatesEnabled())  {
-            m_iTimerSlot = 0;
-            // Update the channel information for each pending strip...
-            for (qsamplerChannelStrip *pChannelStrip = m_changedStrips.first();
-                    pChannelStrip;
+	if (m_pClient && (m_changedStrips.count() > 0 || m_pOptions->bAutoRefresh)) {
+		m_iTimerSlot += QSAMPLER_TIMER_MSECS;
+		if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime && m_pWorkspace->isUpdatesEnabled())  {
+			m_iTimerSlot = 0;
+			// Update the channel information for each pending strip...
+			for (qsamplerChannelStrip *pChannelStrip = m_changedStrips.first();
+					pChannelStrip;
 						pChannelStrip = m_changedStrips.next()) {
 				// If successfull, remove from pending list...
 				if (pChannelStrip->updateChannelInfo())
-                    m_changedStrips.remove(pChannelStrip);
+					m_changedStrips.remove(pChannelStrip);
 			}
-            // Update the channel stream usage for each strip...
-            QWidgetList wlist = m_pWorkspace->windowList();
-            for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-                qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
-                if (pChannelStrip && pChannelStrip->isVisible())
-                    pChannelStrip->updateChannelUsage();
-            }
-        }
-    }
+			// Update the channel stream usage for each strip...
+			QWidgetList wlist = m_pWorkspace->windowList();
+			for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+				qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+				if (pChannelStrip && pChannelStrip->isVisible())
+					pChannelStrip->updateChannelUsage();
+			}
+		}
+	}
 
     // Register the next timer slot.
     QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(timerSlot()));
@@ -2070,7 +2072,7 @@ void qsamplerMainForm::stopClient (void)
     // channels from the back-end server.
     m_iDirtyCount = 0;
     closeSession(false);
-    
+
     // Close us as a client...
     lscp_client_destroy(m_pClient);
     m_pClient = NULL;
