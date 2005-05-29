@@ -195,7 +195,7 @@ bool qsamplerChannelStrip::channelSetup (void)
 		
 	// Invoke the channel setup dialog.
 	bool bResult = m_pChannel->channelSetup(this);
-	// Notify that thie channel has changed.
+	// Notify that this channel has changed.
 	if (bResult)
 		emit channelChanged(this);
 
@@ -211,7 +211,7 @@ bool qsamplerChannelStrip::channelReset (void)
 
 	// Invoke the channel reset method.
 	bool bResult = m_pChannel->channelReset();
-	// Notify that thie channel has changed.
+	// Notify that this channel has changed.
 	if (bResult)
 		emit channelChanged(this);
 
@@ -225,7 +225,7 @@ bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
 	if (m_pChannel == NULL)
 		return false;
 
-	// Do we refersh the actual name?
+	// Do we refresh the actual name?
 	if (bForce)
 		m_pChannel->updateInstrumentName();
 
