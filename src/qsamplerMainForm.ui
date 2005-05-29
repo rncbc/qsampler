@@ -111,6 +111,8 @@
         <separator/>
         <action name="fileResetAction"/>
         <action name="fileRestartAction"/>
+        <separator/>
+        <action name="viewDevicesAction"/>
     </toolbar>
     <toolbar dock="2">
         <property name="name">
