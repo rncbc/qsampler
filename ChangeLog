@@ -5,6 +5,9 @@ ChangeLog
 
 0.1.1   2005-06-02 The mantra of bugfixes.
 
+* New improved and full-featured application icon, thanks 
+  to Christian Schoenebeck design.
+  
 * Fixed refresh cycle of channel strips that are found
   in an error state, which wwas preventing correct channel
   info updates.
