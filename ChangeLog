@@ -3,13 +3,15 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.1.1   2005-05-26 The mantra of bugfixes.
+0.1.1   2005-06-02 The mantra of bugfixes.
 
 * Fixed refresh cycle of channel strips that are found
   in an error state, which wwas preventing correct channel
   info updates.
 
 * Device configuration now accessible on toolbar.
+
+* Minor configure fix, a debian specialty.
 
 
 0.1.0   2005-05-23  Device configuration breakthrough.
