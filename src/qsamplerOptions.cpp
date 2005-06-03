@@ -28,6 +28,10 @@
 
 #include "config.h"
 
+#ifdef CONFIG_LIBGIG
+#include <gig.h>
+#endif
+
 
 //-------------------------------------------------------------------------
 // qsamplerOptions - Prototype settings structure.
@@ -257,7 +261,10 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
         }
         else if (sArg == "-v" || sArg == "--version") {
             fprintf(stderr, "Qt: %s\n", qVersion());
-            fprintf(stderr, "liblscp: %s\n", ::lscp_client_version());
+#ifdef CONFIG_LIBGIG
+			fprintf(stderr, "%s: %s\n", gig::libraryName().c_str(), gig::libraryVersion().c_str());
+#endif            
+            fprintf(stderr, "%s: %s\n", ::lscp_client_package(), ::lscp_client_version());
             fprintf(stderr, "qsampler: %s\n", QSAMPLER_VERSION);
             return false;
         }

@@ -51,8 +51,8 @@
 #include <signal.h>
 #endif
 
-#if CONFIG_LIBGIG
-# include <gig.h>
+#ifdef CONFIG_LIBGIG
+#include <gig.h>
 #endif
 
 // Timer constant stuff.
@@ -1299,7 +1299,7 @@ void qsamplerMainForm::helpAbout (void)
     sText += ::lscp_client_package();
     sText += " ";
     sText += ::lscp_client_version();
-#if CONFIG_LIBGIG
+#ifdef CONFIG_LIBGIG
     sText += ", ";
     sText += gig::libraryName();
     sText += " ";
