@@ -39,8 +39,8 @@ $(name):	$(name).mak $(sources) $(headers)
 #       It is mandatory for Debian packaging.
 
 install:	$(name) icons/$(name).png
-	@install -vD $(name) $(DESTDIR)$(prefix)/bin/$(name)
-	@install -vD icons/$(name).png $(DESTDIR)$(prefix)/share/icons/$(name).png
+	@install -vD $(name) -m 0755 $(DESTDIR)$(prefix)/bin/$(name)
+	@install -vD icons/$(name).png -m 0644 $(DESTDIR)$(prefix)/share/icons/$(name).png
 
 uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
 	@rm -vf $(DESTDIR)$(prefix)/bin/$(name)
