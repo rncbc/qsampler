@@ -9,10 +9,12 @@ ChangeLog
   to Christian Schoenebeck design.
   
 * Fixed refresh cycle of channel strips that are found
-  in an error state, which wwas preventing correct channel
+  in an error state, which was preventing correct channel
   info updates.
 
 * Device configuration now accessible on toolbar.
+
+* Include libgig version info on command line request (-v).
 
 * Minor configure fix, a debian specialty.
 
