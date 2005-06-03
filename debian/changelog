@@ -1,3 +1,9 @@
+qsampler (0.1.cvs20050602-1) unstable; urgency=low
+
+  * Released (Closes: #280576)
+
+ -- Matt Flax <flatmax@pgb.unsw.edu.au>  Fri,  3 Jun 2005 15:27:44 +1000
+
 qsampler (0.1.0-1) unstable; urgency=low
 
   * New Release.

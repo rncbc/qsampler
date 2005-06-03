@@ -1,0 +1,16 @@
+# commands used to package linuxsampler
+MINORVERSION=cvs20050602
+cd ~/debian/debRelease/qsampler
+rm -rf qsampler*
+cvs -z3 -d:pserver:anonymous@cvs.linuxsampler.org:/var/cvs/linuxsampler co qsampler
+find . -name 'CVS' | xargs rm -rf
+tar zcpf qsampler-0.1.$MINORVERSION.tar.gz qsampler
+mv qsampler qsampler-0.1.$MINORVERSION
+rm -r qsampler-0.1.$MINORVERSION/debian
+cp -a debian qsampler-0.1.$MINORVERSION
+rm qsampler-0.1.$MINORVERSION/debian/*~
+cd qsampler-0.1.$MINORVERSION
+dh_make -e flatmax@Matt.Flax -f ../qsampler-0.1.$MINORVERSION.tar.gz
+s
+
+dpkg-buildpackage -rfakeroot

@@ -1,0 +1,60 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH QSAMPLER 1 "June  3, 2005"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+qsampler \- LinuxSampler GUI frontend based on the Qt toolkit
+.SH SYNOPSIS
+.B qsampler
+.RI [ options ] " file"
+.SH DESCRIPTION
+This manual page documents briefly the
+.B qsampler
+command.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics, 
+.\" respectively.
+\fBqsampler\fP is a LinuxSampler GUI front-end application written in C++ around the Qt3 toolkit using Qt Designer. At the moment it just wraps as a client reference interface for the LinuxSampler Control Protocol (LSCP).
+.SH OPTIONS
+These programs follow the usual GNU command line syntax, with long
+options starting with two dashes (`-').
+A summary of options is included below.
+For a complete description, see the Info files.
+.TP
+.B \-?, \-\-help
+Show summary of options.
+.TP
+.B \-s, \-\-start
+Start linuxsampler server locally
+.TP
+.B \-h, \-\-hostname
+Specify linuxsampler server hostname
+.TP
+.B \-p, \-\-port
+Specify linuxsampler server port number
+.TP
+.B \-v, \-\-version
+Show version of program.
+.SH SEE ALSO
+.BR linuxsampler (1),
+.BR gigtools (1).
+.br
+.SH AUTHOR
+qsampler was written by Rui Nuno Capela.
+.PP
+This manual page was written by Matt Flax <flatmax@Matt.Flax>,
+for the Debian project (but may be used by others).
