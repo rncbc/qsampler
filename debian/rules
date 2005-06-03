@@ -28,6 +28,7 @@ config.status:
 	dh_testdir
 	# Add here commands to configure the package.
 	$(MAKE) -f Makefile.cvs
+	chmod a+x configure
 	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info
 
 
@@ -48,8 +49,9 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
+	-$(MAKE) -f Makefile.cvs
+	chmod a+x configure
 	-$(MAKE) distclean
-	-$(MAKE) -f Makefile.cvs clean
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""
 	cp -f /usr/share/misc/config.sub config.sub
 endif
@@ -91,7 +93,7 @@ binary-arch: build install
 #	dh_installinit
 #	dh_installcron
 #	dh_installinfo
-	dh_installman
+	dh_installman debian/qsampler.1
 	dh_link
 	dh_strip
 	dh_compress
