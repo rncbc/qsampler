@@ -16,9 +16,10 @@ ChangeLog
 
 * Include libgig version info on command line request (-v).
 
-* Minor configure fix, a debian specialty. Also, install 
-  does the right thing with target file modes (thanks to
-  Matt Flax for pointing this out).
+* Minor configure and Makefile install fixes, as Debian and 
+  Mac OS X specialties. Also, install does the right thing 
+  with target file modes (thanks to Matt Flax and Ebrahim 
+  Mayat, for pointing these out).
 
 
 0.1.0   2005-05-23  Device configuration breakthrough.
