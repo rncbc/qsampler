@@ -248,7 +248,7 @@
                         <set>AlignCenter</set>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>IInstrument load status</string>
+                        <string>Instrument load status</string>
                     </property>
                 </widget>
             </grid>
