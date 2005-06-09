@@ -360,6 +360,7 @@ void qsamplerDeviceForm::selectDevice (void)
 		DeviceParamTable->setNumRows(0);
 		DevicePortComboBox->clear();
 		DevicePortParamTable->setNumRows(0);
+		DevicePortTextLabel->setEnabled(false);
 		DevicePortComboBox->setEnabled(false);
 		DevicePortParamTable->setEnabled(false);
 		stabilizeForm();
@@ -390,9 +391,20 @@ void qsamplerDeviceForm::selectDevice (void)
 	// Fill the device parameter table...
 	DeviceParamTable->refresh(device.params(), m_bNewDevice);
 	// And now the device port/channel parameter table...
+	switch (device.deviceType()) {
+	case qsamplerDevice::Audio:
+		DevicePortTextLabel->setText(tr("Ch&annel:"));
+		break;
+	case qsamplerDevice::Midi:
+		DevicePortTextLabel->setText(tr("P&ort:"));
+		break;
+	case qsamplerDevice::None:
+		break;
+	}
 	DevicePortComboBox->clear();
 	DevicePortParamTable->setNumRows(0);
 	if (m_bNewDevice) {
+		DevicePortTextLabel->setEnabled(false);
 		DevicePortComboBox->setEnabled(false);
 		DevicePortParamTable->setEnabled(false);
 	} else {
@@ -415,6 +427,7 @@ void qsamplerDeviceForm::selectDevice (void)
 				+ ' ' + pPort->portName());
 		}
 		bool bEnabled = (ports.count() > 0);
+		DevicePortTextLabel->setEnabled(bEnabled);
 		DevicePortComboBox->setEnabled(bEnabled);
 		DevicePortParamTable->setEnabled(bEnabled);
 	}

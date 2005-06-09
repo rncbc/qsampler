@@ -12,7 +12,9 @@ ChangeLog
   in an error state, which was preventing correct channel
   info updates.
 
-* Device configuration now accessible on toolbar.
+* Device configuration now accessible on toolbar. Added
+  buddy text label to device port/channel combobox on the
+  device dialog.
 
 * Include libgig version info on command line request (-v).
 
