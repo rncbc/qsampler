@@ -1,3 +1,9 @@
+qsampler (0.1.1-1) unstable; urgency=low
+
+  * New Release.
+
+ -- Christian Schoenebeck <cuse@users.sourceforge.net>  Sun, 12 Jun 2005 16:53:50 +0200
+
 qsampler (0.1.cvs20050602-1) unstable; urgency=low
 
   * Released (Closes: #280576)
