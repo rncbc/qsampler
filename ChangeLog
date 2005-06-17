@@ -3,7 +3,11 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-0.1.2   2005-06-15 Work in progress...
+0.1.2   2005-06-18 Work in progress...
+
+* Fixed output disability when messages limit option is 
+  turned off (thanks to Wolfgang Woehl for spotting this
+  one, while on qjackctl).
 
 
 0.1.1   2005-06-12 The mantra of bugfixes.

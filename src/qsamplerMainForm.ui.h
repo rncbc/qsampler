@@ -1633,7 +1633,7 @@ void qsamplerMainForm::updateMessagesLimit (void)
         if (m_pOptions->bMessagesLimit)
             m_pMessages->setMessagesLimit(m_pOptions->iMessagesLimitLines);
         else
-            m_pMessages->setMessagesLimit(0);
+            m_pMessages->setMessagesLimit(-1);
     }
 }
 
