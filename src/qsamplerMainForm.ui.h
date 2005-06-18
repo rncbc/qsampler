@@ -1823,25 +1823,30 @@ void qsamplerMainForm::timerSlot (void)
         }
     }
 
-	// Refresh each channel usage, on each period...
-	if (m_pClient && (m_changedStrips.count() > 0 || m_pOptions->bAutoRefresh)) {
-		m_iTimerSlot += QSAMPLER_TIMER_MSECS;
-		if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime && m_pWorkspace->isUpdatesEnabled())  {
-			m_iTimerSlot = 0;
-			// Update the channel information for each pending strip...
+	if (m_pClient) {
+		// Update the channel information for each pending strip...
+		if (m_changedStrips.count() > 0) {
 			for (qsamplerChannelStrip *pChannelStrip = m_changedStrips.first();
-					pChannelStrip;
-						pChannelStrip = m_changedStrips.next()) {
+					pChannelStrip; pChannelStrip = m_changedStrips.next()) {
 				// If successfull, remove from pending list...
 				if (pChannelStrip->updateChannelInfo())
 					m_changedStrips.remove(pChannelStrip);
 			}
-			// Update the channel stream usage for each strip...
-			QWidgetList wlist = m_pWorkspace->windowList();
-			for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-				qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
-				if (pChannelStrip && pChannelStrip->isVisible())
-					pChannelStrip->updateChannelUsage();
+		}
+		// Refresh each channel usage, on each period...
+		if (m_pOptions->bAutoRefresh) {
+			m_iTimerSlot += QSAMPLER_TIMER_MSECS;
+			if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
+				m_iTimerSlot = 0;
+				// Update the channel stream usage for each strip...
+				QWidgetList wlist = m_pWorkspace->windowList();
+				for (int iChannel = 0;
+						iChannel < (int) wlist.count(); iChannel++) {
+					qsamplerChannelStrip *pChannelStrip
+						= (qsamplerChannelStrip *) wlist.at(iChannel);
+					if (pChannelStrip && pChannelStrip->isVisible())
+						pChannelStrip->updateChannelUsage();
+				}
 			}
 		}
 	}

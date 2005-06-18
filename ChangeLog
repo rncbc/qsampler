@@ -9,7 +9,8 @@ ChangeLog
   turned off (thanks to Wolfgang Woehl for spotting this
   one, while on qjackctl).
 
-* Added CHANNEL_INFO event feedback notification handling.
+* Added CHANNEL_INFO event feedback notification handling;
+  minor stream/voice usage auto-refresh cycle optimization.
 
 
 0.1.1   2005-06-12 The mantra of bugfixes.
