@@ -390,6 +390,12 @@ void qsamplerMainForm::customEvent ( QCustomEvent *pCustomEvent )
         appendMessagesColor(tr("Notify event: %1 data: %2")
             .arg(::lscp_event_to_text(pEvent->event()))
             .arg(pEvent->data()), "#996699"); 
+		if (pEvent->event() == LSCP_EVENT_CHANNEL_INFO) {
+			int iChannelID = pEvent->data().toInt();
+			qsamplerChannelStrip *pChannelStrip = channelStrip(iChannelID);
+			if (pChannelStrip)
+				channelStripChanged(pChannelStrip);
+		}
     }
 }
 
@@ -2019,6 +2025,10 @@ bool qsamplerMainForm::startClient (void)
     ::lscp_client_set_timeout(m_pClient, m_pOptions->iServerTimeout);
     appendMessages(tr("Client receive timeout is set to %1 msec.").arg(::lscp_client_get_timeout(m_pClient)));
 
+	// Subscribe to channel info change notifications...
+	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO) != LSCP_OK)
+		appendMessagesClient("lscp_client_subscribe");
+
     // We may stop scheduling around.
     stopSchedule();
 
@@ -2032,7 +2042,7 @@ bool qsamplerMainForm::startClient (void)
 	// if visible, that we're ready...
 	if (m_pDeviceForm && m_pDeviceForm->isVisible())
 	    m_pDeviceForm->setClient(m_pClient);
-	    
+
     // Is any session pending to be loaded?
     if (!m_pOptions->sSessionFile.isEmpty()) {
         // Just load the prabably startup session...
@@ -2074,7 +2084,8 @@ void qsamplerMainForm::stopClient (void)
     closeSession(false);
 
     // Close us as a client...
-    lscp_client_destroy(m_pClient);
+	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO);
+    ::lscp_client_destroy(m_pClient);
     m_pClient = NULL;
 
     // Log final here.
