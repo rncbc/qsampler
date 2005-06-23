@@ -387,14 +387,15 @@ void qsamplerMainForm::customEvent ( QCustomEvent *pCustomEvent )
     // For the time being, just pump it to messages.
     if (pCustomEvent->type() == QSAMPLER_CUSTOM_EVENT) {
         qsamplerCustomEvent *pEvent = (qsamplerCustomEvent *) pCustomEvent;
-        appendMessagesColor(tr("Notify event: %1 data: %2")
-            .arg(::lscp_event_to_text(pEvent->event()))
-            .arg(pEvent->data()), "#996699"); 
 		if (pEvent->event() == LSCP_EVENT_CHANNEL_INFO) {
 			int iChannelID = pEvent->data().toInt();
 			qsamplerChannelStrip *pChannelStrip = channelStrip(iChannelID);
 			if (pChannelStrip)
 				channelStripChanged(pChannelStrip);
+		} else {
+			appendMessagesColor(tr("Notify event: %1 data: %2")
+				.arg(::lscp_event_to_text(pEvent->event()))
+				.arg(pEvent->data()), "#996699"); 
 		}
     }
 }
