@@ -1308,9 +1308,9 @@ void qsamplerMainForm::helpAbout (void)
     sText += ::lscp_client_version();
 #ifdef CONFIG_LIBGIG
     sText += ", ";
-    sText += gig::libraryName();
+    sText += gig::libraryName().c_str();
     sText += " ";
-    sText += gig::libraryVersion();
+    sText += gig::libraryVersion().c_str();
 #endif
     sText += "<br />\n";
     sText += "<br />\n";

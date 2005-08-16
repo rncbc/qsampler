@@ -3,6 +3,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+CVS HEAD
+
+* Fixed compilation error which occured when Qt was
+  compiled with -no-stl.
+
+
 0.1.2   2005-06-23 Even minor workings needs a rest.
 
 * Fixed output disability when messages limit option is 
