@@ -602,7 +602,7 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 	if (isInstrumentFile(sInstrumentFile)) {
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
-			RIFF::File *pRiff = new RIFF::File((const RIFF::String&) sInstrumentFile);
+			RIFF::File *pRiff = new RIFF::File(sInstrumentFile.latin1());
 			gig::File  *pGig  = new gig::File(pRiff);
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {
@@ -633,7 +633,7 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 		sInstrumentName = QFileInfo(sInstrumentFile).fileName();
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
-			RIFF::File *pRiff = new RIFF::File((const RIFF::String&) sInstrumentFile);
+			RIFF::File *pRiff = new RIFF::File(sInstrumentFile.latin1());
 			gig::File  *pGig  = new gig::File(pRiff);
 			int iIndex = 0;
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
