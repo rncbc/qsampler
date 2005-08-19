@@ -108,6 +108,14 @@ public:
 	float    volume() const;
 	bool     setVolume(float fVolume);
 
+	// Sampler channel mute state.
+	bool     channelMute() const;
+	bool     setChannelMute(bool bMute);
+
+	// Sampler channel solo state.
+	bool     channelSolo() const;
+	bool     setChannelSolo(bool bSolo);
+
 	// Istrument name remapper.
 	void     updateInstrumentName();
 
@@ -165,6 +173,8 @@ private:
 	QString m_sAudioDriver;
 	int     m_iAudioDevice;
 	float   m_fVolume;
+	bool    m_bMute;
+	bool    m_bSolo;
 };
 
 #endif  // __qsamplerChannel_h

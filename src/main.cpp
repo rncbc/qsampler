@@ -58,11 +58,12 @@ int main ( int argc, char **argv )
     
     // Construct, setup and show the main form.
     qsamplerMainForm w;
+	app.setMainWidget(&w);
     w.setup(&options);
     w.show();
 
     // Register the quit signal/slot.
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    // app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     return app.exec();
 }

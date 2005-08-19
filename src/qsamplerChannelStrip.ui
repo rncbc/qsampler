@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>694</width>
-            <height>47</height>
+            <width>737</width>
+            <height>46</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -253,13 +253,59 @@
                 </widget>
             </grid>
         </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>ChannelMutePushButton</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>48</width>
+                    <height>64</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>&amp;Mute</string>
+            </property>
+            <property name="accel">
+                <string>Alt+M</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Channel Mute</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>ChannelSoloPushButton</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>48</width>
+                    <height>64</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>&amp;Solo</string>
+            </property>
+            <property name="accel">
+                <string>Alt+S</string>
+            </property>
+            <property name="toggleButton">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Channel Solo</string>
+            </property>
+        </widget>
         <widget class="QSlider">
             <property name="name">
                 <cstring>VolumeSlider</cstring>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>180</width>
+                    <width>120</width>
                     <height>0</height>
                 </size>
             </property>
@@ -392,6 +438,18 @@
         <slot>channelSetup()</slot>
     </connection>
     <connection>
+        <sender>ChannelMutePushButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>qsamplerChannelStrip</receiver>
+        <slot>channelMute(bool)</slot>
+    </connection>
+    <connection>
+        <sender>ChannelSoloPushButton</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>qsamplerChannelStrip</receiver>
+        <slot>channelSolo(bool)</slot>
+    </connection>
+    <connection>
         <sender>VolumeSlider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>qsamplerChannelStrip</receiver>
@@ -406,12 +464,13 @@
 </connections>
 <tabstops>
     <tabstop>ChannelSetupPushButton</tabstop>
+    <tabstop>ChannelMutePushButton</tabstop>
+    <tabstop>ChannelSoloPushButton</tabstop>
     <tabstop>VolumeSlider</tabstop>
     <tabstop>VolumeSpinBox</tabstop>
 </tabstops>
 <includes>
     <include location="local" impldecl="in declaration">qsamplerChannel.h</include>
-    <include location="local" impldecl="in implementation">qsamplerChannelStrip.ui.h</include>
 </includes>
 <variables>
     <variable access="private">qsamplerChannel *m_pChannel;</variable>
@@ -422,9 +481,11 @@
     <signal>channelChanged( qsamplerChannelStrip * )</signal>
 </signals>
 <slots>
-    <slot specifier="non virtual">volumeChanged(int)</slot>
     <slot specifier="non virtual" returnType="bool">channelSetup()</slot>
+    <slot specifier="non virtual" returnType="bool">channelMute( bool bMute )</slot>
+    <slot specifier="non virtual" returnType="bool">channelSolo( bool bSolo )</slot>
     <slot specifier="non virtual" returnType="bool">channelReset()</slot>
+    <slot specifier="non virtual">volumeChanged(int)</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>

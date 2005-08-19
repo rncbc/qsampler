@@ -788,6 +788,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
                 ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannel << endl;
                 ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannel << endl;
                 ts << "SET CHANNEL VOLUME " << iChannel << " " << pChannel->volume() << endl;
+                if (pChannel->channelMute())
+                	ts << "SET CHANNEL MUTE " << iChannel << " 1" << endl;
+                if (pChannel->channelSolo())
+                	ts << "SET CHANNEL SOLO " << iChannel << " 1" << endl;
                 ts << endl;
             }
         }
@@ -1299,6 +1303,11 @@ void qsamplerMainForm::helpAbout (void)
 #ifndef CONFIG_INSTRUMENT_NAME
     sText += "<small><font color=\"red\">";
     sText += tr("LSCP (liblscp) instrument_name support disabled.");
+    sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_MUTE_SOLO
+    sText += "<small><font color=\"red\">";
+    sText += tr("Sampler channel Mute/Solo support disabled.");
     sText += "</font></small><br />";
 #endif
     sText += "<br />\n";
