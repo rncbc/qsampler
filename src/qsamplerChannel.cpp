@@ -57,7 +57,8 @@ qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
 	m_sAudioDriver      = "ALSA";
 	m_iAudioDevice      = -1;
 	m_fVolume           = 0.0;
-
+	m_bMute             = false;
+	m_bSolo             = false;
 }
 
 // Default destructor.
@@ -417,6 +418,60 @@ bool qsamplerChannel::setVolume ( float fVolume )
 }
 
 
+// Sampler channel mute state.
+bool qsamplerChannel::channelMute (void) const
+{
+	return m_bMute;
+}
+
+bool qsamplerChannel::setChannelMute ( bool bMute )
+{
+	if (client() == NULL || m_iChannelID < 0)
+		return false;
+	if (m_iInstrumentStatus == 100 && ((m_bMute && bMute) || (!m_bMute && !bMute)))
+		return true;
+
+#ifdef CONFIG_MUTE_SOLO
+	if (::lscp_set_channel_mute(client(), m_iChannelID, bMute) != LSCP_OK) {
+		appendMessagesClient("lscp_set_channel_mute");
+		return false;
+	}
+	appendMessages(QObject::tr("Mute: %1.").arg((int) bMute));
+	m_bMute = bMute;
+	return true;
+#else
+	return false;
+#endif
+}
+
+
+// Sampler channel solo state.
+bool qsamplerChannel::channelSolo (void) const
+{
+	return m_bSolo;
+}
+
+bool qsamplerChannel::setChannelSolo ( bool bSolo )
+{
+	if (client() == NULL || m_iChannelID < 0)
+		return false;
+	if (m_iInstrumentStatus == 100 && ((m_bSolo && bSolo) || (!m_bSolo && !bSolo)))
+		return true;
+
+#ifdef CONFIG_MUTE_SOLO
+	if (::lscp_set_channel_solo(client(), m_iChannelID, bSolo) != LSCP_OK) {
+		appendMessagesClient("lscp_set_channel_solo");
+		return false;
+	}
+	appendMessages(QObject::tr("Solo: %1.").arg((int) bSolo));
+	m_bSolo = bSolo;
+	return true;
+#else
+	return false;
+#endif
+}
+
+
 // Istrument name remapper.
 void qsamplerChannel::updateInstrumentName (void)
 {
@@ -465,6 +520,10 @@ bool qsamplerChannel::updateChannelInfo (void)
 	m_iMidiChannel      = pChannelInfo->midi_channel;
 	m_iAudioDevice      = pChannelInfo->audio_device;
 	m_fVolume           = pChannelInfo->volume;
+#ifdef CONFIG_MUTE_SOLO
+	m_bMute             = pChannelInfo->mute;
+	m_bSolo             = pChannelInfo->solo;
+#endif
 	// Some sanity checks.
 	if (m_sEngineName == "NONE" || m_sEngineName.isEmpty())
 		m_sEngineName = QString::null;

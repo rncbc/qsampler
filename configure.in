@@ -142,6 +142,24 @@ if test "x$ac_instrument_name" = "xyes"; then
    AC_DEFINE(CONFIG_INSTRUMENT_NAME, 1, [Define if instrument_name is available.])
 fi
 
+AC_CACHE_CHECK([for mute/solo in lscp_channel_info_t],
+  ac_mute_solo, [
+  AC_TRY_COMPILE([#include "lscp/client.h"], [
+	lscp_channel_info_t info;
+	info.mute = 0;
+	info.solo = 0;
+    ], ac_mute_solo="yes", ac_mute_solo="no")
+])
+if test "x$ac_mute_solo" = "xyes"; then
+   AC_CHECK_LIB(lscp, lscp_set_channel_mute, [ac_mute_solo="yes"], [ac_mute_solo="no"])
+fi
+if test "x$ac_mute_solo" = "xyes"; then
+   AC_CHECK_LIB(lscp, lscp_set_channel_solo, [ac_mute_solo="yes"], [ac_mute_solo="no"])
+fi
+if test "x$ac_mute_solo" = "xyes"; then
+   AC_DEFINE(CONFIG_MUTE_SOLO, 1, [Define if mute/solo is available.])
+fi
+
 dnl Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])

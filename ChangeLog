@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Added MUTE/SOLO buttons to individual channel strips.
+
 * Fixed compilation error which occured when Qt was
   compiled with -no-stl.
 

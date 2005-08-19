@@ -2,6 +2,9 @@
 #define CONFIG_PREFIX   "."
 #define CONFIG_DEBUG    1
 
+#define CONFIG_INSTRUMENT_NAME
+#define CONFIG_MUTE_SOLO
+
 #undef  HAVE_SIGNAL_H
 
 

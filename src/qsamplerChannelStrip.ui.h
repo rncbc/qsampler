@@ -203,6 +203,38 @@ bool qsamplerChannelStrip::channelSetup (void)
 }
 
 
+// Channel mute slot.
+bool qsamplerChannelStrip::channelMute ( bool bMute )
+{
+	if (m_pChannel == NULL)
+		return false;
+
+	// Invoke the channel mute method.
+	bool bResult = m_pChannel->setChannelMute(bMute);
+	// Notify that this channel has changed.
+	if (bResult)
+		emit channelChanged(this);
+
+	return bResult;
+}
+
+
+// Channel solo slot.
+bool qsamplerChannelStrip::channelSolo ( bool bSolo )
+{
+	if (m_pChannel == NULL)
+		return false;
+
+	// Invoke the channel solo method.
+	bool bResult = m_pChannel->setChannelSolo(bSolo);
+	// Notify that this channel has changed.
+	if (bResult)
+		emit channelChanged(this);
+
+	return bResult;
+}
+
+
 // Channel reset slot.
 bool qsamplerChannelStrip::channelReset (void)
 {
@@ -325,6 +357,20 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
     InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
     m_iErrorCount = 0;
+
+#ifdef CONFIG_MUTE_SOLO
+    // Mute/Solo button state coloring...
+    const QColor& rgbNormal = ChannelSetupPushButton->paletteBackgroundColor();
+    bool bMute = m_pChannel->channelMute();
+    ChannelMutePushButton->setPaletteBackgroundColor(bMute ? Qt::red : rgbNormal);
+    ChannelMutePushButton->setDown(bMute);
+    bool bSolo = m_pChannel->channelSolo();
+    ChannelSoloPushButton->setPaletteBackgroundColor(bSolo ? Qt::yellow : rgbNormal);
+    ChannelSoloPushButton->setDown(bSolo);
+#else
+	ChannelMutePushButton->setEnabled(false);
+	ChannelSoloPushButton->setEnabled(false);
+#endif
 
     // And update the both GUI volume elements;
     // return success if, and only if, intrument is fully loaded...
