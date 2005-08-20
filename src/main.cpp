@@ -55,7 +55,7 @@ int main ( int argc, char **argv )
         app.quit();
         return 1;
     }
-    
+
     // Construct, setup and show the main form.
     qsamplerMainForm w;
 	app.setMainWidget(&w);
@@ -69,4 +69,3 @@ int main ( int argc, char **argv )
 }
 
 // end of main.cpp
-

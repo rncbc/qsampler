@@ -5,6 +5,11 @@ ChangeLog
 
 CVS HEAD
 
+* Set to use QApplication::setMainWidget() instead of 
+  registering the traditional lastWindowClosed() signal 
+  to quit() slot, just to let the -geometry command line 
+  argument have some effect on X11.
+
 * Added MUTE/SOLO buttons to individual channel strips.
 
 * Fixed compilation error which occured when Qt was
