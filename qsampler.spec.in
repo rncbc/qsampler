@@ -45,7 +45,7 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 %{prefix}/share/icons/qsampler.png
 
 %changelog
-* Tue Aug 24 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Wed Aug 24 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Prepared auto-generation from configure.
 * Tue Aug 16 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Get in sync with latest offerings from liblscp (0.3.1) and
