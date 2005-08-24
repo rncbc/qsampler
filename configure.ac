@@ -1,8 +1,10 @@
-dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/qsamplerMainForm.ui.h)
-AC_CONFIG_HEADER(config.h)
+# Process this file with autoconf to produce a configure script.
+AC_INIT(Qsampler, 0.1.3, rncbc@rncbc.org, qsampler)
+AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
+AC_CONFIG_HEADERS(config.h)
+AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
 
-dnl Set default installation prefix.
+# Set default installation prefix.
 AC_PREFIX_DEFAULT(/usr/local)
 ac_prefix=$prefix
 if test "x$ac_prefix" = "xNONE"; then
@@ -11,7 +13,7 @@ fi
 AC_SUBST(ac_prefix)
 AC_DEFINE_UNQUOTED(CONFIG_PREFIX, ["$ac_prefix"], [Default installation prefix.])
 
-dnl Enable debugging argument option.
+# Enable debugging argument option.
 AC_ARG_ENABLE(debug,
   AC_HELP_STRING([--enable-debug], [enable debugging (default=no)]),
   [ac_debug="debug"],
@@ -22,24 +24,24 @@ if test "x$ac_debug" = "xdebug"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
 fi
 
-dnl Enable libgig availability.
+# Enable libgig availability.
 AC_ARG_ENABLE(libgig,
   AC_HELP_STRING([--disable-libgig], [disable libgig interface (default=no)]),
   [ac_libgig="no"],
   [ac_libgig="yes"])
 
-dnl Checks for programs.
+# Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_PROG_GCC_TRADITIONAL
 
-dnl Checks for languages.
+# Checks for languages.
 AC_LANG_C
 AC_LANG_CPLUSPLUS
 
-dnl Check for QTDIR environment variable.
+# Check for QTDIR environment variable.
 AC_MSG_CHECKING([whether QTDIR environment variable is set])
 if test "x$QTDIR" = "x"; then
   AC_MSG_RESULT([no])
@@ -58,7 +60,7 @@ for X in qt qt3; do
   fi
 done
 
-dnl Checks for Qt library.
+# Checks for Qt library.
 for X in qt-mt qt; do
   if test "x$ac_qtlib" = "x"; then
      AC_CHECK_LIB($X, main, [ac_qtlib=$X])
@@ -69,7 +71,7 @@ if test "x$ac_qtlib" = "x"; then
 fi
 AC_SUBST(ac_qtlib)
 
-dnl Check for Qt multi-thread support.
+# Check for Qt multi-thread support.
 if test "x$ac_qtlib" = "xqt-mt"; then
   ac_thread="thread"
 fi
@@ -88,43 +90,43 @@ AC_CACHE_CHECK([for Qt library version >= 3.1.1],
     ])
 ])
 
-dnl A common error message:
+# A common error message:
 ac_qtdir_errmsg="not found in current PATH. Maybe QT development environment isn't available (qt3-devel)."
 
-dnl Check for Qt qmake utility.
+# Check for Qt qmake utility.
 AC_PATH_PROG(ac_qmake, qmake, [no], $QTDIR/bin:${PATH})
 if test "x$ac_qmake" = "xno"; then
    AC_MSG_ERROR([qmake $ac_qtdir_errmsg])
 fi
 AC_SUBST(ac_qmake)
 
-dnl Check for Qt moc utility.
+# Check for Qt moc utility.
 AC_PATH_PROG(ac_moc, moc, [no], $QTDIR/bin:${PATH})
 if test "x$ac_moc" = "xno"; then
    AC_MSG_ERROR([moc $ac_qtdir_errmsg])
 fi
 AC_SUBST(ac_moc)
 
-dnl Check for Qt uic utility.
+# Check for Qt uic utility.
 AC_PATH_PROG(ac_uic, uic, [no], $QTDIR/bin:${PATH})
 if test "x$ac_uic" = "xno"; then
    AC_MSG_ERROR([uic $ac_qtdir_errmsg])
 fi
 AC_SUBST(ac_uic)
 
-dnl Checks for libraries.
+# Checks for libraries.
 AC_CHECK_LIB(m, main)
 AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
 AC_CHECK_LIB($ac_qtlib, main)
 
-dnl Check for round math function.
+# Check for round math function.
 AC_CHECK_LIB(m, round, [ac_round="yes"], [ac_round="no"])
 if test "x$ac_round" = "xyes"; then
    AC_DEFINE(CONFIG_ROUND, 1, [Define if round is available.])
 fi
 
-dnl Check for mandatory libraries.
+# Check for mandatory libraries.
 AC_CHECK_LIB(lscp, main, [ac_liblscp="yes"], [ac_liblscp="no"])
 if test "x$ac_liblscp" = "xno"; then
    AC_MSG_ERROR([LSCP library not found.])
@@ -160,7 +162,7 @@ if test "x$ac_mute_solo" = "xyes"; then
    AC_DEFINE(CONFIG_MUTE_SOLO, 1, [Define if mute/solo is available.])
 fi
 
-dnl Check for optional libraries.
+# Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
    if test "x$ac_libgig" = "xyes"; then
@@ -171,26 +173,26 @@ fi
 
 AC_SUBST(ac_libs)
 
-dnl Checks for header files.
+# Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h signal.h)
 
-dnl AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
-dnl if test "x$ac_lscp_h" = "xno"; then
-dnl    AC_MSG_ERROR([LSCP headers not found.])
-dnl fi
+# AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
+# if test "x$ac_lscp_h" = "xno"; then
+#    AC_MSG_ERROR([LSCP headers not found.])
+# fi
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-dnl AC_C_CONST
+# Checks for typedefs, structures, and compiler characteristics.
+# AC_C_CONST
 
-dnl Checks for library functions.
+# Checks for library functions.
 AC_CHECK_FUNCS(system)
 
-dnl Finally produce a configure header file and the makefiles.
-AC_OUTPUT(Makefile qsampler.pro)
+# Finally produce a configure header file and the makefiles.
+AC_OUTPUT
 
-dnl make clean > /dev/null 2>&1
+# make clean > /dev/null 2>&1
 
 echo ""
 echo "Now type 'make', followed by 'make install' as root."

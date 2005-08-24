@@ -19,14 +19,12 @@
 
 *****************************************************************************/
 
-#include "qsamplerOptions.h"
 #include "qsamplerAbout.h"
+#include "qsamplerOptions.h"
 
 #include <qcombobox.h>
 
 #include <lscp/client.h>
-
-#include "config.h"
 
 #ifdef CONFIG_LIBGIG
 #include <gig.h>

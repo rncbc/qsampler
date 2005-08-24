@@ -1,0 +1,66 @@
+%define name    @PACKAGE_TARNAME@
+%define version @PACKAGE_VERSION@
+%define release 6
+%define prefix  /usr/local
+
+Summary:	A LinuxSampler Qt GUI interface.
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Prefix:		%{prefix}
+Copyright:	GPL
+Group:		Sound
+Source0:	%{name}-%{version}.tar.gz
+URL:		http://qsampler.sourceforge.net/
+BuildRoot:	/var/tmp/%{name}-%{version}-buildroot
+Requires:	liblscp >= 0.3.2, libgig >= 2.0.2
+
+%description
+QSampler is a LinuxSampler GUI front-end application written in C++ around
+the Qt3 toolkit using Qt Designer. For the moment it just wraps the client
+interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
+
+%prep
+
+%setup
+[ -f Makefile.cvs ] && make -f Makefile.cvs
+
+%build
+export PATH=$QTDIR/bin:$PATH
+./configure --prefix=%{prefix}
+make
+
+%install
+if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
+mkdir -p $RPM_BUILD_ROOT
+make prefix=$RPM_BUILD_ROOT%{prefix} install
+
+%clean
+if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
+
+%files
+%defattr(-,root,root)
+%doc AUTHORS COPYING ChangeLog README TODO
+%{prefix}/bin/qsampler
+%{prefix}/share/icons/qsampler.png
+
+%changelog
+* Tue Aug 24 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Prepared auto-generation from configure.
+* Tue Aug 16 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Get in sync with latest offerings from liblscp (0.3.1) and
+  specially libgig (2.0.2) which broke previous ABI, somewhat.
+* Thu Jun 23 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Even minor workings needs a rest.
+* Mon Jun 13 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- The mantra of bugfixes.
+* Mon May 23 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Device configuration breakthrough.
+* Fri Mar 4 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Fifth alpha-release.
+* Wed Nov 16 2004 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Prepared for the fourth alpha release.
+* Wed Nov 16 2004 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Prepared for the fourth alpha release.
+* Wed Jun 2 2004 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Created initial qsampler.spec
