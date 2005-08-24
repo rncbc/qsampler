@@ -22,9 +22,12 @@
 #ifndef __qsamplerAbout_h
 #define __qsamplerAbout_h
 
-#define QSAMPLER_TITLE        "Qsampler"
+#include "config.h"
+
+#define QSAMPLER_TITLE        PACKAGE_NAME
+#define QSAMPLER_VERSION      PACKAGE_VERSION
+
 #define QSAMPLER_SUBTITLE     "A LinuxSampler Qt GUI Interface"
-#define QSAMPLER_VERSION      "0.1.2.5"
 #define QSAMPLER_WEBSITE      "http://qsampler.sourceforge.net"
 #define QSAMPLER_COPYRIGHT    "Copyright (C) 2004-2005, rncbc aka Rui Nuno Capela. All rights reserved."
 

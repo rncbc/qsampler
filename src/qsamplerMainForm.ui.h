@@ -45,8 +45,6 @@
 #include "qsamplerDeviceForm.h"
 #include "qsamplerOptionsForm.h"
 
-#include "config.h"
-
 #ifdef HAVE_SIGNAL_H
 #include <signal.h>
 #endif

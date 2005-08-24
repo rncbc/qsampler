@@ -26,8 +26,6 @@
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
-#include "config.h"
-
 //-------------------------------------------------------------------------
 // main - The main program trunk.
 //
