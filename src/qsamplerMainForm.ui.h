@@ -471,10 +471,10 @@ bool qsamplerMainForm::openSession (void)
 
     // Ask for the filename to open...
     QString sFilename = QFileDialog::getOpenFileName(
-            m_pOptions->sSessionDir,                // Start here.
-            tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
-            this, 0,                                // Parent and name (none)
-            tr("Open Session")                      // Caption.
+		m_pOptions->sSessionDir,                // Start here.
+		tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
+		this, 0,                                // Parent and name (none)
+		QSAMPLER_TITLE ": " + tr("Open Session")	// Caption.
     );
 
     // Have we cancelled?
@@ -505,10 +505,10 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
             sFilename = m_pOptions->sSessionDir;
         // Prompt the guy...
         sFilename = QFileDialog::getSaveFileName(
-                sFilename,                              // Start here.
-                tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
-                this, 0,                                // Parent and name (none)
-                tr("Save Session")                      // Caption.
+			sFilename,                              // Start here.
+			tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
+			this, 0,                                // Parent and name (none)
+			QSAMPLER_TITLE ": " + tr("Save Session")	// Caption.
         );
         // Have we cancelled it?
         if (sFilename.isEmpty())
@@ -518,7 +518,8 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
             sFilename += ".lscp";
         // Check if already exists...
         if (sFilename != m_sFilename && QFileInfo(sFilename).exists()) {
-            if (QMessageBox::warning(this, tr("Warning"),
+            if (QMessageBox::warning(this,
+				QSAMPLER_TITLE ": " + tr("Warning"),
                 tr("The file already exists:\n\n"
                    "\"%1\"\n\n"
                    "Do you want to replace it?")
@@ -540,7 +541,8 @@ bool qsamplerMainForm::closeSession ( bool bForce )
 
     // Are we dirty enough to prompt it?
     if (m_iDirtyCount > 0) {
-        switch (QMessageBox::warning(this, tr("Warning"),
+        switch (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
             tr("The current session has been changed:\n\n"
             "\"%1\"\n\n"
             "Do you want to save the changes?")
@@ -881,7 +883,8 @@ void qsamplerMainForm::fileReset (void)
         return;
 
     // Ask user whether he/she want's an internal sampler reset...
-    if (QMessageBox::warning(this, tr("Warning"),
+    if (QMessageBox::warning(this,
+		QSAMPLER_TITLE ": " + tr("Warning"),
         tr("Resetting the sampler instance will close\n"
            "all device and channel configurations.\n\n"
            "Please note that this operation may cause\n"
@@ -916,7 +919,8 @@ void qsamplerMainForm::fileRestart (void)
     // Ask user whether he/she want's a complete restart...
     // (if we're currently up and running)
     if (bRestart && m_pClient) {
-        bRestart = (QMessageBox::warning(this, tr("Warning"),
+        bRestart = (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
             tr("New settings will be effective after\n"
                "restarting the client/server connection.\n\n"
                "Please note that this operation may cause\n"
@@ -992,7 +996,8 @@ void qsamplerMainForm::editRemoveChannel (void)
 
     // Prompt user if he/she's sure about this...
     if (m_pOptions && m_pOptions->bConfirmRemove) {
-        if (QMessageBox::warning(this, tr("Warning"),
+        if (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
             tr("About to remove channel:\n\n"
                "%1\n\n"
                "Are you sure?")
@@ -1175,7 +1180,8 @@ void qsamplerMainForm::viewOptions (void)
                 (!bOldStdoutCapture &&  m_pOptions->bStdoutCapture) ||
                 ( bOldKeepOnTop     && !m_pOptions->bKeepOnTop)     ||
                 (!bOldKeepOnTop     &&  m_pOptions->bKeepOnTop)) {
-                QMessageBox::information(this, tr("Information"),
+                QMessageBox::information(this,
+					QSAMPLER_TITLE ": " + tr("Information"),
                     tr("Some settings may be only effective\n"
                        "next time you start this program."), tr("OK"));
                 updateMessagesCapture();
@@ -1607,7 +1613,8 @@ void qsamplerMainForm::appendMessagesError( const QString& s )
 
     appendMessagesColor(s.simplifyWhiteSpace(), "#ff0000");
 
-    QMessageBox::critical(this, tr("Error"), s, tr("Cancel"));
+    QMessageBox::critical(this,
+		QSAMPLER_TITLE ": " + tr("Error"), s, tr("Cancel"));
 }
 
 
@@ -1879,7 +1886,8 @@ void qsamplerMainForm::startServer (void)
 
     // Is the server process instance still here?
     if (m_pServer) {
-        switch (QMessageBox::warning(this, tr("Warning"),
+        switch (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
             tr("Could not start the LinuxSampler server.\n\n"
                "Maybe it ss already started."),
             tr("Stop"), tr("Kill"), tr("Cancel"))) {

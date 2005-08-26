@@ -20,13 +20,12 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
+#include "qsamplerOptions.h"
+
 #include <qvalidator.h>
 #include <qmessagebox.h>
 #include <qfontdialog.h>
-
-#include "qsamplerOptions.h"
-
-#include "config.h"
 
 
 // Kind of constructor.
@@ -173,7 +172,8 @@ void qsamplerOptionsForm::reject (void)
 
     // Check if there's any pending changes...
     if (m_iDirtyCount > 0) {
-        switch (QMessageBox::warning(this, tr("Warning"),
+        switch (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
             tr("Some settings have been changed.\n\n"
                "Do you want to apply the changes?"),
             tr("Apply"), tr("Discard"), tr("Cancel"))) {

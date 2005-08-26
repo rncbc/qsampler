@@ -20,15 +20,14 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
+#include "qsamplerDeviceForm.h"
+
 #include <qvalidator.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlistbox.h>
-
-#include "qsamplerDeviceForm.h"
-
-#include "config.h"
 
 
 // Kind of constructor.
@@ -72,7 +71,7 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 
 	// It can be a brand new channel, remember?
 	bool bNew = (m_pChannel->channelID() < 0);
-	setCaption(m_pChannel->channelName());
+	setCaption(QSAMPLER_TITLE ": " + m_pChannel->channelName());
 
 	// Check if we're up and connected.
 	if (m_pChannel->client() == NULL)
@@ -263,7 +262,8 @@ void qsamplerChannelForm::reject (void)
 
 	// Check if there's any pending changes...
 	if (m_iDirtyCount > 0 && OkPushButton->isEnabled()) {
-		switch (QMessageBox::warning(this, tr("Warning"),
+		switch (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Some channel settings have been changed.\n\n"
 			"Do you want to apply the changes?"),
 			tr("Apply"), tr("Discard"), tr("Cancel"))) {
@@ -292,10 +292,10 @@ void qsamplerChannelForm::openInstrumentFile (void)
 	// FIXME: the instrument file filters should be restricted,
 	// depending on the current engine.
 	QString sInstrumentFile = QFileDialog::getOpenFileName(
-			pOptions->sInstrumentDir,                   // Start here.
-			tr("Instrument files") + " (*.gig *.dls)",  // Filter (GIG and DLS files)
-			this, 0,                                    // Parent and name (none)
-			tr("Instrument files")                      // Caption.
+		pOptions->sInstrumentDir,                   // Start here.
+		tr("Instrument files") + " (*.gig *.dls)",  // Filter (GIG and DLS files)
+		this, 0,                                    // Parent and name (none)
+		QSAMPLER_TITLE ": " + tr("Instrument files")	// Caption.
 	);
 
 	if (sInstrumentFile.isEmpty())
