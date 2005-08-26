@@ -20,16 +20,15 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
+#include "qsamplerMainForm.h"
+
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlistbox.h>
 #include <qptrlist.h>
 #include <qpopupmenu.h>
-
-#include "qsamplerMainForm.h"
-
-#include "config.h"
 
 
 // Kind of constructor.
@@ -240,7 +239,8 @@ void qsamplerDeviceForm::deleteDevice (void)
 	// Prompt user if this is for real...
 	qsamplerOptions *pOptions = m_pMainForm->options();
 	if (pOptions && pOptions->bConfirmRemove) {
-		if (QMessageBox::warning(this, tr("Warning"),
+		if (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Delete device:\n\n"
 			"%1\n\n"
 			"Are you sure?")

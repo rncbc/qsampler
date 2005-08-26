@@ -41,7 +41,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Channel</string>
+        <string>Qsampler: Channel</string>
     </property>
     <property name="icon">
         <pixmap>qsamplerChannel.png</pixmap>

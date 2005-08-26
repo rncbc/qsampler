@@ -41,7 +41,7 @@
         </sizepolicy>
     </property>
     <property name="caption">
-        <string>Devices</string>
+        <string>Qsampler: Devices</string>
     </property>
     <property name="icon">
         <pixmap>qsamplerDevice.png</pixmap>
