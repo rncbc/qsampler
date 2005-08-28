@@ -875,7 +875,7 @@ void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
 // Constructor.
 qsamplerChannelRoutingComboBox::qsamplerChannelRoutingComboBox (
 	QTable *pTable, const QStringList& list, const QPixmap& pixmap )
-	: QTableItem(pTable, QTableItem::OnTyping, QString::null, pixmap),
+	: QTableItem(pTable, QTableItem::WhenCurrent, QString::null, pixmap),
 	m_list(list)
 {
 	m_iCurrentItem = 0;
