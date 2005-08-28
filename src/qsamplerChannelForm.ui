@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>435</width>
-            <height>330</height>
+            <width>508</width>
+            <height>445</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -53,7 +53,7 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="3">
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>EngineNameComboBox</cstring>
             </property>
@@ -97,7 +97,7 @@
                 <cstring>InstrumentFileComboBox</cstring>
             </property>
         </widget>
-        <widget class="QPushButton" row="1" column="3">
+        <widget class="QPushButton" row="1" column="2">
             <property name="name">
                 <cstring>InstrumentFilePushButton</cstring>
             </property>
@@ -131,7 +131,7 @@
                 <string>Browse for instrument filename</string>
             </property>
         </widget>
-        <widget class="QComboBox" row="1" column="1" rowspan="1" colspan="2">
+        <widget class="QComboBox" row="1" column="1">
             <property name="name">
                 <cstring>InstrumentFileComboBox</cstring>
             </property>
@@ -156,56 +156,7 @@
                 <string>Instrument filename</string>
             </property>
         </widget>
-        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="4">
-            <property name="name">
-                <cstring>layout01</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>8</width>
-                            <height>8</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>OkPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>OK</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>formAccept.png</iconset>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>CancelPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cancel</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>formReject.png</iconset>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="3">
+        <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>InstrumentNrComboBox</cstring>
             </property>
@@ -241,7 +192,7 @@
                 <cstring>InstrumentNrComboBox</cstring>
             </property>
         </widget>
-        <widget class="QGroupBox" row="3" column="1" rowspan="1" colspan="3">
+        <widget class="QGroupBox" row="3" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>MidiGroupBox</cstring>
             </property>
@@ -528,7 +479,56 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="QGroupBox" row="4" column="1" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>layout01</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>8</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>OkPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>formAccept.png</iconset>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>CancelPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>formReject.png</iconset>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="4" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>AudioGroupBox</cstring>
             </property>
@@ -568,20 +568,6 @@
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>AudioDriverComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>AudioDeviceTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Device:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>AudioDeviceComboBox</cstring>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="0" column="1">
@@ -687,10 +673,58 @@
                         </widget>
                     </hbox>
                 </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>AudioDeviceTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Device:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>AudioDeviceComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="qsamplerChannelRoutingTable" row="2" column="1">
+                    <property name="name">
+                        <cstring>AudioRoutingTable</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>100</height>
+                        </size>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Audio output channel routing</string>
+                    </property>
+                </widget>
             </grid>
         </widget>
     </grid>
 </widget>
+<customwidgets>
+    <customwidget>
+        <class>qsamplerChannelRoutingTable</class>
+        <header location="local">qsamplerChannel.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>7</hordata>
+            <verdata>7</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </customwidget>
+</customwidgets>
 <connections>
     <connection>
         <sender>EngineNameComboBox</sender>
@@ -790,6 +824,7 @@
     <tabstop>AudioDriverComboBox</tabstop>
     <tabstop>AudioDeviceComboBox</tabstop>
     <tabstop>AudioDevicePushButton</tabstop>
+    <tabstop>AudioRoutingTable</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>
 </tabstops>
@@ -808,6 +843,7 @@
     <variable access="private">QPtrList &lt; qsamplerDevice &gt; m_audioDevices;</variable>
     <variable access="private">QPtrList &lt; qsamplerDevice &gt; m_midiDevices;</variable>
     <variable access="private">qsamplerDeviceForm *m_pDeviceForm;</variable>
+    <variable access="private">qsamplerChannelRoutingMap m_audioRouting;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">accept()</slot>
@@ -820,6 +856,7 @@
     <slot specifier="non virtual">selectAudioDriver( const QString &amp; sAudioDriver )</slot>
     <slot specifier="non virtual">selectAudioDevice( int iAudioItem )</slot>
     <slot specifier="non virtual">setupAudioDevice()</slot>
+    <slot specifier="non virtual">changeAudioRouting( int iRow, int iCol )</slot>
     <slot specifier="non virtual">updateDevices()</slot>
     <slot specifier="non virtual">optionsChanged()</slot>
     <slot specifier="non virtual">stabilizeForm()</slot>
@@ -828,12 +865,12 @@
     <function access="private" specifier="non virtual">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
     <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
-	<function specifier="non virtual">setupDevice( qsamplerDevice *pDevice, qsamplerDevice::qsamplerDeviceType deviceTypeMode, const QString &amp; sDriverName )</function>
+    <function specifier="non virtual">setupDevice( qsamplerDevice *pDevice, qsamplerDevice::qsamplerDeviceType deviceTypeMode, const QString &amp; sDriverName )</function>
     <function specifier="non virtual">selectMidiDriverItem( const QString &amp; sMidiDriver )</function>
     <function specifier="non virtual">selectMidiDeviceItem( int iMidiItem )</function>
     <function specifier="non virtual">selectAudioDriverItem( const QString &amp; sAudioDriver )</function>
     <function specifier="non virtual">selectAudioDeviceItem( int iAudioItem )</function>
 </functions>
 <pixmapinproject/>
-<layoutdefaults spacing="8" margin="8"/>
+<layoutdefaults spacing="4" margin="4"/>
 </UI>

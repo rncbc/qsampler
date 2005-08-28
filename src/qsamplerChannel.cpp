@@ -19,12 +19,11 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerChannel.h"
 
 #include "qsamplerMainForm.h"
 #include "qsamplerChannelForm.h"
-
-#include "config.h"
 
 #include <qfileinfo.h>
 
@@ -472,6 +471,40 @@ bool qsamplerChannel::setChannelSolo ( bool bSolo )
 }
 
 
+// Audio routing accessors.
+int qsamplerChannel::audioChannel ( int iAudioOut ) const
+{
+	return m_audioRouting[iAudioOut];
+}
+
+bool qsamplerChannel::setAudioChannel ( int iAudioOut, int iAudioIn )
+{
+	if (client() == NULL || m_iChannelID < 0)
+		return false;
+	if (m_iInstrumentStatus == 100 &&
+			m_audioRouting[iAudioOut] == iAudioIn)
+		return true;
+
+	if (::lscp_set_channel_audio_channel(client(),
+			m_iChannelID, iAudioOut, iAudioIn) != LSCP_OK) {
+		appendMessagesClient("lscp_set_channel_audio_channel");
+		return false;
+	}
+
+	appendMessages(QObject::tr("Audio Channel: %1 -> %2.")
+		.arg(iAudioOut).arg(iAudioIn));
+
+	m_audioRouting[iAudioOut] = iAudioIn;
+	return true;
+}
+
+// The audio routing map itself.
+const qsamplerChannelRoutingMap& qsamplerChannel::audioRouting (void) const
+{
+	return m_audioRouting;
+}
+
+
 // Istrument name remapper.
 void qsamplerChannel::updateInstrumentName (void)
 {
@@ -550,6 +583,13 @@ bool qsamplerChannel::updateChannelInfo (void)
 		m_sMidiDriver = sNone;
 	} else {
 		m_sMidiDriver = pDeviceInfo->driver;
+	}
+
+	// Set the audio routing map.
+	m_audioRouting.clear();
+	char **ppszRouting = pChannelInfo->audio_routing;
+	for (int i = 0; ppszRouting && ppszRouting[i]; i++) {
+		m_audioRouting[i] = ::atoi(ppszRouting[i]);
 	}
 
 	return true;
@@ -730,6 +770,98 @@ QString qsamplerChannel::noInstrumentName (void)
 
 QString qsamplerChannel::loadingInstrument (void) {
 	return QObject::tr("(Loading instrument...)");
+}
+
+
+
+//-------------------------------------------------------------------------
+// qsamplerChannelRoutingTable - Channel routing table.
+//
+
+// Constructor.
+qsamplerChannelRoutingTable::qsamplerChannelRoutingTable (
+	QWidget *pParent, const char *pszName )
+	: QTable(pParent, pszName)
+{
+	// Set fixed number of columns.
+	QTable::setNumCols(2);
+	QTable::setShowGrid(false);
+	QTable::setSorting(false);
+	QTable::setFocusStyle(QTable::FollowStyle);
+	QTable::setSelectionMode(QTable::SingleRow);
+	// No vertical header.
+	QTable::verticalHeader()->hide();
+	QTable::setLeftMargin(0);
+	// Initialize the fixed table column headings.
+	QHeader *pHeader = QTable::horizontalHeader();
+	pHeader->setLabel(0, tr("Sampler Channel"));
+	pHeader->setLabel(1, tr("Device Channel"));
+	// Set read-onlyness of each column
+	QTable::setColumnReadOnly(0, true);
+//	QTable::setColumnReadOnly(1, false); -- of course not.
+	QTable::setColumnStretchable(1, true);
+}
+
+// Default destructor.
+qsamplerChannelRoutingTable::~qsamplerChannelRoutingTable (void)
+{
+}
+
+
+// Routing map table renderer.
+void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
+	const qsamplerChannelRoutingMap& routing )
+{
+	if (pDevice == NULL)
+		return;
+
+	// Always (re)start it empty.
+	QTable::setUpdatesEnabled(false);
+	QTable::setNumRows(0);
+
+	// The common device port item list.
+	QStringList opts;
+	qsamplerDevicePortList& ports = pDevice->ports();
+	qsamplerDevicePort *pPort;
+	for (pPort = ports.first(); pPort; pPort = ports.next()) {
+		opts.append(pDevice->deviceTypeName()
+			+ ' ' + pDevice->driverName()
+			+ ' ' + pPort->portName());
+	}
+
+	// Those items shall have a proper pixmap...
+	QPixmap pmDevice;
+	switch (pDevice->deviceType()) {
+	case qsamplerDevice::Audio:
+		pmDevice = QPixmap::fromMimeSource("audio2.png");
+		break;
+	case qsamplerDevice::Midi:
+		pmDevice = QPixmap::fromMimeSource("midi2.png");
+		break;
+	case qsamplerDevice::None:
+		break;
+	}
+
+	// Fill the routing table...
+	QTable::insertRows(0, routing.count());
+	int iRow = 0;
+	qsamplerChannelRoutingMap::ConstIterator iter;
+	for (iter = routing.begin(); iter != routing.end(); ++iter) {
+		QTable::setPixmap(iRow, 0, pmDevice);
+		QTable::setText(iRow, 0, pDevice->deviceTypeName()
+			+ ' ' + QString::number(iter.key()));
+		QComboTableItem *pComboItem = new QComboTableItem(this, opts);
+		pComboItem->setCurrentItem(iter.data());
+		QTable::setItem(iRow, 1, pComboItem);
+		++iRow;
+	}
+
+	// Adjust optimal column widths.
+	QTable::adjustColumn(0);
+	QTable::adjustColumn(1);
+
+	QTable::setUpdatesEnabled(true);
+	QTable::updateContents();
 }
 
 

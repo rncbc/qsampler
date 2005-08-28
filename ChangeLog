@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Audio output channel routing configuration finally hits
+  the sampler channel dialog, at last! (EXPERIMENTAL).
+
 * All widget captions changed to include proper application
   title name prefix.
 

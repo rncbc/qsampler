@@ -787,11 +787,19 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
                 ts << endl;
                 ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannel << endl;
                 ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannel << endl;
+				qsamplerChannelRoutingMap::ConstIterator audioRoute;
+				for (audioRoute = pChannel->audioRouting().begin();
+						audioRoute != pChannel->audioRouting().end();
+							++audioRoute) {
+					ts << "SET CHANNEL AUDIO_OUTPUT_CHANNEL " << iChannel
+						<< " " << audioRoute.key()
+						<< " " << audioRoute.data() << endl;
+				}
                 ts << "SET CHANNEL VOLUME " << iChannel << " " << pChannel->volume() << endl;
-                if (pChannel->channelMute())
-                	ts << "SET CHANNEL MUTE " << iChannel << " 1" << endl;
-                if (pChannel->channelSolo())
-                	ts << "SET CHANNEL SOLO " << iChannel << " 1" << endl;
+				if (pChannel->channelMute())
+					ts << "SET CHANNEL MUTE " << iChannel << " 1" << endl;
+				if (pChannel->channelSolo())
+					ts << "SET CHANNEL SOLO " << iChannel << " 1" << endl;
                 ts << endl;
             }
         }
