@@ -213,6 +213,36 @@ public:
 };
 
 
+//-------------------------------------------------------------------------
+// qsamplerChannelRoutingComboBox - Custom combo box for routing table.
+//
+
+class qsamplerChannelRoutingComboBox : public QTableItem
+{
+public:
+
+	// Constructor.
+	qsamplerChannelRoutingComboBox(QTable *pTable,
+		const QStringList& list, const QPixmap& pixmap);
+
+	// Public accessors.
+	void setCurrentItem(int iCurrentItem);
+	int currentItem() const;
+
+protected:
+
+	// Virtual implemetations.
+	QWidget *createEditor() const;
+	void setContentFromEditor(QWidget *pWidget);
+
+private:
+
+	// Initial value holders
+	QStringList m_list;
+	int m_iCurrentItem;
+};
+
+
 #endif  // __qsamplerChannel_h
 
 

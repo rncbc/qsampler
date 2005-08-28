@@ -26,6 +26,7 @@
 #include "qsamplerChannelForm.h"
 
 #include <qfileinfo.h>
+#include <qcombobox.h>
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
@@ -788,7 +789,7 @@ qsamplerChannelRoutingTable::qsamplerChannelRoutingTable (
 	QTable::setShowGrid(false);
 	QTable::setSorting(false);
 	QTable::setFocusStyle(QTable::FollowStyle);
-	QTable::setSelectionMode(QTable::SingleRow);
+	QTable::setSelectionMode(QTable::NoSelection);
 	// No vertical header.
 	QTable::verticalHeader()->hide();
 	QTable::setLeftMargin(0);
@@ -830,6 +831,7 @@ void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
 	}
 
 	// Those items shall have a proper pixmap...
+	QPixmap pmChannel = QPixmap::fromMimeSource("qsamplerChannel.png");
 	QPixmap pmDevice;
 	switch (pDevice->deviceType()) {
 	case qsamplerDevice::Audio:
@@ -847,10 +849,11 @@ void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
 	int iRow = 0;
 	qsamplerChannelRoutingMap::ConstIterator iter;
 	for (iter = routing.begin(); iter != routing.end(); ++iter) {
-		QTable::setPixmap(iRow, 0, pmDevice);
+		QTable::setPixmap(iRow, 0, pmChannel);
 		QTable::setText(iRow, 0, pDevice->deviceTypeName()
 			+ ' ' + QString::number(iter.key()));
-		QComboTableItem *pComboItem = new QComboTableItem(this, opts);
+		qsamplerChannelRoutingComboBox *pComboItem =
+			new qsamplerChannelRoutingComboBox(this, opts, pmDevice);
 		pComboItem->setCurrentItem(iter.data());
 		QTable::setItem(iRow, 1, pComboItem);
 		++iRow;
@@ -862,6 +865,57 @@ void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
 
 	QTable::setUpdatesEnabled(true);
 	QTable::updateContents();
+}
+
+
+//-------------------------------------------------------------------------
+// qsamplerChannelRoutingComboBox - Custom combo box for routing table.
+//
+
+// Constructor.
+qsamplerChannelRoutingComboBox::qsamplerChannelRoutingComboBox (
+	QTable *pTable, const QStringList& list, const QPixmap& pixmap )
+	: QTableItem(pTable, QTableItem::OnTyping, QString::null, pixmap),
+	m_list(list)
+{
+	m_iCurrentItem = 0;
+}
+
+// Public accessors.
+void qsamplerChannelRoutingComboBox::setCurrentItem ( int iCurrentItem )
+{
+	m_iCurrentItem = iCurrentItem;
+
+	QTableItem::setText(m_list[iCurrentItem]);
+}
+
+int qsamplerChannelRoutingComboBox::currentItem (void) const
+{
+	return m_iCurrentItem;
+}
+
+// Virtual implemetations.
+QWidget *qsamplerChannelRoutingComboBox::createEditor (void) const
+{
+	QComboBox *pComboBox = new QComboBox(QTableItem::table()->viewport());
+	QObject::connect(pComboBox, SIGNAL(activated(int)),
+		QTableItem::table(), SLOT(doValueChanged()));
+	for (QStringList::ConstIterator iter = m_list.begin();
+			iter != m_list.end(); iter++) {
+		pComboBox->insertItem(QTableItem::pixmap(), *iter);
+	}
+	pComboBox->setCurrentItem(m_iCurrentItem);
+	return pComboBox;
+}
+
+void qsamplerChannelRoutingComboBox::setContentFromEditor ( QWidget *pWidget )
+{
+	if (pWidget->inherits("QComboBox")) {
+		QComboBox *pComboBox = (QComboBox *) pWidget;
+		m_iCurrentItem = pComboBox->currentItem();
+		QTableItem::setText(pComboBox->currentText());
+	}
+	else QTableItem::setContentFromEditor(pWidget);
 }
 
 
