@@ -19,15 +19,14 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerDevice.h"
-
-#include <qspinbox.h>
-#include <qlineedit.h>
 
 #include "qsamplerMainForm.h"
 #include "qsamplerDeviceForm.h"
 
-#include "config.h"
+#include <qspinbox.h>
+#include <qlineedit.h>
 
 
 //-------------------------------------------------------------------------

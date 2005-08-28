@@ -183,9 +183,9 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 
 	// As convenient, make it ready on stabilizeForm() for
 	// prompt acceptance, if we got the minimum required...
-	if (sEngineName != qsamplerChannel::noEngineName() &&
+/*	if (sEngineName != qsamplerChannel::noEngineName() &&
 		sInstrumentFile != qsamplerChannel::noInstrumentName())
-		m_iDirtyCount++;
+		m_iDirtyCount++; */
 	// Done.
 	m_iDirtySetup--;
 	stabilizeForm();
@@ -369,7 +369,7 @@ void qsamplerChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	const QString sDriverName = sMidiDriver.upper();
 
 	// Save current device id.
-	int iDeviceID = -1;
+	int iDeviceID = 0;
 	qsamplerDevice *pDevice = m_midiDevices.at(MidiDeviceComboBox->currentItem());
 	if (pDevice)
 		iDeviceID = pDevice->deviceID();
@@ -395,10 +395,7 @@ void qsamplerChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 
 	// Do proper enabling...
 	bool bEnabled = !m_midiDevices.isEmpty();
-	if (!bEnabled) {
-		MidiDeviceComboBox->insertItem(
-			tr("(New MIDI %1 device)").arg(sMidiDriver));
-	} else if (iDeviceID >= 0) {
+	if (bEnabled) {
 		// Select the previous current device...
 		int iMidiItem = 0;
 		for (pDevice = m_midiDevices.first();
@@ -411,6 +408,9 @@ void qsamplerChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 			}
 			iMidiItem++;
 		}
+	} else {
+		MidiDeviceComboBox->insertItem(
+			tr("(New MIDI %1 device)").arg(sMidiDriver));
 	}
 	MidiDeviceTextLabel->setEnabled(bEnabled);
 	MidiDeviceComboBox->setEnabled(bEnabled);
@@ -468,7 +468,7 @@ void qsamplerChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	const QString sDriverName = sAudioDriver.upper();
 
 	// Save current device id.
-	int iDeviceID = -1;
+	int iDeviceID = 0;
 	qsamplerDevice *pDevice = m_audioDevices.at(AudioDeviceComboBox->currentItem());
 	if (pDevice)
 		iDeviceID = pDevice->deviceID();
@@ -494,10 +494,7 @@ void qsamplerChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 
 	// Do proper enabling...
 	bool bEnabled = !m_audioDevices.isEmpty();
-	if (!bEnabled) {
-		AudioDeviceComboBox->insertItem(
-			tr("(New Audio %1 device)").arg(sAudioDriver));
-	} else if (iDeviceID >= 0) {
+	if (bEnabled) {
 		// Select the previous current device...
 		int iAudioItem = 0;
 		for (pDevice = m_audioDevices.first();
@@ -510,12 +507,14 @@ void qsamplerChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 			}
 			iAudioItem++;
 		}
+	} else {
+		AudioDeviceComboBox->insertItem(
+			tr("(New Audio %1 device)").arg(sAudioDriver));
+		AudioRoutingTable->setNumRows(0);
 	}
 	AudioDeviceTextLabel->setEnabled(bEnabled);
 	AudioDeviceComboBox->setEnabled(bEnabled);
 	AudioRoutingTable->setEnabled(bEnabled);
-	if (!bEnabled)
-		AudioRoutingTable->setNumRows(0);
 }
 
 
@@ -574,14 +573,14 @@ void qsamplerChannelForm::changeAudioRouting ( int iRow, int iCol )
 	QTableItem *pItem = AudioRoutingTable->item(iRow, iCol);
 	if (pItem == NULL)
 		return;
-	if (pItem->rtti() == 1) {	// 1 == QComboTableItem
-		QComboTableItem *pComboItem = (QComboTableItem *) pItem;
-		// FIXME: Its not garanteed that we must have
-		// iAudioOut == iRow on all times forth!
-		m_audioRouting[iRow] = pComboItem->currentItem();
-		// And let's get dirty...
-		m_iDirtyCount++;
-	}
+	qsamplerChannelRoutingComboBox *pComboItem =
+		static_cast<qsamplerChannelRoutingComboBox*> (pItem);
+	// FIXME: Its not garanteed that we must have
+	// iAudioOut == iRow on all times forth!
+	m_audioRouting[iRow] = pComboItem->currentItem();
+
+	// And let's get dirty...
+	optionsChanged();
 }
 
 
