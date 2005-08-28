@@ -87,6 +87,10 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 	// Load combo box history...
 	pOptions->loadComboBoxHistory(InstrumentFileComboBox);
 
+	// Notify.that we've just changed one audio route.
+	QObject::connect(AudioRoutingTable, SIGNAL(valueChanged(int,int)),
+		this, SLOT(changeAudioRouting(int,int)));
+
 	// Populate Engines list.
 	const char **ppszEngines = ::lscp_list_available_engines(m_pChannel->client());
 	if (ppszEngines) {
@@ -214,6 +218,15 @@ void qsamplerChannelForm::accept (void)
 				iErrors++;
 			else if (!m_pChannel->setAudioDevice(pDevice->deviceID()))
 				iErrors++;
+			else if (!m_audioRouting.isEmpty()) {
+				// Set the audio route changes...
+				qsamplerChannelRoutingMap::ConstIterator iter;
+				for (iter = m_audioRouting.begin();
+						iter != m_audioRouting.end(); ++iter) {
+					if (!m_pChannel->setAudioChannel(iter.key(), iter.data()))
+						iErrors++;
+				}
+			}
 		}
 		// Accept MIDI driver or device selection...
 		if (m_midiDevices.isEmpty()) {
@@ -393,7 +406,7 @@ void qsamplerChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 					pDevice = m_midiDevices.next()) {
 			if (pDevice->deviceID() == iDeviceID) {
 				MidiDeviceComboBox->setCurrentItem(iMidiItem);
-			//	selectMidiDeviceItem(iMidiItem);
+				selectMidiDeviceItem(iMidiItem);
 				break;
 			}
 			iMidiItem++;
@@ -492,7 +505,7 @@ void qsamplerChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 					pDevice = m_audioDevices.next()) {
 			if (pDevice->deviceID() == iDeviceID) {
 				AudioDeviceComboBox->setCurrentItem(iAudioItem);
-			//	selectAudioDeviceItem(iAudioItem);
+				selectAudioDeviceItem(iAudioItem);
 				break;
 			}
 			iAudioItem++;
@@ -500,6 +513,9 @@ void qsamplerChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	}
 	AudioDeviceTextLabel->setEnabled(bEnabled);
 	AudioDeviceComboBox->setEnabled(bEnabled);
+	AudioRoutingTable->setEnabled(bEnabled);
+	if (!bEnabled)
+		AudioRoutingTable->setNumRows(0);
 }
 
 
@@ -519,7 +535,10 @@ void qsamplerChannelForm::selectAudioDeviceItem ( int iAudioItem )
 {
 	qsamplerDevice *pDevice = m_audioDevices.at(iAudioItem);
 	if (pDevice) {
-		// Is there anything to do here?
+		// Refresh the audio routing table.
+		AudioRoutingTable->refresh(pDevice, m_pChannel->audioRouting());
+		// Reset routing change map.
+		m_audioRouting.clear();
 	}
 }
 
@@ -540,6 +559,29 @@ void qsamplerChannelForm::setupAudioDevice (void)
 {
 	setupDevice(m_audioDevices.at(AudioDeviceComboBox->currentItem()),
 		qsamplerDevice::Audio, AudioDriverComboBox->currentText());
+}
+
+
+// Audio routing change slot.
+void qsamplerChannelForm::changeAudioRouting ( int iRow, int iCol )
+{
+	if (m_iDirtySetup > 0)
+		return;
+	if (iRow < 0 || iCol < 0)
+		return;
+
+	// Verify that this is a QComboTableItem (magic rtti == 1)
+	QTableItem *pItem = AudioRoutingTable->item(iRow, iCol);
+	if (pItem == NULL)
+		return;
+	if (pItem->rtti() == 1) {	// 1 == QComboTableItem
+		QComboTableItem *pComboItem = (QComboTableItem *) pItem;
+		// FIXME: Its not garanteed that we must have
+		// iAudioOut == iRow on all times forth!
+		m_audioRouting[iRow] = pComboItem->currentItem();
+		// And let's get dirty...
+		m_iDirtyCount++;
+	}
 }
 
 

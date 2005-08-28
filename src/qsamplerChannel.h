@@ -22,14 +22,19 @@
 #ifndef __qsamplerChannel_h
 #define __qsamplerChannel_h
 
-#include <qobject.h>
+#include <qtable.h>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
 
 #include "qsamplerOptions.h"
 
+class qsamplerDevice;
 class qsamplerMainForm;
+
+
+// Typedef'd QMap.
+typedef QMap<int, int> qsamplerChannelRoutingMap;
 
 
 //-------------------------------------------------------------------------
@@ -116,6 +121,12 @@ public:
 	bool     channelSolo() const;
 	bool     setChannelSolo(bool bSolo);
 
+	// Audio routing accessors.
+	int      audioChannel(int iAudioOut) const;
+	bool     setAudioChannel(int iAudioOut, int iAudioIn);
+	// The audio routing map itself.
+	const qsamplerChannelRoutingMap& audioRouting() const;
+
 	// Istrument name remapper.
 	void     updateInstrumentName();
 
@@ -175,7 +186,32 @@ private:
 	float   m_fVolume;
 	bool    m_bMute;
 	bool    m_bSolo;
+
+	// The audio routing mapping.
+	qsamplerChannelRoutingMap m_audioRouting;
 };
+
+
+//-------------------------------------------------------------------------
+// qsamplerChannelRoutingTable - Channel routing table widget.
+//
+
+class qsamplerChannelRoutingTable : public QTable
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	qsamplerChannelRoutingTable(QWidget *pParent = 0, const char *pszName = 0);
+	// Default destructor.
+	~qsamplerChannelRoutingTable();
+
+	// Common parameter table renderer.
+	void refresh(qsamplerDevice *pDevice,
+		const qsamplerChannelRoutingMap& routing);
+};
+
 
 #endif  // __qsamplerChannel_h
 
