@@ -273,7 +273,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Channel Mute</string>
+                <string>Channel mute</string>
             </property>
         </widget>
         <widget class="QPushButton">
@@ -296,7 +296,7 @@
                 <bool>true</bool>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Channel Solo</string>
+                <string>Channel solo</string>
             </property>
         </widget>
         <widget class="QSlider">
