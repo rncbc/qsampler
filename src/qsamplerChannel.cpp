@@ -868,6 +868,14 @@ void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
 }
 
 
+// Commit any pending editing.
+void qsamplerChannelRoutingTable::flush (void)
+{
+	if (QTable::isEditing())
+	    QTable::endEdit(QTable::currEditRow(), QTable::currEditCol(), true, true);
+}
+
+
 //-------------------------------------------------------------------------
 // qsamplerChannelRoutingComboBox - Custom combo box for routing table.
 //
