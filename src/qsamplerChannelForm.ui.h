@@ -202,6 +202,9 @@ void qsamplerChannelForm::accept (void)
 	if (pOptions == NULL)
 		return;
 
+	// Flush any pending editing...
+	AudioRoutingTable->flush();
+
 	// We'll go for it!
 	if (m_iDirtyCount > 0) {
 		int iErrors = 0;

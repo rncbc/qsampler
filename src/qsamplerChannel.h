@@ -210,6 +210,9 @@ public:
 	// Common parameter table renderer.
 	void refresh(qsamplerDevice *pDevice,
 		const qsamplerChannelRoutingMap& routing);
+
+	// Commit any pending editing.
+	void flush();
 };
 
 
