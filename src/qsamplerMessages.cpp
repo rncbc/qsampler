@@ -79,6 +79,8 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     QDockWindow::setOrientation(Qt::Horizontal);
     QDockWindow::setCloseMode(QDockWindow::Always);
     QDockWindow::setResizeEnabled(true);
+	// Some specialties to this kind of dock window...
+	QDockWindow::setFixedExtentHeight(120);
 
     // Finally set the default caption and tooltip.
     QString sCaption = tr("Messages");

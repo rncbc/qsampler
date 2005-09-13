@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Minor fixing on the initial messages dock-window height.
+
 * Audio output channel routing configuration finally hits
   the sampler channel dialog, at last! (EXPERIMENTAL).
 
