@@ -1357,7 +1357,7 @@ void qsamplerMainForm::stabilizeForm (void)
     // Update the main application caption...
     QString sSessionName = sessionName(m_sFilename);
     if (m_iDirtyCount > 0)
-        sSessionName += '*';
+        sSessionName += " *";
     setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
 
     // Update the main menu state...
