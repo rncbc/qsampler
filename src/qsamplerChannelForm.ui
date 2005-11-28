@@ -97,9 +97,9 @@
                 <cstring>InstrumentFileComboBox</cstring>
             </property>
         </widget>
-        <widget class="QPushButton" row="1" column="2">
+        <widget class="QToolButton" row="1" column="2">
             <property name="name">
-                <cstring>InstrumentFilePushButton</cstring>
+                <cstring>InstrumentFileToolButton</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
@@ -121,6 +121,9 @@
                     <height>26</height>
                 </size>
             </property>
+			<property name="focusPolicy">
+				<enum>TabFocus</enum>
+			</property>
             <property name="text">
                 <string></string>
             </property>
@@ -441,9 +444,9 @@
                                 <string>MIDI input device</string>
                             </property>
                         </widget>
-                        <widget class="QPushButton">
+                        <widget class="QToolButton">
                             <property name="name">
-                                <cstring>MidiDevicePushButton</cstring>
+                                <cstring>MidiDeviceToolButton</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -465,6 +468,9 @@
                                     <height>26</height>
                                 </size>
                             </property>
+							<property name="focusPolicy">
+								<enum>TabFocus</enum>
+							</property>
                             <property name="text">
                                 <string></string>
                             </property>
@@ -637,9 +643,9 @@
                                 <string>Audio output device</string>
                             </property>
                         </widget>
-                        <widget class="QPushButton">
+                        <widget class="QToolButton">
                             <property name="name">
-                                <cstring>AudioDevicePushButton</cstring>
+                                <cstring>AudioDeviceToolButton</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -661,6 +667,9 @@
                                     <height>26</height>
                                 </size>
                             </property>
+							<property name="focusPolicy">
+								<enum>TabFocus</enum>
+							</property>
                             <property name="text">
                                 <string></string>
                             </property>
@@ -739,7 +748,7 @@
         <slot>updateInstrumentName()</slot>
     </connection>
     <connection>
-        <sender>InstrumentFilePushButton</sender>
+        <sender>InstrumentFileToolButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>openInstrumentFile()</slot>
@@ -799,13 +808,13 @@
         <slot>reject()</slot>
     </connection>
     <connection>
-        <sender>MidiDevicePushButton</sender>
+        <sender>MidiDeviceToolButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>setupMidiDevice()</slot>
     </connection>
     <connection>
-        <sender>AudioDevicePushButton</sender>
+        <sender>AudioDeviceToolButton</sender>
         <signal>clicked()</signal>
         <receiver>qsamplerChannelForm</receiver>
         <slot>setupAudioDevice()</slot>
@@ -814,16 +823,16 @@
 <tabstops>
     <tabstop>EngineNameComboBox</tabstop>
     <tabstop>InstrumentFileComboBox</tabstop>
-    <tabstop>InstrumentFilePushButton</tabstop>
+    <tabstop>InstrumentFileToolButton</tabstop>
     <tabstop>InstrumentNrComboBox</tabstop>
     <tabstop>MidiDriverComboBox</tabstop>
     <tabstop>MidiPortSpinBox</tabstop>
     <tabstop>MidiChannelComboBox</tabstop>
     <tabstop>MidiDeviceComboBox</tabstop>
-    <tabstop>MidiDevicePushButton</tabstop>
+    <tabstop>MidiDeviceToolButton</tabstop>
     <tabstop>AudioDriverComboBox</tabstop>
     <tabstop>AudioDeviceComboBox</tabstop>
-    <tabstop>AudioDevicePushButton</tabstop>
+    <tabstop>AudioDeviceToolButton</tabstop>
     <tabstop>AudioRoutingTable</tabstop>
     <tabstop>OkPushButton</tabstop>
     <tabstop>CancelPushButton</tabstop>

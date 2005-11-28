@@ -5,6 +5,11 @@ ChangeLog
 
 CVS HEAD
 
+* The selection buttons, on the right of the Instrument, Audio
+  and MIDI devices combo-boxes, on the sampler channel dialog,
+  are now expected to be a little better looking than it was
+  before, at least for those Mac OS X eyes.
+
 * Minor fixing on the initial messages dock-window height.
 
 * Audio output channel routing configuration finally hits
