@@ -32,7 +32,7 @@
 #include "gig.h"
 #endif
 
-#define QSAMPLER_INSTRUMENT_MAX 8
+#define QSAMPLER_INSTRUMENT_MAX 100
 
 
 //-------------------------------------------------------------------------

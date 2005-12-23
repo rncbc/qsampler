@@ -5,6 +5,12 @@ ChangeLog
 
 CVS HEAD
 
+* Whenever the listing of actual instrument names is not an
+  option (e.g. due to lack of libgig support), the whole
+  number of selectable instrument items is now being graciously
+  increased from just the bare 8 (eight) right up through 100
+  (one hundred), on the sampler channel setup dialog.
+
 * The selection buttons, on the right of the Instrument, Audio
   and MIDI devices combo-boxes, on the sampler channel dialog,
   are now expected to be a little better looking than it was
