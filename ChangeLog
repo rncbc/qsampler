@@ -5,6 +5,10 @@ ChangeLog
 
 CVS HEAD
 
+* Optional specification of alternate liblscp and libgig
+  installation paths have been added to configure command
+  arguments (--with-liblscp, --with-libgig).
+
 * Whenever the listing of actual instrument names is not an
   option (e.g. due to lack of libgig support), the whole
   number of selectable instrument items is now being graciously

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.2.15, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.2.16, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
@@ -30,6 +30,16 @@ AC_ARG_ENABLE(libgig,
   [ac_libgig="no"],
   [ac_libgig="yes"])
 
+# Set for alternate liblscp installation dir.
+AC_ARG_WITH(liblscp,
+  AC_HELP_STRING([--with-liblscp=PATH], [use alternate liblscp install path]),
+  [ac_with_paths="$ac_with_paths $withval"])
+
+# Set for alternate libgig installation dir.
+AC_ARG_WITH(libgig,
+  AC_HELP_STRING([--with-libgig=PATH], [use alternate libgig install path]),
+  [ac_with_paths="$ac_with_paths $withval"])
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CPP
@@ -40,6 +50,19 @@ AC_PROG_GCC_TRADITIONAL
 # Checks for languages.
 AC_LANG_C
 AC_LANG_CPLUSPLUS
+
+# Prepend alternate dependencies paths.
+for X in $ac_with_paths; do
+  if test -d $X/include; then
+    CFLAGS="$CFLAGS -I$X/include"
+    CPPFLAGS="$CPPFLAGS -I$X/include"
+    ac_incpath="$X/include $ac_incpath"
+  fi
+  if test -d $X/lib; then
+    LIBS="$LIBS -L$X/lib"
+    ac_libs="-L$X/lib $ac_libs"
+  fi
+done
 
 # Check for QTDIR environment variable.
 AC_MSG_CHECKING([whether QTDIR environment variable is set])
@@ -52,7 +75,7 @@ fi
 
 CFLAGS="$CFLAGS -I$QTDIR/include"
 CPPFLAGS="$CPPFLAGS -I$QTDIR/include"
-LIBS="-L$QTDIR/lib"
+LIBS="$LIBS -L$QTDIR/lib"
 for X in qt qt3; do
   if test -d $QTDIR/include/$X; then
     CFLAGS="$CFLAGS -I$QTDIR/include/$X"
@@ -131,7 +154,7 @@ AC_CHECK_LIB(lscp, main, [ac_liblscp="yes"], [ac_liblscp="no"])
 if test "x$ac_liblscp" = "xno"; then
    AC_MSG_ERROR([LSCP library not found.])
 fi
-ac_libs="-llscp"
+ac_libs="$ac_libs -llscp"
 
 AC_CACHE_CHECK([for instrument_name in lscp_channel_info_t],
   ac_instrument_name, [
@@ -167,21 +190,22 @@ if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
    if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
-      ac_libs="-lgig $ac_libs"
+      ac_libs="$ac_libs -lgig"
    fi
 fi
 
 AC_SUBST(ac_libs)
+AC_SUBST(ac_incpath)
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h signal.h)
 
-# AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
-# if test "x$ac_lscp_h" = "xno"; then
-#    AC_MSG_ERROR([LSCP headers not found.])
-# fi
+AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
+if test "x$ac_lscp_h" = "xno"; then
+   AC_MSG_ERROR([LSCP headers not found.])
+fi
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_C_CONST
