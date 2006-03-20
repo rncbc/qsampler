@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Added configure support for x86_64 libraries (UNTESTED).
+
 * Optional specification of alternate liblscp and libgig
   installation paths have been added to configure command
   arguments (--with-liblscp, --with-libgig).
