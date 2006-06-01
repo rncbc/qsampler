@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 6
+%define release 7
 %define prefix  /usr/local
 
 Summary:	A LinuxSampler Qt GUI interface.
@@ -8,7 +8,7 @@ Name:		%{name}
 Version:	%{version}
 Release:	%{release}
 Prefix:		%{prefix}
-Copyright:	GPL
+License:	GPL
 Group:		Sound
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://qsampler.sourceforge.net/
@@ -45,6 +45,9 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 %{prefix}/share/icons/qsampler.png
 
 %changelog
+* Thu Jun 01 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Take a chance for a new 0.1.3 release.
+- Changed deprecated copyright attribute to license.
 * Wed Aug 24 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Prepared auto-generation from configure.
 * Tue Aug 16 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
