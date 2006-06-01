@@ -600,7 +600,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     QTextStream ts(&file);
     while (!ts.atEnd()) {
         // Read the line.
-        QString sCommand = ts.readLine().simplifyWhiteSpace();
+        QString sCommand = ts.readLine().stripWhiteSpace();
         // If not empty, nor a comment, call the server...
         if (!sCommand.isEmpty() && sCommand[0] != '#') {
             appendMessagesColor(sCommand, "#996633");
