@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>520</width>
-            <height>323</height>
+            <width>512</width>
+            <height>320</height>
         </rect>
     </property>
     <property name="sizePolicy">

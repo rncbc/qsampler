@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.3.1, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.3.2, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
@@ -191,6 +191,11 @@ if test "x$ac_mute_solo" = "xyes"; then
 fi
 if test "x$ac_mute_solo" = "xyes"; then
    AC_DEFINE(CONFIG_MUTE_SOLO, 1, [Define if mute/solo is available.])
+fi
+
+AC_CHECK_LIB(lscp, lscp_map_midi_instrument, [ac_midi_instrument="yes"], [ac_midi_instrument="no"])
+if test "x$ac_midi_instrument" = "xyes"; then
+  AC_DEFINE(CONFIG_MIDI_INSTRUMENT, 1, [Define if MIDI instrument mapping is available.])
 fi
 
 # Check for optional libraries.

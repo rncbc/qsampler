@@ -807,6 +807,46 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
 
+#ifdef CONFIG_MIDI_INSTRUMENT
+	// MIDI instrument mapping...
+	lscp_midi_instrument_t *pInstrs = ::lscp_list_midi_instruments(m_pClient);
+	if (pInstrs)
+        ts << "# " << tr("MIDI instrument mapping") << endl;
+	for (int iInstr = 0; pInstrs && pInstrs[iInstr].program >= 0; iInstr++) {
+		lscp_midi_instrument_info_t *pInstrInfo
+			= ::lscp_get_midi_instrument_info(m_pClient, &pInstrs[iInstr]);
+		if (pInstrInfo) {
+			ts << "MAP MIDI_INSTRUMENT "
+				<< pInstrs[iInstr].bank_msb    << " " 
+				<< pInstrs[iInstr].bank_lsb    << " " 
+				<< pInstrs[iInstr].program     << " " 
+				<< pInstrInfo->engine_name     << " '" 
+				<< pInstrInfo->instrument_file << "' "
+				<< pInstrInfo->instrument_nr   << " "
+				<< pInstrInfo->volume          << " ";
+			switch (pInstrInfo->load_mode) {
+				case LSCP_LOAD_PERSISTENT:
+					ts << "PERSISTENT";
+					break;
+				case LSCP_LOAD_ON_DEMAND_HOLD:
+					ts << "ON_DEMAND_HOLD";
+					break;
+				case LSCP_LOAD_ON_DEMAND:
+				case LSCP_LOAD_DEFAULT:
+				default:
+					ts << "ON_DEMAND";
+					break;
+			}
+			if (pInstrInfo->name)
+				ts << " '" << pInstrInfo->name << "'";
+			ts << endl;
+		}
+		ts << endl;
+        // Try to keep it snappy :)
+        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	}
+#endif //  CONFIG_MIDI_INSTRUMENT
+
     // Ok. we've wrote it.
     file.close();
 
