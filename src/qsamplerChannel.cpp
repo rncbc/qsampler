@@ -40,9 +40,8 @@
 //
 
 // Constructor.
-qsamplerChannel::qsamplerChannel ( qsamplerMainForm *pMainForm, int iChannelID )
+qsamplerChannel::qsamplerChannel ( int iChannelID )
 {
-	m_pMainForm  = pMainForm;
 	m_iChannelID = iChannelID;
 
 //  m_sEngineName       = noEngineName();
@@ -67,45 +66,22 @@ qsamplerChannel::~qsamplerChannel (void)
 }
 
 
-// Main application form accessor.
-qsamplerMainForm *qsamplerChannel::mainForm(void) const
-{
-	return m_pMainForm;
-}
-
-
-// The global options settings delegated property.
-qsamplerOptions *qsamplerChannel::options (void) const
-{
-	if (m_pMainForm == NULL)
-		return NULL;
-
-	return m_pMainForm->options();
-}
-
-
-// The client descriptor delegated property.
-lscp_client_t *qsamplerChannel::client (void) const
-{
-	if (m_pMainForm == NULL)
-		return NULL;
-
-	return m_pMainForm->client();
-}
-
-
 // Create a new sampler channel, if not already.
 bool qsamplerChannel::addChannel (void)
 {
-	if (client() == NULL)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL)
 		return false;
 
 	// Are we a new channel?
 	if (m_iChannelID < 0) {
-		m_iChannelID = ::lscp_add_channel(client());
+		m_iChannelID = ::lscp_add_channel(pMainForm->client());
 		if (m_iChannelID < 0) {
 			appendMessagesClient("lscp_add_channel");
-			appendMessagesError(QObject::tr("Could not add channel.\n\nSorry."));
+			appendMessagesError(
+				QObject::tr("Could not add channel.\n\nSorry."));
 		}   // Otherwise it's created...
 		else appendMessages(QObject::tr("added."));
 	}
@@ -118,12 +94,15 @@ bool qsamplerChannel::addChannel (void)
 // Remove sampler channel.
 bool qsamplerChannel::removeChannel (void)
 {
-	if (client() == NULL)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL)
 		return false;
 
 	// Are we an existing channel?
 	if (m_iChannelID >= 0) {
-		if (::lscp_remove_channel(client(), m_iChannelID) != LSCP_OK) {
+		if (::lscp_remove_channel(pMainForm->client(), m_iChannelID) != LSCP_OK) {
 			appendMessagesClient("lscp_remove_channel");
 			appendMessagesError(QObject::tr("Could not remove channel.\n\nSorry."));
 		} else {
@@ -165,15 +144,19 @@ const QString& qsamplerChannel::engineName (void) const
 
 bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sEngineName == sEngineName)
 		return true;
 
-	if (::lscp_load_engine(client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
+	if (::lscp_load_engine(pMainForm->client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_load_engine");
 		return false;
 	}
+
 	appendMessages(QObject::tr("Engine: %1.").arg(sEngineName));
 
 	m_sEngineName = sEngineName;
@@ -208,14 +191,17 @@ int qsamplerChannel::instrumentStatus (void) const
 // Instrument file loader.
 bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (!isInstrumentFile(sInstrumentFile))
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sInstrumentFile == sInstrumentFile && m_iInstrumentNr == iInstrumentNr)
 		return true;
 
-	if (::lscp_load_instrument_non_modal(client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
+	if (::lscp_load_instrument_non_modal(pMainForm->client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_load_instrument");
 		return false;
 	}
@@ -251,12 +237,15 @@ const QString& qsamplerChannel::midiDriver (void) const
 
 bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sMidiDriver == sMidiDriver)
 		return true;
 
-	if (::lscp_set_channel_midi_type(client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
+	if (::lscp_set_channel_midi_type(pMainForm->client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_midi_type");
 		return false;
 	}
@@ -276,12 +265,15 @@ int qsamplerChannel::midiDevice (void) const
 
 bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiDevice == iMidiDevice)
 		return true;
 
-	if (::lscp_set_channel_midi_device(client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
+	if (::lscp_set_channel_midi_device(pMainForm->client(), m_iChannelID, iMidiDevice) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_midi_device");
 		return false;
 	}
@@ -301,12 +293,15 @@ int qsamplerChannel::midiPort (void) const
 
 bool qsamplerChannel::setMidiPort ( int iMidiPort )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiPort == iMidiPort)
 		return true;
 
-	if (::lscp_set_channel_midi_port(client(), m_iChannelID, iMidiPort) != LSCP_OK) {
+	if (::lscp_set_channel_midi_port(pMainForm->client(), m_iChannelID, iMidiPort) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_midi_port");
 		return false;
 	}
@@ -326,12 +321,15 @@ int qsamplerChannel::midiChannel (void) const
 
 bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiChannel == iMidiChannel)
 		return true;
 
-	if (::lscp_set_channel_midi_channel(client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
+	if (::lscp_set_channel_midi_channel(pMainForm->client(), m_iChannelID, iMidiChannel) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_midi_channel");
 		return false;
 	}
@@ -351,12 +349,15 @@ int qsamplerChannel::audioDevice (void) const
 
 bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iAudioDevice == iAudioDevice)
 		return true;
 
-	if (::lscp_set_channel_audio_device(client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
+	if (::lscp_set_channel_audio_device(pMainForm->client(), m_iChannelID, iAudioDevice) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_audio_device");
 		return false;
 	}
@@ -376,12 +377,15 @@ const QString& qsamplerChannel::audioDriver (void) const
 
 bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sAudioDriver == sAudioDriver)
 		return true;
 
-	if (::lscp_set_channel_audio_type(client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
+	if (::lscp_set_channel_audio_type(pMainForm->client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_audio_type");
 		return false;
 	}
@@ -401,12 +405,15 @@ float qsamplerChannel::volume (void) const
 
 bool qsamplerChannel::setVolume ( float fVolume )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_fVolume == fVolume)
 		return true;
 
-	if (::lscp_set_channel_volume(client(), m_iChannelID, fVolume) != LSCP_OK) {
+	if (::lscp_set_channel_volume(pMainForm->client(), m_iChannelID, fVolume) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_volume");
 		return false;
 	}
@@ -426,13 +433,16 @@ bool qsamplerChannel::channelMute (void) const
 
 bool qsamplerChannel::setChannelMute ( bool bMute )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && ((m_bMute && bMute) || (!m_bMute && !bMute)))
 		return true;
 
 #ifdef CONFIG_MUTE_SOLO
-	if (::lscp_set_channel_mute(client(), m_iChannelID, bMute) != LSCP_OK) {
+	if (::lscp_set_channel_mute(pMainForm->client(), m_iChannelID, bMute) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_mute");
 		return false;
 	}
@@ -453,13 +463,16 @@ bool qsamplerChannel::channelSolo (void) const
 
 bool qsamplerChannel::setChannelSolo ( bool bSolo )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && ((m_bSolo && bSolo) || (!m_bSolo && !bSolo)))
 		return true;
 
 #ifdef CONFIG_MUTE_SOLO
-	if (::lscp_set_channel_solo(client(), m_iChannelID, bSolo) != LSCP_OK) {
+	if (::lscp_set_channel_solo(pMainForm->client(), m_iChannelID, bSolo) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_solo");
 		return false;
 	}
@@ -480,13 +493,16 @@ int qsamplerChannel::audioChannel ( int iAudioOut ) const
 
 bool qsamplerChannel::setAudioChannel ( int iAudioOut, int iAudioIn )
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 &&
 			m_audioRouting[iAudioOut] == iAudioIn)
 		return true;
 
-	if (::lscp_set_channel_audio_channel(client(),
+	if (::lscp_set_channel_audio_channel(pMainForm->client(),
 			m_iChannelID, iAudioOut, iAudioIn) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_audio_channel");
 		return false;
@@ -519,11 +535,14 @@ void qsamplerChannel::updateInstrumentName (void)
 // Update whole channel info state.
 bool qsamplerChannel::updateChannelInfo (void)
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 
 	// Read channel information.
-	lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(client(), m_iChannelID);
+	lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(pMainForm->client(), m_iChannelID);
 	if (pChannelInfo == NULL) {
 		appendMessagesClient("lscp_get_channel_info");
 		appendMessagesError(QObject::tr("Could not get channel information.\n\nSorry."));
@@ -570,7 +589,7 @@ bool qsamplerChannel::updateChannelInfo (void)
 	lscp_device_info_t *pDeviceInfo;
 	const QString sNone = QObject::tr("(none)");
 	// Audio device driver type.
-	pDeviceInfo = ::lscp_get_audio_device_info(client(), m_iAudioDevice);
+	pDeviceInfo = ::lscp_get_audio_device_info(pMainForm->client(), m_iAudioDevice);
 	if (pDeviceInfo == NULL) {
 		appendMessagesClient("lscp_get_audio_device_info");
 		m_sAudioDriver = sNone;
@@ -578,7 +597,7 @@ bool qsamplerChannel::updateChannelInfo (void)
 		m_sAudioDriver = pDeviceInfo->driver;
 	}
 	// MIDI device driver type.
-	pDeviceInfo = ::lscp_get_midi_device_info(client(), m_iMidiDevice);
+	pDeviceInfo = ::lscp_get_midi_device_info(pMainForm->client(), m_iMidiDevice);
 	if (pDeviceInfo == NULL) {
 		appendMessagesClient("lscp_get_midi_device_info");
 		m_sMidiDriver = sNone;
@@ -600,10 +619,13 @@ bool qsamplerChannel::updateChannelInfo (void)
 // Reset channel method.
 bool qsamplerChannel::channelReset (void)
 {
-	if (client() == NULL || m_iChannelID < 0)
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 
-	if (::lscp_reset_channel(client(), m_iChannelID) != LSCP_OK) {
+	if (::lscp_reset_channel(pMainForm->client(), m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_reset_channel");
 		return false;
 	}
@@ -617,6 +639,10 @@ bool qsamplerChannel::channelReset (void)
 // Channel setup dialog form.
 bool qsamplerChannel::channelSetup ( QWidget *pParent )
 {
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+
 	bool bResult = false;
 
 	appendMessages(QObject::tr("setup..."));
@@ -635,41 +661,47 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 // Redirected messages output methods.
 void qsamplerChannel::appendMessages( const QString& s ) const
 {
-	if (m_pMainForm)
-		m_pMainForm->appendMessages(channelName() + ' ' + s);
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm)
+		pMainForm->appendMessages(channelName() + ' ' + s);
 }
 
 void qsamplerChannel::appendMessagesColor( const QString& s,
 	const QString& c ) const
 {
-	if (m_pMainForm)
-		m_pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm)
+		pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
 }
 
 void qsamplerChannel::appendMessagesText( const QString& s ) const
 {
-	if (m_pMainForm)
-		m_pMainForm->appendMessagesText(channelName() + ' ' + s);
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm)
+		pMainForm->appendMessagesText(channelName() + ' ' + s);
 }
 
 void qsamplerChannel::appendMessagesError( const QString& s ) const
 {
-	if (m_pMainForm)
-		m_pMainForm->appendMessagesError(channelName() + "\n\n" + s);
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm)
+		pMainForm->appendMessagesError(channelName() + "\n\n" + s);
 }
 
 void qsamplerChannel::appendMessagesClient( const QString& s ) const
 {
-	if (m_pMainForm)
-		m_pMainForm->appendMessagesClient(channelName() + ' ' + s);
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm)
+		pMainForm->appendMessagesClient(channelName() + ' ' + s);
 }
 
 
 // Context menu event handler.
 void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
 {
-	if (m_pMainForm)
-		m_pMainForm->contextMenuEvent(pEvent);
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm)
+		pMainForm->contextMenuEvent(pEvent);
 }
 
 

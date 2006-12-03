@@ -41,7 +41,9 @@
 #include "qsamplerMessages.h"
 
 #include "qsamplerChannelStrip.h"
+#include "qsamplerInstrumentList.h"
 
+#include "qsamplerInstrumentListForm.h"
 #include "qsamplerDeviceForm.h"
 #include "qsamplerOptionsForm.h"
 
@@ -102,14 +104,22 @@ private:
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window form implementation.
 
+// Kind of singleton reference.
+qsamplerMainForm *qsamplerMainForm::g_pMainForm = NULL;
+
+
 // Kind of constructor.
 void qsamplerMainForm::init (void)
 {
+	// Pseudo-singleton reference setup.
+	g_pMainForm = this;
+
     // Initialize some pointer references.
     m_pOptions = NULL;
 
     // All child forms are to be created later, not earlier than setup.
-    m_pMessages   = NULL;
+    m_pMessages = NULL;
+    m_pInstrumentListForm = NULL;
     m_pDeviceForm = NULL;
 
     // We'll start clean.
@@ -186,6 +196,8 @@ void qsamplerMainForm::destroy (void)
     // Finally drop any widgets around...
     if (m_pDeviceForm)
         delete m_pDeviceForm;
+    if (m_pInstrumentListForm)
+        delete m_pInstrumentListForm;
     if (m_pMessages)
         delete m_pMessages;
     if (m_pWorkspace)
@@ -204,6 +216,9 @@ void qsamplerMainForm::destroy (void)
     // Delete recentfiles menu.
     if (m_pRecentFilesMenu)
         delete m_pRecentFilesMenu;
+
+	// Pseudo-singleton reference shut-down.
+	g_pMainForm = NULL;
 }
 
 
@@ -214,19 +229,32 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     m_pOptions = pOptions;
 
     // What style do we create these forms?
-    WFlags wflags = Qt::WType_TopLevel;
+	Qt::WFlags wflags = Qt::WStyle_Customize
+		| Qt::WStyle_Title
+		| Qt::WStyle_SysMenu
+		| Qt::WStyle_MinMax
+		| Qt::WType_TopLevel;
     if (m_pOptions->bKeepOnTop)
         wflags |= Qt::WStyle_Tool;
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
     m_pDeviceForm = new qsamplerDeviceForm(this, 0, wflags);
-    m_pDeviceForm->setMainForm(this); // An important life immutable!
+#ifdef CONFIG_MIDI_INSTRUMENT
+    m_pInstrumentListForm = new qsamplerInstrumentListForm(this, 0, wflags);
+	QObject::connect(m_pInstrumentListForm->InstrumentList,
+		SIGNAL(instrumentsChanged()),
+		SLOT(sessionDirty()));
+#else
+	viewInstrumentsAction->setEnabled(false);
+#endif
     // Set message defaults...
     updateMessagesFont();
     updateMessagesLimit();
     updateMessagesCapture();
     // Set the visibility signal.
-    QObject::connect(m_pMessages, SIGNAL(visibilityChanged(bool)), this, SLOT(stabilizeForm()));
+    QObject::connect(m_pMessages,
+		SIGNAL(visibilityChanged(bool)),
+		SLOT(stabilizeForm()));
 
     // Initial decorations toggle state.
     viewMenubarAction->setOn(m_pOptions->bMenubar);
@@ -251,6 +279,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     }
     // Try to restore old window positioning and initial visibility.
     m_pOptions->loadWidgetGeometry(this);
+    m_pOptions->loadWidgetGeometry(m_pInstrumentListForm);
     m_pOptions->loadWidgetGeometry(m_pDeviceForm);
 
     // Final startup stabilization...
@@ -291,8 +320,11 @@ bool qsamplerMainForm::queryClose (void)
             m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
             // And the children, and the main windows state,.
 			m_pOptions->saveWidgetGeometry(m_pDeviceForm);
+			m_pOptions->saveWidgetGeometry(m_pInstrumentListForm);
 			m_pOptions->saveWidgetGeometry(this);
 			// Close popup widgets.
+			if (m_pInstrumentListForm)
+				m_pInstrumentListForm->close();
 			if (m_pDeviceForm)
 				m_pDeviceForm->close();
             // Stop client and/or server, gracefully.
@@ -351,7 +383,7 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 		const QString& sPath = *iter;
 		if (qsamplerChannel::isInstrumentFile(sPath)) {
 			// Try to create a new channel from instrument file...
-			qsamplerChannel *pChannel = new qsamplerChannel(this);
+			qsamplerChannel *pChannel = new qsamplerChannel();
 			if (pChannel == NULL)
 				return;
 			// Start setting the instrument filename...
@@ -417,10 +449,18 @@ qsamplerOptions *qsamplerMainForm::options (void)
     return m_pOptions;
 }
 
+
 // The LSCP client descriptor property.
 lscp_client_t *qsamplerMainForm::client (void)
 {
     return m_pClient;
+}
+
+
+// The pseudo-singleton instance accessor.
+qsamplerMainForm *qsamplerMainForm::getInstance (void)
+{
+	return g_pMainForm;
 }
 
 
@@ -678,7 +718,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		ts << endl;
-		qsamplerDevice device(this, qsamplerDevice::Audio, piDeviceIDs[iDevice]);
+		qsamplerDevice device(qsamplerDevice::Audio, piDeviceIDs[iDevice]);
 		// Audio device specification...
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 			<< " " << tr("Device") << " " << iDevice << endl;
@@ -718,7 +758,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		ts << endl;
-		qsamplerDevice device(this, qsamplerDevice::Midi, piDeviceIDs[iDevice]);
+		qsamplerDevice device(qsamplerDevice::Midi, piDeviceIDs[iDevice]);
 		// MIDI device specification...
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 			<< " " << tr("Device") << " " << iDevice << endl;
@@ -1005,7 +1045,7 @@ void qsamplerMainForm::editAddChannel (void)
         return;
 
     // Just create the channel instance...
-    qsamplerChannel *pChannel = new qsamplerChannel(this);
+    qsamplerChannel *pChannel = new qsamplerChannel();
     if (pChannel == NULL)
         return;
 
@@ -1168,6 +1208,25 @@ void qsamplerMainForm::viewMessages ( bool bOn )
 }
 
 
+// Show/hide the MIDI instrument list-view form.
+void qsamplerMainForm::viewInstruments (void)
+{
+	if (m_pOptions == NULL)
+		return;
+
+	if (m_pInstrumentListForm) {
+		m_pOptions->saveWidgetGeometry(m_pInstrumentListForm);
+		if (m_pInstrumentListForm->isVisible()) {
+			m_pInstrumentListForm->hide();
+		} else {
+			m_pInstrumentListForm->show();
+			m_pInstrumentListForm->raise();
+			m_pInstrumentListForm->setActiveWindow();
+		}
+	}
+}
+
+
 // Show/hide the device configurator form.
 void qsamplerMainForm::viewDevices (void)
 {
@@ -1176,7 +1235,6 @@ void qsamplerMainForm::viewDevices (void)
 
 	if (m_pDeviceForm) {
 		m_pOptions->saveWidgetGeometry(m_pDeviceForm);
-		m_pDeviceForm->setClient(m_pClient);
 		if (m_pDeviceForm->isVisible()) {
 			m_pDeviceForm->hide();
 		} else {
@@ -1362,6 +1420,11 @@ void qsamplerMainForm::helpAbout (void)
     sText += tr("Sampler channel Mute/Solo support disabled.");
     sText += "</font></small><br />";
 #endif
+#ifndef CONFIG_MIDI_INSTRUMENT
+    sText += "<small><font color=\"red\">";
+    sText += tr("MIDI instrument mapping support disabled.");
+    sText += "</font></small><br />";
+#endif
     sText += "<br />\n";
     sText += tr("Using") + ": ";
     sText += ::lscp_client_package();
@@ -1416,7 +1479,13 @@ void qsamplerMainForm::stabilizeForm (void)
     editResetChannelAction->setEnabled(bHasChannel);
     editResetAllChannelsAction->setEnabled(bHasChannel);
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
-    viewDevicesAction->setOn(m_pDeviceForm && m_pDeviceForm->isVisible());
+#ifdef CONFIG_MIDI_INSTRUMENT
+	viewInstrumentsAction->setOn(m_pInstrumentListForm
+		&& m_pInstrumentListForm->isVisible());
+	viewInstrumentsAction->setEnabled(bHasClient);
+#endif
+	viewDevicesAction->setOn(m_pDeviceForm
+		&& m_pDeviceForm->isVisible());
     viewDevicesAction->setEnabled(bHasClient);
     channelsArrangeAction->setEnabled(bHasChannel);
 
@@ -1482,13 +1551,15 @@ void qsamplerMainForm::updateSession (void)
 	for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
 		// Check if theres already a channel strip for this one...
 		if (!channelStrip(piChannelIDs[iChannel]))
-			createChannelStrip(new qsamplerChannel(this, piChannelIDs[iChannel]));
+			createChannelStrip(new qsamplerChannel(piChannelIDs[iChannel]));
 		// Make it visibly responsive...
 		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
 	m_pWorkspace->setUpdatesEnabled(true);
 	
-	// Remember to refresh devices
+	// Remember to refresh devices and instruments...
+	if (m_pInstrumentListForm)
+	    m_pInstrumentListForm->refreshInstruments();
 	if (m_pDeviceForm)
 	    m_pDeviceForm->refreshDevices();
 }
@@ -2107,10 +2178,12 @@ bool qsamplerMainForm::startClient (void)
     // Log success here.
     appendMessages(tr("Client connected."));
 
-	// Hard-notify device configuration form,
+	// Hard-notify instrumnet and device configuration forms,
 	// if visible, that we're ready...
-	if (m_pDeviceForm && m_pDeviceForm->isVisible())
-	    m_pDeviceForm->setClient(m_pClient);
+	if (m_pInstrumentListForm)
+	    m_pInstrumentListForm->refreshInstruments();
+	if (m_pDeviceForm)
+	    m_pDeviceForm->refreshDevices();
 
     // Is any session pending to be loaded?
     if (!m_pOptions->sSessionFile.isEmpty()) {
@@ -2132,11 +2205,6 @@ void qsamplerMainForm::stopClient (void)
     if (m_pClient == NULL)
         return;
 
-	// Hard-notify device configuration form,
-	// if visible, that we're running out...
-	if (m_pDeviceForm && m_pDeviceForm->isVisible())
-	    m_pDeviceForm->setClient(NULL);
-
     // Log prepare here.
     appendMessages(tr("Client disconnecting..."));
 
@@ -2156,6 +2224,13 @@ void qsamplerMainForm::stopClient (void)
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO);
     ::lscp_client_destroy(m_pClient);
     m_pClient = NULL;
+
+	// Hard-notify instrumnet and device configuration forms,
+	// if visible, that we're running out...
+	if (m_pInstrumentListForm)
+	    m_pInstrumentListForm->refreshInstruments();
+	if (m_pDeviceForm)
+	    m_pDeviceForm->refreshDevices();
 
     // Log final here.
     appendMessages(tr("Client disconnected."));

@@ -5,7 +5,8 @@ ChangeLog
 
 CVS HEAD
 
-* Added preliminary MIDI instrument mapping support.
+* Added preliminary MIDI instrument mapping support; now
+  with an instrument list widget and editing capabilities.
 
 - GPL address update.
 

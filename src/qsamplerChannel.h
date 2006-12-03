@@ -30,7 +30,6 @@
 #include "qsamplerOptions.h"
 
 class qsamplerDevice;
-class qsamplerMainForm;
 
 
 // Typedef'd QMap.
@@ -46,18 +45,9 @@ class qsamplerChannel
 public:
 
 	// Constructor.
-	qsamplerChannel(qsamplerMainForm *pMainForm, int iChannelID = -1);
+	qsamplerChannel(int iChannelID = -1);
 	// Default destructor.
 	~qsamplerChannel();
-
-	// Main application form accessor.
-	qsamplerMainForm *mainForm() const;
-
-	// Main application options accessor.
-	qsamplerOptions *options() const;
-
-	// LSCP client descriptor accessor.
-	lscp_client_t * client() const;
 
 	// Add/remove sampler channel methods.
 	bool     addChannel();
@@ -164,9 +154,6 @@ public:
 							bool bInstrumentNames);
 
 private:
-
-	// Main application form reference.
-	qsamplerMainForm *m_pMainForm;
 
 	// Unique channel identifier.
 	int     m_iChannelID;

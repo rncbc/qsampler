@@ -1,25 +1,32 @@
 INCLUDEPATH	+= ../src ../../liblscp
 
-SOURCES	 += ../src/main.cpp \
-			../src/qsamplerOptions.cpp \
-			../src/qsamplerChannel.cpp \
-			../src/qsamplerMessages.cpp \
-			../src/qsamplerDevice.cpp
-
 HEADERS	 += ../src/qsamplerAbout.h \
 			../src/qsamplerOptions.h \
 			../src/qsamplerChannel.h \
 			../src/qsamplerMessages.h \
+			../src/qsamplerInstrument.h \
+			../src/qsamplerInstrumentList.h \
 			../src/qsamplerDevice.h
+
+SOURCES	 += ../src/main.cpp \
+			../src/qsamplerOptions.cpp \
+			../src/qsamplerChannel.cpp \
+			../src/qsamplerMessages.cpp \
+			../src/qsamplerInstrument.cpp \
+			../src/qsamplerInstrumentList.cpp \
+			../src/qsamplerDevice.cpp
 
 FORMS	  = ../src/qsamplerMainForm.ui \
 			../src/qsamplerChannelStrip.ui \
 			../src/qsamplerChannelForm.ui \
 			../src/qsamplerOptionsForm.ui \
+			../src/qsamplerInstrumentForm.ui \
+			../src/qsamplerInstrumentListForm.ui \
 			../src/qsamplerDeviceForm.ui
 
 IMAGES	  = ../icons/qsampler.png \
 			../icons/qsamplerChannel.png \
+			../icons/qsamplerInstrument.png \
 			../icons/qsamplerDevice.png \
 			../icons/fileNew.png \
 			../icons/fileOpen.png \
@@ -32,6 +39,9 @@ IMAGES	  = ../icons/qsampler.png \
 			../icons/editResetChannel.png \
 			../icons/editResetAllChannels.png \
 			../icons/channelsArrange.png \
+			../icons/itemGroup.png \
+			../icons/itemGroupOpen.png \
+			../icons/itemFile.png \
 			../icons/formAccept.png \
 			../icons/formReject.png \
 			../icons/displaybg1.png \
