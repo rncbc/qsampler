@@ -1,0 +1,97 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>qsamplerInstrumentListForm</class>
+<comment>qsampler - A LinuxSampler Qt GUI Interface.
+
+   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+</comment>
+<author>rncbc aka Rui Nuno Capela</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>qsamplerInstrumentListForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>720</width>
+            <height>340</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Qsampler: Instruments</string>
+    </property>
+    <property name="icon">
+        <pixmap>qsamplerInstrument.png</pixmap>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="qsamplerInstrumentList">
+            <property name="name">
+                <cstring>InstrumentList</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>120</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<customwidgets>
+    <customwidget>
+        <class>qsamplerInstrumentList</class>
+        <header location="local">qsamplerInstrumentList.h</header>
+        <sizehint>
+            <width>320</width>
+            <height>120</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>7</hordata>
+            <verdata>5</verdata>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </customwidget>
+</customwidgets>
+<tabstops>
+    <tabstop>InstrumentList</tabstop>
+</tabstops>
+<slots>
+    <slot specifier="non virtual">refreshInstruments()</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
+    <function access="private" specifier="non virtual">showEvent( QShowEvent * pShowEvent )</function>
+    <function access="private" specifier="non virtual">hideEvent( QHideEvent * pHideEvent )</function>
+</functions>
+<pixmapinproject/>
+<layoutdefaults spacing="0" margin="0"/>
+</UI>
