@@ -8,7 +8,11 @@ headers = config.h \
 	src/qsamplerOptions.h \
 	src/qsamplerChannel.h \
 	src/qsamplerMessages.h \
+	src/qsamplerInstrument.h \
+	src/qsamplerInstrumentList.h \
 	src/qsamplerDevice.h \
+	src/qsamplerInstrumentForm.ui.h \
+	src/qsamplerInstrumentListForm.ui.h \
 	src/qsamplerDeviceForm.ui.h \
 	src/qsamplerChannelStrip.ui.h \
 	src/qsamplerChannelForm.ui.h \
@@ -19,7 +23,11 @@ sources = src/main.cpp \
 	src/qsamplerOptions.cpp \
 	src/qsamplerChannel.cpp \
 	src/qsamplerMessages.cpp \
+	src/qsamplerInstrument.cpp \
+	src/qsamplerInstrumentList.cpp \
 	src/qsamplerDevice.cpp \
+	src/qsamplerInstrumentForm.ui \
+	src/qsamplerInstrumentListForm.ui \
 	src/qsamplerDeviceForm.ui \
 	src/qsamplerChannelStrip.ui \
 	src/qsamplerChannelForm.ui \

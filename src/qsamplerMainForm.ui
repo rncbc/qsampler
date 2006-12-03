@@ -83,6 +83,7 @@
         <action name="viewStatusbarAction"/>
         <separator/>
         <action name="viewMessagesAction"/>
+        <action name="viewInstrumentsAction"/>
         <action name="viewDevicesAction"/>
         <separator/>
         <action name="viewOptionsAction"/>
@@ -112,6 +113,7 @@
         <action name="fileResetAction"/>
         <action name="fileRestartAction"/>
         <separator/>
+        <action name="viewInstrumentsAction"/>
         <action name="viewDevicesAction"/>
     </toolbar>
     <toolbar dock="2">
@@ -498,6 +500,32 @@
     </action>
     <action>
         <property name="name">
+            <cstring>viewInstrumentsAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>qsamplerInstrument.png</iconset>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>Instruments</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Instruments</string>
+        </property>
+        <property name="toolTip">
+            <string>MIDI instruments configuration</string>
+        </property>
+        <property name="statusTip">
+            <string>Show/hide the MIDI instruments configuration window</string>
+        </property>
+        <property name="accel">
+            <string>F10</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
             <cstring>viewDevicesAction</cstring>
         </property>
         <property name="iconSet">
@@ -724,6 +752,12 @@
         <slot>viewMessages(bool)</slot>
     </connection>
     <connection>
+        <sender>viewInstrumentsAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>viewInstruments()</slot>
+    </connection>
+    <connection>
         <sender>viewDevicesAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -772,6 +806,7 @@
     <forward>class qsamplerChannel;</forward>
     <forward>class qsamplerMessages;</forward>
     <forward>class qsamplerChannelStrip;</forward>
+    <forward>class qsamplerInstrumentListForm;</forward>
     <forward>class qsamplerDeviceForm;</forward>
 </forwards>
 <variables>
@@ -789,7 +824,9 @@
     <variable access="private">QLabel *m_statusItem[5];</variable>
     <variable access="private">QPopupMenu *m_pRecentFilesMenu;</variable>
     <variable access="private">QPtrList&lt;qsamplerChannelStrip&gt; m_changedStrips;</variable>
+    <variable access="private">qsamplerInstrumentListForm *m_pInstrumentListForm;</variable>
     <variable access="private">qsamplerDeviceForm *m_pDeviceForm;</variable>
+    <variable access="private">static qsamplerMainForm *g_pMainForm;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">fileNew( void )</slot>
@@ -809,6 +846,7 @@
     <slot specifier="non virtual">viewToolbar( bool bOn )</slot>
     <slot specifier="non virtual">viewStatusbar( bool bOn )</slot>
     <slot specifier="non virtual">viewMessages( bool bOn )</slot>
+    <slot specifier="non virtual">viewInstruments( void )</slot>
     <slot specifier="non virtual">viewDevices( void )</slot>
     <slot specifier="non virtual">viewOptions( void )</slot>
     <slot specifier="non virtual">channelsArrange( void )</slot>
@@ -869,6 +907,7 @@
     <function access="private" specifier="non virtual">stopServer( void )</function>
     <function access="private" specifier="non virtual" returnType="bool">startClient( void )</function>
     <function access="private" specifier="non virtual">stopClient( void )</function>
+    <function specifier="non virtual" returnType="static qsamplerMainForm *">getInstance( void )</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="8"/>

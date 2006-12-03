@@ -459,9 +459,7 @@
     <function access="private" specifier="non virtual">destroy()</function>
     <function access="private" specifier="non virtual">showEvent( QShowEvent * pShowEvent )</function>
     <function access="private" specifier="non virtual">hideEvent( QHideEvent * pHideEvent )</function>
-    <function specifier="non virtual">setMainForm( qsamplerMainForm *pMainForm )</function>
     <function specifier="non virtual">setDeviceTypeMode( qsamplerDevice::qsamplerDeviceType deviceType )</function>
-    <function specifier="non virtual">setClient( lscp_client_t *pClient )</function>
     <function specifier="non virtual">setDriverName( const QString &amp; sDriverName )</function>
     <function specifier="non virtual">setDevice( qsamplerDevice *pDevice )</function>
 </functions>

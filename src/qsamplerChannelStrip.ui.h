@@ -324,8 +324,9 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     ChannelSetupPushButton->setText(sText);
 
     // Check if we're up and connected.
-    if (m_pChannel->client() == NULL)
-        return false;
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm->client() == NULL)
+		return false;
 
     // Read actual channel information.
     m_pChannel->updateChannelInfo();
@@ -383,21 +384,23 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
 {
     if (m_pChannel == NULL)
         return false;
-    if (m_pChannel->client() == NULL)
-        return false;
+
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm->client() == NULL)
+		return false;
 
 	// This only makes sense on fully loaded channels...
 	if (m_pChannel->instrumentStatus() < 100)
 	    return false;
 
     // Get current channel voice count.
-    int iVoiceCount  = ::lscp_get_channel_voice_count(m_pChannel->client(), m_pChannel->channelID());
+    int iVoiceCount  = ::lscp_get_channel_voice_count(pMainForm->client(), m_pChannel->channelID());
     // Get current stream count.
-    int iStreamCount = ::lscp_get_channel_stream_count(m_pChannel->client(), m_pChannel->channelID());
+    int iStreamCount = ::lscp_get_channel_stream_count(pMainForm->client(), m_pChannel->channelID());
     // Get current channel buffer fill usage.
     // As benno has suggested this is the percentage usage
     // of the least filled buffer stream...
-    int iStreamUsage = ::lscp_get_channel_stream_usage(m_pChannel->client(), m_pChannel->channelID());;
+    int iStreamUsage = ::lscp_get_channel_stream_usage(pMainForm->client(), m_pChannel->channelID());;
 
     // Update the GUI elements...
     StreamUsageProgressBar->setProgress(iStreamUsage);

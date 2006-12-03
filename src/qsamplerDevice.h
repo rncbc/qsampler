@@ -90,8 +90,7 @@ public:
 	enum qsamplerDeviceType { None, Midi, Audio };
 
 	// Constructor.
-	qsamplerDevice(qsamplerMainForm *pMainForm,
-		qsamplerDeviceType deviceType, int iDeviceID = -1);
+	qsamplerDevice(qsamplerDeviceType deviceType, int iDeviceID = -1);
 	// Copy constructor.
     qsamplerDevice(const qsamplerDevice& device);
 	// Default destructor.
@@ -102,9 +101,6 @@ public:
 
 	// Driver name initializer.
 	void setDriver(const QString& sDriverName);
-
-	// LSCP client descriptor accessor.
-	lscp_client_t *client() const;
 
 	// Device property accessors.
 	int                 deviceID()   const;
@@ -221,9 +217,9 @@ class qsamplerDeviceItem : public QListViewItem
 public:
 
 	// Constructors.
-	qsamplerDeviceItem(QListView *pListView, qsamplerMainForm *pMainForm,
+	qsamplerDeviceItem(QListView *pListView,
 		qsamplerDevice::qsamplerDeviceType deviceType);
-	qsamplerDeviceItem(QListViewItem *pItem, qsamplerMainForm *pMainForm,
+	qsamplerDeviceItem(QListViewItem *pItem,
 		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID);
 	// Default destructor.
 	~qsamplerDeviceItem();
