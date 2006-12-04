@@ -146,7 +146,7 @@ bool qsamplerInstrument::map (void)
 #ifdef CONFIG_MIDI_INSTRUMENT
 
 	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
-	if (pMainForm)
+	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
 		return false;
@@ -206,7 +206,7 @@ bool qsamplerInstrument::unmap (void)
 		return false;
 
 	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
-	if (pMainForm)
+	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
 		return false;
@@ -240,7 +240,7 @@ bool qsamplerInstrument::get (void)
 		return false;
 
 	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
-	if (pMainForm)
+	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
 		return false;
