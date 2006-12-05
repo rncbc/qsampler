@@ -230,6 +230,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 
     // What style do we create these forms?
 	Qt::WFlags wflags = Qt::WStyle_Customize
+		| Qt::WStyle_NormalBorder
 		| Qt::WStyle_Title
 		| Qt::WStyle_SysMenu
 		| Qt::WStyle_MinMax
