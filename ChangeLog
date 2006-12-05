@@ -5,6 +5,10 @@ ChangeLog
 
 CVS HEAD
 
+* Most top-level widgets were missing the normal-widget flag,
+  which were causing some sticky size behavior while on some
+  window managers.
+
 * Added preliminary MIDI instrument mapping support; now
   with an instrument list widget and editing capabilities.
 
