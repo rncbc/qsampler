@@ -852,7 +852,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	// MIDI instrument mapping...
 	lscp_midi_instrument_t *pInstrs = ::lscp_list_midi_instruments(m_pClient);
 	if (pInstrs)
-        ts << "# " << tr("MIDI instrument mapping") << endl;
+		ts << "# " << tr("MIDI instrument mapping") << endl;
 	for (int iInstr = 0; pInstrs && pInstrs[iInstr].program >= 0; iInstr++) {
 		lscp_midi_instrument_info_t *pInstrInfo
 			= ::lscp_get_midi_instrument_info(m_pClient, &pInstrs[iInstr]);
@@ -882,10 +882,11 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				ts << " '" << pInstrInfo->name << "'";
 			ts << endl;
 		}
-		ts << endl;
-        // Try to keep it snappy :)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		// Try to keep it snappy :)
+		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
+	if (pInstrs)
+		ts << endl;
 #endif //  CONFIG_MIDI_INSTRUMENT
 
     // Ok. we've wrote it.

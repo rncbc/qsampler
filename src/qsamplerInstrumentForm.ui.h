@@ -33,6 +33,9 @@
 #include <qfileinfo.h>
 #include <qlistbox.h>
 
+// Needed for lroundf()
+#include <math.h>
+
 
 // Kind of constructor.
 void qsamplerInstrumentForm::init (void)
@@ -104,8 +107,15 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	// and populate the instrument form fields.
 
 	// Instrument bank/program...
-	BankSpinBox->setValue(m_pInstrument->bank());
-	ProgramSpinBox->setValue(m_pInstrument->program());
+	int iBank = m_pInstrument->bank();
+	int iProgram = m_pInstrument->program();
+	BankSpinBox->setValue(iBank);
+	ProgramSpinBox->setValue(iProgram);
+	// Spacial hack to avoid changes on the key...
+	if (!bNew) {
+		BankSpinBox->setRange(iBank, iBank);
+		ProgramSpinBox->setRange(iProgram, iProgram);
+	}
 
 	// Instrument name...
 	NameLineEdit->setText(m_pInstrument->name());
@@ -133,7 +143,7 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	InstrumentNrComboBox->setCurrentItem(m_pInstrument->instrumentNr());
 
 	// Instrument volume....
-	VolumeSpinBox->setValue(int(m_pInstrument->volume() * 100.0f));
+	VolumeSpinBox->setValue(::lroundf(100.0f * m_pInstrument->volume()));
 
 	// Instrument load mode...
 	LoadModeComboBox->setCurrentItem(m_pInstrument->loadMode());
@@ -249,7 +259,7 @@ void qsamplerInstrumentForm::accept (void)
 		m_pInstrument->setEngineName(EngineNameComboBox->currentText());
 		m_pInstrument->setInstrumentFile(InstrumentFileComboBox->currentText());
 		m_pInstrument->setInstrumentNr(InstrumentNrComboBox->currentItem());
-		m_pInstrument->setVolume(float(VolumeSpinBox->value() / 100));
+		m_pInstrument->setVolume(0.01f * float(VolumeSpinBox->value()));
 		m_pInstrument->setLoadMode(LoadModeComboBox->currentItem());
 	}
 
