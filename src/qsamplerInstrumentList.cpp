@@ -31,6 +31,9 @@
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 
+// Needed for lroundf()
+#include <math.h>
+
 
 //----------------------------------------------------------------------
 // class qsamplerInstrumentGroup -- custom group list view item.
@@ -160,7 +163,7 @@ int qsamplerInstrumentItem::rtti (void) const
 
 
 // Payload accessor.
-qsamplerInstrument *qsamplerInstrumentItem::Instrument (void) const
+qsamplerInstrument *qsamplerInstrumentItem::instrument (void) const
 {
 	return m_pInstrument;
 }
@@ -179,7 +182,7 @@ void qsamplerInstrumentItem::update (void)
 		setText(3, m_pInstrument->engineName());
 		setText(4, QFileInfo(m_pInstrument->instrumentFile()).fileName());
 		setText(5, QString::number(m_pInstrument->instrumentNr()));
-		setText(6, QString::number(int(m_pInstrument->volume() * 100.0f)));
+		setText(6, QString::number(::lroundf(100.0f * m_pInstrument->volume())));
 		QString sLoadMode = s;
 		switch (m_pInstrument->loadMode()) {
 		case 3:
@@ -343,6 +346,9 @@ qsamplerInstrumentGroup *qsamplerInstrumentList::findGroup (
 qsamplerInstrumentItem *qsamplerInstrumentList::findItem (
 	qsamplerInstrument *pInstrument ) const
 {
+	if (pInstrument == NULL)
+		return NULL;
+
 	// Iterate all over the place to search for the group.
 	QListViewItemIterator iter((QListView *) this);
 	while (iter.current()) {
@@ -350,7 +356,9 @@ qsamplerInstrumentItem *qsamplerInstrumentList::findItem (
 		if (pListItem->rtti() == Item) {
 			qsamplerInstrumentItem *pItem
 				= static_cast<qsamplerInstrumentItem *> (pListItem);
-			if (pItem && pItem->Instrument() == pInstrument)
+			if (pItem && pItem->instrument()
+				&& pItem->instrument()->bank() == pInstrument->bank()
+				&& pItem->instrument()->program() == pInstrument->program())
 				return pItem;
 		}
 		++iter;
@@ -398,6 +406,11 @@ void qsamplerInstrumentList::newItemSlot (void)
 		return;
 	}
 
+	// Check it there's already one for the same key (bank, program)
+	qsamplerInstrumentItem *pItem = findItem(pInstrument);
+	if (pItem)
+		delete pItem;
+
 	pInstrument->map();
 	emit instrumentsChanged();
 
@@ -420,11 +433,11 @@ void qsamplerInstrumentList::editItemSlot (void)
 	if (pListItem->rtti() == Item) {
 		qsamplerInstrumentItem *pItem
 			= static_cast<qsamplerInstrumentItem *> (pListItem);
-		if (pItem && pItem->Instrument()) {
+		if (pItem && pItem->instrument()) {
 			qsamplerInstrumentForm form(this);
-			form.setup(pItem->Instrument());
+			form.setup(pItem->instrument());
 			if (form.exec()) {
-				pItem->Instrument()->map();
+				pItem->instrument()->map();
 				emit instrumentsChanged();
 				pItem->update();
 			}
@@ -454,8 +467,8 @@ void qsamplerInstrumentList::deleteSlot (void)
 		if (pListItem->rtti() == Item) {
 			qsamplerInstrumentItem *pItem
 				= static_cast<qsamplerInstrumentItem *> (pListItem);
-			if (pItem && pItem->Instrument()) {
-				pItem->Instrument()->unmap();
+			if (pItem && pItem->instrument()) {
+				pItem->instrument()->unmap();
 				emit instrumentsChanged();
 			}
 		}
@@ -495,9 +508,9 @@ void qsamplerInstrumentList::renamedSlot ( QListViewItem *pListItem )
 	if (pListItem->rtti() == Item) {
 		qsamplerInstrumentItem *pItem
 			= static_cast<qsamplerInstrumentItem *> (pListItem);
-		if (pItem && pItem->Instrument()) {
-			pItem->Instrument()->setName(pListItem->text(0));
-			pItem->Instrument()->map();
+		if (pItem && pItem->instrument()) {
+			pItem->instrument()->setName(pListItem->text(0));
+			pItem->instrument()->map();
 			emit instrumentsChanged();
 			pItem->update();
 		}

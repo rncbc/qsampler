@@ -12,7 +12,7 @@ CVS HEAD
 * Added preliminary MIDI instrument mapping support; now
   with an instrument list widget and editing capabilities.
 
-- GPL address update.
+* GPL address update.
 
 
 0.1.3   2006-06-01 Its been a long year isn't it?

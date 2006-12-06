@@ -87,7 +87,7 @@ public:
 	virtual int rtti() const;
 
 	// Payload accessor.
-	qsamplerInstrument *Instrument() const;
+	qsamplerInstrument *instrument() const;
 
 	// View refreshment.
 	void update();
