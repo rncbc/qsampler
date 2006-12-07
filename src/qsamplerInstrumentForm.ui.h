@@ -36,6 +36,21 @@
 // Needed for lroundf()
 #include <math.h>
 
+#ifdef __BORLANDC__
+static long lroundf ( float fval )
+{
+	double fint = 0.0; 
+    float  frac = float(::modf(fval, &fint));
+    long   lint = long(fint);
+    if (frac >= +0.5f)
+        lint++;
+    else
+    if (frac <= -0.5f)
+        lint--;
+    return lint;
+}
+#endif
+
 
 // Kind of constructor.
 void qsamplerInstrumentForm::init (void)
@@ -108,11 +123,14 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 
 	// Instrument bank/program...
 	int iBank = m_pInstrument->bank();
-	int iProgram = m_pInstrument->program();
+	int iProgram = m_pInstrument->program() + 1;
 	BankSpinBox->setValue(iBank);
 	ProgramSpinBox->setValue(iProgram);
 	// Spacial hack to avoid changes on the key...
-	if (!bNew) {
+	if (bNew) {
+		BankSpinBox->setRange(0, 16383);
+		ProgramSpinBox->setRange(1, 128);
+	} else {
 		BankSpinBox->setRange(iBank, iBank);
 		ProgramSpinBox->setRange(iProgram, iProgram);
 	}
@@ -254,7 +272,7 @@ void qsamplerInstrumentForm::accept (void)
 
 	if (m_iDirtyCount > 0) {
 		m_pInstrument->setBank(BankSpinBox->value());
-		m_pInstrument->setProgram(ProgramSpinBox->value());
+		m_pInstrument->setProgram(ProgramSpinBox->value() - 1);
 		m_pInstrument->setName(NameLineEdit->text());
 		m_pInstrument->setEngineName(EngineNameComboBox->currentText());
 		m_pInstrument->setInstrumentFile(InstrumentFileComboBox->currentText());

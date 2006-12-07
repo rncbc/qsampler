@@ -65,8 +65,11 @@
                     <property name="name">
                         <cstring>ProgramSpinBox</cstring>
                     </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
                     <property name="maxValue">
-                        <number>127</number>
+                        <number>128</number>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Program (0-127)</string>
