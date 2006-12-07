@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* MIDI instrumeent map program numbers are now displayed in
+  the range 1-128, instead of the internal 0-127.
+
 * Most top-level widgets were missing the normal-widget flag,
   which were causing some sticky size behavior while on some
   window managers.

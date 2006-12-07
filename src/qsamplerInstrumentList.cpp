@@ -34,6 +34,21 @@
 // Needed for lroundf()
 #include <math.h>
 
+#ifdef __BORLANDC__
+static long lroundf ( float fval )
+{
+	double fint = 0.0; 
+    float  frac = float(::modf(fval, &fint));
+    long   lint = long(fint);
+    if (frac >= +0.5f)
+        lint++;
+    else
+    if (frac <= -0.5f)
+        lint--;
+    return lint;
+}
+#endif
+
 
 //----------------------------------------------------------------------
 // class qsamplerInstrumentGroup -- custom group list view item.
@@ -178,7 +193,7 @@ void qsamplerInstrumentItem::update (void)
 	if (m_pInstrument) {
 		setText(0, m_pInstrument->name());
 		setText(1, QString::number(m_pInstrument->bank()));
-		setText(2, QString::number(m_pInstrument->program()));
+		setText(2, QString::number(m_pInstrument->program() + 1));
 		setText(3, m_pInstrument->engineName());
 		setText(4, QFileInfo(m_pInstrument->instrumentFile()).fileName());
 		setText(5, QString::number(m_pInstrument->instrumentNr()));
@@ -406,7 +421,9 @@ void qsamplerInstrumentList::newItemSlot (void)
 		return;
 	}
 
-	// Check it there's already one for the same key (bank, program)
+	// Check it there's already one instrument item
+	// with the very same key (bank, program);
+	// if yes, just remove it without prejudice...
 	qsamplerInstrumentItem *pItem = findItem(pInstrument);
 	if (pItem)
 		delete pItem;
@@ -522,6 +539,9 @@ void qsamplerInstrumentList::renamedSlot ( QListViewItem *pListItem )
 void qsamplerInstrumentList::contextMenuEvent (
 	QContextMenuEvent *pContextMenuEvent )
 {
+	if (!m_pNewItemAction->isEnabled())
+		return;
+
 	QPopupMenu menu(this);
 
 	// Construct context menu.
