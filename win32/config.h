@@ -5,6 +5,8 @@
 #define CONFIG_PREFIX   "."
 #define CONFIG_DEBUG    1
 
+#undef  CONFIG_ROUND
+
 #define CONFIG_INSTRUMENT_NAME  1
 #define CONFIG_MUTE_SOLO        1
 #define CONFIG_MIDI_INSTRUMENT  1
