@@ -36,7 +36,7 @@
 // Needed for lroundf()
 #include <math.h>
 
-#ifdef __BORLANDC__
+#ifndef CONFIG_ROUND
 static long lroundf ( float fval )
 {
 	double fint = 0.0; 

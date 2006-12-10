@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.3.7, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.3.8, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
@@ -205,6 +205,12 @@ if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
       ac_libs="$ac_libs -lgig"
    fi
+fi
+
+# Check for round math function.
+AC_CHECK_LIB(m, lroundf, [ac_round="yes"], [ac_round="no"])
+if test "x$ac_round" = "xyes"; then
+   AC_DEFINE(CONFIG_ROUND, 1, [Define if round is available.])
 fi
 
 AC_SUBST(ac_libs)
