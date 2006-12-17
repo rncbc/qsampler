@@ -22,7 +22,7 @@
 #ifndef __qsamplerInstrument_h
 #define __qsamplerInstrument_h
 
-#include <qstring.h>
+#include <qstringlist.h>
 
 
 //-------------------------------------------------------------------------
@@ -34,17 +34,20 @@ class qsamplerInstrument
 public:
 
 	// Constructor.
-	qsamplerInstrument(int iBank = -1, int iProg = -1);
+	qsamplerInstrument(int iMap = 0, int iBank = -1, int iProg = -1);
 
 	// Default destructor.
 	~qsamplerInstrument();
 
 	// Instrument accessors.
+	void setMap(int iMap);
+	int map() const;
+
 	void setBank(int iBank);
 	int bank() const;
 
-	void setProgram(int iProgram);
-	int program() const;
+	void setProg(int iProg);
+	int prog() const;
 
 	void setName(const QString& sName);
 	const QString& name() const;
@@ -67,15 +70,20 @@ public:
 	int loadMode() const;
 
 	// Sync methods.
-	bool get();
-	bool map();
-	bool unmap();
+	bool getInstrument();
+	bool mapInstrument();
+	bool unmapInstrument();
+
+	// Instrument map names initialization...
+	static QStringList getMapNames();
+	static QString     getMapName(int iMidiMap);
 
 private:
 
 	// Instance variables.
+	int     m_iMap;
 	int     m_iBank;
-	int     m_iProgram;
+	int     m_iProg;
 	QString m_sName;
 	QString m_sEngineName;
 	QString m_sInstrumentFile;

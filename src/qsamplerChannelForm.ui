@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
-            <height>417</height>
+            <width>446</width>
+            <height>436</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -121,14 +121,14 @@
                     <height>26</height>
                 </size>
             </property>
-			<property name="focusPolicy">
-				<enum>TabFocus</enum>
-			</property>
+            <property name="focusPolicy">
+                <enum>TabFocus</enum>
+            </property>
             <property name="text">
                 <string></string>
             </property>
-            <property name="pixmap">
-                <pixmap>fileOpen.png</pixmap>
+            <property name="iconSet">
+                <iconset>fileOpen.png</iconset>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Browse for instrument filename</string>
@@ -159,6 +159,250 @@
                 <string>Instrument filename</string>
             </property>
         </widget>
+        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>layout01</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>8</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>OkPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>formAccept.png</iconset>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>CancelPushButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                    <property name="iconSet">
+                        <iconset>formReject.png</iconset>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QGroupBox" row="4" column="1" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>AudioGroupBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="title">
+                <string>Audio / Output</string>
+            </property>
+            <property name="alignment">
+                <set>AlignAuto</set>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>8</number>
+                </property>
+                <property name="spacing">
+                    <number>8</number>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>AudioDriverTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Type:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>AudioDriverComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="0" column="1">
+                    <property name="name">
+                        <cstring>layout21</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>AudioDriverComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Audio output driver type</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer3</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>layout22</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>AudioDeviceComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Audio output device</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>AudioDeviceToolButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>24</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>26</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>TabFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>audio1.png</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>Audio output device setup</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>AudioDeviceTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Device:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>AudioDeviceComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="qsamplerChannelRoutingTable" row="2" column="1">
+                    <property name="name">
+                        <cstring>AudioRoutingTable</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>100</height>
+                        </size>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Audio output channel routing</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLabel" row="2" column="0">
+            <property name="name">
+                <cstring>InstrumentNrTextLabel</cstring>
+            </property>
+            <property name="text">
+                <string>&amp;Instrument:</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>InstrumentNrComboBox</cstring>
+            </property>
+        </widget>
         <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>InstrumentNrComboBox</cstring>
@@ -179,20 +423,6 @@
             </property>
             <property name="toolTip" stdset="0">
                 <string>Instrument name</string>
-            </property>
-        </widget>
-        <widget class="QLabel" row="2" column="0">
-            <property name="name">
-                <cstring>InstrumentNrTextLabel</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Instrument:</string>
-            </property>
-            <property name="alignment">
-                <set>AlignVCenter|AlignRight</set>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>InstrumentNrComboBox</cstring>
             </property>
         </widget>
         <widget class="QGroupBox" row="3" column="1" rowspan="1" colspan="2">
@@ -234,6 +464,69 @@
                         <cstring>MidiDriverComboBox</cstring>
                     </property>
                 </widget>
+                <widget class="QLayoutWidget" row="1" column="1">
+                    <property name="name">
+                        <cstring>layout12</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>MidiDeviceComboBox</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input device</string>
+                            </property>
+                        </widget>
+                        <widget class="QToolButton">
+                            <property name="name">
+                                <cstring>MidiDeviceToolButton</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>24</width>
+                                    <height>24</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>26</width>
+                                    <height>26</height>
+                                </size>
+                            </property>
+                            <property name="focusPolicy">
+                                <enum>TabFocus</enum>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="iconSet">
+                                <iconset>midi1.png</iconset>
+                            </property>
+                            <property name="toolTip" stdset="0">
+                                <string>MIDI input device setup</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
                 <widget class="QLabel" row="1" column="0">
                     <property name="name">
                         <cstring>MidiDeviceTextLabel</cstring>
@@ -246,6 +539,20 @@
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>MidiDeviceComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>MidiMapTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Map:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>MidiMapComboBox</cstring>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="0" column="1">
@@ -420,9 +727,9 @@
                         </widget>
                     </hbox>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="1">
+                <widget class="QLayoutWidget" row="2" column="1">
                     <property name="name">
-                        <cstring>layout12</cstring>
+                        <cstring>layout6</cstring>
                     </property>
                     <hbox>
                         <property name="name">
@@ -430,7 +737,7 @@
                         </property>
                         <widget class="QComboBox">
                             <property name="name">
-                                <cstring>MidiDeviceComboBox</cstring>
+                                <cstring>MidiMapComboBox</cstring>
                             </property>
                             <property name="sizePolicy">
                                 <sizepolicy>
@@ -441,168 +748,12 @@
                                 </sizepolicy>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>MIDI input device</string>
-                            </property>
-                        </widget>
-                        <widget class="QToolButton">
-                            <property name="name">
-                                <cstring>MidiDeviceToolButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>24</width>
-                                    <height>24</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>26</width>
-                                    <height>26</height>
-                                </size>
-                            </property>
-							<property name="focusPolicy">
-								<enum>TabFocus</enum>
-							</property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap>midi1.png</pixmap>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>MIDI input device setup</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QLayoutWidget" row="5" column="0" rowspan="1" colspan="3">
-            <property name="name">
-                <cstring>layout01</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer3</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>8</width>
-                            <height>8</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>OkPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>OK</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>formAccept.png</iconset>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>CancelPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cancel</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>formReject.png</iconset>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="QGroupBox" row="4" column="1" rowspan="1" colspan="2">
-            <property name="name">
-                <cstring>AudioGroupBox</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="title">
-                <string>Audio / Output</string>
-            </property>
-            <property name="alignment">
-                <set>AlignAuto</set>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>8</number>
-                </property>
-                <property name="spacing">
-                    <number>8</number>
-                </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>AudioDriverTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Type:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>AudioDriverComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="0" column="1">
-                    <property name="name">
-                        <cstring>layout21</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>AudioDriverComboBox</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Audio output driver type</string>
+                                <string>Instrument name</string>
                             </property>
                         </widget>
                         <spacer>
                             <property name="name">
-                                <cstring>spacer2</cstring>
+                                <cstring>spacer1_2</cstring>
                             </property>
                             <property name="orientation">
                                 <enum>Horizontal</enum>
@@ -612,106 +763,12 @@
                             </property>
                             <property name="sizeHint">
                                 <size>
-                                    <width>20</width>
+                                    <width>160</width>
                                     <height>20</height>
                                 </size>
                             </property>
                         </spacer>
                     </hbox>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="1">
-                    <property name="name">
-                        <cstring>layout22</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QComboBox">
-                            <property name="name">
-                                <cstring>AudioDeviceComboBox</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Audio output device</string>
-                            </property>
-                        </widget>
-                        <widget class="QToolButton">
-                            <property name="name">
-                                <cstring>AudioDeviceToolButton</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>0</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>24</width>
-                                    <height>24</height>
-                                </size>
-                            </property>
-                            <property name="maximumSize">
-                                <size>
-                                    <width>26</width>
-                                    <height>26</height>
-                                </size>
-                            </property>
-							<property name="focusPolicy">
-								<enum>TabFocus</enum>
-							</property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap>audio1.png</pixmap>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Audio output device setup</string>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>AudioDeviceTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Device:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>AudioDeviceComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="qsamplerChannelRoutingTable" row="2" column="1">
-                    <property name="name">
-                        <cstring>AudioRoutingTable</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>0</width>
-                            <height>100</height>
-                        </size>
-                    </property>
-                    <property name="focusPolicy">
-                        <enum>StrongFocus</enum>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Audio output channel routing</string>
-                    </property>
                 </widget>
             </grid>
         </widget>
@@ -784,6 +841,12 @@
         <slot>optionsChanged()</slot>
     </connection>
     <connection>
+        <sender>MidiMapComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerChannelForm</receiver>
+        <slot>optionsChanged()</slot>
+    </connection>
+    <connection>
         <sender>AudioDriverComboBox</sender>
         <signal>activated(const QString&amp;)</signal>
         <receiver>qsamplerChannelForm</receiver>
@@ -830,6 +893,7 @@
     <tabstop>MidiChannelComboBox</tabstop>
     <tabstop>MidiDeviceComboBox</tabstop>
     <tabstop>MidiDeviceToolButton</tabstop>
+    <tabstop>MidiMapComboBox</tabstop>
     <tabstop>AudioDriverComboBox</tabstop>
     <tabstop>AudioDeviceComboBox</tabstop>
     <tabstop>AudioDeviceToolButton</tabstop>
@@ -882,4 +946,7 @@
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="4" margin="4"/>
+<includehints>
+    <includehint>qsamplerChannel.h</includehint>
+</includehints>
 </UI>

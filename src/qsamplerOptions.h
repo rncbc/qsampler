@@ -87,6 +87,11 @@ public:
     QString sEngineName;
     QString sAudioDriver;
     QString sMidiDriver;
+	int     iMidiMap;
+	int     iMidiBank;
+	int     iMidiProg;
+	int     iVolume;
+	int     iLoadMode;
 
     // Recent file list.
     int     iMaxRecentFiles;

@@ -24,6 +24,8 @@
 #include "qsamplerDeviceForm.h"
 
 #include "qsamplerMainForm.h"
+#include "qsamplerInstrument.h"
+
 
 #include <qvalidator.h>
 #include <qmessagebox.h>
@@ -115,6 +117,10 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 	MidiDriverComboBox->insertStringList(
 		qsamplerDevice::getDrivers(pMainForm->client(), qsamplerDevice::Midi));
 
+	// Populate Maps list.
+	MidiMapComboBox->clear();
+	MidiMapComboBox->insertStringList(qsamplerInstrument::getMapNames());
+
 	// Read proper channel information,
 	// and populate the channel form fields.
 
@@ -165,6 +171,18 @@ void qsamplerChannelForm::setup ( qsamplerChannel *pChannel )
 	if (iMidiChannel < 0)
 		iMidiChannel = (::lscp_get_channels(pMainForm->client()) % 16);
 	MidiChannelComboBox->setCurrentItem(iMidiChannel);
+	// MIDI instrument map...
+	int iMidiMap = (bNew ? pOptions->iMidiMap : pChannel->midiMap());
+	// When new, try to suggest a sensible MIDI map...
+	if (iMidiMap < 0)
+		iMidiMap = 0;
+	const QString& sMapName = qsamplerInstrument::getMapName(iMidiMap);
+	if (!sMapName.isEmpty())
+		MidiMapComboBox->setCurrentText(sMapName);
+	// It might be no maps around...
+	bool bMidiMapEnabled = (MidiMapComboBox->count() > 0);
+	MidiMapTextLabel->setEnabled(bMidiMapEnabled);
+	MidiMapComboBox->setEnabled(bMidiMapEnabled);
 
 	// Audio output device...
 	qsamplerDevice audioDevice(qsamplerDevice::Audio, m_pChannel->audioDevice());
@@ -261,7 +279,13 @@ void qsamplerChannelForm::accept (void)
 		if (!m_pChannel->loadEngine(EngineNameComboBox->currentText()))
 			iErrors++;
 		// Instrument file and index...
-		if (!m_pChannel->loadInstrument(InstrumentFileComboBox->currentText(), InstrumentNrComboBox->currentItem()))
+		const QString& sPath = InstrumentFileComboBox->currentText();
+		if (!sPath.isEmpty() && QFileInfo(sPath).exists()) {
+			if (!m_pChannel->loadInstrument(sPath, InstrumentNrComboBox->currentItem()))
+				iErrors++;
+		}
+		// MIDI intrument map...
+		if (!m_pChannel->setMidiMap(MidiMapComboBox->currentItem()))
 			iErrors++;
 		// Show error messages?
 		if (iErrors > 0)
@@ -273,6 +297,7 @@ void qsamplerChannelForm::accept (void)
 	pOptions->sEngineName  = EngineNameComboBox->currentText();
 	pOptions->sAudioDriver = AudioDriverComboBox->currentText();
 	pOptions->sMidiDriver  = MidiDriverComboBox->currentText();
+	pOptions->iMidiMap     = MidiMapComboBox->currentItem();
 	pOptions->saveComboBoxHistory(InstrumentFileComboBox);
 
 	// Just go with dialog acceptance.
@@ -651,8 +676,12 @@ void qsamplerChannelForm::optionsChanged (void)
 // Stabilize current form state.
 void qsamplerChannelForm::stabilizeForm (void)
 {
-	const QString& sFilename = InstrumentFileComboBox->currentText();
-	OkPushButton->setEnabled(m_iDirtyCount > 0 && !sFilename.isEmpty() && QFileInfo(sFilename).exists());
+	bool bValid = true;
+
+	const QString& sPath = InstrumentFileComboBox->currentText();
+	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
+
+	OkPushButton->setEnabled(m_iDirtyCount > 0 && bValid);
 }
 
 

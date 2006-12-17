@@ -675,7 +675,7 @@ QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
 		break;
 	}
 
-	for (int iDriver = 0; ppszDrivers[iDriver]; iDriver++)
+	for (int iDriver = 0; ppszDrivers && ppszDrivers[iDriver]; iDriver++)
 		drivers.append(ppszDrivers[iDriver]);
 
 	return drivers;
