@@ -28,7 +28,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>451</width>
+            <width>452</width>
             <height>226</height>
         </rect>
     </property>
@@ -43,9 +43,6 @@
     <property name="caption">
         <string>Qsampler: MIDI Instrument</string>
     </property>
-    <property name="icon">
-        <pixmap>qsamplerInstrument.png</pixmap>
-    </property>
     <property name="focusPolicy">
         <enum>StrongFocus</enum>
     </property>
@@ -55,27 +52,113 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>layout5</cstring>
             </property>
             <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QSpinBox" row="0" column="3">
+                <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="9">
                     <property name="name">
-                        <cstring>ProgramSpinBox</cstring>
+                        <cstring>EngineNameComboBox</cstring>
                     </property>
-                    <property name="minValue">
-                        <number>1</number>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Engine name</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>EngineNameTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Engine:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>EngineNameComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="7">
+                    <property name="name">
+                        <cstring>ProgTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Prog:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>ProgSpinBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="0" column="8" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>ProgSpinBox</cstring>
                     </property>
                     <property name="maxValue">
                         <number>128</number>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Program (0-127)</string>
                     </property>
                 </widget>
-                <widget class="QSpinBox" row="0" column="1">
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>VolumeTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Vol&amp;ume:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>VolumeSpinBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>MapTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Map:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>MapComboBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="0" column="3" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>BankTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Bank:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>BankSpinBox</cstring>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="0" column="5" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>BankSpinBox</cstring>
                     </property>
@@ -86,18 +169,74 @@
                         <string>Bank (0-16383)</string>
                     </property>
                 </widget>
-                <widget class="QSpinBox" row="5" column="1">
+                <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="8">
                     <property name="name">
-                        <cstring>VolumeSpinBox</cstring>
+                        <cstring>InstrumentFileComboBox</cstring>
                     </property>
-                    <property name="suffix">
-                        <string> %</string>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
-                    <property name="maxValue">
-                        <number>100</number>
+                    <property name="minimumSize">
+                        <size>
+                            <width>320</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Volume (%)</string>
+                        <string>Instrument filename</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="4" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>LoadModeNameTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>M&amp;ode:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>LoadModeComboBox</cstring>
+                    </property>
+                </widget>
+                <spacer row="5" column="2" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>119</width>
+                            <height>8</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>InstrumentFileTextLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Filename:</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>InstrumentFileComboBox</cstring>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="0">
@@ -114,21 +253,117 @@
                         <cstring>NameLineEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="2">
                     <property name="name">
-                        <cstring>BankTextLabel</cstring>
+                        <cstring>MapComboBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Load mode</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>InstrumentNrTextLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Bank:</string>
+                        <string>&amp;Instrument:</string>
                     </property>
                     <property name="alignment">
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                     <property name="buddy" stdset="0">
-                        <cstring>BankSpinBox</cstring>
+                        <cstring>InstrumentNrComboBox</cstring>
                     </property>
                 </widget>
-                <widget class="QToolButton" row="3" column="6">
+                <widget class="QComboBox" row="4" column="1" rowspan="1" colspan="9">
+                    <property name="name">
+                        <cstring>InstrumentNrComboBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>320</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Instrument name</string>
+                    </property>
+                </widget>
+                <widget class="QSpinBox" row="5" column="1">
+                    <property name="name">
+                        <cstring>VolumeSpinBox</cstring>
+                    </property>
+                    <property name="suffix">
+                        <string> %</string>
+                    </property>
+                    <property name="maxValue">
+                        <number>100</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Volume (%)</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="9">
+                    <property name="name">
+                        <cstring>NameLineEdit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Name</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="5" column="6" rowspan="1" colspan="4">
+                    <item>
+                        <property name="text">
+                            <string>Default</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>On Demand</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>On Demand Hold</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Persistent</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>LoadModeComboBox</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Load mode</string>
+                    </property>
+                </widget>
+                <widget class="QToolButton" row="3" column="9">
                     <property name="name">
                         <cstring>InstrumentFileToolButton</cstring>
                     </property>
@@ -165,231 +400,6 @@
                         <string>Browse for instrument filename</string>
                     </property>
                 </widget>
-                <widget class="QComboBox" row="2" column="1" rowspan="1" colspan="6">
-                    <property name="name">
-                        <cstring>EngineNameComboBox</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Engine name</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>InstrumentFileTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Filename:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>InstrumentFileComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="5" column="0">
-                    <property name="name">
-                        <cstring>VolumeTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Volume:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>VolumeSpinBox</cstring>
-                    </property>
-                </widget>
-                <spacer row="0" column="4" rowspan="1" colspan="3">
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>8</width>
-                            <height>8</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QComboBox" row="5" column="5" rowspan="1" colspan="2">
-                    <item>
-                        <property name="text">
-                            <string>Default</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>On Demand</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>On Demand Hold</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Persistent</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>LoadModeComboBox</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Load mode</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="5" column="4">
-                    <property name="name">
-                        <cstring>LoadModeNameTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Mode:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>LoadModeComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="4" column="1" rowspan="1" colspan="6">
-                    <property name="name">
-                        <cstring>InstrumentNrComboBox</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>320</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Instrument name</string>
-                    </property>
-                </widget>
-                <widget class="QComboBox" row="3" column="1" rowspan="1" colspan="5">
-                    <property name="name">
-                        <cstring>InstrumentFileComboBox</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>320</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="editable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Instrument filename</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0">
-                    <property name="name">
-                        <cstring>InstrumentNrTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Instrument:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>InstrumentNrComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>EngineNameTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Engine:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>EngineNameComboBox</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="6">
-                    <property name="name">
-                        <cstring>NameLineEdit</cstring>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Name</string>
-                    </property>
-                </widget>
-                <spacer row="5" column="2" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>spacer2</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>8</width>
-                            <height>8</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QLabel" row="0" column="2">
-                    <property name="name">
-                        <cstring>ProgramTextLabel</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Program:</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>ProgramSpinBox</cstring>
-                    </property>
-                </widget>
             </grid>
         </widget>
         <widget class="QLayoutWidget">
@@ -422,7 +432,10 @@
                         <cstring>OkPushButton</cstring>
                     </property>
                     <property name="text">
-                        <string>OK</string>
+                        <string>O&amp;K</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+K</string>
                     </property>
                     <property name="iconSet">
                         <iconset>formAccept.png</iconset>
@@ -433,7 +446,10 @@
                         <cstring>CancelPushButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Cancel</string>
+                        <string>C&amp;ancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
                     </property>
                     <property name="iconSet">
                         <iconset>formReject.png</iconset>
@@ -445,13 +461,19 @@
 </widget>
 <connections>
     <connection>
+        <sender>MapComboBox</sender>
+        <signal>activated(int)</signal>
+        <receiver>qsamplerInstrumentForm</receiver>
+        <slot>changed()</slot>
+    </connection>
+    <connection>
         <sender>BankSpinBox</sender>
         <signal>valueChanged(int)</signal>
         <receiver>qsamplerInstrumentForm</receiver>
         <slot>changed()</slot>
     </connection>
     <connection>
-        <sender>ProgramSpinBox</sender>
+        <sender>ProgSpinBox</sender>
         <signal>valueChanged(int)</signal>
         <receiver>qsamplerInstrumentForm</receiver>
         <slot>changed()</slot>
@@ -512,8 +534,9 @@
     </connection>
 </connections>
 <tabstops>
+    <tabstop>MapComboBox</tabstop>
     <tabstop>BankSpinBox</tabstop>
-    <tabstop>ProgramSpinBox</tabstop>
+    <tabstop>ProgSpinBox</tabstop>
     <tabstop>NameLineEdit</tabstop>
     <tabstop>EngineNameComboBox</tabstop>
     <tabstop>InstrumentFileComboBox</tabstop>

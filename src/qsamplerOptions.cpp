@@ -99,6 +99,11 @@ qsamplerOptions::qsamplerOptions (void)
     sEngineName    = m_settings.readEntry("/EngineName", QString::null);
     sAudioDriver   = m_settings.readEntry("/AudioDriver", QString::null);
     sMidiDriver    = m_settings.readEntry("/MidiDriver", QString::null);
+    iMidiMap       = m_settings.readNumEntry("/MidiMap", 0);
+    iMidiBank      = m_settings.readNumEntry("/MidiBank", 0);
+    iMidiProg      = m_settings.readNumEntry("/MidiProg", 0);
+    iVolume        = m_settings.readNumEntry("/Volume", 100);
+    iLoadMode      = m_settings.readNumEntry("/Loadmode", 0);
     m_settings.endGroup();
 }
 
@@ -165,6 +170,11 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.writeEntry("/EngineName", sEngineName);
     m_settings.writeEntry("/AudioDriver", sAudioDriver);
     m_settings.writeEntry("/MidiDriver", sMidiDriver);
+    m_settings.writeEntry("/MidiMap", iMidiMap);
+    m_settings.writeEntry("/MidiBank", iMidiBank);
+    m_settings.writeEntry("/MidiProg", iMidiProg);
+    m_settings.writeEntry("/Volume", iVolume);
+    m_settings.writeEntry("/Loadmode", iLoadMode);
     m_settings.endGroup();
 
     m_settings.endGroup();

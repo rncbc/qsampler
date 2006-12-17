@@ -91,6 +91,10 @@ public:
 	int      midiChannel() const;
 	bool     setMidiChannel(int iMidiChannel);
 
+	// MIDI instrument map.
+	int      midiMap() const;
+	bool     setMidiMap(int iMidiMap);
+
 	// Audio output driver (DEPRECATED).
 	const QString& audioDriver() const;
 	bool     setAudioDriver(const QString& sAudioDriver);
@@ -168,6 +172,7 @@ private:
 	int     m_iMidiDevice;
 	int     m_iMidiPort;
 	int     m_iMidiChannel;
+	int     m_iMidiMap;
 	QString m_sAudioDriver;
 	int     m_iAudioDevice;
 	float   m_fVolume;

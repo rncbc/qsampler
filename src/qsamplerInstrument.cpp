@@ -30,10 +30,11 @@
 //
 
 // Constructor.
-qsamplerInstrument::qsamplerInstrument ( int iBank, int iProgram )
+qsamplerInstrument::qsamplerInstrument ( int iMap, int iBank, int iProg )
 {
+	m_iMap          = iMap;
 	m_iBank         = iBank;
-	m_iProgram      = iProgram;
+	m_iProg         = iProg;
 	m_iInstrumentNr = 0;;
 	m_fVolume       = 1.0f;
 	m_iLoadMode     = 0;
@@ -46,6 +47,17 @@ qsamplerInstrument::~qsamplerInstrument (void)
 
 
 // Instrument accessors.
+void qsamplerInstrument::setMap ( int iMap )
+{
+	m_iMap = iMap;
+}
+
+int qsamplerInstrument::map (void) const
+{
+	return m_iMap;
+}
+
+
 void qsamplerInstrument::setBank ( int iBank )
 {
 	m_iBank = iBank;
@@ -57,14 +69,14 @@ int qsamplerInstrument::bank (void) const
 }
 
 
-void qsamplerInstrument::setProgram ( int iProgram )
+void qsamplerInstrument::setProg ( int iProg )
 {
-	m_iProgram = iProgram;
+	m_iProg = iProg;
 }
 
-int qsamplerInstrument::program (void) const
+int qsamplerInstrument::prog (void) const
 {
-	return m_iProgram;
+	return m_iProg;
 }
 
 
@@ -141,7 +153,7 @@ int qsamplerInstrument::loadMode (void) const
 
 
 // Sync methods.
-bool qsamplerInstrument::map (void)
+bool qsamplerInstrument::mapInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
@@ -151,14 +163,14 @@ bool qsamplerInstrument::map (void)
 	if (pMainForm->client() == NULL)
 		return false;
 
-	if (m_iBank < 0 || m_iProgram < 0)
+	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
 	lscp_midi_instrument_t instr;
 
-	instr.bank_msb = (m_iBank & 0x3f80) >> 7;
-	instr.bank_lsb = (m_iBank & 0x7f);
-	instr.program  = (m_iProgram & 0x7f);
+	instr.map  = m_iMap;
+	instr.bank = (m_iBank & 0x0fff);
+	instr.prog = (m_iProg & 0x7f);
 
 	lscp_load_mode_t load_mode;
 	switch (m_iLoadMode) {
@@ -198,11 +210,11 @@ bool qsamplerInstrument::map (void)
 }
 
 
-bool qsamplerInstrument::unmap (void)
+bool qsamplerInstrument::unmapInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
-	if (m_iBank < 0 || m_iProgram < 0)
+	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
 	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
@@ -213,9 +225,9 @@ bool qsamplerInstrument::unmap (void)
 
 	lscp_midi_instrument_t instr;
 
-	instr.bank_msb = (m_iBank & 0x3f80) >> 7;
-	instr.bank_lsb = (m_iBank & 0x7f);
-	instr.program  = (m_iProgram & 0x7f);
+	instr.map  = m_iMap;
+	instr.bank = (m_iBank & 0x0fff);
+	instr.prog = (m_iProg & 0x7f);
 
 	if (::lscp_unmap_midi_instrument(pMainForm->client(), &instr) != LSCP_OK) {
 		pMainForm->appendMessagesClient("lscp_unmap_midi_instrument");
@@ -232,11 +244,11 @@ bool qsamplerInstrument::unmap (void)
 }
 
 
-bool qsamplerInstrument::get (void)
+bool qsamplerInstrument::getInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
-	if (m_iBank < 0 || m_iProgram < 0)
+	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
 	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
@@ -247,9 +259,9 @@ bool qsamplerInstrument::get (void)
 
 	lscp_midi_instrument_t instr;
 
-	instr.bank_msb = (m_iBank & 0x3f80) >> 7;
-	instr.bank_lsb = (m_iBank & 0x7f);
-	instr.program  = (m_iProgram & 0x7f);
+	instr.map  = m_iMap;
+	instr.bank = (m_iBank & 0x0fff);
+	instr.prog = (m_iProg & 0x7f);
 
 	lscp_midi_instrument_info_t *pInstrInfo
 		= ::lscp_get_midi_instrument_info(pMainForm->client(), &instr);
@@ -292,6 +304,52 @@ bool qsamplerInstrument::get (void)
 	return false;
 
 #endif
+}
+
+
+// Instrument map name enumerator.
+QStringList qsamplerInstrument::getMapNames (void)
+{
+	QStringList maps;
+
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return maps;
+	if (pMainForm->client() == NULL)
+		return maps;
+
+#ifdef CONFIG_MIDI_INSTRUMENT
+	int *piMaps = ::lscp_list_midi_instrument_maps(pMainForm->client());
+	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; iMap++) {
+		const QString& sMapName = getMapName(piMaps[iMap]);
+		if (!sMapName.isEmpty())
+			maps.append(sMapName);
+	}
+#endif
+
+	return maps;
+}
+
+// Instrument map name enumerator.
+QString qsamplerInstrument::getMapName ( int iMidiMap )
+{
+	QString sMapName;
+
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return sMapName;
+	if (pMainForm->client() == NULL)
+		return sMapName;
+
+#ifdef CONFIG_MIDI_INSTRUMENT
+	const char *pszMapName
+		= ::lscp_get_midi_instrument_map_name(pMainForm->client(), iMidiMap);
+	if (pszMapName == NULL)
+		pszMapName = " -";
+	sMapName = QString("%1 - %2").arg(iMidiMap).arg(pszMapName);
+#endif
+
+	return sMapName;
 }
 
 

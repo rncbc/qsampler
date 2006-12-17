@@ -53,6 +53,7 @@ qsamplerChannel::qsamplerChannel ( int iChannelID )
 	m_iMidiDevice       = -1;
 	m_iMidiPort         = -1;
 	m_iMidiChannel      = -1;
+	m_iMidiMap          = -1;
 	m_sAudioDriver      = "ALSA";
 	m_iAudioDevice      = -1;
 	m_fVolume           = 0.0;
@@ -341,6 +342,34 @@ bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
 }
 
 
+// MIDI instrument map accessor.
+int qsamplerChannel::midiMap (void) const
+{
+	return m_iMidiMap;
+}
+
+bool qsamplerChannel::setMidiMap ( int iMidiMap )
+{
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
+		return false;
+	if (m_iInstrumentStatus == 100 && m_iMidiMap == iMidiMap)
+		return true;
+#ifdef CONFIG_MIDI_INSTRUMENT
+	if (::lscp_set_channel_midi_map(pMainForm->client(), m_iChannelID, iMidiMap) != LSCP_OK) {
+		appendMessagesClient("lscp_set_channel_midi_map");
+		return false;
+	}
+#endif
+	appendMessages(QObject::tr("MIDI map: %1.").arg(iMidiMap));
+
+	m_iMidiMap = iMidiMap;
+	return true;
+}
+
+
 // Audio device accessor.
 int qsamplerChannel::audioDevice (void) const
 {
@@ -571,6 +600,9 @@ bool qsamplerChannel::updateChannelInfo (void)
 	m_iMidiDevice       = pChannelInfo->midi_device;
 	m_iMidiPort         = pChannelInfo->midi_port;
 	m_iMidiChannel      = pChannelInfo->midi_channel;
+#ifdef CONFIG_MIDI_INSTRUMENT
+	m_iMidiMap          = pChannelInfo->midi_map;
+#endif
 	m_iAudioDevice      = pChannelInfo->audio_device;
 	m_fVolume           = pChannelInfo->volume;
 #ifdef CONFIG_MUTE_SOLO

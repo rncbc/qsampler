@@ -35,17 +35,12 @@
 #include <math.h>
 
 #ifndef CONFIG_ROUND
-static long lroundf ( float fval )
+static inline long lroundf ( float x )
 {
-	double fint = 0.0; 
-    float  frac = float(::modf(fval, &fint));
-    long   lint = long(fint);
-    if (frac >= +0.5f)
-        lint++;
-    else
-    if (frac <= -0.5f)
-        lint--;
-    return lint;
+	if (x >= 0.0f)
+		return long(x + 0.5f);
+	else
+		return long(x - 0.5f);
 }
 #endif
 
@@ -192,12 +187,13 @@ void qsamplerInstrumentItem::update (void)
 	const QString s = "-";
 	if (m_pInstrument) {
 		setText(0, m_pInstrument->name());
-		setText(1, QString::number(m_pInstrument->bank()));
-		setText(2, QString::number(m_pInstrument->program() + 1));
-		setText(3, m_pInstrument->engineName());
-		setText(4, QFileInfo(m_pInstrument->instrumentFile()).fileName());
-		setText(5, QString::number(m_pInstrument->instrumentNr()));
-		setText(6, QString::number(::lroundf(100.0f * m_pInstrument->volume())));
+		setText(1, QString::number(m_pInstrument->map()));
+		setText(2, QString::number(m_pInstrument->bank()));
+		setText(3, QString::number(m_pInstrument->prog() + 1));
+		setText(4, m_pInstrument->engineName());
+		setText(5, QFileInfo(m_pInstrument->instrumentFile()).fileName());
+		setText(6, QString::number(m_pInstrument->instrumentNr()));
+		setText(7, QString::number(::lroundf(100.0f * m_pInstrument->volume())));
 		QString sLoadMode = s;
 		switch (m_pInstrument->loadMode()) {
 		case 3:
@@ -210,7 +206,7 @@ void qsamplerInstrumentItem::update (void)
 			sLoadMode = QObject::tr("On Demand");
 			break;
 		}
-		setText(7, sLoadMode);
+		setText(8, sLoadMode);
 	} else {
 		for (int i = 0; i < listView()->columns(); i++)
 			setText(i, s);
@@ -237,6 +233,7 @@ qsamplerInstrumentList::qsamplerInstrumentList (
 	QListView::setSortColumn(-1);
 
 	QListView::addColumn(tr("Name"));
+	QListView::addColumn(tr("Map"));
 	QListView::addColumn(tr("Bank"));
 	QListView::addColumn(tr("Prog"));
 	QListView::addColumn(tr("Engine"));
@@ -245,13 +242,14 @@ qsamplerInstrumentList::qsamplerInstrumentList (
 	QListView::addColumn(tr("Vol"));
 	QListView::addColumn(tr("Mode"));
 
-	QListView::setColumnAlignment(1, Qt::AlignHCenter);	// Bank
-	QListView::setColumnAlignment(2, Qt::AlignHCenter);	// Prog
-	QListView::setColumnAlignment(5, Qt::AlignHCenter);	// Nr
-	QListView::setColumnAlignment(6, Qt::AlignHCenter);	// Vol
+	QListView::setColumnAlignment(1, Qt::AlignHCenter);	// Map
+	QListView::setColumnAlignment(2, Qt::AlignHCenter);	// Bank
+	QListView::setColumnAlignment(3, Qt::AlignHCenter);	// Prog
+	QListView::setColumnAlignment(6, Qt::AlignHCenter);	// Nr
+	QListView::setColumnAlignment(7, Qt::AlignHCenter);	// Vol
 
-	QListView::setColumnWidth(0, 60);	// Name
-	QListView::setColumnWidth(0, 120);	// File
+	QListView::setColumnWidth(0, 120);	// Name
+	QListView::setColumnWidth(5, 240);	// File
 
 	m_pNewGroupAction = new QAction(tr("New &Group"), tr("Ctrl+G"), this);
 	m_pNewItemAction  = new QAction(tr("New &Instrument..."), tr("Ctrl+I"), this);
@@ -372,8 +370,9 @@ qsamplerInstrumentItem *qsamplerInstrumentList::findItem (
 			qsamplerInstrumentItem *pItem
 				= static_cast<qsamplerInstrumentItem *> (pListItem);
 			if (pItem && pItem->instrument()
+				&& pItem->instrument()->map()  == pInstrument->map()
 				&& pItem->instrument()->bank() == pInstrument->bank()
-				&& pItem->instrument()->program() == pInstrument->program())
+				&& pItem->instrument()->prog() == pInstrument->prog())
 				return pItem;
 		}
 		++iter;
@@ -428,7 +427,7 @@ void qsamplerInstrumentList::newItemSlot (void)
 	if (pItem)
 		delete pItem;
 
-	pInstrument->map();
+	pInstrument->mapInstrument();
 	emit instrumentsChanged();
 
 	qsamplerInstrumentGroup *pParentGroup
@@ -454,7 +453,7 @@ void qsamplerInstrumentList::editItemSlot (void)
 			qsamplerInstrumentForm form(this);
 			form.setup(pItem->instrument());
 			if (form.exec()) {
-				pItem->instrument()->map();
+				pItem->instrument()->mapInstrument();
 				emit instrumentsChanged();
 				pItem->update();
 			}
@@ -485,7 +484,7 @@ void qsamplerInstrumentList::deleteSlot (void)
 			qsamplerInstrumentItem *pItem
 				= static_cast<qsamplerInstrumentItem *> (pListItem);
 			if (pItem && pItem->instrument()) {
-				pItem->instrument()->unmap();
+				pItem->instrument()->unmapInstrument();
 				emit instrumentsChanged();
 			}
 		}
@@ -527,7 +526,7 @@ void qsamplerInstrumentList::renamedSlot ( QListViewItem *pListItem )
 			= static_cast<qsamplerInstrumentItem *> (pListItem);
 		if (pItem && pItem->instrument()) {
 			pItem->instrument()->setName(pListItem->text(0));
-			pItem->instrument()->map();
+			pItem->instrument()->mapInstrument();
 			emit instrumentsChanged();
 			pItem->update();
 		}
@@ -571,13 +570,14 @@ void qsamplerInstrumentList::refresh (void)
 
 	qsamplerInstrumentItem *pItem = NULL;
 	lscp_midi_instrument_t *pInstrs
-		= ::lscp_list_midi_instruments(pMainForm->client());
-	for (int iInstr = 0; pInstrs && pInstrs[iInstr].program >= 0; ++iInstr) {
-		int iBank = (pInstrs[iInstr].bank_msb << 7) | pInstrs[iInstr].bank_lsb;
-		int iProgram = pInstrs[iInstr].program;
+		= ::lscp_list_midi_instruments(pMainForm->client(), LSCP_MIDI_MAP_ALL);
+	for (int iInstr = 0; pInstrs && pInstrs[iInstr].prog >= 0; ++iInstr) {
+		int iMap  = pInstrs[iInstr].map;
+		int iBank = pInstrs[iInstr].bank;
+		int iProg = pInstrs[iInstr].prog;
 		qsamplerInstrument *pInstrument
-			= new qsamplerInstrument(iBank, iProgram);
-		if (pInstrument->get())
+			= new qsamplerInstrument(iMap, iBank, iProg);
+		if (pInstrument->getInstrument())
 			pItem = new qsamplerInstrumentItem(this, pInstrument, pItem);
 	}
 

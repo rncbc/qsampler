@@ -37,17 +37,12 @@
 #include <math.h>
 
 #ifndef CONFIG_ROUND
-static long lroundf ( float fval )
+static inline long lroundf ( float x )
 {
-	double fint = 0.0; 
-    float  frac = float(::modf(fval, &fint));
-    long   lint = long(fint);
-    if (frac >= +0.5f)
-        lint++;
-    else
-    if (frac <= -0.5f)
-        lint--;
-    return lint;
+	if (x >= 0.0f)
+		return long(x + 0.5f);
+	else
+		return long(x - 0.5f);
 }
 #endif
 
@@ -97,9 +92,9 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 		return;
 
 	// It can be a brand new channel, remember?
-	bool bNew = (m_pInstrument->bank() < 0 || m_pInstrument->program() < 0);
+	bool bNew = (m_pInstrument->bank() < 0 || m_pInstrument->prog() < 0);
 	if (!bNew) {
-		m_pInstrument->get();
+		m_pInstrument->getInstrument();
 		m_iDirtyName++;
 	}
 
@@ -108,6 +103,10 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 
 	// Load combo box history...
 	pOptions->loadComboBoxHistory(InstrumentFileComboBox);
+
+	// Populate maps list.
+	MapComboBox->clear();
+	MapComboBox->insertStringList(qsamplerInstrument::getMapNames());
 
 	// Populate Engines list.
 	const char **ppszEngines = ::lscp_list_available_engines(pMainForm->client());
@@ -121,18 +120,34 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	// Read proper instrument information,
 	// and populate the instrument form fields.
 
+	// Instrument map name...
+	int iMap = (bNew ? pOptions->iMidiMap : m_pInstrument->map());
+	if (iMap < 0)
+		iMap = 0;
+	const QString& sMapName = qsamplerInstrument::getMapName(iMap);
+	if (!sMapName.isEmpty())
+		MapComboBox->setCurrentText(sMapName);
+	// It might be no maps around...
+	bool bMapEnabled = (MapComboBox->count() > 0);
+	MapTextLabel->setEnabled(bMapEnabled);
+	MapComboBox->setEnabled(bNew && bMapEnabled);
+
 	// Instrument bank/program...
-	int iBank = m_pInstrument->bank();
-	int iProgram = m_pInstrument->program() + 1;
+	int iBank = (bNew ? pOptions->iMidiBank : m_pInstrument->bank());
+	int iProg = (bNew ? pOptions->iMidiProg : m_pInstrument->prog()) + 1;
+	if (bNew && iProg > 128) {
+		iProg = 1;
+		iBank++;
+	}
 	BankSpinBox->setValue(iBank);
-	ProgramSpinBox->setValue(iProgram);
+	ProgSpinBox->setValue(iProg);
 	// Spacial hack to avoid changes on the key...
 	if (bNew) {
 		BankSpinBox->setRange(0, 16383);
-		ProgramSpinBox->setRange(1, 128);
+		ProgSpinBox->setRange(1, 128);
 	} else {
 		BankSpinBox->setRange(iBank, iBank);
-		ProgramSpinBox->setRange(iProgram, iProgram);
+		ProgSpinBox->setRange(iProg, iProg);
 	}
 
 	// Instrument name...
@@ -161,10 +176,14 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	InstrumentNrComboBox->setCurrentItem(m_pInstrument->instrumentNr());
 
 	// Instrument volume....
-	VolumeSpinBox->setValue(::lroundf(100.0f * m_pInstrument->volume()));
+	int iVolume = (bNew ? pOptions->iVolume :
+		::lroundf(100.0f * m_pInstrument->volume()));
+	VolumeSpinBox->setValue(iVolume);
 
 	// Instrument load mode...
-	LoadModeComboBox->setCurrentItem(m_pInstrument->loadMode());
+	int iLoadMode = (bNew ? pOptions->iLoadMode :
+		m_pInstrument->loadMode());
+	LoadModeComboBox->setCurrentItem(iLoadMode);
 
 	// Done.
 	m_iDirtySetup--;
@@ -271,8 +290,10 @@ void qsamplerInstrumentForm::accept (void)
 		return;
 
 	if (m_iDirtyCount > 0) {
+		m_pInstrument->setMap(MapComboBox->currentItem());
+		m_pInstrument->setMap(MapComboBox->currentItem());
 		m_pInstrument->setBank(BankSpinBox->value());
-		m_pInstrument->setProgram(ProgramSpinBox->value() - 1);
+		m_pInstrument->setProg(ProgSpinBox->value() - 1);
 		m_pInstrument->setName(NameLineEdit->text());
 		m_pInstrument->setEngineName(EngineNameComboBox->currentText());
 		m_pInstrument->setInstrumentFile(InstrumentFileComboBox->currentText());
@@ -284,6 +305,11 @@ void qsamplerInstrumentForm::accept (void)
 	// Save default engine name, instrument directory and history...
 	pOptions->sInstrumentDir = QFileInfo(InstrumentFileComboBox->currentText()).dirPath(true);
 	pOptions->sEngineName = EngineNameComboBox->currentText();
+	pOptions->iMidiMap  = MapComboBox->currentItem();
+	pOptions->iMidiBank = BankSpinBox->value();
+	pOptions->iMidiProg = ProgSpinBox->value();
+	pOptions->iVolume   = VolumeSpinBox->value();
+	pOptions->iLoadMode = LoadModeComboBox->currentItem();
 	pOptions->saveComboBoxHistory(InstrumentFileComboBox);
 
 	// Just go with dialog acceptance.

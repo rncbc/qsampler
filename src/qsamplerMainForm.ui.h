@@ -686,6 +686,15 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 // Save current session to specific file path.
 bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 {
+	if (m_pClient == NULL)
+		return false;
+
+	// Check whether server is apparently OK...
+	if (::lscp_get_channels(m_pClient) < 0) {
+		appendMessagesClient("lscp_get_channels");
+		return false;
+	}
+
     // Open and write into real file.
     QFile file(sFilename);
     if (!file.open(IO_WriteOnly | IO_Truncate)) {
@@ -709,11 +718,13 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
        << " "  << QTime::currentTime().toString("hh:mm:ss") << endl;
     ts << "#"  << endl;
     ts << endl;
+
 	// It is assumed that this new kind of device+session file
-	// will be loaded from a complete
+	// will be loaded from a complete initialized server...
 	int *piDeviceIDs;
 	int  iDevice;
 	ts << "RESET" << endl;
+
 	// Audio device mapping.
 	QMap<int, int> audioDeviceMap;
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
@@ -751,9 +762,10 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		}
 		// Audio device index/id mapping.
 		audioDeviceMap[device.deviceID()] = iDevice;
-        // Try to keep it snappy :)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		// Try to keep it snappy :)
+		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
+
 	// MIDI device mapping.
 	QMap<int, int> midiDeviceMap;
 	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
@@ -791,10 +803,66 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		}
 		// MIDI device index/id mapping.
 		midiDeviceMap[device.deviceID()] = iDevice;
-        // Try to keep it snappy :)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		// Try to keep it snappy :)
+		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
 	ts << endl;
+
+#ifdef CONFIG_MIDI_INSTRUMENT
+	// MIDI instrument mapping...
+	int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
+	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; iMap++) {
+		int iMidiMap = piMaps[iMap];
+		const char *pszMapName
+			= ::lscp_get_midi_instrument_map_name(m_pClient, iMidiMap);
+		ts << "# " << tr("MIDI instrument map") << " " << iMidiMap;
+		if (pszMapName)
+			ts << " - " << pszMapName;
+		ts << endl;
+		ts << "ADD MIDI_INSTRUMENT_MAP";
+		if (pszMapName)
+			ts << " '" << pszMapName << "'";
+		ts << endl;
+		// MIDI instrument mapping...
+		lscp_midi_instrument_t *pInstrs
+			= ::lscp_list_midi_instruments(m_pClient, iMidiMap);
+		for (int iInstr = 0; pInstrs && pInstrs[iInstr].map >= 0; iInstr++) {
+			lscp_midi_instrument_info_t *pInstrInfo
+				= ::lscp_get_midi_instrument_info(m_pClient, &pInstrs[iInstr]);
+			if (pInstrInfo) {
+				ts << "MAP MIDI_INSTRUMENT "
+					<< pInstrs[iInstr].map         << " "
+					<< pInstrs[iInstr].bank        << " "
+					<< pInstrs[iInstr].prog        << " "
+					<< pInstrInfo->engine_name     << " '" 
+					<< pInstrInfo->instrument_file << "' "
+					<< pInstrInfo->instrument_nr   << " "
+					<< pInstrInfo->volume          << " ";
+				switch (pInstrInfo->load_mode) {
+					case LSCP_LOAD_PERSISTENT:
+						ts << "PERSISTENT";
+						break;
+					case LSCP_LOAD_ON_DEMAND_HOLD:
+						ts << "ON_DEMAND_HOLD";
+						break;
+					case LSCP_LOAD_ON_DEMAND:
+					case LSCP_LOAD_DEFAULT:
+					default:
+						ts << "ON_DEMAND";
+						break;
+				}
+				if (pInstrInfo->name)
+					ts << " '" << pInstrInfo->name << "'";
+				ts << endl;
+			}
+			// Try to keep it snappy :)
+			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		}
+		if (pInstrs)
+			ts << endl;
+	}
+#endif //  CONFIG_MIDI_INSTRUMENT
+
 	// Sampler channel mapping.
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
@@ -827,7 +895,9 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
                     ts << pChannel->midiChannel();
                 ts << endl;
                 ts << "LOAD ENGINE " << pChannel->engineName() << " " << iChannel << endl;
-                ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' " << pChannel->instrumentNr() << " " << iChannel << endl;
+				if (pChannel->instrumentStatus() < 100) ts << "# ";
+				ts << "LOAD INSTRUMENT NON_MODAL '" << pChannel->instrumentFile() << "' "
+					<< pChannel->instrumentNr() << " " << iChannel << endl;
 				qsamplerChannelRoutingMap::ConstIterator audioRoute;
 				for (audioRoute = pChannel->audioRouting().begin();
 						audioRoute != pChannel->audioRouting().end();
@@ -836,58 +906,24 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 						<< " " << audioRoute.key()
 						<< " " << audioRoute.data() << endl;
 				}
-                ts << "SET CHANNEL VOLUME " << iChannel << " " << pChannel->volume() << endl;
+				ts << "SET CHANNEL VOLUME " << iChannel
+					<< " " << pChannel->volume() << endl;
 				if (pChannel->channelMute())
 					ts << "SET CHANNEL MUTE " << iChannel << " 1" << endl;
 				if (pChannel->channelSolo())
 					ts << "SET CHANNEL SOLO " << iChannel << " 1" << endl;
+#ifdef CONFIG_MIDI_INSTRUMENT
+				if (pChannel->midiMap() >= 0) {
+					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannel
+						<< " " << pChannel->midiChannel() << endl;
+				}
+#endif
                 ts << endl;
             }
         }
         // Try to keep it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
-
-#ifdef CONFIG_MIDI_INSTRUMENT
-	// MIDI instrument mapping...
-	lscp_midi_instrument_t *pInstrs = ::lscp_list_midi_instruments(m_pClient);
-	if (pInstrs)
-		ts << "# " << tr("MIDI instrument mapping") << endl;
-	for (int iInstr = 0; pInstrs && pInstrs[iInstr].program >= 0; iInstr++) {
-		lscp_midi_instrument_info_t *pInstrInfo
-			= ::lscp_get_midi_instrument_info(m_pClient, &pInstrs[iInstr]);
-		if (pInstrInfo) {
-			ts << "MAP MIDI_INSTRUMENT "
-				<< pInstrs[iInstr].bank_msb    << " " 
-				<< pInstrs[iInstr].bank_lsb    << " " 
-				<< pInstrs[iInstr].program     << " " 
-				<< pInstrInfo->engine_name     << " '" 
-				<< pInstrInfo->instrument_file << "' "
-				<< pInstrInfo->instrument_nr   << " "
-				<< pInstrInfo->volume          << " ";
-			switch (pInstrInfo->load_mode) {
-				case LSCP_LOAD_PERSISTENT:
-					ts << "PERSISTENT";
-					break;
-				case LSCP_LOAD_ON_DEMAND_HOLD:
-					ts << "ON_DEMAND_HOLD";
-					break;
-				case LSCP_LOAD_ON_DEMAND:
-				case LSCP_LOAD_DEFAULT:
-				default:
-					ts << "ON_DEMAND";
-					break;
-			}
-			if (pInstrInfo->name)
-				ts << " '" << pInstrInfo->name << "'";
-			ts << endl;
-		}
-		// Try to keep it snappy :)
-		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
-	}
-	if (pInstrs)
-		ts << endl;
-#endif //  CONFIG_MIDI_INSTRUMENT
 
     // Ok. we've wrote it.
     file.close();
@@ -1538,6 +1574,17 @@ void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip 
 // Grab and restore current sampler channels session.
 void qsamplerMainForm::updateSession (void)
 {
+#ifdef CONFIG_MIDI_INSTRUMENT
+	// FIXME Make some room for default instrument maps...
+	int iMaps = ::lscp_get_midi_instrument_maps(m_pClient);
+	if (iMaps < 0)
+		appendMessagesClient("lscp_get_midi_instrument_maps");
+	else if (iMaps < 1) {
+		::lscp_add_midi_instrument_map(m_pClient, tr("Chromatic").latin1());
+		::lscp_add_midi_instrument_map(m_pClient, tr("Drum Kits").latin1());
+	}
+#endif
+
 	// Retrieve the current channel list.
 	int *piChannelIDs = ::lscp_list_channels(m_pClient);
 	if (piChannelIDs == NULL) {
@@ -1558,7 +1605,7 @@ void qsamplerMainForm::updateSession (void)
 		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
 	m_pWorkspace->setUpdatesEnabled(true);
-	
+
 	// Remember to refresh devices and instruments...
 	if (m_pInstrumentListForm)
 	    m_pInstrumentListForm->refreshInstruments();
