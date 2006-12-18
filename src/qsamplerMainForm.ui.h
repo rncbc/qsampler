@@ -810,12 +810,13 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 
 #ifdef CONFIG_MIDI_INSTRUMENT
 	// MIDI instrument mapping...
+	QMap<int, int> midiInstrumentMap;
 	int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
 	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; iMap++) {
 		int iMidiMap = piMaps[iMap];
 		const char *pszMapName
 			= ::lscp_get_midi_instrument_map_name(m_pClient, iMidiMap);
-		ts << "# " << tr("MIDI instrument map") << " " << iMidiMap;
+		ts << "# " << tr("MIDI instrument map") << " " << iMap;
 		if (pszMapName)
 			ts << " - " << pszMapName;
 		ts << endl;
@@ -831,7 +832,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				= ::lscp_get_midi_instrument_info(m_pClient, &pInstrs[iInstr]);
 			if (pInstrInfo) {
 				ts << "MAP MIDI_INSTRUMENT "
-					<< pInstrs[iInstr].map         << " "
+					<< iMap                        << " "
 					<< pInstrs[iInstr].bank        << " "
 					<< pInstrs[iInstr].prog        << " "
 					<< pInstrInfo->engine_name     << " '" 
@@ -855,6 +856,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 					ts << " '" << pInstrInfo->name << "'";
 				ts << endl;
 			}
+			// MIDI device index/id mapping.
+			midiInstrumentMap[iMidiMap] = iMap;
 			// Try to keep it snappy :)
 			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 		}
@@ -915,7 +918,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 #ifdef CONFIG_MIDI_INSTRUMENT
 				if (pChannel->midiMap() >= 0) {
 					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannel
-						<< " " << pChannel->midiChannel() << endl;
+						<< " " << midiInstrumentMap[pChannel->midiMap()] << endl;
 				}
 #endif
                 ts << endl;
