@@ -404,8 +404,10 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 			m_iDirtyCount++;
 			stabilizeForm();
 		}   // Otherwise, load an usual session file (LSCP script)...
-		else if (closeSession(true))
+		else if (closeSession(true)) {
 			loadSessionFile(sPath);
+			break;
+		}
 		// Make it look responsive...:)
 		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
@@ -636,19 +638,26 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
         return false;
     }
 
+	// Tell the world we'll take some time...
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
     // Read the file.
+	int iLine = 0;
     int iErrors = 0;
     QTextStream ts(&file);
     while (!ts.atEnd()) {
         // Read the line.
         QString sCommand = ts.readLine().stripWhiteSpace();
+		iLine++;
         // If not empty, nor a comment, call the server...
         if (!sCommand.isEmpty() && sCommand[0] != '#') {
-            appendMessagesColor(sCommand, "#996633");
             // Remember that, no matter what,
             // all LSCP commands are CR/LF terminated.
             sCommand += "\r\n";
             if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
+				appendMessagesColor(QString("%1(%2): %3")
+					.arg(QFileInfo(sFilename).fileName()).arg(iLine)
+					.arg(sCommand.simplifyWhiteSpace()), "#996633");
                 appendMessagesClient("lscp_client_query");
                 iErrors++;
             }
@@ -662,6 +671,9 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 
 	// Now we'll try to create (update) the whole GUI session.
 	updateSession();
+
+	// We're fornerly done.
+	QApplication::restoreOverrideCursor();
 
 	// Have we any errors?
 	if (iErrors > 0)
@@ -701,6 +713,9 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         appendMessagesError(tr("Could not open \"%1\" session file.\n\nSorry.").arg(sFilename));
         return false;
     }
+
+	// Tell the world we'll take some time...
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     // Write the file.
     int  iErrors = 0;
@@ -855,14 +870,28 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				if (pInstrInfo->name)
 					ts << " '" << pInstrInfo->name << "'";
 				ts << endl;
+			}	// Check for errors...
+			else if (::lscp_client_get_errno(m_pClient)) {
+				appendMessagesClient("lscp_get_midi_instrument_info");
+				iErrors++;
 			}
 			// MIDI device index/id mapping.
 			midiInstrumentMap[iMidiMap] = iMap;
 			// Try to keep it snappy :)
 			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 		}
+		// Check for errors...
 		if (pInstrs)
 			ts << endl;
+		else if (::lscp_client_get_errno(m_pClient)) {
+			appendMessagesClient("lscp_list_midi_instruments");
+			iErrors++;
+		}
+	}
+	// Check for errors...
+	if (piMaps == NULL && ::lscp_client_get_errno(m_pClient)) {
+		appendMessagesClient("lscp_list_midi_instrument_maps");
+		iErrors++;
 	}
 #endif //  CONFIG_MIDI_INSTRUMENT
 
@@ -930,6 +959,9 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 
     // Ok. we've wrote it.
     file.close();
+
+	// We're fornerly done.
+	QApplication::restoreOverrideCursor();
 
     // Have we any errors?
     if (iErrors > 0)
@@ -1595,19 +1627,20 @@ void qsamplerMainForm::updateSession (void)
 			appendMessagesClient("lscp_list_channels");
 			appendMessagesError(tr("Could not get current list of channels.\n\nSorry."));
 		}
-		return;
+	} else {
+		// Try to (re)create each channel.
+		m_pWorkspace->setUpdatesEnabled(false);
+		for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
+			// Check if theres already a channel strip for this one...
+			if (!channelStrip(piChannelIDs[iChannel]))
+				createChannelStrip(new qsamplerChannel(piChannelIDs[iChannel]));
+		}
+		m_pWorkspace->setUpdatesEnabled(true);
 	}
 
-	// Try to (re)create each channel.
-	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
-		// Check if theres already a channel strip for this one...
-		if (!channelStrip(piChannelIDs[iChannel]))
-			createChannelStrip(new qsamplerChannel(piChannelIDs[iChannel]));
-		// Make it visibly responsive...
-		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
-	}
-	m_pWorkspace->setUpdatesEnabled(true);
+    // Do we auto-arrange?
+    if (m_pOptions && m_pOptions->bAutoArrange)
+        channelsArrange();
 
 	// Remember to refresh devices and instruments...
 	if (m_pInstrumentListForm)
@@ -1784,6 +1817,9 @@ void qsamplerMainForm::appendMessagesError( const QString& s )
 
     appendMessagesColor(s.simplifyWhiteSpace(), "#ff0000");
 
+	// Make it look responsive...:)
+	QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+
     QMessageBox::critical(this,
 		QSAMPLER_TITLE ": " + tr("Error"), s, tr("Cancel"));
 }
@@ -1798,6 +1834,9 @@ void qsamplerMainForm::appendMessagesClient( const QString& s )
     appendMessagesColor(s + QString(": %1 (errno=%2)")
         .arg(::lscp_client_get_result(m_pClient))
         .arg(::lscp_client_get_errno(m_pClient)), "#996666");
+
+	// Make it look responsive...:)
+	QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 }
 
 

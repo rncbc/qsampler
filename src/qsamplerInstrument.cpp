@@ -190,12 +190,12 @@ bool qsamplerInstrument::mapInstrument (void)
 	}
 
 	if (::lscp_map_midi_instrument(pMainForm->client(), &instr,
-		m_sEngineName.latin1(),
-		m_sInstrumentFile.latin1(),
-		m_iInstrumentNr,
-		m_fVolume,
-		load_mode,
-		m_sName.latin1()) != LSCP_OK) {
+			m_sEngineName.latin1(),
+			m_sInstrumentFile.latin1(),
+			m_iInstrumentNr,
+			m_fVolume,
+			load_mode,
+			m_sName.latin1()) != LSCP_OK) {
 		pMainForm->appendMessagesClient("lscp_map_midi_instrument");
 		return false;
 	}
@@ -320,10 +320,15 @@ QStringList qsamplerInstrument::getMapNames (void)
 
 #ifdef CONFIG_MIDI_INSTRUMENT
 	int *piMaps = ::lscp_list_midi_instrument_maps(pMainForm->client());
-	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; iMap++) {
-		const QString& sMapName = getMapName(piMaps[iMap]);
-		if (!sMapName.isEmpty())
-			maps.append(sMapName);
+	if (piMaps == NULL) {
+		if (::lscp_client_get_errno(pMainForm->client()))
+			pMainForm->appendMessagesClient("lscp_list_midi_instruments");
+	} else {
+		for (int iMap = 0; piMaps[iMap] >= 0; iMap++) {
+			const QString& sMapName = getMapName(piMaps[iMap]);
+			if (!sMapName.isEmpty())
+				maps.append(sMapName);
+		}
 	}
 #endif
 
@@ -344,8 +349,11 @@ QString qsamplerInstrument::getMapName ( int iMidiMap )
 #ifdef CONFIG_MIDI_INSTRUMENT
 	const char *pszMapName
 		= ::lscp_get_midi_instrument_map_name(pMainForm->client(), iMidiMap);
-	if (pszMapName == NULL)
+	if (pszMapName == NULL) {
 		pszMapName = " -";
+		if (::lscp_client_get_errno(pMainForm->client()))
+			pMainForm->appendMessagesClient("lscp_get_midi_instrument_name");
+	}
 	sMapName = QString("%1 - %2").arg(iMidiMap).arg(pszMapName);
 #endif
 

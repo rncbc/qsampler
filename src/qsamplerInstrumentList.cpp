@@ -25,8 +25,10 @@
 #include "qsamplerInstrument.h"
 #include "qsamplerInstrumentForm.h"
 
+#include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
+#include <qmessagebox.h>
 #include <qaction.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
@@ -252,11 +254,11 @@ qsamplerInstrumentList::qsamplerInstrumentList (
 	QListView::setColumnWidth(5, 240);	// File
 
 	m_pNewGroupAction = new QAction(tr("New &Group"), tr("Ctrl+G"), this);
-	m_pNewItemAction  = new QAction(tr("New &Instrument..."), tr("Ctrl+I"), this);
-	m_pEditItemAction = new QAction(tr("&Edit..."), tr("Ctrl+E"), this);
-	m_pRenameAction   = new QAction(tr("&Rename"), tr("Ctrl+R"), this);
-	m_pDeleteAction   = new QAction(tr("&Delete"), tr("Ctrl+D"), this);
-	m_pRefreshAction  = new QAction(tr("Re&fresh"), tr("Ctrl+F"), this);
+	m_pNewItemAction  = new QAction(tr("New &Instrument..."), tr("Ins"), this);
+	m_pEditItemAction = new QAction(tr("&Edit..."), tr("Enter"), this);
+	m_pRenameAction   = new QAction(tr("&Rename"), tr("F2"), this);
+	m_pDeleteAction   = new QAction(tr("&Delete"), tr("Del"), this);
+	m_pRefreshAction  = new QAction(tr("Re&fresh"), tr("F5"), this);
 
 	QObject::connect(m_pNewGroupAction,
 		SIGNAL(activated()),
@@ -479,17 +481,39 @@ void qsamplerInstrumentList::renameSlot (void)
 void qsamplerInstrumentList::deleteSlot (void)
 {
 	QListViewItem *pListItem = QListView::selectedItem();
-	if (pListItem) {
-		if (pListItem->rtti() == Item) {
-			qsamplerInstrumentItem *pItem
-				= static_cast<qsamplerInstrumentItem *> (pListItem);
-			if (pItem && pItem->instrument()) {
-				pItem->instrument()->unmapInstrument();
-				emit instrumentsChanged();
-			}
-		}
-		delete pListItem;
+	if (pListItem == NULL)
+		return;
+
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return;
+
+	// Prompt user if this is for real...
+	qsamplerOptions *pOptions = pMainForm->options();
+	if (pOptions && pOptions->bConfirmRemove) {
+		if (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("Delete %1:\n\n"
+			"%2\n\n"
+			"Are you sure?")
+			.arg(pListItem->rtti() == Item ? tr("instrument") : tr("group"))
+			.arg(pListItem->text(0)),
+			tr("OK"), tr("Cancel")) > 0)
+			return;
 	}
+
+	// Unmap instrument entry...
+	if (pListItem->rtti() == Item) {
+		qsamplerInstrumentItem *pItem
+			= static_cast<qsamplerInstrumentItem *> (pListItem);
+		if (pItem && pItem->instrument()) {
+			pItem->instrument()->unmapInstrument();
+			emit instrumentsChanged();
+		}
+	}
+
+	// Do it for real...
+	delete pListItem;
 
 	selectionChangedSlot();
 }
@@ -571,7 +595,7 @@ void qsamplerInstrumentList::refresh (void)
 	qsamplerInstrumentItem *pItem = NULL;
 	lscp_midi_instrument_t *pInstrs
 		= ::lscp_list_midi_instruments(pMainForm->client(), LSCP_MIDI_MAP_ALL);
-	for (int iInstr = 0; pInstrs && pInstrs[iInstr].prog >= 0; ++iInstr) {
+	for (int iInstr = 0; pInstrs && pInstrs[iInstr].map >= 0; ++iInstr) {
 		int iMap  = pInstrs[iInstr].map;
 		int iBank = pInstrs[iInstr].bank;
 		int iProg = pInstrs[iInstr].prog;

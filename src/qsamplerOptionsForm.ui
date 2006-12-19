@@ -938,13 +938,13 @@
                                             </font>
                                         </property>
                                         <property name="text">
-                                            <string>&amp;Confirm channel and device removal</string>
+                                            <string>&amp;Confirm removals</string>
                                         </property>
                                         <property name="accel">
                                             <string>Alt+C</string>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Whether to ask for confirmation on channel or device removal</string>
+                                            <string>Whether to ask for confirmation on removals</string>
                                         </property>
                                     </widget>
 		                            <widget class="QCheckBox">
