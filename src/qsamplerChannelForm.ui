@@ -748,7 +748,7 @@
                                 </sizepolicy>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>Instrument name</string>
+                                <string>Instrument map</string>
                             </property>
                         </widget>
                         <spacer>

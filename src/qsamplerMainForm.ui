@@ -593,7 +593,7 @@
             <string>Line up all channel strips</string>
         </property>
         <property name="accel">
-            <string>F10</string>
+            <string>F5</string>
         </property>
     </action>
     <action>

@@ -5,6 +5,13 @@ ChangeLog
 
 CVS HEAD
 
+* Revised error verbosity in general and on session load/save;
+  hour-glass wait cursor is now displayed on session load/save;
+  keyboard shortcuts changed on MIDI instruments view context;
+  improved channel strip arrangement on session open/load;
+  instrument map entry removal confirmation (as optional);
+  corrected some tooltip text strings.
+ 
 * MIDI instrumeent map program numbers are now displayed in
   the range 1-128, instead of the internal 0-127.
 

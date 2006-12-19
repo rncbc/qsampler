@@ -266,7 +266,7 @@
                         </sizepolicy>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>Load mode</string>
+                        <string>Instrument map</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="4" column="0">
