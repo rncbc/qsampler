@@ -893,7 +893,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		appendMessagesClient("lscp_list_midi_instrument_maps");
 		iErrors++;
 	}
-#endif //  CONFIG_MIDI_INSTRUMENT
+#endif	// CONFIG_MIDI_INSTRUMENT
 
 	// Sampler channel mapping.
     QWidgetList wlist = m_pWorkspace->windowList();
@@ -1055,10 +1055,27 @@ void qsamplerMainForm::fileReset (void)
         return;
 
     // Just do the reset, after closing down current session...
-    if (closeSession(true) && ::lscp_reset_sampler(m_pClient) != LSCP_OK) {
-        appendMessagesClient("lscp_reset_sampler");
-        appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
-        return;
+    if (closeSession(true)) {
+#ifdef CONFIG_MIDI_INSTRUMENT
+		// Reset all MIDI instrument mapping, if any.
+		int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
+		for (int iMap = 0; piMaps && piMaps[iMap] >= 0; ++iMap) {
+			int iMidiMap = piMaps[iMap];
+			if (::lscp_clear_midi_instruments(m_pClient, iMidiMap) != LSCP_OK)
+				appendMessagesClient("lscp_clear_midi_instruments");
+			if (::lscp_remove_midi_instrument_map(m_pClient, iMidiMap) != LSCP_OK)
+				appendMessagesClient("lscp_remove_midi_instrument_map");
+		}
+		// Check for errors...
+		if (piMaps == NULL && ::lscp_client_get_errno(m_pClient))
+			appendMessagesClient("lscp_list_midi_instrument_maps");
+#endif	// CONFIG_MIDI_INSTRUMENT
+		// actually do the sampler reset...
+		if (::lscp_reset_sampler(m_pClient) != LSCP_OK) {
+			appendMessagesClient("lscp_reset_sampler");
+			appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
+			return;
+		}
     }
 
     // Log this.
