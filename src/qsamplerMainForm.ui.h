@@ -625,6 +625,36 @@ bool qsamplerMainForm::closeSession ( bool bForce )
 }
 
 
+// Reset current session.
+bool qsamplerMainForm::resetSession (void)
+{
+#ifdef CONFIG_MIDI_INSTRUMENT
+	// Reset all MIDI instrument mapping, if any.
+	int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
+	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; ++iMap) {
+		int iMidiMap = piMaps[iMap];
+		if (::lscp_clear_midi_instruments(m_pClient, iMidiMap) != LSCP_OK)
+			appendMessagesClient("lscp_clear_midi_instruments");
+		if (::lscp_remove_midi_instrument_map(m_pClient, iMidiMap) != LSCP_OK)
+			appendMessagesClient("lscp_remove_midi_instrument_map");
+	}
+	// Check for errors...
+	if (piMaps == NULL && ::lscp_client_get_errno(m_pClient))
+		appendMessagesClient("lscp_list_midi_instrument_maps");
+#endif	// CONFIG_MIDI_INSTRUMENT
+
+	// Do the actual sampler reset...
+	if (::lscp_reset_sampler(m_pClient) != LSCP_OK) {
+		appendMessagesClient("lscp_reset_sampler");
+		appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
+		return false;
+	}
+
+	// Done.
+	return true;
+}
+
+
 // Load a session from specific file path.
 bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 {
@@ -651,16 +681,23 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 		iLine++;
         // If not empty, nor a comment, call the server...
         if (!sCommand.isEmpty() && sCommand[0] != '#') {
-            // Remember that, no matter what,
-            // all LSCP commands are CR/LF terminated.
-            sCommand += "\r\n";
-            if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
-				appendMessagesColor(QString("%1(%2): %3")
-					.arg(QFileInfo(sFilename).fileName()).arg(iLine)
-					.arg(sCommand.simplifyWhiteSpace()), "#996633");
-                appendMessagesClient("lscp_client_query");
-                iErrors++;
-            }
+			// HACK: A very special trap for the global RESET command...
+			if (sCommand == "RESET") {
+				// Do our own reset...
+				if (!resetSession())
+					iErrors++;
+			} else {
+				// Remember that, no matter what,
+				// all LSCP commands are CR/LF terminated.
+				sCommand += "\r\n";
+				if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
+					appendMessagesColor(QString("%1(%2): %3")
+						.arg(QFileInfo(sFilename).fileName()).arg(iLine)
+						.arg(sCommand.simplifyWhiteSpace()), "#996633");
+					appendMessagesClient("lscp_client_query");
+					iErrors++;
+				}
+			}
         }
         // Try to make it snappy :)
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
@@ -1054,29 +1091,13 @@ void qsamplerMainForm::fileReset (void)
         tr("Reset"), tr("Cancel")) > 0)
         return;
 
+	// Trye closing the current session, first...
+	if (!closeSession(true))
+		return;
+
     // Just do the reset, after closing down current session...
-    if (closeSession(true)) {
-#ifdef CONFIG_MIDI_INSTRUMENT
-		// Reset all MIDI instrument mapping, if any.
-		int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
-		for (int iMap = 0; piMaps && piMaps[iMap] >= 0; ++iMap) {
-			int iMidiMap = piMaps[iMap];
-			if (::lscp_clear_midi_instruments(m_pClient, iMidiMap) != LSCP_OK)
-				appendMessagesClient("lscp_clear_midi_instruments");
-			if (::lscp_remove_midi_instrument_map(m_pClient, iMidiMap) != LSCP_OK)
-				appendMessagesClient("lscp_remove_midi_instrument_map");
-		}
-		// Check for errors...
-		if (piMaps == NULL && ::lscp_client_get_errno(m_pClient))
-			appendMessagesClient("lscp_list_midi_instrument_maps");
-#endif	// CONFIG_MIDI_INSTRUMENT
-		// actually do the sampler reset...
-		if (::lscp_reset_sampler(m_pClient) != LSCP_OK) {
-			appendMessagesClient("lscp_reset_sampler");
-			appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
-			return;
-		}
-    }
+	if (!resetSession())
+		return;
 
     // Log this.
     appendMessages(tr("Sampler reset."));
