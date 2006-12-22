@@ -915,10 +915,9 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 			// Try to keep it snappy :)
 			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 		}
+		ts << endl;
 		// Check for errors...
-		if (pInstrs)
-			ts << endl;
-		else if (::lscp_client_get_errno(m_pClient)) {
+		if (pInstrs == NULL && ::lscp_client_get_errno(m_pClient)) {
 			appendMessagesClient("lscp_list_midi_instruments");
 			iErrors++;
 		}
