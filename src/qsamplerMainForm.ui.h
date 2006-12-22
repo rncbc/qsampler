@@ -912,8 +912,6 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				appendMessagesClient("lscp_get_midi_instrument_info");
 				iErrors++;
 			}
-			// MIDI device index/id mapping.
-			midiInstrumentMap[iMidiMap] = iMap;
 			// Try to keep it snappy :)
 			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 		}
@@ -924,6 +922,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 			appendMessagesClient("lscp_list_midi_instruments");
 			iErrors++;
 		}
+		// MIDI strument index/id mapping.
+		midiInstrumentMap[iMidiMap] = iMap;
 	}
 	// Check for errors...
 	if (piMaps == NULL && ::lscp_client_get_errno(m_pClient)) {
