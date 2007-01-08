@@ -532,9 +532,7 @@ void qsamplerInstrumentList::editItemSlot (void)
 			pInstrument = pItem->instrument();
 		if (pInstrument) {
 			// Save current key values...
-			int iMap  = pInstrument->map();
-			int iBank = pInstrument->bank();
-			int iProg = pInstrument->prog();
+			qsamplerInstrument oldInstrument(*pInstrument);
 			// Do the edit dance...
 			qsamplerInstrumentForm form(this);
 			form.setup(pInstrument);
@@ -542,12 +540,14 @@ void qsamplerInstrumentList::editItemSlot (void)
 				// Commit...
 				pInstrument->mapInstrument();
 				// Check whether we changed instrument key...
-				if (iMap  == pInstrument->map()  &&
-					iBank == pInstrument->bank() &&
-					iProg == pInstrument->prog()) {
+				if (oldInstrument.map()  == pInstrument->map()  &&
+					oldInstrument.bank() == pInstrument->bank() &&
+					oldInstrument.prog() == pInstrument->prog()) {
 					// just update tree item...
 					pItem->update();
 				} else {
+					// Unmap old instance...
+					oldInstrument.unmapInstrument();
 					// Change item tree, whether applicable...
 					if (m_iMidiMap < 0 || m_iMidiMap == pInstrument->map()) {
 						// Add new brand item into view...

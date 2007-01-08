@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -677,10 +677,10 @@ void qsamplerChannelForm::optionsChanged (void)
 void qsamplerChannelForm::stabilizeForm (void)
 {
 	bool bValid = true;
-
+#if 0
 	const QString& sPath = InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
-
+#endif
 	OkPushButton->setEnabled(m_iDirtyCount > 0 && bValid);
 }
 

@@ -5,22 +5,25 @@ ChangeLog
 
 CVS HEAD
 
+* Sampler channel setup dialog does not mandate for valid nor
+  existing instrument file name; dropped MIDI port from sampler
+  channel strip display, only MIDI channel is now displayed.
+
 * Revised error verbosity in general and on session load/save;
   hour-glass wait cursor is now displayed on session load/save;
   keyboard shortcuts changed on MIDI instruments view context;
   improved channel strip arrangement on session open/load;
   instrument map entry removal confirmation (as optional);
   corrected some tooltip text strings.
- 
-* MIDI instrumeent map program numbers are now displayed in
-  the range 1-128, instead of the internal 0-127.
 
 * Most top-level widgets were missing the normal-widget flag,
   which were causing some sticky size behavior while on some
   window managers.
 
 * Added preliminary MIDI instrument mapping support; now
-  with an instrument list widget and editing capabilities.
+  with an instrument list widget and editing capabilities;
+  MIDI instrumeent map program numbers are now displayed in
+  the range 1-128, instead of the internal 0-127.
 
 * GPL address update.
 
