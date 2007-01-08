@@ -41,7 +41,11 @@ IMAGES    = icons/qsampler.png \
 			icons/channelsArrange.png \
 			icons/itemGroup.png \
 			icons/itemGroupOpen.png \
+			icons/itemGroupNew.png \
+			icons/itemNew.png \
 			icons/itemFile.png \
+			icons/formEdit.png \
+			icons/formRemove.png \
 			icons/formAccept.png \
 			icons/formReject.png \
 			icons/formRefresh.png \

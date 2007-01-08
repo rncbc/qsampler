@@ -41,11 +41,15 @@ IMAGES	  = ../icons/qsampler.png \
 			../icons/channelsArrange.png \
 			../icons/itemGroup.png \
 			../icons/itemGroupOpen.png \
+			../icons/itemGroupNew.png \
+			../icons/itemNew.png \
 			../icons/itemFile.png \
+			../icons/formEdit.png \
+			../icons/formRemove.png \
 			../icons/formAccept.png \
 			../icons/formReject.png \
-			../icons/displaybg1.png \
 			../icons/formRefresh.png \
+			../icons/displaybg1.png \
 			../icons/deviceCreate.png \
 			../icons/deviceDelete.png \
 			../icons/midi1.png \
@@ -54,7 +58,7 @@ IMAGES	  = ../icons/qsampler.png \
 			../icons/audio2.png
 
 TEMPLATE = app
-CONFIG  += qt warn_on debug
+CONFIG  += qt warn_on debug console
 LANGUAGE = C++
 
 LIBS    += ../../liblscp/win32/liblscp.lib

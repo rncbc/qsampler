@@ -5,8 +5,6 @@ ChangeLog
 
 CVS HEAD
 
-* Manual sampler reset also resets all MIDI instrument maps.
-
 * Revised error verbosity in general and on session load/save;
   hour-glass wait cursor is now displayed on session load/save;
   keyboard shortcuts changed on MIDI instruments view context;

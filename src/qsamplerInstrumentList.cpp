@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -225,7 +225,10 @@ qsamplerInstrumentList::qsamplerInstrumentList (
 	QWidget *pParent, const char *pszName )
 	: QListView(pParent, pszName)
 {
+	m_iMidiMap = LSCP_MIDI_MAP_ALL;
+
 //  QListView::setRootIsDecorated(true);
+	QListView::setAllColumnsShowFocus(true);
 	QListView::setResizeMode(QListView::NoColumn);
 //	QListView::setAcceptDrops(true);
 	QListView::setDragAutoScroll(true);
@@ -253,12 +256,29 @@ qsamplerInstrumentList::qsamplerInstrumentList (
 	QListView::setColumnWidth(0, 120);	// Name
 	QListView::setColumnWidth(5, 240);	// File
 
-	m_pNewGroupAction = new QAction(tr("New &Group"), tr("Ctrl+G"), this);
-	m_pNewItemAction  = new QAction(tr("New &Instrument..."), tr("Ins"), this);
-	m_pEditItemAction = new QAction(tr("&Edit..."), tr("Enter"), this);
+	m_pNewGroupAction = new QAction(
+		QIconSet(QPixmap::fromMimeSource("itemGroupNew.png")),
+		tr("New &Group"), tr("Ctrl+G"), this);
+	m_pNewItemAction  = new QAction(
+		QIconSet(QPixmap::fromMimeSource("itemNew.png")),
+		tr("New &Instrument..."), tr("Ins"), this);
+	m_pEditItemAction = new QAction(
+		QIconSet(QPixmap::fromMimeSource("formEdit.png")),
+		tr("&Edit..."), tr("Enter"), this);
 	m_pRenameAction   = new QAction(tr("&Rename"), tr("F2"), this);
-	m_pDeleteAction   = new QAction(tr("&Delete"), tr("Del"), this);
-	m_pRefreshAction  = new QAction(tr("Re&fresh"), tr("F5"), this);
+	m_pDeleteAction   = new QAction(
+		QIconSet(QPixmap::fromMimeSource("formRemove.png")),
+		tr("&Delete"), tr("Del"), this);
+	m_pRefreshAction  = new QAction(
+		QIconSet(QPixmap::fromMimeSource("formRefresh.png")),
+		tr("Re&fresh"), tr("F5"), this);
+
+	m_pNewGroupAction->setToolTip(tr("New Group"));
+	m_pNewItemAction->setToolTip(tr("New Instrument"));
+	m_pEditItemAction->setToolTip(tr("Edit"));
+	m_pRenameAction->setToolTip(tr("Rename"));
+	m_pDeleteAction->setToolTip(tr("Delete"));
+	m_pRefreshAction->setToolTip(tr("Refresh"));
 
 	QObject::connect(m_pNewGroupAction,
 		SIGNAL(activated()),
@@ -312,14 +332,24 @@ qsamplerInstrumentItem *qsamplerInstrumentList::addItem (
 	qsamplerInstrument *pInstrument,
 	qsamplerInstrumentGroup *pParentGroup )
 {
+	// Check it there's already one instrument item
+	// with the very same key (bank, program);
+	// if yes, just remove it without prejudice...
 	qsamplerInstrumentItem *pItem = findItem(pInstrument);
-	if (pItem == NULL) {
-		if (pParentGroup)
-			pItem = new qsamplerInstrumentItem(pParentGroup, pInstrument);
-		else
-			pItem = new qsamplerInstrumentItem(this, pInstrument);
+	if (pItem)
+		delete pItem;
+
+	// Add the new item under proper group one, if any...
+	if (pParentGroup) {
+		pParentGroup->setOpen(true);
+		pItem = new qsamplerInstrumentItem(pParentGroup, pInstrument);
+	} else {
+		pItem = new qsamplerInstrumentItem(this, pInstrument);
 	}
+
+	// Set it as current selection...
 	QListView::setSelected(pItem, true);
+
 	return pItem;
 }
 
@@ -330,10 +360,12 @@ qsamplerInstrumentGroup *qsamplerInstrumentList::addGroup (
 {
 	qsamplerInstrumentGroup *pGroup = findGroup(sName);
 	if (pGroup == NULL) {
-		if (pParentGroup)
+		if (pParentGroup) {
+			pParentGroup->setOpen(true);
 			pGroup = new qsamplerInstrumentGroup(pParentGroup, sName);
-		else
+		} else {
 			pGroup = new qsamplerInstrumentGroup(this, sName);
+		}
 	}
 	QListView::setSelected(pGroup, true);
 	return pGroup;
@@ -397,16 +429,59 @@ qsamplerInstrumentGroup *qsamplerInstrumentList::groupItem (
 // Add a new group item below the current one.
 void qsamplerInstrumentList::newGroupSlot (void)
 {
-	qsamplerInstrumentGroup *pParentGroup
-		= groupItem(QListView::selectedItem());
 	qsamplerInstrumentGroup *pNewGroup
-		= addGroup(tr("New Group"), pParentGroup);
-	if (pParentGroup)
-		pParentGroup->setOpen(true);
+		= addGroup(tr("New Group"), groupItem(QListView::selectedItem()));
 	if (pNewGroup)
 		pNewGroup->startRename(0);
 
 	selectionChangedSlot();
+}
+
+
+// Map selector.
+void qsamplerInstrumentList::setMidiMap ( int iMidiMap )
+{
+	if (iMidiMap < 0)
+		iMidiMap = LSCP_MIDI_MAP_ALL;
+
+	m_iMidiMap = iMidiMap;
+}
+
+int qsamplerInstrumentList::midiMap (void) const
+{
+	return m_iMidiMap;
+}
+
+
+// List actions accessors.
+QAction *qsamplerInstrumentList::newGroupAction (void) const
+{
+	return m_pNewGroupAction;
+}
+
+QAction *qsamplerInstrumentList::newItemAction (void) const
+{
+	return m_pNewItemAction;
+}
+
+QAction *qsamplerInstrumentList::editItemAction (void) const
+{
+	return m_pEditItemAction;
+}
+
+QAction *qsamplerInstrumentList::renameAction (void) const
+{
+	return m_pRenameAction;
+}
+
+QAction *qsamplerInstrumentList::deleteAction (void) const
+{
+	return m_pDeleteAction;
+}
+
+QAction *qsamplerInstrumentList::refreshAction (void) const
+{
+	return m_pRefreshAction;
 }
 
 
@@ -422,21 +497,12 @@ void qsamplerInstrumentList::newItemSlot (void)
 		return;
 	}
 
-	// Check it there's already one instrument item
-	// with the very same key (bank, program);
-	// if yes, just remove it without prejudice...
-	qsamplerInstrumentItem *pItem = findItem(pInstrument);
-	if (pItem)
-		delete pItem;
-
+	// Commit...
 	pInstrument->mapInstrument();
+	// add new item to the tree...
+	addItem(pInstrument, groupItem(QListView::selectedItem()));
+	// Notify we've changes...
 	emit instrumentsChanged();
-
-	qsamplerInstrumentGroup *pParentGroup
-		= groupItem(QListView::selectedItem());
-	addItem(pInstrument, pParentGroup);
-	if (pParentGroup)
-		pParentGroup->setOpen(true);
 
 	selectionChangedSlot();
 }
@@ -449,15 +515,40 @@ void qsamplerInstrumentList::editItemSlot (void)
 	if (pListItem == NULL)
 		return;
 	if (pListItem->rtti() == Item) {
+		qsamplerInstrument *pInstrument = NULL;
 		qsamplerInstrumentItem *pItem
 			= static_cast<qsamplerInstrumentItem *> (pListItem);
-		if (pItem && pItem->instrument()) {
+		if (pItem)
+			pInstrument = pItem->instrument();
+		if (pInstrument) {
+			// Save current key values...
+			int iMap  = pInstrument->map();
+			int iBank = pInstrument->bank();
+			int iProg = pInstrument->prog();
+			// Do the edit dance...
 			qsamplerInstrumentForm form(this);
-			form.setup(pItem->instrument());
+			form.setup(pInstrument);
 			if (form.exec()) {
-				pItem->instrument()->mapInstrument();
+				// Commit...
+				pInstrument->mapInstrument();
+				// Check whether we changed instrument key...
+				if (iMap  == pInstrument->map()  &&
+					iBank == pInstrument->bank() &&
+					iProg == pInstrument->prog()) {
+					// just update tree item...
+					pItem->update();
+				} else {
+					// Change item tree, whether applicable...
+					if (m_iMidiMap < 0 || m_iMidiMap == pInstrument->map()) {
+						// Add new brand item into view...
+						addItem(pInstrument, groupItem(pListItem));
+					} else {
+						// Just remove/hide old one.
+						delete pItem;
+					}
+				}
+				// Notify we've changes...
 				emit instrumentsChanged();
-				pItem->update();
 			}
 		}
 	}
@@ -594,7 +685,7 @@ void qsamplerInstrumentList::refresh (void)
 
 	qsamplerInstrumentItem *pItem = NULL;
 	lscp_midi_instrument_t *pInstrs
-		= ::lscp_list_midi_instruments(pMainForm->client(), LSCP_MIDI_MAP_ALL);
+		= ::lscp_list_midi_instruments(pMainForm->client(), m_iMidiMap);
 	for (int iInstr = 0; pInstrs && pInstrs[iInstr].map >= 0; ++iInstr) {
 		int iMap  = pInstrs[iInstr].map;
 		int iBank = pInstrs[iInstr].bank;
