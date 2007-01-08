@@ -28,8 +28,11 @@
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
+#include <qapplication.h>
 #include <qmessagebox.h>
+#include <qeventloop.h>
 #include <qaction.h>
+#include <qcursor.h>
 #include <qfileinfo.h>
 #include <qpopupmenu.h>
 
@@ -336,8 +339,15 @@ qsamplerInstrumentItem *qsamplerInstrumentList::addItem (
 	// with the very same key (bank, program);
 	// if yes, just remove it without prejudice...
 	qsamplerInstrumentItem *pItem = findItem(pInstrument);
-	if (pItem)
+	if (pItem) {
+		// If exactly the same, just update view and bail out...
+		if (pItem->instrument() == pInstrument) {
+			pItem->update();
+			return pItem;
+		}
+		// Remove it, as instrument keys must be unique.
 		delete pItem;
+	}
 
 	// Add the new item under proper group one, if any...
 	if (pParentGroup) {
@@ -683,6 +693,9 @@ void qsamplerInstrumentList::refresh (void)
 	if (pMainForm->client() == NULL)
 		return;
 
+	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+	// Load the whole bunch of instrument items...
 	qsamplerInstrumentItem *pItem = NULL;
 	lscp_midi_instrument_t *pInstrs
 		= ::lscp_list_midi_instruments(pMainForm->client(), m_iMidiMap);
@@ -694,7 +707,11 @@ void qsamplerInstrumentList::refresh (void)
 			= new qsamplerInstrument(iMap, iBank, iProg);
 		if (pInstrument->getInstrument())
 			pItem = new qsamplerInstrumentItem(this, pInstrument, pItem);
+		// Try to keep it snappy :)
+		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 	}
+
+	QApplication::restoreOverrideCursor();
 
 	if (pInstrs == NULL && ::lscp_client_get_errno(pMainForm->client())) {
 		pMainForm->appendMessagesClient("lscp_list_midi_instruments");
