@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -341,10 +341,10 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 	updateInstrumentName(false);
 
     // MIDI Port/Channel...
-    if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
-        MidiPortChannelTextLabel->setText(QString("%1 / *").arg(m_pChannel->midiPort()));
-    else
-        MidiPortChannelTextLabel->setText(QString("%1 / %2").arg(m_pChannel->midiPort()).arg(m_pChannel->midiChannel() + 1));
+	if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
+		MidiPortChannelTextLabel->setText(tr("All"));
+	else
+		MidiPortChannelTextLabel->setText(QString::number(m_pChannel->midiChannel() + 1));
 
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();
