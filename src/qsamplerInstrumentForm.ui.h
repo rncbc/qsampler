@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -130,7 +130,7 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	// It might be no maps around...
 	bool bMapEnabled = (MapComboBox->count() > 0);
 	MapTextLabel->setEnabled(bMapEnabled);
-	MapComboBox->setEnabled(bNew && bMapEnabled);
+	MapComboBox->setEnabled(bMapEnabled);
 
 	// Instrument bank/program...
 	int iBank = (bNew ? pOptions->iMidiBank : m_pInstrument->bank());
@@ -141,14 +141,6 @@ void qsamplerInstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	}
 	BankSpinBox->setValue(iBank);
 	ProgSpinBox->setValue(iProg);
-	// Spacial hack to avoid changes on the key...
-	if (bNew) {
-		BankSpinBox->setRange(0, 16383);
-		ProgSpinBox->setRange(1, 128);
-	} else {
-		BankSpinBox->setRange(iBank, iBank);
-		ProgSpinBox->setRange(iProg, iProg);
-	}
 
 	// Instrument name...
 	NameLineEdit->setText(m_pInstrument->name());
@@ -290,7 +282,6 @@ void qsamplerInstrumentForm::accept (void)
 		return;
 
 	if (m_iDirtyCount > 0) {
-		m_pInstrument->setMap(MapComboBox->currentItem());
 		m_pInstrument->setMap(MapComboBox->currentItem());
 		m_pInstrument->setBank(BankSpinBox->value());
 		m_pInstrument->setProg(ProgSpinBox->value() - 1);

@@ -2,7 +2,7 @@
 //
 // ui.h extension file, included from the uic-generated form implementation.
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -625,36 +625,6 @@ bool qsamplerMainForm::closeSession ( bool bForce )
 }
 
 
-// Reset current session.
-bool qsamplerMainForm::resetSession (void)
-{
-#ifdef CONFIG_MIDI_INSTRUMENT
-	// Reset all MIDI instrument mapping, if any.
-	int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
-	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; ++iMap) {
-		int iMidiMap = piMaps[iMap];
-		if (::lscp_clear_midi_instruments(m_pClient, iMidiMap) != LSCP_OK)
-			appendMessagesClient("lscp_clear_midi_instruments");
-		if (::lscp_remove_midi_instrument_map(m_pClient, iMidiMap) != LSCP_OK)
-			appendMessagesClient("lscp_remove_midi_instrument_map");
-	}
-	// Check for errors...
-	if (piMaps == NULL && ::lscp_client_get_errno(m_pClient))
-		appendMessagesClient("lscp_list_midi_instrument_maps");
-#endif	// CONFIG_MIDI_INSTRUMENT
-
-	// Do the actual sampler reset...
-	if (::lscp_reset_sampler(m_pClient) != LSCP_OK) {
-		appendMessagesClient("lscp_reset_sampler");
-		appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
-		return false;
-	}
-
-	// Done.
-	return true;
-}
-
-
 // Load a session from specific file path.
 bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 {
@@ -681,22 +651,15 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 		iLine++;
         // If not empty, nor a comment, call the server...
         if (!sCommand.isEmpty() && sCommand[0] != '#') {
-			// HACK: A very special trap for the global RESET command...
-			if (sCommand == "RESET") {
-				// Do our own reset...
-				if (!resetSession())
-					iErrors++;
-			} else {
-				// Remember that, no matter what,
-				// all LSCP commands are CR/LF terminated.
-				sCommand += "\r\n";
-				if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
-					appendMessagesColor(QString("%1(%2): %3")
-						.arg(QFileInfo(sFilename).fileName()).arg(iLine)
-						.arg(sCommand.simplifyWhiteSpace()), "#996633");
-					appendMessagesClient("lscp_client_query");
-					iErrors++;
-				}
+			// Remember that, no matter what,
+			// all LSCP commands are CR/LF terminated.
+			sCommand += "\r\n";
+			if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
+				appendMessagesColor(QString("%1(%2): %3")
+					.arg(QFileInfo(sFilename).fileName()).arg(iLine)
+					.arg(sCommand.simplifyWhiteSpace()), "#996633");
+				appendMessagesClient("lscp_client_query");
+				iErrors++;
 			}
         }
         // Try to make it snappy :)
@@ -915,10 +878,9 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 			// Try to keep it snappy :)
 			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
 		}
+		ts << endl;
 		// Check for errors...
-		if (pInstrs)
-			ts << endl;
-		else if (::lscp_client_get_errno(m_pClient)) {
+		if (pInstrs == NULL && ::lscp_client_get_errno(m_pClient)) {
 			appendMessagesClient("lscp_list_midi_instruments");
 			iErrors++;
 		}
@@ -1096,8 +1058,12 @@ void qsamplerMainForm::fileReset (void)
 		return;
 
     // Just do the reset, after closing down current session...
-	if (!resetSession())
+	// Do the actual sampler reset...
+	if (::lscp_reset_sampler(m_pClient) != LSCP_OK) {
+		appendMessagesClient("lscp_reset_sampler");
+		appendMessagesError(tr("Could not reset sampler instance.\n\nSorry."));
 		return;
+	}
 
     // Log this.
     appendMessages(tr("Sampler reset."));
@@ -1648,7 +1614,7 @@ void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip 
 void qsamplerMainForm::updateSession (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
-	// FIXME Make some room for default instrument maps...
+	// FIXME: Make some room for default instrument maps...
 	int iMaps = ::lscp_get_midi_instrument_maps(m_pClient);
 	if (iMaps < 0)
 		appendMessagesClient("lscp_get_midi_instrument_maps");

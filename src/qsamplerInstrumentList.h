@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2005, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -129,6 +129,18 @@ public:
 	qsamplerInstrumentItem  *findItem(
 		qsamplerInstrument *pInstrument) const;
 
+	// Map selector.
+	void setMidiMap(int iMidiMap);
+	int midiMap() const;
+
+	// List actions accessors.
+	QAction *newGroupAction() const;
+	QAction *newItemAction() const;
+	QAction *editItemAction() const;
+	QAction *renameAction() const;
+	QAction *deleteAction() const;
+	QAction *refreshAction() const;
+
 signals:
 
 	// Instrument map/session change signal.
@@ -178,6 +190,9 @@ private:
 	QAction *m_pRenameAction;
 	QAction *m_pDeleteAction;
 	QAction *m_pRefreshAction;
+
+	// Current map selection.
+	int m_iMidiMap;
 };
 
 
