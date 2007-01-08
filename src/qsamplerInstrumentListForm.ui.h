@@ -25,7 +25,6 @@
 #include "qsamplerMainForm.h"
 #include "qsamplerOptions.h"
 
-#include <qapplication.h>
 #include <qcombobox.h>
 #include <qtooltip.h>
 
@@ -93,8 +92,6 @@ void qsamplerInstrumentListForm::refreshInstruments (void)
 	if (pOptions == NULL)
 		return;
 
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	// Get/save current map selection...
 	int iMap = m_pMapComboBox->currentItem();
 	if (iMap < 0 || m_pMapComboBox->count() < 2)
@@ -111,8 +108,6 @@ void qsamplerInstrumentListForm::refreshInstruments (void)
 	m_pMapComboBox->setCurrentItem(iMap);
 	m_pMapComboBox->setEnabled(m_pMapComboBox->count() > 1);
 
-	QApplication::restoreOverrideCursor();
-
 	activateMap(iMap);
 }
 
@@ -128,16 +123,12 @@ void qsamplerInstrumentListForm::activateMap ( int iMap )
 	if (pOptions == NULL)
 		return;
 
-	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
 	int iMidiMap = iMap - 1;
 	if (iMidiMap >= 0)
 		pOptions->iMidiMap = iMidiMap;
 
 	InstrumentList->setMidiMap(iMidiMap);
 	InstrumentList->refresh();
-
-	QApplication::restoreOverrideCursor();
 }
 
 
