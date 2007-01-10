@@ -341,10 +341,12 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 	updateInstrumentName(false);
 
     // MIDI Port/Channel...
+	QString sMidiPortChannel = QString::number(m_pChannel->midiPort()) + " / ";
 	if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
-		MidiPortChannelTextLabel->setText(tr("All"));
+		sMidiPortChannel += tr("All");
 	else
-		MidiPortChannelTextLabel->setText(QString::number(m_pChannel->midiChannel() + 1));
+		sMidiPortChannel += QString::number(m_pChannel->midiChannel() + 1);
+	MidiPortChannelTextLabel->setText(sMidiPortChannel);
 
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();
