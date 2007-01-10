@@ -142,8 +142,10 @@ void qsamplerMainForm::init (void)
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);
     m_pWorkspace->setScrollBarsEnabled(true);
-    // Set the activation connection.
-    QObject::connect(m_pWorkspace, SIGNAL(windowActivated(QWidget *)), this, SLOT(stabilizeForm()));
+	// Set the activation connection.
+	QObject::connect(m_pWorkspace,
+		SIGNAL(windowActivated(QWidget *)),
+		SLOT(stabilizeForm()));
     // Make it shine :-)
     setCentralWidget(m_pWorkspace);
 
@@ -253,7 +255,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     updateMessagesLimit();
     updateMessagesCapture();
     // Set the visibility signal.
-    QObject::connect(m_pMessages,
+	QObject::connect(m_pMessages,
 		SIGNAL(visibilityChanged(bool)),
 		SLOT(stabilizeForm()));
 
@@ -1915,7 +1917,9 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
 
     // Actual channel strip setup...
     pChannelStrip->setup(pChannel);
-    QObject::connect(pChannelStrip, SIGNAL(channelChanged(qsamplerChannelStrip *)), this, SLOT(channelStripChanged(qsamplerChannelStrip *)));
+	QObject::connect(pChannelStrip,
+		SIGNAL(channelChanged(qsamplerChannelStrip *)),
+		SLOT(channelStripChanged(qsamplerChannelStrip *)));
     // Set some initial aesthetic options...
     if (m_pOptions) {
         // Background display effect...
@@ -2122,13 +2126,20 @@ void qsamplerMainForm::startServer (void)
     m_pServer = new QProcess(this);
 
     // Setup stdout/stderr capture...
-    //if (m_pOptions->bStdoutCapture) {
-        m_pServer->setCommunication(QProcess::Stdout | QProcess::Stderr | QProcess::DupStderr);
-        QObject::connect(m_pServer, SIGNAL(readyReadStdout()), this, SLOT(readServerStdout()));
-        QObject::connect(m_pServer, SIGNAL(readyReadStderr()), this, SLOT(readServerStdout()));
-    //}
-    // The unforgiveable signal communication...
-    QObject::connect(m_pServer, SIGNAL(processExited()), this, SLOT(processServerExit()));
+	//	if (m_pOptions->bStdoutCapture) {
+		m_pServer->setCommunication(
+			QProcess::Stdout | QProcess::Stderr | QProcess::DupStderr);
+		QObject::connect(m_pServer,
+			SIGNAL(readyReadStdout()),
+			SLOT(readServerStdout()));
+		QObject::connect(m_pServer,
+			SIGNAL(readyReadStderr()),
+			SLOT(readServerStdout()));
+	//	}
+	// The unforgiveable signal communication...
+	QObject::connect(m_pServer,
+		SIGNAL(processExited()),
+		SLOT(processServerExit()));
 
     // Build process arguments...
     m_pServer->setArguments(QStringList::split(' ', m_pOptions->sServerCmdLine));

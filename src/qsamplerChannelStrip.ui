@@ -209,13 +209,13 @@
                         <enum>ParentOrigin</enum>
                     </property>
                     <property name="text">
-                        <string>--</string>
+                        <string>-- / --</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignTop|AlignRight</set>
+                        <set>AlignTop|AlignHCenter</set>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>MIDI Channel</string>
+                        <string>MIDI port / channel</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="1" column="1">
@@ -245,7 +245,7 @@
                         <string>--</string>
                     </property>
                     <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
+                        <set>AlignCenter</set>
                     </property>
                     <property name="toolTip" stdset="0">
                         <string>Instrument load status</string>

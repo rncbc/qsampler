@@ -6,8 +6,7 @@ ChangeLog
 CVS HEAD
 
 * Sampler channel setup dialog does not mandate for valid nor
-  existing instrument file name; dropped MIDI port from sampler
-  channel strip display, only MIDI channel is now displayed.
+  existing instrument file name.
 
 * Revised error verbosity in general and on session load/save;
   hour-glass wait cursor is now displayed on session load/save;
