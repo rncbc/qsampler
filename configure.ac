@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.3.19, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.3.20, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
@@ -196,6 +196,22 @@ fi
 AC_CHECK_LIB(lscp, lscp_map_midi_instrument, [ac_midi_instrument="yes"], [ac_midi_instrument="no"])
 if test "x$ac_midi_instrument" = "xyes"; then
   AC_DEFINE(CONFIG_MIDI_INSTRUMENT, 1, [Define if MIDI instrument mapping is available.])
+fi
+
+AC_CHECK_LIB(lscp, lscp_create_fxsend, [ac_fxsend="yes"], [ac_fxsend="no"])
+if test "x$ac_fxsend" = "xyes"; then
+  AC_DEFINE(CONFIG_FXSEND, 1, [Define if FX sends is available.])
+fi
+
+AC_CACHE_CHECK([for audio_routing array type],
+  ac_audio_routing, [
+  AC_TRY_COMPILE([#include "lscp/client.h"], [
+	lscp_channel_info_t info;
+	char ch = info.audio_routing[0][0];
+    ], ac_audio_routing="no", ac_audio_routing="yes")
+])
+if test "x$ac_audio_routing" = "xyes"; then
+   AC_DEFINE(CONFIG_AUDIO_ROUTING, 1, [Define if audio_routing is an integer array.])
 fi
 
 # Check for optional libraries.
