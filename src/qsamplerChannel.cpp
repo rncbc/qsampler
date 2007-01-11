@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -639,10 +639,15 @@ bool qsamplerChannel::updateChannelInfo (void)
 
 	// Set the audio routing map.
 	m_audioRouting.clear();
-	char **ppszRouting = pChannelInfo->audio_routing;
-	for (int i = 0; ppszRouting && ppszRouting[i]; i++) {
-		m_audioRouting[i] = ::atoi(ppszRouting[i]);
-	}
+#ifdef CONFIG_AUDIO_ROUTING
+	int *piAudioRouting = pChannelInfo->audio_routing;
+	for (int i = 0; piAudioRouting && piAudioRouting[i] >= 0; i++)
+		m_audioRouting[i] = piAudioRouting[i];
+#else
+	char **ppszAudioRouting = pChannelInfo->audio_routing;
+	for (int i = 0; ppszAudioRouting && ppszAudioRouting[i]; i++)
+		m_audioRouting[i] = ::atoi(ppszAudioRouting[i]);
+#endif
 
 	return true;
 }

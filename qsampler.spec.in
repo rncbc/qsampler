@@ -13,7 +13,7 @@ Group:		Sound
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://qsampler.sourceforge.net/
 BuildRoot:	/var/tmp/%{name}-%{version}-buildroot
-Requires:	liblscp >= 0.5.0, libgig >= 3.1.0
+Requires:	liblscp >= 0.5.2, libgig >= 3.1.0
 
 %description
 QSampler is a LinuxSampler GUI front-end application written in C++ around
