@@ -896,9 +896,6 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	}
 #endif	// CONFIG_MIDI_INSTRUMENT
 
-#ifdef CONFIG_FXSEND
-	int iFxSend = 0;
-#endif
 	// Sampler channel mapping.
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
@@ -958,9 +955,11 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 #ifdef CONFIG_FXSEND
 				int iChannelID = pChannel->channelID();
 				int *piFxSends = ::lscp_list_fxsends(m_pClient, iChannelID);
-				for (int iFx = 0; piFxSends && piFxSends[iFx] >= 0; iFx++) {
-					lscp_fxsend_info_t *pFxSendInfo
-						= ::lscp_get_fxsend_info(m_pClient, iChannelID, piFxSends[iFx]);
+				for (int iFxSend = 0;
+						piFxSends && piFxSends[iFxSend] >= 0;
+							iFxSend++) {
+					lscp_fxsend_info_t *pFxSendInfo	= ::lscp_get_fxsend_info(
+						m_pClient, iChannelID, piFxSends[iFxSend]);
 					if (pFxSendInfo) {
 						ts << "CREATE FX_SEND " << iChannel
 							<< " " << pFxSendInfo->midi_controller;
@@ -968,13 +967,15 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 							ts << " '" << pFxSendInfo->name << "'";
 						ts << endl;
 						int *piRouting = pFxSendInfo->audio_routing;
-						for (int i = 0; piRouting && piRouting[i] >= 0; i++) {
-							ts << "SET FX_SEND AUDIO_OUTPUT_CHANNEL " << iChannel
+						for (int iAudioSrc = 0;
+								piRouting && piRouting[iAudioSrc] >= 0;
+									iAudioSrc++) {
+							ts << "SET FX_SEND AUDIO_OUTPUT_CHANNEL "
+								<< iChannel
 								<< " " << iFxSend
-								<< " " << i	<< " " << piRouting[i] << endl;
+								<< " " << iAudioSrc
+								<< " " << piRouting[iAudioSrc] << endl;
 						}
-						// Increment logical FX send identifier...
-						iFxSend++;
 					}	// Check for errors...
 					else if (::lscp_client_get_errno(m_pClient)) {
 						appendMessagesClient("lscp_get_fxsend_info");
