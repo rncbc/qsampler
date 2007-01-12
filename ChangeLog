@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Initial support for sampler channel FX sends, while saving
+  the session state, only at code-level.
+  
 * Sampler channel setup dialog does not mandate for valid nor
   existing instrument file name.
 
