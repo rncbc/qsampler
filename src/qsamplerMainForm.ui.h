@@ -896,10 +896,14 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	}
 #endif	// CONFIG_MIDI_INSTRUMENT
 
+#ifdef CONFIG_FXSEND
+	int iFxSend = 0;
+#endif
 	// Sampler channel mapping.
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        qsamplerChannelStrip *pChannelStrip
+			= static_cast<qsamplerChannelStrip *> (wlist.at(iChannel));
         if (pChannelStrip) {
             qsamplerChannel *pChannel = pChannelStrip->channel();
             if (pChannel) {
@@ -949,6 +953,33 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				if (pChannel->midiMap() >= 0) {
 					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannel
 						<< " " << midiInstrumentMap[pChannel->midiMap()] << endl;
+				}
+#endif
+#ifdef CONFIG_FXSEND
+				int iChannelID = pChannel->channelID();
+				int *piFxSends = ::lscp_list_fxsends(m_pClient, iChannelID);
+				for (int iFx = 0; piFxSends && piFxSends[iFx] >= 0; iFx++) {
+					lscp_fxsend_info_t *pFxSendInfo
+						= ::lscp_get_fxsend_info(m_pClient, iChannelID, piFxSends[iFx]);
+					if (pFxSendInfo) {
+						ts << "CREATE FX_SEND " << iChannel
+							<< " " << pFxSendInfo->midi_controller;
+						if (pFxSendInfo->name)
+							ts << " '" << pFxSendInfo->name << "'";
+						ts << endl;
+						int *piRouting = pFxSendInfo->audio_routing;
+						for (int i = 0; piRouting && piRouting[i] >= 0; i++) {
+							ts << "SET FX_SEND AUDIO_OUTPUT_CHANNEL " << iChannel
+								<< " " << iFxSend
+								<< " " << i	<< " " << piRouting[i] << endl;
+						}
+						// Increment logical FX send identifier...
+						iFxSend++;
+					}	// Check for errors...
+					else if (::lscp_client_get_errno(m_pClient)) {
+						appendMessagesClient("lscp_get_fxsend_info");
+						iErrors++;
+					}
 				}
 #endif
                 ts << endl;
@@ -1497,6 +1528,16 @@ void qsamplerMainForm::helpAbout (void)
 #ifndef CONFIG_MUTE_SOLO
     sText += "<small><font color=\"red\">";
     sText += tr("Sampler channel Mute/Solo support disabled.");
+    sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_AUDIO_ROUTING
+    sText += "<small><font color=\"red\">";
+    sText += tr("LSCP (liblscp) audio_routing support disabled.");
+    sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_FXSEND
+    sText += "<small><font color=\"red\">";
+    sText += tr("Sampler channel Effect Sends support disabled.");
     sText += "</font></small><br />";
 #endif
 #ifndef CONFIG_MIDI_INSTRUMENT
