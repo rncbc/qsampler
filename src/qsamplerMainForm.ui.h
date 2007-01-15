@@ -976,6 +976,11 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 								<< " " << iAudioSrc
 								<< " " << piRouting[iAudioSrc] << endl;
 						}
+#ifdef CONFIG_FXSEND_LEVEL
+						ts << "SET FX_SEND LEVEL " << iChannel
+							<< " " << iFxSend
+							<< " " << pFxSendInfo->level << endl;							
+#endif
 					}	// Check for errors...
 					else if (::lscp_client_get_errno(m_pClient)) {
 						appendMessagesClient("lscp_get_fxsend_info");
