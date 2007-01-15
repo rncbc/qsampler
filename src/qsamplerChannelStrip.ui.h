@@ -365,10 +365,10 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     // Mute/Solo button state coloring...
     const QColor& rgbNormal = ChannelSetupPushButton->paletteBackgroundColor();
     bool bMute = m_pChannel->channelMute();
-    ChannelMutePushButton->setPaletteBackgroundColor(bMute ? Qt::red : rgbNormal);
+    ChannelMutePushButton->setPaletteBackgroundColor(bMute ? Qt::yellow : rgbNormal);
     ChannelMutePushButton->setDown(bMute);
     bool bSolo = m_pChannel->channelSolo();
-    ChannelSoloPushButton->setPaletteBackgroundColor(bSolo ? Qt::yellow : rgbNormal);
+    ChannelSoloPushButton->setPaletteBackgroundColor(bSolo ? Qt::cyan : rgbNormal);
     ChannelSoloPushButton->setDown(bSolo);
 #else
 	ChannelMutePushButton->setEnabled(false);

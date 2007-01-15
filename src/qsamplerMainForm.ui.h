@@ -58,6 +58,19 @@
 #include <gig.h>
 #endif
 
+// Needed for lroundf()
+#include <math.h>
+
+#ifndef CONFIG_ROUND
+static inline long lroundf ( float x )
+{
+	if (x >= 0.0f)
+		return long(x + 0.5f);
+	else
+		return long(x - 0.5f);
+}
+#endif
+
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    200
 
@@ -144,24 +157,25 @@ void qsamplerMainForm::init (void)
 
 #ifdef CONFIG_VOLUME
     // Make some extras into the toolbar...
-	channelsToolbar->addSeparator();
 	const QString& sVolumeText = tr("Master volume");
 	m_iVolumeChanging = 0;
 	// Volume slider...
+	channelsToolbar->addSeparator();
 	m_pVolumeSlider = new QSlider(Qt::Horizontal, channelsToolbar);
-//	m_pVolumeSlider->setTickmarks(QSlider::Below);
-//	m_pVolumeSlider->setTickInterval(10);
+	m_pVolumeSlider->setTickmarks(QSlider::Below);
+	m_pVolumeSlider->setTickInterval(10);
 	m_pVolumeSlider->setPageStep(10);
 	m_pVolumeSlider->setRange(0, 100);
 	m_pVolumeSlider->setMaximumHeight(22);
 	m_pVolumeSlider->setMinimumWidth(160);
-	m_pVolumeSlider->setSizePolicy(
-		QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	QToolTip::add(m_pVolumeSlider, sVolumeText);
 	QObject::connect(m_pVolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
+	channelsToolbar->setHorizontallyStretchable(true);
+	channelsToolbar->setStretchableWidget(m_pVolumeSlider);
 	// Volume spin-box
+	channelsToolbar->addSeparator();
 	m_pVolumeSpinBox = new QSpinBox(channelsToolbar);
 	m_pVolumeSpinBox->setSuffix(" %");
 	m_pVolumeSpinBox->setRange(0, 100);
@@ -1709,7 +1723,7 @@ void qsamplerMainForm::volumeChanged ( int iVolume )
 	m_iVolumeChanging++;
 
 	// Update the toolbar widgets...
-	if (m_pVolumeSlider->value() != iVolume)
+	if (m_pVolumeSlider->value()  != iVolume)
 		m_pVolumeSlider->setValue(iVolume);
 	if (m_pVolumeSpinBox->value() != iVolume)
 		m_pVolumeSpinBox->setValue(iVolume);
@@ -1719,7 +1733,7 @@ void qsamplerMainForm::volumeChanged ( int iVolume )
 	if (::lscp_set_volume(m_pClient, fVolume) == LSCP_OK)
 		appendMessages(QObject::tr("Volume: %1.").arg(fVolume));
 	else
-		appendMessagesClient("lscp_set_channel_volume");
+		appendMessagesClient("lscp_set_volume");
 
 	m_iVolumeChanging--;
 
@@ -1750,7 +1764,7 @@ void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip 
 void qsamplerMainForm::updateSession (void)
 {
 #ifdef CONFIG_VOLUME
-	int iVolume = 100.0f * ::lscp_get_volume(m_pClient);
+	int iVolume = ::lroundf(100.0f * ::lscp_get_volume(m_pClient));
 	m_iVolumeChanging++;
 	m_pVolumeSlider->setValue(iVolume);
 	m_pVolumeSpinBox->setValue(iVolume);
