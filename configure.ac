@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.3.22, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.3.23, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
@@ -201,6 +201,16 @@ fi
 AC_CHECK_LIB(lscp, lscp_create_fxsend, [ac_fxsend="yes"], [ac_fxsend="no"])
 if test "x$ac_fxsend" = "xyes"; then
   AC_DEFINE(CONFIG_FXSEND, 1, [Define if FX sends is available.])
+  AC_CACHE_CHECK([for FX send level in lscp_fxsend_info_t],
+    ac_fxsend_level, [
+    AC_TRY_COMPILE([#include "lscp/client.h"], [
+	  lscp_fxsend_info_t info;
+	  info.level = 0.0f;
+      ], ac_fxsend_level="yes", ac_fxsend_level="no")
+  ])
+  if test "x$ac_fxsend_level" = "xyes"; then
+	  AC_DEFINE(CONFIG_FXSEND_LEVEL, 1, [Define if FX send level is available.])
+  fi
 fi
 
 AC_CACHE_CHECK([for audio_routing array type],

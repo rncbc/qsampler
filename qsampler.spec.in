@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 8
+%define release 9
 %define prefix  /usr/local
 
 Summary:	A LinuxSampler Qt GUI interface.
@@ -13,7 +13,7 @@ Group:		Sound
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://qsampler.sourceforge.net/
 BuildRoot:	/var/tmp/%{name}-%{version}-buildroot
-Requires:	liblscp >= 0.5.2, libgig >= 3.1.0
+Requires:	liblscp >= 0.5.3, libgig >= 3.1.0
 
 %description
 QSampler is a LinuxSampler GUI front-end application written in C++ around
@@ -45,6 +45,8 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 %{prefix}/share/icons/qsampler.png
 
 %changelog
+* Mon Jan 15 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Added sampler channel FX send support at session save code-level.
 * Thu Dec 17 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Added preliminary MIDI instrument mapping support.
 * Thu Jun 01 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>

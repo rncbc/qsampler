@@ -1,6 +1,6 @@
 
 #define PACKAGE_NAME    "Qsampler"
-#define PACKAGE_VERSION "0.1.3.22"
+#define PACKAGE_VERSION "0.1.3.23"
 
 #define CONFIG_PREFIX   "."
 #define CONFIG_DEBUG    1
@@ -12,6 +12,7 @@
 #define CONFIG_MIDI_INSTRUMENT  1
 #define CONFIG_AUDIO_ROUTING    1
 #define CONFIG_FXSEND           1
+#define CONFIG_FXSEND_LEVEL     1
 
 #undef  HAVE_SIGNAL_H
 
