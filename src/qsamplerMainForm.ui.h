@@ -32,8 +32,11 @@
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qstatusbar.h>
+#include <qslider.h>
+#include <qspinbox.h>
 #include <qlabel.h>
 #include <qtimer.h>
+#include <qtooltip.h>
 
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
@@ -139,6 +142,35 @@ void qsamplerMainForm::init (void)
 	::signal(SIGPIPE, SIG_IGN);
 #endif
 
+#ifdef CONFIG_VOLUME
+    // Make some extras into the toolbar...
+	channelsToolbar->addSeparator();
+	const QString& sVolumeText = tr("Master volume");
+	m_iVolumeChanging = 0;
+	// Volume slider...
+	m_pVolumeSlider = new QSlider(Qt::Horizontal, channelsToolbar);
+//	m_pVolumeSlider->setTickmarks(QSlider::Below);
+//	m_pVolumeSlider->setTickInterval(10);
+	m_pVolumeSlider->setPageStep(10);
+	m_pVolumeSlider->setRange(0, 100);
+	m_pVolumeSlider->setMaximumHeight(22);
+	m_pVolumeSlider->setMinimumWidth(160);
+	m_pVolumeSlider->setSizePolicy(
+		QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+	QToolTip::add(m_pVolumeSlider, sVolumeText);
+	QObject::connect(m_pVolumeSlider,
+		SIGNAL(valueChanged(int)),
+		SLOT(volumeChanged(int)));
+	// Volume spin-box
+	m_pVolumeSpinBox = new QSpinBox(channelsToolbar);
+	m_pVolumeSpinBox->setSuffix(" %");
+	m_pVolumeSpinBox->setRange(0, 100);
+	QToolTip::add(m_pVolumeSpinBox, sVolumeText);
+	QObject::connect(m_pVolumeSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(volumeChanged(int)));
+#endif
+
     // Make it an MDI workspace.
     m_pWorkspace = new QWorkspace(this);
     m_pWorkspace->setScrollBarsEnabled(true);
@@ -215,6 +247,11 @@ void qsamplerMainForm::destroy (void)
     if (m_statusItem[QSAMPLER_STATUS_SESSION])
         delete m_statusItem[QSAMPLER_STATUS_SESSION];
 
+#ifdef CONFIG_VOLUME
+	delete m_pVolumeSpinBox;
+	delete m_pVolumeSlider;
+#endif
+
     // Delete recentfiles menu.
     if (m_pRecentFilesMenu)
         delete m_pRecentFilesMenu;
@@ -286,6 +323,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
     m_pOptions->loadWidgetGeometry(m_pDeviceForm);
 
     // Final startup stabilization...
+    updateMaxVolume();
     updateRecentFilesMenu();
     stabilizeForm();
 
@@ -995,6 +1033,12 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
         QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
     }
 
+#ifdef CONFIG_VOLUME
+	ts << "# " << tr("Global volume level") << endl;
+	ts << "SET VOLUME " << ::lscp_get_volume(m_pClient) << endl;
+	ts << endl;
+#endif
+
     // Ok. we've wrote it.
     file.close();
 
@@ -1546,6 +1590,11 @@ void qsamplerMainForm::helpAbout (void)
     sText += tr("Sampler channel Effect Sends support disabled.");
     sText += "</font></small><br />";
 #endif
+#ifndef CONFIG_VOLUME
+    sText += "<small><font color=\"red\">";
+    sText += tr("Global volume support disabled.");
+    sText += "</font></small><br />";
+#endif
 #ifndef CONFIG_MIDI_INSTRUMENT
     sText += "<small><font color=\"red\">";
     sText += tr("MIDI instrument mapping support disabled.");
@@ -1615,6 +1664,12 @@ void qsamplerMainForm::stabilizeForm (void)
     viewDevicesAction->setEnabled(bHasClient);
     channelsArrangeAction->setEnabled(bHasChannel);
 
+#ifdef CONFIG_VOLUME
+	// Toolbar widgets are also affected...
+    m_pVolumeSlider->setEnabled(bHasClient);
+    m_pVolumeSpinBox->setEnabled(bHasClient);
+#endif
+
     // Client/Server status...
     if (bHasClient) {
         m_statusItem[QSAMPLER_STATUS_CLIENT]->setText(tr("Connected"));
@@ -1643,6 +1698,38 @@ void qsamplerMainForm::stabilizeForm (void)
 }
 
 
+// Global volume change receiver slot.
+void qsamplerMainForm::volumeChanged ( int iVolume )
+{
+#ifdef CONFIG_VOLUME
+
+	if (m_iVolumeChanging > 0)
+		return;
+	
+	m_iVolumeChanging++;
+
+	// Update the toolbar widgets...
+	if (m_pVolumeSlider->value() != iVolume)
+		m_pVolumeSlider->setValue(iVolume);
+	if (m_pVolumeSpinBox->value() != iVolume)
+		m_pVolumeSpinBox->setValue(iVolume);
+
+	// Do it as commanded...
+	float fVolume = 0.01f * float(iVolume);
+	if (::lscp_set_volume(m_pClient, fVolume) == LSCP_OK)
+		appendMessages(QObject::tr("Volume: %1.").arg(fVolume));
+	else
+		appendMessagesClient("lscp_set_channel_volume");
+
+	m_iVolumeChanging--;
+
+	m_iDirtyCount++;
+	stabilizeForm();
+
+#endif
+}
+
+
 // Channel change receiver slot.
 void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip )
 {
@@ -1662,6 +1749,13 @@ void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip 
 // Grab and restore current sampler channels session.
 void qsamplerMainForm::updateSession (void)
 {
+#ifdef CONFIG_VOLUME
+	int iVolume = 100.0f * ::lscp_get_volume(m_pClient);
+	m_iVolumeChanging++;
+	m_pVolumeSlider->setValue(iVolume);
+	m_pVolumeSpinBox->setValue(iVolume);
+	m_iVolumeChanging--;
+#endif
 #ifdef CONFIG_MIDI_INSTRUMENT
 	// FIXME: Make some room for default instrument maps...
 	int iMaps = ::lscp_get_midi_instrument_maps(m_pClient);
@@ -1821,6 +1915,13 @@ void qsamplerMainForm::updateMaxVolume (void)
 {
     if (m_pOptions == NULL)
         return;
+
+#ifdef CONFIG_VOLUME
+	m_iVolumeChanging++;
+	m_pVolumeSlider->setMaxValue(m_pOptions->iMaxVolume);
+	m_pVolumeSpinBox->setMaxValue(m_pOptions->iMaxVolume);
+	m_iVolumeChanging--;
+#endif
 
     // Full channel list update...
     QWidgetList wlist = m_pWorkspace->windowList();

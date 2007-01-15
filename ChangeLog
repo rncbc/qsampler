@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Master sampler volume slider/spinbox combo is now featured.
+
 * Initial support for sampler channel FX sends, while saving
   the session state, only at code-level.
   
