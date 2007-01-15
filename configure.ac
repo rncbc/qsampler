@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.3.23, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.3.24, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec)
@@ -222,6 +222,11 @@ AC_CACHE_CHECK([for audio_routing array type],
 ])
 if test "x$ac_audio_routing" = "xyes"; then
    AC_DEFINE(CONFIG_AUDIO_ROUTING, 1, [Define if audio_routing is an integer array.])
+fi
+
+AC_CHECK_LIB(lscp, lscp_set_volume, [ac_volume="yes"], [ac_volume="no"])
+if test "x$ac_volume" = "xyes"; then
+  AC_DEFINE(CONFIG_VOLUME, 1, [Define if global volume is available.])
 fi
 
 # Check for optional libraries.

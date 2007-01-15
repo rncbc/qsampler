@@ -47,6 +47,7 @@ if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
 %changelog
 * Mon Jan 15 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Added sampler channel FX send support at session save code-level.
+- Global sampler volume slider/spinbox combo is now featured.
 * Thu Dec 17 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Added preliminary MIDI instrument mapping support.
 * Thu Jun 01 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>

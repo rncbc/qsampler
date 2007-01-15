@@ -801,6 +801,8 @@
 <forwards>
     <forward>class QWorkspace;</forward>
     <forward>class QProcess;</forward>
+    <forward>class QSlider;</forward>
+    <forward>class QSpinBox;</forward>
     <forward>class QLabel;</forward>
     <forward>class qsamplerOptions;</forward>
     <forward>class qsamplerChannel;</forward>
@@ -820,13 +822,16 @@
     <variable access="private">QProcess *m_pServer;</variable>
     <variable access="private">int m_iStartDelay;</variable>
     <variable access="private">int m_iTimerDelay;</variable>
-    <variable access="private">int m_iTimerSlot;</variable>
+    <variable access="private">int m_iTimerSlot;</variable>	
     <variable access="private">QLabel *m_statusItem[5];</variable>
     <variable access="private">QPopupMenu *m_pRecentFilesMenu;</variable>
     <variable access="private">QPtrList&lt;qsamplerChannelStrip&gt; m_changedStrips;</variable>
     <variable access="private">qsamplerInstrumentListForm *m_pInstrumentListForm;</variable>
     <variable access="private">qsamplerDeviceForm *m_pDeviceForm;</variable>
     <variable access="private">static qsamplerMainForm *g_pMainForm;</variable>
+    <variable access="private">QSlider *m_pVolumeSlider;</variable>
+    <variable access="private">QSpinBox *m_pVolumeSpinBox;</variable>
+    <variable access="private">int m_iVolumeChanging;</variable>
 </variables>
 <slots>
     <slot specifier="non virtual">fileNew( void )</slot>
@@ -855,6 +860,7 @@
     <slot specifier="non virtual">helpAbout( void )</slot>
     <slot specifier="non virtual">sessionDirty( void )</slot>
     <slot specifier="non virtual">stabilizeForm( void )</slot>
+    <slot specifier="non virtual">volumeChanged( int iVolume )</slot>
     <slot specifier="non virtual">channelStripChanged( qsamplerChannelStrip *pChannelStrip )</slot>
     <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
     <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
