@@ -5,11 +5,15 @@ ChangeLog
 
 CVS HEAD
 
+* Channel button colors have changed: yellow for mute and
+  cyan for solo is now the rule, but note that this color
+  highlighting is only rendered on some widget styles.
+
 * Master sampler volume slider/spinbox combo is now featured.
 
 * Initial support for sampler channel FX sends, while saving
   the session state, only at code-level.
-  
+
 * Sampler channel setup dialog does not mandate for valid nor
   existing instrument file name.
 
