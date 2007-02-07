@@ -7,7 +7,7 @@ Standards-Version: 3.6.1
 
 Package: qsampler
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, liblscp, libgig, libqt3c102-mt
+Depends: ${shlibs:Depends}, ${misc:Depends}, liblscp, libgig
 Description: LinuxSampler GUI frontend based on the Qt toolkit
  QSampler is a LinuxSampler GUI front-end application written in C++ around
  the Qt3 toolkit using Qt Designer. At the moment it just wraps as a client
