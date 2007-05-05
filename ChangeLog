@@ -3,7 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-CVS HEAD
+0.1.4  2007-05-04 Almost another year has gone by.
 
 * Channel button colors have changed: yellow for mute and
   cyan for solo is now the rule, but note that this color
