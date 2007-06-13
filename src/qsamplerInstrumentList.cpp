@@ -638,7 +638,7 @@ void qsamplerInstrumentList::selectionChangedSlot (void)
 void qsamplerInstrumentList::activatedSlot ( QListViewItem *pListItem )
 {
 	// FIXME: Hope the list view item is the one selected.
-	if (pListItem->rtti() == Item)
+	if (pListItem && pListItem->rtti() == Item)
 		editItemSlot();
 }
 
