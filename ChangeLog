@@ -3,6 +3,11 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+CVS HEAD
+
+* Crash fix on double-clicking on a empty instrument list.
+
+
 0.1.4  2007-05-04 Almost another year has gone by.
 
 * Channel button colors have changed: yellow for mute and
