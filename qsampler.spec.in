@@ -1,7 +1,7 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 9
-%define prefix  /usr/local
+%define release 10
+%define prefix  @ac_prefix@
 
 Summary:	A LinuxSampler Qt GUI interface.
 Name:		%{name}
@@ -12,8 +12,18 @@ License:	GPL
 Group:		Sound
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://qsampler.sourceforge.net/
-BuildRoot:	/var/tmp/%{name}-%{version}-buildroot
+
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
 Requires:	liblscp >= 0.5.3, libgig >= 3.1.0
+
+Requires:	qt3 >= 3.1
+Requires:	liblscp >= 0.5.3
+Requires:	libgig >= 3.1.0
+
+BuildRequires:	qt3-devel >= 3.1
+BuildRequires:	liblscp-devel >= 0.5.3
+BuildRequires:	libgig-devel >= 3.1.0
 
 %description
 QSampler is a LinuxSampler GUI front-end application written in C++ around
@@ -21,30 +31,33 @@ the Qt3 toolkit using Qt Designer. For the moment it just wraps the client
 interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %prep
-
 %setup
-[ -f Makefile.cvs ] && make -f Makefile.cvs
+[ -f Makefile.cvs ] && %__make -f Makefile.cvs
 
 %build
 export PATH=$QTDIR/bin:$PATH
-./configure --prefix=%{prefix}
-make
+%configure
+%__make
 
 %install
-if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
-mkdir -p $RPM_BUILD_ROOT
-make prefix=$RPM_BUILD_ROOT%{prefix} install
+%makeinstall
 
 %clean
-if [ -d $RPM_BUILD_ROOT ]; then rm -rf $RPM_BUILD_ROOT; fi
+[ -d %{buildroot} -a "%{buildroot}" != "" ] && %__rm -rf  %{buildroot}
 
 %files
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
-%{prefix}/bin/qsampler
-%{prefix}/share/icons/qsampler.png
+%{_bindir}/%{name}
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/pixmaps/%{name}.png
 
 %changelog
+* Mon Jun 25 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Application icon is now installed to (prefix)/share/pixmaps.
+- Declared fundamental build and run-time requirements.
+- Destination install directory prefix is now in spec.
+- Spec is now a bit more openSUSE compliant.
 * Mon Jan 15 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Added sampler channel FX send support at session save code-level.
 - Global sampler volume slider/spinbox combo is now featured.
