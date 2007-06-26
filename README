@@ -36,11 +36,17 @@ and optionally as root:
 This procedure will end installing the following couple of files:
 
     ${prefix}/bin/qsampler
-    ${prefix}/share/icons/qsampler.png
+    ${prefix}/share/pixmaps/qsampler.png
+    ${prefix}/share/applications/qsampler.desktop
 
 Just launch ${prefix}/bin/qsampler and you're off (hopefully).
 
 Note that the default installation path ${prefix} is /usr/local.
+
+If you're checking out from CVS, you'll have to prepare the configure
+script just before you proceed with the above instructions:
+
+   make -f Makefile.cvs
 
 
 Configuration
