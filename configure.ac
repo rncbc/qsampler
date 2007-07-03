@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.4.3, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.4.4, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec qsampler.desktop)
