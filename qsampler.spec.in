@@ -9,13 +9,11 @@ Version:	%{version}
 Release:	%{release}
 Prefix:		%{prefix}
 License:	GPL
-Group:		Sound
+Group:		Productivity/Multimedia/Sound/Midi
 Source0:	%{name}-%{version}.tar.gz
 URL:		http://qsampler.sourceforge.net/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
-Requires:	liblscp >= 0.5.3, libgig >= 3.1.0
 
 Requires:	qt3 >= 3.1
 Requires:	liblscp >= 0.5.3
