@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>qsamplerChannelStrip</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
@@ -505,32 +505,32 @@
     <signal>channelChanged( qsamplerChannelStrip * )</signal>
 </signals>
 <slots>
-    <slot specifier="non virtual" returnType="bool">channelSetup( void )</slot>
+    <slot specifier="non virtual" returnType="bool">channelSetup()</slot>
     <slot specifier="non virtual" returnType="bool">channelMute( bool bMute )</slot>
     <slot specifier="non virtual" returnType="bool">channelSolo( bool bSolo )</slot>
     <slot>channelEdit()</slot>
-    <slot specifier="non virtual" returnType="bool">channelReset( void )</slot>
+    <slot specifier="non virtual" returnType="bool">channelReset()</slot>
     <slot specifier="non virtual">volumeChanged( int iVolume )</slot>
 </slots>
 <functions>
-    <function access="private" specifier="non virtual">init( void )</function>
-    <function access="private" specifier="non virtual">destroy( void )</function>
+    <function access="private" specifier="non virtual">init()</function>
+    <function access="private" specifier="non virtual">destroy()</function>
     <function access="private" specifier="non virtual" returnType="bool">decodeDragFile( const QMimeSource * pEvent, QString &amp; sInstrumentFile )</function>
     <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent * pDragEnterEvent )</function>
     <function access="private" specifier="non virtual">dropEvent( QDropEvent * pDropEvent )</function>
     <function specifier="non virtual">setup( qsamplerChannel * pChannel )</function>
-    <function specifier="non virtual" returnType="qsamplerChannel *">channel( void )</function>
-    <function specifier="non virtual" returnType="QFont">displayFont( void )</function>
+    <function specifier="non virtual" returnType="qsamplerChannel *">channel()</function>
+    <function specifier="non virtual" returnType="QFont">displayFont()</function>
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
     <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
     <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
     <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
     <function specifier="non virtual" returnType="bool">updateInstrumentName( bool bForce )</function>
-    <function specifier="non virtual" returnType="bool">updateChannelVolume( void )</function>
-    <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
-    <function specifier="non virtual" returnType="bool">updateChannelUsage( void )</function>
+    <function specifier="non virtual" returnType="bool">updateChannelVolume()</function>
+    <function specifier="non virtual" returnType="bool">updateChannelInfo()</function>
+    <function specifier="non virtual" returnType="bool">updateChannelUsage()</function>
     <function access="private" specifier="non virtual">contextMenuEvent( QContextMenuEvent * pEvent )</function>
-    <function specifier="non virtual">resetErrorCount( void )</function>
+    <function specifier="non virtual">resetErrorCount()</function>
 </functions>
 <pixmapinproject/>
 <layoutdefaults spacing="0" margin="0"/>

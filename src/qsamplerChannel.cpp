@@ -685,11 +685,12 @@ bool qsamplerChannel::editChannel (void)
 
 	if (::lscp_edit_instrument(pMainForm->client(), m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_edit_instrument");
-		appendMessagesError(
-			"Could not launch an appropriate instrument editor for the\n"
-			"given instrument! Make sure you have an appropriate\n"
-			"instrument editor like 'gigedit' installed and that it placed\n"
-			"its mandatory DLL file into the sampler's plugin directory."
+		appendMessagesError(QObject::tr(
+			"Could not launch an appropriate instrument editor "
+			"for the given instrument!\n"
+			"Make sure you have an appropriate instrument editor like"
+			"'gigedit' installed and that it placed its mandatory "
+			"DLL file into the sampler's plugin directory.")
 		);
 		return false;
 	}
@@ -698,10 +699,10 @@ bool qsamplerChannel::editChannel (void)
 
 	return true;
 #else
-	appendMessagesError(
-		"Sorry, QSampler was compiled for a version of liblscp which lacks\n"
-		"this feature. You may want to update liblscp and recompile\n"
-		"QSampler afterwards."
+	appendMessagesError(QObject::tr(
+		"Sorry, QSampler was compiled for a version of liblscp "
+		"which lacks this feature.\n"
+		"You may want to update liblscp and recompile QSampler afterwards.")
 	);
 	return false;
 #endif
