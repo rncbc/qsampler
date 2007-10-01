@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>qsamplerChannelStrip</class>
 <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
@@ -28,8 +28,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>720</width>
-            <height>48</height>
+            <width>795</width>
+            <height>56</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -351,6 +351,23 @@
                 <string>Channel volume</string>
             </property>
         </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>ChannelEditPushButton</cstring>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>48</width>
+                    <height>64</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>&amp;Edit</string>
+            </property>
+            <property name="accel">
+                <string>Alt+E</string>
+            </property>
+        </widget>
         <widget class="QProgressBar">
             <property name="name">
                 <cstring>StreamUsageProgressBar</cstring>
@@ -461,6 +478,12 @@
         <receiver>qsamplerChannelStrip</receiver>
         <slot>volumeChanged(int)</slot>
     </connection>
+    <connection>
+        <sender>ChannelEditPushButton</sender>
+        <signal>clicked()</signal>
+        <receiver>qsamplerChannelStrip</receiver>
+        <slot>channelEdit()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>ChannelSetupPushButton</tabstop>
@@ -471,6 +494,7 @@
 </tabstops>
 <includes>
     <include location="local" impldecl="in declaration">qsamplerChannel.h</include>
+    <include location="local" impldecl="in implementation">qsamplerChannelStrip.ui.h</include>
 </includes>
 <variables>
     <variable access="private">qsamplerChannel *m_pChannel;</variable>
@@ -481,21 +505,21 @@
     <signal>channelChanged( qsamplerChannelStrip * )</signal>
 </signals>
 <slots>
-    <slot specifier="non virtual" returnType="bool">channelSetup()</slot>
+    <slot specifier="non virtual" returnType="bool">channelSetup( void )</slot>
     <slot specifier="non virtual" returnType="bool">channelMute( bool bMute )</slot>
     <slot specifier="non virtual" returnType="bool">channelSolo( bool bSolo )</slot>
-    <slot specifier="non virtual" returnType="bool">channelReset()</slot>
-    <slot specifier="non virtual">volumeChanged(int)</slot>
+    <slot>channelEdit()</slot>
+    <slot specifier="non virtual" returnType="bool">channelReset( void )</slot>
+    <slot specifier="non virtual">volumeChanged( int iVolume )</slot>
 </slots>
 <functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
+    <function access="private" specifier="non virtual">init( void )</function>
+    <function access="private" specifier="non virtual">destroy( void )</function>
     <function access="private" specifier="non virtual" returnType="bool">decodeDragFile( const QMimeSource * pEvent, QString &amp; sInstrumentFile )</function>
-    <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent *pDragEnterEvent )</function>
-    <function access="private" specifier="non virtual">dropEvent( QDropEvent *pDropEvent )</function>
-    <function access="private" specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
-    <function specifier="non virtual">setup( qsamplerChannel *pChannel )</function>
-    <function specifier="non virtual" returnType="qsamplerChannel *">channel ( void )</function>
+    <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent * pDragEnterEvent )</function>
+    <function access="private" specifier="non virtual">dropEvent( QDropEvent * pDropEvent )</function>
+    <function specifier="non virtual">setup( qsamplerChannel * pChannel )</function>
+    <function specifier="non virtual" returnType="qsamplerChannel *">channel( void )</function>
     <function specifier="non virtual" returnType="QFont">displayFont( void )</function>
     <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
     <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
@@ -505,6 +529,7 @@
     <function specifier="non virtual" returnType="bool">updateChannelVolume( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelInfo( void )</function>
     <function specifier="non virtual" returnType="bool">updateChannelUsage( void )</function>
+    <function access="private" specifier="non virtual">contextMenuEvent( QContextMenuEvent * pEvent )</function>
     <function specifier="non virtual">resetErrorCount( void )</function>
 </functions>
 <pixmapinproject/>

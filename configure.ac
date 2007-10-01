@@ -240,6 +240,11 @@ if test "x$ac_volume" = "xyes"; then
   AC_DEFINE(CONFIG_VOLUME, 1, [Define if global volume is available.])
 fi
 
+AC_CHECK_LIB(lscp, lscp_edit_instrument, [ac_edit_instrument="yes"], [ac_edit_instrument="no"])
+if test "x$ac_edit_instrument" = "xyes"; then
+  AC_DEFINE(CONFIG_EDIT_INSTRUMENT, 1, [Define if instrument editing is available.])
+fi
+
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])

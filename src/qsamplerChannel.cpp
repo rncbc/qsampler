@@ -673,6 +673,41 @@ bool qsamplerChannel::channelReset (void)
 }
 
 
+// Spawn instrument editor method.
+bool qsamplerChannel::editChannel (void)
+{
+#ifdef CONFIG_EDIT_INSTRUMENT
+	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	if (pMainForm == NULL)
+		return false;
+	if (pMainForm->client() == NULL || m_iChannelID < 0)
+		return false;
+
+	if (::lscp_edit_instrument(pMainForm->client(), m_iChannelID) != LSCP_OK) {
+		appendMessagesClient("lscp_edit_instrument");
+		appendMessagesError(
+			"Could not launch an appropriate instrument editor for the\n"
+			"given instrument! Make sure you have an appropriate\n"
+			"instrument editor like 'gigedit' installed and that it placed\n"
+			"its mandatory DLL file into the sampler's plugin directory."
+		);
+		return false;
+	}
+
+	appendMessages(QObject::tr("edit instrument."));
+
+	return true;
+#else
+	appendMessagesError(
+		"Sorry, QSampler was compiled for a version of liblscp which lacks\n"
+		"this feature. You may want to update liblscp and recompile\n"
+		"QSampler afterwards."
+	);
+	return false;
+#endif
+}
+
+
 // Channel setup dialog form.
 bool qsamplerChannel::channelSetup ( QWidget *pParent )
 {
