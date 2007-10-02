@@ -235,6 +235,16 @@ bool qsamplerChannelStrip::channelSolo ( bool bSolo )
 }
 
 
+// Channel edit slot.
+void qsamplerChannelStrip::channelEdit()
+{
+	if (m_pChannel == NULL)
+		return;
+
+	m_pChannel->editChannel();
+}
+
+
 // Channel reset slot.
 bool qsamplerChannelStrip::channelReset (void)
 {

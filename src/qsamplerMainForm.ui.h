@@ -1614,6 +1614,11 @@ void qsamplerMainForm::helpAbout (void)
     sText += tr("MIDI instrument mapping support disabled.");
     sText += "</font></small><br />";
 #endif
+#ifndef CONFIG_EDIT_INSTRUMENT
+    sText += "<small><font color=\"red\">";
+    sText += tr("Instrument editing support disabled.");
+    sText += "</font></small><br />";
+#endif
     sText += "<br />\n";
     sText += tr("Using") + ": ";
     sText += ::lscp_client_package();

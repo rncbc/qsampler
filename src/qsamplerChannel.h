@@ -133,6 +133,9 @@ public:
 	// Reset channel method.
 	bool     channelReset();
 
+	// Spawn instrument editor method.
+	bool     editChannel();
+
 	// Message logging methods (brainlessly mapped to main form's).
 	void     appendMessages       (const QString & s) const;
 	void     appendMessagesColor  (const QString & s, const QString & c) const;
