@@ -1300,6 +1300,21 @@ void qsamplerMainForm::editSetupChannel (void)
 }
 
 
+// Edit current sampler channel.
+void qsamplerMainForm::editEditChannel (void)
+{
+    if (m_pClient == NULL)
+        return;
+
+    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    if (pChannelStrip == NULL)
+        return;
+
+    // Just invoque the channel strip procedure.
+    pChannelStrip->channelEdit();
+}
+
+
 // Reset current sampler channel.
 void qsamplerMainForm::editResetChannel (void)
 {
@@ -1670,6 +1685,11 @@ void qsamplerMainForm::stabilizeForm (void)
     editAddChannelAction->setEnabled(bHasClient);
     editRemoveChannelAction->setEnabled(bHasChannel);
     editSetupChannelAction->setEnabled(bHasChannel);
+#ifdef CONFIG_EDIT_INSTRUMENT
+    editEditChannelAction->setEnabled(bHasChannel);
+#else
+    editEditChannelAction->setEnabled(false);
+#endif
     editResetChannelAction->setEnabled(bHasChannel);
     editResetAllChannelsAction->setEnabled(bHasChannel);
     viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
@@ -1677,6 +1697,8 @@ void qsamplerMainForm::stabilizeForm (void)
 	viewInstrumentsAction->setOn(m_pInstrumentListForm
 		&& m_pInstrumentListForm->isVisible());
 	viewInstrumentsAction->setEnabled(bHasClient);
+#else
+	viewInstrumentsAction->setEnabled(false);
 #endif
 	viewDevicesAction->setOn(m_pDeviceForm
 		&& m_pDeviceForm->isVisible());

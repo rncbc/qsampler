@@ -36,6 +36,7 @@ IMAGES	  = ../icons/qsampler.png \
 			../icons/editAddChannel.png \
 			../icons/editRemoveChannel.png \
 			../icons/editSetupChannel.png \
+			../icons/editEditChannel.png \
 			../icons/editResetChannel.png \
 			../icons/editResetAllChannels.png \
 			../icons/channelsArrange.png \

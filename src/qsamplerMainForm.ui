@@ -73,6 +73,7 @@
         <action name="editRemoveChannelAction"/>
         <separator/>
         <action name="editSetupChannelAction"/>
+        <action name="editEditChannelAction"/>
         <separator/>
         <action name="editResetChannelAction"/>
         <action name="editResetAllChannelsAction"/>
@@ -127,6 +128,7 @@
         <action name="editRemoveChannelAction"/>
         <separator/>
         <action name="editSetupChannelAction"/>
+        <action name="editEditChannelAction"/>
         <separator/>
         <action name="editResetChannelAction"/>
         <action name="editResetAllChannelsAction"/>
@@ -404,6 +406,29 @@
         </property>
         <property name="accel">
             <string>F2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editEditChannelAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>editEditChannel.png</iconset>
+        </property>
+        <property name="text">
+            <string>Edit</string>
+        </property>
+        <property name="menuText">
+            <string>Ed&amp;it Channel...</string>
+        </property>
+        <property name="toolTip">
+            <string>Edit channel</string>
+        </property>
+        <property name="statusTip">
+            <string>Edit current sampler channel</string>
+        </property>
+        <property name="accel">
+            <string>F9</string>
         </property>
     </action>
     <action>
@@ -716,6 +741,12 @@
         <slot>editSetupChannel()</slot>
     </connection>
     <connection>
+        <sender>editEditChannelAction</sender>
+        <signal>activated()</signal>
+        <receiver>qsamplerMainForm</receiver>
+        <slot>editEditChannel()</slot>
+    </connection>
+    <connection>
         <sender>editResetChannelAction</sender>
         <signal>activated()</signal>
         <receiver>qsamplerMainForm</receiver>
@@ -845,6 +876,7 @@
     <slot specifier="non virtual">editAddChannel( void )</slot>
     <slot specifier="non virtual">editRemoveChannel( void )</slot>
     <slot specifier="non virtual">editSetupChannel( void )</slot>
+    <slot specifier="non virtual">editEditChannel( void )</slot>
     <slot specifier="non virtual">editResetChannel( void )</slot>
     <slot specifier="non virtual">editResetAllChannels( void )</slot>
     <slot specifier="non virtual">viewMenubar( bool bOn )</slot>
