@@ -236,7 +236,7 @@ bool qsamplerChannelStrip::channelSolo ( bool bSolo )
 
 
 // Channel edit slot.
-void qsamplerChannelStrip::channelEdit()
+void qsamplerChannelStrip::channelEdit (void)
 {
 	if (m_pChannel == NULL)
 		return;

@@ -367,6 +367,9 @@
             <property name="accel">
                 <string>Alt+E</string>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Edit channel</string>
+            </property>
         </widget>
         <widget class="QProgressBar">
             <property name="name">

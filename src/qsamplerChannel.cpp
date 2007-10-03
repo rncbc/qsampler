@@ -677,6 +677,7 @@ bool qsamplerChannel::channelReset (void)
 bool qsamplerChannel::editChannel (void)
 {
 #ifdef CONFIG_EDIT_INSTRUMENT
+
 	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
@@ -688,9 +689,10 @@ bool qsamplerChannel::editChannel (void)
 		appendMessagesError(QObject::tr(
 			"Could not launch an appropriate instrument editor "
 			"for the given instrument!\n"
-			"Make sure you have an appropriate instrument editor like"
-			"'gigedit' installed and that it placed its mandatory "
-			"DLL file into the sampler's plugin directory.")
+			"Make sure you have an appropriate "
+			"instrument editor like 'gigedit' installed\n"
+			"and that it placed its mandatory DLL file "
+			"into the sampler's plugin directory.")
 		);
 		return false;
 	}
@@ -698,13 +700,17 @@ bool qsamplerChannel::editChannel (void)
 	appendMessages(QObject::tr("edit instrument."));
 
 	return true;
+
 #else
+
 	appendMessagesError(QObject::tr(
 		"Sorry, QSampler was compiled for a version of liblscp "
 		"which lacks this feature.\n"
 		"You may want to update liblscp and recompile QSampler afterwards.")
 	);
+
 	return false;
+
 #endif
 }
 
