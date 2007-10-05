@@ -16,6 +16,10 @@ CVS HEAD
 
 * Crash fix on double-clicking on a empty instrument list.
 
+* Added support for LSCP escape sequences to allow loading and
+  mapping instrument files with special characters in their
+  filename (requires LSCP v1.2 on sampler side).
+
 
 0.1.4  2007-05-04 Almost another year has gone by.
 
