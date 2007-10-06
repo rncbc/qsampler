@@ -19,6 +19,7 @@
 
 *****************************************************************************/
 
+#include "qsamplerUtilities.h"
 #include "qsamplerAbout.h"
 #include "qsamplerChannel.h"
 
@@ -202,7 +203,13 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 	if (m_iInstrumentStatus == 100 && m_sInstrumentFile == sInstrumentFile && m_iInstrumentNr == iInstrumentNr)
 		return true;
 
-	if (::lscp_load_instrument_non_modal(pMainForm->client(), sInstrumentFile.latin1(), iInstrumentNr, m_iChannelID) != LSCP_OK) {
+	if (
+		::lscp_load_instrument_non_modal(
+			pMainForm->client(),
+			lscpEscapePath(sInstrumentFile).latin1(),
+			iInstrumentNr, m_iChannelID
+		) != LSCP_OK
+	) {
 		appendMessagesClient("lscp_load_instrument");
 		return false;
 	}

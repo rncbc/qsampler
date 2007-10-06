@@ -1,7 +1,7 @@
 // qsamplerInstrument.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,6 +19,7 @@
 
 *****************************************************************************/
 
+#include "qsamplerUtilities.h"
 #include "qsamplerAbout.h"
 #include "qsamplerInstrument.h"
 
@@ -191,7 +192,7 @@ bool qsamplerInstrument::mapInstrument (void)
 
 	if (::lscp_map_midi_instrument(pMainForm->client(), &instr,
 			m_sEngineName.latin1(),
-			m_sInstrumentFile.latin1(),
+			lscpEscapePath(m_sInstrumentFile).latin1(),
 			m_iInstrumentNr,
 			m_fVolume,
 			load_mode,
