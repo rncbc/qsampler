@@ -27,7 +27,10 @@
 #include <qregexp.h>
 
 // converts the given file path into a path as expected by LSCP 1.2
-QString lscpEscapePath(QString path) {
+QString lscpEscapePath ( const QString& sPath )
+{
+	QString path(sPath);
+
     // check if remote side supports LSCP escape sequences
     const lscpVersion_t version = getRemoteLscpVersion();
     if (version.major < 1 || version.minor < 2)
@@ -40,6 +43,7 @@ QString lscpEscapePath(QString path) {
         for (int i = path.find(regexp); i >= 0; i = path.find(regexp, i + 3))
             path.replace(i, 1, "\\x");
     }
+
     // replace all non-basic characters by LSCP escape sequences
     {
         const char pathSeparator = '/';
@@ -62,25 +66,32 @@ QString lscpEscapePath(QString path) {
             ) {
                 // convert the non-basic character into a LSCP escape sequence
                 char buf[5];
-                snprintf(buf, sizeof(buf), "\\x%2x", static_cast<unsigned char>(c));
+                ::snprintf(buf, sizeof(buf), "\\x%2x", static_cast<unsigned char>(c));
                 path.replace(i, 1, buf);
                 i += 3;
             }
         }
     }
+
     return path;
 }
 
-lscpVersion_t getRemoteLscpVersion() {
+
+lscpVersion_t getRemoteLscpVersion (void)
+{
     lscpVersion_t result = { 0, 0 };
 
     qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
-    if (!pMainForm || !pMainForm->client()) return result;
+    if (pMainForm == NULL)
+		return result;
+	if (pMainForm->client() == NULL)
+		return result;
 
     lscp_server_info_t* pServerInfo =
         ::lscp_get_server_info(pMainForm->client());
-    if (!pServerInfo) return result;
+    if (pServerInfo && pServerInfo->protocol_version)
+		::sscanf(pServerInfo->protocol_version, "%d.%d",
+			&result.major, &result.minor);
 
-    sscanf(pServerInfo->protocol_version, "%d.%d", &result.major, &result.minor);
     return result;
 }
