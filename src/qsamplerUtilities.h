@@ -29,7 +29,7 @@ struct lscpVersion_t {
     int minor;
 };
 
-QString lscpEscapePath(QString path);
+QString lscpEscapePath(const QString& sPath);
 
 lscpVersion_t getRemoteLscpVersion();
 

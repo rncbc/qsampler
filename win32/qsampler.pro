@@ -6,7 +6,8 @@ HEADERS	 += ../src/qsamplerAbout.h \
 			../src/qsamplerMessages.h \
 			../src/qsamplerInstrument.h \
 			../src/qsamplerInstrumentList.h \
-			../src/qsamplerDevice.h
+			../src/qsamplerDevice.h \
+			../src/qsamplerUtilities.h
 
 SOURCES	 += ../src/main.cpp \
 			../src/qsamplerOptions.cpp \
@@ -14,7 +15,8 @@ SOURCES	 += ../src/main.cpp \
 			../src/qsamplerMessages.cpp \
 			../src/qsamplerInstrument.cpp \
 			../src/qsamplerInstrumentList.cpp \
-			../src/qsamplerDevice.cpp
+			../src/qsamplerDevice.cpp \
+			../src/qsamplerUtilities.cpp
 
 FORMS	  = ../src/qsamplerMainForm.ui \
 			../src/qsamplerChannelStrip.ui \
