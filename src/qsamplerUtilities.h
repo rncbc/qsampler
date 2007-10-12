@@ -24,13 +24,19 @@
 
 #include <qstring.h>
 
+namespace qsamplerUtilities {
+
 struct lscpVersion_t {
     int major;
     int minor;
 };
 
 QString lscpEscapePath(const QString& sPath);
+QString lscpEscapedPathToPosix(QString path);
+QString lscpEscapedTextToRaw(QString txt);
 
 lscpVersion_t getRemoteLscpVersion();
+
+} // namespace qsamplerUtilities
 
 #endif  // __qsamplerUtilities_h

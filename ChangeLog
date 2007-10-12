@@ -7,7 +7,8 @@ CVS HEAD
 
 * Added support for LSCP escape sequences to allow loading and
   mapping instrument files with special characters in their
-  filename (requires LSCP v1.2 on sampler side).
+  filename, as well as special characters for instrument names
+  and instrument map names (requires LSCP v1.2 on sampler side).
 
 * Added new button "Edit" to the channel strips, which probably
   does exactly what you think it does: it opens an appropriate
