@@ -206,7 +206,7 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 	if (
 		::lscp_load_instrument_non_modal(
 			pMainForm->client(),
-			lscpEscapePath(sInstrumentFile).latin1(),
+			qsamplerUtilities::lscpEscapePath(sInstrumentFile).latin1(),
 			iInstrumentNr, m_iChannelID
 		) != LSCP_OK
 	) {
@@ -587,9 +587,11 @@ bool qsamplerChannel::updateChannelInfo (void)
 
 #ifdef CONFIG_INSTRUMENT_NAME
 	// We got all actual instrument datum...
-	m_sInstrumentFile = pChannelInfo->instrument_file;
+	m_sInstrumentFile =
+		qsamplerUtilities::lscpEscapedPathToPosix(pChannelInfo->instrument_file);
 	m_iInstrumentNr   = pChannelInfo->instrument_nr;
-	m_sInstrumentName = pChannelInfo->instrument_name;
+	m_sInstrumentName =
+		qsamplerUtilities::lscpEscapedTextToRaw(pChannelInfo->instrument_name);
 #else
 	// First, check if intrument name has changed,
 	// taking care that instrument name lookup might be expensive,
