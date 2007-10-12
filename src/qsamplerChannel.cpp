@@ -693,8 +693,9 @@ bool qsamplerChannel::editChannel (void)
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
 		return false;
 
-	if (::lscp_edit_instrument(pMainForm->client(), m_iChannelID) != LSCP_OK) {
-		appendMessagesClient("lscp_edit_instrument");
+	if (::lscp_edit_channel_instrument(pMainForm->client(), m_iChannelID)
+		!= LSCP_OK) {
+		appendMessagesClient("lscp_edit_channel_instrument");
 		appendMessagesError(QObject::tr(
 			"Could not launch an appropriate instrument editor "
 			"for the given instrument!\n"
