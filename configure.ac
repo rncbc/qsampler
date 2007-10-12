@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.4.9, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.4.10, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec qsampler.desktop)
@@ -240,7 +240,7 @@ if test "x$ac_volume" = "xyes"; then
   AC_DEFINE(CONFIG_VOLUME, 1, [Define if global volume is available.])
 fi
 
-AC_CHECK_LIB(lscp, lscp_edit_instrument, [ac_edit_instrument="yes"], [ac_edit_instrument="no"])
+AC_CHECK_LIB(lscp, lscp_edit_channel_instrument, [ac_edit_instrument="yes"], [ac_edit_instrument="no"])
 if test "x$ac_edit_instrument" = "xyes"; then
   AC_DEFINE(CONFIG_EDIT_INSTRUMENT, 1, [Define if instrument editing is available.])
 fi
