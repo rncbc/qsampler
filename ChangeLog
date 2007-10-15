@@ -3,7 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-CVS HEAD
+0.1.5  2007-10-15 Five months later a fifth is heard.
 
 * Added support for LSCP escape sequences to allow loading and
   mapping instrument files with special characters in their
