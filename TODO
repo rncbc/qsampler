@@ -3,5 +3,9 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 TODOs
 
-- Complete coverage of the LinuxSampler Control Protocol.
+- Complete coverage of the LinuxSampler Control Protocol:
+  - Support for FX Sends
+  - Allowing to create more than the two standard MIDI instrument maps
+    ("Chromatic" / "Drumkits").
+  - Instruments DB support.
 - Any feature one can think of ;)
