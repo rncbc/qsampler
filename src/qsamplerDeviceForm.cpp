@@ -1,39 +1,12 @@
-// qsamplerDeviceForm.ui.h
-//
-// ui.h extension file, included from the uic-generated form implementation.
-/****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-*****************************************************************************/
+#include "qsamplerDeviceForm.h"
 
 #include "qsamplerAbout.h"
-#include "qsamplerMainForm.h"
 
-#include <qmessagebox.h>
-#include <qfiledialog.h>
-#include <qfileinfo.h>
-#include <qlistbox.h>
-#include <qptrlist.h>
-#include <qpopupmenu.h>
+namespace QSampler {
 
+DeviceForm::DeviceForm(QWidget* parent, Qt::WFlags f) : QDialog(parent, f) {
+    ui.setupUi(this);
 
-// Kind of constructor.
-void qsamplerDeviceForm::init (void)
-{
 	// Initialize locals.
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
@@ -44,11 +17,17 @@ void qsamplerDeviceForm::init (void)
 	// No exclusive mode as default.
 	m_deviceTypeMode = qsamplerDevice::None;
 
+	ui.DeviceParamTable->setModel(&deviceParamModel);
+	ui.DeviceParamTable->setItemDelegate(&deviceParamDelegate);
+
+	ui.DevicePortParamTable->setModel(&devicePortParamModel);
+	ui.DevicePortParamTable->setItemDelegate(&devicePortParamDelegate);
+
 	// This an outsider (from designer), but rather important.
-	QObject::connect(DeviceParamTable, SIGNAL(valueChanged(int,int)),
-		this, SLOT(changeDeviceParam(int,int)));
-	QObject::connect(DevicePortParamTable, SIGNAL(valueChanged(int,int)),
-		this, SLOT(changeDevicePortParam(int,int)));
+	//QObject::connect(DeviceParamTable, SIGNAL(valueChanged(int,int)),
+	//	this, SLOT(changeDeviceParam(int,int)));
+	//QObject::connect(DevicePortParamTable, SIGNAL(valueChanged(int,int)),
+	//	this, SLOT(changeDevicePortParam(int,int)));
 
 	// Initial contents.
 	refreshDevices();
@@ -56,17 +35,14 @@ void qsamplerDeviceForm::init (void)
 	adjustSize();
 }
 
-
-// Kind of destructor.
-void qsamplerDeviceForm::destroy (void)
-{
+DeviceForm::~DeviceForm() {
 }
 
 
 // Notify our parent that we're emerging.
-void qsamplerDeviceForm::showEvent ( QShowEvent *pShowEvent )
+void DeviceForm::showEvent ( QShowEvent *pShowEvent )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->stabilizeForm();
 
@@ -77,11 +53,11 @@ void qsamplerDeviceForm::showEvent ( QShowEvent *pShowEvent )
 
 
 // Notify our parent that we're closing.
-void qsamplerDeviceForm::hideEvent ( QHideEvent *pHideEvent )
+void DeviceForm::hideEvent ( QHideEvent *pHideEvent )
 {
 	QWidget::hideEvent(pHideEvent);
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->stabilizeForm();
 
@@ -94,7 +70,7 @@ void qsamplerDeviceForm::hideEvent ( QHideEvent *pHideEvent )
 
 
 // Set device type spacial exclusive mode.
-void qsamplerDeviceForm::setDeviceTypeMode (
+void DeviceForm::setDeviceTypeMode (
 	qsamplerDevice::qsamplerDeviceType deviceTypeMode )
 {
 	// If it has not changed, do nothing.
@@ -109,18 +85,17 @@ void qsamplerDeviceForm::setDeviceTypeMode (
 
 
 // Device driver name setup formal initializer.
-void qsamplerDeviceForm::setDriverName ( const QString& sDriverName )
+void DeviceForm::setDriverName ( const QString& sDriverName )
 {
-	if (DriverNameComboBox->listBox()->findItem(sDriverName,
-			Qt::ExactMatch | Qt::CaseSensitive) == NULL) {
-		DriverNameComboBox->insertItem(sDriverName);
+	if (ui.DriverNameComboBox->findText(sDriverName) == 0) {
+		ui.DriverNameComboBox->insertItem(sDriverName);
 	}
-	DriverNameComboBox->setCurrentText(sDriverName);
+	ui.DriverNameComboBox->setCurrentText(sDriverName);
 }
 
 
 // Set current selected device by type and id.
-void qsamplerDeviceForm::setDevice ( qsamplerDevice *pDevice )
+void DeviceForm::setDevice ( qsamplerDevice *pDevice )
 {
 	// In case no device is given...
 	qsamplerDevice::qsamplerDeviceType deviceType = m_deviceTypeMode;
@@ -146,34 +121,34 @@ void qsamplerDeviceForm::setDevice ( qsamplerDevice *pDevice )
 
 	// So there's no device huh?
 	if (pDevice == NULL) {
-		DeviceListView->setSelected(pRootItem, true);
+		ui.DeviceListView->setCurrentItem(pRootItem);
 		return;
 	}
 
 	// For each child, test for identity...
-	qsamplerDeviceItem *pDeviceItem =
-		(qsamplerDeviceItem *) pRootItem->firstChild();
-	while (pDeviceItem) {
+	for (int i = 0; i < pRootItem->childCount(); i++) {
+		qsamplerDeviceItem* pDeviceItem =
+			(qsamplerDeviceItem*) pRootItem->child(i);
+
 		// If identities match, select as current device item.
 		if (pDeviceItem->device().deviceID() == pDevice->deviceID()) {
-			DeviceListView->setSelected(pDeviceItem, true);
+			pDeviceItem->setSelected(true);
 			break;
 		}
-		pDeviceItem = (qsamplerDeviceItem *) pDeviceItem->nextSibling();
 	}
 }
 
 
 
 // Create a new device from current table view.
-void qsamplerDeviceForm::createDevice (void)
+void DeviceForm::createDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	QTreeWidgetItem *pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	// About a brand new device instance...
@@ -195,7 +170,7 @@ void qsamplerDeviceForm::createDevice (void)
 		qsamplerDeviceItem *pDeviceItem = new qsamplerDeviceItem(pRootItem,
 			device.deviceType(), device.deviceID());
 		// Just make it the new selection...
-		DeviceListView->setSelected(pDeviceItem, true);
+		pDeviceItem->setSelected(true);
 		// Main session should be marked dirty.
 		pMainForm->sessionDirty();
 		m_iDirtyCount++;
@@ -204,14 +179,14 @@ void qsamplerDeviceForm::createDevice (void)
 
 
 // Delete current device in table view.
-void qsamplerDeviceForm::deleteDevice (void)
+void DeviceForm::deleteDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
@@ -241,9 +216,9 @@ void qsamplerDeviceForm::deleteDevice (void)
 
 
 // Refresh all device list and views.
-void qsamplerDeviceForm::refreshDevices (void)
+void DeviceForm::refreshDevices (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 
@@ -255,13 +230,13 @@ void qsamplerDeviceForm::refreshDevices (void)
 	//
 	m_pAudioItems = NULL;
 	m_pMidiItems = NULL;
-	DeviceListView->clear();
+	ui.DeviceListView->clear();
 	if (pMainForm->client()) {
 		int *piDeviceIDs;
 		// Grab and pop Audio devices...
 		if (m_deviceTypeMode == qsamplerDevice::None ||
 			m_deviceTypeMode == qsamplerDevice::Audio) {
-			m_pAudioItems = new qsamplerDeviceItem(DeviceListView,
+			m_pAudioItems = new qsamplerDeviceItem(ui.DeviceListView,
 				qsamplerDevice::Audio);
 		}
 		if (m_pAudioItems) {
@@ -271,12 +246,12 @@ void qsamplerDeviceForm::refreshDevices (void)
 				new qsamplerDeviceItem(m_pAudioItems,
 					qsamplerDevice::Audio, piDeviceIDs[i]);
 			}
-			m_pAudioItems->setOpen(true);
+			m_pAudioItems->setExpanded(true);
 		}
 		// Grab and pop MIDI devices...
 		if (m_deviceTypeMode == qsamplerDevice::None ||
 			m_deviceTypeMode == qsamplerDevice::Midi) {
-			m_pMidiItems = new qsamplerDeviceItem(DeviceListView,
+			m_pMidiItems = new qsamplerDeviceItem(ui.DeviceListView,
 				qsamplerDevice::Midi);
 		}
 		if (m_pMidiItems) {
@@ -286,7 +261,7 @@ void qsamplerDeviceForm::refreshDevices (void)
 				new qsamplerDeviceItem(m_pMidiItems,
 					qsamplerDevice::Midi, piDeviceIDs[i]);
 			}
-			m_pMidiItems->setOpen(true);
+			m_pMidiItems->setExpanded(true);
 		}
 	}
 
@@ -299,7 +274,7 @@ void qsamplerDeviceForm::refreshDevices (void)
 
 
 // Driver selection slot.
-void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
+void DeviceForm::selectDriver ( const QString& sDriverName )
 {
 	if (m_iDirtySetup > 0)
 		return;
@@ -308,8 +283,8 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 	//  Driver name has changed for a new device...
 	//
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
@@ -318,7 +293,7 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 	if (m_bNewDevice) {
 		m_iDirtySetup++;
 		device.setDriver(sDriverName);
-		DeviceParamTable->refresh(device.params(), m_bNewDevice);
+		deviceParamModel.refresh(device.params(), m_bNewDevice);
 		m_iDirtySetup--;
 		// Done.
 		stabilizeForm();
@@ -327,9 +302,9 @@ void qsamplerDeviceForm::selectDriver ( const QString& sDriverName )
 
 
 // Device selection slot.
-void qsamplerDeviceForm::selectDevice (void)
+void DeviceForm::selectDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 
@@ -340,16 +315,16 @@ void qsamplerDeviceForm::selectDevice (void)
 	//  Device selection has changed...
 	//
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM) {
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM) {
 		m_deviceType = qsamplerDevice::None;
-		DeviceNameTextLabel->setText(QString::null);
-		DeviceParamTable->setNumRows(0);
-		DevicePortComboBox->clear();
-		DevicePortParamTable->setNumRows(0);
-		DevicePortTextLabel->setEnabled(false);
-		DevicePortComboBox->setEnabled(false);
-		DevicePortParamTable->setEnabled(false);
+		ui.DeviceNameTextLabel->setText(QString::null);
+		deviceParamModel.clear();
+		ui.DevicePortComboBox->clear();
+		devicePortParamModel.clear();
+		ui.DevicePortTextLabel->setEnabled(false);
+		ui.DevicePortComboBox->setEnabled(false);
+		ui.DevicePortParamTable->setEnabled(false);
 		stabilizeForm();
 		return;
 	}
@@ -361,47 +336,47 @@ void qsamplerDeviceForm::selectDevice (void)
 	m_bNewDevice = (device.deviceID() < 0);
 
 	// Fill the device/driver heading...
-	DeviceNameTextLabel->setText(device.deviceName());
+	ui.DeviceNameTextLabel->setText(device.deviceName());
 	// The driver combobox is only rebuilt if device type has changed...
 	if (device.deviceType() != m_deviceType) {
-		DriverNameComboBox->clear();
-		DriverNameComboBox->insertStringList(
+		ui.DriverNameComboBox->clear();
+		ui.DriverNameComboBox->insertStringList(
 			qsamplerDevice::getDrivers(pMainForm->client(), device.deviceType()));
 		m_deviceType = device.deviceType();
 	}
 	// Do we need a driver name?
 	if (m_bNewDevice || device.driverName().isEmpty())
-		device.setDriver(DriverNameComboBox->currentText());
+		device.setDriver(ui.DriverNameComboBox->currentText());
 	setDriverName(device.driverName());
-	DriverNameTextLabel->setEnabled(m_bNewDevice);
-	DriverNameComboBox->setEnabled(m_bNewDevice);
+	ui.DriverNameTextLabel->setEnabled(m_bNewDevice);
+	ui.DriverNameComboBox->setEnabled(m_bNewDevice);
 	// Fill the device parameter table...
-	DeviceParamTable->refresh(device.params(), m_bNewDevice);
+	deviceParamModel.refresh(device.params(), m_bNewDevice);
 	// And now the device port/channel parameter table...
 	switch (device.deviceType()) {
 	case qsamplerDevice::Audio:
-		DevicePortTextLabel->setText(tr("Ch&annel:"));
+		ui.DevicePortTextLabel->setText(tr("Ch&annel:"));
 		break;
 	case qsamplerDevice::Midi:
-		DevicePortTextLabel->setText(tr("P&ort:"));
+		ui.DevicePortTextLabel->setText(tr("P&ort:"));
 		break;
 	case qsamplerDevice::None:
 		break;
 	}
-	DevicePortComboBox->clear();
-	DevicePortParamTable->setNumRows(0);
+	ui.DevicePortComboBox->clear();
+	devicePortParamModel.clear();
 	if (m_bNewDevice) {
-		DevicePortTextLabel->setEnabled(false);
-		DevicePortComboBox->setEnabled(false);
-		DevicePortParamTable->setEnabled(false);
+		ui.DevicePortTextLabel->setEnabled(false);
+		ui.DevicePortComboBox->setEnabled(false);
+		ui.DevicePortParamTable->setEnabled(false);
 	} else {
 		QPixmap pixmap;
 		switch (device.deviceType()) {
 		case qsamplerDevice::Audio:
-			pixmap = QPixmap::fromMimeSource("audio2.png");
+			pixmap = QPixmap(":/qsampler/pixmaps/audio2.png");
 			break;
 		case qsamplerDevice::Midi:
-			pixmap = QPixmap::fromMimeSource("midi2.png");
+			pixmap = QPixmap(":/qsampler/pixmaps/midi2.png");
 			break;
 		case qsamplerDevice::None:
 			break;
@@ -409,25 +384,25 @@ void qsamplerDeviceForm::selectDevice (void)
 		qsamplerDevicePortList& ports = device.ports();
 		qsamplerDevicePort *pPort;
 		for (pPort = ports.first(); pPort; pPort = ports.next()) {
-			DevicePortComboBox->insertItem(pixmap, device.deviceTypeName()
+			ui.DevicePortComboBox->insertItem(pixmap, device.deviceTypeName()
 				+ ' ' + device.driverName()
 				+ ' ' + pPort->portName());
 		}
 		bool bEnabled = (ports.count() > 0);
-		DevicePortTextLabel->setEnabled(bEnabled);
-		DevicePortComboBox->setEnabled(bEnabled);
-		DevicePortParamTable->setEnabled(bEnabled);
+		ui.DevicePortTextLabel->setEnabled(bEnabled);
+		ui.DevicePortComboBox->setEnabled(bEnabled);
+		ui.DevicePortParamTable->setEnabled(bEnabled);
 	}
 	// Done.
 	m_iDirtySetup--;
 
 	// Make the device port/channel selection effective.
-	selectDevicePort(DevicePortComboBox->currentItem());
+	selectDevicePort(ui.DevicePortComboBox->currentItem());
 }
 
 
 // Device port/channel selection slot.
-void qsamplerDeviceForm::selectDevicePort ( int iPort )
+void DeviceForm::selectDevicePort ( int iPort )
 {
 	if (m_iDirtySetup > 0)
 		return;
@@ -436,15 +411,15 @@ void qsamplerDeviceForm::selectDevicePort ( int iPort )
 	//  Device port/channel selection has changed...
 	//
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 	qsamplerDevicePort *pPort = device.ports().at(iPort);
 	if (pPort) {
 		m_iDirtySetup++;
-		DevicePortParamTable->refresh(pPort->params(), false);
+		devicePortParamModel.refresh(pPort->params(), false);
 		m_iDirtySetup--;
 	}
 	// Done.
@@ -453,7 +428,7 @@ void qsamplerDeviceForm::selectDevicePort ( int iPort )
 
 
 // Device parameter value change slot.
-void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
+void DeviceForm::changeDeviceParam ( int iRow, int iCol )
 {
 	if (m_iDirtySetup > 0)
 		return;
@@ -464,15 +439,17 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 	//  Device parameter change...
 	//
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	// Table 1st column has the parameter name;
-	const QString sParam = DeviceParamTable->text(iRow, 0);
-	const QString sValue = DeviceParamTable->text(iRow, iCol);
+	//const QString sParam = ui.DeviceParamTable->text(iRow, 0);
+	//const QString sValue = ui.DeviceParamTable->text(iRow, iCol);
+	const QString sParam = deviceParamModel.data(deviceParamModel.index(iRow, 0), Qt::DisplayRole).value<DeviceParameterRow>().name;
+	const QString sValue = deviceParamModel.data(deviceParamModel.index(iRow, iCol), Qt::DisplayRole).value<DeviceParameterRow>().param.value;
 	// Set the local device parameter value.
 	if (device.setParam(sParam, sValue)) {
 		selectDevice();
@@ -481,14 +458,14 @@ void qsamplerDeviceForm::changeDeviceParam ( int iRow, int iCol )
 	}
 
 	// Main session should be dirtier...
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->sessionDirty();
 }
 
 
 // Device port/channel parameter value change slot.
-void qsamplerDeviceForm::changeDevicePortParam ( int iRow, int iCol )
+void DeviceForm::changeDevicePortParam ( int iRow, int iCol )
 {
 	if (m_iDirtySetup > 0)
 		return;
@@ -499,57 +476,60 @@ void qsamplerDeviceForm::changeDevicePortParam ( int iRow, int iCol )
 	//  Device port/channel parameter change...
 	//
 
-	QListViewItem *pItem = DeviceListView->selectedItem();
-	if (pItem == NULL || pItem->rtti() != QSAMPLER_DEVICE_ITEM)
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
+	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
-	int iPort = DevicePortComboBox->currentItem();
+	int iPort = ui.DevicePortComboBox->currentItem();
 	qsamplerDevicePort *pPort = device.ports().at(iPort);
 	if (pPort == NULL)
 		return;
 
 	// Table 1st column has the parameter name;
-	const QString sParam = DevicePortParamTable->text(iRow, 0);
-	const QString sValue = DevicePortParamTable->text(iRow, iCol);
+	//const QString sParam = ui.DevicePortParamTable->text(iRow, 0);
+	//const QString sValue = ui.DevicePortParamTable->text(iRow, iCol);
+	const QString sParam = devicePortParamModel.data(devicePortParamModel.index(iRow, 0), Qt::DisplayRole).value<DeviceParameterRow>().name;
+	const QString sValue = devicePortParamModel.data(devicePortParamModel.index(iRow, iCol), Qt::DisplayRole).value<DeviceParameterRow>().param.value;
+
 	// Set the local device port/channel parameter value.
 	pPort->setParam(sParam, sValue);
 	// Done.
 	stabilizeForm();
 
 	// Main session should be dirtier...
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->sessionDirty();
 }
 
 
 // Device list view context menu handler.
-void qsamplerDeviceForm::contextMenu ( QListViewItem *pItem, const QPoint& pos, int )
+void DeviceForm::contextMenu ( QTreeWidgetItem* pItem, const QPoint& pos, int )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 
 	int iItemID;
 
 	// Build the device context menu...
-	QPopupMenu* pContextMenu = new QPopupMenu(this);
+	QMenu* pContextMenu = new QMenu(this);
 
 	bool bClient = (pMainForm->client() != NULL);
 	bool bEnabled = (pItem != NULL);
 	iItemID = pContextMenu->insertItem(
-		QIconSet(QPixmap::fromMimeSource("deviceCreate.png")),
+		QIconSet(QPixmap(":/qsampler/pixmaps/deviceCreate.png")),
 		tr("&Create device"), this, SLOT(createDevice()));
 	pContextMenu->setItemEnabled(iItemID, bEnabled || (bClient && m_bNewDevice));
 	iItemID = pContextMenu->insertItem(
-		QIconSet(QPixmap::fromMimeSource("deviceDelete.png")),
+		QIconSet(QPixmap(":/qsampler/pixmaps/deviceDelete.png")),
 		tr("&Delete device"), this, SLOT(deleteDevice()));
 	pContextMenu->setItemEnabled(iItemID, bEnabled && !m_bNewDevice);
 	pContextMenu->insertSeparator();
 	iItemID = pContextMenu->insertItem(
-		QIconSet(QPixmap::fromMimeSource("formRefresh.png")),
+		QIconSet(QPixmap(":/qsampler/pixmaps/formRefresh.png")),
 		tr("&Refresh"), this, SLOT(refreshDevices()));
 	pContextMenu->setItemEnabled(iItemID, bClient);
 
@@ -560,20 +540,19 @@ void qsamplerDeviceForm::contextMenu ( QListViewItem *pItem, const QPoint& pos, 
 
 
 // Stabilize current form state.
-void qsamplerDeviceForm::stabilizeForm (void)
+void DeviceForm::stabilizeForm (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
-	QListViewItem *pItem = DeviceListView->selectedItem();
+	MainForm* pMainForm = MainForm::getInstance();
+	QTreeWidgetItem* pItem = ui.DeviceListView->currentItem();
 	bool bClient = (pMainForm && pMainForm->client() != NULL);
 	bool bEnabled = (pItem != NULL);
-	DeviceNameTextLabel->setEnabled(bEnabled && !m_bNewDevice);
-	DriverNameTextLabel->setEnabled(bEnabled &&  m_bNewDevice);
-	DriverNameComboBox->setEnabled(bEnabled && m_bNewDevice);
-	DeviceParamTable->setEnabled(bEnabled);
-	RefreshDevicesPushButton->setEnabled(bClient);
-	CreateDevicePushButton->setEnabled(bEnabled || (bClient && m_bNewDevice));
-	DeleteDevicePushButton->setEnabled(bEnabled && !m_bNewDevice);
+	ui.DeviceNameTextLabel->setEnabled(bEnabled && !m_bNewDevice);
+	ui.DriverNameTextLabel->setEnabled(bEnabled &&  m_bNewDevice);
+	ui.DriverNameComboBox->setEnabled(bEnabled && m_bNewDevice);
+	ui.DeviceParamTable->setEnabled(bEnabled);
+	ui.RefreshDevicesPushButton->setEnabled(bClient);
+	ui.CreateDevicePushButton->setEnabled(bEnabled || (bClient && m_bNewDevice));
+	ui.DeleteDevicePushButton->setEnabled(bEnabled && !m_bNewDevice);
 }
 
-
-// end of qsamplerDeviceForm.ui.h
+} // namespace QSampler

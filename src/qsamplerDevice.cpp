@@ -1,7 +1,7 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 #include <qspinbox.h>
 #include <qlineedit.h>
 
+using namespace QSampler;
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceParam - MIDI/Audio Device parameter structure.
@@ -130,7 +131,7 @@ qsamplerDevice::qsamplerDevice ( const qsamplerDevice& device )
 // Initializer.
 void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -209,7 +210,7 @@ void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 // Driver name initializer/settler.
 void qsamplerDevice::setDriver ( const QString& sDriverName )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -313,7 +314,7 @@ QString qsamplerDevice::deviceName (void) const
 bool qsamplerDevice::setParam ( const QString& sParam,
 	const QString& sValue )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -383,7 +384,7 @@ qsamplerDevicePortList& qsamplerDevice::ports (void)
 // Create a new device, as a copy of this current one.
 bool qsamplerDevice::createDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -438,7 +439,7 @@ bool qsamplerDevice::createDevice (void)
 // Destroy existing device.
 bool qsamplerDevice::deleteDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -539,7 +540,7 @@ int qsamplerDevice::refreshDepends ( const QString& sParam )
 // Refresh/set given parameter based on driver supplied dependencies.
 int qsamplerDevice::refreshParam ( const QString& sParam )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return 0;
 	if (pMainForm->client() == NULL)
@@ -603,7 +604,7 @@ int qsamplerDevice::refreshParam ( const QString& sParam )
 // Redirected messages output methods.
 void qsamplerDevice::appendMessages( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessages(deviceName() + ' ' + s);
 }
@@ -611,28 +612,28 @@ void qsamplerDevice::appendMessages( const QString& s ) const
 void qsamplerDevice::appendMessagesColor( const QString& s,
 	const QString& c ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesColor(deviceName() + ' ' + s, c);
 }
 
 void qsamplerDevice::appendMessagesText( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesText(deviceName() + ' ' + s);
 }
 
 void qsamplerDevice::appendMessagesError( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesError(deviceName() + "\n\n" + s);
 }
 
 void qsamplerDevice::appendMessagesClient( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesClient(deviceName() + ' ' + s);
 }
@@ -702,7 +703,7 @@ qsamplerDevicePort::~qsamplerDevicePort (void)
 // Initializer.
 void qsamplerDevicePort::setDevicePort ( int iPortID )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -791,7 +792,7 @@ const qsamplerDeviceParamMap& qsamplerDevicePort::params (void) const
 bool qsamplerDevicePort::setParam ( const QString& sParam,
 	const QString& sValue )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -841,45 +842,47 @@ bool qsamplerDevicePort::setParam ( const QString& sParam,
 
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceItem - QListView device item.
+// qsamplerDeviceItem - QTreeWidget device item.
 //
 
 // Constructors.
-qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView,
+qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidget* pTreeWidget,
 	qsamplerDevice::qsamplerDeviceType deviceType )
-	: QListViewItem(pListView), m_device(deviceType)
+	: QTreeWidgetItem(pTreeWidget, QSAMPLER_DEVICE_ITEM),
+      m_device(deviceType)
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio1.png"));
-		QListViewItem::setText(0, QObject::tr("Audio Devices"));
+		setIcon(0, QPixmap(":/qsampler/pixmaps/audio1.png"));
+		setText(1, QObject::tr("Audio Devices"));
 		break;
 	case qsamplerDevice::Midi:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi1.png"));
-		QListViewItem::setText(0, QObject::tr("MIDI Devices"));
+		setIcon(0, QPixmap(":/qsampler/pixmaps/midi1.png"));
+		setText(1, QObject::tr("MIDI Devices"));
 		break;
 	case qsamplerDevice::None:
 		break;
 	}
 }
 
-qsamplerDeviceItem::qsamplerDeviceItem ( QListViewItem *pItem,
+qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidgetItem* pItem,
 	qsamplerDevice::qsamplerDeviceType deviceType,
 	int iDeviceID )
-	: QListViewItem(pItem), m_device(deviceType, iDeviceID)
+	: QTreeWidgetItem(pItem, QSAMPLER_DEVICE_ITEM),
+      m_device(deviceType, iDeviceID)
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio2.png"));
+		setIcon(0, QPixmap(":/qsampler/pixmaps/audio2.png"));
 		break;
 	case qsamplerDevice::Midi:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi2.png"));
+		setIcon(0, QPixmap(":/qsampler/pixmaps/midi2.png"));
 		break;
 	case qsamplerDevice::None:
 		break;
 	}
 
-	QListViewItem::setText(0, m_device.deviceName());
+	setText(1, m_device.deviceName());
 }
 
 // Default destructor.
@@ -893,18 +896,12 @@ qsamplerDevice& qsamplerDeviceItem::device (void)
 	return m_device;
 }
 
-// To virtually distinguish between list view items.
-int qsamplerDeviceItem::rtti() const
-{
-	return QSAMPLER_DEVICE_ITEM;
-}
-
 
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceParamTable - Device parameter view table.
 //
-
+#if 0
 // Constructor.
 qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent,
 	const char *pszName )
@@ -1000,12 +997,136 @@ void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
 	QTable::setUpdatesEnabled(true);
 	QTable::updateContents();
 }
+#endif
 
+DeviceParamModel::DeviceParamModel(QObject* parent) : QAbstractTableModel(parent), bEditable(false) {
+}
+
+int DeviceParamModel::rowCount(const QModelIndex& /*parent*/) const {
+    return params.size();
+}
+
+int DeviceParamModel::columnCount(const QModelIndex& /*parent*/) const {
+    return 3;
+}
+
+QVariant DeviceParamModel::data(const QModelIndex &index, int role) const {
+    if (!index.isValid())
+        return QVariant();
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    DeviceParameterRow item;
+    item.name  = params.keys()[index.row()];
+    item.param = params[item.name];
+
+    return QVariant::fromValue(item);
+}
+
+QVariant DeviceParamModel::headerData(int section, Qt::Orientation orientation, int role) const {
+    if (role != Qt::DisplayRole) return QVariant();
+
+    if (orientation == Qt::Horizontal) {
+        switch (section) {
+            case 0:  return tr("Parameter");
+            case 1:  return tr("Value");
+            case 2:  return tr("Description");
+            default: return QVariant();
+        }
+    }
+
+    return QVariant();
+}
+
+void DeviceParamModel::refresh(const qsamplerDeviceParamMap& params, bool bEditable)
+{
+    this->params    = params;
+    this->bEditable = bEditable;
+}
+
+void DeviceParamModel::clear() {
+    params.clear();
+}
+
+
+DeviceParamDelegate::DeviceParamDelegate(QObject *parent) : QItemDelegate(parent) {
+}
+
+QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
+	const QStyleOptionViewItem &/* option */,
+	const QModelIndex& index) const
+{
+    DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
+
+    const bool bEnabled = (/*index.model()->bEditable ||*/ !r.param.fix);
+
+    switch (index.column()) {
+        case 0:
+            return new QLabel(r.name, parent);
+        case 1: {
+            if (r.param.type == LSCP_TYPE_BOOL) {
+                QCheckBox* pCheckBox = new QCheckBox(parent);
+                pCheckBox->setChecked(r.param.value.lower() == "true");
+                pCheckBox->setEnabled(bEnabled);
+                return pCheckBox;
+            } else if (r.param.possibilities.count() > 0 && bEnabled) {
+                QStringList opts = r.param.possibilities;
+                if (r.param.multiplicity)
+                    opts.prepend(tr("(none)"));
+                QComboBox* pComboBox = new QComboBox(parent);
+                pComboBox->addItems(opts);
+                if (r.param.value.isEmpty())
+                    pComboBox->setCurrentIndex(0);
+                else
+                    pComboBox->setCurrentIndex(pComboBox->findText(r.param.value));
+                pComboBox->setEnabled(bEnabled);
+                return pComboBox;
+            } else if (r.param.type == LSCP_TYPE_INT && bEnabled
+                       && !r.param.range_min.isEmpty()
+                       && !r.param.range_max.isEmpty()) {
+                QSpinBox* pSpinBox = new QSpinBox(parent);
+                pSpinBox->setValue(r.param.value.toInt());
+                pSpinBox->setMinimum(r.param.range_min.toInt());
+                pSpinBox->setMaximum(r.param.range_max.toInt());
+                return pSpinBox;
+            } else {
+                QLineEdit* pLineEdit = new QLineEdit(r.param.value, parent);
+                return pLineEdit;
+            }
+        }
+        case 2:
+            return new QLabel(r.param.description, parent);
+        default:
+            return NULL;
+    }
+}
+
+void DeviceParamDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
+/*
+    ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
+    QComboBox* comboBox = static_cast<QComboBox*>(editor);
+    comboBox->setCurrentIndex(item.selection);
+*/
+}
+
+void DeviceParamDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+/*
+    QComboBox* comboBox = static_cast<QComboBox*>(editor);
+    model->setData(index, comboBox->currentIndex());
+*/
+}
+
+void DeviceParamDelegate::updateEditorGeometry(QWidget* editor,
+	const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    if (editor) editor->setGeometry(option.rect);
+}
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
 //
 
+#if 0
 // Constructor.
 qsamplerDeviceParamTableSpinBox::qsamplerDeviceParamTableSpinBox (
 	QTable *pTable, EditType editType, const QString& sText )
@@ -1083,7 +1204,7 @@ void qsamplerDeviceParamTableEditBox::setContentFromEditor ( QWidget *pWidget )
 	else
 		QTableItem::setContentFromEditor(pWidget);
 }
-
+#endif
 
 // end of qsamplerDevice.cpp
 

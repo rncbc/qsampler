@@ -1,31 +1,11 @@
-// qsamplerMainForm.ui.h
-//
-// ui.h extension file, included from the uic-generated form implementation.
-/****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-*****************************************************************************/
+#include "qsamplerMainForm.h"
 
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qworkspace.h>
 #include <qprocess.h>
 #include <qmessagebox.h>
-#include <qdragobject.h>
+//#include <qdragobject.h>
 #include <qregexp.h>
 #include <qfiledialog.h>
 #include <qfileinfo.h>
@@ -90,15 +70,15 @@ static WSADATA _wsaData;
 //-------------------------------------------------------------------------
 // qsamplerCustomEvent -- specialty for callback comunication.
 
-#define QSAMPLER_CUSTOM_EVENT   1000
+#define QSAMPLER_CUSTOM_EVENT   QEvent::Type(QEvent::User + 0)
 
-class qsamplerCustomEvent : public QCustomEvent
+class qsamplerCustomEvent : public QEvent
 {
 public:
 
     // Constructor.
     qsamplerCustomEvent(lscp_event_t event, const char *pchData, int cchData)
-        : QCustomEvent(QSAMPLER_CUSTOM_EVENT)
+        : QEvent(QSAMPLER_CUSTOM_EVENT)
     {
         m_event = event;
         m_data.setLatin1(pchData, cchData);
@@ -120,13 +100,18 @@ private:
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window form implementation.
 
+namespace QSampler {
+
 // Kind of singleton reference.
-qsamplerMainForm *qsamplerMainForm::g_pMainForm = NULL;
+MainForm* MainForm::g_pMainForm = NULL;
 
+MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
+    ui.setupUi(this);
 
-// Kind of constructor.
-void qsamplerMainForm::init (void)
-{
+    fileToolbar     = addToolBar(tr("File"));
+    editToolbar     = addToolBar(tr("Edit"));
+    channelsToolbar = addToolBar(tr("Channels"));
+
 	// Pseudo-singleton reference setup.
 	g_pMainForm = this;
 
@@ -172,8 +157,9 @@ void qsamplerMainForm::init (void)
 	QObject::connect(m_pVolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
-	channelsToolbar->setHorizontallyStretchable(true);
-	channelsToolbar->setStretchableWidget(m_pVolumeSlider);
+	//channelsToolbar->setHorizontallyStretchable(true);
+	//channelsToolbar->setStretchableWidget(m_pVolumeSlider);
+    channelsToolbar->addWidget(m_pVolumeSlider);
 	// Volume spin-box
 	channelsToolbar->addSeparator();
 	m_pVolumeSpinBox = new QSpinBox(channelsToolbar);
@@ -221,18 +207,17 @@ void qsamplerMainForm::init (void)
     statusBar()->addWidget(pLabel);
 
     // Create the recent files sub-menu.
-    m_pRecentFilesMenu = new QPopupMenu(this);
-    fileMenu->insertSeparator(4);
-    fileMenu->insertItem(tr("Recent &Files"), m_pRecentFilesMenu, 0, 5);
+    m_pRecentFilesMenu = new Q3PopupMenu(this);
+    ui.fileMenu->insertSeparator(4);
+    ui.fileMenu->insertItem(tr("Recent &Files"), m_pRecentFilesMenu, 0, 5);
 
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
 }
 
-
-// Kind of destructor.
-void qsamplerMainForm::destroy (void)
+// Destructor.
+MainForm::~MainForm()
 {
     // Do final processing anyway.
     processServerExit();
@@ -276,7 +261,7 @@ void qsamplerMainForm::destroy (void)
 
 
 // Make and set a proper setup options step.
-void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
+void MainForm::setup ( qsamplerOptions *pOptions )
 {
     // We got options?
     m_pOptions = pOptions;
@@ -292,10 +277,10 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
         wflags |= Qt::WStyle_Tool;
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
-    m_pDeviceForm = new qsamplerDeviceForm(this, 0, wflags);
+    m_pDeviceForm = new DeviceForm(this, wflags);
 #ifdef CONFIG_MIDI_INSTRUMENT
-    m_pInstrumentListForm = new qsamplerInstrumentListForm(this, 0, wflags);
-	QObject::connect(m_pInstrumentListForm->InstrumentList,
+    m_pInstrumentListForm = new InstrumentListForm(this, wflags);
+	QObject::connect(&m_pInstrumentListForm->model,
 		SIGNAL(instrumentsChanged()),
 		SLOT(sessionDirty()));
 #else
@@ -311,25 +296,22 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 		SLOT(stabilizeForm()));
 
     // Initial decorations toggle state.
-    viewMenubarAction->setOn(m_pOptions->bMenubar);
-    viewToolbarAction->setOn(m_pOptions->bToolbar);
-    viewStatusbarAction->setOn(m_pOptions->bStatusbar);
-    channelsAutoArrangeAction->setOn(m_pOptions->bAutoArrange);
+    ui.viewMenubarAction->setOn(m_pOptions->bMenubar);
+    ui.viewToolbarAction->setOn(m_pOptions->bToolbar);
+    ui.viewStatusbarAction->setOn(m_pOptions->bStatusbar);
+    ui.channelsAutoArrangeAction->setOn(m_pOptions->bAutoArrange);
 
     // Initial decorations visibility state.
     viewMenubar(m_pOptions->bMenubar);
     viewToolbar(m_pOptions->bToolbar);
     viewStatusbar(m_pOptions->bStatusbar);
 
-    // Restore whole dock windows state.
-    QString sDockables = m_pOptions->settings().readEntry("/Layout/DockWindows" , QString::null);
-    if (sDockables.isEmpty()) {
-        // Message window is forced to dock on the bottom.
-        moveDockWindow(m_pMessages, Qt::DockBottom);
-    } else {
-        // Make it as the last time.
-        QTextIStream istr(&sDockables);
-        istr >> *this;
+    addDockWidget(Qt::BottomDockWidgetArea, m_pMessages);
+
+    // Restore whole toolbar & dock windows states.
+    QString sDockables = m_pOptions->settings().readEntry("/Layout/DockWindowsBase64" , QString::null);
+    if (!sDockables.isEmpty()) {
+        restoreState(QByteArray::fromBase64(sDockables.toAscii()));
     }
     // Try to restore old window positioning and initial visibility.
     m_pOptions->loadWidgetGeometry(this);
@@ -353,7 +335,7 @@ void qsamplerMainForm::setup ( qsamplerOptions *pOptions )
 
 
 // Window close event handlers.
-bool qsamplerMainForm::queryClose (void)
+bool MainForm::queryClose (void)
 {
     bool bQueryClose = closeSession(false);
 
@@ -365,14 +347,12 @@ bool qsamplerMainForm::queryClose (void)
         // Try to save current positioning.
         if (bQueryClose) {
             // Save decorations state.
-            m_pOptions->bMenubar = MenuBar->isVisible();
+            m_pOptions->bMenubar = ui.MenuBar->isVisible();
             m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible() || channelsToolbar->isVisible());
             m_pOptions->bStatusbar = statusBar()->isVisible();
             // Save the dock windows state.
-            QString sDockables;
-            QTextOStream ostr(&sDockables);
-            ostr << *this;
-            m_pOptions->settings().writeEntry("/Layout/DockWindows", sDockables);
+            const QString sDockables = saveState().toBase64().data();
+            m_pOptions->settings().writeEntry("/Layout/DockWindowsBase64", sDockables);
             // And the children, and the main windows state,.
 			m_pOptions->saveWidgetGeometry(m_pDeviceForm);
 			m_pOptions->saveWidgetGeometry(m_pInstrumentListForm);
@@ -391,7 +371,7 @@ bool qsamplerMainForm::queryClose (void)
 }
 
 
-void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
+void MainForm::closeEvent ( QCloseEvent *pCloseEvent )
 {
     if (queryClose())
         pCloseEvent->accept();
@@ -401,13 +381,13 @@ void qsamplerMainForm::closeEvent ( QCloseEvent *pCloseEvent )
 
 
 // Drag'n'drop file handler.
-bool qsamplerMainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList& files )
+bool MainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList& files )
 {
     bool bDecode = false;
 
-    if (QTextDrag::canDecode(pEvent)) {
+    if (Q3TextDrag::canDecode(pEvent)) {
         QString sText;
-        bDecode = QTextDrag::decode(pEvent, sText);
+        bDecode = Q3TextDrag::decode(pEvent, sText);
         if (bDecode) {
             files = QStringList::split('\n', sText);
             for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++)
@@ -420,14 +400,14 @@ bool qsamplerMainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList&
 
 
 // Window drag-n-drop event handlers.
-void qsamplerMainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
+void MainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
 	QStringList files;
 	pDragEnterEvent->accept(decodeDragFiles(pDragEnterEvent, files));
 }
 
 
-void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
+void MainForm::dropEvent ( QDropEvent* pDropEvent )
 {
     QStringList files;
 
@@ -463,37 +443,35 @@ void qsamplerMainForm::dropEvent ( QDropEvent* pDropEvent )
 			break;
 		}
 		// Make it look responsive...:)
-		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInput);
 	}
 }
 
-
 // Custome event handler.
-void qsamplerMainForm::customEvent ( QCustomEvent *pCustomEvent )
+void MainForm::customEvent(QEvent* pCustomEvent)
 {
     // For the time being, just pump it to messages.
     if (pCustomEvent->type() == QSAMPLER_CUSTOM_EVENT) {
         qsamplerCustomEvent *pEvent = (qsamplerCustomEvent *) pCustomEvent;
 		if (pEvent->event() == LSCP_EVENT_CHANNEL_INFO) {
 			int iChannelID = pEvent->data().toInt();
-			qsamplerChannelStrip *pChannelStrip = channelStrip(iChannelID);
+			ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 			if (pChannelStrip)
 				channelStripChanged(pChannelStrip);
 		} else {
 			appendMessagesColor(tr("Notify event: %1 data: %2")
 				.arg(::lscp_event_to_text(pEvent->event()))
-				.arg(pEvent->data()), "#996699"); 
+				.arg(pEvent->data()), "#996699");
 		}
     }
 }
 
-
 // Context menu event handler.
-void qsamplerMainForm::contextMenuEvent( QContextMenuEvent *pEvent )
+void MainForm::contextMenuEvent( QContextMenuEvent *pEvent )
 {
     stabilizeForm();
 
-    editMenu->exec(pEvent->globalPos());
+    ui.editMenu->exec(pEvent->globalPos());
 }
 
 
@@ -501,21 +479,21 @@ void qsamplerMainForm::contextMenuEvent( QContextMenuEvent *pEvent )
 // qsamplerMainForm -- Brainless public property accessors.
 
 // The global options settings property.
-qsamplerOptions *qsamplerMainForm::options (void)
+qsamplerOptions *MainForm::options (void)
 {
     return m_pOptions;
 }
 
 
 // The LSCP client descriptor property.
-lscp_client_t *qsamplerMainForm::client (void)
+lscp_client_t *MainForm::client (void)
 {
     return m_pClient;
 }
 
 
 // The pseudo-singleton instance accessor.
-qsamplerMainForm *qsamplerMainForm::getInstance (void)
+MainForm *MainForm::getInstance (void)
 {
 	return g_pMainForm;
 }
@@ -525,7 +503,7 @@ qsamplerMainForm *qsamplerMainForm::getInstance (void)
 // qsamplerMainForm -- Session file stuff.
 
 // Format the displayable session filename.
-QString qsamplerMainForm::sessionName ( const QString& sFilename )
+QString MainForm::sessionName ( const QString& sFilename )
 {
     bool bCompletePath = (m_pOptions && m_pOptions->bCompletePath);
     QString sSessionName = sFilename;
@@ -538,7 +516,7 @@ QString qsamplerMainForm::sessionName ( const QString& sFilename )
 
 
 // Create a new session file from scratch.
-bool qsamplerMainForm::newSession (void)
+bool MainForm::newSession (void)
 {
     // Check if we can do it.
     if (!closeSession(true))
@@ -561,7 +539,7 @@ bool qsamplerMainForm::newSession (void)
 
 
 // Open an existing sampler session.
-bool qsamplerMainForm::openSession (void)
+bool MainForm::openSession (void)
 {
     if (m_pOptions == NULL)
         return false;
@@ -588,7 +566,7 @@ bool qsamplerMainForm::openSession (void)
 
 
 // Save current sampler session with another name.
-bool qsamplerMainForm::saveSession ( bool bPrompt )
+bool MainForm::saveSession ( bool bPrompt )
 {
     if (m_pOptions == NULL)
         return false;
@@ -632,7 +610,7 @@ bool qsamplerMainForm::saveSession ( bool bPrompt )
 
 
 // Close current session.
-bool qsamplerMainForm::closeSession ( bool bForce )
+bool MainForm::closeSession ( bool bForce )
 {
     bool bClose = true;
 
@@ -662,7 +640,7 @@ bool qsamplerMainForm::closeSession ( bool bForce )
         m_pWorkspace->setUpdatesEnabled(false);
         QWidgetList wlist = m_pWorkspace->windowList();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+            ChannelStrip *pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
             if (pChannelStrip) {
                 qsamplerChannel *pChannel = pChannelStrip->channel();
                 if (bForce && pChannel)
@@ -680,7 +658,7 @@ bool qsamplerMainForm::closeSession ( bool bForce )
 
 
 // Load a session from specific file path.
-bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
+bool MainForm::loadSessionFile ( const QString& sFilename )
 {
     if (m_pClient == NULL)
         return false;
@@ -717,7 +695,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 			}
         }
         // Try to make it snappy :)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+        QApplication::processEvents(QEventLoop::ExcludeUserInput);
     }
 
     // Ok. we've read it.
@@ -736,7 +714,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
     // Save as default session directory.
     if (m_pOptions)
         m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
-	// We're not dirty anymore, if loaded without errors, 
+	// We're not dirty anymore, if loaded without errors,
 	m_iDirtyCount = iErrors;
     // Stabilize form...
     m_sFilename = sFilename;
@@ -750,7 +728,7 @@ bool qsamplerMainForm::loadSessionFile ( const QString& sFilename )
 
 
 // Save current session to specific file path.
-bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
+bool MainForm::saveSessionFile ( const QString& sFilename )
 {
 	if (m_pClient == NULL)
 		return false;
@@ -832,7 +810,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		// Audio device index/id mapping.
 		audioDeviceMap[device.deviceID()] = iDevice;
 		// Try to keep it snappy :)
-		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInput);
 	}
 
 	// MIDI device mapping.
@@ -873,7 +851,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 		// MIDI device index/id mapping.
 		midiDeviceMap[device.deviceID()] = iDevice;
 		// Try to keep it snappy :)
-		QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInput);
 	}
 	ts << endl;
 
@@ -904,7 +882,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 					<< iMap                        << " "
 					<< pInstrs[iInstr].bank        << " "
 					<< pInstrs[iInstr].prog        << " "
-					<< pInstrInfo->engine_name     << " '" 
+					<< pInstrInfo->engine_name     << " '"
 					<< pInstrInfo->instrument_file << "' "
 					<< pInstrInfo->instrument_nr   << " "
 					<< pInstrInfo->volume          << " ";
@@ -930,7 +908,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 				iErrors++;
 			}
 			// Try to keep it snappy :)
-			QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+			QApplication::processEvents(QEventLoop::ExcludeUserInput);
 		}
 		ts << endl;
 		// Check for errors...
@@ -951,8 +929,8 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 	// Sampler channel mapping.
     QWidgetList wlist = m_pWorkspace->windowList();
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip
-			= static_cast<qsamplerChannelStrip *> (wlist.at(iChannel));
+        ChannelStrip* pChannelStrip
+			= static_cast<ChannelStrip *> (wlist.at(iChannel));
         if (pChannelStrip) {
             qsamplerChannel *pChannel = pChannelStrip->channel();
             if (pChannel) {
@@ -1031,7 +1009,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 #ifdef CONFIG_FXSEND_LEVEL
 						ts << "SET FX_SEND LEVEL " << iChannel
 							<< " " << iFxSend
-							<< " " << pFxSendInfo->level << endl;							
+							<< " " << pFxSendInfo->level << endl;
 #endif
 					}	// Check for errors...
 					else if (::lscp_client_get_errno(m_pClient)) {
@@ -1044,7 +1022,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
             }
         }
         // Try to keep it snappy :)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+        QApplication::processEvents(QEventLoop::ExcludeUserInput);
     }
 
 #ifdef CONFIG_VOLUME
@@ -1078,7 +1056,7 @@ bool qsamplerMainForm::saveSessionFile ( const QString& sFilename )
 
 
 // Session change receiver slot.
-void qsamplerMainForm::sessionDirty (void)
+void MainForm::sessionDirty (void)
 {
     // Just mark the dirty form.
     m_iDirtyCount++;
@@ -1091,7 +1069,7 @@ void qsamplerMainForm::sessionDirty (void)
 // qsamplerMainForm -- File Action slots.
 
 // Create a new sampler session.
-void qsamplerMainForm::fileNew (void)
+void MainForm::fileNew (void)
 {
     // Of course we'll start clean new.
     newSession();
@@ -1099,7 +1077,7 @@ void qsamplerMainForm::fileNew (void)
 
 
 // Open an existing sampler session.
-void qsamplerMainForm::fileOpen (void)
+void MainForm::fileOpen (void)
 {
     // Open it right away.
     openSession();
@@ -1107,7 +1085,7 @@ void qsamplerMainForm::fileOpen (void)
 
 
 // Open a recent file session.
-void qsamplerMainForm::fileOpenRecent ( int iIndex )
+void MainForm::fileOpenRecent ( int iIndex )
 {
     // Check if we can safely close the current session...
     if (m_pOptions && closeSession(true)) {
@@ -1118,7 +1096,7 @@ void qsamplerMainForm::fileOpenRecent ( int iIndex )
 
 
 // Save current sampler session.
-void qsamplerMainForm::fileSave (void)
+void MainForm::fileSave (void)
 {
     // Save it right away.
     saveSession(false);
@@ -1126,7 +1104,7 @@ void qsamplerMainForm::fileSave (void)
 
 
 // Save current sampler session with another name.
-void qsamplerMainForm::fileSaveAs (void)
+void MainForm::fileSaveAs (void)
 {
     // Save it right away, maybe with another name.
     saveSession(true);
@@ -1134,7 +1112,7 @@ void qsamplerMainForm::fileSaveAs (void)
 
 
 // Reset the sampler instance.
-void qsamplerMainForm::fileReset (void)
+void MainForm::fileReset (void)
 {
     if (m_pClient == NULL)
         return;
@@ -1171,7 +1149,7 @@ void qsamplerMainForm::fileReset (void)
 
 
 // Restart the client/server instance.
-void qsamplerMainForm::fileRestart (void)
+void MainForm::fileRestart (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -1202,7 +1180,7 @@ void qsamplerMainForm::fileRestart (void)
 
 
 // Exit application program.
-void qsamplerMainForm::fileExit (void)
+void MainForm::fileExit (void)
 {
     // Go for close the whole thing.
     close();
@@ -1213,7 +1191,7 @@ void qsamplerMainForm::fileExit (void)
 // qsamplerMainForm -- Edit Action slots.
 
 // Add a new sampler channel.
-void qsamplerMainForm::editAddChannel (void)
+void MainForm::editAddChannel (void)
 {
     if (m_pClient == NULL)
         return;
@@ -1243,12 +1221,12 @@ void qsamplerMainForm::editAddChannel (void)
 
 
 // Remove current sampler channel.
-void qsamplerMainForm::editRemoveChannel (void)
+void MainForm::editRemoveChannel (void)
 {
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    ChannelStrip* pChannelStrip = activeChannelStrip();
     if (pChannelStrip == NULL)
         return;
 
@@ -1286,12 +1264,12 @@ void qsamplerMainForm::editRemoveChannel (void)
 
 
 // Setup current sampler channel.
-void qsamplerMainForm::editSetupChannel (void)
+void MainForm::editSetupChannel (void)
 {
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    ChannelStrip* pChannelStrip = activeChannelStrip();
     if (pChannelStrip == NULL)
         return;
 
@@ -1301,12 +1279,12 @@ void qsamplerMainForm::editSetupChannel (void)
 
 
 // Edit current sampler channel.
-void qsamplerMainForm::editEditChannel (void)
+void MainForm::editEditChannel (void)
 {
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    ChannelStrip* pChannelStrip = activeChannelStrip();
     if (pChannelStrip == NULL)
         return;
 
@@ -1316,12 +1294,12 @@ void qsamplerMainForm::editEditChannel (void)
 
 
 // Reset current sampler channel.
-void qsamplerMainForm::editResetChannel (void)
+void MainForm::editResetChannel (void)
 {
     if (m_pClient == NULL)
         return;
 
-    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    ChannelStrip* pChannelStrip = activeChannelStrip();
     if (pChannelStrip == NULL)
         return;
 
@@ -1331,7 +1309,7 @@ void qsamplerMainForm::editResetChannel (void)
 
 
 // Reset all sampler channels.
-void qsamplerMainForm::editResetAllChannels (void)
+void MainForm::editResetAllChannels (void)
 {
 	if (m_pClient == NULL)
 		return;
@@ -1341,7 +1319,7 @@ void qsamplerMainForm::editResetAllChannels (void)
 	m_pWorkspace->setUpdatesEnabled(false);
 	QWidgetList wlist = m_pWorkspace->windowList();
 	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
 		if (pChannelStrip)
 			pChannelStrip->channelReset();
 	}
@@ -1353,17 +1331,17 @@ void qsamplerMainForm::editResetAllChannels (void)
 // qsamplerMainForm -- View Action slots.
 
 // Show/hide the main program window menubar.
-void qsamplerMainForm::viewMenubar ( bool bOn )
+void MainForm::viewMenubar ( bool bOn )
 {
     if (bOn)
-        MenuBar->show();
+        ui.MenuBar->show();
     else
-        MenuBar->hide();
+        ui.MenuBar->hide();
 }
 
 
 // Show/hide the main program window toolbar.
-void qsamplerMainForm::viewToolbar ( bool bOn )
+void MainForm::viewToolbar ( bool bOn )
 {
     if (bOn) {
         fileToolbar->show();
@@ -1378,7 +1356,7 @@ void qsamplerMainForm::viewToolbar ( bool bOn )
 
 
 // Show/hide the main program window statusbar.
-void qsamplerMainForm::viewStatusbar ( bool bOn )
+void MainForm::viewStatusbar ( bool bOn )
 {
     if (bOn)
         statusBar()->show();
@@ -1388,7 +1366,7 @@ void qsamplerMainForm::viewStatusbar ( bool bOn )
 
 
 // Show/hide the messages window logger.
-void qsamplerMainForm::viewMessages ( bool bOn )
+void MainForm::viewMessages ( bool bOn )
 {
     if (bOn)
         m_pMessages->show();
@@ -1398,7 +1376,7 @@ void qsamplerMainForm::viewMessages ( bool bOn )
 
 
 // Show/hide the MIDI instrument list-view form.
-void qsamplerMainForm::viewInstruments (void)
+void MainForm::viewInstruments (void)
 {
 	if (m_pOptions == NULL)
 		return;
@@ -1417,7 +1395,7 @@ void qsamplerMainForm::viewInstruments (void)
 
 
 // Show/hide the device configurator form.
-void qsamplerMainForm::viewDevices (void)
+void MainForm::viewDevices (void)
 {
 	if (m_pOptions == NULL)
 		return;
@@ -1436,15 +1414,15 @@ void qsamplerMainForm::viewDevices (void)
 
 
 // Show options dialog.
-void qsamplerMainForm::viewOptions (void)
+void MainForm::viewOptions (void)
 {
     if (m_pOptions == NULL)
         return;
 
-    qsamplerOptionsForm *pOptionsForm = new qsamplerOptionsForm(this);
+    OptionsForm* pOptionsForm = new OptionsForm(this);
     if (pOptionsForm) {
         // Check out some initial nullities(tm)...
-        qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+        ChannelStrip* pChannelStrip = activeChannelStrip();
         if (m_pOptions->sDisplayFont.isEmpty() && pChannelStrip)
             m_pOptions->sDisplayFont = pChannelStrip->displayFont().toString();
         if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
@@ -1524,7 +1502,7 @@ void qsamplerMainForm::viewOptions (void)
 // qsamplerMainForm -- Channels action slots.
 
 // Arrange channel strips.
-void qsamplerMainForm::channelsArrange (void)
+void MainForm::channelsArrange (void)
 {
     // Full width vertical tiling
     QWidgetList wlist = m_pWorkspace->windowList();
@@ -1534,7 +1512,7 @@ void qsamplerMainForm::channelsArrange (void)
     m_pWorkspace->setUpdatesEnabled(false);
     int y = 0;
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
     /*  if (pChannelStrip->testWState(WState_Maximized | WState_Minimized)) {
             // Prevent flicker...
             pChannelStrip->hide();
@@ -1556,7 +1534,7 @@ void qsamplerMainForm::channelsArrange (void)
 
 
 // Auto-arrange channel strips.
-void qsamplerMainForm::channelsAutoArrange ( bool bOn )
+void MainForm::channelsAutoArrange ( bool bOn )
 {
     if (m_pOptions == NULL)
         return;
@@ -1574,14 +1552,14 @@ void qsamplerMainForm::channelsAutoArrange ( bool bOn )
 // qsamplerMainForm -- Help Action slots.
 
 // Show information about the Qt toolkit.
-void qsamplerMainForm::helpAboutQt (void)
+void MainForm::helpAboutQt (void)
 {
     QMessageBox::aboutQt(this);
 }
 
 
 // Show information about application program.
-void qsamplerMainForm::helpAbout (void)
+void MainForm::helpAbout (void)
 {
     // Stuff the about box text...
     QString sText = "<p>\n";
@@ -1664,7 +1642,7 @@ void qsamplerMainForm::helpAbout (void)
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window stabilization.
 
-void qsamplerMainForm::stabilizeForm (void)
+void MainForm::stabilizeForm (void)
 {
     // Update the main application caption...
     QString sSessionName = sessionName(m_sFilename);
@@ -1673,37 +1651,37 @@ void qsamplerMainForm::stabilizeForm (void)
     setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
 
     // Update the main menu state...
-    qsamplerChannelStrip *pChannelStrip = activeChannelStrip();
+    ChannelStrip* pChannelStrip = activeChannelStrip();
     bool bHasClient  = (m_pOptions != NULL && m_pClient != NULL);
     bool bHasChannel = (bHasClient && pChannelStrip != NULL);
-    fileNewAction->setEnabled(bHasClient);
-    fileOpenAction->setEnabled(bHasClient);
-    fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
-    fileSaveAsAction->setEnabled(bHasClient);
-    fileResetAction->setEnabled(bHasClient);
-    fileRestartAction->setEnabled(bHasClient || m_pServer == NULL);
-    editAddChannelAction->setEnabled(bHasClient);
-    editRemoveChannelAction->setEnabled(bHasChannel);
-    editSetupChannelAction->setEnabled(bHasChannel);
+    ui.fileNewAction->setEnabled(bHasClient);
+    ui.fileOpenAction->setEnabled(bHasClient);
+    ui.fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
+    ui.fileSaveAsAction->setEnabled(bHasClient);
+    ui.fileResetAction->setEnabled(bHasClient);
+    ui.fileRestartAction->setEnabled(bHasClient || m_pServer == NULL);
+    ui.editAddChannelAction->setEnabled(bHasClient);
+    ui.editRemoveChannelAction->setEnabled(bHasChannel);
+    ui.editSetupChannelAction->setEnabled(bHasChannel);
 #ifdef CONFIG_EDIT_INSTRUMENT
-    editEditChannelAction->setEnabled(bHasChannel);
+    ui.editEditChannelAction->setEnabled(bHasChannel);
 #else
-    editEditChannelAction->setEnabled(false);
+    ui.editEditChannelAction->setEnabled(false);
 #endif
-    editResetChannelAction->setEnabled(bHasChannel);
-    editResetAllChannelsAction->setEnabled(bHasChannel);
-    viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
+    ui.editResetChannelAction->setEnabled(bHasChannel);
+    ui.editResetAllChannelsAction->setEnabled(bHasChannel);
+    ui.viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
 #ifdef CONFIG_MIDI_INSTRUMENT
-	viewInstrumentsAction->setOn(m_pInstrumentListForm
+	ui.viewInstrumentsAction->setOn(m_pInstrumentListForm
 		&& m_pInstrumentListForm->isVisible());
-	viewInstrumentsAction->setEnabled(bHasClient);
+	ui.viewInstrumentsAction->setEnabled(bHasClient);
 #else
-	viewInstrumentsAction->setEnabled(false);
+	ui.viewInstrumentsAction->setEnabled(false);
 #endif
-	viewDevicesAction->setOn(m_pDeviceForm
+	ui.viewDevicesAction->setOn(m_pDeviceForm
 		&& m_pDeviceForm->isVisible());
-    viewDevicesAction->setEnabled(bHasClient);
-    channelsArrangeAction->setEnabled(bHasChannel);
+    ui.viewDevicesAction->setEnabled(bHasClient);
+    ui.channelsArrangeAction->setEnabled(bHasChannel);
 
 #ifdef CONFIG_VOLUME
 	// Toolbar widgets are also affected...
@@ -1740,13 +1718,13 @@ void qsamplerMainForm::stabilizeForm (void)
 
 
 // Global volume change receiver slot.
-void qsamplerMainForm::volumeChanged ( int iVolume )
+void MainForm::volumeChanged ( int iVolume )
 {
 #ifdef CONFIG_VOLUME
 
 	if (m_iVolumeChanging > 0)
 		return;
-	
+
 	m_iVolumeChanging++;
 
 	// Update the toolbar widgets...
@@ -1772,7 +1750,7 @@ void qsamplerMainForm::volumeChanged ( int iVolume )
 
 
 // Channel change receiver slot.
-void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip )
+void MainForm::channelStripChanged(ChannelStrip* pChannelStrip)
 {
 	// Add this strip to the changed list...
 	if (m_changedStrips.containsRef(pChannelStrip) == 0) {
@@ -1788,7 +1766,7 @@ void qsamplerMainForm::channelStripChanged( qsamplerChannelStrip *pChannelStrip 
 
 
 // Grab and restore current sampler channels session.
-void qsamplerMainForm::updateSession (void)
+void MainForm::updateSession (void)
 {
 #ifdef CONFIG_VOLUME
 	int iVolume = ::lroundf(100.0f * ::lscp_get_volume(m_pClient));
@@ -1839,7 +1817,7 @@ void qsamplerMainForm::updateSession (void)
 
 
 // Update the recent files list and menu.
-void qsamplerMainForm::updateRecentFiles ( const QString& sFilename )
+void MainForm::updateRecentFiles ( const QString& sFilename )
 {
     if (m_pOptions == NULL)
         return;
@@ -1857,7 +1835,7 @@ void qsamplerMainForm::updateRecentFiles ( const QString& sFilename )
 
 
 // Update the recent files list and menu.
-void qsamplerMainForm::updateRecentFilesMenu (void)
+void MainForm::updateRecentFilesMenu (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -1868,7 +1846,7 @@ void qsamplerMainForm::updateRecentFilesMenu (void)
         m_pOptions->recentFiles.pop_back();
         iRecentFiles--;
     }
-    
+
     // rebuild the recent files menu...
     m_pRecentFilesMenu->clear();
     for (int i = 0; i < iRecentFiles; i++) {
@@ -1883,7 +1861,7 @@ void qsamplerMainForm::updateRecentFilesMenu (void)
 
 
 // Force update of the channels instrument names mode.
-void qsamplerMainForm::updateInstrumentNames (void)
+void MainForm::updateInstrumentNames (void)
 {
     // Full channel list update...
     QWidgetList wlist = m_pWorkspace->windowList();
@@ -1892,7 +1870,7 @@ void qsamplerMainForm::updateInstrumentNames (void)
 
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        ChannelStrip *pChannelStrip = (ChannelStrip *) wlist.at(iChannel);
         if (pChannelStrip)
             pChannelStrip->updateInstrumentName(true);
     }
@@ -1901,7 +1879,7 @@ void qsamplerMainForm::updateInstrumentNames (void)
 
 
 // Force update of the channels display font.
-void qsamplerMainForm::updateDisplayFont (void)
+void MainForm::updateDisplayFont (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -1921,7 +1899,7 @@ void qsamplerMainForm::updateDisplayFont (void)
 
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
         if (pChannelStrip)
             pChannelStrip->setDisplayFont(font);
     }
@@ -1930,11 +1908,11 @@ void qsamplerMainForm::updateDisplayFont (void)
 
 
 // Update channel strips background effect.
-void qsamplerMainForm::updateDisplayEffect (void)
+void MainForm::updateDisplayEffect (void)
 {
    QPixmap pm;
     if (m_pOptions->bDisplayEffect)
-        pm = QPixmap::fromMimeSource("displaybg1.png");
+        pm = QPixmap(":/qsampler/pixmaps/displaybg1.png");
 
     // Full channel list update...
     QWidgetList wlist = m_pWorkspace->windowList();
@@ -1943,7 +1921,7 @@ void qsamplerMainForm::updateDisplayEffect (void)
 
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
         if (pChannelStrip)
             pChannelStrip->setDisplayBackground(pm);
     }
@@ -1952,7 +1930,7 @@ void qsamplerMainForm::updateDisplayEffect (void)
 
 
 // Force update of the channels maximum volume setting.
-void qsamplerMainForm::updateMaxVolume (void)
+void MainForm::updateMaxVolume (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -1971,7 +1949,7 @@ void qsamplerMainForm::updateMaxVolume (void)
 
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-        qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+        ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
         if (pChannelStrip)
             pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
     }
@@ -1983,7 +1961,7 @@ void qsamplerMainForm::updateMaxVolume (void)
 // qsamplerMainForm -- Messages window form handlers.
 
 // Messages output methods.
-void qsamplerMainForm::appendMessages( const QString& s )
+void MainForm::appendMessages( const QString& s )
 {
     if (m_pMessages)
         m_pMessages->appendMessages(s);
@@ -1991,7 +1969,7 @@ void qsamplerMainForm::appendMessages( const QString& s )
     statusBar()->message(s, 3000);
 }
 
-void qsamplerMainForm::appendMessagesColor( const QString& s, const QString& c )
+void MainForm::appendMessagesColor( const QString& s, const QString& c )
 {
     if (m_pMessages)
         m_pMessages->appendMessagesColor(s, c);
@@ -1999,13 +1977,13 @@ void qsamplerMainForm::appendMessagesColor( const QString& s, const QString& c )
     statusBar()->message(s, 3000);
 }
 
-void qsamplerMainForm::appendMessagesText( const QString& s )
+void MainForm::appendMessagesText( const QString& s )
 {
     if (m_pMessages)
         m_pMessages->appendMessagesText(s);
 }
 
-void qsamplerMainForm::appendMessagesError( const QString& s )
+void MainForm::appendMessagesError( const QString& s )
 {
     if (m_pMessages)
         m_pMessages->show();
@@ -2013,7 +1991,7 @@ void qsamplerMainForm::appendMessagesError( const QString& s )
     appendMessagesColor(s.simplifyWhiteSpace(), "#ff0000");
 
 	// Make it look responsive...:)
-	QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	QApplication::processEvents(QEventLoop::ExcludeUserInput);
 
     QMessageBox::critical(this,
 		QSAMPLER_TITLE ": " + tr("Error"), s, tr("Cancel"));
@@ -2021,7 +1999,7 @@ void qsamplerMainForm::appendMessagesError( const QString& s )
 
 
 // This is a special message format, just for client results.
-void qsamplerMainForm::appendMessagesClient( const QString& s )
+void MainForm::appendMessagesClient( const QString& s )
 {
     if (m_pClient == NULL)
         return;
@@ -2031,12 +2009,12 @@ void qsamplerMainForm::appendMessagesClient( const QString& s )
         .arg(::lscp_client_get_errno(m_pClient)), "#996666");
 
 	// Make it look responsive...:)
-	QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+	QApplication::processEvents(QEventLoop::ExcludeUserInput);
 }
 
 
 // Force update of the messages font.
-void qsamplerMainForm::updateMessagesFont (void)
+void MainForm::updateMessagesFont (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -2050,7 +2028,7 @@ void qsamplerMainForm::updateMessagesFont (void)
 
 
 // Update messages window line limit.
-void qsamplerMainForm::updateMessagesLimit (void)
+void MainForm::updateMessagesLimit (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -2065,7 +2043,7 @@ void qsamplerMainForm::updateMessagesLimit (void)
 
 
 // Enablement of the messages capture feature.
-void qsamplerMainForm::updateMessagesCapture (void)
+void MainForm::updateMessagesCapture (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -2079,18 +2057,18 @@ void qsamplerMainForm::updateMessagesCapture (void)
 // qsamplerMainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
-qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pChannel )
+ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
 {
     if (m_pClient == NULL || pChannel == NULL)
         return NULL;
 
     // Prepare for auto-arrange?
-    qsamplerChannelStrip *pChannelStrip = NULL;
+    ChannelStrip* pChannelStrip = NULL;
     int y = 0;
     if (m_pOptions && m_pOptions->bAutoArrange) {
         QWidgetList wlist = m_pWorkspace->windowList();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+            pChannelStrip = (ChannelStrip *) wlist.at(iChannel);
 			if (pChannelStrip) {
 			//  y += pChannelStrip->height() + pChannelStrip->parentWidget()->baseSize().height();
 				y += pChannelStrip->parentWidget()->frameGeometry().height();
@@ -2099,8 +2077,8 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
     }
 
     // Add a new channel itema...
-    WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
-    pChannelStrip = new qsamplerChannelStrip(m_pWorkspace, 0, wflags);
+    Qt::WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
+    pChannelStrip = new ChannelStrip(m_pWorkspace, wflags);
     if (pChannelStrip == NULL)
         return NULL;
 
@@ -2127,8 +2105,7 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
     if (m_pOptions && m_pOptions->bAutoArrange) {
         int iWidth  = m_pWorkspace->width();
     //  int iHeight = pChannel->height() + pChannel->parentWidget()->baseSize().height();
-        int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
-        pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+        int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();        pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
     }
 
 	// This is pretty new, so we'll watch for it closely.
@@ -2140,32 +2117,32 @@ qsamplerChannelStrip *qsamplerMainForm::createChannelStrip ( qsamplerChannel *pC
 
 
 // Retrieve the active channel strip.
-qsamplerChannelStrip *qsamplerMainForm::activeChannelStrip (void)
+ChannelStrip* MainForm::activeChannelStrip (void)
 {
-    return (qsamplerChannelStrip *) m_pWorkspace->activeWindow();
+    return (ChannelStrip*) m_pWorkspace->activeWindow();
 }
 
 
 // Retrieve a channel strip by index.
-qsamplerChannelStrip *qsamplerMainForm::channelStripAt ( int iChannel )
+ChannelStrip* MainForm::channelStripAt ( int iChannel )
 {
     QWidgetList wlist = m_pWorkspace->windowList();
     if (wlist.isEmpty())
         return NULL;
 
-    return (qsamplerChannelStrip *) wlist.at(iChannel);
+    return (ChannelStrip*) wlist.at(iChannel);
 }
 
 
 // Retrieve a channel strip by sampler channel id.
-qsamplerChannelStrip *qsamplerMainForm::channelStrip ( int iChannelID )
+ChannelStrip* MainForm::channelStrip ( int iChannelID )
 {
 	QWidgetList wlist = m_pWorkspace->windowList();
 	if (wlist.isEmpty())
 		return NULL;
 
 	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
 		if (pChannelStrip) {
 			qsamplerChannel *pChannel = pChannelStrip->channel();
 			if (pChannel && pChannel->channelID() == iChannelID)
@@ -2179,21 +2156,21 @@ qsamplerChannelStrip *qsamplerMainForm::channelStrip ( int iChannelID )
 
 
 // Construct the windows menu.
-void qsamplerMainForm::channelsMenuAboutToShow (void)
+void MainForm::channelsMenuAboutToShow (void)
 {
-    channelsMenu->clear();
-    channelsArrangeAction->addTo(channelsMenu);
-    channelsAutoArrangeAction->addTo(channelsMenu);
+    ui.channelsMenu->clear();
+    ui.channelsArrangeAction->addTo(ui.channelsMenu);
+    ui.channelsAutoArrangeAction->addTo(ui.channelsMenu);
 
     QWidgetList wlist = m_pWorkspace->windowList();
     if (!wlist.isEmpty()) {
-        channelsMenu->insertSeparator();
+        ui.channelsMenu->insertSeparator();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            qsamplerChannelStrip *pChannelStrip = (qsamplerChannelStrip *) wlist.at(iChannel);
+            ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
             if (pChannelStrip) {
-                int iItemID = channelsMenu->insertItem(pChannelStrip->caption(), this, SLOT(channelsMenuActivated(int)));
-                channelsMenu->setItemParameter(iItemID, iChannel);
-                channelsMenu->setItemChecked(iItemID, activeChannelStrip() == pChannelStrip);
+                int iItemID = ui.channelsMenu->insertItem(pChannelStrip->caption(), this, SLOT(channelsMenuActivated(int)));
+                ui.channelsMenu->setItemParameter(iItemID, iChannel);
+                ui.channelsMenu->setItemChecked(iItemID, activeChannelStrip() == pChannelStrip);
             }
         }
     }
@@ -2201,9 +2178,9 @@ void qsamplerMainForm::channelsMenuAboutToShow (void)
 
 
 // Windows menu activation slot
-void qsamplerMainForm::channelsMenuActivated ( int iChannel )
+void MainForm::channelsMenuActivated ( int iChannel )
 {
-    qsamplerChannelStrip *pChannelStrip = channelStripAt(iChannel);
+    ChannelStrip* pChannelStrip = channelStripAt(iChannel);
     if (pChannelStrip)
         pChannelStrip->showNormal();
     pChannelStrip->setFocus();
@@ -2214,21 +2191,21 @@ void qsamplerMainForm::channelsMenuActivated ( int iChannel )
 // qsamplerMainForm -- Timer stuff.
 
 // Set the pseudo-timer delay schedule.
-void qsamplerMainForm::startSchedule ( int iStartDelay )
+void MainForm::startSchedule ( int iStartDelay )
 {
     m_iStartDelay  = 1 + (iStartDelay * 1000);
     m_iTimerDelay  = 0;
 }
 
 // Suspend the pseudo-timer delay schedule.
-void qsamplerMainForm::stopSchedule (void)
+void MainForm::stopSchedule (void)
 {
     m_iStartDelay  = 0;
     m_iTimerDelay  = 0;
 }
 
 // Timer slot funtion.
-void qsamplerMainForm::timerSlot (void)
+void MainForm::timerSlot (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -2248,7 +2225,7 @@ void qsamplerMainForm::timerSlot (void)
 	if (m_pClient) {
 		// Update the channel information for each pending strip...
 		if (m_changedStrips.count() > 0) {
-			for (qsamplerChannelStrip *pChannelStrip = m_changedStrips.first();
+			for (ChannelStrip* pChannelStrip = m_changedStrips.first();
 					pChannelStrip; pChannelStrip = m_changedStrips.next()) {
 				// If successfull, remove from pending list...
 				if (pChannelStrip->updateChannelInfo())
@@ -2264,8 +2241,8 @@ void qsamplerMainForm::timerSlot (void)
 				QWidgetList wlist = m_pWorkspace->windowList();
 				for (int iChannel = 0;
 						iChannel < (int) wlist.count(); iChannel++) {
-					qsamplerChannelStrip *pChannelStrip
-						= (qsamplerChannelStrip *) wlist.at(iChannel);
+					ChannelStrip* pChannelStrip
+						= (ChannelStrip*) wlist.at(iChannel);
 					if (pChannelStrip && pChannelStrip->isVisible())
 						pChannelStrip->updateChannelUsage();
 				}
@@ -2282,7 +2259,7 @@ void qsamplerMainForm::timerSlot (void)
 // qsamplerMainForm -- Server stuff.
 
 // Start linuxsampler server...
-void qsamplerMainForm::startServer (void)
+void MainForm::startServer (void)
 {
     if (m_pOptions == NULL)
         return;
@@ -2299,7 +2276,7 @@ void qsamplerMainForm::startServer (void)
                "Maybe it ss already started."),
             tr("Stop"), tr("Kill"), tr("Cancel"))) {
           case 0:
-            m_pServer->tryTerminate();
+            m_pServer->terminate();
             break;
           case 1:
             m_pServer->kill();
@@ -2316,8 +2293,8 @@ void qsamplerMainForm::startServer (void)
 
     // Setup stdout/stderr capture...
 	//	if (m_pOptions->bStdoutCapture) {
-		m_pServer->setCommunication(
-			QProcess::Stdout | QProcess::Stderr | QProcess::DupStderr);
+		//m_pServer->setProcessChannelMode(
+		//	QProcess::StandardOutput);
 		QObject::connect(m_pServer,
 			SIGNAL(readyReadStdout()),
 			SLOT(readServerStdout()));
@@ -2331,20 +2308,26 @@ void qsamplerMainForm::startServer (void)
 		SLOT(processServerExit()));
 
     // Build process arguments...
-    m_pServer->setArguments(QStringList::split(' ', m_pOptions->sServerCmdLine));
+    QStringList serverCmdLine = QStringList::split(' ', m_pOptions->sServerCmdLine);
 
     appendMessages(tr("Server is starting..."));
     appendMessagesColor(m_pOptions->sServerCmdLine, "#990099");
 
+
+
+    const QString prog = (serverCmdLine.size() > 0) ? serverCmdLine[0] : QString();
+    const QStringList args = serverCmdLine.mid(1);
+
     // Go jack, go...
-    if (!m_pServer->start()) {
+    m_pServer->start(prog, args);
+    if (!m_pServer->waitForStarted()) {
         appendMessagesError(tr("Could not start server.\n\nSorry."));
         processServerExit();
         return;
     }
 
     // Show startup results...
-    appendMessages(tr("Server was started with PID=%1.").arg((long) m_pServer->processIdentifier()));
+    appendMessages(tr("Server was started with PID=%1.").arg((long) m_pServer->pid()));
 
     // Reset (yet again) the timer counters,
     // but this time is deferred as the user opted.
@@ -2354,7 +2337,7 @@ void qsamplerMainForm::startServer (void)
 
 
 // Stop linuxsampler server...
-void qsamplerMainForm::stopServer (void)
+void MainForm::stopServer (void)
 {
     // Stop client code.
     stopClient();
@@ -2362,15 +2345,15 @@ void qsamplerMainForm::stopServer (void)
     // And try to stop server.
     if (m_pServer) {
         appendMessages(tr("Server is stopping..."));
-        if (m_pServer->isRunning())
-            m_pServer->tryTerminate();
+        if (m_pServer->state() == QProcess::Running)
+            m_pServer->terminate();
      }
 
     // Give it some time to terminate gracefully and stabilize...
     QTime t;
     t.start();
     while (t.elapsed() < QSAMPLER_TIMER_MSECS)
-        QApplication::eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+        QApplication::processEvents(QEventLoop::ExcludeUserInput);
 
      // Do final processing anyway.
      processServerExit();
@@ -2378,15 +2361,15 @@ void qsamplerMainForm::stopServer (void)
 
 
 // Stdout handler...
-void qsamplerMainForm::readServerStdout (void)
+void MainForm::readServerStdout (void)
 {
     if (m_pMessages)
-        m_pMessages->appendStdoutBuffer(m_pServer->readStdout());
+        m_pMessages->appendStdoutBuffer(m_pServer->readAllStandardOutput());
 }
 
 
 // Linuxsampler server cleanup.
-void qsamplerMainForm::processServerExit (void)
+void MainForm::processServerExit (void)
 {
     // Force client code cleanup.
     stopClient();
@@ -2398,7 +2381,8 @@ void qsamplerMainForm::processServerExit (void)
     if (m_pServer) {
         // Force final server shutdown...
         appendMessages(tr("Server was stopped with exit status %1.").arg(m_pServer->exitStatus()));
-        if (!m_pServer->normalExit())
+        m_pServer->terminate();
+        if (!m_pServer->waitForFinished(2000))
             m_pServer->kill();
         // Destroy it.
         delete m_pServer;
@@ -2416,7 +2400,7 @@ void qsamplerMainForm::processServerExit (void)
 // The LSCP client callback procedure.
 lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/, lscp_event_t event, const char *pchData, int cchData, void *pvData )
 {
-    qsamplerMainForm *pMainForm = (qsamplerMainForm *) pvData;
+    MainForm* pMainForm = (MainForm *) pvData;
     if (pMainForm == NULL)
         return LSCP_FAILED;
 
@@ -2430,7 +2414,7 @@ lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/, lscp_event_
 
 
 // Start our almighty client...
-bool qsamplerMainForm::startClient (void)
+bool MainForm::startClient (void)
 {
     // Have it a setup?
     if (m_pOptions == NULL)
@@ -2448,7 +2432,7 @@ bool qsamplerMainForm::startClient (void)
     if (m_pClient == NULL) {
         // Is this the first try?
         // maybe we need to start a local server...
-        if ((m_pServer && m_pServer->isRunning()) || !m_pOptions->bServerStart)
+        if ((m_pServer && m_pServer->state() == QProcess::Running) || !m_pOptions->bServerStart)
             appendMessagesError(tr("Could not connect to server as client.\n\nSorry."));
         else
             startServer();
@@ -2495,7 +2479,7 @@ bool qsamplerMainForm::startClient (void)
 
 
 // Stop client...
-void qsamplerMainForm::stopClient (void)
+void MainForm::stopClient (void)
 {
     if (m_pClient == NULL)
         return;
@@ -2534,5 +2518,4 @@ void qsamplerMainForm::stopClient (void)
     stabilizeForm();
 }
 
-
-// end of qsamplerMainForm.ui.h
+} // namespace QSampler

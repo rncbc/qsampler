@@ -22,7 +22,13 @@
 #ifndef __qsamplerChannel_h
 #define __qsamplerChannel_h
 
-#include <qtable.h>
+#include <QTableWidgetItem>
+#include <QAbstractTableModel>
+#include <QMetaType>
+#include <QItemDelegate>
+#include <QFontMetrics>
+#include <QModelIndex>
+#include <QSize>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
@@ -191,6 +197,7 @@ private:
 // qsamplerChannelRoutingTable - Channel routing table widget.
 //
 
+#if 0
 class qsamplerChannelRoutingTable : public QTable
 {
 	Q_OBJECT
@@ -209,18 +216,63 @@ public:
 	// Commit any pending editing.
 	void flush();
 };
+#endif
+
+struct ChannelRoutingItem {
+    QStringList options;
+    int         selection;
+};
+
+// so we can use it i.e. through QVariant
+Q_DECLARE_METATYPE(ChannelRoutingItem)
+
+class ChannelRoutingModel : public QAbstractTableModel {
+        Q_OBJECT
+    public:
+        ChannelRoutingModel(QObject* parent = 0);
+
+        // overridden methods from subclass(es)
+        int rowCount(const QModelIndex &parent) const;
+        int columnCount(const QModelIndex &parent) const;
+        QVariant data(const QModelIndex &index, int role) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+    public slots:
+        void refresh(qsamplerDevice *pDevice, const qsamplerChannelRoutingMap& routing);
+
+    private:
+        qsamplerDevice* pDevice;
+        qsamplerChannelRoutingMap routing;
+};
+
+class ChannelRoutingDelegate : public QItemDelegate {
+        Q_OBJECT
+    public:
+        ChannelRoutingDelegate(QObject* parent = 0);
+
+        QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+                              const QModelIndex& index) const;
+
+        void setEditorData(QWidget* editor, const QModelIndex& index) const;
+        void setModelData(QWidget* editor, QAbstractItemModel* model,
+                          const QModelIndex& index) const;
+
+        void updateEditorGeometry(QWidget* editor,
+            const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
 
 
 //-------------------------------------------------------------------------
 // qsamplerChannelRoutingComboBox - Custom combo box for routing table.
 //
 
-class qsamplerChannelRoutingComboBox : public QTableItem
+/*
+class qsamplerChannelRoutingComboBox : public QTableWidgetItem
 {
 public:
 
 	// Constructor.
-	qsamplerChannelRoutingComboBox(QTable *pTable,
+	qsamplerChannelRoutingComboBox(QTableWidget *pTable,
 		const QStringList& list, const QPixmap& pixmap);
 
 	// Public accessors.
@@ -239,7 +291,7 @@ private:
 	QStringList m_list;
 	int m_iCurrentItem;
 };
-
+*/
 
 #endif  // __qsamplerChannel_h
 

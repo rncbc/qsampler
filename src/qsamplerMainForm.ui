@@ -1,952 +1,555 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>qsamplerMainForm</class>
-<comment>qsampler - A LinuxSampler Qt GUI Interface.
-
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-</comment>
-<author>rncbc aka Rui Nuno Capela</author>
-<widget class="QMainWindow">
-    <property name="name">
-        <cstring>qsamplerMainForm</cstring>
+<ui version="4.0" >
+ <class>qsamplerMainForm</class>
+ <widget class="QMainWindow" name="qsamplerMainForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" />
+  <widget class="QMenuBar" name="MenuBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="editMenu" >
+    <property name="title" >
+     <string>&amp;Edit</string>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>472</width>
-            <height>296</height>
-        </rect>
+    <addaction name="editAddChannelAction" />
+    <addaction name="editRemoveChannelAction" />
+    <addaction name="separator" />
+    <addaction name="editSetupChannelAction" />
+    <addaction name="editEditChannelAction" />
+    <addaction name="separator" />
+    <addaction name="editResetChannelAction" />
+    <addaction name="editResetAllChannelsAction" />
+   </widget>
+   <widget class="QMenu" name="viewMenu" >
+    <property name="title" >
+     <string>&amp;View</string>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>21</width>
-            <height>284</height>
-        </size>
+    <addaction name="viewMenubarAction" />
+    <addaction name="viewToolbarAction" />
+    <addaction name="viewStatusbarAction" />
+    <addaction name="separator" />
+    <addaction name="viewMessagesAction" />
+    <addaction name="viewInstrumentsAction" />
+    <addaction name="viewDevicesAction" />
+    <addaction name="separator" />
+    <addaction name="viewOptionsAction" />
+   </widget>
+   <widget class="QMenu" name="channelsMenu" >
+    <property name="title" >
+     <string>&amp;Channels</string>
     </property>
-    <property name="caption">
-        <string>Qsampler</string>
+    <addaction name="channelsArrangeAction" />
+    <addaction name="channelsAutoArrangeAction" />
+   </widget>
+   <widget class="QMenu" name="helpMenu" >
+    <property name="title" >
+     <string>&amp;Help</string>
     </property>
-    <property name="icon">
-        <pixmap>qsampler.png</pixmap>
+    <addaction name="helpAboutAction" />
+    <addaction name="helpAboutQtAction" />
+   </widget>
+   <widget class="QMenu" name="fileMenu" >
+    <property name="title" >
+     <string>&amp;File</string>
     </property>
-</widget>
-<menubar>
-    <property name="name">
-        <cstring>MenuBar</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>472</width>
-            <height>29</height>
-        </rect>
-    </property>
-    <item text="&amp;File" name="fileMenu">
-        <action name="fileNewAction"/>
-        <action name="fileOpenAction"/>
-        <action name="fileSaveAction"/>
-        <action name="fileSaveAsAction"/>
-        <separator/>
-        <action name="fileResetAction"/>
-        <action name="fileRestartAction"/>
-        <separator/>
-        <action name="fileExitAction"/>
-    </item>
-    <item text="&amp;Edit" name="editMenu">
-        <action name="editAddChannelAction"/>
-        <action name="editRemoveChannelAction"/>
-        <separator/>
-        <action name="editSetupChannelAction"/>
-        <action name="editEditChannelAction"/>
-        <separator/>
-        <action name="editResetChannelAction"/>
-        <action name="editResetAllChannelsAction"/>
-    </item>
-    <item text="&amp;View" name="viewMenu">
-        <action name="viewMenubarAction"/>
-        <action name="viewToolbarAction"/>
-        <action name="viewStatusbarAction"/>
-        <separator/>
-        <action name="viewMessagesAction"/>
-        <action name="viewInstrumentsAction"/>
-        <action name="viewDevicesAction"/>
-        <separator/>
-        <action name="viewOptionsAction"/>
-    </item>
-    <item text="&amp;Channels" name="channelsMenu">
-        <action name="channelsArrangeAction"/>
-        <action name="channelsAutoArrangeAction"/>
-    </item>
-    <separator/>
-    <item text="&amp;Help" name="helpMenu">
-        <action name="helpAboutAction"/>
-        <action name="helpAboutQtAction"/>
-    </item>
-</menubar>
-<toolbars>
-    <toolbar dock="2">
-        <property name="name">
-            <cstring>fileToolbar</cstring>
-        </property>
-        <property name="label">
-            <string>File Toolbar</string>
-        </property>
-        <action name="fileNewAction"/>
-        <action name="fileOpenAction"/>
-        <action name="fileSaveAction"/>
-        <separator/>
-        <action name="fileResetAction"/>
-        <action name="fileRestartAction"/>
-        <separator/>
-        <action name="viewInstrumentsAction"/>
-        <action name="viewDevicesAction"/>
-    </toolbar>
-    <toolbar dock="2">
-        <property name="name">
-            <cstring>editToolbar</cstring>
-        </property>
-        <property name="label">
-            <string>Edit Toolbar</string>
-        </property>
-        <action name="editAddChannelAction"/>
-        <action name="editRemoveChannelAction"/>
-        <separator/>
-        <action name="editSetupChannelAction"/>
-        <action name="editEditChannelAction"/>
-        <separator/>
-        <action name="editResetChannelAction"/>
-        <action name="editResetAllChannelsAction"/>
-    </toolbar>
-    <toolbar dock="2">
-        <property name="name">
-            <cstring>channelsToolbar</cstring>
-        </property>
-        <property name="label">
-            <string>Channels Toolbar</string>
-        </property>
-        <action name="channelsArrangeAction"/>
-    </toolbar>
-</toolbars>
-<actions>
-    <action>
-        <property name="name">
-            <cstring>fileNewAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>fileNew.png</iconset>
-        </property>
-        <property name="text">
-            <string>New</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;New</string>
-        </property>
-        <property name="toolTip">
-            <string>New session</string>
-        </property>
-        <property name="statusTip">
-            <string>New sampler session</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+N</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileOpenAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>fileOpen.png</iconset>
-        </property>
-        <property name="text">
-            <string>Open</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Open...</string>
-        </property>
-        <property name="toolTip">
-            <string>Open session</string>
-        </property>
-        <property name="statusTip">
-            <string>Open sampler session</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+O</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileSaveAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>fileSave.png</iconset>
-        </property>
-        <property name="text">
-            <string>Save</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Save</string>
-        </property>
-        <property name="toolTip">
-            <string>Save session</string>
-        </property>
-        <property name="statusTip">
-            <string>Save sampler session</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+S</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileSaveAsAction</cstring>
-        </property>
-        <property name="text">
-            <string>Save As</string>
-        </property>
-        <property name="menuText">
-            <string>Save &amp;As...</string>
-        </property>
-        <property name="statusTip">
-            <string>Save current sampler session with another name</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileResetAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>fileReset.png</iconset>
-        </property>
-        <property name="text">
-            <string>Reset</string>
-        </property>
-        <property name="menuText">
-            <string>Rese&amp;t</string>
-        </property>
-        <property name="toolTip">
-            <string>Reset instance</string>
-        </property>
-        <property name="statusTip">
-            <string>Reset sampler instance</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+R</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileRestartAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>fileRestart.png</iconset>
-        </property>
-        <property name="text">
-            <string>Restart</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Restart</string>
-        </property>
-        <property name="toolTip">
-            <string>Restart instance</string>
-        </property>
-        <property name="statusTip">
-            <string>Restart sampler instance</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+Shift+R</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>fileExitAction</cstring>
-        </property>
-        <property name="text">
-            <string>Exit</string>
-        </property>
-        <property name="menuText">
-            <string>E&amp;xit</string>
-        </property>
-        <property name="statusTip">
-            <string>Exit this application program</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editAddChannelAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editAddChannel.png</iconset>
-        </property>
-        <property name="text">
-            <string>Add</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Add Channel</string>
-        </property>
-        <property name="toolTip">
-            <string>Add channel</string>
-        </property>
-        <property name="statusTip">
-            <string>Add a new sampler channel</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+A</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editRemoveChannelAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editRemoveChannel.png</iconset>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Remove Channel</string>
-        </property>
-        <property name="toolTip">
-            <string>Remove channel</string>
-        </property>
-        <property name="statusTip">
-            <string>Remove current sampler channel</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+X</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editResetChannelAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editResetChannel.png</iconset>
-        </property>
-        <property name="text">
-            <string>Reset</string>
-        </property>
-        <property name="menuText">
-            <string>Re&amp;set Channel</string>
-        </property>
-        <property name="toolTip">
-            <string>Reset channel</string>
-        </property>
-        <property name="statusTip">
-            <string>Reset current sampler channel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editResetAllChannelsAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editResetAllChannels.png</iconset>
-        </property>
-        <property name="text">
-            <string>Reset All</string>
-        </property>
-        <property name="menuText">
-            <string>R&amp;eset All Channels</string>
-        </property>
-        <property name="toolTip">
-            <string>Reset all channels</string>
-        </property>
-        <property name="statusTip">
-            <string>Reset all sampler channels</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editSetupChannelAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editSetupChannel.png</iconset>
-        </property>
-        <property name="text">
-            <string>Setup</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Setup Channel...</string>
-        </property>
-        <property name="toolTip">
-            <string>Setup channel</string>
-        </property>
-        <property name="statusTip">
-            <string>Setup current sampler channel</string>
-        </property>
-        <property name="accel">
-            <string>F2</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>editEditChannelAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>editEditChannel.png</iconset>
-        </property>
-        <property name="text">
-            <string>Edit</string>
-        </property>
-        <property name="menuText">
-            <string>Ed&amp;it Channel...</string>
-        </property>
-        <property name="toolTip">
-            <string>Edit channel</string>
-        </property>
-        <property name="statusTip">
-            <string>Edit current sampler channel</string>
-        </property>
-        <property name="accel">
-            <string>F9</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewMenubarAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Menubar</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Menubar</string>
-        </property>
-        <property name="toolTip">
-            <string>Show/hide menubar</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide the main program window menubar</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+M</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewToolbarAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>viewToolbars</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Toolbar</string>
-        </property>
-        <property name="toolTip">
-            <string>Show/hide toolbar</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide main program window toolbars</string>
-        </property>
-        <property name="accel">
-            <string>Ctrl+T</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewStatusbarAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Statusbar</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Statusbar</string>
-        </property>
-        <property name="toolTip">
-            <string>Show/hide statusbar</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide the main program window statusbar</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewMessagesAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Messages</string>
-        </property>
-        <property name="menuText">
-            <string>M&amp;essages</string>
-        </property>
-        <property name="toolTip">
-            <string>Show/hide messages</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide the messages window</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewInstrumentsAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>qsamplerInstrument.png</iconset>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Instruments</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Instruments</string>
-        </property>
-        <property name="toolTip">
-            <string>MIDI instruments configuration</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide the MIDI instruments configuration window</string>
-        </property>
-        <property name="accel">
-            <string>F10</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewDevicesAction</cstring>
-        </property>
-        <property name="iconSet">
-            <iconset>qsamplerDevice.png</iconset>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Devices</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Devices</string>
-        </property>
-        <property name="toolTip">
-            <string>Device configuration</string>
-        </property>
-        <property name="statusTip">
-            <string>Show/hide the device configuration window</string>
-        </property>
-        <property name="accel">
-            <string>F11</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>viewOptionsAction</cstring>
-        </property>
-        <property name="text">
-            <string>Options</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Options...</string>
-        </property>
-        <property name="toolTip">
-            <string>General options</string>
-        </property>
-        <property name="statusTip">
-            <string>Change general application program options</string>
-        </property>
-        <property name="accel">
-            <string>F12</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>channelsArrangeAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>false</bool>
-        </property>
-        <property name="iconSet">
-            <iconset>channelsArrange.png</iconset>
-        </property>
-        <property name="text">
-            <string>Arrange</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;Arrange</string>
-        </property>
-        <property name="toolTip">
-            <string>Arrange channels</string>
-        </property>
-        <property name="statusTip">
-            <string>Line up all channel strips</string>
-        </property>
-        <property name="accel">
-            <string>F5</string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>channelsAutoArrangeAction</cstring>
-        </property>
-        <property name="toggleAction">
-            <bool>true</bool>
-        </property>
-        <property name="text">
-            <string>Auto Arrange</string>
-        </property>
-        <property name="menuText">
-            <string>A&amp;uto Arrange</string>
-        </property>
-        <property name="toolTip">
-            <string>Auto-arrange channels</string>
-        </property>
-        <property name="statusTip">
-            <string>Auto-arrange channel strips</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>helpAboutAction</cstring>
-        </property>
-        <property name="text">
-            <string>About</string>
-        </property>
-        <property name="menuText">
-            <string>&amp;About...</string>
-        </property>
-        <property name="statusTip">
-            <string>Show information about this application program</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-    <action>
-        <property name="name">
-            <cstring>helpAboutQtAction</cstring>
-        </property>
-        <property name="text">
-            <string>About Qt</string>
-        </property>
-        <property name="menuText">
-            <string>About &amp;Qt...</string>
-        </property>
-        <property name="statusTip">
-            <string>Show information about the Qt toolkit</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </action>
-</actions>
-<connections>
-    <connection>
-        <sender>fileNewAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileNew()</slot>
-    </connection>
-    <connection>
-        <sender>fileOpenAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileOpen()</slot>
-    </connection>
-    <connection>
-        <sender>fileSaveAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileSave()</slot>
-    </connection>
-    <connection>
-        <sender>fileSaveAsAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileSaveAs()</slot>
-    </connection>
-    <connection>
-        <sender>fileResetAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileReset()</slot>
-    </connection>
-    <connection>
-        <sender>fileRestartAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileRestart()</slot>
-    </connection>
-    <connection>
-        <sender>fileExitAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>fileExit()</slot>
-    </connection>
-    <connection>
-        <sender>editAddChannelAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>editAddChannel()</slot>
-    </connection>
-    <connection>
-        <sender>editRemoveChannelAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>editRemoveChannel()</slot>
-    </connection>
-    <connection>
-        <sender>editSetupChannelAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>editSetupChannel()</slot>
-    </connection>
-    <connection>
-        <sender>editEditChannelAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>editEditChannel()</slot>
-    </connection>
-    <connection>
-        <sender>editResetChannelAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>editResetChannel()</slot>
-    </connection>
-    <connection>
-        <sender>editResetAllChannelsAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>editResetAllChannels()</slot>
-    </connection>
-    <connection>
-        <sender>viewMenubarAction</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewMenubar(bool)</slot>
-    </connection>
-    <connection>
-        <sender>viewToolbarAction</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewToolbar(bool)</slot>
-    </connection>
-    <connection>
-        <sender>viewStatusbarAction</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewStatusbar(bool)</slot>
-    </connection>
-    <connection>
-        <sender>viewMessagesAction</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewMessages(bool)</slot>
-    </connection>
-    <connection>
-        <sender>viewInstrumentsAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewInstruments()</slot>
-    </connection>
-    <connection>
-        <sender>viewDevicesAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewDevices()</slot>
-    </connection>
-    <connection>
-        <sender>viewOptionsAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>viewOptions()</slot>
-    </connection>
-    <connection>
-        <sender>channelsArrangeAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>channelsArrange()</slot>
-    </connection>
-    <connection>
-        <sender>channelsAutoArrangeAction</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>channelsAutoArrange(bool)</slot>
-    </connection>
-    <connection>
-        <sender>helpAboutAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>helpAbout()</slot>
-    </connection>
-    <connection>
-        <sender>helpAboutQtAction</sender>
-        <signal>activated()</signal>
-        <receiver>qsamplerMainForm</receiver>
-        <slot>helpAboutQt()</slot>
-    </connection>
-</connections>
-<includes>
-    <include location="global" impldecl="in declaration">lscp/client.h</include>
-    <include location="local" impldecl="in implementation">qsamplerMainForm.ui.h</include>
-</includes>
-<forwards>
-    <forward>class QWorkspace;</forward>
-    <forward>class QProcess;</forward>
-    <forward>class QSlider;</forward>
-    <forward>class QSpinBox;</forward>
-    <forward>class QLabel;</forward>
-    <forward>class qsamplerOptions;</forward>
-    <forward>class qsamplerChannel;</forward>
-    <forward>class qsamplerMessages;</forward>
-    <forward>class qsamplerChannelStrip;</forward>
-    <forward>class qsamplerInstrumentListForm;</forward>
-    <forward>class qsamplerDeviceForm;</forward>
-</forwards>
-<variables>
-    <variable access="private">qsamplerOptions *m_pOptions;</variable>
-    <variable access="private">qsamplerMessages *m_pMessages;</variable>
-    <variable access="private">QWorkspace *m_pWorkspace;</variable>
-    <variable access="private">QString m_sFilename;</variable>
-    <variable access="private">int m_iUntitled;</variable>
-    <variable access="private">int m_iDirtyCount;</variable>
-    <variable access="private">lscp_client_t *m_pClient;</variable>
-    <variable access="private">QProcess *m_pServer;</variable>
-    <variable access="private">int m_iStartDelay;</variable>
-    <variable access="private">int m_iTimerDelay;</variable>
-    <variable access="private">int m_iTimerSlot;</variable>	
-    <variable access="private">QLabel *m_statusItem[5];</variable>
-    <variable access="private">QPopupMenu *m_pRecentFilesMenu;</variable>
-    <variable access="private">QPtrList&lt;qsamplerChannelStrip&gt; m_changedStrips;</variable>
-    <variable access="private">qsamplerInstrumentListForm *m_pInstrumentListForm;</variable>
-    <variable access="private">qsamplerDeviceForm *m_pDeviceForm;</variable>
-    <variable access="private">static qsamplerMainForm *g_pMainForm;</variable>
-    <variable access="private">QSlider *m_pVolumeSlider;</variable>
-    <variable access="private">QSpinBox *m_pVolumeSpinBox;</variable>
-    <variable access="private">int m_iVolumeChanging;</variable>
-</variables>
-<slots>
-    <slot specifier="non virtual">fileNew( void )</slot>
-    <slot specifier="non virtual">fileOpen( void )</slot>
-    <slot specifier="non virtual">fileOpenRecent( int iIndex )</slot>
-    <slot specifier="non virtual">fileSave( void )</slot>
-    <slot specifier="non virtual">fileSaveAs( void )</slot>
-    <slot specifier="non virtual">fileReset( void )</slot>
-    <slot specifier="non virtual">fileRestart( void )</slot>
-    <slot specifier="non virtual">fileExit( void )</slot>
-    <slot specifier="non virtual">editAddChannel( void )</slot>
-    <slot specifier="non virtual">editRemoveChannel( void )</slot>
-    <slot specifier="non virtual">editSetupChannel( void )</slot>
-    <slot specifier="non virtual">editEditChannel( void )</slot>
-    <slot specifier="non virtual">editResetChannel( void )</slot>
-    <slot specifier="non virtual">editResetAllChannels( void )</slot>
-    <slot specifier="non virtual">viewMenubar( bool bOn )</slot>
-    <slot specifier="non virtual">viewToolbar( bool bOn )</slot>
-    <slot specifier="non virtual">viewStatusbar( bool bOn )</slot>
-    <slot specifier="non virtual">viewMessages( bool bOn )</slot>
-    <slot specifier="non virtual">viewInstruments( void )</slot>
-    <slot specifier="non virtual">viewDevices( void )</slot>
-    <slot specifier="non virtual">viewOptions( void )</slot>
-    <slot specifier="non virtual">channelsArrange( void )</slot>
-    <slot specifier="non virtual">channelsAutoArrange( bool bOn )</slot>
-    <slot specifier="non virtual">helpAboutQt( void )</slot>
-    <slot specifier="non virtual">helpAbout( void )</slot>
-    <slot specifier="non virtual">sessionDirty( void )</slot>
-    <slot specifier="non virtual">stabilizeForm( void )</slot>
-    <slot specifier="non virtual">volumeChanged( int iVolume )</slot>
-    <slot specifier="non virtual">channelStripChanged( qsamplerChannelStrip *pChannelStrip )</slot>
-    <slot specifier="non virtual">channelsMenuAboutToShow()</slot>
-    <slot specifier="non virtual">channelsMenuActivated( int iChannel )</slot>
-    <slot specifier="non virtual">timerSlot( void )</slot>
-    <slot specifier="non virtual">readServerStdout( void )</slot>
-    <slot specifier="non virtual">processServerExit( void )</slot>
-</slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function specifier="non virtual">setup( qsamplerOptions * pOptions )</function>
-    <function access="private" specifier="non virtual" returnType="bool">queryClose( void )</function>
-    <function access="private" specifier="non virtual">closeEvent( QCloseEvent * pCloseEvent )</function>
-    <function access="private" specifier="non virtual" returnType="bool">decodeDragFiles( const QMimeSource * pEvent, QStringList &amp; files )</function>
-    <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent *pDragEnterEvent )</function>
-    <function access="private" specifier="non virtual">dropEvent( QDropEvent *pDropEvent )</function>
-    <function access="private" specifier="non virtual">customEvent( QCustomEvent *pCustomEvent )</function>
-    <function specifier="non virtual">contextMenuEvent( QContextMenuEvent *pEvent )</function>
-    <function specifier="non virtual" returnType="qsamplerOptions *">options( void )</function>
-    <function specifier="non virtual" returnType="lscp_client_t *">client( void )</function>
-    <function specifier="non virtual" returnType="QString">sessionName( const QString &amp; sFilename )</function>
-    <function access="private" specifier="non virtual" returnType="bool">newSession( void )</function>
-    <function access="private" specifier="non virtual" returnType="bool">openSession( void )</function>
-    <function access="private" specifier="non virtual" returnType="bool">saveSession( bool bPrompt )</function>
-    <function access="private" specifier="non virtual" returnType="bool">closeSession( bool bForce )</function>
-    <function access="private" specifier="non virtual" returnType="bool">loadSessionFile( const QString &amp; sFilename )</function>
-    <function access="private" specifier="non virtual" returnType="bool">saveSessionFile( const QString &amp; sFilename )</function>
-    <function access="private" specifier="non virtual">updateSession()</function>
-    <function access="private" specifier="non virtual">updateRecentFiles( const QString &amp; sFilename )</function>
-    <function access="private" specifier="non virtual">updateRecentFilesMenu( void )</function>
-    <function access="private" specifier="non virtual">updateInstrumentNames( void )</function>
-    <function access="private" specifier="non virtual">updateDisplayFont( void )</function>
-    <function access="private" specifier="non virtual">updateDisplayEffect( void )</function>
-    <function access="private" specifier="non virtual">updateMaxVolume( void )</function>
-    <function specifier="non virtual">appendMessages( const QString &amp; s )</function>
-    <function specifier="non virtual">appendMessagesColor( const QString &amp; s, const QString &amp; c )</function>
-    <function specifier="non virtual">appendMessagesText( const QString &amp; s )</function>
-    <function specifier="non virtual">appendMessagesError( const QString &amp; s )</function>
-    <function specifier="non virtual">appendMessagesClient( const QString &amp; s )</function>
-    <function access="private" specifier="non virtual">updateMessagesFont( void )</function>
-    <function access="private" specifier="non virtual">updateMessagesLimit( void )</function>
-    <function access="private" specifier="non virtual">updateMessagesCapture( void )</function>
-    <function specifier="non virtual" returnType="qsamplerChannelStrip *">createChannelStrip( qsamplerChannel *pChannel )</function>
-    <function specifier="non virtual" returnType="qsamplerChannelStrip *">activeChannelStrip( void )</function>
-    <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelStripAt( int iChannel )</function>
-    <function specifier="non virtual" returnType="qsamplerChannelStrip *">channelStrip( int iChannelID )</function>
-    <function access="private" specifier="non virtual">startSchedule( int iStartDelay )</function>
-    <function access="private" specifier="non virtual">stopSchedule( void )</function>
-    <function access="private" specifier="non virtual">startServer( void )</function>
-    <function access="private" specifier="non virtual">stopServer( void )</function>
-    <function access="private" specifier="non virtual" returnType="bool">startClient( void )</function>
-    <function access="private" specifier="non virtual">stopClient( void )</function>
-    <function specifier="non virtual" returnType="static qsamplerMainForm *">getInstance( void )</function>
-</functions>
-<pixmapinproject/>
-<layoutdefaults spacing="4" margin="8"/>
-</UI>
+    <addaction name="fileNewAction" />
+    <addaction name="fileOpenAction" />
+    <addaction name="fileSaveAction" />
+    <addaction name="fileSaveAsAction" />
+    <addaction name="separator" />
+    <addaction name="fileResetAction" />
+    <addaction name="fileRestartAction" />
+    <addaction name="separator" />
+    <addaction name="fileExitAction" />
+   </widget>
+   <addaction name="fileMenu" />
+   <addaction name="editMenu" />
+   <addaction name="viewMenu" />
+   <addaction name="channelsMenu" />
+   <addaction name="separator" />
+   <addaction name="helpMenu" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <action name="fileNewAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileNew.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;New</string>
+   </property>
+   <property name="iconText" >
+    <string>New</string>
+   </property>
+   <property name="toolTip" >
+    <string>New session</string>
+   </property>
+   <property name="statusTip" >
+    <string>New sampler session</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="fileOpenAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileOpen.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Open...</string>
+   </property>
+   <property name="iconText" >
+    <string>Open</string>
+   </property>
+   <property name="toolTip" >
+    <string>Open session</string>
+   </property>
+   <property name="statusTip" >
+    <string>Open sampler session</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="fileSaveAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileSave.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Save</string>
+   </property>
+   <property name="iconText" >
+    <string>Save</string>
+   </property>
+   <property name="toolTip" >
+    <string>Save session</string>
+   </property>
+   <property name="statusTip" >
+    <string>Save sampler session</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="fileSaveAsAction" >
+   <property name="text" >
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="iconText" >
+    <string>Save As</string>
+   </property>
+   <property name="statusTip" >
+    <string>Save current sampler session with another name</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="fileResetAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileReset.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Rese&amp;t</string>
+   </property>
+   <property name="iconText" >
+    <string>Reset</string>
+   </property>
+   <property name="toolTip" >
+    <string>Reset instance</string>
+   </property>
+   <property name="statusTip" >
+    <string>Reset sampler instance</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="fileRestartAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileRestart.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Restart</string>
+   </property>
+   <property name="iconText" >
+    <string>Restart</string>
+   </property>
+   <property name="toolTip" >
+    <string>Restart instance</string>
+   </property>
+   <property name="statusTip" >
+    <string>Restart sampler instance</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Shift+R</string>
+   </property>
+  </action>
+  <action name="fileExitAction" >
+   <property name="text" >
+    <string>E&amp;xit</string>
+   </property>
+   <property name="iconText" >
+    <string>Exit</string>
+   </property>
+   <property name="statusTip" >
+    <string>Exit this application program</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="editAddChannelAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editAddChannel.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Add Channel</string>
+   </property>
+   <property name="iconText" >
+    <string>Add</string>
+   </property>
+   <property name="toolTip" >
+    <string>Add channel</string>
+   </property>
+   <property name="statusTip" >
+    <string>Add a new sampler channel</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="editRemoveChannelAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editRemoveChannel.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Remove Channel</string>
+   </property>
+   <property name="iconText" >
+    <string>Remove</string>
+   </property>
+   <property name="toolTip" >
+    <string>Remove channel</string>
+   </property>
+   <property name="statusTip" >
+    <string>Remove current sampler channel</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="editResetChannelAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editResetChannel.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Re&amp;set Channel</string>
+   </property>
+   <property name="iconText" >
+    <string>Reset</string>
+   </property>
+   <property name="toolTip" >
+    <string>Reset channel</string>
+   </property>
+   <property name="statusTip" >
+    <string>Reset current sampler channel</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="editResetAllChannelsAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editResetAllChannels.png</iconset>
+   </property>
+   <property name="text" >
+    <string>R&amp;eset All Channels</string>
+   </property>
+   <property name="iconText" >
+    <string>Reset All</string>
+   </property>
+   <property name="toolTip" >
+    <string>Reset all channels</string>
+   </property>
+   <property name="statusTip" >
+    <string>Reset all sampler channels</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="editSetupChannelAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editSetupChannel.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Setup Channel...</string>
+   </property>
+   <property name="iconText" >
+    <string>Setup</string>
+   </property>
+   <property name="toolTip" >
+    <string>Setup channel</string>
+   </property>
+   <property name="statusTip" >
+    <string>Setup current sampler channel</string>
+   </property>
+   <property name="shortcut" >
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="editEditChannelAction" >
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editEditChannel.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Ed&amp;it Channel...</string>
+   </property>
+   <property name="iconText" >
+    <string>Edit</string>
+   </property>
+   <property name="toolTip" >
+    <string>Edit channel</string>
+   </property>
+   <property name="statusTip" >
+    <string>Edit current sampler channel</string>
+   </property>
+   <property name="shortcut" >
+    <string>F9</string>
+   </property>
+  </action>
+  <action name="viewMenubarAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Menubar</string>
+   </property>
+   <property name="iconText" >
+    <string>Menubar</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show/hide menubar</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show/hide the main program window menubar</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="viewToolbarAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Toolbar</string>
+   </property>
+   <property name="iconText" >
+    <string>viewToolbars</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show/hide toolbar</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show/hide main program window toolbars</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="viewStatusbarAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Statusbar</string>
+   </property>
+   <property name="iconText" >
+    <string>Statusbar</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show/hide statusbar</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show/hide the main program window statusbar</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="viewMessagesAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>M&amp;essages</string>
+   </property>
+   <property name="iconText" >
+    <string>Messages</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show/hide messages</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show/hide the messages window</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="viewInstrumentsAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerInstrument.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Instruments</string>
+   </property>
+   <property name="iconText" >
+    <string>Instruments</string>
+   </property>
+   <property name="toolTip" >
+    <string>MIDI instruments configuration</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show/hide the MIDI instruments configuration window</string>
+   </property>
+   <property name="shortcut" >
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="viewDevicesAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerDevice.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Devices</string>
+   </property>
+   <property name="iconText" >
+    <string>Devices</string>
+   </property>
+   <property name="toolTip" >
+    <string>Device configuration</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show/hide the device configuration window</string>
+   </property>
+   <property name="shortcut" >
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="viewOptionsAction" >
+   <property name="text" >
+    <string>&amp;Options...</string>
+   </property>
+   <property name="iconText" >
+    <string>Options</string>
+   </property>
+   <property name="toolTip" >
+    <string>General options</string>
+   </property>
+   <property name="statusTip" >
+    <string>Change general application program options</string>
+   </property>
+   <property name="shortcut" >
+    <string>F12</string>
+   </property>
+  </action>
+  <action name="channelsArrangeAction" >
+   <property name="checkable" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/channelsArrange.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Arrange</string>
+   </property>
+   <property name="iconText" >
+    <string>Arrange</string>
+   </property>
+   <property name="toolTip" >
+    <string>Arrange channels</string>
+   </property>
+   <property name="statusTip" >
+    <string>Line up all channel strips</string>
+   </property>
+   <property name="shortcut" >
+    <string>F5</string>
+   </property>
+  </action>
+  <action name="channelsAutoArrangeAction" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>A&amp;uto Arrange</string>
+   </property>
+   <property name="iconText" >
+    <string>Auto Arrange</string>
+   </property>
+   <property name="toolTip" >
+    <string>Auto-arrange channels</string>
+   </property>
+   <property name="statusTip" >
+    <string>Auto-arrange channel strips</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="helpAboutAction" >
+   <property name="text" >
+    <string>&amp;About...</string>
+   </property>
+   <property name="iconText" >
+    <string>About</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show information about this application program</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+  <action name="helpAboutQtAction" >
+   <property name="text" >
+    <string>About &amp;Qt...</string>
+   </property>
+   <property name="iconText" >
+    <string>About Qt</string>
+   </property>
+   <property name="statusTip" >
+    <string>Show information about the Qt toolkit</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../pixmaps.qrc" />
+ </resources>
+ <connections/>
+</ui>

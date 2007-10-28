@@ -22,15 +22,21 @@
 #ifndef __qsamplerInstrumentList_h
 #define __qsamplerInstrumentList_h
 
-#include <qlistview.h>
-#include <qheader.h>
+#include <QListWidget>
+#include <QListWidgetItem>
+//#include <qheader.h>
+#include <QAbstractTableModel>
+#include <QItemDelegate>
 
 #include <lscp/client.h>
 
+#include <string.h>
+
+#include "qsamplerInstrument.h"
 
 // Forward declarations.
-class qsamplerInstrument;
-class qsamplerInstrumentList;
+//class qsamplerInstrument;
+//class qsamplerInstrumentList;
 
 class QAction;
 
@@ -39,13 +45,13 @@ class QAction;
 // class qsamplerInstrumentGroup -- custom group list view item.
 //
 
-class qsamplerInstrumentGroup : public QListViewItem
+class qsamplerInstrumentGroup : public QListWidgetItem
 {
 public:
 
 	// Constructors.
-	qsamplerInstrumentGroup(qsamplerInstrumentList *pListView,
-		const QString& sName, QListViewItem *pItemAfter = NULL);
+	qsamplerInstrumentGroup(QListWidget *pListView,
+		const QString& sName, QListWidgetItem *pItemAfter = NULL);
 	qsamplerInstrumentGroup(qsamplerInstrumentGroup *pGroupItem,
 		const QString& sName);
 	// Default destructor.
@@ -55,7 +61,7 @@ public:
 	void setName(const QString& sName);
 	QString name() const;
 
-	qsamplerInstrumentList  *listView() const;
+	QListWidget  *listView() const;
 	qsamplerInstrumentGroup *groupItem() const;
 
 	// To show up whether its open or not.
@@ -75,9 +81,9 @@ class qsamplerInstrumentItem : public qsamplerInstrumentGroup
 public:
 
 	// Constructors.
-	qsamplerInstrumentItem(qsamplerInstrumentList *pListView,
+	qsamplerInstrumentItem(QListWidget *pListView,
 		qsamplerInstrument *pInstrument,
-		QListViewItem *pItemAfter = NULL);
+		QListWidgetItem *pItemAfter = NULL);
 	qsamplerInstrumentItem(qsamplerInstrumentGroup *pGroupItem,
 		qsamplerInstrument *pInstrument);
 	// Default destructor.
@@ -103,6 +109,7 @@ private:
 // qsamplerInstrumentList -- MIDI instrument list view.
 //
 
+#if 0
 class qsamplerInstrumentList : public QListView
 {
 	Q_OBJECT
@@ -168,15 +175,15 @@ protected slots:
 	void selectionChangedSlot();
 
 	// In-place activation slot.
-	void activatedSlot(QListViewItem *pListItem);
+	void activatedSlot(QListWidgetItem *pListItem);
 
 	// In-place aliasing slot.
-	void renamedSlot(QListViewItem *pItem);
+	void renamedSlot(QListWidgetItem *pItem);
 
 protected:
 
 	// Find and return the nearest group item...
-	qsamplerInstrumentGroup *groupItem(QListViewItem *pListItem) const;
+	qsamplerInstrumentGroup *groupItem(QListWidgetItem *pListItem) const;
 
 	// Context menu request event handler.
 	void contextMenuEvent(QContextMenuEvent *pContextMenuEvent);
@@ -193,6 +200,57 @@ private:
 
 	// Current map selection.
 	int m_iMidiMap;
+};
+#endif
+
+class MidiInstrumentsModel : public QAbstractTableModel {
+Q_OBJECT
+public:
+    MidiInstrumentsModel(QObject* parent = 0);
+
+    // overridden methods from subclass(es)
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+    qsamplerInstrument* addInstrument(int iMap = 0, int iBank = -1, int iProg = -1);
+
+    // Map selector.
+    void setMidiMap(int iMidiMap);
+    int midiMap() const;
+
+signals:
+    // Instrument map/session change signal.
+    void instrumentsChanged();
+
+public slots:
+    // General reloader.
+    void refresh();
+
+private:
+    typedef QMap<int, QList<qsamplerInstrument> > InstrumentsMap;
+
+    // Current map selection.
+    int m_iMidiMap;
+
+    InstrumentsMap instruments;
+};
+
+class MidiInstrumentsDelegate : public QItemDelegate {
+Q_OBJECT
+public:
+    MidiInstrumentsDelegate(QObject* parent = 0);
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+                          const QModelIndex& index) const;
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const;
+    void setModelData(QWidget* editor, QAbstractItemModel* model,
+                      const QModelIndex& index) const;
+
+    void updateEditorGeometry(QWidget* editor,
+        const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 

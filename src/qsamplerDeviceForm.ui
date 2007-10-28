@@ -1,6 +1,6 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>qsamplerDeviceForm</class>
-<comment>qsampler - A LinuxSampler Qt GUI Interface.
+<ui version="4.0" >
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
    Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
 
@@ -19,450 +19,414 @@
    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </comment>
-<author>rncbc aka Rui Nuno Capela</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>qsamplerDeviceForm</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>570</width>
-            <height>361</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="caption">
-        <string>Qsampler: Devices</string>
-    </property>
-    <property name="icon">
-        <pixmap>qsamplerDevice.png</pixmap>
-    </property>
-    <property name="focusPolicy">
-        <enum>StrongFocus</enum>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QSplitter">
-            <property name="name">
-                <cstring>splitter1</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <widget class="QListView">
-                <column>
-                    <property name="text">
-                        <string>Devices</string>
-                    </property>
-                    <property name="clickable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="resizable">
-                        <bool>true</bool>
-                    </property>
-                </column>
-                <property name="name">
-                    <cstring>DeviceListView</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>160</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="rootIsDecorated">
-                    <bool>true</bool>
-                </property>
-                <property name="resizeMode">
-                    <enum>LastColumn</enum>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Device list</string>
-                </property>
-            </widget>
-            <widget class="QSplitter">
-                <property name="name">
-                    <cstring>splitter2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Vertical</enum>
-                </property>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout2</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>DeviceNameTextLabel</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="font">
-                                <font>
-                                    <bold>1</bold>
-                                </font>
-                            </property>
-                            <property name="indent">
-                                <number>4</number>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Device name</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="1">
-                            <property name="name">
-                                <cstring>DriverNameTextLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Dri&amp;ver:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>DriverNameComboBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="qsamplerDeviceParamTable" row="1" column="0" rowspan="1" colspan="3">
-                            <property name="name">
-                                <cstring>DeviceParamTable</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>7</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>380</width>
-                                    <height>160</height>
-                                </size>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>StrongFocus</enum>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Device parameters</string>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox" row="0" column="2">
-                            <property name="name">
-                                <cstring>DriverNameComboBox</cstring>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Driver type name</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>layout3</cstring>
-                    </property>
-                    <grid>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="qsamplerDeviceParamTable" row="1" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>DevicePortParamTable</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>7</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>380</width>
-                                    <height>80</height>
-                                </size>
-                            </property>
-                            <property name="focusPolicy">
-                                <enum>StrongFocus</enum>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Device port/channel parameters</string>
-                            </property>
-                        </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>DevicePortTextLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Channel:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignVCenter|AlignRight</set>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>DevicePortComboBox</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QComboBox" row="0" column="1">
-                            <property name="name">
-                                <cstring>DevicePortComboBox</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>7</hsizetype>
-                                    <vsizetype>0</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Device port/channel</string>
-                            </property>
-                        </widget>
-                    </grid>
-                </widget>
-            </widget>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout1</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>RefreshDevicesPushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Refresh</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>formRefresh.png</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Refresh device list view</string>
-                    </property>
-                </widget>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>180</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>CreateDevicePushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Create</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>deviceCreate.png</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Create device</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>DeleteDevicePushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Delete</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+D</string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>deviceDelete.png</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Delete device</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>ClosePushButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Close</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
-                    <property name="iconSet">
-                        <iconset>formReject.png</iconset>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Close this dialog</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<customwidgets>
-    <customwidget>
-        <class>qsamplerDeviceParamTable</class>
-        <header location="global">qsamplerDevice.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>7</hordata>
-            <verdata>7</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </customwidget>
-</customwidgets>
-<connections>
-    <connection>
-        <sender>DeviceListView</sender>
-        <signal>selectionChanged()</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>selectDevice()</slot>
-    </connection>
-    <connection>
-        <sender>DeviceListView</sender>
-        <signal>contextMenuRequested(QListViewItem*,const QPoint&amp;,int)</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>contextMenu(QListViewItem*,const QPoint&amp;,int)</slot>
-    </connection>
-    <connection>
-        <sender>RefreshDevicesPushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>refreshDevices()</slot>
-    </connection>
-    <connection>
-        <sender>DriverNameComboBox</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>selectDriver(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>DevicePortComboBox</sender>
-        <signal>activated(int)</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>selectDevicePort(int)</slot>
-    </connection>
-    <connection>
-        <sender>CreateDevicePushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>createDevice()</slot>
-    </connection>
-    <connection>
-        <sender>DeleteDevicePushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>deleteDevice()</slot>
-    </connection>
-    <connection>
-        <sender>ClosePushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerDeviceForm</receiver>
-        <slot>close()</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>DeviceListView</tabstop>
-    <tabstop>RefreshDevicesPushButton</tabstop>
-    <tabstop>DriverNameComboBox</tabstop>
-    <tabstop>DeviceParamTable</tabstop>
-    <tabstop>DevicePortComboBox</tabstop>
-    <tabstop>DevicePortParamTable</tabstop>
-    <tabstop>CreateDevicePushButton</tabstop>
-    <tabstop>DeleteDevicePushButton</tabstop>
-    <tabstop>ClosePushButton</tabstop>
-</tabstops>
-<includes>
-    <include location="local" impldecl="in declaration">qsamplerDevice.h</include>
-    <include location="local" impldecl="in implementation">qsamplerDeviceForm.ui.h</include>
-</includes>
-<forwards>
-    <forward>class qsamplerMainForm;</forward>
-</forwards>
-<variables>
-    <variable access="private">qsamplerMainForm *m_pMainForm;</variable>
-    <variable access="private">lscp_client_t *m_pClient;</variable>
-    <variable access="private">int m_iDirtySetup;</variable>
-    <variable access="private">int m_iDirtyCount;</variable>
-    <variable access="private">bool m_bNewDevice;</variable>
-    <variable access="private">qsamplerDevice::qsamplerDeviceType m_deviceType;</variable>
-    <variable access="private">qsamplerDevice::qsamplerDeviceType m_deviceTypeMode;</variable>
-    <variable access="private">qsamplerDeviceItem *m_pAudioItems;</variable>
-    <variable access="private">qsamplerDeviceItem *m_pMidiItems;</variable>
-</variables>
-<signals>
-    <signal>devicesChanged()</signal>
-</signals>
-<slots>
-    <slot specifier="non virtual">createDevice()</slot>
-    <slot specifier="non virtual">deleteDevice()</slot>
-    <slot specifier="non virtual">refreshDevices()</slot>
-    <slot specifier="non virtual">selectDriver( const QString &amp; sDriverName )</slot>
-    <slot specifier="non virtual">selectDevice()</slot>
-    <slot specifier="non virtual">selectDevicePort( int iPort )</slot>
-    <slot specifier="non virtual">changeDeviceParam( int iRow, int iCol )</slot>
-    <slot specifier="non virtual">changeDevicePortParam( int iRow, int iCol )</slot>
-    <slot specifier="non virtual">contextMenu(QListViewItem *, const QPoint&amp;, int)</slot>
-    <slot specifier="non virtual">stabilizeForm()</slot>
-</slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function access="private" specifier="non virtual">showEvent( QShowEvent * pShowEvent )</function>
-    <function access="private" specifier="non virtual">hideEvent( QHideEvent * pHideEvent )</function>
-    <function specifier="non virtual">setDeviceTypeMode( qsamplerDevice::qsamplerDeviceType deviceType )</function>
-    <function specifier="non virtual">setDriverName( const QString &amp; sDriverName )</function>
-    <function specifier="non virtual">setDevice( qsamplerDevice *pDevice )</function>
-</functions>
-<pixmapinproject/>
-<layoutdefaults spacing="4" margin="4"/>
-</UI>
+ <class>qsamplerDeviceForm</class>
+ <widget class="QDialog" name="qsamplerDeviceForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>601</width>
+    <height>378</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>7</hsizetype>
+    <vsizetype>1</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="focusPolicy" >
+   <enum>Qt::StrongFocus</enum>
+  </property>
+  <property name="windowTitle" >
+   <string>Qsampler: Devices</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerDevice.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QTreeWidget" name="DeviceListView" >
+       <property name="minimumSize" >
+        <size>
+         <width>160</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="toolTip" >
+        <string>Device list</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="DeviceNameTextLabel" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>5</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font" >
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="toolTip" >
+            <string>Device name</string>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+           <property name="indent" >
+            <number>4</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="DriverNameTextLabel" >
+           <property name="text" >
+            <string>Dri&amp;ver:</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+           <property name="buddy" >
+            <cstring>DriverNameComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="DriverNameComboBox" >
+           <property name="toolTip" >
+            <string>Driver type name</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableView" name="DeviceParamTable" />
+       </item>
+       <item>
+        <layout class="QHBoxLayout" >
+         <property name="margin" >
+          <number>0</number>
+         </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
+         <item>
+          <spacer>
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" >
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="DevicePortTextLabel" >
+           <property name="text" >
+            <string>Channel:</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+           <property name="buddy" >
+            <cstring>DevicePortComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="DevicePortComboBox" >
+           <property name="sizePolicy" >
+            <sizepolicy>
+             <hsizetype>7</hsizetype>
+             <vsizetype>0</vsizetype>
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip" >
+            <string>Device port/channel</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableView" name="DevicePortParamTable" />
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>4</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="RefreshDevicesPushButton" >
+       <property name="toolTip" >
+        <string>Refresh device list view</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Refresh</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formRefresh.png</iconset>
+       </property>
+       <property name="shortcut" >
+        <string>Alt+R</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>180</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="CreateDevicePushButton" >
+       <property name="toolTip" >
+        <string>Create device</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Create</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/deviceCreate.png</iconset>
+       </property>
+       <property name="shortcut" >
+        <string>Alt+C</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="DeleteDevicePushButton" >
+       <property name="toolTip" >
+        <string>Delete device</string>
+       </property>
+       <property name="text" >
+        <string>&amp;Delete</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/deviceDelete.png</iconset>
+       </property>
+       <property name="shortcut" >
+        <string>Alt+D</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="ClosePushButton" >
+       <property name="toolTip" >
+        <string>Close this dialog</string>
+       </property>
+       <property name="text" >
+        <string>Close</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formReject.png</iconset>
+       </property>
+       <property name="shortcut" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="4" margin="4" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <tabstops>
+  <tabstop>DeviceListView</tabstop>
+  <tabstop>RefreshDevicesPushButton</tabstop>
+  <tabstop>DriverNameComboBox</tabstop>
+  <tabstop>DevicePortComboBox</tabstop>
+  <tabstop>CreateDevicePushButton</tabstop>
+  <tabstop>DeleteDevicePushButton</tabstop>
+  <tabstop>ClosePushButton</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local" >qsamplerDevice.h</include>
+ </includes>
+ <resources>
+  <include location="../pixmaps.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>DeviceListView</sender>
+   <signal>selectionChanged()</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>selectDevice()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>RefreshDevicesPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>refreshDevices()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DriverNameComboBox</sender>
+   <signal>activated(QString)</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>selectDriver(QString)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DevicePortComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>selectDevicePort(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>CreateDevicePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>createDevice()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>DeleteDevicePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>deleteDevice()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ClosePushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>qsamplerDeviceForm</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

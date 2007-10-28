@@ -1,7 +1,7 @@
 // main.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,8 +19,9 @@
 
 *****************************************************************************/
 
-#include <qapplication.h>
-#include <qtextcodec.h>
+#include <QApplication>
+#include <QTextCodec>
+#include <QTranslator>
 
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
@@ -36,13 +37,13 @@ int main ( int argc, char **argv )
 
     // Load translation support.
     QTranslator translator(0);
-    QString sLocale = QTextCodec::locale();
-    if (sLocale != "C") {
+    QString sLocale = QTextCodec::codecForLocale()->name();
+    if (sLocale != "C") { //TODO: not sure if "C" locale name exists in Qt4
         QString sLocName = "qsampler_" + sLocale;
         if (!translator.load(sLocName, ".")) {
             QString sLocPath = CONFIG_PREFIX "/share/locale";
             if (!translator.load(sLocName, sLocPath))
-                fprintf(stderr, "Warning: no locale found: %s/%s.qm\n", sLocPath.latin1(), sLocName.latin1());
+                fprintf(stderr, "Warning: no locale found: %s/%s.qm\n", sLocPath.toLatin1().data(), sLocName.toLatin1().data());
         }
         app.installTranslator(&translator);
     }
@@ -55,8 +56,8 @@ int main ( int argc, char **argv )
     }
 
     // Construct, setup and show the main form.
-    qsamplerMainForm w;
-	app.setMainWidget(&w);
+    QSampler::MainForm w;
+	app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
     w.setup(&options);
     w.show();
 

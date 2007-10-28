@@ -1,7 +1,7 @@
 // qsamplerDevice.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,8 +22,19 @@
 #ifndef __qsamplerDevice_h
 #define __qsamplerDevice_h
 
-#include <qlistview.h>
-#include <qtable.h>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QTreeWidgetItem>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QAbstractTableModel>
+#include <QMetaType>
+#include <QItemDelegate>
+#include <QFontMetrics>
+#include <QModelIndex>
+#include <QSize>
+#include <QList>
+#include <Q3PtrList>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
@@ -75,7 +86,7 @@ public:
 typedef QMap<QString, qsamplerDeviceParam> qsamplerDeviceParamMap;
 
 // Typedef'd device port/channels QptrList.
-typedef QPtrList<qsamplerDevicePort> qsamplerDevicePortList;
+typedef Q3PtrList<qsamplerDevicePort> qsamplerDevicePortList;
 
 
 //-------------------------------------------------------------------------
@@ -212,23 +223,20 @@ private:
 // qsamplerDeviceItem - QListView device item.
 //
 
-class qsamplerDeviceItem : public QListViewItem
+class qsamplerDeviceItem : public QTreeWidgetItem
 {
 public:
 
 	// Constructors.
-	qsamplerDeviceItem(QListView *pListView,
+	qsamplerDeviceItem(QTreeWidget* pTreeWidget,
 		qsamplerDevice::qsamplerDeviceType deviceType);
-	qsamplerDeviceItem(QListViewItem *pItem,
+	qsamplerDeviceItem(QTreeWidgetItem* pItem,
 		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID);
 	// Default destructor.
 	~qsamplerDeviceItem();
 
 	// Instance accessors.
 	qsamplerDevice& device();
-
-	// To virtually distinguish between list view items.
-	virtual int rtti() const;
 
 private:
 
@@ -241,6 +249,7 @@ private:
 // qsamplerDeviceParamTable - Device parameter view table.
 //
 
+#if 0
 class qsamplerDeviceParamTable : public QTable
 {
 	Q_OBJECT
@@ -255,18 +264,65 @@ public:
 	// Common parameter table renderer.
 	void refresh(const qsamplerDeviceParamMap& params, bool bEditable);
 };
+#endif
+
+struct DeviceParameterRow {
+    QString             name;
+    qsamplerDeviceParam param;
+};
+
+// so we can use it i.e. through QVariant
+Q_DECLARE_METATYPE(DeviceParameterRow)
+
+class DeviceParamModel : public QAbstractTableModel {
+        Q_OBJECT
+    public:
+        DeviceParamModel(QObject* parent = 0);
+
+        // overridden methods from subclass(es)
+        int rowCount(const QModelIndex &parent) const;
+        int columnCount(const QModelIndex &parent) const;
+        QVariant data(const QModelIndex &index, int role) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+        void clear();
+
+    public slots:
+        void refresh(const qsamplerDeviceParamMap& params, bool bEditable);
+
+    private:
+        qsamplerDeviceParamMap params;
+        bool bEditable;
+};
+
+class DeviceParamDelegate : public QItemDelegate {
+        Q_OBJECT
+    public:
+        DeviceParamDelegate(QObject* parent = 0);
+
+        QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option,
+                              const QModelIndex& index) const;
+
+        void setEditorData(QWidget* editor, const QModelIndex& index) const;
+        void setModelData(QWidget* editor, QAbstractItemModel* model,
+                          const QModelIndex& index) const;
+
+        void updateEditorGeometry(QWidget* editor,
+            const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
 
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
 //
 
-class qsamplerDeviceParamTableSpinBox : public QTableItem
+#if 0
+class qsamplerDeviceParamTableSpinBox : public QTableWidgetItem
 {
 public:
 
 	// Constructor.
-	qsamplerDeviceParamTableSpinBox (QTable *pTable, EditType editType,
+	qsamplerDeviceParamTableSpinBox (QTableWidget *pTable, Qt::ItemFlags flags,
 		const QString& sText);
 
 	// Public accessors.
@@ -293,12 +349,12 @@ private:
 // qsamplerDeviceParamTableEditBox - Custom edit box for parameter table.
 //
 
-class qsamplerDeviceParamTableEditBox : public QTableItem
+class qsamplerDeviceParamTableEditBox : public QTableWidgetItem
 {
 public:
 
 	// Constructor.
-	qsamplerDeviceParamTableEditBox (QTable *pTable, EditType editType,
+	qsamplerDeviceParamTableEditBox (QTableWidget *pTable, Qt::ItemFlags flags,
 		const QString& sText);
 
 protected:
@@ -307,7 +363,7 @@ protected:
 	QWidget *createEditor() const;
 	void setContentFromEditor(QWidget *pWidget);
 };
-
+#endif
 
 #endif  // __qsamplerDevice_h
 

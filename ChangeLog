@@ -3,6 +3,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+CVS HEAD
+
+* Started Qt4 port of the application
+  (not completed and broken yet!).
+
+
 0.1.5  2007-10-15 Five months later a fifth is heard.
 
 * Added support for LSCP escape sequences to allow loading and
@@ -89,9 +95,9 @@ ChangeLog
   sample SPEC file for RPM build is now being included and
   generated at configure time.
 
-* Set to use QApplication::setMainWidget() instead of 
-  registering the traditional lastWindowClosed() signal 
-  to quit() slot, just to let the -geometry command line 
+* Set to use QApplication::setMainWidget() instead of
+  registering the traditional lastWindowClosed() signal
+  to quit() slot, just to let the -geometry command line
   argument have some effect on X11.
 
 * Added MUTE/SOLO buttons to individual channel strips.
@@ -102,7 +108,7 @@ ChangeLog
 
 0.1.2   2005-06-23 Even minor workings needs a rest.
 
-* Fixed output disability when messages limit option is 
+* Fixed output disability when messages limit option is
   turned off (thanks to Wolfgang Woehl for spotting this
   one, while on qjackctl).
 
@@ -139,11 +145,11 @@ ChangeLog
   consistency, regarding the enumeration of available
   sampler engines, Audio and MIDI drivers.
 
-* [bug #13] Update instrument names list when a new 
+* [bug #13] Update instrument names list when a new
   instrument file is select on the channel setup dialog.
 
 * Show appropriate message in channel strip while loading
-  an instrument. 
+  an instrument.
 
 * Show libgig version in About box (in case libgig is used).
 
@@ -173,8 +179,8 @@ ChangeLog
   drop is allowed, but it only makes sense for instrument
   files, each one prompting to create a new sampler channel.
 
-* Drag-and-drop to an existing channel strip is now also 
-  featured, allowing the in-place change of the channel 
+* Drag-and-drop to an existing channel strip is now also
+  featured, allowing the in-place change of the channel
   sampler instrument file.
 
 * Actual instrument names are now optionally retrieved

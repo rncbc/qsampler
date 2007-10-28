@@ -1,7 +1,7 @@
 // qsamplerInstrument.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,7 +22,8 @@
 #ifndef __qsamplerInstrument_h
 #define __qsamplerInstrument_h
 
-#include <qstringlist.h>
+#include <QStringList>
+#include <QMetaType>
 
 
 //-------------------------------------------------------------------------
@@ -93,6 +94,9 @@ private:
 	int     m_iLoadMode;
 
 };
+
+// so we can use it i.e. through QVariant
+Q_DECLARE_METATYPE(qsamplerInstrument)
 
 
 #endif  // __qsamplerInstrument_h

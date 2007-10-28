@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.5, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.1.5.1, rncbc@rncbc.org, qsampler)
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui.h)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec qsampler.desktop)
@@ -37,7 +37,7 @@ ac_with_paths="/usr /usr/local"
 
 # Some a-la-debian alternatives...
 for X in /usr/lib /usr/share; do
-  for Y in qt qt3; do
+  for Y in qt qt4; do
     if test -d $X/$Y/bin; then
       ac_with_paths="$ac_with_paths $X/$Y"
     fi
@@ -81,7 +81,7 @@ for X in $ac_with_paths; do
     ac_path="$X/bin:$ac_path"
   fi
   if test -d $X/include; then
-    for Y in qt qt3; do
+    for Y in qt qt4; do
       if test -d $X/include/$Y; then
         CFLAGS="-I$X/include/$Y $CFLAGS"
         CPPFLAGS="-I$X/include/$Y $CPPFLAGS"
@@ -119,21 +119,24 @@ if test "x$ac_qtlib" = "xqt-mt"; then
 fi
 AC_SUBST(ac_thread)
 
-AC_CACHE_CHECK([for Qt library version >= 3.1.1],
+AC_CACHE_CHECK([for Qt library version >= 4.0.0],
   ac_qtlib_version, [
-  AC_TRY_LINK([#include "qglobal.h"], [
-#if QT_VERSION < 0x030101
-#error Qt library 3.1.1 or greater required.
+  AC_TRY_LINK([#include <Qt/qglobal.h>], [
+#ifndef QT_VERSION
+#error QT_VERSION macro not defined!
+#endif
+#if QT_VERSION < 0x040000
+#error Qt library 4.0.0 or greater required.
 #endif
     ],
     ac_qtlib_version="yes", [
-      echo "no; Qt 3.1.1 or greater is required"
+      echo "no; Qt 4.0.0 or greater is required"
       exit
     ])
 ])
 
 # A common error message:
-ac_qtdir_errmsg="not found in current PATH. Maybe QT development environment isn't available (qt3-devel)."
+ac_qtdir_errmsg="not found in current PATH. Maybe QT development environment isn't available (qt4-devel)."
 
 # Check for Qt qmake utility.
 AC_PATH_PROG(ac_qmake, qmake, [no], $ac_path)

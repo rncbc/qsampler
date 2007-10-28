@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -28,6 +28,9 @@
 #include <qtooltip.h>
 #include <qpixmap.h>
 
+#include <QDockWidget>
+#include <QScrollBar>
+
 #include "config.h"
 
 #if !defined(WIN32)
@@ -49,7 +52,7 @@
 
 // Constructor.
 qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
-    : QDockWindow(pParent, pszName)
+    : QDockWidget(pszName, pParent)
 {
     // Intialize stdout capture stuff.
     m_pStdoutNotifier = NULL;
@@ -58,14 +61,14 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
 
     // Surely a name is crucial (e.g.for storing geometry settings)
     if (pszName == 0)
-        QDockWindow::setName("qsamplerMessages");
+        QDockWidget::setName("qsamplerMessages");
 
     // Create local text view widget.
     m_pTextView = new QTextEdit(this);
 //  QFont font(m_pTextView->font());
 //  font.setFamily("Fixed");
 //  m_pTextView->setFont(font);
-    m_pTextView->setWordWrap(QTextEdit::NoWrap);
+    m_pTextView->setWordWrapMode(QTextOption::NoWrap);
     m_pTextView->setReadOnly(true);
     m_pTextView->setUndoRedoEnabled(false);
 #if QT_VERSION >= 0x030200
@@ -75,17 +78,19 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
     setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
 
     // Prepare the dockable window stuff.
-    QDockWindow::setWidget(m_pTextView);
-    QDockWindow::setOrientation(Qt::Horizontal);
-    QDockWindow::setCloseMode(QDockWindow::Always);
-    QDockWindow::setResizeEnabled(true);
+    QDockWidget::setWidget(m_pTextView);
+    //QDockWidget::setOrientation(Qt::Horizontal);
+    QDockWidget::setFeatures(
+        QDockWidget::DockWidgetClosable
+    );
+    //QDockWidget::setResizeEnabled(true);
 	// Some specialties to this kind of dock window...
-	QDockWindow::setFixedExtentHeight(120);
+	//QDockWidget::setFixedExtentHeight(120);
 
     // Finally set the default caption and tooltip.
     QString sCaption = tr("Messages");
     QToolTip::add(this, sCaption);
-    QDockWindow::setCaption(sCaption);
+    QDockWidget::setWindowIconText(sCaption);
 }
 
 
@@ -200,7 +205,7 @@ void qsamplerMessages::setMessagesLimit ( int iMessagesLimit )
     m_iMessagesLimit = iMessagesLimit;
     m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
 #if QT_VERSION >= 0x030200
-	m_pTextView->setMaxLogLines(iMessagesLimit);
+	//m_pTextView->setMaxLogLines(iMessagesLimit);
 #endif
 }
 
@@ -241,7 +246,8 @@ void qsamplerMessages::appendMessagesText ( const QString& s )
 void qsamplerMessages::scrollToBottom (void)
 {
     flushStdoutBuffer();
-    m_pTextView->scrollToBottom();
+    //m_pTextView->scrollToBottom();
+    m_pTextView->verticalScrollBar()->setValue(m_pTextView->verticalScrollBar()->maximum());
 }
 
 

@@ -1,7 +1,7 @@
 // qsamplerMessages.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 #ifndef __qsamplerMessages_h
 #define __qsamplerMessages_h
 
-#include <qdockwindow.h>
+#include <QDockWidget>
 
 class QSocketNotifier;
 class QTextEdit;
@@ -32,7 +32,7 @@ class QTextEdit;
 // qsamplerMessages - Messages log dockable window.
 //
 
-class qsamplerMessages : public QDockWindow
+class qsamplerMessages : public QDockWidget
 {
     Q_OBJECT
 
@@ -54,7 +54,7 @@ public:
     // Maximum number of message lines accessors.
     int messagesLimit();
     void setMessagesLimit(int iMessagesLimit);
-    
+
     // The main utility methods.
     void appendMessages(const QString& s);
     void appendMessagesColor(const QString& s, const QString &c);
@@ -79,7 +79,7 @@ private:
 
     // The textview main widget.
     QTextEdit *m_pTextView;
-    
+
     // Stdout capture variables.
     QSocketNotifier *m_pStdoutNotifier;
     QString          m_sStdoutBuffer;

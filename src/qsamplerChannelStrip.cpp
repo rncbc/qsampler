@@ -1,61 +1,31 @@
-// qsamplerChannelStrip.ui.h
-//
-// ui.h extension file, included from the uic-generated form implementation.
-/****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-
-   This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License
-   as published by the Free Software Foundation; either version 2
-   of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc.,
-   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
-*****************************************************************************/
-
-#include <qvalidator.h>
-#include <qmessagebox.h>
-#include <qdragobject.h>
-#include <qfileinfo.h>
-#include <qtooltip.h>
-#include <qpopupmenu.h>
-#include <qobjectlist.h>
-#include <qurl.h>
-
-#include <math.h>
+#include "qsamplerChannelStrip.h"
 
 #include "qsamplerMainForm.h"
-#include "qsamplerChannelForm.h"
 
-#include "config.h"
+#include <q3dragobject.h>
+
+#include <QUrl>
+
+#include <math.h>
 
 // Channel status/usage usage limit control.
 #define QSAMPLER_ERROR_LIMIT	3
 
+namespace QSampler {
 
-// Kind of constructor.
-void qsamplerChannelStrip::init (void)
-{
+ChannelStrip::ChannelStrip(QWidget* parent, Qt::WFlags f) : QWidget(parent, f) {
+    ui.setupUi(this);
+
     // Initialize locals.
     m_pChannel     = NULL;
     m_iDirtyChange = 0;
-	m_iErrorCount  = 0;
+    m_iErrorCount  = 0;
 
     // Try to restore normal window positioning.
     adjustSize();
 }
 
-
-// Kind of destructor.
-void qsamplerChannelStrip::destroy (void)
-{
+ChannelStrip::~ChannelStrip() {
     // Destroy existing channel descriptor.
     if (m_pChannel)
         delete m_pChannel;
@@ -64,13 +34,13 @@ void qsamplerChannelStrip::destroy (void)
 
 
 // Drag'n'drop file handler.
-bool qsamplerChannelStrip::decodeDragFile ( const QMimeSource *pEvent, QString& sInstrumentFile )
+bool ChannelStrip::decodeDragFile ( const QMimeSource *pEvent, QString& sInstrumentFile )
 {
 	if (m_pChannel == NULL)
 		return false;
-	if (QTextDrag::canDecode(pEvent)) {
+	if (Q3TextDrag::canDecode(pEvent)) {
 		QString sText;
-		if (QTextDrag::decode(pEvent, sText)) {
+		if (Q3TextDrag::decode(pEvent, sText)) {
 			QStringList files = QStringList::split('\n', sText);
 			for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
 				*iter = QUrl((*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null)).path();
@@ -87,14 +57,14 @@ bool qsamplerChannelStrip::decodeDragFile ( const QMimeSource *pEvent, QString& 
 
 
 // Window drag-n-drop event handlers.
-void qsamplerChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
+void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
 	QString sInstrumentFile;
 	pDragEnterEvent->accept(decodeDragFile(pDragEnterEvent, sInstrumentFile));
 }
 
 
-void qsamplerChannelStrip::dropEvent ( QDropEvent* pDropEvent )
+void ChannelStrip::dropEvent ( QDropEvent* pDropEvent )
 {
 	QString sInstrumentFile;
 
@@ -108,7 +78,7 @@ void qsamplerChannelStrip::dropEvent ( QDropEvent* pDropEvent )
 
 
 // Channel strip setup formal initializer.
-void qsamplerChannelStrip::setup ( qsamplerChannel *pChannel )
+void ChannelStrip::setup ( qsamplerChannel *pChannel )
 {
     // Destroy any previous channel descriptor;
     // (remember that once setup we own it!)
@@ -127,72 +97,70 @@ void qsamplerChannelStrip::setup ( qsamplerChannel *pChannel )
 }
 
 // Channel secriptor accessor.
-qsamplerChannel *qsamplerChannelStrip::channel (void)
+qsamplerChannel *ChannelStrip::channel (void)
 {
     return m_pChannel;
 }
 
 
 // Messages view font accessors.
-QFont qsamplerChannelStrip::displayFont (void)
+QFont ChannelStrip::displayFont (void)
 {
-    return EngineNameTextLabel->font();
+    return ui.EngineNameTextLabel->font();
 }
 
-void qsamplerChannelStrip::setDisplayFont ( const QFont & font )
+void ChannelStrip::setDisplayFont ( const QFont & font )
 {
-    EngineNameTextLabel->setFont(font);
-    MidiPortChannelTextLabel->setFont(font);
-    InstrumentNameTextLabel->setFont(font);
-    InstrumentStatusTextLabel->setFont(font);
+    ui.EngineNameTextLabel->setFont(font);
+    ui.MidiPortChannelTextLabel->setFont(font);
+    ui.InstrumentNameTextLabel->setFont(font);
+    ui.InstrumentStatusTextLabel->setFont(font);
 }
 
 
 // Channel display background effect.
-void qsamplerChannelStrip::setDisplayEffect ( bool bDisplayEffect )
+void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
-    QPixmap pm;
-    if (bDisplayEffect)
-        pm = QPixmap::fromMimeSource("displaybg1.png");
+    QPixmap pm =
+        (bDisplayEffect) ?
+            QPixmap(":/qsampler/pixmaps/displaybg1.png") : QPixmap();
     setDisplayBackground(pm);
 }
 
 
 // Update main display background pixmap.
-void qsamplerChannelStrip::setDisplayBackground ( const QPixmap& pm )
+void ChannelStrip::setDisplayBackground ( const QPixmap& pm )
 {
     // Set the main origin...
-    ChannelInfoFrame->setPaletteBackgroundPixmap(pm);
+    ui.ChannelInfoFrame->setPaletteBackgroundPixmap(pm);
 
     // Iterate for every child text label...
-    QObjectList *pList = ChannelInfoFrame->queryList("QLabel");
-    if (pList) {
-        for (QLabel *pLabel = (QLabel *) pList->first(); pLabel; pLabel = (QLabel *) pList->next())
-            pLabel->setPaletteBackgroundPixmap(pm);
-        delete pList;
+    QList<QObject*> list = ui.ChannelInfoFrame->queryList("QLabel");
+    for (QList<QObject*>::iterator iter = list.begin(); iter != list.end(); iter++) {
+        static_cast<QLabel*>(*iter)->setPaletteBackgroundPixmap(pm);
     }
 
     // And this standalone too.
-    StreamVoiceCountTextLabel->setPaletteBackgroundPixmap(pm);
+    ui.StreamVoiceCountTextLabel->setPaletteBackgroundPixmap(pm);
 }
 
 
 // Maximum volume slider accessors.
-void qsamplerChannelStrip::setMaxVolume ( int iMaxVolume )
+void ChannelStrip::setMaxVolume ( int iMaxVolume )
 {
     m_iDirtyChange++;
-    VolumeSlider->setRange(0, iMaxVolume);
-    VolumeSpinBox->setRange(0, iMaxVolume);
+    ui.VolumeSlider->setRange(0, iMaxVolume);
+    ui.VolumeSpinBox->setRange(0, iMaxVolume);
     m_iDirtyChange--;
 }
 
 
 // Channel setup dialog slot.
-bool qsamplerChannelStrip::channelSetup (void)
+bool ChannelStrip::channelSetup (void)
 {
 	if (m_pChannel == NULL)
 		return false;
-		
+
 	// Invoke the channel setup dialog.
 	bool bResult = m_pChannel->channelSetup(this);
 	// Notify that this channel has changed.
@@ -204,7 +172,7 @@ bool qsamplerChannelStrip::channelSetup (void)
 
 
 // Channel mute slot.
-bool qsamplerChannelStrip::channelMute ( bool bMute )
+bool ChannelStrip::channelMute ( bool bMute )
 {
 	if (m_pChannel == NULL)
 		return false;
@@ -220,7 +188,7 @@ bool qsamplerChannelStrip::channelMute ( bool bMute )
 
 
 // Channel solo slot.
-bool qsamplerChannelStrip::channelSolo ( bool bSolo )
+bool ChannelStrip::channelSolo ( bool bSolo )
 {
 	if (m_pChannel == NULL)
 		return false;
@@ -236,7 +204,7 @@ bool qsamplerChannelStrip::channelSolo ( bool bSolo )
 
 
 // Channel edit slot.
-void qsamplerChannelStrip::channelEdit (void)
+void ChannelStrip::channelEdit (void)
 {
 	if (m_pChannel == NULL)
 		return;
@@ -246,7 +214,7 @@ void qsamplerChannelStrip::channelEdit (void)
 
 
 // Channel reset slot.
-bool qsamplerChannelStrip::channelReset (void)
+bool ChannelStrip::channelReset (void)
 {
 	if (m_pChannel == NULL)
 		return false;
@@ -262,7 +230,7 @@ bool qsamplerChannelStrip::channelReset (void)
 
 
 // Update the channel instrument name.
-bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
+bool ChannelStrip::updateInstrumentName ( bool bForce )
 {
 	if (m_pChannel == NULL)
 		return false;
@@ -274,18 +242,18 @@ bool qsamplerChannelStrip::updateInstrumentName ( bool bForce )
 	// Instrument name...
 	if (m_pChannel->instrumentName().isEmpty()) {
 		if (m_pChannel->instrumentStatus() >= 0)
-			InstrumentNameTextLabel->setText(' ' + qsamplerChannel::loadingInstrument());
+			ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::loadingInstrument());
 		else
-			InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
+			ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
 	} else
-		InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
+		ui.InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
 
-	return true;    
+	return true;
 }
 
 
 // Do the dirty volume change.
-bool qsamplerChannelStrip::updateChannelVolume (void)
+bool ChannelStrip::updateChannelVolume (void)
 {
     if (m_pChannel == NULL)
         return false;
@@ -310,8 +278,8 @@ bool qsamplerChannelStrip::updateChannelVolume (void)
 
     // Flag it here, to avoid infinite recursion.
     m_iDirtyChange++;
-    VolumeSlider->setValue(iVolume);
-    VolumeSpinBox->setValue(iVolume);
+    ui.VolumeSlider->setValue(iVolume);
+    ui.VolumeSpinBox->setValue(iVolume);
     m_iDirtyChange--;
 
     return true;
@@ -319,7 +287,7 @@ bool qsamplerChannelStrip::updateChannelVolume (void)
 
 
 // Update whole channel info state.
-bool qsamplerChannelStrip::updateChannelInfo (void)
+bool ChannelStrip::updateChannelInfo (void)
 {
     if (m_pChannel == NULL)
         return false;
@@ -331,10 +299,10 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     // Update strip caption.
     QString sText = m_pChannel->channelName();
     setCaption(sText);
-    ChannelSetupPushButton->setText(sText);
+    ui.ChannelSetupPushButton->setText(sText);
 
     // Check if we're up and connected.
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm->client() == NULL)
 		return false;
 
@@ -343,9 +311,9 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 
     // Engine name...
     if (m_pChannel->engineName().isEmpty())
-        EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
+        ui.EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
     else
-        EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
+        ui.EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
 
 	// Instrument name...
 	updateInstrumentName(false);
@@ -356,19 +324,19 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 		sMidiPortChannel += tr("All");
 	else
 		sMidiPortChannel += QString::number(m_pChannel->midiChannel() + 1);
-	MidiPortChannelTextLabel->setText(sMidiPortChannel);
+	ui.MidiPortChannelTextLabel->setText(sMidiPortChannel);
 
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();
     if (iInstrumentStatus < 0) {
-        InstrumentStatusTextLabel->setPaletteForegroundColor(Qt::red);
-        InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
+        ui.InstrumentStatusTextLabel->setPaletteForegroundColor(Qt::red);
+        ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
         m_iErrorCount++;
         return false;
     }
     // All seems normal...
-    InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
-    InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
+    ui.InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
+    ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
     m_iErrorCount = 0;
 
 #ifdef CONFIG_MUTE_SOLO
@@ -381,8 +349,8 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
     ChannelSoloPushButton->setPaletteBackgroundColor(bSolo ? Qt::cyan : rgbNormal);
     ChannelSoloPushButton->setDown(bSolo);
 #else
-	ChannelMutePushButton->setEnabled(false);
-	ChannelSoloPushButton->setEnabled(false);
+	ui.ChannelMutePushButton->setEnabled(false);
+	ui.ChannelSoloPushButton->setEnabled(false);
 #endif
 
     // And update the both GUI volume elements;
@@ -392,12 +360,12 @@ bool qsamplerChannelStrip::updateChannelInfo (void)
 
 
 // Update whole channel usage state.
-bool qsamplerChannelStrip::updateChannelUsage (void)
+bool ChannelStrip::updateChannelUsage (void)
 {
     if (m_pChannel == NULL)
         return false;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm->client() == NULL)
 		return false;
 
@@ -415,8 +383,8 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
     int iStreamUsage = ::lscp_get_channel_stream_usage(pMainForm->client(), m_pChannel->channelID());;
 
     // Update the GUI elements...
-    StreamUsageProgressBar->setProgress(iStreamUsage);
-    StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
+    ui.StreamUsageProgressBar->setValue(iStreamUsage);
+    ui.StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
 
     // We're clean.
     return true;
@@ -424,7 +392,7 @@ bool qsamplerChannelStrip::updateChannelUsage (void)
 
 
 // Volume change slot.
-void qsamplerChannelStrip::volumeChanged ( int iVolume )
+void ChannelStrip::volumeChanged ( int iVolume )
 {
     if (m_pChannel == NULL)
         return;
@@ -447,7 +415,7 @@ void qsamplerChannelStrip::volumeChanged ( int iVolume )
 
 
 // Context menu event handler.
-void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
+void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
     if (m_pChannel == NULL)
         return;
@@ -458,10 +426,9 @@ void qsamplerChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 
 
 // Error count hackish accessors.
-void qsamplerChannelStrip::resetErrorCount (void)
+void ChannelStrip::resetErrorCount (void)
 {
 	m_iErrorCount = 0;
 }
 
-
-// end of qsamplerChannelStrip.ui.h
+} // namespace QSampler

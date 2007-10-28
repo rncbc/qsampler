@@ -1,6 +1,6 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>qsamplerChannelStrip</class>
-<comment>qsampler - A LinuxSampler Qt GUI Interface.
+<ui version="4.0" >
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
 
@@ -19,522 +19,771 @@
    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </comment>
-<author>rncbc aka Rui Nuno Capela</author>
-<widget class="QWidget">
-    <property name="name">
-        <cstring>qsamplerChannelStrip</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>795</width>
-            <height>56</height>
-        </rect>
-    </property>
-    <property name="sizePolicy">
-        <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>1</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </property>
-    <property name="caption">
-        <string>Qsampler: Channel</string>
-    </property>
-    <property name="icon">
-        <pixmap>qsamplerChannel.png</pixmap>
-    </property>
-    <property name="focusPolicy">
-        <enum>StrongFocus</enum>
-    </property>
-    <hbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+ <class>qsamplerChannelStrip</class>
+ <widget class="QWidget" name="qsamplerChannelStrip" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>795</width>
+    <height>56</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>7</hsizetype>
+    <vsizetype>1</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="focusPolicy" >
+   <enum>Qt::StrongFocus</enum>
+  </property>
+  <property name="windowTitle" >
+   <string>Qsampler: Channel</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset/>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>4</number>
+   </property>
+   <property name="spacing" >
+    <number>4</number>
+   </property>
+   <item>
+    <widget class="QPushButton" name="ChannelSetupPushButton" >
+     <property name="toolTip" >
+      <string>Channel setup</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Channel</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerChannel.png</iconset>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+C</string>
+     </property>
+     <property name="flat" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="ChannelInfoFrame" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>320</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="palette" >
+      <palette>
+       <active>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::Panel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>2</number>
+      </property>
+      <property name="spacing" >
+       <number>0</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="EngineNameTextLabel" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="margin">
-            <number>4</number>
+        <property name="palette" >
+         <palette>
+          <active>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>255</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>255</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>119</red>
+              <green>119</green>
+              <blue>119</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
         </property>
-        <property name="spacing">
-            <number>4</number>
+        <property name="toolTip" >
+         <string>Engine name</string>
         </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>ChannelSetupPushButton</cstring>
-            </property>
-            <property name="text">
-                <string>&amp;Channel</string>
-            </property>
-            <property name="accel">
-                <string>Alt+C</string>
-            </property>
-            <property name="iconSet">
-                <iconset>qsamplerChannel.png</iconset>
-            </property>
-            <property name="flat">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Channel setup</string>
-            </property>
-        </widget>
-        <widget class="QFrame">
-            <property name="name">
-                <cstring>ChannelInfoFrame</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>5</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>200</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>320</width>
-                    <height>64</height>
-                </size>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="paletteBackgroundPixmap">
-                <pixmap>displaybg1.png</pixmap>
-            </property>
-            <property name="frameShape">
-                <enum>Panel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <property name="margin">
-                    <number>2</number>
-                </property>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>EngineNameTextLabel</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>127</blue>
-                        </color>
-                    </property>
-                    <property name="paletteBackgroundPixmap">
-                        <pixmap>displaybg1.png</pixmap>
-                    </property>
-                    <property name="backgroundOrigin">
-                        <enum>ParentOrigin</enum>
-                    </property>
-                    <property name="text">
-                        <string>--</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignTop</set>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Engine name</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>InstrumentNameTextLabel</cstring>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>0</red>
-                            <green>255</green>
-                            <blue>0</blue>
-                        </color>
-                    </property>
-                    <property name="paletteBackgroundPixmap">
-                        <pixmap>displaybg1.png</pixmap>
-                    </property>
-                    <property name="backgroundOrigin">
-                        <enum>ParentOrigin</enum>
-                    </property>
-                    <property name="text">
-                        <string>--</string>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Instrument name</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="1">
-                    <property name="name">
-                        <cstring>MidiPortChannelTextLabel</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>20</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>255</red>
-                            <green>255</green>
-                            <blue>127</blue>
-                        </color>
-                    </property>
-                    <property name="paletteBackgroundPixmap">
-                        <pixmap>displaybg1.png</pixmap>
-                    </property>
-                    <property name="backgroundOrigin">
-                        <enum>ParentOrigin</enum>
-                    </property>
-                    <property name="text">
-                        <string>-- / --</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignTop|AlignHCenter</set>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>MIDI port / channel</string>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="1" column="1">
-                    <property name="name">
-                        <cstring>InstrumentStatusTextLabel</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>20</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="paletteForegroundColor">
-                        <color>
-                            <red>0</red>
-                            <green>255</green>
-                            <blue>0</blue>
-                        </color>
-                    </property>
-                    <property name="paletteBackgroundPixmap">
-                        <pixmap>displaybg1.png</pixmap>
-                    </property>
-                    <property name="backgroundOrigin">
-                        <enum>ParentOrigin</enum>
-                    </property>
-                    <property name="text">
-                        <string>--</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignCenter</set>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Instrument load status</string>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>ChannelMutePushButton</cstring>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>48</width>
-                    <height>64</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&amp;Mute</string>
-            </property>
-            <property name="accel">
-                <string>Alt+M</string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Channel mute</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>ChannelSoloPushButton</cstring>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>48</width>
-                    <height>64</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&amp;Solo</string>
-            </property>
-            <property name="accel">
-                <string>Alt+S</string>
-            </property>
-            <property name="toggleButton">
-                <bool>true</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Channel solo</string>
-            </property>
-        </widget>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>VolumeSlider</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maxValue">
-                <number>100</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>10</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Channel volume</string>
-            </property>
-        </widget>
-        <widget class="QSpinBox">
-            <property name="name">
-                <cstring>VolumeSpinBox</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>40</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>60</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="suffix">
-                <string> %</string>
-            </property>
-            <property name="maxValue">
-                <number>100</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Channel volume</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>ChannelEditPushButton</cstring>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>48</width>
-                    <height>64</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>&amp;Edit</string>
-            </property>
-            <property name="accel">
-                <string>Alt+E</string>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Edit channel</string>
-            </property>
-        </widget>
-        <widget class="QProgressBar">
-            <property name="name">
-                <cstring>StreamUsageProgressBar</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>100</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>32767</width>
-                    <height>22</height>
-                </size>
-            </property>
-            <property name="indicatorFollowsStyle">
-                <bool>false</bool>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Least buffer fill stream usage (%)</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>StreamVoiceCountTextLabel</cstring>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>60</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>32767</width>
-                    <height>22</height>
-                </size>
-            </property>
-            <property name="paletteForegroundColor">
-                <color>
-                    <red>0</red>
-                    <green>255</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>0</red>
-                    <green>0</green>
-                    <blue>0</blue>
-                </color>
-            </property>
-            <property name="frameShape">
-                <enum>Panel</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="text">
-                <string>--/--</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Stream / Voice count</string>
-            </property>
-        </widget>
-    </hbox>
-</widget>
-<connections>
-    <connection>
-        <sender>ChannelSetupPushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>channelSetup()</slot>
-    </connection>
-    <connection>
-        <sender>ChannelMutePushButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>channelMute(bool)</slot>
-    </connection>
-    <connection>
-        <sender>ChannelSoloPushButton</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>channelSolo(bool)</slot>
-    </connection>
-    <connection>
-        <sender>VolumeSlider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>volumeChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>VolumeSpinBox</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>volumeChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>ChannelEditPushButton</sender>
-        <signal>clicked()</signal>
-        <receiver>qsamplerChannelStrip</receiver>
-        <slot>channelEdit()</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>ChannelSetupPushButton</tabstop>
-    <tabstop>ChannelMutePushButton</tabstop>
-    <tabstop>ChannelSoloPushButton</tabstop>
-    <tabstop>VolumeSlider</tabstop>
-    <tabstop>VolumeSpinBox</tabstop>
-</tabstops>
-<includes>
-    <include location="local" impldecl="in declaration">qsamplerChannel.h</include>
-    <include location="local" impldecl="in implementation">qsamplerChannelStrip.ui.h</include>
-</includes>
-<variables>
-    <variable access="private">qsamplerChannel *m_pChannel;</variable>
-    <variable access="private">int m_iDirtyChange;</variable>
-    <variable access="private">int m_iErrorCount;</variable>
-</variables>
-<signals>
-    <signal>channelChanged( qsamplerChannelStrip * )</signal>
-</signals>
-<slots>
-    <slot specifier="non virtual" returnType="bool">channelSetup()</slot>
-    <slot specifier="non virtual" returnType="bool">channelMute( bool bMute )</slot>
-    <slot specifier="non virtual" returnType="bool">channelSolo( bool bSolo )</slot>
-    <slot>channelEdit()</slot>
-    <slot specifier="non virtual" returnType="bool">channelReset()</slot>
-    <slot specifier="non virtual">volumeChanged( int iVolume )</slot>
-</slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function access="private" specifier="non virtual" returnType="bool">decodeDragFile( const QMimeSource * pEvent, QString &amp; sInstrumentFile )</function>
-    <function access="private" specifier="non virtual">dragEnterEvent( QDragEnterEvent * pDragEnterEvent )</function>
-    <function access="private" specifier="non virtual">dropEvent( QDropEvent * pDropEvent )</function>
-    <function specifier="non virtual">setup( qsamplerChannel * pChannel )</function>
-    <function specifier="non virtual" returnType="qsamplerChannel *">channel()</function>
-    <function specifier="non virtual" returnType="QFont">displayFont()</function>
-    <function specifier="non virtual">setDisplayFont( const QFont &amp; font )</function>
-    <function specifier="non virtual">setDisplayEffect( bool bDisplayEffect )</function>
-    <function specifier="non virtual">setDisplayBackground( const QPixmap &amp; pm )</function>
-    <function specifier="non virtual">setMaxVolume( int iMaxVolume )</function>
-    <function specifier="non virtual" returnType="bool">updateInstrumentName( bool bForce )</function>
-    <function specifier="non virtual" returnType="bool">updateChannelVolume()</function>
-    <function specifier="non virtual" returnType="bool">updateChannelInfo()</function>
-    <function specifier="non virtual" returnType="bool">updateChannelUsage()</function>
-    <function access="private" specifier="non virtual">contextMenuEvent( QContextMenuEvent * pEvent )</function>
-    <function specifier="non virtual">resetErrorCount()</function>
-</functions>
-<pixmapinproject/>
-<layoutdefaults spacing="0" margin="0"/>
-</UI>
+        <property name="text" >
+         <string>--</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="InstrumentNameTextLabel" >
+        <property name="palette" >
+         <palette>
+          <active>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>85</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>85</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>119</red>
+              <green>119</green>
+              <blue>119</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="toolTip" >
+         <string>Instrument name</string>
+        </property>
+        <property name="text" >
+         <string>--</string>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLabel" name="MidiPortChannelTextLabel" >
+        <property name="minimumSize" >
+         <size>
+          <width>20</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="palette" >
+         <palette>
+          <active>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>255</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>255</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>119</red>
+              <green>119</green>
+              <blue>119</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="toolTip" >
+         <string>MIDI port / channel</string>
+        </property>
+        <property name="text" >
+         <string>-- / --</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLabel" name="InstrumentStatusTextLabel" >
+        <property name="minimumSize" >
+         <size>
+          <width>20</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="palette" >
+         <palette>
+          <active>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>85</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>85</red>
+              <green>255</green>
+              <blue>0</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="WindowText" >
+            <brush brushstyle="SolidPattern" >
+             <color alpha="255" >
+              <red>119</red>
+              <green>119</green>
+              <blue>119</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="toolTip" >
+         <string>Instrument load status</string>
+        </property>
+        <property name="text" >
+         <string>--</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="ChannelMutePushButton" >
+     <property name="maximumSize" >
+      <size>
+       <width>48</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Channel mute</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Mute</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+M</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="ChannelSoloPushButton" >
+     <property name="maximumSize" >
+      <size>
+       <width>48</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Channel solo</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Solo</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+S</string>
+     </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSlider" name="VolumeSlider" >
+     <property name="minimumSize" >
+      <size>
+       <width>120</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Channel volume</string>
+     </property>
+     <property name="maximum" >
+      <number>100</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="tickPosition" >
+      <enum>QSlider::TicksBothSides</enum>
+     </property>
+     <property name="tickInterval" >
+      <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSpinBox" name="VolumeSpinBox" >
+     <property name="minimumSize" >
+      <size>
+       <width>40</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>60</width>
+       <height>32767</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Channel volume</string>
+     </property>
+     <property name="suffix" >
+      <string> %</string>
+     </property>
+     <property name="maximum" >
+      <number>100</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="ChannelEditPushButton" >
+     <property name="maximumSize" >
+      <size>
+       <width>48</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Edit channel</string>
+     </property>
+     <property name="text" >
+      <string>&amp;Edit</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+E</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QProgressBar" name="StreamUsageProgressBar" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>1</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Least buffer fill stream usage (%)</string>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="StreamVoiceCountTextLabel" >
+     <property name="minimumSize" >
+      <size>
+       <width>60</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="palette" >
+      <palette>
+       <active>
+        <colorrole role="WindowText" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>85</red>
+           <green>255</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="WindowText" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>85</red>
+           <green>255</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>255</red>
+           <green>255</green>
+           <blue>255</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="WindowText" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>119</red>
+           <green>119</green>
+           <blue>119</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Base" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+        <colorrole role="Window" >
+         <brush brushstyle="SolidPattern" >
+          <color alpha="255" >
+           <red>0</red>
+           <green>0</green>
+           <blue>0</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="toolTip" >
+      <string>Stream / Voice count</string>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::Panel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="text" >
+      <string>--/--</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="0" margin="0" />
+ <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <tabstops>
+  <tabstop>ChannelSetupPushButton</tabstop>
+  <tabstop>ChannelMutePushButton</tabstop>
+  <tabstop>ChannelSoloPushButton</tabstop>
+  <tabstop>VolumeSlider</tabstop>
+  <tabstop>VolumeSpinBox</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local" >qsamplerChannel.h</include>
+ </includes>
+ <resources>
+  <include location="../pixmaps.qrc" />
+ </resources>
+ <connections>
+  <connection>
+   <sender>ChannelSetupPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>qsamplerChannelStrip</receiver>
+   <slot>channelSetup()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ChannelMutePushButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>qsamplerChannelStrip</receiver>
+   <slot>channelMute(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ChannelSoloPushButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>qsamplerChannelStrip</receiver>
+   <slot>channelSolo(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>VolumeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>qsamplerChannelStrip</receiver>
+   <slot>volumeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>VolumeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>qsamplerChannelStrip</receiver>
+   <slot>volumeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ChannelEditPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>qsamplerChannelStrip</receiver>
+   <slot>channelEdit()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

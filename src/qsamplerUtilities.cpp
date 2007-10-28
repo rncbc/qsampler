@@ -26,6 +26,8 @@
 #include <stdio.h>
 #include <qregexp.h>
 
+using namespace QSampler;
+
 namespace qsamplerUtilities {
 
 static int _hexToNumber(char hex_digit) {
@@ -167,7 +169,7 @@ lscpVersion_t getRemoteLscpVersion (void)
 {
     lscpVersion_t result = { 0, 0 };
 
-    qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+    MainForm* pMainForm = MainForm::getInstance();
     if (pMainForm == NULL)
         return result;
     if (pMainForm->client() == NULL)

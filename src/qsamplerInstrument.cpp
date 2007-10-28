@@ -25,6 +25,7 @@
 
 #include "qsamplerMainForm.h"
 
+using namespace QSampler;
 
 //-------------------------------------------------------------------------
 // qsamplerInstrument - MIDI instrument map structure.
@@ -158,7 +159,7 @@ bool qsamplerInstrument::mapInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -218,7 +219,7 @@ bool qsamplerInstrument::unmapInstrument (void)
 	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -252,7 +253,7 @@ bool qsamplerInstrument::getInstrument (void)
 	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -313,7 +314,7 @@ QStringList qsamplerInstrument::getMapNames (void)
 {
 	QStringList maps;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return maps;
 	if (pMainForm->client() == NULL)
@@ -341,7 +342,7 @@ QString qsamplerInstrument::getMapName ( int iMidiMap )
 {
 	QString sMapName;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return sMapName;
 	if (pMainForm->client() == NULL)
