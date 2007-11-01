@@ -1,4 +1,4 @@
-INCLUDEPATH += ./src
+INCPATH  += ./src
 
 HEADERS  += src/qsamplerChannelForm.h \
 			src/qsamplerChannelStrip.h \
@@ -40,45 +40,14 @@ FORMS     = src/qsamplerMainForm.ui \
 			src/qsamplerInstrumentListForm.ui \
 			src/qsamplerDeviceForm.ui
 
-IMAGES    = icons/qsampler.png \
-			icons/qsamplerChannel.png \
-			icons/qsamplerInstrument.png \
-			icons/qsamplerDevice.png \
-			icons/fileNew.png \
-			icons/fileOpen.png \
-			icons/fileSave.png \
-			icons/fileRestart.png \
-			icons/fileReset.png \
-			icons/editAddChannel.png \
-			icons/editRemoveChannel.png \
-			icons/editSetupChannel.png \
-			icons/editEditChannel.png \
-			icons/editResetChannel.png \
-			icons/editResetAllChannels.png \
-			icons/channelsArrange.png \
-			icons/itemGroup.png \
-			icons/itemGroupOpen.png \
-			icons/itemGroupNew.png \
-			icons/itemNew.png \
-			icons/itemFile.png \
-			icons/formEdit.png \
-			icons/formRemove.png \
-			icons/formAccept.png \
-			icons/formReject.png \
-			icons/formRefresh.png \
-			icons/deviceCreate.png \
-			icons/deviceDelete.png \
-			icons/displaybg1.png \
-			icons/midi1.png \
-			icons/midi2.png \
-			icons/audio1.png \
-			icons/audio2.png
+RESOURCES = icons/qsampler.qrc
 
 TEMPLATE  = app
-CONFIG   += qt @ac_thread@ warn_on @ac_debug@
+CONFIG   += qt thread warn_on @ac_debug@
 LANGUAGE  = C++
 
 LIBS     += @ac_libs@
 INCPATH  += @ac_incpath@
 
+# Qt3 support
 QT += qt3support

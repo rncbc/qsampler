@@ -44,7 +44,7 @@
    <string>Qsampler: MIDI Instrument</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerInstrument.png</iconset>
+   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerInstrument.png</iconset>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
@@ -406,7 +406,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileOpen.png</iconset>
+        <iconset resource="../icons/qsampler.qrc" >:/icons/fileOpen.png</iconset>
        </property>
       </widget>
      </item>
@@ -442,7 +442,7 @@
         <string>O&amp;K</string>
        </property>
        <property name="icon" >
-        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formAccept.png</iconset>
+        <iconset resource="../icons/qsampler.qrc" >:/icons/formAccept.png</iconset>
        </property>
        <property name="shortcut" >
         <string>Alt+K</string>
@@ -455,7 +455,7 @@
         <string>C&amp;ancel</string>
        </property>
        <property name="icon" >
-        <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formReject.png</iconset>
+        <iconset resource="../icons/qsampler.qrc" >:/icons/formReject.png</iconset>
        </property>
        <property name="shortcut" >
         <string>Alt+A</string>
@@ -483,7 +483,7 @@
   <tabstop>CancelPushButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../pixmaps.qrc" />
+  <include location="../icons/qsampler.qrc" />
  </resources>
  <connections>
   <connection>

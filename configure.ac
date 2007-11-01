@@ -1,6 +1,7 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.1.5.1, rncbc@rncbc.org, qsampler)
-AC_CONFIG_SRCDIR(src/qsamplerMainForm.h)
+AC_INIT(Qsampler, 0.2.0.1, rncbc@rncbc.org, qsampler)
+
+AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec qsampler.desktop)
 
@@ -44,6 +45,11 @@ for X in /usr/lib /usr/share; do
   done
 done
 
+# Set for alternate Qt installation dir.
+AC_ARG_WITH(qt,
+  AC_HELP_STRING([--with-qt=PATH], [use alternate Qt install path]),
+  [ac_with_paths="$ac_with_paths $withval"])
+
 # Set for alternate liblscp installation dir.
 AC_ARG_WITH(liblscp,
   AC_HELP_STRING([--with-liblscp=PATH], [use alternate liblscp install path]),
@@ -65,20 +71,14 @@ AC_PROG_GCC_TRADITIONAL
 AC_LANG_C
 AC_LANG_CPLUSPLUS
 
-# Check for QTDIR environment variable.
-AC_MSG_CHECKING([whether QTDIR environment variable is set])
-if test "x$QTDIR" = "x"; then
-  AC_MSG_RESULT([no])
-else
-  AC_MSG_RESULT([$QTDIR])
-  ac_with_paths="$ac_with_paths $QTDIR"
-fi
-
 # Prepend alternate dependencies paths.
 ac_path=$PATH
 for X in $ac_with_paths; do
   if test -d $X/bin; then
     ac_path="$X/bin:$ac_path"
+  fi
+  if test -x $X/qmake; then
+    ac_path="$X:$ac_path"
   fi
   if test -d $X/include; then
     for Y in qt qt4; do
@@ -102,60 +102,41 @@ for X in $ac_with_paths; do
   fi
 done
 
-# Checks for Qt library.
-for X in qt-mt qt; do
-  if test "x$ac_qtlib" = "x"; then
-     AC_CHECK_LIB($X, main, [ac_qtlib=$X])
-  fi
-done
-if test "x$ac_qtlib" = "x"; then
-  AC_MSG_ERROR([Qt library not found. Maybe QTDIR isn't properly set.])
-fi
-AC_SUBST(ac_qtlib)
-
-# Check for Qt multi-thread support.
-if test "x$ac_qtlib" = "xqt-mt"; then
-  ac_thread="thread"
-fi
-AC_SUBST(ac_thread)
-
-AC_CACHE_CHECK([for Qt library version >= 4.0.0],
+# Check for proper Qt version.
+AC_CACHE_CHECK([for Qt library version >= 4.1],
   ac_qtlib_version, [
-  AC_TRY_LINK([#include <Qt/qglobal.h>], [
-#ifndef QT_VERSION
-#error QT_VERSION macro not defined!
-#endif
-#if QT_VERSION < 0x040000
-#error Qt library 4.0.0 or greater required.
+  AC_TRY_LINK([#include "Qt/qglobal.h"], [
+#if QT_VERSION < 0x040100
+#error Qt library 4.1 or greater required.
 #endif
     ],
     ac_qtlib_version="yes", [
-      echo "no; Qt 4.0.0 or greater is required"
+      echo "no; Qt 4.1 or greater is required"
       exit
     ])
 ])
 
 # A common error message:
-ac_qtdir_errmsg="not found in current PATH. Maybe QT development environment isn't available (qt4-devel)."
+ac_errmsg="not found in current PATH. Maybe QT development environment isn't available (qt-devel)."
 
 # Check for Qt qmake utility.
 AC_PATH_PROG(ac_qmake, qmake, [no], $ac_path)
 if test "x$ac_qmake" = "xno"; then
-   AC_MSG_ERROR([qmake $ac_qtdir_errmsg])
+   AC_MSG_ERROR([qmake $ac_errmsg])
 fi
 AC_SUBST(ac_qmake)
 
 # Check for Qt moc utility.
 AC_PATH_PROG(ac_moc, moc, [no], $ac_path)
 if test "x$ac_moc" = "xno"; then
-   AC_MSG_ERROR([moc $ac_qtdir_errmsg])
+   AC_MSG_ERROR([moc $ac_errmsg])
 fi
 AC_SUBST(ac_moc)
 
 # Check for Qt uic utility.
 AC_PATH_PROG(ac_uic, uic, [no], $ac_path)
 if test "x$ac_uic" = "xno"; then
-   AC_MSG_ERROR([uic $ac_qtdir_errmsg])
+   AC_MSG_ERROR([uic $ac_errmsg])
 fi
 AC_SUBST(ac_uic)
 
@@ -163,7 +144,6 @@ AC_SUBST(ac_uic)
 AC_CHECK_LIB(m, main)
 AC_CHECK_LIB(X11, main)
 AC_CHECK_LIB(Xext, main)
-AC_CHECK_LIB($ac_qtlib, main)
 
 # Check for round math function.
 AC_CHECK_LIB(m, round, [ac_round="yes"], [ac_round="no"])
@@ -287,6 +267,24 @@ AC_OUTPUT
 
 # make clean > /dev/null 2>&1
 
-echo ""
+# Output summary message
+
+echo
+echo "  $PACKAGE_NAME $PACKAGE_VERSION"
+echo
+echo "  Build target . . . . . . . . . . . . . . . . . . .: $ac_debug"
+echo
+echo "  LSCP instrument name support . . . . . . . . . . .: $ac_instrument_name"
+echo "  LSCP mute/solo support . . . . . . . . . . . . . .: $ac_mute_solo"
+echo "  LSCP MIDI instrument support . . . . . . . . . . .: $ac_midi_instrument"
+echo "  LSCP FX send support . . . . . . . . . . . . . . .: $ac_fxsend"
+echo "  LSCP FX send level support . . . . . . . . . . . .: $ac_fxsend_level"
+echo "  LSCP audio routing support . . . . . . . . . . . .: $ac_audio_routing"
+echo "  LSCP volume support  . . . . . . . . . . . . . . .: $ac_volume"
+echo "  LSCP edit instrument support . . . . . . . . . . .: $ac_edit_instrument"
+echo "  GigaSampler instrument file support (libgig) . . .: $ac_libgig"
+echo
+echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
+echo
 echo "Now type 'make', followed by 'make install' as root."
-echo ""
+echo

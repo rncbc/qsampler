@@ -953,14 +953,14 @@ void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
 	}
 
 	// Those items shall have a proper pixmap...
-	QPixmap pmChannel = QPixmap::fromMimeSource("qsamplerChannel.png");
+	QPixmap pmChannel = QPixmap(":/icons/qsamplerChannel.png");
 	QPixmap pmDevice;
 	switch (pDevice->deviceType()) {
 	case qsamplerDevice::Audio:
-		pmDevice = QPixmap::fromMimeSource("audio2.png");
+		pmDevice = QPixmap(":/icons/audio2.png");
 		break;
 	case qsamplerDevice::Midi:
-		pmDevice = QPixmap::fromMimeSource("midi2.png");
+		pmDevice = QPixmap(":/icons/midi2.png");
 		break;
 	case qsamplerDevice::None:
 		break;

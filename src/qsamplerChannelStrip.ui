@@ -62,7 +62,7 @@
       <string>&amp;Channel</string>
      </property>
      <property name="icon" >
-      <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerChannel.png</iconset>
+      <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerChannel.png</iconset>
      </property>
      <property name="shortcut" >
       <string>Alt+C</string>
@@ -686,7 +686,7 @@
   <include location="local" >qsamplerChannel.h</include>
  </includes>
  <resources>
-  <include location="../pixmaps.qrc" />
+  <include location="../icons/qsampler.qrc" />
  </resources>
  <connections>
   <connection>

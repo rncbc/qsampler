@@ -33,7 +33,7 @@
    <string>Qsampler: Instruments</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerInstrument.png</iconset>
+   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerInstrument.png</iconset>
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
@@ -50,7 +50,7 @@
   </widget>
   <action name="newInstrumentAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/itemNew.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/itemNew.png</iconset>
    </property>
    <property name="text" >
     <string>New</string>
@@ -58,7 +58,7 @@
   </action>
   <action name="editInstrumentAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formEdit.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/formEdit.png</iconset>
    </property>
    <property name="text" >
     <string>Edit</string>
@@ -66,7 +66,7 @@
   </action>
   <action name="deleteInstrumentAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formRemove.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/formRemove.png</iconset>
    </property>
    <property name="text" >
     <string>Delete</string>
@@ -74,7 +74,7 @@
   </action>
   <action name="refreshInstrumentsAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/formRefresh.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/formRefresh.png</iconset>
    </property>
    <property name="text" >
     <string>Refresh</string>
@@ -84,7 +84,7 @@
  <layoutdefault spacing="0" margin="0" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <resources>
-  <include location="../pixmaps.qrc" />
+  <include location="../icons/qsampler.qrc" />
  </resources>
  <connections/>
 </ui>

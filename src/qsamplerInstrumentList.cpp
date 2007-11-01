@@ -65,7 +65,7 @@ qsamplerInstrumentGroup::qsamplerInstrumentGroup (
 {
 	QListViewItem::setRenameEnabled(0, true);
 
-	QListViewItem::setPixmap(0, QPixmap::fromMimeSource("itemGroup.png"));
+	QListViewItem::setPixmap(0, QPixmap(":/icons/itemGroup.png"));
 	QListViewItem::setText(0, sName);
 }
 
@@ -76,7 +76,7 @@ qsamplerInstrumentGroup::qsamplerInstrumentGroup (
 {
 	QListViewItem::setRenameEnabled(0, true);
 
-	QListViewItem::setPixmap(0, QPixmap::fromMimeSource("itemGroup.png"));
+	QListViewItem::setPixmap(0, QPixmap(":/icons/itemGroup.png"));
 }
 
 
@@ -119,8 +119,8 @@ void qsamplerInstrumentGroup::setOpen ( bool bOpen )
 {
 	// Set the proper pixmap of this...
 	if (rtti() == qsamplerInstrumentList::Group) {
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource(
-			bOpen ? "itemGroupOpen.png" : "itemGroup.png"));
+		QListViewItem::setPixmap(0, QPixmap(bOpen ?
+			":/icons/itemGroupOpen.png" : ":/icons/itemGroup.png"));
 	}
 	// Open it up...
 	QListViewItem::setOpen(bOpen);
@@ -190,7 +190,7 @@ qsamplerInstrument *qsamplerInstrumentItem::instrument (void) const
 // Item refreshment.
 void qsamplerInstrumentItem::update (void)
 {
-	QListViewItem::setPixmap(0, QPixmap::fromMimeSource("itemFile.png"));
+	QListViewItem::setPixmap(0, QPixmap(":/icons/itemFile.png"));
 
 	const QString s = "-";
 	if (m_pInstrument) {
@@ -263,20 +263,20 @@ qsamplerInstrumentList::qsamplerInstrumentList (
 	QListView::setColumnWidth(5, 240);	// File
 
 	m_pNewGroupAction = new QAction(
-		QIconSet(QPixmap::fromMimeSource("itemGroupNew.png")),
+		QIcon(":/icons/itemGroupNew.png"),
 		tr("New &Group"), tr("Ctrl+G"), this);
 	m_pNewItemAction  = new QAction(
-		QIconSet(QPixmap::fromMimeSource("itemNew.png")),
+		QIcon(":/icons/itemNew.png"),
 		tr("New &Instrument..."), tr("Ins"), this);
 	m_pEditItemAction = new QAction(
-		QIconSet(QPixmap::fromMimeSource("formEdit.png")),
+		QIcon(":/icons/formEdit.png"),
 		tr("&Edit..."), tr("Enter"), this);
 	m_pRenameAction   = new QAction(tr("&Rename"), tr("F2"), this);
 	m_pDeleteAction   = new QAction(
-		QIconSet(QPixmap::fromMimeSource("formRemove.png")),
+		QIcon(":/icons/formRemove.png"),
 		tr("&Delete"), tr("Del"), this);
 	m_pRefreshAction  = new QAction(
-		QIconSet(QPixmap::fromMimeSource("formRefresh.png")),
+		QIcon(":/icons/formRefresh.png"),
 		tr("Re&fresh"), tr("F5"), this);
 
 	m_pNewGroupAction->setToolTip(tr("New Group"));

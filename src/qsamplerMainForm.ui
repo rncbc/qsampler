@@ -1,4 +1,24 @@
 <ui version="4.0" >
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>qsampler - A LinuxSampler Qt GUI Interface.
+
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+
+   This program is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public License
+   as published by the Free Software Foundation; either version 2
+   of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+</comment>
  <class>qsamplerMainForm</class>
  <widget class="QMainWindow" name="qsamplerMainForm" >
   <property name="geometry" >
@@ -87,7 +107,7 @@
   <widget class="QStatusBar" name="statusbar" />
   <action name="fileNewAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileNew.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/fileNew.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;New</string>
@@ -107,7 +127,7 @@
   </action>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileOpen.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/fileOpen.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
@@ -127,7 +147,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileSave.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/fileSave.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Save</string>
@@ -161,7 +181,7 @@
   </action>
   <action name="fileResetAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileReset.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/fileReset.png</iconset>
    </property>
    <property name="text" >
     <string>Rese&amp;t</string>
@@ -181,7 +201,7 @@
   </action>
   <action name="fileRestartAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/fileRestart.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/fileRestart.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Restart</string>
@@ -215,7 +235,7 @@
   </action>
   <action name="editAddChannelAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editAddChannel.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/editAddChannel.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Add Channel</string>
@@ -235,7 +255,7 @@
   </action>
   <action name="editRemoveChannelAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editRemoveChannel.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/editRemoveChannel.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Remove Channel</string>
@@ -255,7 +275,7 @@
   </action>
   <action name="editResetChannelAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editResetChannel.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/editResetChannel.png</iconset>
    </property>
    <property name="text" >
     <string>Re&amp;set Channel</string>
@@ -275,7 +295,7 @@
   </action>
   <action name="editResetAllChannelsAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editResetAllChannels.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/editResetAllChannels.png</iconset>
    </property>
    <property name="text" >
     <string>R&amp;eset All Channels</string>
@@ -295,7 +315,7 @@
   </action>
   <action name="editSetupChannelAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editSetupChannel.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/editSetupChannel.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Setup Channel...</string>
@@ -315,7 +335,7 @@
   </action>
   <action name="editEditChannelAction" >
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/editEditChannel.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/editEditChannel.png</iconset>
    </property>
    <property name="text" >
     <string>Ed&amp;it Channel...</string>
@@ -418,7 +438,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerInstrument.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerInstrument.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Instruments</string>
@@ -441,7 +461,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/qsamplerDevice.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerDevice.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Devices</string>
@@ -481,7 +501,7 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="../pixmaps.qrc" >:/qsampler/pixmaps/icons/channelsArrange.png</iconset>
+    <iconset resource="../icons/qsampler.qrc" >:/icons/channelsArrange.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Arrange</string>
@@ -549,7 +569,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../pixmaps.qrc" />
+  <include location="../icons/qsampler.qrc" />
  </resources>
  <connections/>
 </ui>
