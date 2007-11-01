@@ -30,7 +30,9 @@
 #define QSAMPLER_SUBTITLE     "A LinuxSampler Qt GUI Interface"
 #define QSAMPLER_WEBSITE      "http://qsampler.sourceforge.net"
 #define QSAMPLER_COPYRIGHT    "Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved."
+#define QSAMPLER_COPYRIGHT2   "Copyright (C) 2007, Christian Schoenebeck"
 
 #endif  // __qsamplerAbout_h
+
 
 // end of qsamplerAbout.h
