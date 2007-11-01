@@ -34,6 +34,48 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget" />
+  <widget class="QToolBar" name="fileToolbar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="fileNewAction"/>
+   <addaction name="fileOpenAction"/>
+   <addaction name="fileSaveAction"/>
+   <addaction name="separator" />
+   <addaction name="fileResetAction"/>
+   <addaction name="fileRestartAction"/>
+   <addaction name="separator" />
+   <addaction name="viewInstrumentsAction"/>
+   <addaction name="viewDevicesAction"/>
+  </widget>
+  <widget class="QToolBar" name="editToolbar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="editAddChannelAction"/>
+   <addaction name="editRemoveChannelAction"/>
+   <addaction name="separator" />
+   <addaction name="editSetupChannelAction"/>
+   <addaction name="editEditChannelAction"/>
+   <addaction name="separator" />
+   <addaction name="editResetChannelAction"/>
+   <addaction name="editResetAllChannelsAction"/>
+  </widget>
+  <widget class="QToolBar" name="channelsToolbar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="channelsArrangeAction"/>
+  </widget>
   <widget class="QMenuBar" name="MenuBar" >
    <property name="geometry" >
     <rect>

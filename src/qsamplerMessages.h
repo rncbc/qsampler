@@ -35,56 +35,58 @@ class QTextEdit;
 
 class qsamplerMessages : public QDockWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    // Constructor.
-    qsamplerMessages(QWidget *pParent, const char *pszName = 0);
-    // Destructor.
-    ~qsamplerMessages();
+	// Constructor.
+	qsamplerMessages(QWidget *pParent);
+	// Destructor.
+	~qsamplerMessages();
 
-    // Stdout/stderr capture accessors.
-    bool isCaptureEnabled();
-    void setCaptureEnabled(bool bCapture);
+	// Stdout/stderr capture accessors.
+	bool isCaptureEnabled();
+	void setCaptureEnabled(bool bCapture);
 
-    // Message font accessors.
-    QFont messagesFont();
-    void setMessagesFont(const QFont & font);
+	// Message font accessors.
+	QFont messagesFont();
+	void setMessagesFont(const QFont & font);
 
-    // Maximum number of message lines accessors.
-    int messagesLimit();
-    void setMessagesLimit(int iMessagesLimit);
+	// Maximum number of message lines accessors.
+	int messagesLimit();
+	void setMessagesLimit(int iMessagesLimit);
 
-    // The main utility methods.
-    void appendMessages(const QString& s);
-    void appendMessagesColor(const QString& s, const QString &c);
-    void appendMessagesText(const QString& s);
+	// The main utility methods.
+	void appendMessages(const QString& s);
+	void appendMessagesColor(const QString& s, const QString &c);
+	void appendMessagesText(const QString& s);
 
-    void scrollToBottom();
+	// Stdout capture functions.
+	void appendStdoutBuffer(const QString& s);
+	void flushStdoutBuffer();
 
-    // Stdout capture functions.
-    void appendStdoutBuffer(const QString& s);
-    void flushStdoutBuffer();
-
+	// History reset.
+	void clear();
+	
 protected slots:
 
-    // Stdout capture slot.
-    void stdoutNotify(int fd);
+	// Stdout capture slot.
+	void stdoutNotify(int fd);
 
 private:
 
-    // The maximum number of message lines.
-    int m_iMessagesLimit;
-    int m_iMessagesHigh;
+	// The maximum number of message lines.
+	int m_iMessagesLines;
+	int m_iMessagesLimit;
+	int m_iMessagesHigh;
 
-    // The textview main widget.
-    QTextEdit *m_pTextView;
+	// The textview main widget.
+	QTextEdit *m_pTextView;
 
-    // Stdout capture variables.
-    QSocketNotifier *m_pStdoutNotifier;
-    QString          m_sStdoutBuffer;
-    int              m_fdStdout[2];
+	// Stdout capture variables.
+	QSocketNotifier *m_pStdoutNotifier;
+	QString          m_sStdoutBuffer;
+	int              m_fdStdout[2];
 };
 
 

@@ -1733,10 +1733,6 @@ void MainForm::stabilizeForm (void)
 
     // Recent files menu.
     m_pRecentFilesMenu->setEnabled(bHasClient && m_pOptions->recentFiles.count() > 0);
-
-    // Always make the latest message visible.
-    if (m_pMessages)
-        m_pMessages->scrollToBottom();
 }
 
 
