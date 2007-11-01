@@ -52,6 +52,44 @@ InstrumentForm::InstrumentForm(QWidget* parent) : QDialog(parent) {
 
 	// Try to restore normal window positioning.
 	adjustSize();
+
+
+	QObject::connect(ui.MapComboBox,
+		SIGNAL(activated(int)),
+		SLOT(changed()));
+	QObject::connect(ui.BankSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(changed()));
+	QObject::connect(ui.ProgSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(changed()));
+	QObject::connect(ui.NameLineEdit,
+		SIGNAL(textChanged(const QString&amp;)),
+		SLOT(nameChanged(const QString&amp;)));
+	QObject::connect(ui.EngineNameComboBox,
+		SIGNAL(activated(int)),
+		SLOT(changed()));
+	QObject::connect(ui.InstrumentFileComboBox,
+		SIGNAL(activated(const QString&amp;)),
+		SLOT(updateInstrumentName()));
+	QObject::connect(ui.InstrumentFileToolButton,
+		SIGNAL(clicked()),
+		SLOT(openInstrumentFile()));
+	QObject::connect(ui.InstrumentNrComboBox,
+		SIGNAL(activated(int)),
+		SLOT(instrumentNrChanged()));
+	QObject::connect(ui.VolumeSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(changed()));
+	QObject::connect(ui.LoadModeComboBox,
+		SIGNAL(activated(int)),
+		SLOT(changed()));
+	QObject::connect(ui.OkPushButton,
+		SIGNAL(clicked()),
+		SLOT(accept()));
+	QObject::connect(ui.CancelPushButton,
+		SIGNAL(clicked()),
+		SLOT(reject()));
 }
 
 InstrumentForm::~InstrumentForm() {

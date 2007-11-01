@@ -120,9 +120,6 @@ private:
     QSlider *m_pVolumeSlider;
     QSpinBox *m_pVolumeSpinBox;
     int m_iVolumeChanging;
-    QToolBar* fileToolbar;
-    QToolBar* editToolbar;
-    QToolBar* channelsToolbar;
 
 private slots:
     void fileNew(void);

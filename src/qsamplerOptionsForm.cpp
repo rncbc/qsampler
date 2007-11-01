@@ -45,6 +45,73 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent) {
 
     // Try to restore old window positioning.
     adjustSize();
+
+	QObject::connect(ui.ServerHostComboBox,
+		SIGNAL(textChanged(const QString&amp;)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.ServerPortComboBox,
+		SIGNAL(textChanged(const QString&amp;)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.ServerTimeoutSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.ServerStartCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.ServerCmdLineComboBox,
+		SIGNAL(textChanged(const QString&amp;)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.StartDelaySpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.DisplayFontPushButton,
+		SIGNAL(clicked()),
+		SLOT(chooseDisplayFont()));
+	QObject::connect(ui.DisplayEffectCheckBox,
+		SIGNAL(toggled(bool)),
+		SLOT(toggleDisplayEffect(bool)));
+	QObject::connect(ui.AutoRefreshCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.AutoRefreshTimeSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MaxVolumeSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MessagesFontPushButton,
+		SIGNAL(clicked()),
+		SLOT(chooseMessagesFont()));
+	QObject::connect(ui.MessagesLimitCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MessagesLimitLinesSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.ConfirmRemoveCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.KeepOnTopCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.StdoutCaptureCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MaxRecentFilesSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.CompletePathCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.InstrumentNamesCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.OkPushButton,
+		SIGNAL(clicked()),
+		SLOT(accept()));
+	QObject::connect(ui.CancelPushButton,
+		SIGNAL(clicked()),
+		SLOT(reject()));
 }
 
 OptionsForm::~OptionsForm() {

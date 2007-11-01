@@ -49,6 +49,14 @@
     </item>
    </layout>
   </widget>
+  <widget class="QToolBar" name="InstrumentToolbar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+  </widget>
   <action name="newInstrumentAction" >
    <property name="icon" >
     <iconset resource="../icons/qsampler.qrc" >:/icons/itemNew.png</iconset>

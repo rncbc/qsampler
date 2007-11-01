@@ -130,10 +130,6 @@ MainForm* MainForm::g_pMainForm = NULL;
 MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
     ui.setupUi(this);
 
-    fileToolbar     = addToolBar(tr("File"));
-    editToolbar     = addToolBar(tr("Edit"));
-    channelsToolbar = addToolBar(tr("Channels"));
-
 	// Pseudo-singleton reference setup.
 	g_pMainForm = this;
 
@@ -167,30 +163,31 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
 	const QString& sVolumeText = tr("Master volume");
 	m_iVolumeChanging = 0;
 	// Volume slider...
-	channelsToolbar->addSeparator();
-	m_pVolumeSlider = new QSlider(Qt::Horizontal, channelsToolbar);
+	ui.channelsToolbar->addSeparator();
+	m_pVolumeSlider = new QSlider(Qt::Horizontal, ui.channelsToolbar);
 	m_pVolumeSlider->setTickmarks(QSlider::Below);
 	m_pVolumeSlider->setTickInterval(10);
 	m_pVolumeSlider->setPageStep(10);
 	m_pVolumeSlider->setRange(0, 100);
-	m_pVolumeSlider->setMaximumHeight(22);
+	m_pVolumeSlider->setMaximumHeight(26);
 	m_pVolumeSlider->setMinimumWidth(160);
 	QToolTip::add(m_pVolumeSlider, sVolumeText);
 	QObject::connect(m_pVolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
-	//channelsToolbar->setHorizontallyStretchable(true);
-	//channelsToolbar->setStretchableWidget(m_pVolumeSlider);
-    channelsToolbar->addWidget(m_pVolumeSlider);
+	//ui.channelsToolbar->setHorizontallyStretchable(true);
+	//ui.channelsToolbar->setStretchableWidget(m_pVolumeSlider);
+    ui.channelsToolbar->addWidget(m_pVolumeSlider);
 	// Volume spin-box
-	channelsToolbar->addSeparator();
-	m_pVolumeSpinBox = new QSpinBox(channelsToolbar);
+	ui.channelsToolbar->addSeparator();
+	m_pVolumeSpinBox = new QSpinBox(ui.channelsToolbar);
 	m_pVolumeSpinBox->setSuffix(" %");
 	m_pVolumeSpinBox->setRange(0, 100);
 	QToolTip::add(m_pVolumeSpinBox, sVolumeText);
 	QObject::connect(m_pVolumeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
+    ui.channelsToolbar->addWidget(m_pVolumeSpinBox);
 #endif
 
     // Make it an MDI workspace.
@@ -236,6 +233,79 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
+
+	QObject::connect(ui.fileNewAction,
+		SIGNAL(activated()),
+		SLOT(fileNew()));
+	QObject::connect(ui.fileOpenAction,
+		SIGNAL(activated()),
+		SLOT(fileOpen()));
+	QObject::connect(ui.fileSaveAction,
+		SIGNAL(activated()),
+		SLOT(fileSave()));
+	QObject::connect(ui.fileSaveAsAction,
+		SIGNAL(activated()),
+		SLOT(fileSaveAs()));
+	QObject::connect(ui.fileResetAction,
+		SIGNAL(activated()),
+		SLOT(fileReset()));
+	QObject::connect(ui.fileRestartAction,
+		SIGNAL(activated()),
+		SLOT(fileRestart()));
+	QObject::connect(ui.fileExitAction,
+		SIGNAL(activated()),
+		SLOT(fileExit()));
+	QObject::connect(ui.editAddChannelAction,
+		SIGNAL(activated()),
+		SLOT(editAddChannel()));
+	QObject::connect(ui.editRemoveChannelAction,
+		SIGNAL(activated()),
+		SLOT(editRemoveChannel()));
+	QObject::connect(ui.editSetupChannelAction,
+		SIGNAL(activated()),
+		SLOT(editSetupChannel()));
+	QObject::connect(ui.editEditChannelAction,
+		SIGNAL(activated()),
+		SLOT(editEditChannel()));
+	QObject::connect(ui.editResetChannelAction,
+		SIGNAL(activated()),
+		SLOT(editResetChannel()));
+	QObject::connect(ui.editResetAllChannelsAction,
+		SIGNAL(activated()),
+		SLOT(editResetAllChannels()));
+	QObject::connect(ui.viewMenubarAction,
+		SIGNAL(toggled(bool)),
+		SLOT(viewMenubar(bool)));
+	QObject::connect(ui.viewToolbarAction,
+		SIGNAL(toggled(bool)),
+		SLOT(viewToolbar(bool)));
+	QObject::connect(ui.viewStatusbarAction,
+		SIGNAL(toggled(bool)),
+		SLOT(viewStatusbar(bool)));
+	QObject::connect(ui.viewMessagesAction,
+		SIGNAL(toggled(bool)),
+		SLOT(viewMessages(bool)));
+	QObject::connect(ui.viewInstrumentsAction,
+		SIGNAL(activated()),
+		SLOT(viewInstruments()));
+	QObject::connect(ui.viewDevicesAction,
+		SIGNAL(activated()),
+		SLOT(viewDevices()));
+	QObject::connect(ui.viewOptionsAction,
+		SIGNAL(activated()),
+		SLOT(viewOptions()));
+	QObject::connect(ui.channelsArrangeAction,
+		SIGNAL(activated()),
+		SLOT(channelsArrange()));
+	QObject::connect(ui.channelsAutoArrangeAction,
+		SIGNAL(toggled(bool)),
+		SLOT(channelsAutoArrange(bool)));
+	QObject::connect(ui.helpAboutAction,
+		SIGNAL(activated()),
+		SLOT(helpAbout()));
+	QObject::connect(ui.helpAboutQtAction,
+		SIGNAL(activated()),
+		SLOT(helpAboutQt()));
 }
 
 // Destructor.
@@ -370,7 +440,7 @@ bool MainForm::queryClose (void)
         if (bQueryClose) {
             // Save decorations state.
             m_pOptions->bMenubar = ui.MenuBar->isVisible();
-            m_pOptions->bToolbar = (fileToolbar->isVisible() || editToolbar->isVisible() || channelsToolbar->isVisible());
+            m_pOptions->bToolbar = (ui.fileToolbar->isVisible() || ui.editToolbar->isVisible() || ui.channelsToolbar->isVisible());
             m_pOptions->bStatusbar = statusBar()->isVisible();
             // Save the dock windows state.
             const QString sDockables = saveState().toBase64().data();
@@ -1366,13 +1436,13 @@ void MainForm::viewMenubar ( bool bOn )
 void MainForm::viewToolbar ( bool bOn )
 {
     if (bOn) {
-        fileToolbar->show();
-        editToolbar->show();
-        channelsToolbar->show();
+        ui.fileToolbar->show();
+        ui.editToolbar->show();
+        ui.channelsToolbar->show();
     } else {
-        fileToolbar->hide();
-        editToolbar->hide();
-        channelsToolbar->hide();
+        ui.fileToolbar->hide();
+        ui.editToolbar->hide();
+        ui.channelsToolbar->hide();
     }
 }
 

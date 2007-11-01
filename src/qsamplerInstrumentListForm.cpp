@@ -43,18 +43,17 @@ InstrumentListForm::InstrumentListForm(QWidget* parent, Qt::WindowFlags flags) :
     ui.refreshInstrumentsAction->setShortcut(Qt::Key_F5);
 
     // Setup toolbar widgets.
-    InstrumentToolbar = addToolBar(tr("MIDI Instruments"));
-    m_pMapComboBox = new QComboBox(InstrumentToolbar);
+    m_pMapComboBox = new QComboBox(ui.InstrumentToolbar);
     m_pMapComboBox->setMinimumWidth(120);
     m_pMapComboBox->setEnabled(false);
     QToolTip::add(m_pMapComboBox, tr("Instrument Map"));
 
-    InstrumentToolbar->addSeparator();
-    ui.newInstrumentAction->addTo(InstrumentToolbar);
-    ui.editInstrumentAction->addTo(InstrumentToolbar);
-    ui.deleteInstrumentAction->addTo(InstrumentToolbar);
-    InstrumentToolbar->addSeparator();
-    ui.refreshInstrumentsAction->addTo(InstrumentToolbar);
+    ui.InstrumentToolbar->addSeparator();
+    ui.newInstrumentAction->addTo(ui.InstrumentToolbar);
+    ui.editInstrumentAction->addTo(ui.InstrumentToolbar);
+    ui.deleteInstrumentAction->addTo(ui.InstrumentToolbar);
+    ui.InstrumentToolbar->addSeparator();
+    ui.refreshInstrumentsAction->addTo(ui.InstrumentToolbar);
 
     ui.InstrumentTable->setModel(&model);
     //ui.InstrumentTable->setDelegate(delegate);
@@ -63,9 +62,10 @@ InstrumentListForm::InstrumentListForm(QWidget* parent, Qt::WindowFlags flags) :
 		SIGNAL(activated(int)),
 		SLOT(activateMap(int)));
 
-    connect(
-        ui.refreshInstrumentsAction,
-        SIGNAL(triggered()), SLOT(refreshInstruments(void))
+	QObject::connect(
+		ui.refreshInstrumentsAction,
+		SIGNAL(triggered()),
+		SLOT(refreshInstruments(void))
     );
 }
 

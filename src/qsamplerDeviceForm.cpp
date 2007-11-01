@@ -55,6 +55,31 @@ DeviceForm::DeviceForm(QWidget* parent, Qt::WFlags f) : QDialog(parent, f) {
 	refreshDevices();
 	// Try to restore normal window positioning.
 	adjustSize();
+
+	QObject::connect(ui.DeviceListView,
+		SIGNAL(selectionChanged()),
+		SLOT(selectDevice()));
+	QObject::connect(ui.DeviceListView,
+		SIGNAL(contextMenuRequested(QListViewItem*,const QPoint&amp;,int)),
+		SLOT(contextMenu(QListViewItem*,const QPoint&amp;,int)));
+	QObject::connect(ui.RefreshDevicesPushButton,
+		SIGNAL(clicked()),
+		SLOT(refreshDevices()));
+	QObject::connect(ui.DriverNameComboBox,
+		SIGNAL(activated(const QString&amp;)),
+		SLOT(selectDriver(const QString&amp;)));
+	QObject::connect(ui.DevicePortComboBox,
+		SIGNAL(activated(int)),
+		SLOT(selectDevicePort(int)));
+	QObject::connect(ui.CreateDevicePushButton,
+		SIGNAL(clicked()),
+		SLOT(createDevice()));
+	QObject::connect(ui.DeleteDevicePushButton,
+		SIGNAL(clicked()),
+		SLOT(deleteDevice()));
+	QObject::connect(ui.ClosePushButton,
+		SIGNAL(clicked()),
+		SLOT(close()));
 }
 
 DeviceForm::~DeviceForm() {

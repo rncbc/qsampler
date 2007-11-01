@@ -51,6 +51,52 @@ ChannelForm::ChannelForm(QWidget* parent) : QDialog(parent) {
 
 	// Try to restore normal window positioning.
 	adjustSize();
+
+	QObject::connect(ui.EngineNameComboBox,
+		SIGNAL(activated(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.InstrumentFileComboBox,
+		SIGNAL(activated(const QString&amp;)),
+		SLOT(updateInstrumentName()));
+	QObject::connect(ui.InstrumentFileToolButton,
+		SIGNAL(clicked()),
+		SLOT(openInstrumentFile()));
+	QObject::connect(ui.InstrumentNrComboBox,
+		SIGNAL(activated(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MidiDriverComboBox,
+		SIGNAL(activated(const QString&amp;)),
+		SLOT(selectMidiDriver(const QString&amp;)));
+	QObject::connect(ui.MidiDeviceComboBox,
+		SIGNAL(activated(int)),
+		SLOT(selectMidiDevice(int)));
+	QObject::connect(ui.MidiPortSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MidiChannelComboBox,
+		SIGNAL(activated(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.MidiMapComboBox,
+		SIGNAL(activated(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(ui.AudioDriverComboBox,
+		SIGNAL(activated(const QString&amp;)),
+		SLOT(selectAudioDriver(const QString&amp;)));
+	QObject::connect(ui.AudioDeviceComboBox,
+		SIGNAL(activated(int)),
+		SLOT(selectAudioDevice(int)));
+	QObject::connect(ui.OkPushButton,
+		SIGNAL(clicked()),
+		SLOT(accept()));
+	QObject::connect(ui.CancelPushButton,
+		SIGNAL(clicked()),
+		SLOT(reject()));
+	QObject::connect(ui.MidiDeviceToolButton,
+		SIGNAL(clicked()),
+		SLOT(setupMidiDevice()));
+	QObject::connect(ui.AudioDeviceToolButton,
+		SIGNAL(clicked()),
+		SLOT(setupAudioDevice()));
 }
 
 ChannelForm::~ChannelForm() {

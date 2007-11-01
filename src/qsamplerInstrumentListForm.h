@@ -45,7 +45,6 @@ public slots:
 
 protected:
     QComboBox* m_pMapComboBox;
-    QToolBar* InstrumentToolbar;
 
     void showEvent(QShowEvent* pShowEvent);
     void hideEvent(QHideEvent* pHideEvent);

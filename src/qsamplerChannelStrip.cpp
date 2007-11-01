@@ -45,6 +45,25 @@ ChannelStrip::ChannelStrip(QWidget* parent, Qt::WFlags f) : QWidget(parent, f) {
 
     // Try to restore normal window positioning.
     adjustSize();
+
+	QObject::connect(ui.ChannelSetupPushButton,
+		SIGNAL(clicked()),
+		SLOT(channelSetup()));
+	QObject::connect(ui.ChannelMutePushButton,
+		SIGNAL(toggled(bool)),
+		SLOT(channelMute(bool)));
+	QObject::connect(ui.ChannelSoloPushButton,
+		SIGNAL(toggled(bool)),
+		SLOT(channelSolo(bool)));
+	QObject::connect(ui.VolumeSlider,
+		SIGNAL(valueChanged(int)),
+		SLOT(volumeChanged(int)));
+	QObject::connect(ui.VolumeSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(volumeChanged(int)));
+	QObject::connect(ui.ChannelEditPushButton,
+		SIGNAL(clicked()),
+		SLOT(channelEdit()));
 }
 
 ChannelStrip::~ChannelStrip() {

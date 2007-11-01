@@ -28,6 +28,15 @@ sources = src/main.cpp \
 	src/qsamplerInstrumentList.cpp \
 	src/qsamplerDevice.cpp \
 	src/qsamplerUtilities.cpp \
+	src/qsamplerInstrumentForm.cpp \
+	src/qsamplerInstrumentListForm.cpp \
+	src/qsamplerDeviceForm.cpp \
+	src/qsamplerChannelStrip.cpp \
+	src/qsamplerChannelForm.cpp \
+	src/qsamplerOptionsForm.cpp \
+	src/qsamplerMainForm.cpp
+
+forms = \
 	src/qsamplerInstrumentForm.ui \
 	src/qsamplerInstrumentListForm.ui \
 	src/qsamplerDeviceForm.ui \
@@ -41,7 +50,7 @@ all:	$(name)
 $(name).mak:	$(name).pro
 	@$(qmake) -o $(name).mak $(name).pro
 
-$(name):	$(name).mak $(sources) $(headers)
+$(name):	$(name).mak $(sources) $(headers) $(forms)
 	@make -f $(name).mak
 
 
