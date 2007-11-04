@@ -67,8 +67,15 @@ public:
 
 	// History reset.
 	void clear();
-	
+
+signals:
+
+	void visibilityChanged(bool bVisible);
+
 protected slots:
+
+	// overridden method of QWidget
+	void showEvent(QShowEvent* event);
 
 	// Stdout capture slot.
 	void stdoutNotify(int fd);

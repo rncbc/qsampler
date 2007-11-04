@@ -101,6 +101,13 @@ qsamplerMessages::~qsamplerMessages (void)
 }
 
 
+void qsamplerMessages::showEvent (QShowEvent* event)
+{
+    QDockWidget::showEvent(event);
+    emit visibilityChanged(isVisible());
+}
+
+
 // Own stdout/stderr socket notifier slot.
 void qsamplerMessages::stdoutNotify ( int fd )
 {

@@ -57,17 +57,17 @@ DeviceForm::DeviceForm(QWidget* parent, Qt::WFlags f) : QDialog(parent, f) {
 	adjustSize();
 
 	QObject::connect(ui.DeviceListView,
-		SIGNAL(selectionChanged()),
+		SIGNAL(itemSelectionChanged()),
 		SLOT(selectDevice()));
 	QObject::connect(ui.DeviceListView,
-		SIGNAL(contextMenuRequested(QListViewItem*,const QPoint&amp;,int)),
-		SLOT(contextMenu(QListViewItem*,const QPoint&amp;,int)));
+		SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(deviceListViewContextMenu(const QPoint&)));
 	QObject::connect(ui.RefreshDevicesPushButton,
 		SIGNAL(clicked()),
 		SLOT(refreshDevices()));
 	QObject::connect(ui.DriverNameComboBox,
-		SIGNAL(activated(const QString&amp;)),
-		SLOT(selectDriver(const QString&amp;)));
+		SIGNAL(activated(const QString&)),
+		SLOT(selectDriver(const QString&)));
 	QObject::connect(ui.DevicePortComboBox,
 		SIGNAL(activated(int)),
 		SLOT(selectDevicePort(int)));
@@ -553,10 +553,14 @@ void DeviceForm::changeDevicePortParam ( int iRow, int iCol )
 
 
 // Device list view context menu handler.
-void DeviceForm::contextMenu ( QTreeWidgetItem* pItem, const QPoint& pos, int )
+void DeviceForm::deviceListViewContextMenu ( const QPoint& pos )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
+		return;
+
+	QTreeWidgetItem* pItem = ui.DeviceListView->itemAt(pos);
+	if (pItem == NULL)
 		return;
 
 	int iItemID;

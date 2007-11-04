@@ -2385,15 +2385,15 @@ void MainForm::startServer (void)
 		//m_pServer->setProcessChannelMode(
 		//	QProcess::StandardOutput);
 		QObject::connect(m_pServer,
-			SIGNAL(readyReadStdout()),
+			SIGNAL(readyReadStandardOutput()),
 			SLOT(readServerStdout()));
 		QObject::connect(m_pServer,
-			SIGNAL(readyReadStderr()),
+			SIGNAL(readyReadStandardError()),
 			SLOT(readServerStdout()));
 	//	}
 	// The unforgiveable signal communication...
 	QObject::connect(m_pServer,
-		SIGNAL(processExited()),
+		SIGNAL(finished(int,QProcess::ExitStatus)),
 		SLOT(processServerExit()));
 
     // Build process arguments...

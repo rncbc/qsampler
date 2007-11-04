@@ -54,7 +54,7 @@ public slots:
     void selectDevicePort(int iPort);
     void changeDeviceParam(int iRow, int iCol);
     void changeDevicePortParam(int iRow, int iCol);
-    void contextMenu(QTreeWidgetItem* item, const QPoint&, int);
+    void deviceListViewContextMenu(const QPoint& pos);
     void stabilizeForm();
 
 protected:

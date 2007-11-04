@@ -319,7 +319,7 @@
  <connections>
   <connection>
    <sender>DeviceListView</sender>
-   <signal>selectionChanged()</signal>
+   <signal>itemSelectionChanged()</signal>
    <receiver>qsamplerDeviceForm</receiver>
    <slot>selectDevice()</slot>
    <hints>
