@@ -675,7 +675,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="0" margin="0" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>ChannelSetupPushButton</tabstop>
   <tabstop>ChannelMutePushButton</tabstop>
@@ -683,108 +682,7 @@
   <tabstop>VolumeSlider</tabstop>
   <tabstop>VolumeSpinBox</tabstop>
  </tabstops>
- <includes>
-  <include location="local" >qsamplerChannel.h</include>
- </includes>
  <resources>
   <include location="../icons/qsampler.qrc" />
  </resources>
- <connections>
-  <connection>
-   <sender>ChannelSetupPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerChannelStrip</receiver>
-   <slot>channelSetup()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ChannelMutePushButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>qsamplerChannelStrip</receiver>
-   <slot>channelMute(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ChannelSoloPushButton</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>qsamplerChannelStrip</receiver>
-   <slot>channelSolo(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>VolumeSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>qsamplerChannelStrip</receiver>
-   <slot>volumeChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>VolumeSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>qsamplerChannelStrip</receiver>
-   <slot>volumeChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ChannelEditPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerChannelStrip</receiver>
-   <slot>channelEdit()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

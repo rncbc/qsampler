@@ -2077,7 +2077,7 @@ void MainForm::appendMessagesError( const QString& s )
     if (m_pMessages)
         m_pMessages->show();
 
-    appendMessagesColor(s.simplifyWhiteSpace(), "#ff0000");
+    appendMessagesColor(s.simplified(), "#ff0000");
 
 	// Make it look responsive...:)
 	QApplication::processEvents(QEventLoop::ExcludeUserInput);

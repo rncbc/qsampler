@@ -300,7 +300,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="4" margin="4" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>DeviceListView</tabstop>
   <tabstop>RefreshDevicesPushButton</tabstop>
@@ -310,124 +309,7 @@
   <tabstop>DeleteDevicePushButton</tabstop>
   <tabstop>ClosePushButton</tabstop>
  </tabstops>
- <includes>
-  <include location="local" >qsamplerDevice.h</include>
- </includes>
  <resources>
   <include location="../icons/qsampler.qrc" />
  </resources>
- <connections>
-  <connection>
-   <sender>DeviceListView</sender>
-   <signal>itemSelectionChanged()</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>selectDevice()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>RefreshDevicesPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>refreshDevices()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>DriverNameComboBox</sender>
-   <signal>activated(QString)</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>selectDriver(QString)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>DevicePortComboBox</sender>
-   <signal>activated(int)</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>selectDevicePort(int)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CreateDevicePushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>createDevice()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>DeleteDevicePushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>deleteDevice()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ClosePushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerDeviceForm</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

@@ -20,13 +20,14 @@
 
 *****************************************************************************/
 
-#include <QApplication>
-#include <QTextCodec>
-#include <QTranslator>
-
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
+
+#include <QApplication>
+#include <QTranslator>
+#include <QLocale>
+
 
 //-------------------------------------------------------------------------
 // main - The main program trunk.
@@ -34,38 +35,39 @@
 
 int main ( int argc, char **argv )
 {
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-    // Load translation support.
-    QTranslator translator(0);
-    QString sLocale = QTextCodec::codecForLocale()->name();
-    if (sLocale != "C") { //TODO: not sure if "C" locale name exists in Qt4
-        QString sLocName = "qsampler_" + sLocale;
-        if (!translator.load(sLocName, ".")) {
-            QString sLocPath = CONFIG_PREFIX "/share/locale";
-            if (!translator.load(sLocName, sLocPath))
-                fprintf(stderr, "Warning: no locale found: %s/%s.qm\n", sLocPath.toLatin1().data(), sLocName.toLatin1().data());
-        }
-        app.installTranslator(&translator);
-    }
+	// Load translation support.
+	QTranslator translator(0);
+	QLocale loc;
+	if (loc.language() != QLocale::C) {
+		QString sLocName = "qsampler_" + loc.name();
+		if (!translator.load(sLocName, ".")) {
+			QString sLocPath = CONFIG_PREFIX "/share/locale";
+			if (!translator.load(sLocName, sLocPath))
+				fprintf(stderr, "Warning: no locale found: %s/%s.qm\n",
+					sLocPath.toUtf8().constData(),
+					sLocName.toUtf8().constData());
+		}
+		app.installTranslator(&translator);
+	}
 
-    // Construct default settings; override with command line arguments.
-    qsamplerOptions options;
-    if (!options.parse_args(app.argc(), app.argv())) {
-        app.quit();
-        return 1;
-    }
+	// Construct default settings; override with command line arguments.
+	qsamplerOptions options;
+	if (!options.parse_args(app.argc(), app.argv())) {
+		app.quit();
+		return 1;
+	}
 
-    // Construct, setup and show the main form.
-    QSampler::MainForm w;
-	app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    w.setup(&options);
-    w.show();
+	// Construct, setup and show the main form.
+	QSampler::MainForm w;
+	w.setup(&options);
+	w.show();
 
-    // Register the quit signal/slot.
-    // app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+	// Register the quit signal/slot.
+	// app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    return app.exec();
+	return app.exec();
 }
 
 

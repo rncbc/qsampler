@@ -756,7 +756,6 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <layoutdefault spacing="4" margin="4" />
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>EngineNameComboBox</tabstop>
   <tabstop>InstrumentFileComboBox</tabstop>
@@ -768,102 +767,4 @@ p, li { white-space: pre-wrap; }
  <resources>
   <include location="../icons/qsampler.qrc" />
  </resources>
- <connections>
-  <connection>
-   <sender>EngineNameComboBox</sender>
-   <signal>activated(int)</signal>
-   <receiver>qsamplerChannelForm</receiver>
-   <slot>optionsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>InstrumentFileComboBox</sender>
-   <signal>activated(QString)</signal>
-   <receiver>qsamplerChannelForm</receiver>
-   <slot>updateInstrumentName()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>InstrumentFileToolButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerChannelForm</receiver>
-   <slot>openInstrumentFile()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>InstrumentNrComboBox</sender>
-   <signal>activated(int)</signal>
-   <receiver>qsamplerChannelForm</receiver>
-   <slot>optionsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>OkPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerChannelForm</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>CancelPushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>qsamplerChannelForm</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
 </ui>

@@ -30,21 +30,22 @@
 
 namespace QSampler {
 
-OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent) {
-    ui.setupUi(this);
+OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
+{
+	ui.setupUi(this);
 
-    // No settings descriptor initially (the caller will set it).
-    m_pOptions = NULL;
+	// No settings descriptor initially (the caller will set it).
+	m_pOptions = NULL;
 
-    // Initialize dirty control state.
-    m_iDirtySetup = 0;
-    m_iDirtyCount = 0;
+	// Initialize dirty control state.
+	m_iDirtySetup = 0;
+	m_iDirtyCount = 0;
 
-    // Set dialog validators...
-    ui.ServerPortComboBox->setValidator(new QIntValidator(ui.ServerPortComboBox));
+	// Set dialog validators...
+	ui.ServerPortComboBox->setValidator(new QIntValidator(ui.ServerPortComboBox));
 
-    // Try to restore old window positioning.
-    adjustSize();
+	// Try to restore old window positioning.
+	adjustSize();
 
 	QObject::connect(ui.ServerHostComboBox,
 		SIGNAL(textChanged(const QString&amp;)),
@@ -114,7 +115,8 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent) {
 		SLOT(reject()));
 }
 
-OptionsForm::~OptionsForm() {
+OptionsForm::~OptionsForm()
+{
 }
 
 // Populate (setup) dialog controls from settings descriptors.

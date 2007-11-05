@@ -33,6 +33,9 @@
   <property name="windowTitle" >
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon" >
+   <iconset resource="../icons/qsampler.qrc" >:/icons/qsampler.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget" />
   <widget class="QToolBar" name="fileToolbar" >
    <property name="orientation" >
@@ -614,5 +617,4 @@
  <resources>
   <include location="../icons/qsampler.qrc" />
  </resources>
- <connections/>
 </ui>

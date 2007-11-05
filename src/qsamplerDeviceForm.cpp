@@ -23,6 +23,7 @@
 #include "qsamplerDeviceForm.h"
 
 #include "qsamplerAbout.h"
+#include "qsamplerMainForm.h"
 
 namespace QSampler {
 

@@ -30,7 +30,9 @@
 
 namespace QSampler {
 
-InstrumentListForm::InstrumentListForm(QWidget* parent, Qt::WindowFlags flags) : QMainWindow(parent, flags) {
+InstrumentListForm::InstrumentListForm ( QWidget* parent, Qt::WindowFlags flags )
+	: QMainWindow(parent, flags)
+{
     ui.setupUi(this);
 
     ui.newInstrumentAction->setText(tr("New &Instrument..."));
@@ -47,6 +49,7 @@ InstrumentListForm::InstrumentListForm(QWidget* parent, Qt::WindowFlags flags) :
     m_pMapComboBox->setMinimumWidth(120);
     m_pMapComboBox->setEnabled(false);
     QToolTip::add(m_pMapComboBox, tr("Instrument Map"));
+    ui.InstrumentToolbar->addWidget(m_pMapComboBox);
 
     ui.InstrumentToolbar->addSeparator();
     ui.newInstrumentAction->addTo(ui.InstrumentToolbar);

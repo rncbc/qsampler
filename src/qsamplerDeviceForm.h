@@ -25,7 +25,7 @@
 
 #include "ui_qsamplerDeviceForm.h"
 
-#include "qsamplerMainForm.h"
+#include "qsamplerDevice.h"
 
 namespace QSampler {
 
