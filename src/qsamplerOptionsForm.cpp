@@ -48,10 +48,10 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
 	adjustSize();
 
 	QObject::connect(ui.ServerHostComboBox,
-		SIGNAL(textChanged(const QString&amp;)),
+		SIGNAL(textChanged(const QString&)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.ServerPortComboBox,
-		SIGNAL(textChanged(const QString&amp;)),
+		SIGNAL(textChanged(const QString&)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.ServerTimeoutSpinBox,
 		SIGNAL(valueChanged(int)),
@@ -60,7 +60,7 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.ServerCmdLineComboBox,
-		SIGNAL(textChanged(const QString&amp;)),
+		SIGNAL(textChanged(const QString&)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.StartDelaySpinBox,
 		SIGNAL(valueChanged(int)),

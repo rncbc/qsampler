@@ -127,10 +127,10 @@ void qsamplerMessages::appendStdoutBuffer ( const QString& s )
 {
 	m_sStdoutBuffer.append(s);
 
-	int iLength = m_sStdoutBuffer.lastIndexOf('\n') + 1;
+	int iLength = m_sStdoutBuffer.lastIndexOf('\n');
 	if (iLength > 0) {
 		QString sTemp = m_sStdoutBuffer.left(iLength);
-		m_sStdoutBuffer.remove(0, iLength);
+		m_sStdoutBuffer.remove(0, iLength + 1);
 		QStringList list = sTemp.split('\n');
 		QStringListIterator iter(list);
 		while (iter.hasNext())

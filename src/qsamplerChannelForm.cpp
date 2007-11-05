@@ -56,7 +56,7 @@ ChannelForm::ChannelForm(QWidget* parent) : QDialog(parent) {
 		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.InstrumentFileComboBox,
-		SIGNAL(activated(const QString&amp;)),
+		SIGNAL(activated(const QString&)),
 		SLOT(updateInstrumentName()));
 	QObject::connect(ui.InstrumentFileToolButton,
 		SIGNAL(clicked()),
@@ -65,8 +65,8 @@ ChannelForm::ChannelForm(QWidget* parent) : QDialog(parent) {
 		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.MidiDriverComboBox,
-		SIGNAL(activated(const QString&amp;)),
-		SLOT(selectMidiDriver(const QString&amp;)));
+		SIGNAL(activated(const QString&)),
+		SLOT(selectMidiDriver(const QString&)));
 	QObject::connect(ui.MidiDeviceComboBox,
 		SIGNAL(activated(int)),
 		SLOT(selectMidiDevice(int)));
@@ -80,8 +80,8 @@ ChannelForm::ChannelForm(QWidget* parent) : QDialog(parent) {
 		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.AudioDriverComboBox,
-		SIGNAL(activated(const QString&amp;)),
-		SLOT(selectAudioDriver(const QString&amp;)));
+		SIGNAL(activated(const QString&)),
+		SLOT(selectAudioDriver(const QString&)));
 	QObject::connect(ui.AudioDeviceComboBox,
 		SIGNAL(activated(int)),
 		SLOT(selectAudioDevice(int)));
@@ -147,7 +147,7 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	if (ppszEngines) {
 		ui.EngineNameComboBox->clear();
 		for (int iEngine = 0; ppszEngines[iEngine]; iEngine++)
-			ui.EngineNameComboBox->insertItem(ppszEngines[iEngine]);
+			ui.EngineNameComboBox->addItem(QString(ppszEngines[iEngine]));
 	}
 	else m_pChannel->appendMessagesClient("lscp_list_available_engines");
 
@@ -175,10 +175,12 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	if (sEngineName.isEmpty())
 		sEngineName = qsamplerChannel::noEngineName();
 	if (ui.EngineNameComboBox->findText(sEngineName,
-			Qt::MatchExactly | Qt::MatchCaseSensitive) == 0) {
-		ui.EngineNameComboBox->insertItem(sEngineName);
+			Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
+		ui.EngineNameComboBox->addItem(sEngineName);
 	}
-	ui.EngineNameComboBox->setCurrentText(sEngineName);
+	ui.EngineNameComboBox->setCurrentIndex(
+		ui.EngineNameComboBox->findText(sEngineName,
+			Qt::MatchExactly | Qt::MatchCaseSensitive));
 	// Instrument filename and index...
 	QString sInstrumentFile = pChannel->instrumentFile();
 	if (sInstrumentFile.isEmpty())
@@ -198,7 +200,7 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 		sMidiDriver = pOptions->sMidiDriver.upper();
 	if (!sMidiDriver.isEmpty()) {
 		if (ui.MidiDriverComboBox->findText(sMidiDriver,
-				Qt::MatchExactly | Qt::MatchCaseSensitive) == 0) {
+				Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 			ui.MidiDriverComboBox->insertItem(sMidiDriver);
 		}
 		ui.MidiDriverComboBox->setCurrentText(sMidiDriver);
@@ -236,7 +238,7 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 		sAudioDriver = pOptions->sAudioDriver.upper();
 	if (!sAudioDriver.isEmpty()) {
 		if (ui.AudioDriverComboBox->findText(sAudioDriver,
-				Qt::MatchExactly | Qt::MatchCaseSensitive) == 0) {
+				Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 			ui.AudioDriverComboBox->insertItem(sAudioDriver);
 		}
 		ui.AudioDriverComboBox->setCurrentText(sAudioDriver);

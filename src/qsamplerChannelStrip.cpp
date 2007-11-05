@@ -164,7 +164,7 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
     QPixmap pm =
         (bDisplayEffect) ?
-            QPixmap(":/qsampler/pixmaps/displaybg1.png") : QPixmap();
+            QPixmap(":/icons/displaybg1.png") : QPixmap();
     setDisplayBackground(pm);
 }
 

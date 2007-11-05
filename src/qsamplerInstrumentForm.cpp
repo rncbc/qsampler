@@ -64,13 +64,13 @@ InstrumentForm::InstrumentForm(QWidget* parent) : QDialog(parent) {
 		SIGNAL(valueChanged(int)),
 		SLOT(changed()));
 	QObject::connect(ui.NameLineEdit,
-		SIGNAL(textChanged(const QString&amp;)),
-		SLOT(nameChanged(const QString&amp;)));
+		SIGNAL(textChanged(const QString&)),
+		SLOT(nameChanged(const QString&)));
 	QObject::connect(ui.EngineNameComboBox,
 		SIGNAL(activated(int)),
 		SLOT(changed()));
 	QObject::connect(ui.InstrumentFileComboBox,
-		SIGNAL(activated(const QString&amp;)),
+		SIGNAL(activated(const QString&)),
 		SLOT(updateInstrumentName()));
 	QObject::connect(ui.InstrumentFileToolButton,
 		SIGNAL(clicked()),
@@ -179,7 +179,7 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	if (sEngineName.isEmpty())
 		sEngineName = qsamplerChannel::noEngineName();
 	if (ui.EngineNameComboBox->findText(sEngineName,
-			Qt::MatchExactly | Qt::MatchCaseSensitive) == 0) {
+			Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 		ui.EngineNameComboBox->insertItem(sEngineName);
 	}
 	ui.EngineNameComboBox->setCurrentText(sEngineName);

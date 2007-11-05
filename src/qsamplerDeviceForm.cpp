@@ -135,7 +135,7 @@ void DeviceForm::setDeviceTypeMode (
 // Device driver name setup formal initializer.
 void DeviceForm::setDriverName ( const QString& sDriverName )
 {
-	if (ui.DriverNameComboBox->findText(sDriverName) == 0) {
+	if (ui.DriverNameComboBox->findText(sDriverName) < 0) {
 		ui.DriverNameComboBox->insertItem(sDriverName);
 	}
 	ui.DriverNameComboBox->setCurrentText(sDriverName);

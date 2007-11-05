@@ -2166,8 +2166,7 @@ ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
     }
 
     // Add a new channel itema...
-    Qt::WFlags wflags = Qt::WStyle_Customize | Qt::WStyle_Tool | Qt::WStyle_Title | Qt::WStyle_NoBorder;
-    pChannelStrip = new ChannelStrip(m_pWorkspace, wflags);
+    pChannelStrip = new ChannelStrip(m_pWorkspace);
     if (pChannelStrip == NULL)
         return NULL;
 
