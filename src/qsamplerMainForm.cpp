@@ -2166,15 +2166,17 @@ ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
     }
 
     // Add a new channel itema...
-    pChannelStrip = new ChannelStrip(m_pWorkspace);
+    pChannelStrip = new ChannelStrip();
     if (pChannelStrip == NULL)
         return NULL;
+
+    m_pWorkspace->addWindow(pChannelStrip, Qt::Tool);
 
     // Actual channel strip setup...
     pChannelStrip->setup(pChannel);
 	QObject::connect(pChannelStrip,
-		SIGNAL(channelChanged(qsamplerChannelStrip *)),
-		SLOT(channelStripChanged(qsamplerChannelStrip *)));
+		SIGNAL(channelChanged(ChannelStrip*)),
+		SLOT(channelStripChanged(ChannelStrip*)));
     // Set some initial aesthetic options...
     if (m_pOptions) {
         // Background display effect...
