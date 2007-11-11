@@ -1,6 +1,14 @@
 INCPATH  += ../src ../../liblscp
 
-HEADERS  += ../src/qsamplerAbout.h \
+HEADERS  += config.h \
+			../src/qsamplerChannelForm.h \
+			../src/qsamplerChannelStrip.h \
+			../src/qsamplerDeviceForm.h \
+			../src/qsamplerInstrumentForm.h \
+			../src/qsamplerInstrumentListForm.h \
+			../src/qsamplerMainForm.h \
+			../src/qsamplerOptionsForm.h \
+			../src/qsamplerAbout.h \
 			../src/qsamplerOptions.h \
 			../src/qsamplerChannel.h \
 			../src/qsamplerMessages.h \
@@ -10,6 +18,13 @@ HEADERS  += ../src/qsamplerAbout.h \
 			../src/qsamplerUtilities.h
 
 SOURCES  += ../src/main.cpp \
+			../src/qsamplerChannelForm.cpp \
+			../src/qsamplerChannelStrip.cpp \
+			../src/qsamplerDeviceForm.cpp \
+			../src/qsamplerInstrumentForm.cpp \
+			../src/qsamplerInstrumentListForm.cpp \
+			../src/qsamplerMainForm.cpp \
+			../src/qsamplerOptionsForm.cpp \
 			../src/qsamplerOptions.cpp \
 			../src/qsamplerChannel.cpp \
 			../src/qsamplerMessages.cpp \
@@ -32,12 +47,12 @@ TEMPLATE  = app
 CONFIG   += qt thread warn_on release
 LANGUAGE  = C++
 
-LIBS += ../../liblscp/win32/liblscp.lib
-
 win32 {
 	CONFIG  += console
 	INCPATH += C:\usr\local\include
 	LIBS    += -LC:\usr\local\lib
+	LIBS += c:/msys/1.0/local/lib/liblscp.a
+        LIBS    += -lws2_32
 }
 
 # Qt3 support

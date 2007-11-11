@@ -5,7 +5,9 @@
 #define CONFIG_PREFIX   "."
 #define CONFIG_DEBUG    1
 
-#undef  CONFIG_ROUND
+#if defined(__MINGW32__)
+#define CONFIG_ROUND 1
+#endif
 
 #define CONFIG_INSTRUMENT_NAME  1
 #define CONFIG_MUTE_SOLO        1

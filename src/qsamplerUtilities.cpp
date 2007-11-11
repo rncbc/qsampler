@@ -109,6 +109,9 @@ QString lscpEscapePath ( const QString& sPath )
                 !(c >= '0' && c <= '9') &&
                 !(c >= 'a' && c <= 'z') &&
                 !(c >= 'A' && c <= 'Z') &&
+                #if defined(WIN32)
+                !(c == ':') &&
+                #endif
                 !(c == pathSeparator)
             ) {
                 // convert the non-basic character into a LSCP escape sequence
