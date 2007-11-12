@@ -854,12 +854,12 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidget* pTreeWidget,
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
-		setIcon(0, QPixmap(":/qsampler/pixmaps/audio1.png"));
-		setText(1, QObject::tr("Audio Devices"));
+		setIcon(0, QPixmap(":/icons/audio1.png"));
+		setText(0, QObject::tr("Audio Devices"));
 		break;
 	case qsamplerDevice::Midi:
-		setIcon(0, QPixmap(":/qsampler/pixmaps/midi1.png"));
-		setText(1, QObject::tr("MIDI Devices"));
+		setIcon(0, QPixmap(":/icons/midi1.png"));
+		setText(0, QObject::tr("MIDI Devices"));
 		break;
 	case qsamplerDevice::None:
 		break;
@@ -874,10 +874,10 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidgetItem* pItem,
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
-		setIcon(0, QPixmap(":/qsampler/pixmaps/audio2.png"));
+		setIcon(0, QPixmap(":/icons/audio2.png"));
 		break;
 	case qsamplerDevice::Midi:
-		setIcon(0, QPixmap(":/qsampler/pixmaps/midi2.png"));
+		setIcon(0, QPixmap(":/icons/midi2.png"));
 		break;
 	case qsamplerDevice::None:
 		break;
@@ -887,12 +887,12 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidgetItem* pItem,
 }
 
 // Default destructor.
-qsamplerDeviceItem::~qsamplerDeviceItem (void)
+qsamplerDeviceItem::~qsamplerDeviceItem ()
 {
 }
 
 // Instance accessors.
-qsamplerDevice& qsamplerDeviceItem::device (void)
+qsamplerDevice& qsamplerDeviceItem::device ()
 {
 	return m_device;
 }

@@ -40,6 +40,8 @@ DeviceForm::DeviceForm(QWidget* parent, Qt::WFlags f) : QDialog(parent, f) {
 	// No exclusive mode as default.
 	m_deviceTypeMode = qsamplerDevice::None;
 
+	ui.DeviceListView->header()->hide();
+
 	ui.DeviceParamTable->setModel(&deviceParamModel);
 	ui.DeviceParamTable->setItemDelegate(&deviceParamDelegate);
 
@@ -350,7 +352,7 @@ void DeviceForm::selectDriver ( const QString& sDriverName )
 
 
 // Device selection slot.
-void DeviceForm::selectDevice (void)
+void DeviceForm::selectDevice ()
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -421,10 +423,10 @@ void DeviceForm::selectDevice (void)
 		QPixmap pixmap;
 		switch (device.deviceType()) {
 		case qsamplerDevice::Audio:
-			pixmap = QPixmap(":/qsampler/pixmaps/audio2.png");
+			pixmap = QPixmap(":/icons/audio2.png");
 			break;
 		case qsamplerDevice::Midi:
-			pixmap = QPixmap(":/qsampler/pixmaps/midi2.png");
+			pixmap = QPixmap(":/icons/midi2.png");
 			break;
 		case qsamplerDevice::None:
 			break;
