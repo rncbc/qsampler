@@ -56,6 +56,10 @@ public slots:
     void changeDevicePortParam(int iRow, int iCol);
     void deviceListViewContextMenu(const QPoint& pos);
     void stabilizeForm();
+    void updateCellRenderers();
+    void updateCellRenderers(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+    void updatePortCellRenderers();
+    void updatePortCellRenderers(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 protected:
     MainForm *m_pMainForm;
@@ -76,7 +80,7 @@ private:
     DeviceParamModel    deviceParamModel;
     DeviceParamDelegate deviceParamDelegate;
 
-    DeviceParamModel    devicePortParamModel;
+    PortParamModel      devicePortParamModel;
     DeviceParamDelegate devicePortParamDelegate;
 };
 

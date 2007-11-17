@@ -326,7 +326,7 @@ bool qsamplerDevice::setParam ( const QString& sParam,
 
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
-	if (m_iDeviceID >= 0) {
+	if (m_iDeviceID >= 0 && sValue != QString::null) {
 		// Prepare parameter struct.
 		lscp_param_t param;
 		param.key   = (char *) sParam.latin1();
@@ -396,6 +396,7 @@ bool qsamplerDevice::createDevice (void)
 	int iParam = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = m_params.begin(); iter != m_params.end(); ++iter) {
+		if (iter.data().value == QString::null) continue;
 		pParams[iParam].key   = (char *) iter.key().latin1();
 		pParams[iParam].value = (char *) iter.data().value.latin1();
 		++iParam;
@@ -590,7 +591,10 @@ int qsamplerDevice::refreshParam ( const QString& sParam )
 		break;
 	}
 	if (pParamInfo) {
-		param = qsamplerDeviceParam(pParamInfo, QString(param.value));
+		if (param.value != QString::null)
+			param = qsamplerDeviceParam(pParamInfo, param.value);
+		else
+			param = qsamplerDeviceParam(pParamInfo, NULL);
 		iRefresh++;
 	}
 
@@ -883,7 +887,7 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidgetItem* pItem,
 		break;
 	}
 
-	setText(1, m_device.deviceName());
+	setText(0, m_device.deviceName());
 }
 
 // Default destructor.
@@ -898,133 +902,47 @@ qsamplerDevice& qsamplerDeviceItem::device ()
 }
 
 
-
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTable - Device parameter view table.
+// AbstractDeviceParamModel - data model base class for device parameters
 //
-#if 0
-// Constructor.
-qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent,
-	const char *pszName )
-	: QTable(pParent, pszName)
-{
-	// Set fixed number of columns.
-	QTable::setNumCols(3);
-	QTable::setShowGrid(false);
-	QTable::setSorting(false);
-	QTable::setFocusStyle(QTable::FollowStyle);
-	QTable::setSelectionMode(QTable::NoSelection);
-	// No vertical header.
-	QTable::verticalHeader()->hide();
-	QTable::setLeftMargin(0);
-	// Initialize the fixed table column headings.
-	QHeader *pHeader = QTable::horizontalHeader();
-	pHeader->setLabel(0, tr("Parameter"));
-	pHeader->setLabel(1, tr("Description"));
-	pHeader->setLabel(2, tr("Value"));
-	// Set read-onlyness of each column
-	QTable::setColumnReadOnly(0, true);
-	QTable::setColumnReadOnly(1, true);
-//  QTable::setColumnReadOnly(2, false); -- of course not.
-	QTable::setColumnStretchable(1, true);
+
+AbstractDeviceParamModel::AbstractDeviceParamModel(QObject* parent) : QAbstractTableModel(parent), bEditable(false) {
+    params = NULL;
 }
 
-// Default destructor.
-qsamplerDeviceParamTable::~qsamplerDeviceParamTable (void)
-{
+int AbstractDeviceParamModel::rowCount(const QModelIndex& /*parent*/) const {
+    //std::cout << "model size=" << params.size() << "\n" << std::flush;
+    return (params) ? params->size() : 0;
 }
 
-
-// Common parameter table renderer.
-void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
-	bool bEditable )
-{
-	// Always (re)start it empty.
-	QTable::setUpdatesEnabled(false);
-	QTable::setNumRows(0);
-
-	// Fill the parameter table...
-	QTable::insertRows(0, params.count());
-	int iRow = 0;
-	qsamplerDeviceParamMap::ConstIterator iter;
-	for (iter = params.begin(); iter != params.end(); ++iter) {
-		const qsamplerDeviceParam& param = iter.data();
-		bool bEnabled = (bEditable || !param.fix);
-		QTable::setText(iRow, 0, iter.key());
-		QTable::setText(iRow, 1, param.description);
-		if (param.type == LSCP_TYPE_BOOL) {
-			QStringList opts;
-			opts.append(tr("false"));
-			opts.append(tr("true"));
-			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
-			pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
-			pComboItem->setEnabled(bEnabled);
-			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.possibilities.count() > 0 && bEnabled) {
-			QStringList opts = param.possibilities;
-			if (param.multiplicity)
-				opts.prepend(tr("(none)"));
-			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
-			if (param.value.isEmpty())
-				pComboItem->setCurrentItem(0);
-			else
-				pComboItem->setCurrentItem(param.value);
-			pComboItem->setEnabled(bEnabled);
-			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.type == LSCP_TYPE_INT && bEnabled
-				&& !param.range_min.isEmpty()
-				&& !param.range_max.isEmpty()) {
-			qsamplerDeviceParamTableSpinBox *pSpinItem =
-				new qsamplerDeviceParamTableSpinBox(this,
-					bEnabled ? QTableItem::OnTyping : QTableItem::Never,
-					param.value);
-			pSpinItem->setMinValue(param.range_min.toInt());
-			pSpinItem->setMaxValue(param.range_max.toInt());
-			QTable::setItem(iRow, 2, pSpinItem);
-		} else {
-			qsamplerDeviceParamTableEditBox *pEditItem =
-				new qsamplerDeviceParamTableEditBox(this,
-					bEnabled ? QTableItem::OnTyping : QTableItem::Never,
-					param.value);
-			QTable::setItem(iRow, 2, pEditItem);
-		}
-		++iRow;
-	}
-
-	// Adjust optimal column widths.
-	QTable::adjustColumn(0);
-	QTable::adjustColumn(2);
-
-	QTable::setUpdatesEnabled(true);
-	QTable::updateContents();
-}
-#endif
-
-DeviceParamModel::DeviceParamModel(QObject* parent) : QAbstractTableModel(parent), bEditable(false) {
-}
-
-int DeviceParamModel::rowCount(const QModelIndex& /*parent*/) const {
-    return params.size();
-}
-
-int DeviceParamModel::columnCount(const QModelIndex& /*parent*/) const {
+int AbstractDeviceParamModel::columnCount(const QModelIndex& /*parent*/) const {
     return 3;
 }
 
-QVariant DeviceParamModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid())
+Qt::ItemFlags AbstractDeviceParamModel::flags(const QModelIndex& /*index*/) const {
+    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+}
+
+QVariant AbstractDeviceParamModel::data(const QModelIndex &index, int role) const {
+    if (!index.isValid()) {
+        //std::cout << "inavlid device model index\n" << std::flush;
         return QVariant();
-    if (role != Qt::DisplayRole)
+    }
+    if (role != Qt::DisplayRole) {
+        //std::cout << "inavlid display role\n" << std::flush;
         return QVariant();
+    }
 
     DeviceParameterRow item;
-    item.name  = params.keys()[index.row()];
-    item.param = params[item.name];
+    item.name  = params->keys()[index.row()];
+    item.param = (*params)[item.name];
+
+    //std::cout << "item["<<index.row()<<"]=[" << item.name.toLatin1().data() << "]\n" << std::flush;
 
     return QVariant::fromValue(item);
 }
 
-QVariant DeviceParamModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant AbstractDeviceParamModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role != Qt::DisplayRole) return QVariant();
 
     if (orientation == Qt::Horizontal) {
@@ -1039,16 +957,83 @@ QVariant DeviceParamModel::headerData(int section, Qt::Orientation orientation, 
     return QVariant();
 }
 
-void DeviceParamModel::refresh(const qsamplerDeviceParamMap& params, bool bEditable)
-{
+void AbstractDeviceParamModel::refresh(const qsamplerDeviceParamMap* params, bool bEditable) {
     this->params    = params;
     this->bEditable = bEditable;
+    // inform the outer world (QTableView) that our data changed
+    QAbstractTableModel::reset();
+}
+
+void AbstractDeviceParamModel::clear() {
+    params = NULL;
+    // inform the outer world (QTableView) that our data changed
+    QAbstractTableModel::reset();
+}
+
+
+//-------------------------------------------------------------------------
+// DeviceParamModel - data model for device parameters (used for QTableView)
+//
+
+DeviceParamModel::DeviceParamModel(QObject* parent) : AbstractDeviceParamModel(parent) {
+    device = NULL;
+}
+
+bool DeviceParamModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
+    if (!index.isValid()) {
+        return false;
+    }
+    QString key = params->keys()[index.row()];
+    //params[key].value = value.toString();
+    device->setParam(key, value.toString());
+    emit dataChanged(index, index);
+    return true;
+}
+
+void DeviceParamModel::refresh(qsamplerDevice* pDevice, bool bEditable) {
+    device = pDevice;
+    AbstractDeviceParamModel::refresh(&pDevice->params(), bEditable);
 }
 
 void DeviceParamModel::clear() {
-    params.clear();
+    AbstractDeviceParamModel::clear();
+    device = NULL;
 }
 
+
+//-------------------------------------------------------------------------
+// PortParamModel - data model for port parameters (used for QTableView)
+//
+
+PortParamModel::PortParamModel(QObject* parent) : AbstractDeviceParamModel(parent) {
+    port = NULL;
+}
+
+bool PortParamModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
+    if (!index.isValid()) {
+        return false;
+    }
+    QString key = params->keys()[index.row()];
+    //params[key].value = value.toString();
+    port->setParam(key, value.toString());
+    emit dataChanged(index, index);
+    return true;
+}
+
+void PortParamModel::refresh(qsamplerDevicePort* pPort, bool bEditable) {
+    port = pPort;
+    AbstractDeviceParamModel::refresh(&pPort->params(), bEditable);
+}
+
+void PortParamModel::clear() {
+    AbstractDeviceParamModel::clear();
+    port = NULL;
+}
+
+
+//-------------------------------------------------------------------------
+// DeviceParamDelegate - table cell renderer for device/port parameters
+//
 
 DeviceParamDelegate::DeviceParamDelegate(QObject *parent) : QItemDelegate(parent) {
 }
@@ -1057,6 +1042,10 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
 	const QStyleOptionViewItem &/* option */,
 	const QModelIndex& index) const
 {
+    if (!index.isValid()) {
+        return NULL;
+    }
+
     DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
 
     const bool bEnabled = (/*index.model()->bEditable ||*/ !r.param.fix);
@@ -1070,7 +1059,7 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
                 pCheckBox->setChecked(r.param.value.lower() == "true");
                 pCheckBox->setEnabled(bEnabled);
                 return pCheckBox;
-            } else if (r.param.possibilities.count() > 0 && bEnabled) {
+            } else if (r.param.possibilities.count() > 0) {
                 QStringList opts = r.param.possibilities;
                 if (r.param.multiplicity)
                     opts.prepend(tr("(none)"));
@@ -1082,16 +1071,18 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
                     pComboBox->setCurrentIndex(pComboBox->findText(r.param.value));
                 pComboBox->setEnabled(bEnabled);
                 return pComboBox;
-            } else if (r.param.type == LSCP_TYPE_INT && bEnabled
+            } else if (r.param.type == LSCP_TYPE_INT
                        && !r.param.range_min.isEmpty()
                        && !r.param.range_max.isEmpty()) {
                 QSpinBox* pSpinBox = new QSpinBox(parent);
                 pSpinBox->setValue(r.param.value.toInt());
                 pSpinBox->setMinimum(r.param.range_min.toInt());
                 pSpinBox->setMaximum(r.param.range_max.toInt());
+                pSpinBox->setEnabled(bEnabled);
                 return pSpinBox;
             } else {
                 QLineEdit* pLineEdit = new QLineEdit(r.param.value, parent);
+                pLineEdit->setEnabled(bEnabled);
                 return pLineEdit;
             }
         }
@@ -1102,19 +1093,27 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
     }
 }
 
-void DeviceParamDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
-/*
-    ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
-    QComboBox* comboBox = static_cast<QComboBox*>(editor);
-    comboBox->setCurrentIndex(item.selection);
-*/
+void DeviceParamDelegate::setEditorData(QWidget* /*editor*/, const QModelIndex& /*index*/) const {
+    // unused, since we set the editor data already in createEditor()
 }
 
-void DeviceParamDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
-/*
-    QComboBox* comboBox = static_cast<QComboBox*>(editor);
-    model->setData(index, comboBox->currentIndex());
-*/
+void DeviceParamDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
+    if (index.column() == 1) {
+        DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
+        if (r.param.type == LSCP_TYPE_BOOL) {
+            QCheckBox* pCheckBox = static_cast<QCheckBox*>(editor);
+            model->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
+        } else if (r.param.possibilities.count() > 0) {
+            QComboBox* pComboBox = static_cast<QComboBox*>(editor);
+            model->setData(index, pComboBox->currentText());
+        } else if (r.param.type == LSCP_TYPE_INT) {
+            QSpinBox* pSpinBox = static_cast<QSpinBox*>(editor);
+            model->setData(index, pSpinBox->value());
+        } else {
+            QLineEdit* pLineEdit = static_cast<QLineEdit*>(editor);
+            model->setData(index, pLineEdit->text());
+        }
+    }
 }
 
 void DeviceParamDelegate::updateEditorGeometry(QWidget* editor,
@@ -1122,90 +1121,5 @@ void DeviceParamDelegate::updateEditorGeometry(QWidget* editor,
 {
     if (editor) editor->setGeometry(option.rect);
 }
-
-//-------------------------------------------------------------------------
-// qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
-//
-
-#if 0
-// Constructor.
-qsamplerDeviceParamTableSpinBox::qsamplerDeviceParamTableSpinBox (
-	QTable *pTable, EditType editType, const QString& sText )
-	: QTableItem(pTable, editType, sText)
-{
-	m_iValue = sText.toInt();
-	m_iMinValue = m_iMaxValue = 0;
-}
-
-// Public accessors.
-void qsamplerDeviceParamTableSpinBox::setValue ( int iValue )
-{
-	m_iValue = iValue;
-	QTableItem::setText(QString::number(m_iValue));
-}
-
-void qsamplerDeviceParamTableSpinBox::setMinValue ( int iMinValue )
-{
-	m_iMinValue = iMinValue;
-}
-
-void qsamplerDeviceParamTableSpinBox::setMaxValue ( int iMaxValue )
-{
-	m_iMaxValue = iMaxValue;
-}
-
-// Virtual implemetations.
-QWidget *qsamplerDeviceParamTableSpinBox::createEditor (void) const
-{
-	QSpinBox *pSpinBox = new QSpinBox(QTableItem::table()->viewport());
-	QObject::connect(pSpinBox, SIGNAL(valueChanged(int)),
-		QTableItem::table(), SLOT(doValueChanged()));
-	if (m_iValue >= m_iMinValue && m_iMaxValue >= m_iValue) {
-		pSpinBox->setMinValue(m_iMinValue);
-		pSpinBox->setMaxValue(m_iMaxValue);
-	}
-	pSpinBox->setValue(m_iValue);
-	return pSpinBox;
-}
-
-void qsamplerDeviceParamTableSpinBox::setContentFromEditor ( QWidget *pWidget )
-{
-	if (pWidget->inherits("QSpinBox"))
-		QTableItem::setText(QString::number(((QSpinBox *) pWidget)->value()));
-	else
-		QTableItem::setContentFromEditor(pWidget);
-}
-
-
-//-------------------------------------------------------------------------
-// qsamplerDeviceParamTableEditBox - Custom edit box for parameter table.
-//
-
-// Constructor.
-qsamplerDeviceParamTableEditBox::qsamplerDeviceParamTableEditBox (
-	QTable *pTable, EditType editType, const QString& sText )
-	: QTableItem(pTable, editType, sText)
-{
-}
-
-// Virtual implemetations.
-QWidget *qsamplerDeviceParamTableEditBox::createEditor (void) const
-{
-	QLineEdit *pEditBox = new QLineEdit(QTableItem::table()->viewport());
-	QObject::connect(pEditBox, SIGNAL(returnPressed()),
-		QTableItem::table(), SLOT(doValueChanged()));
-	pEditBox->setText(QTableItem::text());
-	return pEditBox;
-}
-
-void qsamplerDeviceParamTableEditBox::setContentFromEditor ( QWidget *pWidget )
-{
-	if (pWidget->inherits("QLineEdit"))
-		QTableItem::setText(((QLineEdit *) pWidget)->text());
-	else
-		QTableItem::setContentFromEditor(pWidget);
-}
-#endif
-
 
 // end of qsamplerDevice.cpp

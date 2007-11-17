@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Fixed creation of devices (don't try to set device parameters which the
+  user did not touch in the device creation dialog).
+
 * Started Qt4 port of the application
   (not completed and very broken yet!).
 

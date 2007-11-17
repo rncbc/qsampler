@@ -144,7 +144,14 @@
         </layout>
        </item>
        <item>
-        <widget class="QTableView" name="DeviceParamTable" />
+        <widget class="QTableView" name="DeviceParamTable" >
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
+         </property>
+         <property name="showGrid" >
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" >
@@ -201,7 +208,14 @@
         </layout>
        </item>
        <item>
-        <widget class="QTableView" name="DevicePortParamTable" />
+        <widget class="QTableView" name="DevicePortParamTable" >
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
+         </property>
+         <property name="showGrid" >
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
