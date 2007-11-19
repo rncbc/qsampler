@@ -45,7 +45,7 @@
    <string>Qsampler: Channel</string>
   </property>
   <property name="windowIcon" >
-   <iconset/>
+   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerChannel.png</iconset>
   </property>
   <layout class="QHBoxLayout" >
    <property name="margin" >
@@ -69,7 +69,7 @@
       <string>Alt+C</string>
      </property>
      <property name="flat" >
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -158,6 +158,9 @@
         </colorrole>
        </disabled>
       </palette>
+     </property>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
      </property>
      <property name="frameShape" >
       <enum>QFrame::Panel</enum>
@@ -507,7 +510,7 @@
       </size>
      </property>
      <property name="toolTip" >
-      <string>Edit channel</string>
+      <string>Edit channel's instrument</string>
      </property>
      <property name="text" >
       <string>&amp;Edit</string>
@@ -654,6 +657,9 @@
      </property>
      <property name="toolTip" >
       <string>Stream / Voice count</string>
+     </property>
+     <property name="autoFillBackground" >
+      <bool>true</bool>
      </property>
      <property name="frameShape" >
       <enum>QFrame::Panel</enum>

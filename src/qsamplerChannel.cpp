@@ -897,107 +897,9 @@ QString qsamplerChannel::loadingInstrument (void) {
 }
 
 
-
 //-------------------------------------------------------------------------
-// qsamplerChannelRoutingTable - Channel routing table.
+// ChannelRoutingModel - data model for audio routing (used for QTableView)
 //
-#if 0
-// Constructor.
-qsamplerChannelRoutingTable::qsamplerChannelRoutingTable (
-	QWidget *pParent, const char *pszName )
-	: QTable(pParent, pszName)
-{
-	// Set fixed number of columns.
-	QTable::setNumCols(2);
-	QTable::setShowGrid(false);
-	QTable::setSorting(false);
-	QTable::setFocusStyle(QTable::FollowStyle);
-	QTable::setSelectionMode(QTable::NoSelection);
-	// No vertical header.
-	QTable::verticalHeader()->hide();
-	QTable::setLeftMargin(0);
-	// Initialize the fixed table column headings.
-	QHeader *pHeader = QTable::horizontalHeader();
-	pHeader->setLabel(0, tr("Sampler Channel"));
-	pHeader->setLabel(1, tr("Device Channel"));
-	// Set read-onlyness of each column
-	QTable::setColumnReadOnly(0, true);
-//	QTable::setColumnReadOnly(1, false); -- of course not.
-	QTable::setColumnStretchable(1, true);
-}
-
-// Default destructor.
-qsamplerChannelRoutingTable::~qsamplerChannelRoutingTable (void)
-{
-}
-
-
-// Routing map table renderer.
-void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
-	const qsamplerChannelRoutingMap& routing )
-{
-	if (pDevice == NULL)
-		return;
-
-	// Always (re)start it empty.
-	QTable::setUpdatesEnabled(false);
-	QTable::setNumRows(0);
-
-	// The common device port item list.
-	QStringList opts;
-	qsamplerDevicePortList& ports = pDevice->ports();
-	qsamplerDevicePort *pPort;
-	for (pPort = ports.first(); pPort; pPort = ports.next()) {
-		opts.append(pDevice->deviceTypeName()
-			+ ' ' + pDevice->driverName()
-			+ ' ' + pPort->portName());
-	}
-
-	// Those items shall have a proper pixmap...
-	QPixmap pmChannel = QPixmap(":/icons/qsamplerChannel.png");
-	QPixmap pmDevice;
-	switch (pDevice->deviceType()) {
-	case qsamplerDevice::Audio:
-		pmDevice = QPixmap(":/icons/audio2.png");
-		break;
-	case qsamplerDevice::Midi:
-		pmDevice = QPixmap(":/icons/midi2.png");
-		break;
-	case qsamplerDevice::None:
-		break;
-	}
-
-	// Fill the routing table...
-	QTable::insertRows(0, routing.count());
-	int iRow = 0;
-	qsamplerChannelRoutingMap::ConstIterator iter;
-	for (iter = routing.begin(); iter != routing.end(); ++iter) {
-		QTable::setPixmap(iRow, 0, pmChannel);
-		QTable::setText(iRow, 0, pDevice->deviceTypeName()
-			+ ' ' + QString::number(iter.key()));
-		qsamplerChannelRoutingComboBox *pComboItem =
-			new qsamplerChannelRoutingComboBox(this, opts, pmDevice);
-		pComboItem->setCurrentItem(iter.data());
-		QTable::setItem(iRow, 1, pComboItem);
-		++iRow;
-	}
-
-	// Adjust optimal column widths.
-	QTable::adjustColumn(0);
-	QTable::adjustColumn(1);
-
-	QTable::setUpdatesEnabled(true);
-	QTable::updateContents();
-}
-
-
-// Commit any pending editing.
-void qsamplerChannelRoutingTable::flush (void)
-{
-	if (QTable::isEditing())
-	    QTable::endEdit(QTable::currEditRow(), QTable::currEditCol(), true, true);
-}
-#endif
 
 ChannelRoutingModel::ChannelRoutingModel(QObject* parent) : QAbstractTableModel(parent), pDevice(NULL) {
 }
@@ -1010,10 +912,27 @@ int ChannelRoutingModel::columnCount(const QModelIndex& /*parent*/) const {
     return 1;
 }
 
+Qt::ItemFlags ChannelRoutingModel::flags(const QModelIndex& /*index*/) const {
+    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+}
+
+bool ChannelRoutingModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
+    if (!index.isValid()) {
+        return false;
+    }
+
+    routing[index.row()] = value.toInt();
+
+    emit dataChanged(index, index);
+    return true;
+}
+
 QVariant ChannelRoutingModel::data(const QModelIndex &index, int role) const {
     if (!index.isValid())
         return QVariant();
     if (role != Qt::DisplayRole)
+        return QVariant();
+    if (index.column() != 0)
         return QVariant();
 
     ChannelRoutingItem item;
@@ -1029,7 +948,7 @@ QVariant ChannelRoutingModel::data(const QModelIndex &index, int role) const {
         );
     }
 
-    item.selection = routing[index.column()];
+    item.selection = routing[index.row()];
 
     return QVariant::fromValue(item);
 }
@@ -1037,14 +956,15 @@ QVariant ChannelRoutingModel::data(const QModelIndex &index, int role) const {
 QVariant ChannelRoutingModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role != Qt::DisplayRole) return QVariant();
 
-    if (orientation == Qt::Horizontal)
-        return QObject::tr("Device Channel");
-
-    if (orientation == Qt::Vertical)
-        return QObject::tr("Sampler Channel Output ") +
-               QString(section);
-
-    return QVariant();
+    switch (orientation) {
+        case Qt::Horizontal:
+            return QObject::tr("-> Device Channel");
+        case Qt::Vertical:
+            return QObject::tr("Sampler Channel ") +
+                   QString::number(section) + " ->";
+        default:
+            return QVariant();
+    }
 }
 
 void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
@@ -1052,25 +972,38 @@ void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
 {
     this->pDevice = pDevice;
     this->routing = routing;
+    // inform the outer world (QTableView) that our data changed
+    QAbstractTableModel::reset();
 }
 
 
-
+//-------------------------------------------------------------------------
+// ChannelRoutingDelegate - table cell renderer for audio routing
+//
 
 ChannelRoutingDelegate::ChannelRoutingDelegate(QObject *parent) : QItemDelegate(parent) {
 }
 
 QWidget* ChannelRoutingDelegate::createEditor(QWidget *parent,
-	const QStyleOptionViewItem &/* option */,
+	const QStyleOptionViewItem & option ,
 	const QModelIndex& index) const
 {
+    if (!index.isValid()) {
+        return NULL;
+    }
+
+    if (index.column() != 0) {
+        return NULL;
+    }
+
     ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
 
-    QComboBox* editor = new QComboBox(parent);
-    editor->addItems(item.options);
-    editor->setCurrentIndex(item.selection);
-    editor->installEventFilter(const_cast<ChannelRoutingDelegate*>(this));
-    return editor;
+    QComboBox* pComboBox = new QComboBox(parent);
+    pComboBox->addItems(item.options);
+    pComboBox->setCurrentIndex(item.selection);
+    pComboBox->setEnabled(true);
+    pComboBox->setGeometry(option.rect);
+    return pComboBox;
 }
 
 void ChannelRoutingDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
@@ -1079,7 +1012,7 @@ void ChannelRoutingDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     comboBox->setCurrentIndex(item.selection);
 }
 
-void ChannelRoutingDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
+void ChannelRoutingDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
     QComboBox* comboBox = static_cast<QComboBox*>(editor);
     model->setData(index, comboBox->currentIndex());
 }
@@ -1089,61 +1022,5 @@ void ChannelRoutingDelegate::updateEditorGeometry(QWidget *editor,
 {
     editor->setGeometry(option.rect);
 }
-
-
-
-//-------------------------------------------------------------------------
-// qsamplerChannelRoutingComboBox - Custom combo box for routing table.
-//
-
-#if 0
-// Constructor.
-qsamplerChannelRoutingComboBox::qsamplerChannelRoutingComboBox (
-	QTable *pTable, const QStringList& list, const QPixmap& pixmap )
-	: QTableItem(pTable, QTableItem::WhenCurrent, QString::null, pixmap),
-	m_list(list)
-{
-	m_iCurrentItem = 0;
-}
-
-// Public accessors.
-void qsamplerChannelRoutingComboBox::setCurrentItem ( int iCurrentItem )
-{
-	m_iCurrentItem = iCurrentItem;
-
-	QTableItem::setText(m_list[iCurrentItem]);
-}
-
-int qsamplerChannelRoutingComboBox::currentItem (void) const
-{
-	return m_iCurrentItem;
-}
-
-// Virtual implemetations.
-QWidget *qsamplerChannelRoutingComboBox::createEditor (void) const
-{
-	QComboBox *pComboBox = new QComboBox(QTableItem::table()->viewport());
-	QObject::connect(pComboBox, SIGNAL(activated(int)),
-		QTableItem::table(), SLOT(doValueChanged()));
-	for (QStringList::ConstIterator iter = m_list.begin();
-			iter != m_list.end(); iter++) {
-		pComboBox->insertItem(QTableItem::pixmap(), *iter);
-	}
-	pComboBox->setCurrentItem(m_iCurrentItem);
-	return pComboBox;
-}
-
-void qsamplerChannelRoutingComboBox::setContentFromEditor ( QWidget *pWidget )
-{
-	if (pWidget->inherits("QComboBox")) {
-		QComboBox *pComboBox = (QComboBox *) pWidget;
-		m_iCurrentItem = pComboBox->currentItem();
-		QTableItem::setText(pComboBox->currentText());
-	}
-	else QTableItem::setContentFromEditor(pWidget);
-}
-
-#endif
-
 
 // end of qsamplerChannel.cpp

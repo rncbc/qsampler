@@ -53,7 +53,6 @@ protected:
     Q3PtrList<qsamplerDevice> m_audioDevices;
     Q3PtrList<qsamplerDevice> m_midiDevices;
     DeviceForm* m_pDeviceForm;
-    qsamplerChannelRoutingMap m_audioRouting;
     ChannelRoutingModel routingModel;
     ChannelRoutingDelegate routingDelegate;
 
@@ -68,10 +67,11 @@ protected slots:
     void selectAudioDriver(const QString& sAudioDriver);
     void selectAudioDevice(int iAudioItem);
     void setupAudioDevice();
-    void changeAudioRouting(int iRow, int iCol);
     void updateDevices();
     void optionsChanged();
     void stabilizeForm();
+    void updateTableCellRenderers();
+    void updateTableCellRenderers(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private:
     Ui::qsamplerChannelForm ui;
