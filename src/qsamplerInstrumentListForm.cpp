@@ -22,6 +22,7 @@
 
 #include "qsamplerInstrumentListForm.h"
 
+#include "qsamplerInstrumentForm.h"
 #include "qsamplerMainForm.h"
 #include "qsamplerOptions.h"
 #include "qsamplerInstrument.h"
@@ -59,7 +60,7 @@ InstrumentListForm::InstrumentListForm ( QWidget* parent, Qt::WindowFlags flags 
     ui.refreshInstrumentsAction->addTo(ui.InstrumentToolbar);
 
     ui.InstrumentTable->setModel(&model);
-    //ui.InstrumentTable->setDelegate(delegate);
+    ui.InstrumentTable->setItemDelegate(&delegate);
 
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),
@@ -70,6 +71,27 @@ InstrumentListForm::InstrumentListForm ( QWidget* parent, Qt::WindowFlags flags 
 		SIGNAL(triggered()),
 		SLOT(refreshInstruments(void))
     );
+
+	connect(
+		ui.InstrumentTable,
+		SIGNAL(activated(const QModelIndex&)),
+		SLOT(editInstrument(const QModelIndex&))
+	);
+	connect(
+		ui.newInstrumentAction,
+		SIGNAL(triggered()),
+		SLOT(newInstrument())
+	);
+	connect(
+		ui.deleteInstrumentAction,
+		SIGNAL(triggered()),
+		SLOT(deleteInstrument())
+	);
+	connect(
+		ui.editInstrumentAction,
+		SIGNAL(triggered()),
+		SLOT(editInstrument())
+	);
 }
 
 InstrumentListForm::~InstrumentListForm() {
@@ -147,6 +169,78 @@ void InstrumentListForm::activateMap ( int iMap )
 
 	model.setMidiMap(iMidiMap);
 	model.refresh();
+}
+
+void InstrumentListForm::editInstrument() {
+	const QModelIndex index = ui.InstrumentTable->currentIndex();
+	editInstrument(index);
+}
+
+void InstrumentListForm::editInstrument(const QModelIndex& index) {
+	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
+		return;
+
+	qsamplerInstrument* pInstrument =
+		(qsamplerInstrument*) index.data(Qt::UserRole).value<void*>();
+
+	if (!pInstrument) return;
+
+	// Save current key values...
+	qsamplerInstrument oldInstrument(*pInstrument);
+	// Do the edit dance...
+	InstrumentForm form(this);
+	form.setup(pInstrument);
+	if (form.exec()) {
+		// Commit...
+		pInstrument->mapInstrument();
+		// Check whether we changed instrument key...
+		if (oldInstrument.map()  == pInstrument->map()  &&
+			oldInstrument.bank() == pInstrument->bank() &&
+			oldInstrument.prog() == pInstrument->prog()) {
+			// just update tree item...
+			//pItem->update();
+		} else {
+			// Unmap old instance...
+			oldInstrument.unmapInstrument();
+			// correct the position of the instrument in the model
+			model.resort(*pInstrument);
+		}
+		// Notify we've changes...
+		emit model.reset();
+	}
+}
+
+void InstrumentListForm::newInstrument() {
+	qsamplerInstrument instrument;
+
+	InstrumentForm form(this);
+	form.setup(&instrument);
+	if (!form.exec()) return;
+
+	// Commit...
+	instrument.mapInstrument();
+	// add new item to the table model
+	model.resort(instrument);
+	// Notify we've changes...
+	//emit model.reset();
+	//FIXME: call above didnt really refresh, so we use this for now ...
+	refreshInstruments();
+}
+
+void InstrumentListForm::deleteInstrument() {
+	const QModelIndex index = ui.InstrumentTable->currentIndex();
+	if (!index.isValid() || !index.data(Qt::UserRole).isValid()) return;
+
+	qsamplerInstrument* pInstrument =
+		(qsamplerInstrument*) index.data(Qt::UserRole).value<void*>();
+
+	if (!pInstrument) return;
+
+	pInstrument->unmapInstrument();
+	// let the instrument vanish from the table model
+	model.removeInstrument(*pInstrument);
+	// Notify we've changes...
+	emit model.reset();
 }
 
 } // namespace QSampler

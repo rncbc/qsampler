@@ -96,10 +96,6 @@ private:
 
 };
 
-// so we can use it i.e. through QVariant
-Q_DECLARE_METATYPE(qsamplerInstrument)
-
-
 #endif  // __qsamplerInstrument_h
 
 

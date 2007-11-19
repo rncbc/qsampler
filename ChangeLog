@@ -8,8 +8,7 @@ CVS HEAD
 * Fixed creation of devices (don't try to set device parameters which the
   user did not touch in the device creation dialog).
 
-* Started Qt4 port of the application
-  (not completed and very broken yet!).
+* Qt4 port of the application.
 
 
 0.1.5  2007-10-15 Five months later a fifth is heard.

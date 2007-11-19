@@ -35,6 +35,7 @@ class InstrumentListForm : public QMainWindow {
 Q_OBJECT
 public:
     MidiInstrumentsModel model;
+    MidiInstrumentsDelegate delegate;
 
     InstrumentListForm(QWidget* parent = 0, Qt::WindowFlags flags = 0);
    ~InstrumentListForm();
@@ -48,6 +49,12 @@ protected:
 
     void showEvent(QShowEvent* pShowEvent);
     void hideEvent(QHideEvent* pHideEvent);
+
+protected slots:
+    void editInstrument();
+    void editInstrument(const QModelIndex& index);
+    void newInstrument();
+    void deleteInstrument();
 
 private:
     Ui::qsamplerInstrumentListForm ui;
