@@ -36,6 +36,8 @@
 
 #define QSAMPLER_INSTRUMENT_MAX 100
 
+#define UNICODE_RIGHT_ARROW	QChar(char(0x92), char(0x21))
+
 using namespace QSampler;
 
 //-------------------------------------------------------------------------
@@ -958,10 +960,10 @@ QVariant ChannelRoutingModel::headerData(int section, Qt::Orientation orientatio
 
     switch (orientation) {
         case Qt::Horizontal:
-            return QObject::tr("-> Device Channel");
+            return UNICODE_RIGHT_ARROW + QObject::tr(" Device Channel");
         case Qt::Vertical:
             return QObject::tr("Sampler Channel ") +
-                   QString::number(section) + " ->";
+                   QString::number(section) + " " + UNICODE_RIGHT_ARROW;
         default:
             return QVariant();
     }
