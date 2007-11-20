@@ -23,20 +23,16 @@
 #ifndef __qsamplerMainForm_h
 #define __qsamplerMainForm_h
 
-#include <Qt3Support>
-
-#include <QWorkspace>
-#include <QList>
-#include <Q3PtrList>
-#include <QProcess>
-#include <QMenu>
-
 #include "ui_qsamplerMainForm.h"
 
-#include "qsamplerChannelStrip.h"
 #include "qsamplerMessages.h"
+#include "qsamplerChannelStrip.h"
 #include "qsamplerInstrumentListForm.h"
 #include "qsamplerDeviceForm.h"
+
+class QWorkspace;
+class QProcess;
+
 
 namespace QSampler {
 
@@ -49,8 +45,8 @@ public:
    ~MainForm();
     void setup(qsamplerOptions* pOptions);
     void contextMenuEvent(QContextMenuEvent *pEvent);
-    qsamplerOptions* options(void);
-    lscp_client_t* client(void);
+    qsamplerOptions* options();
+    lscp_client_t* client();
     QString sessionName(const QString& sFilename);
     void appendMessages(const QString& s);
     void appendMessagesColor(const QString& s, const QString& c);
@@ -58,44 +54,46 @@ public:
     void appendMessagesError(const QString& s);
     void appendMessagesClient(const QString& s);
     ChannelStrip* createChannelStrip(qsamplerChannel *pChannel);
-    ChannelStrip* activeChannelStrip(void);
+    ChannelStrip* activeChannelStrip();
     ChannelStrip* channelStripAt(int iChannel);
     ChannelStrip* channelStrip(int iChannelID);
-    static MainForm* getInstance(void);
+    static MainForm* getInstance();
 
 public slots:
-    void sessionDirty(void);
-    void stabilizeForm(void);
+    void sessionDirty();
+    void stabilizeForm();
+
+protected slots:
+
+    void updateRecentFilesMenu();
 
 protected:
-    bool queryClose(void);
+    bool queryClose();
     void closeEvent(QCloseEvent* pCloseEvent);
-    bool decodeDragFiles(const QMimeSource* pEvent, QStringList& files);
     void dragEnterEvent(QDragEnterEvent *pDragEnterEvent);
     void dropEvent(QDropEvent *pDropEvent);
     void customEvent(QEvent* pCustomEvent);
-    bool newSession(void);
-    bool openSession(void);
+    bool newSession();
+    bool openSession();
     bool saveSession(bool bPrompt);
     bool closeSession(bool bForce);
     bool loadSessionFile(const QString& sFilename);
     bool saveSessionFile(const QString& sFilename);
     void updateSession();
     void updateRecentFiles(const QString& sFilename);
-    void updateRecentFilesMenu(void);
-    void updateInstrumentNames(void);
-    void updateDisplayFont(void);
-    void updateDisplayEffect(void);
-    void updateMaxVolume(void);
-    void updateMessagesFont(void);
-    void updateMessagesLimit(void);
-    void updateMessagesCapture(void);
+    void updateInstrumentNames();
+    void updateDisplayFont();
+    void updateDisplayEffect();
+    void updateMaxVolume();
+    void updateMessagesFont();
+    void updateMessagesLimit();
+    void updateMessagesCapture();
     void startSchedule(int iStartDelay);
-    void stopSchedule(void);
-    void startServer(void);
-    void stopServer(void);
-    bool startClient(void);
-    void stopClient(void);
+    void stopSchedule();
+    void startServer();
+    void stopServer();
+    bool startClient();
+    void stopClient();
 
 private:
     Ui::qsamplerMainForm ui;
@@ -112,8 +110,7 @@ private:
     int m_iTimerDelay;
     int m_iTimerSlot;
     QLabel *m_statusItem[5];
-    QMenu *m_pRecentFilesMenu;
-    Q3PtrList<ChannelStrip> m_changedStrips;
+    QList<ChannelStrip *> m_changedStrips;
     InstrumentListForm *m_pInstrumentListForm;
     DeviceForm *m_pDeviceForm;
     static MainForm *g_pMainForm;
@@ -122,38 +119,38 @@ private:
     int m_iVolumeChanging;
 
 private slots:
-    void fileNew(void);
-    void fileOpen(void);
-    void fileOpenRecent(int iIndex);
-    void fileSave(void);
-    void fileSaveAs(void);
-    void fileReset(void);
-    void fileRestart(void);
-    void fileExit(void);
-    void editAddChannel(void);
-    void editRemoveChannel(void);
-    void editSetupChannel(void);
-    void editEditChannel(void);
-    void editResetChannel(void);
-    void editResetAllChannels(void);
+    void fileNew();
+    void fileOpen();
+    void fileOpenRecent();
+    void fileSave();
+    void fileSaveAs();
+    void fileReset();
+    void fileRestart();
+    void fileExit();
+    void editAddChannel();
+    void editRemoveChannel();
+    void editSetupChannel();
+    void editEditChannel();
+    void editResetChannel();
+    void editResetAllChannels();
     void viewMenubar(bool bOn);
     void viewToolbar(bool bOn);
     void viewStatusbar(bool bOn);
     void viewMessages(bool bOn);
-    void viewInstruments(void);
-    void viewDevices(void);
-    void viewOptions(void);
-    void channelsArrange(void);
+    void viewInstruments();
+    void viewDevices();
+    void viewOptions();
+    void channelsArrange();
     void channelsAutoArrange(bool bOn);
-    void helpAboutQt(void);
-    void helpAbout(void);
+    void helpAboutQt();
+    void helpAbout();
     void volumeChanged(int iVolume);
     void channelStripChanged(ChannelStrip *pChannelStrip);
     void channelsMenuAboutToShow();
-    void channelsMenuActivated(int iChannel);
-    void timerSlot(void);
-    void readServerStdout(void);
-    void processServerExit(void);
+    void channelsMenuActivated();
+    void timerSlot();
+    void readServerStdout();
+    void processServerExit();
 };
 
 } // namespace QSampler

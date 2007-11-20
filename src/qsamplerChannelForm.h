@@ -29,7 +29,6 @@
 #include "qsamplerChannel.h"
 #include "qsamplerDeviceForm.h"
 
-#include <Q3PtrList>
 
 namespace QSampler {
 
@@ -50,8 +49,8 @@ protected:
     qsamplerChannel* m_pChannel;
     int m_iDirtySetup;
     int m_iDirtyCount;
-    Q3PtrList<qsamplerDevice> m_audioDevices;
-    Q3PtrList<qsamplerDevice> m_midiDevices;
+    QList<qsamplerDevice *> m_audioDevices;
+    QList<qsamplerDevice *> m_midiDevices;
     DeviceForm* m_pDeviceForm;
     ChannelRoutingModel routingModel;
     ChannelRoutingDelegate routingDelegate;

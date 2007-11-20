@@ -28,10 +28,13 @@
 #include "qsamplerMainForm.h"
 #include "qsamplerInstrument.h"
 
-#include <qvalidator.h>
-#include <qmessagebox.h>
-#include <qfiledialog.h>
-#include <qfileinfo.h>
+#include <QValidator>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QFileInfo>
+
+#include <QHeaderView>
+
 
 namespace QSampler {
 
@@ -44,8 +47,8 @@ ChannelForm::ChannelForm(QWidget* parent) : QDialog(parent) {
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
 
-	m_midiDevices.setAutoDelete(true);
-	m_audioDevices.setAutoDelete(true);
+//	m_midiDevices.setAutoDelete(true);
+//	m_audioDevices.setAutoDelete(true);
 
 	m_pDeviceForm = NULL;
 
@@ -112,10 +115,17 @@ ChannelForm::ChannelForm(QWidget* parent) : QDialog(parent) {
 		SLOT(updateTableCellRenderers()));
 }
 
-ChannelForm::~ChannelForm() {
+ChannelForm::~ChannelForm()
+{
 	if (m_pDeviceForm)
 		delete m_pDeviceForm;
 	m_pDeviceForm = NULL;
+
+	qDeleteAll(m_midiDevices);
+	m_midiDevices.clear();
+
+	qDeleteAll(m_audioDevices);
+	m_audioDevices.clear();
 }
 
 
@@ -132,7 +142,7 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 
 	// It can be a brand new channel, remember?
 	bool bNew = (m_pChannel->channelID() < 0);
-	setCaption(QSAMPLER_TITLE ": " + m_pChannel->channelName());
+	setWindowTitle(QSAMPLER_TITLE ": " + m_pChannel->channelName());
 
 	// Check if we're up and connected.
 	MainForm *pMainForm = MainForm::getInstance();
@@ -162,17 +172,18 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 
 	// Populate Audio output type list.
 	ui.AudioDriverComboBox->clear();
-	ui.AudioDriverComboBox->insertStringList(
+	ui.AudioDriverComboBox->insertItems(0,
 		qsamplerDevice::getDrivers(pMainForm->client(), qsamplerDevice::Audio));
 
 	// Populate MIDI input type list.
 	ui.MidiDriverComboBox->clear();
-	ui.MidiDriverComboBox->insertStringList(
+	ui.MidiDriverComboBox->insertItems(0,
 		qsamplerDevice::getDrivers(pMainForm->client(), qsamplerDevice::Midi));
 
 	// Populate Maps list.
 	ui.MidiMapComboBox->clear();
-	ui.MidiMapComboBox->insertStringList(qsamplerInstrument::getMapNames());
+	ui.MidiMapComboBox->insertItems(0,
+		qsamplerInstrument::getMapNames());
 
 	// Read proper channel information,
 	// and populate the channel form fields.
@@ -194,30 +205,37 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	QString sInstrumentFile = pChannel->instrumentFile();
 	if (sInstrumentFile.isEmpty())
 		sInstrumentFile = qsamplerChannel::noInstrumentName();
-	ui.InstrumentFileComboBox->setCurrentText(sInstrumentFile);
+	ui.InstrumentFileComboBox->setItemText(
+		ui.InstrumentFileComboBox->currentIndex(),
+		sInstrumentFile);
 	ui.InstrumentNrComboBox->clear();
-	ui.InstrumentNrComboBox->insertStringList(
+	ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(sInstrumentFile,
 		pOptions->bInstrumentNames));
-	ui.InstrumentNrComboBox->setCurrentItem(pChannel->instrumentNr());
+	ui.InstrumentNrComboBox->setCurrentIndex(pChannel->instrumentNr());
 
 	// MIDI input device...
 	qsamplerDevice midiDevice(qsamplerDevice::Midi, m_pChannel->midiDevice());
 	// MIDI input driver...
 	QString sMidiDriver = midiDevice.driverName();
 	if (sMidiDriver.isEmpty() || bNew)
-		sMidiDriver = pOptions->sMidiDriver.upper();
+		sMidiDriver = pOptions->sMidiDriver.toUpper();
 	if (!sMidiDriver.isEmpty()) {
 		if (ui.MidiDriverComboBox->findText(sMidiDriver,
 				Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
-			ui.MidiDriverComboBox->insertItem(sMidiDriver);
+			ui.MidiDriverComboBox->insertItem(0, sMidiDriver);
 		}
-		ui.MidiDriverComboBox->setCurrentText(sMidiDriver);
+		ui.MidiDriverComboBox->setItemText(
+			ui.MidiDriverComboBox->currentIndex(),
+			sMidiDriver);
 	}
 	selectMidiDriverItem(sMidiDriver);
-	if (!bNew)
-		ui.MidiDeviceComboBox->setCurrentText(midiDevice.deviceName());
-	selectMidiDeviceItem(ui.MidiDeviceComboBox->currentItem());
+	if (!bNew) {
+		ui.MidiDeviceComboBox->setItemText(
+			ui.MidiDeviceComboBox->currentIndex(),
+			midiDevice.deviceName());
+	}
+	selectMidiDeviceItem(ui.MidiDeviceComboBox->currentIndex());
 	// MIDI input port...
 	ui.MidiPortSpinBox->setValue(pChannel->midiPort());
 	// MIDI input channel...
@@ -225,15 +243,18 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	// When new, try to suggest a sensible MIDI channel...
 	if (iMidiChannel < 0)
 		iMidiChannel = (::lscp_get_channels(pMainForm->client()) % 16);
-	ui.MidiChannelComboBox->setCurrentItem(iMidiChannel);
+	ui.MidiChannelComboBox->setCurrentIndex(iMidiChannel);
 	// MIDI instrument map...
 	int iMidiMap = (bNew ? pOptions->iMidiMap : pChannel->midiMap());
 	// When new, try to suggest a sensible MIDI map...
 	if (iMidiMap < 0)
 		iMidiMap = 0;
 	const QString& sMapName = qsamplerInstrument::getMapName(iMidiMap);
-	if (!sMapName.isEmpty())
-		ui.MidiMapComboBox->setCurrentText(sMapName);
+	if (!sMapName.isEmpty()) {
+		ui.MidiMapComboBox->setItemText(
+			ui.MidiMapComboBox->currentIndex(),
+			sMapName);
+	}
 	// It might be no maps around...
 	bool bMidiMapEnabled = (ui.MidiMapComboBox->count() > 0);
 	ui.MidiMapTextLabel->setEnabled(bMidiMapEnabled);
@@ -244,18 +265,23 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	// Audio output driver...
 	QString sAudioDriver = audioDevice.driverName();
 	if (sAudioDriver.isEmpty() || bNew)
-		sAudioDriver = pOptions->sAudioDriver.upper();
+		sAudioDriver = pOptions->sAudioDriver.toUpper();
 	if (!sAudioDriver.isEmpty()) {
 		if (ui.AudioDriverComboBox->findText(sAudioDriver,
 				Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
-			ui.AudioDriverComboBox->insertItem(sAudioDriver);
+			ui.AudioDriverComboBox->insertItem(0, sAudioDriver);
 		}
-		ui.AudioDriverComboBox->setCurrentText(sAudioDriver);
+		ui.AudioDriverComboBox->setItemText(
+			ui.AudioDriverComboBox->currentIndex(),
+			sAudioDriver);
 	}
 	selectAudioDriverItem(sAudioDriver);
-	if (!bNew)
-		ui.AudioDeviceComboBox->setCurrentText(audioDevice.deviceName());
-	selectAudioDeviceItem(ui.AudioDeviceComboBox->currentItem());
+	if (!bNew) {
+		ui.AudioDeviceComboBox->setItemText(
+			ui.AudioDeviceComboBox->currentIndex(),
+			audioDevice.deviceName());
+	}
+	selectAudioDeviceItem(ui.AudioDeviceComboBox->currentIndex());
 
 	// As convenient, make it ready on stabilizeForm() for
 	// prompt acceptance, if we got the minimum required...
@@ -298,7 +324,7 @@ void ChannelForm::accept (void)
 			if (!m_pChannel->setAudioDriver(ui.AudioDriverComboBox->currentText()))
 				iErrors++;
 		} else {
-			qsamplerDevice *pDevice = m_audioDevices.at(ui.AudioDeviceComboBox->currentItem());
+			qsamplerDevice *pDevice = m_audioDevices.at(ui.AudioDeviceComboBox->currentIndex());
 			qsamplerChannelRoutingMap routingMap = routingModel.routingMap();
 			if (pDevice == NULL)
 				iErrors++;
@@ -309,7 +335,7 @@ void ChannelForm::accept (void)
 				qsamplerChannelRoutingMap::ConstIterator iter;
 				for (iter = routingMap.begin();
 						iter != routingMap.end(); ++iter) {
-					if (!m_pChannel->setAudioChannel(iter.key(), iter.data()))
+					if (!m_pChannel->setAudioChannel(iter.key(), iter.value()))
 						iErrors++;
 				}
 			}
@@ -319,7 +345,7 @@ void ChannelForm::accept (void)
 			if (!m_pChannel->setMidiDriver(ui.MidiDriverComboBox->currentText()))
 				iErrors++;
 		} else {
-			qsamplerDevice *pDevice = m_midiDevices.at(ui.MidiDeviceComboBox->currentItem());
+			qsamplerDevice *pDevice = m_midiDevices.at(ui.MidiDeviceComboBox->currentIndex());
 			if (pDevice == NULL)
 				iErrors++;
 			else if (!m_pChannel->setMidiDevice(pDevice->deviceID()))
@@ -329,7 +355,7 @@ void ChannelForm::accept (void)
 		if (!m_pChannel->setMidiPort(ui.MidiPortSpinBox->value()))
 			iErrors++;
 		// MIDI input channel...
-		if (!m_pChannel->setMidiChannel(ui.MidiChannelComboBox->currentItem()))
+		if (!m_pChannel->setMidiChannel(ui.MidiChannelComboBox->currentIndex()))
 			iErrors++;
 		// Engine name...
 		if (!m_pChannel->loadEngine(ui.EngineNameComboBox->currentText()))
@@ -337,11 +363,11 @@ void ChannelForm::accept (void)
 		// Instrument file and index...
 		const QString& sPath = ui.InstrumentFileComboBox->currentText();
 		if (!sPath.isEmpty() && QFileInfo(sPath).exists()) {
-			if (!m_pChannel->loadInstrument(sPath, ui.InstrumentNrComboBox->currentItem()))
+			if (!m_pChannel->loadInstrument(sPath, ui.InstrumentNrComboBox->currentIndex()))
 				iErrors++;
 		}
 		// MIDI intrument map...
-		if (!m_pChannel->setMidiMap(ui.MidiMapComboBox->currentItem()))
+		if (!m_pChannel->setMidiMap(ui.MidiMapComboBox->currentIndex()))
 			iErrors++;
 		// Show error messages?
 		if (iErrors > 0)
@@ -349,11 +375,12 @@ void ChannelForm::accept (void)
 	}
 
 	// Save default engine name, instrument directory and history...
-	pOptions->sInstrumentDir = QFileInfo(ui.InstrumentFileComboBox->currentText()).dirPath(true);
+	pOptions->sInstrumentDir = QFileInfo(
+		ui.InstrumentFileComboBox->currentText()).dir().absolutePath();
 	pOptions->sEngineName  = ui.EngineNameComboBox->currentText();
 	pOptions->sAudioDriver = ui.AudioDriverComboBox->currentText();
 	pOptions->sMidiDriver  = ui.MidiDriverComboBox->currentText();
-	pOptions->iMidiMap     = ui.MidiMapComboBox->currentItem();
+	pOptions->iMidiMap     = ui.MidiMapComboBox->currentIndex();
 	pOptions->saveComboBoxHistory(ui.InstrumentFileComboBox);
 
 	// Just go with dialog acceptance.
@@ -404,17 +431,19 @@ void ChannelForm::openInstrumentFile (void)
 
 	// FIXME: the instrument file filters should be restricted,
 	// depending on the current engine.
-	QString sInstrumentFile = QFileDialog::getOpenFileName(
-		pOptions->sInstrumentDir,                   // Start here.
-		tr("Instrument files") + " (*.gig *.dls)",  // Filter (GIG and DLS files)
-		this, 0,                                    // Parent and name (none)
-		QSAMPLER_TITLE ": " + tr("Instrument files")	// Caption.
+	QString sInstrumentFile = QFileDialog::getOpenFileName(this,
+		QSAMPLER_TITLE ": " + tr("Instrument files"), // Caption.
+		pOptions->sInstrumentDir,                 // Start here.
+		tr("Instrument files") + " (*.gig *.dls)" // Filter (GIG and DLS files)
 	);
 
 	if (sInstrumentFile.isEmpty())
 		return;
 
-	ui.InstrumentFileComboBox->setCurrentText(sInstrumentFile);
+	ui.InstrumentFileComboBox->setItemText(
+		ui.InstrumentFileComboBox->currentIndex(),
+		sInstrumentFile);
+
 	updateInstrumentName();
 }
 
@@ -435,7 +464,7 @@ void ChannelForm::updateInstrumentName (void)
 	// Finally this better idea would be to use libgig
 	// to retrieve the REAL instrument names.
 	ui.InstrumentNrComboBox->clear();
-	ui.InstrumentNrComboBox->insertStringList(
+	ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(
 			ui.InstrumentFileComboBox->currentText(),
 			pOptions->bInstrumentNames)
@@ -484,16 +513,17 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	if (pMainForm->client() == NULL)
 		return;
 
-	const QString sDriverName = sMidiDriver.upper();
+	const QString sDriverName = sMidiDriver.toUpper();
 
 	// Save current device id.
 	int iDeviceID = 0;
-	qsamplerDevice *pDevice = m_midiDevices.at(ui.MidiDeviceComboBox->currentItem());
+	qsamplerDevice *pDevice = m_midiDevices.at(ui.MidiDeviceComboBox->currentIndex());
 	if (pDevice)
 		iDeviceID = pDevice->deviceID();
 
 	// Clean maplist.
 	ui.MidiDeviceComboBox->clear();
+	qDeleteAll(m_midiDevices);
 	m_midiDevices.clear();
 
 	// Populate with the current ones...
@@ -502,8 +532,8 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 		qsamplerDevice::Midi);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		pDevice = new qsamplerDevice(qsamplerDevice::Midi, piDeviceIDs[i]);
-		if (pDevice->driverName().upper() == sDriverName) {
-			ui.MidiDeviceComboBox->insertItem(midiPixmap, pDevice->deviceName());
+		if (pDevice->driverName().toUpper() == sDriverName) {
+			ui.MidiDeviceComboBox->insertItem(0, midiPixmap, pDevice->deviceName());
 			m_midiDevices.append(pDevice);
 		} else {
 			delete pDevice;
@@ -515,18 +545,18 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	if (bEnabled) {
 		// Select the previous current device...
 		int iMidiItem = 0;
-		for (pDevice = m_midiDevices.first();
-				pDevice;
-					pDevice = m_midiDevices.next()) {
+		QListIterator<qsamplerDevice *> iter(m_midiDevices);
+		while (iter.hasNext()) {
+			pDevice = iter.next();
 			if (pDevice->deviceID() == iDeviceID) {
-				ui.MidiDeviceComboBox->setCurrentItem(iMidiItem);
+				ui.MidiDeviceComboBox->setCurrentIndex(iMidiItem);
 				selectMidiDeviceItem(iMidiItem);
 				break;
 			}
 			iMidiItem++;
 		}
 	} else {
-		ui.MidiDeviceComboBox->insertItem(
+		ui.MidiDeviceComboBox->insertItem(0,
 			tr("(New MIDI %1 device)").arg(sMidiDriver));
 	}
 	ui.MidiDeviceTextLabel->setEnabled(bEnabled);
@@ -555,7 +585,7 @@ void ChannelForm::selectMidiDeviceItem ( int iMidiItem )
 		ui.MidiPortTextLabel->setEnabled(iPorts > 0);
 		ui.MidiPortSpinBox->setEnabled(iPorts > 0);
 		if (iPorts > 0)
-			ui.MidiPortSpinBox->setMaxValue(iPorts - 1);
+			ui.MidiPortSpinBox->setMaximum(iPorts - 1);
 	}
 }
 
@@ -574,7 +604,7 @@ void ChannelForm::selectMidiDevice ( int iMidiItem )
 // MIDI device options.
 void ChannelForm::setupMidiDevice (void)
 {
-	setupDevice(m_midiDevices.at(ui.MidiDeviceComboBox->currentItem()),
+	setupDevice(m_midiDevices.at(ui.MidiDeviceComboBox->currentIndex()),
 		qsamplerDevice::Midi, ui.MidiDriverComboBox->currentText());
 }
 
@@ -588,16 +618,17 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	if (pMainForm->client() == NULL)
 		return;
 
-	const QString sDriverName = sAudioDriver.upper();
+	const QString sDriverName = sAudioDriver.toUpper();
 
 	// Save current device id.
 	int iDeviceID = 0;
-	qsamplerDevice *pDevice = m_audioDevices.at(ui.AudioDeviceComboBox->currentItem());
+	qsamplerDevice *pDevice = m_audioDevices.at(ui.AudioDeviceComboBox->currentIndex());
 	if (pDevice)
 		iDeviceID = pDevice->deviceID();
 
 	// Clean maplist.
 	ui.AudioDeviceComboBox->clear();
+	qDeleteAll(m_audioDevices);
 	m_audioDevices.clear();
 
 	// Populate with the current ones...
@@ -606,8 +637,8 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 		qsamplerDevice::Audio);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		pDevice = new qsamplerDevice(qsamplerDevice::Audio, piDeviceIDs[i]);
-		if (pDevice->driverName().upper() == sDriverName) {
-			ui.AudioDeviceComboBox->insertItem(audioPixmap, pDevice->deviceName());
+		if (pDevice->driverName().toUpper() == sDriverName) {
+			ui.AudioDeviceComboBox->insertItem(0, audioPixmap, pDevice->deviceName());
 			m_audioDevices.append(pDevice);
 		} else {
 			delete pDevice;
@@ -619,18 +650,18 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	if (bEnabled) {
 		// Select the previous current device...
 		int iAudioItem = 0;
-		for (pDevice = m_audioDevices.first();
-				pDevice;
-					pDevice = m_audioDevices.next()) {
+		QListIterator<qsamplerDevice *> iter(m_audioDevices);
+		while (iter.hasNext()) {
+			pDevice = iter.next();
 			if (pDevice->deviceID() == iDeviceID) {
-				ui.AudioDeviceComboBox->setCurrentItem(iAudioItem);
+				ui.AudioDeviceComboBox->setCurrentIndex(iAudioItem);
 				selectAudioDeviceItem(iAudioItem);
 				break;
 			}
 			iAudioItem++;
 		}
 	} else {
-		ui.AudioDeviceComboBox->insertItem(
+		ui.AudioDeviceComboBox->insertItem(0,
 			tr("(New Audio %1 device)").arg(sAudioDriver));
 		//ui.AudioRoutingTable->setNumRows(0);
 	}
@@ -678,7 +709,7 @@ void ChannelForm::selectAudioDevice ( int iAudioItem )
 // Audio device options.
 void ChannelForm::setupAudioDevice (void)
 {
-	setupDevice(m_audioDevices.at(ui.AudioDeviceComboBox->currentItem()),
+	setupDevice(m_audioDevices.at(ui.AudioDeviceComboBox->currentIndex()),
 		qsamplerDevice::Audio, ui.AudioDriverComboBox->currentText());
 }
 

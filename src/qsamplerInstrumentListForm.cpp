@@ -27,7 +27,6 @@
 #include "qsamplerOptions.h"
 #include "qsamplerInstrument.h"
 
-#include <QToolTip>
 
 namespace QSampler {
 
@@ -49,15 +48,15 @@ InstrumentListForm::InstrumentListForm ( QWidget* parent, Qt::WindowFlags flags 
     m_pMapComboBox = new QComboBox(ui.InstrumentToolbar);
     m_pMapComboBox->setMinimumWidth(120);
     m_pMapComboBox->setEnabled(false);
-    QToolTip::add(m_pMapComboBox, tr("Instrument Map"));
+    m_pMapComboBox->setToolTip(tr("Instrument Map"));
     ui.InstrumentToolbar->addWidget(m_pMapComboBox);
 
     ui.InstrumentToolbar->addSeparator();
-    ui.newInstrumentAction->addTo(ui.InstrumentToolbar);
-    ui.editInstrumentAction->addTo(ui.InstrumentToolbar);
-    ui.deleteInstrumentAction->addTo(ui.InstrumentToolbar);
+    ui.InstrumentToolbar->addAction(ui.newInstrumentAction);
+    ui.InstrumentToolbar->addAction(ui.editInstrumentAction);
+    ui.InstrumentToolbar->addAction(ui.deleteInstrumentAction);
     ui.InstrumentToolbar->addSeparator();
-    ui.refreshInstrumentsAction->addTo(ui.InstrumentToolbar);
+    ui.InstrumentToolbar->addAction(ui.refreshInstrumentsAction);
 
     ui.InstrumentTable->setModel(&model);
     ui.InstrumentTable->setItemDelegate(&delegate);
@@ -133,19 +132,19 @@ void InstrumentListForm::refreshInstruments (void)
 		return;
 
 	// Get/save current map selection...
-	int iMap = m_pMapComboBox->currentItem();
+	int iMap = m_pMapComboBox->currentIndex();
 	if (iMap < 0 || m_pMapComboBox->count() < 2)
 		iMap = pOptions->iMidiMap + 1;
 
 	// Populate maps list.
 	m_pMapComboBox->clear();
-	m_pMapComboBox->insertItem(tr("(All)"));
-	m_pMapComboBox->insertStringList(qsamplerInstrument::getMapNames());
+	m_pMapComboBox->addItem(tr("(All)"));
+	m_pMapComboBox->insertItems(1, qsamplerInstrument::getMapNames());
 
 	// Adjust to saved selection...
 	if (iMap < 0 || iMap >= m_pMapComboBox->count())
 		iMap = 0;
-	m_pMapComboBox->setCurrentItem(iMap);
+	m_pMapComboBox->setCurrentIndex(iMap);
 	m_pMapComboBox->setEnabled(m_pMapComboBox->count() > 1);
 
 	activateMap(iMap);

@@ -27,6 +27,7 @@
 
 #include "qsamplerOptions.h"
 
+
 namespace QSampler {
 
 class OptionsForm : public QDialog {

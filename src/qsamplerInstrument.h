@@ -24,7 +24,6 @@
 #define __qsamplerInstrument_h
 
 #include <QStringList>
-#include <QMetaType>
 
 
 //-------------------------------------------------------------------------

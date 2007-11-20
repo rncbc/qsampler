@@ -20,12 +20,12 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerChannelStrip.h"
 
 #include "qsamplerMainForm.h"
 
-#include <q3dragobject.h>
-
+#include <QDragEnterEvent>
 #include <QUrl>
 
 #include <math.h>
@@ -74,46 +74,57 @@ ChannelStrip::~ChannelStrip() {
 }
 
 
-// Drag'n'drop file handler.
-bool ChannelStrip::decodeDragFile ( const QMimeSource *pEvent, QString& sInstrumentFile )
+// Window drag-n-drop event handlers.
+void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
 	if (m_pChannel == NULL)
-		return false;
-	if (Q3TextDrag::canDecode(pEvent)) {
-		QString sText;
-		if (Q3TextDrag::decode(pEvent, sText)) {
-			QStringList files = QStringList::split('\n', sText);
-			for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
-				*iter = QUrl((*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null)).path();
-				if (qsamplerChannel::isInstrumentFile(*iter)) {
-					sInstrumentFile = *iter;
-					return true;
+		return;
+
+	bool bAccept = false;
+
+	if (pDragEnterEvent->source() == NULL) {
+		const QMimeData *pMimeData = pDragEnterEvent->mimeData();
+		if (pMimeData && pMimeData->hasUrls()) {
+			QListIterator<QUrl> iter(pMimeData->urls());
+			while (iter.hasNext()) {
+				const QString& sFilename = iter.next().toLocalFile();
+				if (!sFilename.isEmpty()) {
+					bAccept = qsamplerChannel::isInstrumentFile(sFilename);
+					break;
 				}
 			}
 		}
 	}
-	// Fail.
-	return false;
-}
 
-
-// Window drag-n-drop event handlers.
-void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
-{
-	QString sInstrumentFile;
-	pDragEnterEvent->accept(decodeDragFile(pDragEnterEvent, sInstrumentFile));
+	if (bAccept)
+		pDragEnterEvent->accept();
+	else
+		pDragEnterEvent->ignore();
 }
 
 
 void ChannelStrip::dropEvent ( QDropEvent* pDropEvent )
 {
-	QString sInstrumentFile;
+	if (m_pChannel == NULL)
+		return;
 
-	if (decodeDragFile(pDropEvent, sInstrumentFile)) {
-		// Go and set the dropped instrument filename...
-		m_pChannel->setInstrument(sInstrumentFile, 0);
-		// Open up the channel dialog.
-		channelSetup();
+	if (pDropEvent->source())
+		return;
+
+	const QMimeData *pMimeData = pDropEvent->mimeData();
+	if (pMimeData && pMimeData->hasUrls()) {
+		QStringList files;
+		QListIterator<QUrl> iter(pMimeData->urls());
+		while (iter.hasNext()) {
+			const QString& sFilename = iter.next().toLocalFile();
+			if (!sFilename.isEmpty()) {
+				// Go and set the dropped instrument filename...
+				m_pChannel->setInstrument(sFilename, 0);
+				// Open up the channel dialog.
+				channelSetup();
+				break;
+			}
+		}
 	}
 }
 
@@ -162,27 +173,16 @@ void ChannelStrip::setDisplayFont ( const QFont & font )
 // Channel display background effect.
 void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
-    QPixmap pm =
-        (bDisplayEffect) ?
-            QPixmap(":/icons/displaybg1.png") : QPixmap();
-    setDisplayBackground(pm);
-}
-
-
-// Update main display background pixmap.
-void ChannelStrip::setDisplayBackground ( const QPixmap& pm )
-{
-    // Set the main origin...
-    ui.ChannelInfoFrame->setPaletteBackgroundPixmap(pm);
-
-    // Iterate for every child text label...
-    QList<QObject*> list = ui.ChannelInfoFrame->queryList("QLabel");
-    for (QList<QObject*>::iterator iter = list.begin(); iter != list.end(); iter++) {
-        static_cast<QLabel*>(*iter)->setPaletteBackgroundPixmap(pm);
-    }
-
-    // And this standalone too.
-    ui.StreamVoiceCountTextLabel->setPaletteBackgroundPixmap(pm);
+	QPalette pal;
+	pal.setColor(QPalette::Foreground, Qt::green);
+	if (bDisplayEffect) {
+		QPixmap pm(":/icons/displaybg1.png");
+		pal.setBrush(QPalette::Background, QBrush(pm));
+	} else {
+		pal.setColor(QPalette::Background, Qt::black);
+	}
+	ui.ChannelInfoFrame->setPalette(pal);
+	ui.StreamVoiceCountTextLabel->setPalette(pal);
 }
 
 
@@ -339,7 +339,7 @@ bool ChannelStrip::updateChannelInfo (void)
 
     // Update strip caption.
     QString sText = m_pChannel->channelName();
-    setCaption(sText);
+    setWindowTitle(sText);
     ui.ChannelSetupPushButton->setText(sText);
 
     // Check if we're up and connected.
@@ -367,28 +367,38 @@ bool ChannelStrip::updateChannelInfo (void)
 		sMidiPortChannel += QString::number(m_pChannel->midiChannel() + 1);
 	ui.MidiPortChannelTextLabel->setText(sMidiPortChannel);
 
+	// Common palette...
+	QPalette pal;
+	const QColor& rgbFore = pal.color(QPalette::Foreground);
+
     // Instrument status...
     int iInstrumentStatus = m_pChannel->instrumentStatus();
     if (iInstrumentStatus < 0) {
-        ui.InstrumentStatusTextLabel->setPaletteForegroundColor(Qt::red);
+		pal.setColor(QPalette::Foreground, Qt::red);
+		ui.InstrumentStatusTextLabel->setPalette(pal);
         ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
         m_iErrorCount++;
         return false;
     }
     // All seems normal...
-    ui.InstrumentStatusTextLabel->setPaletteForegroundColor(iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
+	pal.setColor(QPalette::Foreground,
+		iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
+    ui.InstrumentStatusTextLabel->setPalette(pal);
     ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
     m_iErrorCount = 0;
 
 #ifdef CONFIG_MUTE_SOLO
     // Mute/Solo button state coloring...
-    const QColor& rgbNormal = ChannelSetupPushButton->paletteBackgroundColor();
     bool bMute = m_pChannel->channelMute();
-    ChannelMutePushButton->setPaletteBackgroundColor(bMute ? Qt::yellow : rgbNormal);
-    ChannelMutePushButton->setDown(bMute);
+	const QColor& rgbButton = pal.color(QPalette::Button);
+	pal.setColor(QPalette::Foreground, rgbFore);
+	pal.setColor(QPalette::Button, bMute ? Qt::yellow : rgbButton);
+	ui.ChannelMutePushButton->setPalette(pal);
+	ui.ChannelMutePushButton->setDown(bMute);
     bool bSolo = m_pChannel->channelSolo();
-    ChannelSoloPushButton->setPaletteBackgroundColor(bSolo ? Qt::cyan : rgbNormal);
-    ChannelSoloPushButton->setDown(bSolo);
+	pal.setColor(QPalette::Button, bSolo ? Qt::cyan : rgbButton);	
+	ui.ChannelSoloPushButton->setPalette(pal);
+	ui.ChannelSoloPushButton->setDown(bSolo);
 #else
 	ui.ChannelMutePushButton->setEnabled(false);
 	ui.ChannelSoloPushButton->setEnabled(false);
@@ -416,7 +426,7 @@ bool ChannelStrip::updateChannelUsage (void)
 
     // Get current channel voice count.
     int iVoiceCount  = ::lscp_get_channel_voice_count(pMainForm->client(), m_pChannel->channelID());
-    // Get current stream count.
+   // Get current stream count.
     int iStreamCount = ::lscp_get_channel_stream_count(pMainForm->client(), m_pChannel->channelID());
     // Get current channel buffer fill usage.
     // As benno has suggested this is the percentage usage

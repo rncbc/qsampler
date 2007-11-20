@@ -25,8 +25,12 @@
 #include "qsamplerAbout.h"
 #include "qsamplerMainForm.h"
 
+#include <QFileDialog>
+#include <QMessageBox>
+
 // Needed for lroundf()
 #include <math.h>
+
 
 namespace QSampler {
 
@@ -133,14 +137,14 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 
 	// Populate maps list.
 	ui.MapComboBox->clear();
-	ui.MapComboBox->insertStringList(qsamplerInstrument::getMapNames());
+	ui.MapComboBox->insertItems(0, qsamplerInstrument::getMapNames());
 
 	// Populate Engines list.
 	const char **ppszEngines = ::lscp_list_available_engines(pMainForm->client());
 	if (ppszEngines) {
 		ui.EngineNameComboBox->clear();
 		for (int iEngine = 0; ppszEngines[iEngine]; iEngine++)
-			ui.EngineNameComboBox->insertItem(ppszEngines[iEngine]);
+			ui.EngineNameComboBox->addItem(ppszEngines[iEngine]);
 	}
 	else pMainForm->appendMessagesClient("lscp_list_available_engines");
 
@@ -152,8 +156,11 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	if (iMap < 0)
 		iMap = 0;
 	const QString& sMapName = qsamplerInstrument::getMapName(iMap);
-	if (!sMapName.isEmpty())
-		ui.MapComboBox->setCurrentText(sMapName);
+	if (!sMapName.isEmpty()) {
+		ui.MapComboBox->setItemText(
+			ui.MapComboBox->currentIndex(),
+			sMapName);
+	}
 	// It might be no maps around...
 	bool bMapEnabled = (ui.MapComboBox->count() > 0);
 	ui.MapTextLabel->setEnabled(bMapEnabled);
@@ -180,19 +187,23 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 		sEngineName = qsamplerChannel::noEngineName();
 	if (ui.EngineNameComboBox->findText(sEngineName,
 			Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
-		ui.EngineNameComboBox->insertItem(sEngineName);
+		ui.EngineNameComboBox->addItem(sEngineName);
 	}
-	ui.EngineNameComboBox->setCurrentText(sEngineName);
+	ui.EngineNameComboBox->setItemText(
+		ui.EngineNameComboBox->currentIndex(),
+		sEngineName);
 	// Instrument filename and index...
 	QString sInstrumentFile = m_pInstrument->instrumentFile();
 	if (sInstrumentFile.isEmpty())
 		sInstrumentFile = qsamplerChannel::noInstrumentName();
-	ui.InstrumentFileComboBox->setCurrentText(sInstrumentFile);
+	ui.InstrumentFileComboBox->setItemText(
+		ui.InstrumentFileComboBox->currentIndex(),
+		sInstrumentFile);
 	ui.InstrumentNrComboBox->clear();
-	ui.InstrumentNrComboBox->insertStringList(
+	ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(sInstrumentFile,
 		pOptions->bInstrumentNames));
-	ui.InstrumentNrComboBox->setCurrentItem(m_pInstrument->instrumentNr());
+	ui.InstrumentNrComboBox->setCurrentIndex(m_pInstrument->instrumentNr());
 
 	// Instrument volume....
 	int iVolume = (bNew ? pOptions->iVolume :
@@ -202,7 +213,7 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	// Instrument load mode...
 	int iLoadMode = (bNew ? pOptions->iLoadMode :
 		m_pInstrument->loadMode());
-	ui.LoadModeComboBox->setCurrentItem(iLoadMode);
+	ui.LoadModeComboBox->setCurrentIndex(iLoadMode);
 
 	// Done.
 	m_iDirtySetup--;
@@ -238,17 +249,19 @@ void InstrumentForm::openInstrumentFile (void)
 
 	// FIXME: the instrument file filters should be restricted,
 	// depending on the current engine.
-	QString sInstrumentFile = QFileDialog::getOpenFileName(
-		pOptions->sInstrumentDir,                   // Start here.
-		tr("Instrument files") + " (*.gig *.dls)",  // Filter (GIG and DLS files)
-		this, 0,                                    // Parent and name (none)
-		QSAMPLER_TITLE ": " + tr("Instrument files")// Caption.
+	QString sInstrumentFile = QFileDialog::getOpenFileName(this,
+		QSAMPLER_TITLE ": " + tr("Instrument files"), // Caption.
+		pOptions->sInstrumentDir,                 // Start here.
+		tr("Instrument files") + " (*.gig *.dls)" // Filter (GIG and DLS files)
 	);
 
 	if (sInstrumentFile.isEmpty())
 		return;
 
-	ui.InstrumentFileComboBox->setCurrentText(sInstrumentFile);
+	ui.InstrumentFileComboBox->setItemText(
+		ui.InstrumentFileComboBox->currentIndex(),
+		sInstrumentFile);
+
 	updateInstrumentName();
 }
 
@@ -267,7 +280,7 @@ void InstrumentForm::updateInstrumentName (void)
 	// TODO: this better idea would be to use libgig
 	// to retrieve the REAL instrument names.
 	ui.InstrumentNrComboBox->clear();
-	ui.InstrumentNrComboBox->insertStringList(
+	ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(
 			ui.InstrumentFileComboBox->currentText(),
 			pOptions->bInstrumentNames)
@@ -309,25 +322,26 @@ void InstrumentForm::accept (void)
 		return;
 
 	if (m_iDirtyCount > 0) {
-		m_pInstrument->setMap(ui.MapComboBox->currentItem());
+		m_pInstrument->setMap(ui.MapComboBox->currentIndex());
 		m_pInstrument->setBank(ui.BankSpinBox->value());
 		m_pInstrument->setProg(ui.ProgSpinBox->value() - 1);
 		m_pInstrument->setName(ui.NameLineEdit->text());
 		m_pInstrument->setEngineName(ui.EngineNameComboBox->currentText());
 		m_pInstrument->setInstrumentFile(ui.InstrumentFileComboBox->currentText());
-		m_pInstrument->setInstrumentNr(ui.InstrumentNrComboBox->currentItem());
+		m_pInstrument->setInstrumentNr(ui.InstrumentNrComboBox->currentIndex());
 		m_pInstrument->setVolume(0.01f * float(ui.VolumeSpinBox->value()));
-		m_pInstrument->setLoadMode(ui.LoadModeComboBox->currentItem());
+		m_pInstrument->setLoadMode(ui.LoadModeComboBox->currentIndex());
 	}
 
 	// Save default engine name, instrument directory and history...
-	pOptions->sInstrumentDir = QFileInfo(ui.InstrumentFileComboBox->currentText()).dirPath(true);
+	pOptions->sInstrumentDir = QFileInfo(
+		ui.InstrumentFileComboBox->currentText()).dir().absolutePath();
 	pOptions->sEngineName = ui.EngineNameComboBox->currentText();
-	pOptions->iMidiMap  = ui.MapComboBox->currentItem();
+	pOptions->iMidiMap  = ui.MapComboBox->currentIndex();
 	pOptions->iMidiBank = ui.BankSpinBox->value();
 	pOptions->iMidiProg = ui.ProgSpinBox->value();
 	pOptions->iVolume   = ui.VolumeSpinBox->value();
-	pOptions->iLoadMode = ui.LoadModeComboBox->currentItem();
+	pOptions->iLoadMode = ui.LoadModeComboBox->currentIndex();
 	pOptions->saveComboBoxHistory(ui.InstrumentFileComboBox);
 
 	// Just go with dialog acceptance.

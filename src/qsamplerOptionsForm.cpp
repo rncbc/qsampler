@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QFontDialog>
 
+
 namespace QSampler {
 
 OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
@@ -136,11 +137,17 @@ void OptionsForm::setup ( qsamplerOptions *pOptions )
     m_pOptions->loadComboBoxHistory(ui.ServerCmdLineComboBox);
 
     // Load Server settings...
-    ui.ServerHostComboBox->setCurrentText(m_pOptions->sServerHost);
-    ui.ServerPortComboBox->setCurrentText(QString::number(m_pOptions->iServerPort));
+	ui.ServerHostComboBox->setItemText(
+		ui.ServerHostComboBox->currentIndex(),
+		m_pOptions->sServerHost);
+	ui.ServerPortComboBox->setItemText(
+		ui.ServerPortComboBox->currentIndex(),
+		QString::number(m_pOptions->iServerPort));
     ui.ServerTimeoutSpinBox->setValue(m_pOptions->iServerTimeout);
     ui.ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
-    ui.ServerCmdLineComboBox->setCurrentText(m_pOptions->sServerCmdLine);
+	ui.ServerCmdLineComboBox->setItemText(
+		ui.ServerCmdLineComboBox->currentIndex(),
+		m_pOptions->sServerCmdLine);
     ui.StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
 
     // Load Display options...
@@ -195,11 +202,11 @@ void OptionsForm::accept (void)
     // Save options...
     if (m_iDirtyCount > 0) {
         // Server settings....
-        m_pOptions->sServerHost         = ui.ServerHostComboBox->currentText().stripWhiteSpace();
+        m_pOptions->sServerHost         = ui.ServerHostComboBox->currentText().trimmed();
         m_pOptions->iServerPort         = ui.ServerPortComboBox->currentText().toInt();
         m_pOptions->iServerTimeout      = ui.ServerTimeoutSpinBox->value();
         m_pOptions->bServerStart        = ui.ServerStartCheckBox->isChecked();
-        m_pOptions->sServerCmdLine      = ui.ServerCmdLineComboBox->currentText().stripWhiteSpace();
+        m_pOptions->sServerCmdLine      = ui.ServerCmdLineComboBox->currentText().trimmed();
         m_pOptions->iStartDelay         = ui.StartDelaySpinBox->value();
         // Channels options...
         m_pOptions->sDisplayFont        = ui.DisplayFontTextLabel->font().toString();
@@ -315,12 +322,17 @@ void OptionsForm::chooseMessagesFont (void)
 // The channel display effect demo changer.
 void OptionsForm::toggleDisplayEffect ( bool bOn )
 {
-    QPixmap pm;
-    if (bOn)
-        pm = QPixmap(":/qsampler/pixmaps/displaybg1.png");
-    ui.DisplayFontTextLabel->setPaletteBackgroundPixmap(pm);
+	QPalette pal;
+	pal.setColor(QPalette::Foreground, Qt::green);
+	if (bOn) {
+		QPixmap pm(":/qsampler/pixmaps/displaybg1.png");
+		pal.setBrush(QPalette::Background, QBrush(pm));
+	} else {
+		pal.setColor(QPalette::Background, Qt::black);
+	}
+	ui.DisplayFontTextLabel->setPalette(pal);
 
-    optionsChanged();
+	optionsChanged();
 }
 
 } // namespace QSampler

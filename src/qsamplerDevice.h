@@ -29,13 +29,11 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QAbstractTableModel>
-#include <QMetaType>
 #include <QItemDelegate>
 #include <QFontMetrics>
 #include <QModelIndex>
 #include <QSize>
 #include <QList>
-#include <Q3PtrList>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
@@ -87,7 +85,7 @@ public:
 typedef QMap<QString, qsamplerDeviceParam> qsamplerDeviceParamMap;
 
 // Typedef'd device port/channels QptrList.
-typedef Q3PtrList<qsamplerDevicePort> qsamplerDevicePortList;
+typedef QList<qsamplerDevicePort *> qsamplerDevicePortList;
 
 
 //-------------------------------------------------------------------------

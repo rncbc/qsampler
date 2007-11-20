@@ -29,14 +29,12 @@
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qeventloop.h>
-#include <qaction.h>
-#include <qcursor.h>
-#include <qfileinfo.h>
-
+#include <QApplication>
+#include <QMessageBox>
 #include <QMenu>
+#include <QAction>
+#include <QCursor>
+#include <QFileInfo>
 
 // Needed for lroundf()
 #include <math.h>
@@ -236,7 +234,7 @@ void MidiInstrumentsModel::refresh() {
 		const int iProg = pInstrs[iInstr].prog;
 		addInstrument(iMap, iBank, iProg);
 		// Try to keep it snappy :)
-		QApplication::processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 
 	QApplication::restoreOverrideCursor();

@@ -25,6 +25,10 @@
 #include "qsamplerAbout.h"
 #include "qsamplerMainForm.h"
 
+#include <QHeaderView>
+#include <QMessageBox>
+
+
 namespace QSampler {
 
 DeviceForm::DeviceForm(QWidget* parent, Qt::WFlags f) : QDialog(parent, f) {
@@ -145,10 +149,11 @@ void DeviceForm::setDeviceTypeMode (
 // Device driver name setup formal initializer.
 void DeviceForm::setDriverName ( const QString& sDriverName )
 {
-	if (ui.DriverNameComboBox->findText(sDriverName) < 0) {
-		ui.DriverNameComboBox->insertItem(sDriverName);
-	}
-	ui.DriverNameComboBox->setCurrentText(sDriverName);
+	if (ui.DriverNameComboBox->findText(sDriverName) < 0)
+		ui.DriverNameComboBox->insertItem(0, sDriverName);
+	ui.DriverNameComboBox->setItemText(
+		ui.DriverNameComboBox->currentIndex(),
+		sDriverName);
 }
 
 
@@ -398,7 +403,7 @@ void DeviceForm::selectDevice ()
 	// The driver combobox is only rebuilt if device type has changed...
 	if (device.deviceType() != m_deviceType) {
 		ui.DriverNameComboBox->clear();
-		ui.DriverNameComboBox->insertStringList(
+		ui.DriverNameComboBox->insertItems(0,
 			qsamplerDevice::getDrivers(pMainForm->client(), device.deviceType()));
 		m_deviceType = device.deviceType();
 	}
@@ -440,9 +445,11 @@ void DeviceForm::selectDevice ()
 			break;
 		}
 		qsamplerDevicePortList& ports = device.ports();
-		qsamplerDevicePort *pPort;
-		for (pPort = ports.first(); pPort; pPort = ports.next()) {
-			ui.DevicePortComboBox->insertItem(pixmap, device.deviceTypeName()
+		QListIterator<qsamplerDevicePort *> iter(ports);
+		while (iter.hasNext()) {
+			qsamplerDevicePort *pPort = iter.next();
+			ui.DevicePortComboBox->addItem(pixmap,
+				device.deviceTypeName()
 				+ ' ' + device.driverName()
 				+ ' ' + pPort->portName());
 		}
@@ -455,7 +462,7 @@ void DeviceForm::selectDevice ()
 	m_iDirtySetup--;
 
 	// Make the device port/channel selection effective.
-	selectDevicePort(ui.DevicePortComboBox->currentItem());
+	selectDevicePort(ui.DevicePortComboBox->currentIndex());
 }
 
 
@@ -543,7 +550,7 @@ void DeviceForm::changeDevicePortParam ( int iRow, int iCol )
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
-	int iPort = ui.DevicePortComboBox->currentItem();
+	int iPort = ui.DevicePortComboBox->currentIndex();
 	qsamplerDevicePort *pPort = device.ports().at(iPort);
 	if (pPort == NULL)
 		return;
@@ -579,30 +586,27 @@ void DeviceForm::deviceListViewContextMenu ( const QPoint& pos )
 	if (pItem == NULL)
 		return;
 
-	int iItemID;
-
 	// Build the device context menu...
-	QMenu* pContextMenu = new QMenu(this);
+	QMenu menu(this);
+	QAction *pAction;
 
 	bool bClient = (pMainForm->client() != NULL);
 	bool bEnabled = (pItem != NULL);
-	iItemID = pContextMenu->insertItem(
-		QIconSet(QPixmap(":/qsampler/pixmaps/deviceCreate.png")),
+	pAction = menu.addAction(
+		QIcon(":/qsampler/pixmaps/deviceCreate.png"),
 		tr("&Create device"), this, SLOT(createDevice()));
-	pContextMenu->setItemEnabled(iItemID, bEnabled || (bClient && m_bNewDevice));
-	iItemID = pContextMenu->insertItem(
-		QIconSet(QPixmap(":/qsampler/pixmaps/deviceDelete.png")),
+	pAction->setEnabled(bEnabled || (bClient && m_bNewDevice));
+	pAction = menu.addAction(
+		QIcon(":/qsampler/pixmaps/deviceDelete.png"),
 		tr("&Delete device"), this, SLOT(deleteDevice()));
-	pContextMenu->setItemEnabled(iItemID, bEnabled && !m_bNewDevice);
-	pContextMenu->insertSeparator();
-	iItemID = pContextMenu->insertItem(
-		QIconSet(QPixmap(":/qsampler/pixmaps/formRefresh.png")),
+	pAction->setEnabled(bEnabled && !m_bNewDevice);
+	menu.addSeparator();
+	pAction = menu.addAction(
+		QIcon(":/qsampler/pixmaps/formRefresh.png"),
 		tr("&Refresh"), this, SLOT(refreshDevices()));
-	pContextMenu->setItemEnabled(iItemID, bClient);
+	pAction->setEnabled(bClient);
 
-	pContextMenu->exec(pos);
-
-	delete pContextMenu;
+	menu.exec(pos);
 }
 
 

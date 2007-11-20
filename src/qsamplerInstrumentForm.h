@@ -27,6 +27,7 @@
 
 #include "qsamplerInstrument.h"
 
+
 namespace QSampler {
 
 class InstrumentForm : public QDialog {

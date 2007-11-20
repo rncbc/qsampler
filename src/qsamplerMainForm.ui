@@ -133,8 +133,16 @@
     <property name="title" >
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="fileOpenRecentMenu" >
+     <property name="title" >
+      <string>Open &amp;Recent</string>
+     </property>
+    </widget>
     <addaction name="fileNewAction" />
+    <addaction name="separator" />
     <addaction name="fileOpenAction" />
+    <addaction name="fileOpenRecentMenu" />
+    <addaction name="separator" />
     <addaction name="fileSaveAction" />
     <addaction name="fileSaveAsAction" />
     <addaction name="separator" />

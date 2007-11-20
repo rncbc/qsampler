@@ -22,24 +22,6 @@
 
 #include "qsamplerMainForm.h"
 
-#include <qapplication.h>
-#include <qeventloop.h>
-#include <qworkspace.h>
-#include <qprocess.h>
-#include <qmessagebox.h>
-//#include <qdragobject.h>
-#include <qregexp.h>
-#include <qfiledialog.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qstatusbar.h>
-#include <qslider.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
 #include "qsamplerChannel.h"
@@ -51,6 +33,28 @@
 #include "qsamplerInstrumentListForm.h"
 #include "qsamplerDeviceForm.h"
 #include "qsamplerOptionsForm.h"
+
+#include <QApplication>
+#include <QWorkspace>
+#include <QProcess>
+#include <QMessageBox>
+
+#include <QRegExp>
+#include <QTextStream>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QFile>
+#include <QUrl>
+
+#include <QDragEnterEvent>
+
+#include <QStatusBar>
+#include <QSpinBox>
+#include <QSlider>
+#include <QLabel>
+#include <QTimer>
+#include <QDateTime>
+
 
 #ifdef HAVE_SIGNAL_H
 #include <signal.h>
@@ -103,7 +107,7 @@ public:
         : QEvent(QSAMPLER_CUSTOM_EVENT)
     {
         m_event = event;
-        m_data.setLatin1(pchData, cchData);
+        m_data  = QString::fromUtf8(pchData, cchData);
     }
 
     // Accessors.
@@ -165,13 +169,15 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
 	// Volume slider...
 	ui.channelsToolbar->addSeparator();
 	m_pVolumeSlider = new QSlider(Qt::Horizontal, ui.channelsToolbar);
-	m_pVolumeSlider->setTickmarks(QSlider::Below);
+	m_pVolumeSlider->setTickPosition(QSlider::TicksBelow);
 	m_pVolumeSlider->setTickInterval(10);
 	m_pVolumeSlider->setPageStep(10);
-	m_pVolumeSlider->setRange(0, 100);
+	m_pVolumeSlider->setSingleStep(10);
+	m_pVolumeSlider->setMinimum(0);
+	m_pVolumeSlider->setMaximum(100);
 	m_pVolumeSlider->setMaximumHeight(26);
 	m_pVolumeSlider->setMinimumWidth(160);
-	QToolTip::add(m_pVolumeSlider, sVolumeText);
+	m_pVolumeSlider->setToolTip(sVolumeText);
 	QObject::connect(m_pVolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
@@ -182,8 +188,9 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
 	ui.channelsToolbar->addSeparator();
 	m_pVolumeSpinBox = new QSpinBox(ui.channelsToolbar);
 	m_pVolumeSpinBox->setSuffix(" %");
-	m_pVolumeSpinBox->setRange(0, 100);
-	QToolTip::add(m_pVolumeSpinBox, sVolumeText);
+	m_pVolumeSpinBox->setMinimum(0);
+	m_pVolumeSpinBox->setMaximum(100);
+	m_pVolumeSpinBox->setToolTip(sVolumeText);
 	QObject::connect(m_pVolumeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
@@ -225,53 +232,48 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
     m_statusItem[QSAMPLER_STATUS_SESSION] = pLabel;
     statusBar()->addWidget(pLabel);
 
-    // Create the recent files sub-menu.
-    m_pRecentFilesMenu = new Q3PopupMenu(this);
-    ui.fileMenu->insertSeparator(4);
-    ui.fileMenu->insertItem(tr("Recent &Files"), m_pRecentFilesMenu, 0, 5);
-
 #if defined(WIN32)
     WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
 
 	QObject::connect(ui.fileNewAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileNew()));
 	QObject::connect(ui.fileOpenAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileOpen()));
 	QObject::connect(ui.fileSaveAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileSave()));
 	QObject::connect(ui.fileSaveAsAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileSaveAs()));
 	QObject::connect(ui.fileResetAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileReset()));
 	QObject::connect(ui.fileRestartAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileRestart()));
 	QObject::connect(ui.fileExitAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(fileExit()));
 	QObject::connect(ui.editAddChannelAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(editAddChannel()));
 	QObject::connect(ui.editRemoveChannelAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(editRemoveChannel()));
 	QObject::connect(ui.editSetupChannelAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(editSetupChannel()));
 	QObject::connect(ui.editEditChannelAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(editEditChannel()));
 	QObject::connect(ui.editResetChannelAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(editResetChannel()));
 	QObject::connect(ui.editResetAllChannelsAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(editResetAllChannels()));
 	QObject::connect(ui.viewMenubarAction,
 		SIGNAL(toggled(bool)),
@@ -286,26 +288,30 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
 		SIGNAL(toggled(bool)),
 		SLOT(viewMessages(bool)));
 	QObject::connect(ui.viewInstrumentsAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(viewInstruments()));
 	QObject::connect(ui.viewDevicesAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(viewDevices()));
 	QObject::connect(ui.viewOptionsAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(viewOptions()));
 	QObject::connect(ui.channelsArrangeAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(channelsArrange()));
 	QObject::connect(ui.channelsAutoArrangeAction,
 		SIGNAL(toggled(bool)),
 		SLOT(channelsAutoArrange(bool)));
 	QObject::connect(ui.helpAboutAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(helpAbout()));
 	QObject::connect(ui.helpAboutQtAction,
-		SIGNAL(activated()),
+		SIGNAL(triggered()),
 		SLOT(helpAboutQt()));
+
+	QObject::connect(ui.fileMenu,
+		SIGNAL(aboutToShow()),
+		SLOT(updateRecentFilesMenu()));
 }
 
 // Destructor.
@@ -343,10 +349,6 @@ MainForm::~MainForm()
 	delete m_pVolumeSlider;
 #endif
 
-    // Delete recentfiles menu.
-    if (m_pRecentFilesMenu)
-        delete m_pRecentFilesMenu;
-
 	// Pseudo-singleton reference shut-down.
 	g_pMainForm = NULL;
 }
@@ -359,14 +361,15 @@ void MainForm::setup ( qsamplerOptions *pOptions )
     m_pOptions = pOptions;
 
     // What style do we create these forms?
-	Qt::WFlags wflags = Qt::WStyle_Customize
-		| Qt::WStyle_NormalBorder
-		| Qt::WStyle_Title
-		| Qt::WStyle_SysMenu
-		| Qt::WStyle_MinMax
-		| Qt::WType_TopLevel;
-    if (m_pOptions->bKeepOnTop)
-        wflags |= Qt::WStyle_Tool;
+	Qt::WindowFlags wflags = Qt::Window
+#if QT_VERSION >= 0x040200
+		| Qt::CustomizeWindowHint
+#endif
+		| Qt::WindowTitleHint
+		| Qt::WindowSystemMenuHint
+		| Qt::WindowMinMaxButtonsHint;
+	if (m_pOptions->bKeepOnTop)
+		wflags |= Qt::Tool;
     // Some child forms are to be created right now.
     m_pMessages = new qsamplerMessages(this);
     m_pDeviceForm = new DeviceForm(this, wflags);
@@ -388,10 +391,10 @@ void MainForm::setup ( qsamplerOptions *pOptions )
 		SLOT(stabilizeForm()));
 
     // Initial decorations toggle state.
-    ui.viewMenubarAction->setOn(m_pOptions->bMenubar);
-    ui.viewToolbarAction->setOn(m_pOptions->bToolbar);
-    ui.viewStatusbarAction->setOn(m_pOptions->bStatusbar);
-    ui.channelsAutoArrangeAction->setOn(m_pOptions->bAutoArrange);
+    ui.viewMenubarAction->setChecked(m_pOptions->bMenubar);
+    ui.viewToolbarAction->setChecked(m_pOptions->bToolbar);
+    ui.viewStatusbarAction->setChecked(m_pOptions->bStatusbar);
+    ui.channelsAutoArrangeAction->setChecked(m_pOptions->bAutoArrange);
 
     // Initial decorations visibility state.
     viewMenubar(m_pOptions->bMenubar);
@@ -400,11 +403,13 @@ void MainForm::setup ( qsamplerOptions *pOptions )
 
     addDockWidget(Qt::BottomDockWidgetArea, m_pMessages);
 
-    // Restore whole toolbar & dock windows states.
-    QString sDockables = m_pOptions->settings().readEntry("/Layout/DockWindowsBase64" , QString::null);
-    if (!sDockables.isEmpty()) {
-        restoreState(QByteArray::fromBase64(sDockables.toAscii()));
-    }
+	// Restore whole dock windows state.
+	QByteArray aDockables = m_pOptions->settings().value(
+		"/Layout/DockWindows").toByteArray();
+	if (!aDockables.isEmpty()) {
+		restoreState(aDockables);
+	}
+
     // Try to restore old window positioning and initial visibility.
     m_pOptions->loadWidgetGeometry(this);
     m_pOptions->loadWidgetGeometry(m_pInstrumentListForm);
@@ -416,7 +421,7 @@ void MainForm::setup ( qsamplerOptions *pOptions )
     stabilizeForm();
 
     // Make it ready :-)
-    statusBar()->message(tr("Ready"), 3000);
+    statusBar()->showMessage(tr("Ready"), 3000);
 
     // We'll try to start immediately...
     startSchedule(0);
@@ -444,7 +449,7 @@ bool MainForm::queryClose (void)
             m_pOptions->bStatusbar = statusBar()->isVisible();
             // Save the dock windows state.
             const QString sDockables = saveState().toBase64().data();
-            m_pOptions->settings().writeEntry("/Layout/DockWindowsBase64", sDockables);
+			m_pOptions->settings().setValue("/Layout/DockWindows", saveState());
             // And the children, and the main windows state,.
 			m_pOptions->saveWidgetGeometry(m_pDeviceForm);
 			m_pOptions->saveWidgetGeometry(m_pInstrumentListForm);
@@ -472,72 +477,62 @@ void MainForm::closeEvent ( QCloseEvent *pCloseEvent )
 }
 
 
-// Drag'n'drop file handler.
-bool MainForm::decodeDragFiles ( const QMimeSource *pEvent, QStringList& files )
-{
-    bool bDecode = false;
-
-    if (Q3TextDrag::canDecode(pEvent)) {
-        QString sText;
-        bDecode = Q3TextDrag::decode(pEvent, sText);
-        if (bDecode) {
-            files = QStringList::split('\n', sText);
-            for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++)
-                *iter = QUrl((*iter).stripWhiteSpace().replace(QRegExp("^file:"), QString::null)).path();
-        }
-    }
-
-    return bDecode;
-}
-
-
 // Window drag-n-drop event handlers.
 void MainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
-	QStringList files;
-	pDragEnterEvent->accept(decodeDragFiles(pDragEnterEvent, files));
+	// Accept external drags only...
+	if (pDragEnterEvent->source() == NULL
+		&& pDragEnterEvent->mimeData()->hasUrls()) {
+		pDragEnterEvent->accept();
+	} else {
+		pDragEnterEvent->ignore();
+	}
 }
 
 
 void MainForm::dropEvent ( QDropEvent* pDropEvent )
 {
-    QStringList files;
+	// Accept externally originated drops only...
+	if (pDropEvent->source())
+		return;
 
-    if (!decodeDragFiles(pDropEvent, files))
-        return;
-
-	for (QStringList::Iterator iter = files.begin(); iter != files.end(); iter++) {
-		const QString& sPath = *iter;
-		if (qsamplerChannel::isInstrumentFile(sPath)) {
-			// Try to create a new channel from instrument file...
-			qsamplerChannel *pChannel = new qsamplerChannel();
-			if (pChannel == NULL)
-				return;
-			// Start setting the instrument filename...
-			pChannel->setInstrument(sPath, 0);
-			// Before we show it up, may be we'll
-			// better ask for some initial values?
-			if (!pChannel->channelSetup(this)) {
-				delete pChannel;
-				return;
+	const QMimeData *pMimeData = pDropEvent->mimeData();
+	if (pMimeData->hasUrls()) {
+		QListIterator<QUrl> iter(pMimeData->urls());
+		while (iter.hasNext()) {
+			const QString& sPath = iter.next().toLocalFile();
+			if (qsamplerChannel::isInstrumentFile(sPath)) {
+				// Try to create a new channel from instrument file...
+				qsamplerChannel *pChannel = new qsamplerChannel();
+				if (pChannel == NULL)
+					return;
+				// Start setting the instrument filename...
+				pChannel->setInstrument(sPath, 0);
+				// Before we show it up, may be we'll
+				// better ask for some initial values?
+				if (!pChannel->channelSetup(this)) {
+					delete pChannel;
+					return;
+				}
+				// Finally, give it to a new channel strip...
+				if (!createChannelStrip(pChannel)) {
+					delete pChannel;
+					return;
+				}
+				// Make that an overall update.
+				m_iDirtyCount++;
+				stabilizeForm();
+			}   // Otherwise, load an usual session file (LSCP script)...
+			else if (closeSession(true)) {
+				loadSessionFile(sPath);
+				break;
 			}
-			// Finally, give it to a new channel strip...
-			if (!createChannelStrip(pChannel)) {
-				delete pChannel;
-				return;
-			}
-			// Make that an overall update.
-			m_iDirtyCount++;
-			stabilizeForm();
-		}   // Otherwise, load an usual session file (LSCP script)...
-		else if (closeSession(true)) {
-			loadSessionFile(sPath);
-			break;
 		}
 		// Make it look responsive...:)
-		QApplication::processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 }
+
 
 // Custome event handler.
 void MainForm::customEvent(QEvent* pCustomEvent)
@@ -637,12 +632,11 @@ bool MainForm::openSession (void)
         return false;
 
     // Ask for the filename to open...
-    QString sFilename = QFileDialog::getOpenFileName(
-		m_pOptions->sSessionDir,                // Start here.
-		tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
-		this, 0,                                // Parent and name (none)
-		QSAMPLER_TITLE ": " + tr("Open Session")	// Caption.
-    );
+	QString sFilename = QFileDialog::getOpenFileName(this,
+		QSAMPLER_TITLE ": " + tr("Open Session"), // Caption.
+		m_pOptions->sSessionDir,                  // Start here.
+		tr("LSCP Session files") + " (*.lscp)"    // Filter (LSCP files)
+	);
 
     // Have we cancelled?
     if (sFilename.isEmpty())
@@ -671,17 +665,16 @@ bool MainForm::saveSession ( bool bPrompt )
         if (sFilename.isEmpty())
             sFilename = m_pOptions->sSessionDir;
         // Prompt the guy...
-        sFilename = QFileDialog::getSaveFileName(
-			sFilename,                              // Start here.
-			tr("LSCP Session files") + " (*.lscp)", // Filter (LSCP files)
-			this, 0,                                // Parent and name (none)
-			QSAMPLER_TITLE ": " + tr("Save Session")	// Caption.
-        );
+		sFilename = QFileDialog::getSaveFileName(this,
+			QSAMPLER_TITLE ": " + tr("Save Session"), // Caption.
+			sFilename,                                // Start here.
+			tr("LSCP Session files") + " (*.lscp)"    // Filter (LSCP files)
+		);
         // Have we cancelled it?
         if (sFilename.isEmpty())
             return false;
         // Enforce .lscp extension...
-        if (QFileInfo(sFilename).extension().isEmpty())
+        if (QFileInfo(sFilename).suffix().isEmpty())
             sFilename += ".lscp";
         // Check if already exists...
         if (sFilename != m_sFilename && QFileInfo(sFilename).exists()) {
@@ -757,7 +750,7 @@ bool MainForm::loadSessionFile ( const QString& sFilename )
 
     // Open and read from real file.
     QFile file(sFilename);
-    if (!file.open(IO_ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         appendMessagesError(tr("Could not open \"%1\" session file.\n\nSorry.").arg(sFilename));
         return false;
     }
@@ -771,23 +764,24 @@ bool MainForm::loadSessionFile ( const QString& sFilename )
     QTextStream ts(&file);
     while (!ts.atEnd()) {
         // Read the line.
-        QString sCommand = ts.readLine().stripWhiteSpace();
+        QString sCommand = ts.readLine().trimmed();
 		iLine++;
         // If not empty, nor a comment, call the server...
         if (!sCommand.isEmpty() && sCommand[0] != '#') {
 			// Remember that, no matter what,
 			// all LSCP commands are CR/LF terminated.
 			sCommand += "\r\n";
-			if (::lscp_client_query(m_pClient, sCommand.latin1()) != LSCP_OK) {
+			if (::lscp_client_query(m_pClient, sCommand.toUtf8().constData())
+				!= LSCP_OK) {
 				appendMessagesColor(QString("%1(%2): %3")
 					.arg(QFileInfo(sFilename).fileName()).arg(iLine)
-					.arg(sCommand.simplifyWhiteSpace()), "#996633");
+					.arg(sCommand.simplified()), "#996633");
 				appendMessagesClient("lscp_client_query");
 				iErrors++;
 			}
         }
         // Try to make it snappy :)
-        QApplication::processEvents(QEventLoop::ExcludeUserInput);
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
     // Ok. we've read it.
@@ -805,7 +799,7 @@ bool MainForm::loadSessionFile ( const QString& sFilename )
 
     // Save as default session directory.
     if (m_pOptions)
-        m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
+        m_pOptions->sSessionDir = QFileInfo(sFilename).dir().absolutePath();
 	// We're not dirty anymore, if loaded without errors,
 	m_iDirtyCount = iErrors;
     // Stabilize form...
@@ -833,7 +827,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 
     // Open and write into real file.
     QFile file(sFilename);
-    if (!file.open(IO_WriteOnly | IO_Truncate)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         appendMessagesError(tr("Could not open \"%1\" session file.\n\nSorry.").arg(sFilename));
         return false;
     }
@@ -878,31 +872,32 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		for (deviceParam = device.params().begin();
 				deviceParam != device.params().end();
 					++deviceParam) {
-			const qsamplerDeviceParam& param = deviceParam.data();
+			const qsamplerDeviceParam& param = deviceParam.value();
 			if (param.value.isEmpty()) ts << "# ";
 			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// Audio channel parameters...
 		int iPort = 0;
-		for (qsamplerDevicePort *pPort = device.ports().first();
-				pPort;
-					pPort = device.ports().next(), ++iPort) {
+		QListIterator<qsamplerDevicePort *> iter(device.ports());
+		while (iter.hasNext()) {
+			qsamplerDevicePort *pPort = iter.next();
 			qsamplerDeviceParamMap::ConstIterator portParam;
 			for (portParam = pPort->params().begin();
 					portParam != pPort->params().end();
 						++portParam) {
-				const qsamplerDeviceParam& param = portParam.data();
+				const qsamplerDeviceParam& param = portParam.value();
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
 					<< " " << iPort << " " << portParam.key()
 					<< "='" << param.value << "'" << endl;
 			}
+			iPort++;
 		}
 		// Audio device index/id mapping.
 		audioDeviceMap[device.deviceID()] = iDevice;
 		// Try to keep it snappy :)
-		QApplication::processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 
 	// MIDI device mapping.
@@ -919,31 +914,32 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		for (deviceParam = device.params().begin();
 				deviceParam != device.params().end();
 					++deviceParam) {
-			const qsamplerDeviceParam& param = deviceParam.data();
+			const qsamplerDeviceParam& param = deviceParam.value();
 			if (param.value.isEmpty()) ts << "# ";
 			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// MIDI port parameters...
 		int iPort = 0;
-		for (qsamplerDevicePort *pPort = device.ports().first();
-				pPort;
-					pPort = device.ports().next(), ++iPort) {
+		QListIterator<qsamplerDevicePort *> iter(device.ports());
+		while (iter.hasNext()) {
+			qsamplerDevicePort *pPort = iter.next();
 			qsamplerDeviceParamMap::ConstIterator portParam;
 			for (portParam = pPort->params().begin();
 					portParam != pPort->params().end();
 						++portParam) {
-				const qsamplerDeviceParam& param = portParam.data();
+				const qsamplerDeviceParam& param = portParam.value();
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
 				   << " " << iPort << " " << portParam.key()
 				   << "='" << param.value << "'" << endl;
 			}
+			iPort++;
 		}
 		// MIDI device index/id mapping.
 		midiDeviceMap[device.deviceID()] = iDevice;
 		// Try to keep it snappy :)
-		QApplication::processEvents(QEventLoop::ExcludeUserInput);
+		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 	ts << endl;
 
@@ -1000,7 +996,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				iErrors++;
 			}
 			// Try to keep it snappy :)
-			QApplication::processEvents(QEventLoop::ExcludeUserInput);
+			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 		}
 		ts << endl;
 		// Check for errors...
@@ -1060,7 +1056,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 							++audioRoute) {
 					ts << "SET CHANNEL AUDIO_OUTPUT_CHANNEL " << iChannel
 						<< " " << audioRoute.key()
-						<< " " << audioRoute.data() << endl;
+						<< " " << audioRoute.value() << endl;
 				}
 				ts << "SET CHANNEL VOLUME " << iChannel
 					<< " " << pChannel->volume() << endl;
@@ -1114,7 +1110,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
             }
         }
         // Try to keep it snappy :)
-        QApplication::processEvents(QEventLoop::ExcludeUserInput);
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
 #ifdef CONFIG_VOLUME
@@ -1135,7 +1131,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 
     // Save as default session directory.
     if (m_pOptions)
-        m_pOptions->sSessionDir = QFileInfo(sFilename).dirPath(true);
+        m_pOptions->sSessionDir = QFileInfo(sFilename).dir().absolutePath();
     // We're not dirty anymore.
     m_iDirtyCount = 0;
     // Stabilize form...
@@ -1177,13 +1173,19 @@ void MainForm::fileOpen (void)
 
 
 // Open a recent file session.
-void MainForm::fileOpenRecent ( int iIndex )
+void MainForm::fileOpenRecent (void)
 {
-    // Check if we can safely close the current session...
-    if (m_pOptions && closeSession(true)) {
-        QString sFilename = m_pOptions->recentFiles[iIndex];
-        loadSessionFile(sFilename);
-    }
+	// Retrive filename index from action data...
+	QAction *pAction = qobject_cast<QAction *> (sender());
+	if (pAction && m_pOptions) {
+		int iIndex = pAction->data().toInt();
+		if (iIndex >= 0 && iIndex < m_pOptions->recentFiles.count()) {
+			QString sFilename = m_pOptions->recentFiles[iIndex];
+			// Check if we can safely close the current session...
+			if (!sFilename.isEmpty() && closeSession(true))
+				loadSessionFile(sFilename);
+		}
+	}
 }
 
 
@@ -1333,7 +1335,7 @@ void MainForm::editRemoveChannel (void)
             tr("About to remove channel:\n\n"
                "%1\n\n"
                "Are you sure?")
-               .arg(pChannelStrip->caption()),
+               .arg(pChannelStrip->windowTitle()),
             tr("OK"), tr("Cancel")) > 0)
             return;
     }
@@ -1480,7 +1482,7 @@ void MainForm::viewInstruments (void)
 		} else {
 			m_pInstrumentListForm->show();
 			m_pInstrumentListForm->raise();
-			m_pInstrumentListForm->setActiveWindow();
+			m_pInstrumentListForm->activateWindow();
 		}
 	}
 }
@@ -1499,7 +1501,7 @@ void MainForm::viewDevices (void)
 		} else {
 			m_pDeviceForm->show();
 			m_pDeviceForm->raise();
-			m_pDeviceForm->setActiveWindow();
+			m_pDeviceForm->activateWindow();
 		}
 	}
 }
@@ -1741,7 +1743,7 @@ void MainForm::stabilizeForm (void)
     QString sSessionName = sessionName(m_sFilename);
     if (m_iDirtyCount > 0)
         sSessionName += " *";
-    setCaption(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
+    setWindowTitle(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
 
     // Update the main menu state...
     ChannelStrip* pChannelStrip = activeChannelStrip();
@@ -1763,15 +1765,15 @@ void MainForm::stabilizeForm (void)
 #endif
     ui.editResetChannelAction->setEnabled(bHasChannel);
     ui.editResetAllChannelsAction->setEnabled(bHasChannel);
-    ui.viewMessagesAction->setOn(m_pMessages && m_pMessages->isVisible());
+    ui.viewMessagesAction->setChecked(m_pMessages && m_pMessages->isVisible());
 #ifdef CONFIG_MIDI_INSTRUMENT
-	ui.viewInstrumentsAction->setOn(m_pInstrumentListForm
+	ui.viewInstrumentsAction->setChecked(m_pInstrumentListForm
 		&& m_pInstrumentListForm->isVisible());
 	ui.viewInstrumentsAction->setEnabled(bHasClient);
 #else
 	ui.viewInstrumentsAction->setEnabled(false);
 #endif
-	ui.viewDevicesAction->setOn(m_pDeviceForm
+	ui.viewDevicesAction->setChecked(m_pDeviceForm
 		&& m_pDeviceForm->isVisible());
     ui.viewDevicesAction->setEnabled(bHasClient);
     ui.channelsArrangeAction->setEnabled(bHasChannel);
@@ -1792,7 +1794,7 @@ void MainForm::stabilizeForm (void)
     }
     // Channel status...
     if (bHasChannel)
-        m_statusItem[QSAMPLER_STATUS_CHANNEL]->setText(pChannelStrip->caption());
+        m_statusItem[QSAMPLER_STATUS_CHANNEL]->setText(pChannelStrip->windowTitle());
     else
         m_statusItem[QSAMPLER_STATUS_CHANNEL]->clear();
     // Session status...
@@ -1802,7 +1804,7 @@ void MainForm::stabilizeForm (void)
         m_statusItem[QSAMPLER_STATUS_SESSION]->clear();
 
     // Recent files menu.
-    m_pRecentFilesMenu->setEnabled(bHasClient && m_pOptions->recentFiles.count() > 0);
+	ui.fileOpenRecentMenu->setEnabled(m_pOptions->recentFiles.count() > 0);
 }
 
 
@@ -1842,7 +1844,7 @@ void MainForm::volumeChanged ( int iVolume )
 void MainForm::channelStripChanged(ChannelStrip* pChannelStrip)
 {
 	// Add this strip to the changed list...
-	if (m_changedStrips.containsRef(pChannelStrip) == 0) {
+	if (!m_changedStrips.contains(pChannelStrip)) {
 		m_changedStrips.append(pChannelStrip);
 		pChannelStrip->resetErrorCount();
 	}
@@ -1870,8 +1872,10 @@ void MainForm::updateSession (void)
 	if (iMaps < 0)
 		appendMessagesClient("lscp_get_midi_instrument_maps");
 	else if (iMaps < 1) {
-		::lscp_add_midi_instrument_map(m_pClient, tr("Chromatic").latin1());
-		::lscp_add_midi_instrument_map(m_pClient, tr("Drum Kits").latin1());
+		::lscp_add_midi_instrument_map(m_pClient,
+			tr("Chromatic").toUtf8().constData());
+		::lscp_add_midi_instrument_map(m_pClient,
+			tr("Drum Kits").toUtf8().constData());
 	}
 #endif
 
@@ -1912,40 +1916,38 @@ void MainForm::updateRecentFiles ( const QString& sFilename )
         return;
 
     // Remove from list if already there (avoid duplicates)
-    QStringList::Iterator iter = m_pOptions->recentFiles.find(sFilename);
-    if (iter != m_pOptions->recentFiles.end())
-        m_pOptions->recentFiles.remove(iter);
+    int iIndex = m_pOptions->recentFiles.indexOf(sFilename);
+    if (iIndex >= 0)
+        m_pOptions->recentFiles.removeAt(iIndex);
     // Put it to front...
     m_pOptions->recentFiles.push_front(sFilename);
-
-    // May update the menu.
-    updateRecentFilesMenu();
 }
 
 
 // Update the recent files list and menu.
 void MainForm::updateRecentFilesMenu (void)
 {
-    if (m_pOptions == NULL)
-        return;
+	if (m_pOptions == NULL)
+		return;
 
-    // Time to keep the list under limits.
-    int iRecentFiles = m_pOptions->recentFiles.count();
-    while (iRecentFiles > m_pOptions->iMaxRecentFiles) {
-        m_pOptions->recentFiles.pop_back();
-        iRecentFiles--;
-    }
+	// Time to keep the list under limits.
+	int iRecentFiles = m_pOptions->recentFiles.count();
+	while (iRecentFiles > m_pOptions->iMaxRecentFiles) {
+		m_pOptions->recentFiles.pop_back();
+		iRecentFiles--;
+	}
 
-    // rebuild the recent files menu...
-    m_pRecentFilesMenu->clear();
-    for (int i = 0; i < iRecentFiles; i++) {
-        const QString& sFilename = m_pOptions->recentFiles[i];
-        if (QFileInfo(sFilename).exists()) {
-            m_pRecentFilesMenu->insertItem(QString("&%1 %2")
-                .arg(i + 1).arg(sessionName(sFilename)),
-                this, SLOT(fileOpenRecent(int)), 0, i);
-        }
-    }
+	// Rebuild the recent files menu...
+	ui.fileOpenRecentMenu->clear();
+	for (int i = 0; i < iRecentFiles; i++) {
+		const QString& sFilename = m_pOptions->recentFiles[i];
+		if (QFileInfo(sFilename).exists()) {
+			QAction *pAction = ui.fileOpenRecentMenu->addAction(
+				QString("&%1 %2").arg(i + 1).arg(sessionName(sFilename)),
+				this, SLOT(fileOpenRecent()));
+			pAction->setData(i);
+		}
+	}
 }
 
 
@@ -1999,10 +2001,6 @@ void MainForm::updateDisplayFont (void)
 // Update channel strips background effect.
 void MainForm::updateDisplayEffect (void)
 {
-   QPixmap pm;
-    if (m_pOptions->bDisplayEffect)
-        pm = QPixmap(":/qsampler/pixmaps/displaybg1.png");
-
     // Full channel list update...
     QWidgetList wlist = m_pWorkspace->windowList();
     if (wlist.isEmpty())
@@ -2011,8 +2009,8 @@ void MainForm::updateDisplayEffect (void)
     m_pWorkspace->setUpdatesEnabled(false);
     for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
         ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
-        if (pChannelStrip)
-            pChannelStrip->setDisplayBackground(pm);
+		if (pChannelStrip)
+			pChannelStrip->setDisplayEffect(m_pOptions->bDisplayEffect);
     }
     m_pWorkspace->setUpdatesEnabled(true);
 }
@@ -2026,8 +2024,8 @@ void MainForm::updateMaxVolume (void)
 
 #ifdef CONFIG_VOLUME
 	m_iVolumeChanging++;
-	m_pVolumeSlider->setMaxValue(m_pOptions->iMaxVolume);
-	m_pVolumeSpinBox->setMaxValue(m_pOptions->iMaxVolume);
+	m_pVolumeSlider->setMaximum(m_pOptions->iMaxVolume);
+	m_pVolumeSpinBox->setMaximum(m_pOptions->iMaxVolume);
 	m_iVolumeChanging--;
 #endif
 
@@ -2055,7 +2053,7 @@ void MainForm::appendMessages( const QString& s )
     if (m_pMessages)
         m_pMessages->appendMessages(s);
 
-    statusBar()->message(s, 3000);
+    statusBar()->showMessage(s, 3000);
 }
 
 void MainForm::appendMessagesColor( const QString& s, const QString& c )
@@ -2063,7 +2061,7 @@ void MainForm::appendMessagesColor( const QString& s, const QString& c )
     if (m_pMessages)
         m_pMessages->appendMessagesColor(s, c);
 
-    statusBar()->message(s, 3000);
+    statusBar()->showMessage(s, 3000);
 }
 
 void MainForm::appendMessagesText( const QString& s )
@@ -2080,7 +2078,7 @@ void MainForm::appendMessagesError( const QString& s )
     appendMessagesColor(s.simplified(), "#ff0000");
 
 	// Make it look responsive...:)
-	QApplication::processEvents(QEventLoop::ExcludeUserInput);
+	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
     QMessageBox::critical(this,
 		QSAMPLER_TITLE ": " + tr("Error"), s, tr("Cancel"));
@@ -2098,7 +2096,7 @@ void MainForm::appendMessagesClient( const QString& s )
         .arg(::lscp_client_get_errno(m_pClient)), "#996666");
 
 	// Make it look responsive...:)
-	QApplication::processEvents(QEventLoop::ExcludeUserInput);
+	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 
@@ -2157,7 +2155,7 @@ ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
     if (m_pOptions && m_pOptions->bAutoArrange) {
         QWidgetList wlist = m_pWorkspace->windowList();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            pChannelStrip = (ChannelStrip *) wlist.at(iChannel);
+			pChannelStrip = static_cast<ChannelStrip *> (wlist.at(iChannel));
 			if (pChannelStrip) {
 			//  y += pChannelStrip->height() + pChannelStrip->parentWidget()->baseSize().height();
 				y += pChannelStrip->parentWidget()->frameGeometry().height();
@@ -2209,7 +2207,7 @@ ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
 // Retrieve the active channel strip.
 ChannelStrip* MainForm::activeChannelStrip (void)
 {
-    return (ChannelStrip*) m_pWorkspace->activeWindow();
+    return static_cast<ChannelStrip *> (m_pWorkspace->activeWindow());
 }
 
 
@@ -2220,7 +2218,7 @@ ChannelStrip* MainForm::channelStripAt ( int iChannel )
     if (wlist.isEmpty())
         return NULL;
 
-    return (ChannelStrip*) wlist.at(iChannel);
+    return static_cast<ChannelStrip *> (wlist.at(iChannel));
 }
 
 
@@ -2232,7 +2230,8 @@ ChannelStrip* MainForm::channelStrip ( int iChannelID )
 		return NULL;
 
 	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
+		ChannelStrip* pChannelStrip
+			= static_cast<ChannelStrip*> (wlist.at(iChannel));
 		if (pChannelStrip) {
 			qsamplerChannel *pChannel = pChannelStrip->channel();
 			if (pChannel && pChannel->channelID() == iChannelID)
@@ -2249,31 +2248,39 @@ ChannelStrip* MainForm::channelStrip ( int iChannelID )
 void MainForm::channelsMenuAboutToShow (void)
 {
     ui.channelsMenu->clear();
-    ui.channelsArrangeAction->addTo(ui.channelsMenu);
-    ui.channelsAutoArrangeAction->addTo(ui.channelsMenu);
+	ui.channelsMenu->addAction(ui.channelsArrangeAction);
+	ui.channelsMenu->addAction(ui.channelsAutoArrangeAction);
 
     QWidgetList wlist = m_pWorkspace->windowList();
     if (!wlist.isEmpty()) {
-        ui.channelsMenu->insertSeparator();
+		ui.channelsMenu->addSeparator();
         for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-            ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
-            if (pChannelStrip) {
-                int iItemID = ui.channelsMenu->insertItem(pChannelStrip->caption(), this, SLOT(channelsMenuActivated(int)));
-                ui.channelsMenu->setItemParameter(iItemID, iChannel);
-                ui.channelsMenu->setItemChecked(iItemID, activeChannelStrip() == pChannelStrip);
-            }
+			ChannelStrip* pChannelStrip
+				= static_cast<ChannelStrip*> (wlist.at(iChannel));
+			if (pChannelStrip) {
+				QAction *pAction = ui.channelsMenu->addAction(
+					pChannelStrip->windowTitle(), this, SLOT(channelsMenuActivated()));
+				pAction->setData(iChannel);
+				pAction->setChecked(activeChannelStrip() == pChannelStrip);
+			}
         }
     }
 }
 
 
 // Windows menu activation slot
-void MainForm::channelsMenuActivated ( int iChannel )
+void MainForm::channelsMenuActivated (void)
 {
-    ChannelStrip* pChannelStrip = channelStripAt(iChannel);
-    if (pChannelStrip)
-        pChannelStrip->showNormal();
-    pChannelStrip->setFocus();
+	// Retrive channel index from action data...
+	QAction *pAction = qobject_cast<QAction *> (sender());
+	if (pAction == NULL)
+		return;
+
+	ChannelStrip* pChannelStrip = channelStripAt(pAction->data().toInt());
+	if (pChannelStrip) {
+		pChannelStrip->showNormal();
+		pChannelStrip->setFocus();
+	}
 }
 
 
@@ -2314,12 +2321,14 @@ void MainForm::timerSlot (void)
 
 	if (m_pClient) {
 		// Update the channel information for each pending strip...
-		if (m_changedStrips.count() > 0) {
-			for (ChannelStrip* pChannelStrip = m_changedStrips.first();
-					pChannelStrip; pChannelStrip = m_changedStrips.next()) {
-				// If successfull, remove from pending list...
-				if (pChannelStrip->updateChannelInfo())
-					m_changedStrips.remove(pChannelStrip);
+		QListIterator<ChannelStrip *> iter(m_changedStrips);
+		while (iter.hasNext()) {
+			ChannelStrip *pChannelStrip = iter.next();
+			// If successfull, remove from pending list...
+			if (pChannelStrip->updateChannelInfo()) {
+				int iChannelStrip = m_changedStrips.indexOf(pChannelStrip);
+				if (iChannelStrip >= 0)
+					m_changedStrips.removeAt(iChannelStrip);
 			}
 		}
 		// Refresh each channel usage, on each period...
@@ -2398,7 +2407,7 @@ void MainForm::startServer (void)
 		SLOT(processServerExit()));
 
     // Build process arguments...
-    QStringList serverCmdLine = QStringList::split(' ', m_pOptions->sServerCmdLine);
+    QStringList serverCmdLine = m_pOptions->sServerCmdLine.split(' ');
 
     appendMessages(tr("Server is starting..."));
     appendMessagesColor(m_pOptions->sServerCmdLine, "#990099");
@@ -2443,7 +2452,7 @@ void MainForm::stopServer (void)
     QTime t;
     t.start();
     while (t.elapsed() < QSAMPLER_TIMER_MSECS)
-        QApplication::processEvents(QEventLoop::ExcludeUserInput);
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
      // Do final processing anyway.
      processServerExit();
@@ -2518,7 +2527,9 @@ bool MainForm::startClient (void)
     appendMessages(tr("Client connecting..."));
 
     // Create the client handle...
-    m_pClient = ::lscp_client_create(m_pOptions->sServerHost.latin1(), m_pOptions->iServerPort, qsampler_client_callback, this);
+	m_pClient = ::lscp_client_create(
+		m_pOptions->sServerHost.toUtf8().constData(),
+		m_pOptions->iServerPort, qsampler_client_callback, this);
     if (m_pClient == NULL) {
         // Is this the first try?
         // maybe we need to start a local server...

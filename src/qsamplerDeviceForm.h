@@ -27,6 +27,7 @@
 
 #include "qsamplerDevice.h"
 
+
 namespace QSampler {
 
 class MainForm;

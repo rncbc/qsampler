@@ -5,12 +5,13 @@ ChangeLog
 
 CVS HEAD
 
-* Fixed creation of devices (don't try to set device parameters which the
-  user did not touch in the device creation dialog).
+* Fixed creation of devices (don't try to set device parameters
+  which the user did not touch in the device creation dialog).
 
 * Added Windows file path support.
 
-* Fixed win32/qmakefile and win32/config.h so that it compiles under win32.
+* Fixed win32/qmakefile and win32/config.h so that it compiles
+  under win32.
 
 * Qt4 port of the application.
 

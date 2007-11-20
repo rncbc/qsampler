@@ -23,7 +23,8 @@
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
 
-#include <qcombobox.h>
+#include <QTextStream>
+#include <QComboBox>
 
 #include <lscp/client.h>
 
@@ -47,64 +48,65 @@ qsamplerOptions::qsamplerOptions (void)
 
     // Load server options...
     m_settings.beginGroup("/Server");
-    sServerHost    = m_settings.readEntry("/ServerHost", "localhost");
-    iServerPort    = m_settings.readNumEntry("/ServerPort", 8888);
-    iServerTimeout = m_settings.readNumEntry("/ServerTimeout", 1000);
-    bServerStart   = m_settings.readBoolEntry("/ServerStart", true);
-    sServerCmdLine = m_settings.readEntry("/ServerCmdLine", "linuxsampler");
-    iStartDelay    = m_settings.readNumEntry("/StartDelay", 3);
+    sServerHost    = m_settings.value("/ServerHost", "localhost").toString();
+    iServerPort    = m_settings.value("/ServerPort", 8888).toInt();
+    iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
+    bServerStart   = m_settings.value("/ServerStart", true).toBool();
+    sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
+    iStartDelay    = m_settings.value("/StartDelay", 3).toInt();
     m_settings.endGroup();
 
     // Load display options...
     m_settings.beginGroup("/Display");
-    sDisplayFont     = m_settings.readEntry("/DisplayFont", QString::null);
-    bDisplayEffect   = m_settings.readBoolEntry("/DisplayEffect", true);
-    bAutoRefresh     = m_settings.readBoolEntry("/AutoRefresh", true);
-    iAutoRefreshTime = m_settings.readNumEntry("/AutoRefreshTime", 1000);
-    iMaxVolume       = m_settings.readNumEntry("/MaxVolume", 100);
-    sMessagesFont    = m_settings.readEntry("/MessagesFont", QString::null);
-    bMessagesLimit   = m_settings.readBoolEntry("/MessagesLimit", true);
-    iMessagesLimitLines = m_settings.readNumEntry("/MessagesLimitLines", 1000);
-    bConfirmRemove   = m_settings.readBoolEntry("/ConfirmRemove", true);
-    bKeepOnTop       = m_settings.readBoolEntry("/KeepOnTop", true);
-    bStdoutCapture   = m_settings.readBoolEntry("/StdoutCapture", true);
-    bCompletePath    = m_settings.readBoolEntry("/CompletePath", true);
-    iMaxRecentFiles  = m_settings.readNumEntry("/MaxRecentFiles", 5);
-    bInstrumentNames = m_settings.readBoolEntry("/InstrumentNames", false);
+    sDisplayFont     = m_settings.value("/DisplayFont").toString();
+    bDisplayEffect   = m_settings.value("/DisplayEffect", true).toBool();
+    bAutoRefresh     = m_settings.value("/AutoRefresh", true).toBool();
+    iAutoRefreshTime = m_settings.value("/AutoRefreshTime", 1000).toInt();
+    iMaxVolume       = m_settings.value("/MaxVolume", 100).toInt();
+    sMessagesFont    = m_settings.value("/MessagesFont").toString();
+    bMessagesLimit   = m_settings.value("/MessagesLimit", true).toBool();
+    iMessagesLimitLines = m_settings.value("/MessagesLimitLines", 1000).toInt();
+    bConfirmRemove   = m_settings.value("/ConfirmRemove", true).toBool();
+    bKeepOnTop       = m_settings.value("/KeepOnTop", true).toBool();
+    bStdoutCapture   = m_settings.value("/StdoutCapture", true).toBool();
+    bCompletePath    = m_settings.value("/CompletePath", true).toBool();
+    iMaxRecentFiles  = m_settings.value("/MaxRecentFiles", 5).toInt();
+    bInstrumentNames = m_settings.value("/InstrumentNames", false).toBool();
     m_settings.endGroup();
 
     // And go into view options group.
     m_settings.beginGroup("/View");
-    bMenubar     = m_settings.readBoolEntry("/Menubar", true);
-    bToolbar     = m_settings.readBoolEntry("/Toolbar", true);
-    bStatusbar   = m_settings.readBoolEntry("/Statusbar", true);
-    bAutoArrange = m_settings.readBoolEntry("/AutoArrange", true);
+    bMenubar     = m_settings.value("/Menubar", true).toBool();
+    bToolbar     = m_settings.value("/Toolbar", true).toBool();
+    bStatusbar   = m_settings.value("/Statusbar", true).toBool();
+    bAutoArrange = m_settings.value("/AutoArrange", true).toBool();
     m_settings.endGroup();
 
     m_settings.endGroup(); // Options group.
 
-    // Recent file list.
-    m_settings.beginGroup("/RecentFiles");
-    recentFiles.clear();
-    for (int i = 0; i < iMaxRecentFiles; i++) {
-        QString sFilename = m_settings.readEntry("/File" + QString::number(i + 1), QString::null);
-        if (!sFilename.isEmpty())
-            recentFiles.append(sFilename);
-    }
-    m_settings.endGroup();
+	// Recent file list.
+	recentFiles.clear();
+	m_settings.beginGroup("/RecentFiles");
+	for (int iFile = 0; iFile < iMaxRecentFiles; iFile++) {
+		QString sFilename = m_settings.value(
+			"/File" + QString::number(iFile + 1)).toString();
+		if (!sFilename.isEmpty())
+			recentFiles.append(sFilename);
+	}
+	m_settings.endGroup();
 
     // Last but not least, get the default directories.
     m_settings.beginGroup("/Default");
-    sSessionDir    = m_settings.readEntry("/SessionDir", QString::null);
-    sInstrumentDir = m_settings.readEntry("/InstrumentDir", QString::null);
-    sEngineName    = m_settings.readEntry("/EngineName", QString::null);
-    sAudioDriver   = m_settings.readEntry("/AudioDriver", QString::null);
-    sMidiDriver    = m_settings.readEntry("/MidiDriver", QString::null);
-    iMidiMap       = m_settings.readNumEntry("/MidiMap", 0);
-    iMidiBank      = m_settings.readNumEntry("/MidiBank", 0);
-    iMidiProg      = m_settings.readNumEntry("/MidiProg", 0);
-    iVolume        = m_settings.readNumEntry("/Volume", 100);
-    iLoadMode      = m_settings.readNumEntry("/Loadmode", 0);
+    sSessionDir    = m_settings.value("/SessionDir").toString();
+    sInstrumentDir = m_settings.value("/InstrumentDir").toString();
+    sEngineName    = m_settings.value("/EngineName").toString();
+    sAudioDriver   = m_settings.value("/AudioDriver").toString();
+    sMidiDriver    = m_settings.value("/MidiDriver").toString();
+    iMidiMap       = m_settings.value("/MidiMap",  0).toInt();
+    iMidiBank      = m_settings.value("/MidiBank", 0).toInt();
+    iMidiProg      = m_settings.value("/MidiProg", 0).toInt();
+    iVolume        = m_settings.value("/Volume", 100).toInt();
+    iLoadMode      = m_settings.value("/Loadmode", 0).toInt();
     m_settings.endGroup();
 }
 
@@ -114,7 +116,7 @@ qsamplerOptions::~qsamplerOptions (void)
 {
     // Make program version available in the future.
     m_settings.beginGroup("/Program");
-    m_settings.writeEntry("/Version", QSAMPLER_VERSION);
+    m_settings.setValue("/Version", QSAMPLER_VERSION);
     m_settings.endGroup();
 
     // And go into general options group.
@@ -122,60 +124,62 @@ qsamplerOptions::~qsamplerOptions (void)
 
     // Save server options.
     m_settings.beginGroup("/Server");
-    m_settings.writeEntry("/ServerHost", sServerHost);
-    m_settings.writeEntry("/ServerPort", iServerPort);
-    m_settings.writeEntry("/ServerTimeout", iServerTimeout);
-    m_settings.writeEntry("/ServerStart", bServerStart);
-    m_settings.writeEntry("/ServerCmdLine", sServerCmdLine);
-    m_settings.writeEntry("/StartDelay", iStartDelay);
+    m_settings.setValue("/ServerHost", sServerHost);
+    m_settings.setValue("/ServerPort", iServerPort);
+    m_settings.setValue("/ServerTimeout", iServerTimeout);
+    m_settings.setValue("/ServerStart", bServerStart);
+    m_settings.setValue("/ServerCmdLine", sServerCmdLine);
+    m_settings.setValue("/StartDelay", iStartDelay);
     m_settings.endGroup();
 
     // Save display options.
     m_settings.beginGroup("/Display");
-    m_settings.writeEntry("/DisplayFont", sDisplayFont);
-    m_settings.writeEntry("/DisplayEffect", bDisplayEffect);
-    m_settings.writeEntry("/AutoRefresh", bAutoRefresh);
-    m_settings.writeEntry("/AutoRefreshTime", iAutoRefreshTime);
-    m_settings.writeEntry("/MaxVolume", iMaxVolume);
-    m_settings.writeEntry("/MessagesFont", sMessagesFont);
-    m_settings.writeEntry("/MessagesLimit", bMessagesLimit);
-    m_settings.writeEntry("/MessagesLimitLines", iMessagesLimitLines);
-    m_settings.writeEntry("/ConfirmRemove", bConfirmRemove);
-    m_settings.writeEntry("/KeepOnTop", bKeepOnTop);
-    m_settings.writeEntry("/StdoutCapture", bStdoutCapture);
-    m_settings.writeEntry("/CompletePath", bCompletePath);
-    m_settings.writeEntry("/MaxRecentFiles", iMaxRecentFiles);
-    m_settings.writeEntry("/InstrumentNames", bInstrumentNames);
+    m_settings.setValue("/DisplayFont", sDisplayFont);
+    m_settings.setValue("/DisplayEffect", bDisplayEffect);
+    m_settings.setValue("/AutoRefresh", bAutoRefresh);
+    m_settings.setValue("/AutoRefreshTime", iAutoRefreshTime);
+    m_settings.setValue("/MaxVolume", iMaxVolume);
+    m_settings.setValue("/MessagesFont", sMessagesFont);
+    m_settings.setValue("/MessagesLimit", bMessagesLimit);
+    m_settings.setValue("/MessagesLimitLines", iMessagesLimitLines);
+    m_settings.setValue("/ConfirmRemove", bConfirmRemove);
+    m_settings.setValue("/KeepOnTop", bKeepOnTop);
+    m_settings.setValue("/StdoutCapture", bStdoutCapture);
+    m_settings.setValue("/CompletePath", bCompletePath);
+    m_settings.setValue("/MaxRecentFiles", iMaxRecentFiles);
+    m_settings.setValue("/InstrumentNames", bInstrumentNames);
     m_settings.endGroup();
 
     // View options group.
     m_settings.beginGroup("/View");
-    m_settings.writeEntry("/Menubar", bMenubar);
-    m_settings.writeEntry("/Toolbar", bToolbar);
-    m_settings.writeEntry("/Statusbar", bStatusbar);
-    m_settings.writeEntry("/AutoArrange", bAutoArrange);
+    m_settings.setValue("/Menubar", bMenubar);
+    m_settings.setValue("/Toolbar", bToolbar);
+    m_settings.setValue("/Statusbar", bStatusbar);
+    m_settings.setValue("/AutoArrange", bAutoArrange);
     m_settings.endGroup();
 
     m_settings.endGroup(); // Options group.
 
     // Recent file list.
-    m_settings.beginGroup("/RecentFiles");
-    for (int i = 0; i < (int) recentFiles.count(); i++)
-        m_settings.writeEntry("/File" + QString::number(i + 1), recentFiles[i]);
-    m_settings.endGroup();
+	int iFile = 0;
+	m_settings.beginGroup("/RecentFiles");
+	QStringListIterator iter(recentFiles);
+	while (iter.hasNext())
+		m_settings.setValue("/File" + QString::number(++iFile), iter.next());
+	m_settings.endGroup();
 
     // Default directories.
     m_settings.beginGroup("/Default");
-    m_settings.writeEntry("/SessionDir", sSessionDir);
-    m_settings.writeEntry("/InstrumentDir", sInstrumentDir);
-    m_settings.writeEntry("/EngineName", sEngineName);
-    m_settings.writeEntry("/AudioDriver", sAudioDriver);
-    m_settings.writeEntry("/MidiDriver", sMidiDriver);
-    m_settings.writeEntry("/MidiMap", iMidiMap);
-    m_settings.writeEntry("/MidiBank", iMidiBank);
-    m_settings.writeEntry("/MidiProg", iMidiProg);
-    m_settings.writeEntry("/Volume", iVolume);
-    m_settings.writeEntry("/Loadmode", iLoadMode);
+    m_settings.setValue("/SessionDir", sSessionDir);
+    m_settings.setValue("/InstrumentDir", sInstrumentDir);
+    m_settings.setValue("/EngineName", sEngineName);
+    m_settings.setValue("/AudioDriver", sAudioDriver);
+    m_settings.setValue("/MidiDriver", sMidiDriver);
+    m_settings.setValue("/MidiMap", iMidiMap);
+    m_settings.setValue("/MidiBank", iMidiBank);
+    m_settings.setValue("/MidiProg", iMidiProg);
+    m_settings.setValue("/Volume", iVolume);
+    m_settings.setValue("/Loadmode", iLoadMode);
     m_settings.endGroup();
 
     m_settings.endGroup();
@@ -198,29 +202,23 @@ QSettings& qsamplerOptions::settings (void)
 // Help about command line options.
 void qsamplerOptions::print_usage ( const char *arg0 )
 {
-    const QString sEot = "\n\t";
-    const QString sEol = "\n\n";
-
-    fprintf(stderr, QObject::tr("Usage") + ": %s [" + QObject::tr("options") + "] [" +
-        QObject::tr("session-file") + "]" + sEol, arg0);
-    fprintf(stderr, QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE) + sEol);
-    fprintf(stderr, QObject::tr("Options") + ":" + sEol);
-    fprintf(stderr, "  -s, --start" + sEot +
-        QObject::tr("Start linuxsampler server locally") + sEol);
-    fprintf(stderr, "  -h, --hostname" + sEot +
-        QObject::tr("Specify linuxsampler server hostname") + sEol);
-    fprintf(stderr, "  -p, --port" + sEot +
-        QObject::tr("Specify linuxsampler server port number") + sEol);
-    fprintf(stderr, "  -?, --help" + sEot +
-        QObject::tr("Show help about command line options") + sEol);
-    fprintf(stderr, "  -v, --version" + sEot +
-        QObject::tr("Show version information") + sEol);
+	QTextStream out(stderr);
+	out << QObject::tr("Usage: %1 [options] [session-file]\n\n"
+		QSAMPLER_TITLE " - " QSAMPLER_SUBTITLE "\n\n"
+		"Options:\n\n"
+		"  -s, --start\n\tStart linuxsampler server locally\n\n"
+		"  -h, --hostname\n\tSpecify linuxsampler server hostname\n\n"
+		"  -p, --port\n\tSpecify linuxsampler server port number\n\n"
+		"  -?, --help\n\tShow help about command line options\n\n"
+		"  -v, --version\n\tShow version information\n\n")
+		.arg(arg0);
 }
 
 
 // Parse command line arguments into m_settings.
 bool qsamplerOptions::parse_args ( int argc, char **argv )
 {
+	QTextStream out(stderr);
     const QString sEol = "\n\n";
     int iCmdArgs = 0;
 
@@ -235,7 +233,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
 
         QString sArg = argv[i];
         QString sVal = QString::null;
-        int iEqual = sArg.find("=");
+        int iEqual = sArg.indexOf("=");
         if (iEqual >= 0) {
             sVal = sArg.right(sArg.length() - iEqual - 1);
             sArg = sArg.left(iEqual);
@@ -248,7 +246,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
         }
         else if (sArg == "-h" || sArg == "--hostname") {
             if (sVal.isNull()) {
-                fprintf(stderr, QObject::tr("Option -h requires an argument (hostname).") + sEol);
+                out << QObject::tr("Option -h requires an argument (hostname).") + sEol;
                 return false;
             }
             sServerHost = sVal;
@@ -257,7 +255,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
         }
         else if (sArg == "-p" || sArg == "--port") {
             if (sVal.isNull()) {
-                fprintf(stderr, QObject::tr("Option -p requires an argument (port).") + sEol);
+                out << QObject::tr("Option -p requires an argument (port).") + sEol;
                 return false;
             }
             iServerPort = sVal.toInt();
@@ -269,12 +267,16 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
             return false;
         }
         else if (sArg == "-v" || sArg == "--version") {
-            fprintf(stderr, "Qt: %s\n", qVersion());
+			out << QObject::tr("Qt: %1\n").arg(qVersion());
 #ifdef CONFIG_LIBGIG
-			fprintf(stderr, "%s: %s\n", gig::libraryName().c_str(), gig::libraryVersion().c_str());
-#endif            
-            fprintf(stderr, "%s: %s\n", ::lscp_client_package(), ::lscp_client_version());
-            fprintf(stderr, "qsampler: %s\n", QSAMPLER_VERSION);
+			out << QString("%1: %2\n")
+				.arg(gig::libraryName().c_str())
+				.arg(gig::libraryVersion().c_str());
+#endif
+			out << QString("%1: %2\n")
+				.arg(::lscp_client_package())
+				.arg(::lscp_client_version());
+			out << QObject::tr(QSAMPLER_TITLE ": %1\n").arg(QSAMPLER_VERSION);
             return false;
         }
         else {
@@ -295,104 +297,105 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
 
 void qsamplerOptions::loadWidgetGeometry ( QWidget *pWidget )
 {
-    // Try to restore old form window positioning.
-    if (pWidget) {
-        QPoint fpos;
-        QSize  fsize;
-        bool bVisible;
-        m_settings.beginGroup("/Geometry/" + QString(pWidget->name()));
-        fpos.setX(m_settings.readNumEntry("/x", -1));
-        fpos.setY(m_settings.readNumEntry("/y", -1));
-        fsize.setWidth(m_settings.readNumEntry("/width", -1));
-        fsize.setHeight(m_settings.readNumEntry("/height", -1));
-        bVisible = m_settings.readBoolEntry("/visible", false);
-        m_settings.endGroup();
-        if (fpos.x() > 0 && fpos.y() > 0)
-            pWidget->move(fpos);
-        if (fsize.width() > 0 && fsize.height() > 0)
-            pWidget->resize(fsize);
-        else
-            pWidget->adjustSize();
-        if (bVisible)
-            pWidget->show();
-        else
-            pWidget->hide();
-    }
+	// Try to restore old form window positioning.
+	if (pWidget) {
+		QPoint fpos;
+		QSize  fsize;
+		bool bVisible;
+		m_settings.beginGroup("/Geometry/" + pWidget->objectName());
+		fpos.setX(m_settings.value("/x", -1).toInt());
+		fpos.setY(m_settings.value("/y", -1).toInt());
+		fsize.setWidth(m_settings.value("/width", -1).toInt());
+		fsize.setHeight(m_settings.value("/height", -1).toInt());
+		bVisible = m_settings.value("/visible", false).toBool();
+		m_settings.endGroup();
+		if (fpos.x() > 0 && fpos.y() > 0)
+			pWidget->move(fpos);
+		if (fsize.width() > 0 && fsize.height() > 0)
+			pWidget->resize(fsize);
+		else
+			pWidget->adjustSize();
+		if (bVisible)
+			pWidget->show();
+		else
+			pWidget->hide();
+	}
 }
 
 
 void qsamplerOptions::saveWidgetGeometry ( QWidget *pWidget )
 {
-    // Try to save form window position...
-    // (due to X11 window managers ideossincrasies, we better
-    // only save the form geometry while its up and visible)
-    if (pWidget) {
-        m_settings.beginGroup("/Geometry/" + QString(pWidget->name()));
-        bool bVisible = pWidget->isVisible();
-        if (bVisible) {
-            QPoint fpos  = pWidget->pos();
-            QSize  fsize = pWidget->size();
-            m_settings.writeEntry("/x", fpos.x());
-            m_settings.writeEntry("/y", fpos.y());
-            m_settings.writeEntry("/width", fsize.width());
-            m_settings.writeEntry("/height", fsize.height());
-        }
-        m_settings.writeEntry("/visible", bVisible);
-        m_settings.endGroup();
-    }
+	// Try to save form window position...
+	// (due to X11 window managers ideossincrasies, we better
+	// only save the form geometry while its up and visible)
+	if (pWidget) {
+		m_settings.beginGroup("/Geometry/" + pWidget->objectName());
+		bool bVisible = pWidget->isVisible();
+		const QPoint& fpos  = pWidget->pos();
+		const QSize&  fsize = pWidget->size();
+		m_settings.setValue("/x", fpos.x());
+		m_settings.setValue("/y", fpos.y());
+		m_settings.setValue("/width", fsize.width());
+		m_settings.setValue("/height", fsize.height());
+		m_settings.setValue("/visible", bVisible);
+		m_settings.endGroup();
+	}
 }
 
 
 //---------------------------------------------------------------------------
 // Combo box history persistence helper implementation.
 
-void qsamplerOptions::add2ComboBoxHistory ( QComboBox *pComboBox, const QString& sNewText, int iLimit, int iIndex )
-{
-    int iCount = pComboBox->count();
-    for (int i = 0; i < iCount; i++) {
-        QString sText = pComboBox->text(i);
-        if (sText == sNewText) {
-            pComboBox->removeItem(i);
-            iCount--;
-            break;
-        }
-    }
-    while (iCount >= iLimit)
-        pComboBox->removeItem(--iCount);
-    pComboBox->insertItem(sNewText, iIndex);
-}
-
-
 void qsamplerOptions::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 {
-    pComboBox->setUpdatesEnabled(false);
-    pComboBox->setDuplicatesEnabled(false);
+	// Load combobox list from configuration settings file...
+	m_settings.beginGroup("/History/" + pComboBox->objectName());
 
-    m_settings.beginGroup("/History/" + QString(pComboBox->name()));
-    for (int i = 0; i < iLimit; i++) {
-        QString sText = m_settings.readEntry("/Item" + QString::number(i + 1), QString::null);
-        if (sText.isEmpty())
-            break;
-        add2ComboBoxHistory(pComboBox, sText, iLimit);
-    }
-    m_settings.endGroup();
+	if (m_settings.childKeys().count() > 0) {
+		pComboBox->setUpdatesEnabled(false);
+		pComboBox->setDuplicatesEnabled(false);
+		pComboBox->clear();
+		for (int i = 0; i < iLimit; i++) {
+			const QString& sText = m_settings.value(
+				"/Item" + QString::number(i + 1)).toString();
+			if (sText.isEmpty())
+				break;
+			pComboBox->addItem(sText);
+		}
+		pComboBox->setUpdatesEnabled(true);
+	}
 
-    pComboBox->setUpdatesEnabled(true);
+	m_settings.endGroup();
 }
 
 
 void qsamplerOptions::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 {
-    add2ComboBoxHistory(pComboBox, pComboBox->currentText(), iLimit, 0);
+	// Add current text as latest item...
+	const QString& sCurrentText = pComboBox->currentText();
+	int iCount = pComboBox->count();
+	for (int i = 0; i < iCount; i++) {
+		const QString& sText = pComboBox->itemText(i);
+		if (sText == sCurrentText) {
+			pComboBox->removeItem(i);
+			iCount--;
+			break;
+		}
+	}
+	while (iCount >= iLimit)
+		pComboBox->removeItem(--iCount);
+	pComboBox->insertItem(0, sCurrentText);
+	iCount++;
 
-    m_settings.beginGroup("/History/" + QString(pComboBox->name()));
-    for (int i = 0; i < iLimit && i < pComboBox->count(); i++) {
-        QString sText = pComboBox->text(i);
-        if (sText.isEmpty())
-            break;
-        m_settings.writeEntry("/Item" + QString::number(i + 1), sText);
-    }
-    m_settings.endGroup();
+	// Save combobox list to configuration settings file...
+	m_settings.beginGroup("/History/" + pComboBox->objectName());
+	for (int i = 0; i < iCount; i++) {
+		const QString& sText = pComboBox->itemText(i);
+		if (sText.isEmpty())
+			break;
+		m_settings.setValue("/Item" + QString::number(i + 1), sText);
+	}
+	m_settings.endGroup();
 }
 
 

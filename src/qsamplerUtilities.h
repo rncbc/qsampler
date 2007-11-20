@@ -23,7 +23,8 @@
 #ifndef __qsamplerUtilities_h
 #define __qsamplerUtilities_h
 
-#include <qstring.h>
+#include <QString>
+
 
 namespace qsamplerUtilities {
 

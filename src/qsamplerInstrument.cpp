@@ -20,11 +20,12 @@
 
 *****************************************************************************/
 
-#include "qsamplerUtilities.h"
 #include "qsamplerAbout.h"
 #include "qsamplerInstrument.h"
+#include "qsamplerUtilities.h"
 
 #include "qsamplerMainForm.h"
+
 
 using namespace QSampler;
 
@@ -193,12 +194,13 @@ bool qsamplerInstrument::mapInstrument (void)
 	}
 
 	if (::lscp_map_midi_instrument(pMainForm->client(), &instr,
-			m_sEngineName.latin1(),
-			qsamplerUtilities::lscpEscapePath(m_sInstrumentFile).latin1(),
+			m_sEngineName.toUtf8().constData(),
+			qsamplerUtilities::lscpEscapePath(
+				m_sInstrumentFile).toUtf8().constData(),
 			m_iInstrumentNr,
 			m_fVolume,
 			load_mode,
-			m_sName.latin1()) != LSCP_OK) {
+			m_sName.toUtf8().constData()) != LSCP_OK) {
 		pMainForm->appendMessagesClient("lscp_map_midi_instrument");
 		return false;
 	}

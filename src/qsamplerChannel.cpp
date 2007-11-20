@@ -20,15 +20,15 @@
 
 *****************************************************************************/
 
-#include "qsamplerUtilities.h"
 #include "qsamplerAbout.h"
 #include "qsamplerChannel.h"
+#include "qsamplerUtilities.h"
 
 #include "qsamplerMainForm.h"
 #include "qsamplerChannelForm.h"
 
-#include <qfileinfo.h>
-#include <qcombobox.h>
+#include <QFileInfo>
+#include <QComboBox>
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
@@ -37,6 +37,7 @@
 #define QSAMPLER_INSTRUMENT_MAX 100
 
 #define UNICODE_RIGHT_ARROW	QChar(char(0x92), char(0x21))
+
 
 using namespace QSampler;
 
@@ -158,7 +159,8 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 	if (m_iInstrumentStatus == 100 && m_sEngineName == sEngineName)
 		return true;
 
-	if (::lscp_load_engine(pMainForm->client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
+	if (::lscp_load_engine(pMainForm->client(),
+			sEngineName.toUtf8().constData(), m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_load_engine");
 		return false;
 	}
@@ -210,7 +212,8 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 	if (
 		::lscp_load_instrument_non_modal(
 			pMainForm->client(),
-			qsamplerUtilities::lscpEscapePath(sInstrumentFile).latin1(),
+			qsamplerUtilities::lscpEscapePath(
+				sInstrumentFile).toUtf8().constData(),
 			iInstrumentNr, m_iChannelID
 		) != LSCP_OK
 	) {
@@ -257,7 +260,8 @@ bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 	if (m_iInstrumentStatus == 100 && m_sMidiDriver == sMidiDriver)
 		return true;
 
-	if (::lscp_set_channel_midi_type(pMainForm->client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
+	if (::lscp_set_channel_midi_type(pMainForm->client(),
+			m_iChannelID, sMidiDriver.toUtf8().constData()) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_midi_type");
 		return false;
 	}
@@ -425,7 +429,8 @@ bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 	if (m_iInstrumentStatus == 100 && m_sAudioDriver == sAudioDriver)
 		return true;
 
-	if (::lscp_set_channel_audio_type(pMainForm->client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
+	if (::lscp_set_channel_audio_type(pMainForm->client(),
+			m_iChannelID, sAudioDriver.toUtf8().constData()) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_audio_type");
 		return false;
 	}
@@ -804,9 +809,9 @@ bool qsamplerChannel::isInstrumentFile ( const QString& sInstrumentFile )
 	bool bResult = false;
 
 	QFile file(sInstrumentFile);
-	if (file.open(IO_ReadOnly)) {
+	if (file.open(QIODevice::ReadOnly)) {
 		char achHeader[16];
-		if (file.readBlock(achHeader, 16)) {
+		if (file.read(achHeader, 16) > 0) {
 			bResult = (::memcmp(&achHeader[0], "RIFF", 4)     == 0
 					&& ::memcmp(&achHeader[8], "DLS LIST", 8) == 0);
 		}
@@ -827,7 +832,8 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 	if (isInstrumentFile(sInstrumentFile)) {
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
-			RIFF::File *pRiff = new RIFF::File(sInstrumentFile.latin1());
+			RIFF::File *pRiff
+				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File  *pGig  = new gig::File(pRiff);
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {
@@ -858,8 +864,9 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 		sInstrumentName = QFileInfo(sInstrumentFile).fileName();
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
-			RIFF::File *pRiff = new RIFF::File(sInstrumentFile.latin1());
-			gig::File  *pGig  = new gig::File(pRiff);
+			RIFF::File *pRiff
+				= new RIFF::File(sInstrumentFile.toUtf8().constData());
+			gig::File *pGig = new gig::File(pRiff);
 			int iIndex = 0;
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {
@@ -941,8 +948,9 @@ QVariant ChannelRoutingModel::data(const QModelIndex &index, int role) const {
 
     // The common device port item list.
     qsamplerDevicePortList& ports = pDevice->ports();
-    qsamplerDevicePort* pPort;
-    for (pPort = ports.first(); pPort; pPort = ports.next()) {
+	QListIterator<qsamplerDevicePort *> iter(ports);
+	while (iter.hasNext()) {
+		qsamplerDevicePort *pPort = iter.next();
         item.options.append(
             pDevice->deviceTypeName()
             + ' ' + pDevice->driverName()

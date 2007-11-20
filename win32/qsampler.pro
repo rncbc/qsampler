@@ -51,9 +51,5 @@ win32 {
 	CONFIG  += console
 	INCPATH += C:\usr\local\include
 	LIBS    += -LC:\usr\local\lib
-	LIBS += c:/msys/1.0/local/lib/liblscp.a
-        LIBS    += -lws2_32
 }
 
-# Qt3 support
-QT += qt3support

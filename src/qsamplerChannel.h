@@ -24,12 +24,7 @@
 #define __qsamplerChannel_h
 
 #include <QTableWidgetItem>
-#include <QAbstractTableModel>
-#include <QMetaType>
 #include <QItemDelegate>
-#include <QFontMetrics>
-#include <QModelIndex>
-#include <QSize>
 
 #include <lscp/client.h>
 #include <lscp/device.h>

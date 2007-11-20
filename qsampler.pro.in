@@ -48,6 +48,3 @@ LANGUAGE  = C++
 
 LIBS     += @ac_libs@
 INCPATH  += @ac_incpath@
-
-# Qt3 support
-QT += qt3support

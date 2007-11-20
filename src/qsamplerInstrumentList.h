@@ -24,13 +24,9 @@
 #define __qsamplerInstrumentList_h
 
 #include <QListWidget>
-#include <QListWidgetItem>
-#include <QAbstractTableModel>
 #include <QItemDelegate>
 
 #include <lscp/client.h>
-
-#include <string.h>
 
 #include "qsamplerInstrument.h"
 

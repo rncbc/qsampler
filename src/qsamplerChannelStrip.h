@@ -27,7 +27,8 @@
 
 #include "qsamplerChannel.h"
 
-#include <QDragEnterEvent>
+class QDragEnterEvent;
+
 
 namespace QSampler {
 
@@ -42,7 +43,6 @@ public:
     QFont displayFont();
     void setDisplayFont(const QFont& font);
     void setDisplayEffect(bool bDisplayEffect);
-    void setDisplayBackground(const QPixmap& pm);
     void setMaxVolume(int iMaxVolume);
     bool updateInstrumentName(bool bForce);
     bool updateChannelVolume();
@@ -62,7 +62,6 @@ public slots:
     void volumeChanged(int iVolume);
 
 protected:
-    bool decodeDragFile(const QMimeSource* pEvent, QString& sInstrumentFile);
     void dragEnterEvent(QDragEnterEvent* pDragEnterEvent);
     void dropEvent(QDropEvent* pDropEvent);
     void contextMenuEvent(QContextMenuEvent* pEvent);

@@ -29,6 +29,7 @@
 
 #include <QComboBox>
 
+
 namespace QSampler {
 
 class InstrumentListForm : public QMainWindow {

@@ -23,8 +23,9 @@
 #ifndef __qsamplerOptions_h
 #define __qsamplerOptions_h
 
-#include <qsettings.h>
+#include <QSettings>
 #include <QStringList>
+
 
 class QWidget;
 class QComboBox;
@@ -104,7 +105,6 @@ public:
     void loadWidgetGeometry(QWidget *pWidget);
 
     // Combo box history persistence helper prototypes.
-    void add2ComboBoxHistory(QComboBox *pComboBox, const QString& sNewText, int iLimit = 8, int iIndex = -1);
     void loadComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
     void saveComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
 
