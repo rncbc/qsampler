@@ -763,7 +763,10 @@ void ChannelForm::optionsChanged (void)
 // Stabilize current form state.
 void ChannelForm::stabilizeForm (void)
 {
-	bool bValid = true;
+	const bool bValid =
+		ui.EngineNameComboBox->currentIndex() >= 0 &&
+		ui.EngineNameComboBox->currentText() !=
+		qsamplerChannel::noEngineName();
 #if 0
 	const QString& sPath = InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();

@@ -392,7 +392,11 @@ void InstrumentForm::changed (void)
 // Stabilize current form state.
 void InstrumentForm::stabilizeForm (void)
 {
-	bool bValid = !ui.NameLineEdit->text().isEmpty();
+	bool bValid =
+		!ui.NameLineEdit->text().isEmpty() &&
+		ui.EngineNameComboBox->currentIndex() >= 0 &&
+		ui.EngineNameComboBox->currentText() !=
+		qsamplerChannel::noEngineName();
 
 	const QString& sPath = ui.InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
