@@ -1,4 +1,4 @@
-INCPATH  += ../src ../../liblscp
+INCPATH  += ../src
 
 HEADERS  += config.h \
 			../src/qsamplerChannelForm.h \
@@ -47,9 +47,11 @@ TEMPLATE  = app
 CONFIG   += qt thread warn_on release
 LANGUAGE  = C++
 
+LIBS     += -llscp
+
 win32 {
 	CONFIG  += console
 	INCPATH += C:\usr\local\include
-	LIBS    += -LC:\usr\local\lib
+	LIBS    += -LC:\usr\local\lib -lws2_32
 }
 
