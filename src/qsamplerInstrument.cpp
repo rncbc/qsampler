@@ -197,9 +197,7 @@ bool qsamplerInstrument::mapInstrument (void)
 			m_sEngineName.toUtf8().constData(),
 			qsamplerUtilities::lscpEscapePath(
 				m_sInstrumentFile).toUtf8().constData(),
-			m_iInstrumentNr,
-			m_fVolume,
-			load_mode,
+			m_iInstrumentNr, m_fVolume, load_mode,
 			m_sName.toUtf8().constData()) != LSCP_OK) {
 		pMainForm->appendMessagesClient("lscp_map_midi_instrument");
 		return false;

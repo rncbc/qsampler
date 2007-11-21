@@ -137,17 +137,11 @@ void OptionsForm::setup ( qsamplerOptions *pOptions )
     m_pOptions->loadComboBoxHistory(ui.ServerCmdLineComboBox);
 
     // Load Server settings...
-	ui.ServerHostComboBox->setItemText(
-		ui.ServerHostComboBox->currentIndex(),
-		m_pOptions->sServerHost);
-	ui.ServerPortComboBox->setItemText(
-		ui.ServerPortComboBox->currentIndex(),
-		QString::number(m_pOptions->iServerPort));
+	ui.ServerHostComboBox->setEditText(m_pOptions->sServerHost);
+	ui.ServerPortComboBox->setEditText(QString::number(m_pOptions->iServerPort));
     ui.ServerTimeoutSpinBox->setValue(m_pOptions->iServerTimeout);
     ui.ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
-	ui.ServerCmdLineComboBox->setItemText(
-		ui.ServerCmdLineComboBox->currentIndex(),
-		m_pOptions->sServerCmdLine);
+	ui.ServerCmdLineComboBox->setEditText(m_pOptions->sServerCmdLine);
     ui.StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
 
     // Load Display options...

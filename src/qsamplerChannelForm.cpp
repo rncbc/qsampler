@@ -206,9 +206,7 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	QString sInstrumentFile = pChannel->instrumentFile();
 	if (sInstrumentFile.isEmpty())
 		sInstrumentFile = qsamplerChannel::noInstrumentName();
-	ui.InstrumentFileComboBox->setItemText(
-		ui.InstrumentFileComboBox->currentIndex(),
-		sInstrumentFile);
+	ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
 	ui.InstrumentNrComboBox->clear();
 	ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(sInstrumentFile,
@@ -447,10 +445,7 @@ void ChannelForm::openInstrumentFile (void)
 	if (sInstrumentFile.isEmpty())
 		return;
 
-	ui.InstrumentFileComboBox->setItemText(
-		ui.InstrumentFileComboBox->currentIndex(),
-		sInstrumentFile);
-
+	ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
 	updateInstrumentName();
 }
 
