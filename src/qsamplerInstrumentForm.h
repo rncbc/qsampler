@@ -33,8 +33,9 @@ namespace QSampler {
 class InstrumentForm : public QDialog {
 Q_OBJECT
 public:
-    InstrumentForm(QWidget* parent = 0);
+    InstrumentForm(QWidget* pParent = NULL);
    ~InstrumentForm();
+
     void setup(qsamplerInstrument* pInstrument);
 
 public slots:
@@ -47,14 +48,13 @@ public slots:
     void changed();
     void stabilizeForm();
 
-protected:
+private:
+    Ui::qsamplerInstrumentForm ui;
+
     qsamplerInstrument* m_pInstrument;
     int m_iDirtySetup;
     int m_iDirtyCount;
     int m_iDirtyName;
-
-private:
-    Ui::qsamplerInstrumentForm ui;
 };
 
 } // namespace QSampler

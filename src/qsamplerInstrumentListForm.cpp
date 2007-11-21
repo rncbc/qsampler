@@ -30,19 +30,11 @@
 
 namespace QSampler {
 
-InstrumentListForm::InstrumentListForm ( QWidget* parent, Qt::WindowFlags flags )
-	: QMainWindow(parent, flags)
+InstrumentListForm::InstrumentListForm (
+	QWidget* pParent, Qt::WindowFlags wflags )
+	: QMainWindow(pParent, wflags)
 {
     ui.setupUi(this);
-
-    ui.newInstrumentAction->setText(tr("New &Instrument..."));
-    ui.newInstrumentAction->setShortcut(Qt::Key_Insert);
-    ui.editInstrumentAction->setText(tr("&Edit..."));
-    ui.editInstrumentAction->setShortcut(Qt::Key_Enter);
-    ui.deleteInstrumentAction->setText(tr("&Delete"));
-    ui.deleteInstrumentAction->setShortcut(Qt::Key_Delete);
-    ui.refreshInstrumentsAction->setText(tr("&Refresh"));
-    ui.refreshInstrumentsAction->setShortcut(Qt::Key_F5);
 
     // Setup toolbar widgets.
     m_pMapComboBox = new QComboBox(ui.InstrumentToolbar);
@@ -71,29 +63,31 @@ InstrumentListForm::InstrumentListForm ( QWidget* parent, Qt::WindowFlags flags 
 		SLOT(refreshInstruments(void))
     );
 
-	connect(
+	QObject::connect(
 		ui.InstrumentTable,
 		SIGNAL(activated(const QModelIndex&)),
 		SLOT(editInstrument(const QModelIndex&))
 	);
-	connect(
+	QObject::connect(
 		ui.newInstrumentAction,
 		SIGNAL(triggered()),
 		SLOT(newInstrument())
 	);
-	connect(
+	QObject::connect(
 		ui.deleteInstrumentAction,
 		SIGNAL(triggered()),
 		SLOT(deleteInstrument())
 	);
-	connect(
+	QObject::connect(
 		ui.editInstrumentAction,
 		SIGNAL(triggered()),
 		SLOT(editInstrument())
 	);
 }
 
-InstrumentListForm::~InstrumentListForm() {
+
+InstrumentListForm::~InstrumentListForm (void)
+{
 	delete m_pMapComboBox;
 }
 
@@ -101,9 +95,9 @@ InstrumentListForm::~InstrumentListForm() {
 // Notify our parent that we're emerging.
 void InstrumentListForm::showEvent ( QShowEvent *pShowEvent )
 {
-	//MainForm* pMainForm = MainForm::getInstance();
-	//if (pMainForm)
-	//	pMainForm->stabilizeForm();
+	MainForm* pMainForm = MainForm::getInstance();
+	if (pMainForm)
+		pMainForm->stabilizeForm();
 
 	QWidget::showEvent(pShowEvent);
 }
@@ -114,9 +108,20 @@ void InstrumentListForm::hideEvent ( QHideEvent *pHideEvent )
 {
 	QWidget::hideEvent(pHideEvent);
 
-	//MainForm* pMainForm = MainForm::getInstance();
-	//if (pMainForm)
-	//	pMainForm->stabilizeForm();
+	MainForm* pMainForm = MainForm::getInstance();
+	if (pMainForm)
+		pMainForm->stabilizeForm();
+}
+
+
+// Just about to notify main-window that we're closing.
+void InstrumentListForm::closeEvent ( QCloseEvent * /*pCloseEvent*/ )
+{
+	QWidget::hide();
+
+	MainForm *pMainForm = MainForm::getInstance();
+	if (pMainForm)
+		pMainForm->stabilizeForm();
 }
 
 
@@ -170,19 +175,24 @@ void InstrumentListForm::activateMap ( int iMap )
 	model.refresh();
 }
 
-void InstrumentListForm::editInstrument() {
-	const QModelIndex index = ui.InstrumentTable->currentIndex();
-	editInstrument(index);
+
+void InstrumentListForm::editInstrument (void)
+{
+	editInstrument(ui.InstrumentTable->currentIndex());
 }
 
-void InstrumentListForm::editInstrument(const QModelIndex& index) {
+
+void InstrumentListForm::editInstrument ( const QModelIndex& index )
+{
 	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
 		return;
 
-	qsamplerInstrument* pInstrument =
-		(qsamplerInstrument*) index.data(Qt::UserRole).value<void*>();
+	qsamplerInstrument* pInstrument
+		= static_cast<qsamplerInstrument *> (
+			index.data(Qt::UserRole).value<void *> ());
 
-	if (!pInstrument) return;
+	if (pInstrument == NULL)
+		return;
 
 	// Save current key values...
 	qsamplerInstrument oldInstrument(*pInstrument);
@@ -209,12 +219,15 @@ void InstrumentListForm::editInstrument(const QModelIndex& index) {
 	}
 }
 
-void InstrumentListForm::newInstrument() {
+
+void InstrumentListForm::newInstrument (void)
+{
 	qsamplerInstrument instrument;
 
 	InstrumentForm form(this);
 	form.setup(&instrument);
-	if (!form.exec()) return;
+	if (!form.exec())
+		return;
 
 	// Commit...
 	instrument.mapInstrument();
@@ -226,14 +239,19 @@ void InstrumentListForm::newInstrument() {
 	refreshInstruments();
 }
 
-void InstrumentListForm::deleteInstrument() {
-	const QModelIndex index = ui.InstrumentTable->currentIndex();
-	if (!index.isValid() || !index.data(Qt::UserRole).isValid()) return;
+
+void InstrumentListForm::deleteInstrument (void)
+{
+	const QModelIndex& index = ui.InstrumentTable->currentIndex();
+	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
+		return;
 
 	qsamplerInstrument* pInstrument =
-		(qsamplerInstrument*) index.data(Qt::UserRole).value<void*>();
+		static_cast<qsamplerInstrument*> (
+			index.data(Qt::UserRole).value<void *> ());
 
-	if (!pInstrument) return;
+	if (pInstrument == NULL)
+		return;
 
 	pInstrument->unmapInstrument();
 	// let the instrument vanish from the table model

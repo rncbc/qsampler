@@ -27,18 +27,20 @@
 
 #include "qsamplerInstrumentList.h"
 
-#include <QComboBox>
+class QComboBox;
 
 
 namespace QSampler {
 
-class InstrumentListForm : public QMainWindow {
-Q_OBJECT
+class InstrumentListForm : public QMainWindow
+{
+	Q_OBJECT
+
 public:
     MidiInstrumentsModel model;
     MidiInstrumentsDelegate delegate;
 
-    InstrumentListForm(QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    InstrumentListForm(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
    ~InstrumentListForm();
 
 public slots:
@@ -46,10 +48,9 @@ public slots:
     void activateMap(int);
 
 protected:
-    QComboBox* m_pMapComboBox;
-
-    void showEvent(QShowEvent* pShowEvent);
-    void hideEvent(QHideEvent* pHideEvent);
+    void showEvent(QShowEvent *);
+    void hideEvent(QHideEvent *);
+    void closeEvent(QCloseEvent *);
 
 protected slots:
     void editInstrument();
@@ -59,6 +60,8 @@ protected slots:
 
 private:
     Ui::qsamplerInstrumentListForm ui;
+
+    QComboBox* m_pMapComboBox;
 };
 
 } // namespace QSampler

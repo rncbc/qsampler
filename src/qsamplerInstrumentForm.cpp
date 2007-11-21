@@ -44,7 +44,9 @@ static inline long lroundf ( float x )
 }
 #endif
 
-InstrumentForm::InstrumentForm(QWidget* parent) : QDialog(parent) {
+InstrumentForm::InstrumentForm ( QWidget* pParent )
+	: QDialog(pParent)
+{
     ui.setupUi(this);
 
 	// Initialize locals.
@@ -96,8 +98,11 @@ InstrumentForm::InstrumentForm(QWidget* parent) : QDialog(parent) {
 		SLOT(reject()));
 }
 
-InstrumentForm::~InstrumentForm() {
+
+InstrumentForm::~InstrumentForm (void)
+{
 }
+
 
 // Channel dialog setup formal initializer.
 void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
@@ -189,9 +194,10 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 			Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 		ui.EngineNameComboBox->addItem(sEngineName);
 	}
-	ui.EngineNameComboBox->setItemText(
-		ui.EngineNameComboBox->currentIndex(),
-		sEngineName);
+	ui.EngineNameComboBox->setCurrentIndex(
+		ui.EngineNameComboBox->findText(sEngineName,
+			Qt::MatchExactly | Qt::MatchCaseSensitive));
+
 	// Instrument filename and index...
 	QString sInstrumentFile = m_pInstrument->instrumentFile();
 	if (sInstrumentFile.isEmpty())

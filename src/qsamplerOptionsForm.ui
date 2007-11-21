@@ -557,8 +557,11 @@
             <property name="toolTip" >
              <string>Sample channel display font display</string>
             </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
+            </property>
             <property name="frameShape" >
-             <enum>QFrame::Panel</enum>
+             <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="frameShadow" >
              <enum>QFrame::Sunken</enum>
@@ -796,8 +799,11 @@
             <property name="toolTip" >
              <string>Sample messages text font display</string>
             </property>
+            <property name="autoFillBackground" >
+             <bool>true</bool>
+            </property>
             <property name="frameShape" >
-             <enum>QFrame::Panel</enum>
+             <enum>QFrame::StyledPanel</enum>
             </property>
             <property name="frameShadow" >
              <enum>QFrame::Sunken</enum>

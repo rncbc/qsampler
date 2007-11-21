@@ -49,10 +49,10 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
 	adjustSize();
 
 	QObject::connect(ui.ServerHostComboBox,
-		SIGNAL(textChanged(const QString&)),
+		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.ServerPortComboBox,
-		SIGNAL(textChanged(const QString&)),
+		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.ServerTimeoutSpinBox,
 		SIGNAL(valueChanged(int)),
@@ -61,7 +61,7 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.ServerCmdLineComboBox,
-		SIGNAL(textChanged(const QString&)),
+		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
 	QObject::connect(ui.StartDelaySpinBox,
 		SIGNAL(valueChanged(int)),
@@ -152,6 +152,7 @@ void OptionsForm::setup ( qsamplerOptions *pOptions )
 
     // Load Display options...
     QFont font;
+	QPalette pal;
 
     // Display font.
     if (m_pOptions->sDisplayFont.isEmpty() || !font.fromString(m_pOptions->sDisplayFont))
@@ -171,8 +172,11 @@ void OptionsForm::setup ( qsamplerOptions *pOptions )
     // Messages font.
     if (m_pOptions->sMessagesFont.isEmpty() || !font.fromString(m_pOptions->sMessagesFont))
         font = QFont("Fixed", 8);
+	pal = ui.MessagesFontTextLabel->palette();
+	pal.setColor(QPalette::Background, Qt::white);
+	ui.MessagesFontTextLabel->setPalette(pal);
     ui.MessagesFontTextLabel->setFont(font);
-    ui.MessagesFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
+    ui.MessagesFontTextLabel->setText(font.family() + ' ' + QString::number(font.pointSize()));
 
     // Messages limit option.
     ui.MessagesLimitCheckBox->setChecked(m_pOptions->bMessagesLimit);
@@ -325,7 +329,7 @@ void OptionsForm::toggleDisplayEffect ( bool bOn )
 	QPalette pal;
 	pal.setColor(QPalette::Foreground, Qt::green);
 	if (bOn) {
-		QPixmap pm(":/qsampler/pixmaps/displaybg1.png");
+		QPixmap pm(":/icons/displaybg1.png");
 		pal.setBrush(QPalette::Background, QBrush(pm));
 	} else {
 		pal.setColor(QPalette::Background, Qt::black);

@@ -15,11 +15,11 @@ URL:		http://qsampler.sourceforge.net/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-Requires:	qt3 >= 3.1
+Requires:	qt >= 4.1
 Requires:	liblscp >= 0.5.3
 Requires:	libgig >= 3.1.0
 
-BuildRequires:	qt3-devel >= 3.1
+BuildRequires:	qt-devel >= 4.1
 BuildRequires:	liblscp-devel >= 0.5.3
 BuildRequires:	libgig-devel >= 3.1.0
 
@@ -51,6 +51,8 @@ export PATH=$QTDIR/bin:$PATH
 %{_datadir}/pixmaps/%{name}.png
 
 %changelog
+* Wed Nov 21 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Qt4 migration complete.
 * Mon Jun 25 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Application icon is now installed to (prefix)/share/pixmaps.
 - Declared fundamental build and run-time requirements.

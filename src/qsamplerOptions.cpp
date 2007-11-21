@@ -39,11 +39,9 @@
 
 // Constructor.
 qsamplerOptions::qsamplerOptions (void)
+	: m_settings(QSAMPLER_DOMAIN, QSAMPLER_TITLE)
 {
-    // Begin master key group.
-    m_settings.beginGroup("/qsampler");
-
-    // And go into general options group.
+    // Begin into general options group.
     m_settings.beginGroup("/Options");
 
     // Load server options...
@@ -180,8 +178,6 @@ qsamplerOptions::~qsamplerOptions (void)
     m_settings.setValue("/MidiProg", iMidiProg);
     m_settings.setValue("/Volume", iVolume);
     m_settings.setValue("/Loadmode", iLoadMode);
-    m_settings.endGroup();
-
     m_settings.endGroup();
 }
 

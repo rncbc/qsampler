@@ -481,7 +481,9 @@ void DeviceForm::selectDevicePort ( int iPort )
 		return;
 
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
-	qsamplerDevicePort *pPort = device.ports().at(iPort);
+	qsamplerDevicePort *pPort = NULL;
+	if (iPort >= 0 && iPort < device.ports().count())
+		pPort = device.ports().at(iPort);
 	if (pPort) {
 		m_iDirtySetup++;
 		devicePortParamModel.refresh(pPort, false);
@@ -551,7 +553,9 @@ void DeviceForm::changeDevicePortParam ( int iRow, int iCol )
 	qsamplerDevice& device = ((qsamplerDeviceItem *) pItem)->device();
 
 	int iPort = ui.DevicePortComboBox->currentIndex();
-	qsamplerDevicePort *pPort = device.ports().at(iPort);
+	qsamplerDevicePort *pPort = NULL;
+	if (iPort >= 0 && iPort < device.ports().count())
+		pPort = device.ports().at(iPort);
 	if (pPort == NULL)
 		return;
 

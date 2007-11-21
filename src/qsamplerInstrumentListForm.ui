@@ -69,7 +69,13 @@
     <iconset resource="../icons/qsampler.qrc" >:/icons/itemNew.png</iconset>
    </property>
    <property name="text" >
+    <string>New &amp;Instrument...</string>
+   </property>
+   <property name="iconText" >
     <string>New</string>
+   </property>
+   <property name="shortcut" >
+    <string>Insert</string>
    </property>
   </action>
   <action name="editInstrumentAction" >
@@ -77,7 +83,13 @@
     <iconset resource="../icons/qsampler.qrc" >:/icons/formEdit.png</iconset>
    </property>
    <property name="text" >
+    <string>&amp;Edit...</string>
+   </property>
+   <property name="iconText" >
     <string>Edit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Enter</string>
    </property>
   </action>
   <action name="deleteInstrumentAction" >
@@ -85,6 +97,12 @@
     <iconset resource="../icons/qsampler.qrc" >:/icons/formRemove.png</iconset>
    </property>
    <property name="text" >
+    <string>&amp;Delete</string>
+   </property>
+   <property name="iconText" >
+    <string>Delete</string>
+   </property>
+   <property name="shortcut" >
     <string>Delete</string>
    </property>
   </action>
@@ -93,7 +111,13 @@
     <iconset resource="../icons/qsampler.qrc" >:/icons/formRefresh.png</iconset>
    </property>
    <property name="text" >
+    <string>&amp;Refresh</string>
+   </property>
+   <property name="iconText" >
     <string>Refresh</string>
+   </property>
+   <property name="shortcut" >
+    <string>F5</string>
    </property>
   </action>
  </widget>

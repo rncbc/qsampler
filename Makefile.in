@@ -11,14 +11,14 @@ headers = config.h \
 	src/qsamplerInstrument.h \
 	src/qsamplerInstrumentList.h \
 	src/qsamplerDevice.h \
+	src/qsamplerUtilities.h \
 	src/qsamplerInstrumentForm.h \
 	src/qsamplerInstrumentListForm.h \
 	src/qsamplerDeviceForm.h \
 	src/qsamplerChannelStrip.h \
 	src/qsamplerChannelForm.h \
 	src/qsamplerOptionsForm.h \
-	src/qsamplerMainForm.h \
-	src/qsamplerUtilities.h
+	src/qsamplerMainForm.h
 
 sources = src/main.cpp \
 	src/qsamplerOptions.cpp \
