@@ -95,70 +95,6 @@
        <height>64</height>
       </size>
      </property>
-     <property name="palette" >
-      <palette>
-       <active>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
-     </property>
      <property name="autoFillBackground" >
       <bool>true</bool>
      </property>
@@ -185,96 +121,10 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="palette" >
-         <palette>
-          <active>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>255</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </active>
-          <inactive>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>255</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </inactive>
-          <disabled>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>119</red>
-              <green>119</green>
-              <blue>119</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </disabled>
-         </palette>
-        </property>
-        <property name="toolTip" >
-         <string>Engine name</string>
-        </property>
-        <property name="text" >
-         <string>--</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignTop</set>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
        </widget>
       </item>
       <item row="1" column="0" >
        <widget class="QLabel" name="InstrumentNameTextLabel" >
-        <property name="palette" >
-         <palette>
-          <active>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>85</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </active>
-          <inactive>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>85</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </inactive>
-          <disabled>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>119</red>
-              <green>119</green>
-              <blue>119</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </disabled>
-         </palette>
-        </property>
         <property name="toolTip" >
          <string>Instrument name</string>
         </property>
@@ -293,43 +143,6 @@
           <width>20</width>
           <height>0</height>
          </size>
-        </property>
-        <property name="palette" >
-         <palette>
-          <active>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>255</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </active>
-          <inactive>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>255</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </inactive>
-          <disabled>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>119</red>
-              <green>119</green>
-              <blue>119</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </disabled>
-         </palette>
         </property>
         <property name="toolTip" >
          <string>MIDI port / channel</string>
@@ -352,43 +165,6 @@
           <width>20</width>
           <height>0</height>
          </size>
-        </property>
-        <property name="palette" >
-         <palette>
-          <active>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>85</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </active>
-          <inactive>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>85</red>
-              <green>255</green>
-              <blue>0</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </inactive>
-          <disabled>
-           <colorrole role="WindowText" >
-            <brush brushstyle="SolidPattern" >
-             <color alpha="255" >
-              <red>119</red>
-              <green>119</green>
-              <blue>119</blue>
-             </color>
-            </brush>
-           </colorrole>
-          </disabled>
-         </palette>
         </property>
         <property name="toolTip" >
          <string>Instrument load status</string>

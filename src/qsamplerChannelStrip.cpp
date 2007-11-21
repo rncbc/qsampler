@@ -174,6 +174,9 @@ void ChannelStrip::setDisplayFont ( const QFont & font )
 void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
 	QPalette pal;
+	pal.setColor(QPalette::Foreground, Qt::yellow);
+	ui.EngineNameTextLabel->setPalette(pal);
+	ui.MidiPortChannelTextLabel->setPalette(pal);
 	pal.setColor(QPalette::Foreground, Qt::green);
 	if (bDisplayEffect) {
 		QPixmap pm(":/icons/displaybg1.png");

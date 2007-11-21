@@ -312,6 +312,9 @@ MainForm::MainForm(QWidget* parent) : QMainWindow(parent) {
 	QObject::connect(ui.fileMenu,
 		SIGNAL(aboutToShow()),
 		SLOT(updateRecentFilesMenu()));
+	QObject::connect(ui.channelsMenu,
+		SIGNAL(aboutToShow()),
+		SLOT(channelsMenuAboutToShow()));
 }
 
 // Destructor.
@@ -2168,7 +2171,7 @@ ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
     if (pChannelStrip == NULL)
         return NULL;
 
-    m_pWorkspace->addWindow(pChannelStrip, Qt::Tool);
+	m_pWorkspace->addWindow(pChannelStrip, Qt::FramelessWindowHint);
 
     // Actual channel strip setup...
     pChannelStrip->setup(pChannel);
@@ -2260,8 +2263,9 @@ void MainForm::channelsMenuAboutToShow (void)
 			if (pChannelStrip) {
 				QAction *pAction = ui.channelsMenu->addAction(
 					pChannelStrip->windowTitle(), this, SLOT(channelsMenuActivated()));
-				pAction->setData(iChannel);
+				pAction->setCheckable(true);
 				pAction->setChecked(activeChannelStrip() == pChannelStrip);
+				pAction->setData(iChannel);
 			}
         }
     }
