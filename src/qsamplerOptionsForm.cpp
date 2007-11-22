@@ -31,9 +31,10 @@
 
 namespace QSampler {
 
-OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
+OptionsForm::OptionsForm ( QWidget* pParent )
+	: QDialog(pParent)
 {
-	ui.setupUi(this);
+	m_ui.setupUi(this);
 
 	// No settings descriptor initially (the caller will set it).
 	m_pOptions = NULL;
@@ -43,75 +44,76 @@ OptionsForm::OptionsForm(QWidget* parent) : QDialog(parent)
 	m_iDirtyCount = 0;
 
 	// Set dialog validators...
-	ui.ServerPortComboBox->setValidator(new QIntValidator(ui.ServerPortComboBox));
+	m_ui.ServerPortComboBox->setValidator(
+		new QIntValidator(m_ui.ServerPortComboBox));
 
 	// Try to restore old window positioning.
 	adjustSize();
 
-	QObject::connect(ui.ServerHostComboBox,
+	QObject::connect(m_ui.ServerHostComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.ServerPortComboBox,
+	QObject::connect(m_ui.ServerPortComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.ServerTimeoutSpinBox,
+	QObject::connect(m_ui.ServerTimeoutSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.ServerStartCheckBox,
+	QObject::connect(m_ui.ServerStartCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.ServerCmdLineComboBox,
+	QObject::connect(m_ui.ServerCmdLineComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.StartDelaySpinBox,
+	QObject::connect(m_ui.StartDelaySpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.DisplayFontPushButton,
+	QObject::connect(m_ui.DisplayFontPushButton,
 		SIGNAL(clicked()),
 		SLOT(chooseDisplayFont()));
-	QObject::connect(ui.DisplayEffectCheckBox,
+	QObject::connect(m_ui.DisplayEffectCheckBox,
 		SIGNAL(toggled(bool)),
 		SLOT(toggleDisplayEffect(bool)));
-	QObject::connect(ui.AutoRefreshCheckBox,
+	QObject::connect(m_ui.AutoRefreshCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.AutoRefreshTimeSpinBox,
+	QObject::connect(m_ui.AutoRefreshTimeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.MaxVolumeSpinBox,
+	QObject::connect(m_ui.MaxVolumeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.MessagesFontPushButton,
+	QObject::connect(m_ui.MessagesFontPushButton,
 		SIGNAL(clicked()),
 		SLOT(chooseMessagesFont()));
-	QObject::connect(ui.MessagesLimitCheckBox,
+	QObject::connect(m_ui.MessagesLimitCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.MessagesLimitLinesSpinBox,
+	QObject::connect(m_ui.MessagesLimitLinesSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.ConfirmRemoveCheckBox,
+	QObject::connect(m_ui.ConfirmRemoveCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.KeepOnTopCheckBox,
+	QObject::connect(m_ui.KeepOnTopCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.StdoutCaptureCheckBox,
+	QObject::connect(m_ui.StdoutCaptureCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.MaxRecentFilesSpinBox,
+	QObject::connect(m_ui.MaxRecentFilesSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.CompletePathCheckBox,
+	QObject::connect(m_ui.CompletePathCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.InstrumentNamesCheckBox,
+	QObject::connect(m_ui.InstrumentNamesCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
-	QObject::connect(ui.OkPushButton,
+	QObject::connect(m_ui.OkPushButton,
 		SIGNAL(clicked()),
 		SLOT(accept()));
-	QObject::connect(ui.CancelPushButton,
+	QObject::connect(m_ui.CancelPushButton,
 		SIGNAL(clicked()),
 		SLOT(reject()));
 }
@@ -123,197 +125,207 @@ OptionsForm::~OptionsForm()
 // Populate (setup) dialog controls from settings descriptors.
 void OptionsForm::setup ( qsamplerOptions *pOptions )
 {
-    // Set reference descriptor.
-    m_pOptions = pOptions;
+	// Set reference descriptor.
+	m_pOptions = pOptions;
 
-    // Start clean.
-    m_iDirtyCount = 0;
-    // Avoid nested changes.
-    m_iDirtySetup++;
+	// Start clean.
+	m_iDirtyCount = 0;
+	// Avoid nested changes.
+	m_iDirtySetup++;
 
-    // Load combo box history...
-    m_pOptions->loadComboBoxHistory(ui.ServerHostComboBox);
-    m_pOptions->loadComboBoxHistory(ui.ServerPortComboBox);
-    m_pOptions->loadComboBoxHistory(ui.ServerCmdLineComboBox);
+	// Load combo box history...
+	m_pOptions->loadComboBoxHistory(m_ui.ServerHostComboBox);
+	m_pOptions->loadComboBoxHistory(m_ui.ServerPortComboBox);
+	m_pOptions->loadComboBoxHistory(m_ui.ServerCmdLineComboBox);
 
-    // Load Server settings...
-	ui.ServerHostComboBox->setEditText(m_pOptions->sServerHost);
-	ui.ServerPortComboBox->setEditText(QString::number(m_pOptions->iServerPort));
-    ui.ServerTimeoutSpinBox->setValue(m_pOptions->iServerTimeout);
-    ui.ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
-	ui.ServerCmdLineComboBox->setEditText(m_pOptions->sServerCmdLine);
-    ui.StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
+	// Load Server settings...
+	m_ui.ServerHostComboBox->setEditText(m_pOptions->sServerHost);
+	m_ui.ServerPortComboBox->setEditText(QString::number(m_pOptions->iServerPort));
+	m_ui.ServerTimeoutSpinBox->setValue(m_pOptions->iServerTimeout);
+	m_ui.ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
+	m_ui.ServerCmdLineComboBox->setEditText(m_pOptions->sServerCmdLine);
+	m_ui.StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
 
-    // Load Display options...
-    QFont font;
+	// Load Display options...
+	QFont font;
 	QPalette pal;
 
-    // Display font.
-    if (m_pOptions->sDisplayFont.isEmpty() || !font.fromString(m_pOptions->sDisplayFont))
-        font = QFont("Sans Serif", 8);
-    ui.DisplayFontTextLabel->setFont(font);
-    ui.DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
+	// Display font.
+	if (m_pOptions->sDisplayFont.isEmpty()
+		|| !font.fromString(m_pOptions->sDisplayFont))
+		font = QFont("Sans Serif", 8);
+	m_ui.DisplayFontTextLabel->setFont(font);
+	m_ui.DisplayFontTextLabel->setText(font.family()
+		+ ' ' + QString::number(font.pointSize()));
 
-    // Display effect.
-    ui.DisplayEffectCheckBox->setChecked(m_pOptions->bDisplayEffect);
-    toggleDisplayEffect(m_pOptions->bDisplayEffect);
+	// Display effect.
+	m_ui.DisplayEffectCheckBox->setChecked(m_pOptions->bDisplayEffect);
+	toggleDisplayEffect(m_pOptions->bDisplayEffect);
 
-    // Auto-refresh and maximum volume options.
-    ui.AutoRefreshCheckBox->setChecked(m_pOptions->bAutoRefresh);
-    ui.AutoRefreshTimeSpinBox->setValue(m_pOptions->iAutoRefreshTime);
-    ui.MaxVolumeSpinBox->setValue(m_pOptions->iMaxVolume);
+	// Auto-refresh and maximum volume options.
+	m_ui.AutoRefreshCheckBox->setChecked(m_pOptions->bAutoRefresh);
+	m_ui.AutoRefreshTimeSpinBox->setValue(m_pOptions->iAutoRefreshTime);
+	m_ui.MaxVolumeSpinBox->setValue(m_pOptions->iMaxVolume);
 
-    // Messages font.
-    if (m_pOptions->sMessagesFont.isEmpty() || !font.fromString(m_pOptions->sMessagesFont))
-        font = QFont("Fixed", 8);
-	pal = ui.MessagesFontTextLabel->palette();
+	// Messages font.
+	if (m_pOptions->sMessagesFont.isEmpty()
+		|| !font.fromString(m_pOptions->sMessagesFont))
+		font = QFont("Fixed", 8);
+	pal = m_ui.MessagesFontTextLabel->palette();
 	pal.setColor(QPalette::Background, Qt::white);
-	ui.MessagesFontTextLabel->setPalette(pal);
-    ui.MessagesFontTextLabel->setFont(font);
-    ui.MessagesFontTextLabel->setText(font.family() + ' ' + QString::number(font.pointSize()));
+	m_ui.MessagesFontTextLabel->setPalette(pal);
+	m_ui.MessagesFontTextLabel->setFont(font);
+	m_ui.MessagesFontTextLabel->setText(font.family()
+		+ ' ' + QString::number(font.pointSize()));
 
-    // Messages limit option.
-    ui.MessagesLimitCheckBox->setChecked(m_pOptions->bMessagesLimit);
-    ui.MessagesLimitLinesSpinBox->setValue(m_pOptions->iMessagesLimitLines);
+	// Messages limit option.
+	m_ui.MessagesLimitCheckBox->setChecked(m_pOptions->bMessagesLimit);
+	m_ui.MessagesLimitLinesSpinBox->setValue(m_pOptions->iMessagesLimitLines);
 
-    // Other options finally.
-    ui.ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
-    ui.KeepOnTopCheckBox->setChecked(m_pOptions->bKeepOnTop);
-    ui.StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
-    ui.CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
-    ui.InstrumentNamesCheckBox->setChecked(m_pOptions->bInstrumentNames);
-    ui.MaxRecentFilesSpinBox->setValue(m_pOptions->iMaxRecentFiles);
+	// Other options finally.
+	m_ui.ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
+	m_ui.KeepOnTopCheckBox->setChecked(m_pOptions->bKeepOnTop);
+	m_ui.StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
+	m_ui.CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
+	m_ui.InstrumentNamesCheckBox->setChecked(m_pOptions->bInstrumentNames);
+	m_ui.MaxRecentFilesSpinBox->setValue(m_pOptions->iMaxRecentFiles);
 
 #ifndef CONFIG_LIBGIG
-    ui.InstrumentNamesCheckBox->setEnabled(false);
+	m_ui.InstrumentNamesCheckBox->setEnabled(false);
 #endif
 
-    // Done.
-    m_iDirtySetup--;
-    stabilizeForm();
+	// Done.
+	m_iDirtySetup--;
+	stabilizeForm();
 }
 
 
 // Accept settings (OK button slot).
 void OptionsForm::accept (void)
 {
-    // Save options...
-    if (m_iDirtyCount > 0) {
-        // Server settings....
-        m_pOptions->sServerHost         = ui.ServerHostComboBox->currentText().trimmed();
-        m_pOptions->iServerPort         = ui.ServerPortComboBox->currentText().toInt();
-        m_pOptions->iServerTimeout      = ui.ServerTimeoutSpinBox->value();
-        m_pOptions->bServerStart        = ui.ServerStartCheckBox->isChecked();
-        m_pOptions->sServerCmdLine      = ui.ServerCmdLineComboBox->currentText().trimmed();
-        m_pOptions->iStartDelay         = ui.StartDelaySpinBox->value();
-        // Channels options...
-        m_pOptions->sDisplayFont        = ui.DisplayFontTextLabel->font().toString();
-        m_pOptions->bDisplayEffect      = ui.DisplayEffectCheckBox->isChecked();
-        m_pOptions->bAutoRefresh        = ui.AutoRefreshCheckBox->isChecked();
-        m_pOptions->iAutoRefreshTime    = ui.AutoRefreshTimeSpinBox->value();
-        m_pOptions->iMaxVolume          = ui.MaxVolumeSpinBox->value();
-        // Messages options...
-        m_pOptions->sMessagesFont       = ui.MessagesFontTextLabel->font().toString();
-        m_pOptions->bMessagesLimit      = ui.MessagesLimitCheckBox->isChecked();
-        m_pOptions->iMessagesLimitLines = ui.MessagesLimitLinesSpinBox->value();
-        // Other options...
-        m_pOptions->bConfirmRemove      = ui.ConfirmRemoveCheckBox->isChecked();
-        m_pOptions->bKeepOnTop          = ui.KeepOnTopCheckBox->isChecked();
-        m_pOptions->bStdoutCapture      = ui.StdoutCaptureCheckBox->isChecked();
-        m_pOptions->bCompletePath       = ui.CompletePathCheckBox->isChecked();
-        m_pOptions->bInstrumentNames    = ui.InstrumentNamesCheckBox->isChecked();
-        m_pOptions->iMaxRecentFiles     = ui.MaxRecentFilesSpinBox->value();
-        // Reset dirty flag.
-        m_iDirtyCount = 0;
-    }
+	// Save options...
+	if (m_iDirtyCount > 0) {
+		// Server settings....
+		m_pOptions->sServerHost    = m_ui.ServerHostComboBox->currentText().trimmed();
+		m_pOptions->iServerPort    = m_ui.ServerPortComboBox->currentText().toInt();
+		m_pOptions->iServerTimeout = m_ui.ServerTimeoutSpinBox->value();
+		m_pOptions->bServerStart   = m_ui.ServerStartCheckBox->isChecked();
+		m_pOptions->sServerCmdLine = m_ui.ServerCmdLineComboBox->currentText().trimmed();
+		m_pOptions->iStartDelay      = m_ui.StartDelaySpinBox->value();
+		// Channels options...
+		m_pOptions->sDisplayFont   = m_ui.DisplayFontTextLabel->font().toString();
+		m_pOptions->bDisplayEffect = m_ui.DisplayEffectCheckBox->isChecked();
+		m_pOptions->bAutoRefresh   = m_ui.AutoRefreshCheckBox->isChecked();
+		m_pOptions->iAutoRefreshTime = m_ui.AutoRefreshTimeSpinBox->value();
+		m_pOptions->iMaxVolume     = m_ui.MaxVolumeSpinBox->value();
+		// Messages options...
+		m_pOptions->sMessagesFont  = m_ui.MessagesFontTextLabel->font().toString();
+		m_pOptions->bMessagesLimit = m_ui.MessagesLimitCheckBox->isChecked();
+		m_pOptions->iMessagesLimitLines = m_ui.MessagesLimitLinesSpinBox->value();
+		// Other options...
+		m_pOptions->bConfirmRemove = m_ui.ConfirmRemoveCheckBox->isChecked();
+		m_pOptions->bKeepOnTop     = m_ui.KeepOnTopCheckBox->isChecked();
+		m_pOptions->bStdoutCapture = m_ui.StdoutCaptureCheckBox->isChecked();
+		m_pOptions->bCompletePath  = m_ui.CompletePathCheckBox->isChecked();
+		m_pOptions->bInstrumentNames = m_ui.InstrumentNamesCheckBox->isChecked();
+		m_pOptions->iMaxRecentFiles  = m_ui.MaxRecentFilesSpinBox->value();
+		// Reset dirty flag.
+		m_iDirtyCount = 0;
+	}
 
-    // Save combobox history...
-    m_pOptions->saveComboBoxHistory(ui.ServerHostComboBox);
-    m_pOptions->saveComboBoxHistory(ui.ServerPortComboBox);
-    m_pOptions->saveComboBoxHistory(ui.ServerCmdLineComboBox);
+	// Save combobox history...
+	m_pOptions->saveComboBoxHistory(m_ui.ServerHostComboBox);
+	m_pOptions->saveComboBoxHistory(m_ui.ServerPortComboBox);
+	m_pOptions->saveComboBoxHistory(m_ui.ServerCmdLineComboBox);
 
-    // Just go with dialog acceptance.
-    QDialog::accept();
+	// Just go with dialog acceptance.
+	QDialog::accept();
 }
 
 
 // Reject settings (Cancel button slot).
 void OptionsForm::reject (void)
 {
-    bool bReject = true;
+	bool bReject = true;
 
-    // Check if there's any pending changes...
-    if (m_iDirtyCount > 0) {
-        switch (QMessageBox::warning(this,
+	// Check if there's any pending changes...
+	if (m_iDirtyCount > 0) {
+		switch (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
-            tr("Some settings have been changed.\n\n"
-               "Do you want to apply the changes?"),
-            tr("Apply"), tr("Discard"), tr("Cancel"))) {
-        case 0:     // Apply...
-            accept();
-            return;
-        case 1:     // Discard
-            break;
-        default:    // Cancel.
-            bReject = false;
-        }
-    }
+			tr("Some settings have been changed.\n\n"
+			"Do you want to apply the changes?"),
+			tr("Apply"), tr("Discard"), tr("Cancel"))) {
+		case 0:     // Apply...
+			accept();
+			return;
+		case 1:     // Discard
+			break;
+		default:    // Cancel.
+			bReject = false;
+		}
+	}
 
-    if (bReject)
-        QDialog::reject();
+	if (bReject)
+		QDialog::reject();
 }
 
 
 // Dirty up settings.
 void OptionsForm::optionsChanged (void)
 {
-    if (m_iDirtySetup > 0)
-        return;
+	if (m_iDirtySetup > 0)
+		return;
 
-    m_iDirtyCount++;
-    stabilizeForm();
+	m_iDirtyCount++;
+	stabilizeForm();
 }
 
 
 // Stabilize current form state.
 void OptionsForm::stabilizeForm (void)
 {
-    bool bEnabled = ui.ServerStartCheckBox->isChecked();
-    ui.ServerCmdLineTextLabel->setEnabled(bEnabled);
-    ui.ServerCmdLineComboBox->setEnabled(bEnabled);
-    ui.StartDelayTextLabel->setEnabled(bEnabled);
-    ui.StartDelaySpinBox->setEnabled(bEnabled);
+	bool bEnabled = m_ui.ServerStartCheckBox->isChecked();
+	m_ui.ServerCmdLineTextLabel->setEnabled(bEnabled);
+	m_ui.ServerCmdLineComboBox->setEnabled(bEnabled);
+	m_ui.StartDelayTextLabel->setEnabled(bEnabled);
+	m_ui.StartDelaySpinBox->setEnabled(bEnabled);
 
-    ui.AutoRefreshTimeSpinBox->setEnabled(ui.AutoRefreshCheckBox->isChecked());
-    ui.MessagesLimitLinesSpinBox->setEnabled(ui.MessagesLimitCheckBox->isChecked());
+	m_ui.AutoRefreshTimeSpinBox->setEnabled(
+		m_ui.AutoRefreshCheckBox->isChecked());
+	m_ui.MessagesLimitLinesSpinBox->setEnabled(
+		m_ui.MessagesLimitCheckBox->isChecked());
 
-    ui.OkPushButton->setEnabled(m_iDirtyCount > 0);
+	m_ui.OkPushButton->setEnabled(m_iDirtyCount > 0);
 }
 
 
 // The channel display font selection dialog.
 void OptionsForm::chooseDisplayFont (void)
 {
-    bool  bOk  = false;
-    QFont font = QFontDialog::getFont(&bOk, ui.DisplayFontTextLabel->font(), this);
-    if (bOk) {
-        ui.DisplayFontTextLabel->setFont(font);
-        ui.DisplayFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
-        optionsChanged();
-    }
+	bool  bOk  = false;
+	QFont font = QFontDialog::getFont(&bOk,
+		m_ui.DisplayFontTextLabel->font(), this);
+	if (bOk) {
+		m_ui.DisplayFontTextLabel->setFont(font);
+		m_ui.DisplayFontTextLabel->setText(font.family()
+			+ ' ' + QString::number(font.pointSize()));
+		optionsChanged();
+	}
 }
 
 
 // The messages font selection dialog.
 void OptionsForm::chooseMessagesFont (void)
 {
-    bool  bOk  = false;
-    QFont font = QFontDialog::getFont(&bOk, ui.MessagesFontTextLabel->font(), this);
-    if (bOk) {
-        ui.MessagesFontTextLabel->setFont(font);
-        ui.MessagesFontTextLabel->setText(font.family() + " " + QString::number(font.pointSize()));
-        optionsChanged();
-    }
+	bool  bOk  = false;
+	QFont font = QFontDialog::getFont(&bOk,
+		m_ui.MessagesFontTextLabel->font(), this);
+	if (bOk) {
+		m_ui.MessagesFontTextLabel->setFont(font);
+		m_ui.MessagesFontTextLabel->setText(font.family()
+			+ ' ' + QString::number(font.pointSize()));
+		optionsChanged();
+	}
 }
 
 
@@ -328,7 +340,7 @@ void OptionsForm::toggleDisplayEffect ( bool bOn )
 	} else {
 		pal.setColor(QPalette::Background, Qt::black);
 	}
-	ui.DisplayFontTextLabel->setPalette(pal);
+	m_ui.DisplayFontTextLabel->setPalette(pal);
 
 	optionsChanged();
 }

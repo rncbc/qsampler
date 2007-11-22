@@ -5,6 +5,11 @@ ChangeLog
 
 CVS HEAD
 
+* Audio routing table is initially hidden in the dialog, when
+  creating a new sampler channel.
+
+* README requirements and configuration notes update.
+
 * Disable OK button in sampler channel form and MIDI instrument
   form if no valid engine is selected (to avoid bothering newbie
   users with confusing LSCP syntax errors when using the UI the

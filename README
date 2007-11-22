@@ -2,7 +2,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ------------------------------------------
 
 Qsampler is a LinuxSampler GUI front-end application written in C++ around
-the Qt3 toolkit using Qt Designer. At the moment it just wraps as a client
+the Qt4 toolkit using Qt Designer. At the moment it just wraps as a client
 reference interface for the LinuxSampler Control Protocol (LSCP).
 
 LinuxSampler is a work in progress. The goal is to produce a free, open source
@@ -18,6 +18,26 @@ Homepage: http://qsampler.sourceforge.net
 See also: http://www.linuxsampler.org
 
 License: GNU General Public License (GPL)
+
+
+Requirements
+------------
+
+The software requirements for build and runtime are listed as follows:
+
+  Mandatory:
+
+  - Qt 4 (core, gui), C++ class library and tools for
+        crossplatform development and internationalization
+        http://www.trolltech.org/products/qt/
+
+  - liblscp, C library for LinuxSampler control protocol API.
+        http://www.linuxsampler.org/
+
+  Optional (opted-in at build time):
+
+  - libgig, C++ library for loading and modifying Gigasampler and DLS files.
+        http://www.linuxsampler.org/libgig/
 
 
 Installation
@@ -52,14 +72,17 @@ script just before you proceed with the above instructions:
 Configuration
 -------------
 
-Qsampler holds its settings and configuration state per user, in a file
-located as $HOME/.qt/qsamplerrc. Normally, there's no need to edit this file,
-as it is recreated and rewritten everytime qsampler is run.
+Qsampler holds its settings and configuration state per user, in a
+file located as $HOME/.config/linuxsampler.org/Qsampler.conf .
+Normally, there's no need to edit this file, as it is recreated and
+rewritten everytime qsampler is run.
+
 
 Bugs
 ----
 
-Plenty still, after all this is alpha software ;)
+Plenty as this is still alpha software. Bug reports should be posted on
+LinuxSampler bug tracker (http://bugs.linuxsampler.org).
 
 
 Support
@@ -67,9 +90,8 @@ Support
 
 Qsampler is open source free software. For bug reports, feature requests,
 discussion forums, mailling lists, or any other matter related to the
-development of this piece of software, please use the Sourceforge
-project page (http://sourceforge.net/projects/qsampler).
-
+development of this piece of software, please use the LinuxSampler project
+site (http://www.linuxsampler.org).
 
 
 Enjoy.

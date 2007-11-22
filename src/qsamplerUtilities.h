@@ -29,8 +29,8 @@
 namespace qsamplerUtilities {
 
 struct lscpVersion_t {
-    int major;
-    int minor;
+	int major;
+	int minor;
 };
 
 QString lscpEscapePath(const QString& sPath);

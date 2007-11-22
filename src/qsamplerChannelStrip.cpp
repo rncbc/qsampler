@@ -35,8 +35,10 @@
 
 namespace QSampler {
 
-ChannelStrip::ChannelStrip(QWidget* parent, Qt::WFlags f) : QWidget(parent, f) {
-    ui.setupUi(this);
+ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
+	: QWidget(pParent, wflags)
+{
+    m_ui.setupUi(this);
 
     // Initialize locals.
     m_pChannel     = NULL;
@@ -46,22 +48,22 @@ ChannelStrip::ChannelStrip(QWidget* parent, Qt::WFlags f) : QWidget(parent, f) {
     // Try to restore normal window positioning.
     adjustSize();
 
-	QObject::connect(ui.ChannelSetupPushButton,
+	QObject::connect(m_ui.ChannelSetupPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelSetup()));
-	QObject::connect(ui.ChannelMutePushButton,
+	QObject::connect(m_ui.ChannelMutePushButton,
 		SIGNAL(toggled(bool)),
 		SLOT(channelMute(bool)));
-	QObject::connect(ui.ChannelSoloPushButton,
+	QObject::connect(m_ui.ChannelSoloPushButton,
 		SIGNAL(toggled(bool)),
 		SLOT(channelSolo(bool)));
-	QObject::connect(ui.VolumeSlider,
+	QObject::connect(m_ui.VolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
-	QObject::connect(ui.VolumeSpinBox,
+	QObject::connect(m_ui.VolumeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
-	QObject::connect(ui.ChannelEditPushButton,
+	QObject::connect(m_ui.ChannelEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelEdit()));
 }
@@ -149,24 +151,24 @@ void ChannelStrip::setup ( qsamplerChannel *pChannel )
 }
 
 // Channel secriptor accessor.
-qsamplerChannel *ChannelStrip::channel (void)
+qsamplerChannel *ChannelStrip::channel (void) const
 {
     return m_pChannel;
 }
 
 
 // Messages view font accessors.
-QFont ChannelStrip::displayFont (void)
+QFont ChannelStrip::displayFont (void) const
 {
-    return ui.EngineNameTextLabel->font();
+    return m_ui.EngineNameTextLabel->font();
 }
 
 void ChannelStrip::setDisplayFont ( const QFont & font )
 {
-    ui.EngineNameTextLabel->setFont(font);
-    ui.MidiPortChannelTextLabel->setFont(font);
-    ui.InstrumentNameTextLabel->setFont(font);
-    ui.InstrumentStatusTextLabel->setFont(font);
+    m_ui.EngineNameTextLabel->setFont(font);
+    m_ui.MidiPortChannelTextLabel->setFont(font);
+    m_ui.InstrumentNameTextLabel->setFont(font);
+    m_ui.InstrumentStatusTextLabel->setFont(font);
 }
 
 
@@ -175,8 +177,8 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
 	QPalette pal;
 	pal.setColor(QPalette::Foreground, Qt::yellow);
-	ui.EngineNameTextLabel->setPalette(pal);
-	ui.MidiPortChannelTextLabel->setPalette(pal);
+	m_ui.EngineNameTextLabel->setPalette(pal);
+	m_ui.MidiPortChannelTextLabel->setPalette(pal);
 	pal.setColor(QPalette::Foreground, Qt::green);
 	if (bDisplayEffect) {
 		QPixmap pm(":/icons/displaybg1.png");
@@ -184,8 +186,8 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 	} else {
 		pal.setColor(QPalette::Background, Qt::black);
 	}
-	ui.ChannelInfoFrame->setPalette(pal);
-	ui.StreamVoiceCountTextLabel->setPalette(pal);
+	m_ui.ChannelInfoFrame->setPalette(pal);
+	m_ui.StreamVoiceCountTextLabel->setPalette(pal);
 }
 
 
@@ -193,8 +195,8 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 void ChannelStrip::setMaxVolume ( int iMaxVolume )
 {
     m_iDirtyChange++;
-    ui.VolumeSlider->setRange(0, iMaxVolume);
-    ui.VolumeSpinBox->setRange(0, iMaxVolume);
+    m_ui.VolumeSlider->setRange(0, iMaxVolume);
+    m_ui.VolumeSpinBox->setRange(0, iMaxVolume);
     m_iDirtyChange--;
 }
 
@@ -286,11 +288,11 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 	// Instrument name...
 	if (m_pChannel->instrumentName().isEmpty()) {
 		if (m_pChannel->instrumentStatus() >= 0)
-			ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::loadingInstrument());
+			m_ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::loadingInstrument());
 		else
-			ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
+			m_ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
 	} else
-		ui.InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
+		m_ui.InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
 
 	return true;
 }
@@ -322,8 +324,8 @@ bool ChannelStrip::updateChannelVolume (void)
 
     // Flag it here, to avoid infinite recursion.
     m_iDirtyChange++;
-    ui.VolumeSlider->setValue(iVolume);
-    ui.VolumeSpinBox->setValue(iVolume);
+    m_ui.VolumeSlider->setValue(iVolume);
+    m_ui.VolumeSpinBox->setValue(iVolume);
     m_iDirtyChange--;
 
     return true;
@@ -343,7 +345,7 @@ bool ChannelStrip::updateChannelInfo (void)
     // Update strip caption.
     QString sText = m_pChannel->channelName();
     setWindowTitle(sText);
-    ui.ChannelSetupPushButton->setText(sText);
+    m_ui.ChannelSetupPushButton->setText(sText);
 
     // Check if we're up and connected.
 	MainForm* pMainForm = MainForm::getInstance();
@@ -355,9 +357,9 @@ bool ChannelStrip::updateChannelInfo (void)
 
     // Engine name...
     if (m_pChannel->engineName().isEmpty())
-        ui.EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
+        m_ui.EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
     else
-        ui.EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
+        m_ui.EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
 
 	// Instrument name...
 	updateInstrumentName(false);
@@ -368,7 +370,7 @@ bool ChannelStrip::updateChannelInfo (void)
 		sMidiPortChannel += tr("All");
 	else
 		sMidiPortChannel += QString::number(m_pChannel->midiChannel() + 1);
-	ui.MidiPortChannelTextLabel->setText(sMidiPortChannel);
+	m_ui.MidiPortChannelTextLabel->setText(sMidiPortChannel);
 
 	// Common palette...
 	QPalette pal;
@@ -378,16 +380,16 @@ bool ChannelStrip::updateChannelInfo (void)
     int iInstrumentStatus = m_pChannel->instrumentStatus();
     if (iInstrumentStatus < 0) {
 		pal.setColor(QPalette::Foreground, Qt::red);
-		ui.InstrumentStatusTextLabel->setPalette(pal);
-        ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
+		m_ui.InstrumentStatusTextLabel->setPalette(pal);
+        m_ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
         m_iErrorCount++;
         return false;
     }
     // All seems normal...
 	pal.setColor(QPalette::Foreground,
 		iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
-    ui.InstrumentStatusTextLabel->setPalette(pal);
-    ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
+    m_ui.InstrumentStatusTextLabel->setPalette(pal);
+    m_ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
     m_iErrorCount = 0;
 
 #ifdef CONFIG_MUTE_SOLO
@@ -396,15 +398,15 @@ bool ChannelStrip::updateChannelInfo (void)
 	const QColor& rgbButton = pal.color(QPalette::Button);
 	pal.setColor(QPalette::Foreground, rgbFore);
 	pal.setColor(QPalette::Button, bMute ? Qt::yellow : rgbButton);
-	ui.ChannelMutePushButton->setPalette(pal);
-	ui.ChannelMutePushButton->setDown(bMute);
+	m_ui.ChannelMutePushButton->setPalette(pal);
+	m_ui.ChannelMutePushButton->setDown(bMute);
     bool bSolo = m_pChannel->channelSolo();
 	pal.setColor(QPalette::Button, bSolo ? Qt::cyan : rgbButton);	
-	ui.ChannelSoloPushButton->setPalette(pal);
-	ui.ChannelSoloPushButton->setDown(bSolo);
+	m_ui.ChannelSoloPushButton->setPalette(pal);
+	m_ui.ChannelSoloPushButton->setDown(bSolo);
 #else
-	ui.ChannelMutePushButton->setEnabled(false);
-	ui.ChannelSoloPushButton->setEnabled(false);
+	m_ui.ChannelMutePushButton->setEnabled(false);
+	m_ui.ChannelSoloPushButton->setEnabled(false);
 #endif
 
     // And update the both GUI volume elements;
@@ -437,8 +439,8 @@ bool ChannelStrip::updateChannelUsage (void)
     int iStreamUsage = ::lscp_get_channel_stream_usage(pMainForm->client(), m_pChannel->channelID());;
 
     // Update the GUI elements...
-    ui.StreamUsageProgressBar->setValue(iStreamUsage);
-    ui.StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
+    m_ui.StreamUsageProgressBar->setValue(iStreamUsage);
+    m_ui.StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
 
     // We're clean.
     return true;

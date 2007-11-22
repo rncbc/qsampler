@@ -107,7 +107,7 @@ void qsamplerDeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 //
 
 // Constructor.
-qsamplerDevice::qsamplerDevice ( qsamplerDeviceType deviceType, int iDeviceID )
+qsamplerDevice::qsamplerDevice ( DeviceType deviceType, int iDeviceID )
 {
 //	m_ports.setAutoDelete(true);
 
@@ -134,7 +134,7 @@ qsamplerDevice::qsamplerDevice ( const qsamplerDevice& device )
 
 
 // Initializer.
-void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
+void qsamplerDevice::setDevice ( DeviceType deviceType, int iDeviceID )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -296,7 +296,7 @@ int qsamplerDevice::deviceID (void) const
 	return m_iDeviceID;
 }
 
-qsamplerDevice::qsamplerDeviceType qsamplerDevice::deviceType (void) const
+qsamplerDevice::DeviceType qsamplerDevice::deviceType (void) const
 {
 	return m_deviceType;
 }
@@ -316,7 +316,7 @@ QString qsamplerDevice::deviceName (void) const
 {
 	QString sPrefix;
 	if (m_iDeviceID >= 0)
-	    sPrefix += m_sDeviceType + ' ';
+		sPrefix += m_sDeviceType + ' ';
 	return sPrefix + m_sDeviceName;
 }
 
@@ -352,13 +352,13 @@ bool qsamplerDevice::setParam ( const QString& sParam,
 		lscp_status_t ret = LSCP_FAILED;
 		switch (m_deviceType) {
 		case qsamplerDevice::Audio:
-		    if (sParam == "CHANNELS") iRefresh++;
+			if (sParam == "CHANNELS") iRefresh++;
 			if ((ret = ::lscp_set_audio_device_param(pMainForm->client(),
 					m_iDeviceID, &param)) != LSCP_OK)
 				appendMessagesClient("lscp_set_audio_device_param");
 			break;
 		case qsamplerDevice::Midi:
-		    if (sParam == "PORTS") iRefresh++;
+			if (sParam == "PORTS") iRefresh++;
 			if ((ret = ::lscp_set_midi_device_param(pMainForm->client(),
 					m_iDeviceID, &param)) != LSCP_OK)
 				appendMessagesClient("lscp_set_midi_device_param");
@@ -511,7 +511,7 @@ int qsamplerDevice::refreshParams (void)
 {
 	// This should only make sense for scratch devices...
 	if (m_iDeviceID >= 0)
-	    return 0;
+		return 0;
 	// Refresh all parameters that have dependencies...
 	int iParams = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
@@ -527,7 +527,7 @@ int qsamplerDevice::refreshPorts (void)
 {
 	// This should only make sense for actual devices...
 	if (m_iDeviceID < 0)
-	    return 0;
+		return 0;
 	// Port/channel count determination...
 	int iPorts = 0;
 	switch (m_deviceType) {
@@ -555,7 +555,7 @@ int qsamplerDevice::refreshDepends ( const QString& sParam )
 {
 	// This should only make sense for scratch devices...
 	if (m_iDeviceID >= 0)
-	    return 0;
+		return 0;
 	// Refresh all parameters that depend on this one...
 	int iDepends = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
@@ -686,7 +686,7 @@ void qsamplerDevice::appendMessagesClient( const QString& s ) const
 
 // Device ids enumerator.
 int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
-	qsamplerDeviceType deviceType )
+	DeviceType deviceType )
 {
 	int *piDeviceIDs = NULL;
 	switch (deviceType) {
@@ -705,7 +705,7 @@ int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
 
 // Driver names enumerator.
 QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
-	qsamplerDeviceType deviceType )
+	DeviceType deviceType )
 {
 	QStringList drivers;
 
@@ -899,9 +899,9 @@ bool qsamplerDevicePort::setParam ( const QString& sParam,
 
 // Constructors.
 qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidget* pTreeWidget,
-	qsamplerDevice::qsamplerDeviceType deviceType )
+	qsamplerDevice::DeviceType deviceType )
 	: QTreeWidgetItem(pTreeWidget, QSAMPLER_DEVICE_ITEM),
-      m_device(deviceType)
+	m_device(deviceType)
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
@@ -918,10 +918,10 @@ qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidget* pTreeWidget,
 }
 
 qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidgetItem* pItem,
-	qsamplerDevice::qsamplerDeviceType deviceType,
+	qsamplerDevice::DeviceType deviceType,
 	int iDeviceID )
 	: QTreeWidgetItem(pItem, QSAMPLER_DEVICE_ITEM),
-      m_device(deviceType, iDeviceID)
+	m_device(deviceType, iDeviceID)
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
@@ -953,49 +953,66 @@ qsamplerDevice& qsamplerDeviceItem::device ()
 // AbstractDeviceParamModel - data model base class for device parameters
 //
 
-AbstractDeviceParamModel::AbstractDeviceParamModel(QObject* parent) : QAbstractTableModel(parent), bEditable(false) {
-    params = NULL;
+AbstractDeviceParamModel::AbstractDeviceParamModel ( QObject* pParent )
+	: QAbstractTableModel(pParent), m_bEditable(false)
+{
+	m_params = NULL;
 }
 
-int AbstractDeviceParamModel::rowCount(const QModelIndex& /*parent*/) const {
-    //std::cout << "model size=" << params.size() << "\n" << std::flush;
-    return (params) ? params->size() : 0;
+
+int AbstractDeviceParamModel::rowCount ( const QModelIndex& /*parent*/) const
+{
+	//std::cout << "model size=" << params.size() << "\n" << std::flush;
+	return (m_params) ? m_params->size() : 0;
 }
 
-int AbstractDeviceParamModel::columnCount(const QModelIndex& /*parent*/) const {
-    return 3;
+
+int AbstractDeviceParamModel::columnCount ( const QModelIndex& /*parent*/) const
+{
+	return 3;
 }
 
-Qt::ItemFlags AbstractDeviceParamModel::flags(const QModelIndex& /*index*/) const {
-    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+
+Qt::ItemFlags AbstractDeviceParamModel::flags ( const QModelIndex& /*index*/) const
+{
+	return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-QVariant AbstractDeviceParamModel::headerData(int section, Qt::Orientation orientation, int role) const {
-    if (role != Qt::DisplayRole) return QVariant();
 
-    if (orientation == Qt::Horizontal) {
-        switch (section) {
-            case 0:  return tr("Parameter");
-            case 1:  return tr("Value");
-            case 2:  return tr("Description");
-            default: return QVariant();
-        }
-    }
+QVariant AbstractDeviceParamModel::headerData (
+	int section, Qt::Orientation orientation, int role) const
+{
+	if (role != Qt::DisplayRole)
+		return QVariant();
 
-    return QVariant();
+	if (orientation == Qt::Horizontal) {
+		switch (section) {
+			case 0:  return tr("Parameter");
+			case 1:  return tr("Value");
+			case 2:  return tr("Description");
+			default: return QVariant();
+		}
+	}
+
+	return QVariant();
 }
 
-void AbstractDeviceParamModel::refresh(const qsamplerDeviceParamMap* params, bool bEditable) {
-    this->params    = params;
-    this->bEditable = bEditable;
-    // inform the outer world (QTableView) that our data changed
-    QAbstractTableModel::reset();
+
+void AbstractDeviceParamModel::refresh (
+	const qsamplerDeviceParamMap* params, bool bEditable )
+{
+	m_params    = params;
+	m_bEditable = bEditable;
+	// inform the outer world (QTableView) that our data changed
+	QAbstractTableModel::reset();
 }
 
-void AbstractDeviceParamModel::clear() {
-    params = NULL;
-    // inform the outer world (QTableView) that our data changed
-    QAbstractTableModel::reset();
+
+void AbstractDeviceParamModel::clear (void)
+{
+	m_params = NULL;
+	// inform the outer world (QTableView) that our data changed
+	QAbstractTableModel::reset();
 }
 
 
@@ -1003,47 +1020,55 @@ void AbstractDeviceParamModel::clear() {
 // DeviceParamModel - data model for device parameters (used for QTableView)
 //
 
-DeviceParamModel::DeviceParamModel(QObject* parent) : AbstractDeviceParamModel(parent) {
-    device = NULL;
+DeviceParamModel::DeviceParamModel ( QObject *pParent )
+	: AbstractDeviceParamModel(pParent)
+{
+	m_device = NULL;
 }
 
-QVariant DeviceParamModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid()) {
-        //std::cout << "inavlid device model index\n" << std::flush;
-        return QVariant();
-    }
-    if (role != Qt::DisplayRole) {
-        //std::cout << "inavlid display role\n" << std::flush;
-        return QVariant();
-    }
+QVariant DeviceParamModel::data (
+	const QModelIndex &index, int role) const
+{
+	if (!index.isValid())
+		return QVariant();
 
-    DeviceParameterRow item;
-    item.name  = params->keys()[index.row()];
-    item.param = (*params)[item.name];
-    item.alive = device != NULL && device->deviceID() >= 0;
+	if (role != Qt::DisplayRole)
+		return QVariant();
 
-    return QVariant::fromValue(item);
+	DeviceParameterRow item;
+	item.name  = m_params->keys()[index.row()];
+	item.param = (*m_params)[item.name];
+	item.alive = m_device != NULL && m_device->deviceID() >= 0;
+
+	return QVariant::fromValue(item);
 }
 
-bool DeviceParamModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
-    if (!index.isValid()) {
-        return false;
-    }
-    QString key = params->keys()[index.row()];
-    //params[key].value = value.toString();
-    device->setParam(key, value.toString());
-    emit dataChanged(index, index);
-    return true;
+
+bool DeviceParamModel::setData (
+	const QModelIndex& index, const QVariant& value, int /*role*/)
+{
+	if (!index.isValid())
+		return false;
+
+	QString key = m_params->keys()[index.row()];
+	//m_params[key].value = value.toString();
+	m_device->setParam(key, value.toString());
+	emit dataChanged(index, index);
+	return true;
 }
 
-void DeviceParamModel::refresh(qsamplerDevice* pDevice, bool bEditable) {
-    device = pDevice;
-    AbstractDeviceParamModel::refresh(&pDevice->params(), bEditable);
+
+void DeviceParamModel::refresh ( qsamplerDevice* pDevice, bool bEditable )
+{
+	m_device = pDevice;
+	AbstractDeviceParamModel::refresh(&pDevice->params(), bEditable);
 }
 
-void DeviceParamModel::clear() {
-    AbstractDeviceParamModel::clear();
-    device = NULL;
+
+void DeviceParamModel::clear (void)
+{
+	AbstractDeviceParamModel::clear();
+	m_device = NULL;
 }
 
 
@@ -1051,47 +1076,54 @@ void DeviceParamModel::clear() {
 // PortParamModel - data model for port parameters (used for QTableView)
 //
 
-PortParamModel::PortParamModel(QObject* parent) : AbstractDeviceParamModel(parent) {
-    port = NULL;
+PortParamModel::PortParamModel ( QObject *pParent)
+	: AbstractDeviceParamModel(pParent)
+{
+	m_port = NULL;
 }
 
-QVariant PortParamModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid()) {
-        //std::cout << "inavlid device model index\n" << std::flush;
-        return QVariant();
-    }
-    if (role != Qt::DisplayRole) {
-        //std::cout << "inavlid display role\n" << std::flush;
-        return QVariant();
-    }
+QVariant PortParamModel::data ( const QModelIndex &index, int role ) const
+{
+	if (!index.isValid())
+		return QVariant();
 
-    DeviceParameterRow item;
-    item.name  = params->keys()[index.row()];
-    item.param = (*params)[item.name];
-    item.alive = port != NULL && port->portID() >= 0;
+	if (role != Qt::DisplayRole)
+		return QVariant();
 
-    return QVariant::fromValue(item);
+	DeviceParameterRow item;
+	item.name  = m_params->keys()[index.row()];
+	item.param = (*m_params)[item.name];
+	item.alive = m_port != NULL && m_port->portID() >= 0;
+
+	return QVariant::fromValue(item);
 }
 
-bool PortParamModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
-    if (!index.isValid()) {
-        return false;
-    }
-    QString key = params->keys()[index.row()];
-    //params[key].value = value.toString();
-    port->setParam(key, value.toString());
-    emit dataChanged(index, index);
-    return true;
+
+bool PortParamModel::setData (
+	const QModelIndex& index, const QVariant& value, int /*role*/)
+{
+	if (!index.isValid())
+		return false;
+
+	QString key = m_params->keys()[index.row()];
+	//params[key].value = value.toString();
+	m_port->setParam(key, value.toString());
+	emit dataChanged(index, index);
+	return true;
 }
 
-void PortParamModel::refresh(qsamplerDevicePort* pPort, bool bEditable) {
-    port = pPort;
-    AbstractDeviceParamModel::refresh(&pPort->params(), bEditable);
+
+void PortParamModel::refresh ( qsamplerDevicePort* pPort, bool bEditable )
+{
+	m_port = pPort;
+	AbstractDeviceParamModel::refresh(&m_port->params(), bEditable);
 }
 
-void PortParamModel::clear() {
-    AbstractDeviceParamModel::clear();
-    port = NULL;
+
+void PortParamModel::clear (void)
+{
+	AbstractDeviceParamModel::clear();
+	m_port = NULL;
 }
 
 
@@ -1099,102 +1131,112 @@ void PortParamModel::clear() {
 // DeviceParamDelegate - table cell renderer for device/port parameters
 //
 
-DeviceParamDelegate::DeviceParamDelegate(QObject *parent) : QItemDelegate(parent) {
-}
-
-QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
-	const QStyleOptionViewItem &/* option */,
-	const QModelIndex& index) const
+DeviceParamDelegate::DeviceParamDelegate ( QObject *pParent)
+	: QItemDelegate(pParent)
 {
-    if (!index.isValid()) {
-        return NULL;
-    }
-
-    DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
-
-    const bool bEnabled = (r.alive) ? !r.param.fix : true;
-
-    QString val = (r.alive) ? r.param.value : r.param.defaultv;
-
-    switch (index.column()) {
-        case 0:
-            return new QLabel(r.name, parent);
-        case 1: {
-            if (r.param.type == LSCP_TYPE_BOOL) {
-                QCheckBox* pCheckBox = new QCheckBox(parent);
-                if (val != QString::null)
-                    pCheckBox->setChecked(val.toLower() == "true");
-                pCheckBox->setEnabled(bEnabled);
-                return pCheckBox;
-            } else if (r.param.possibilities.count() > 0) {
-                QStringList opts = r.param.possibilities;
-                if (r.param.multiplicity)
-                    opts.prepend(tr("(none)"));
-                QComboBox* pComboBox = new QComboBox(parent);
-                pComboBox->addItems(opts);
-                if (r.param.value.isEmpty())
-                    pComboBox->setCurrentIndex(0);
-                else
-                    pComboBox->setCurrentIndex(pComboBox->findText(val));
-                pComboBox->setEnabled(bEnabled);
-                return pComboBox;
-            } else if (r.param.type == LSCP_TYPE_INT && bEnabled) {
-                QSpinBox* pSpinBox = new QSpinBox(parent);
-                pSpinBox->setMinimum(
-                    (!r.param.range_min.isEmpty()) ?
-                        r.param.range_min.toInt() : 0 // or better a negative default min value ?
-                );
-                pSpinBox->setMaximum(
-                    (!r.param.range_max.isEmpty()) ?
-                        r.param.range_max.toInt() : (1 << 16) // or better a nigher default max value ?
-                );
-                pSpinBox->setValue(val.toInt());
-                return pSpinBox;
-            } else if (bEnabled) {
-                QLineEdit* pLineEdit = new QLineEdit(val, parent);
-                return pLineEdit;
-            } else {
-                QLabel* pLabel = new QLabel(val, parent);
-                return pLabel;
-            }
-        }
-        case 2:
-            return new QLabel(r.param.description, parent);
-        default:
-            return NULL;
-    }
 }
 
-void DeviceParamDelegate::setEditorData(QWidget* /*editor*/, const QModelIndex& /*index*/) const {
-    // unused, since we set the editor data already in createEditor()
+
+QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
+	const QStyleOptionViewItem& /* option */, const QModelIndex& index ) const
+{
+	if (!index.isValid())
+		return NULL;
+
+	DeviceParameterRow r = index.model()->data(index,
+		Qt::DisplayRole).value<DeviceParameterRow>();
+
+	const bool bEnabled = (r.alive) ? !r.param.fix : true;
+
+	QString val = (r.alive) ? r.param.value : r.param.defaultv;
+
+	switch (index.column()) {
+		case 0:
+			return new QLabel(r.name, pParent);
+		case 1: {
+			if (r.param.type == LSCP_TYPE_BOOL) {
+				QCheckBox* pCheckBox = new QCheckBox(pParent);
+				if (val != QString::null)
+					pCheckBox->setChecked(val.toLower() == "true");
+				pCheckBox->setEnabled(bEnabled);
+				return pCheckBox;
+			} else if (r.param.possibilities.count() > 0) {
+				QStringList opts = r.param.possibilities;
+				if (r.param.multiplicity)
+					opts.prepend(tr("(none)"));
+				QComboBox* pComboBox = new QComboBox(pParent);
+				pComboBox->addItems(opts);
+				if (r.param.value.isEmpty())
+					pComboBox->setCurrentIndex(0);
+				else
+					pComboBox->setCurrentIndex(pComboBox->findText(val));
+				pComboBox->setEnabled(bEnabled);
+				return pComboBox;
+			} else if (r.param.type == LSCP_TYPE_INT && bEnabled) {
+				QSpinBox* pSpinBox = new QSpinBox(pParent);
+				pSpinBox->setMinimum(
+					(!r.param.range_min.isEmpty()) ?
+						r.param.range_min.toInt() : 0 // or better a negative default min value ?
+				);
+				pSpinBox->setMaximum(
+					(!r.param.range_max.isEmpty()) ?
+						r.param.range_max.toInt() : (1 << 16) // or better a nigher default max value ?
+				);
+				pSpinBox->setValue(val.toInt());
+				return pSpinBox;
+			} else if (bEnabled) {
+				QLineEdit* pLineEdit = new QLineEdit(val, pParent);
+				return pLineEdit;
+			} else {
+				QLabel* pLabel = new QLabel(val, pParent);
+				return pLabel;
+			}
+		}
+		case 2:
+			return new QLabel(r.param.description, pParent);
+		default:
+			return NULL;
+	}
 }
 
-void DeviceParamDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
-    if (index.column() == 1) {
-        DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
-        if (editor->metaObject()->className() == "QCheckBox") {
-            QCheckBox* pCheckBox = static_cast<QCheckBox*>(editor);
-            model->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
-        } else if (editor->metaObject()->className() == "QComboBox") {
-            QComboBox* pComboBox = static_cast<QComboBox*>(editor);
-            model->setData(index, pComboBox->currentText());
-        } else if (editor->metaObject()->className() == "QSpinBox") {
-            QSpinBox* pSpinBox = static_cast<QSpinBox*>(editor);
-            model->setData(index, pSpinBox->value());
-        } else if (editor->metaObject()->className() == "QLineEdit") {
-            QLineEdit* pLineEdit = static_cast<QLineEdit*>(editor);
-            model->setData(index, pLineEdit->text());
-        } else if (editor->metaObject()->className() == "QLabel") {
-            QLabel* pLabel = static_cast<QLabel*>(editor);
-            model->setData(index, pLabel->text());
-        }
-    }
+
+void DeviceParamDelegate::setEditorData (
+	QWidget* /*pEditor*/, const QModelIndex& /*index*/) const
+{
+	// Unused, since we set the editor data already in createEditor()
 }
 
-void DeviceParamDelegate::updateEditorGeometry(QWidget* editor,
+
+void DeviceParamDelegate::setModelData ( QWidget *pEditor,
+	QAbstractItemModel *model, const QModelIndex& index ) const
+{
+	if (index.column() == 1) {
+		DeviceParameterRow r = index.model()->data(index,
+			Qt::DisplayRole).value<DeviceParameterRow> ();
+		if (pEditor->metaObject()->className() == "QCheckBox") {
+			QCheckBox* pCheckBox = static_cast<QCheckBox*> (pEditor);
+			model->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
+		} else if (pEditor->metaObject()->className() == "QComboBox") {
+			QComboBox* pComboBox = static_cast<QComboBox*> (pEditor);
+			model->setData(index, pComboBox->currentText());
+		} else if (pEditor->metaObject()->className() == "QSpinBox") {
+			QSpinBox* pSpinBox = static_cast<QSpinBox*> (pEditor);
+			model->setData(index, pSpinBox->value());
+		} else if (pEditor->metaObject()->className() == "QLineEdit") {
+			QLineEdit* pLineEdit = static_cast<QLineEdit*> (pEditor);
+			model->setData(index, pLineEdit->text());
+		} else if (pEditor->metaObject()->className() == "QLabel") {
+			QLabel* pLabel = static_cast<QLabel*> (pEditor);
+			model->setData(index, pLabel->text());
+		}
+	}
+}
+
+void DeviceParamDelegate::updateEditorGeometry ( QWidget *pEditor,
 	const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    if (editor) editor->setGeometry(option.rect);
+	if (pEditor)
+		pEditor->setGeometry(option.rect);
 }
 
 // end of qsamplerDevice.cpp

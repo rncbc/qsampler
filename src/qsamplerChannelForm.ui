@@ -26,8 +26,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>484</height>
+    <width>460</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -702,7 +702,25 @@
        </layout>
       </item>
       <item>
-       <widget class="QTableView" name="AudioRoutingTable" />
+       <widget class="QTableView" name="AudioRoutingTable" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>7</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip" >
+         <string>Audio routing table</string>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>320</width>
+          <height>80</height>
+         </size>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

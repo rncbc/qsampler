@@ -39,79 +39,79 @@ class qsamplerOptions
 {
 public:
 
-    // Constructor.
-    qsamplerOptions();
-    // Default destructor.
-    ~qsamplerOptions();
+	// Constructor.
+	qsamplerOptions();
+	// Default destructor.
+	~qsamplerOptions();
 
-    // The settings object accessor.
-    QSettings& settings();
+	// The settings object accessor.
+	QSettings& settings();
 
-    // Command line arguments parser.
-    bool parse_args(int argc, char **argv);
-    // Command line usage helper.
-    void print_usage(const char *arg0);
+	// Command line arguments parser.
+	bool parse_args(int argc, char **argv);
+	// Command line usage helper.
+	void print_usage(const char *arg0);
 
-    // Startup supplied session file.
-    QString sSessionFile;
+	// Startup supplied session file.
+	QString sSessionFile;
 
-    // Server options...
-    QString sServerHost;
-    int     iServerPort;
-    int     iServerTimeout;
-    bool    bServerStart;
-    QString sServerCmdLine;
-    int     iStartDelay;
+	// Server options...
+	QString sServerHost;
+	int     iServerPort;
+	int     iServerTimeout;
+	bool    bServerStart;
+	QString sServerCmdLine;
+	int     iStartDelay;
 
-    // Display options...
-    QString sDisplayFont;
-    bool    bDisplayEffect;
-    bool    bAutoRefresh;
-    int     iAutoRefreshTime;
-    int     iMaxVolume;
-    QString sMessagesFont;
-    bool    bMessagesLimit;
-    int     iMessagesLimitLines;
-    bool    bConfirmRemove;
-    bool    bKeepOnTop;
-    bool    bStdoutCapture;
-    bool    bCompletePath;
-    bool    bInstrumentNames;
+	// Display options...
+	QString sDisplayFont;
+	bool    bDisplayEffect;
+	bool    bAutoRefresh;
+	int     iAutoRefreshTime;
+	int     iMaxVolume;
+	QString sMessagesFont;
+	bool    bMessagesLimit;
+	int     iMessagesLimitLines;
+	bool    bConfirmRemove;
+	bool    bKeepOnTop;
+	bool    bStdoutCapture;
+	bool    bCompletePath;
+	bool    bInstrumentNames;
 
-    // View options...
-    bool    bMenubar;
-    bool    bToolbar;
-    bool    bStatusbar;
-    bool    bAutoArrange;
+	// View options...
+	bool    bMenubar;
+	bool    bToolbar;
+	bool    bStatusbar;
+	bool    bAutoArrange;
 
-    // Default options...
-    QString sSessionDir;
-    QString sInstrumentDir;
-    QString sEngineName;
-    QString sAudioDriver;
-    QString sMidiDriver;
+	// Default options...
+	QString sSessionDir;
+	QString sInstrumentDir;
+	QString sEngineName;
+	QString sAudioDriver;
+	QString sMidiDriver;
 	int     iMidiMap;
 	int     iMidiBank;
 	int     iMidiProg;
 	int     iVolume;
 	int     iLoadMode;
 
-    // Recent file list.
-    int     iMaxRecentFiles;
-    QStringList recentFiles;
+	// Recent file list.
+	int     iMaxRecentFiles;
+	QStringList recentFiles;
 
-    // Widget geometry persistence helper prototypes.
-    void saveWidgetGeometry(QWidget *pWidget);
-    void loadWidgetGeometry(QWidget *pWidget);
+	// Widget geometry persistence helper prototypes.
+	void saveWidgetGeometry(QWidget *pWidget);
+	void loadWidgetGeometry(QWidget *pWidget);
 
-    // Combo box history persistence helper prototypes.
-    void loadComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
-    void saveComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
+	// Combo box history persistence helper prototypes.
+	void loadComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
+	void saveComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
 
 private:
 
-    // Settings member variables.
-    QSettings m_settings;
+	// Settings member variables.
+	QSettings m_settings;
 };
 
 

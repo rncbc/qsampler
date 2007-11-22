@@ -32,21 +32,21 @@ namespace QSampler {
 
 class MainForm;
 
-class DeviceForm : public QDialog {
-Q_OBJECT
-public:
-    DeviceForm(QWidget* parent = 0, Qt::WFlags f = 0);
-   ~DeviceForm();
-    void showEvent(QShowEvent* pShowEvent);
+class DeviceForm : public QDialog
+{
+	Q_OBJECT
 
-    void setDeviceTypeMode(qsamplerDevice::qsamplerDeviceType deviceType);
+public:
+
+    DeviceForm(QWidget *pParent = NULL, Qt::WindowFlags wflags = 0);
+   ~DeviceForm();
+
+    void setDeviceTypeMode(qsamplerDevice::DeviceType deviceType);
     void setDriverName(const QString& sDriverName);
     void setDevice(qsamplerDevice* pDevice);
 
-signals:
-    void devicesChanged();
-
 public slots:
+
     void createDevice();
     void deleteDevice();
     void refreshDevices();
@@ -62,27 +62,33 @@ public slots:
     void updatePortCellRenderers();
     void updatePortCellRenderers(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
+signals:
+
+    void devicesChanged();
+
 protected:
-    MainForm *m_pMainForm;
+
+    void showEvent(QShowEvent* pShowEvent);
+    void hideEvent(QHideEvent* pHideEvent);
+
+private:
+
+    Ui::qsamplerDeviceForm m_ui;
+
+    DeviceParamModel    m_deviceParamModel;
+    DeviceParamDelegate m_deviceParamDelegate;
+
+    PortParamModel      m_devicePortParamModel;
+    DeviceParamDelegate m_devicePortParamDelegate;
+
     lscp_client_t *m_pClient;
     int m_iDirtySetup;
     int m_iDirtyCount;
     bool m_bNewDevice;
-    qsamplerDevice::qsamplerDeviceType m_deviceType;
-    qsamplerDevice::qsamplerDeviceType m_deviceTypeMode;
+    qsamplerDevice::DeviceType m_deviceType;
+    qsamplerDevice::DeviceType m_deviceTypeMode;
     qsamplerDeviceItem *m_pAudioItems;
     qsamplerDeviceItem *m_pMidiItems;
-
-    void hideEvent(QHideEvent* pHideEvent);
-
-private:
-    Ui::qsamplerDeviceForm ui;
-
-    DeviceParamModel    deviceParamModel;
-    DeviceParamDelegate deviceParamDelegate;
-
-    PortParamModel      devicePortParamModel;
-    DeviceParamDelegate devicePortParamDelegate;
 };
 
 } // namespace QSampler

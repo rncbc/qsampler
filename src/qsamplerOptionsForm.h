@@ -30,28 +30,34 @@
 
 namespace QSampler {
 
-class OptionsForm : public QDialog {
-Q_OBJECT
-public:
-    OptionsForm(QWidget* parent = 0);
-   ~OptionsForm();
-    void setup(qsamplerOptions* pOptions);
+class OptionsForm : public QDialog
+{
+	Q_OBJECT
 
-public slots:
-    void accept();
-    void reject();
-    void optionsChanged();
-    void stabilizeForm();
-    void chooseDisplayFont();
-    void chooseMessagesFont();
-    void toggleDisplayEffect(bool bOn);
+public:
+
+	OptionsForm(QWidget *pParent = NULL);
+	~OptionsForm();
+
+	void setup(qsamplerOptions* pOptions);
+
+protected slots:
+
+	void accept();
+	void reject();
+	void optionsChanged();
+	void stabilizeForm();
+	void chooseDisplayFont();
+	void chooseMessagesFont();
+	void toggleDisplayEffect(bool bOn);
 
 private:
-    Ui::qsamplerOptionsForm ui;
 
-    qsamplerOptions* m_pOptions;
-    int m_iDirtySetup;
-    int m_iDirtyCount;
+	Ui::qsamplerOptionsForm m_ui;
+
+	qsamplerOptions* m_pOptions;
+	int m_iDirtySetup;
+	int m_iDirtyCount;
 };
 
 } // namespace QSampler

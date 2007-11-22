@@ -32,28 +32,39 @@ class QDragEnterEvent;
 
 namespace QSampler {
 
-class ChannelStrip : public QWidget {
-Q_OBJECT
+class ChannelStrip : public QWidget
+{
+	Q_OBJECT
+
 public:
-    ChannelStrip(QWidget* parent = 0, Qt::WFlags f = 0);
+
+    ChannelStrip(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
    ~ChannelStrip();
 
     void setup(qsamplerChannel* pChannel);
-    qsamplerChannel* channel();
-    QFont displayFont();
+
+    qsamplerChannel *channel() const;
+
     void setDisplayFont(const QFont& font);
+    QFont displayFont() const;
+
     void setDisplayEffect(bool bDisplayEffect);
+
     void setMaxVolume(int iMaxVolume);
+
     bool updateInstrumentName(bool bForce);
     bool updateChannelVolume();
     bool updateChannelInfo();
     bool updateChannelUsage();
+
     void resetErrorCount();
 
 signals:
+
     void channelChanged(ChannelStrip*);
 
 public slots:
+
     bool channelSetup();
     bool channelMute(bool bMute);
     bool channelSolo(bool bSolo);
@@ -62,12 +73,14 @@ public slots:
     void volumeChanged(int iVolume);
 
 protected:
+
     void dragEnterEvent(QDragEnterEvent* pDragEnterEvent);
     void dropEvent(QDropEvent* pDropEvent);
     void contextMenuEvent(QContextMenuEvent* pEvent);
 
 private:
-    Ui::qsamplerChannelStrip ui;
+
+    Ui::qsamplerChannelStrip m_ui;
 
     qsamplerChannel* m_pChannel;
     int m_iDirtyChange;

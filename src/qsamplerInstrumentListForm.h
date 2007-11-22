@@ -37,31 +37,33 @@ class InstrumentListForm : public QMainWindow
 	Q_OBJECT
 
 public:
-    MidiInstrumentsModel model;
-    MidiInstrumentsDelegate delegate;
 
-    InstrumentListForm(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
-   ~InstrumentListForm();
+	InstrumentListForm(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+~InstrumentListForm();
 
 public slots:
-    void refreshInstruments();
-    void activateMap(int);
+
+	void editInstrument();
+	void editInstrument(const QModelIndex& index);
+	void newInstrument();
+	void deleteInstrument();
+	void refreshInstruments();
+	void activateMap(int);
 
 protected:
-    void showEvent(QShowEvent *);
-    void hideEvent(QHideEvent *);
-    void closeEvent(QCloseEvent *);
 
-protected slots:
-    void editInstrument();
-    void editInstrument(const QModelIndex& index);
-    void newInstrument();
-    void deleteInstrument();
+	void showEvent(QShowEvent *);
+	void hideEvent(QHideEvent *);
+	void closeEvent(QCloseEvent *);
 
 private:
-    Ui::qsamplerInstrumentListForm ui;
 
-    QComboBox* m_pMapComboBox;
+	Ui::qsamplerInstrumentListForm m_ui;
+
+	MidiInstrumentsModel m_model;
+	MidiInstrumentsDelegate m_delegate;
+
+	QComboBox* m_pMapComboBox;
 };
 
 } // namespace QSampler

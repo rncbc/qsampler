@@ -34,55 +34,55 @@ InstrumentListForm::InstrumentListForm (
 	QWidget* pParent, Qt::WindowFlags wflags )
 	: QMainWindow(pParent, wflags)
 {
-    ui.setupUi(this);
+	m_ui.setupUi(this);
 
-    // Setup toolbar widgets.
-    m_pMapComboBox = new QComboBox(ui.InstrumentToolbar);
-    m_pMapComboBox->setMinimumWidth(120);
-    m_pMapComboBox->setEnabled(false);
-    m_pMapComboBox->setToolTip(tr("Instrument Map"));
-    ui.InstrumentToolbar->addWidget(m_pMapComboBox);
+	// Setup toolbar widgets.
+	m_pMapComboBox = new QComboBox(m_ui.InstrumentToolbar);
+	m_pMapComboBox->setMinimumWidth(120);
+	m_pMapComboBox->setEnabled(false);
+	m_pMapComboBox->setToolTip(tr("Instrument Map"));
+	m_ui.InstrumentToolbar->addWidget(m_pMapComboBox);
 
-    ui.InstrumentToolbar->addSeparator();
-    ui.InstrumentToolbar->addAction(ui.newInstrumentAction);
-    ui.InstrumentToolbar->addAction(ui.editInstrumentAction);
-    ui.InstrumentToolbar->addAction(ui.deleteInstrumentAction);
-    ui.InstrumentToolbar->addSeparator();
-    ui.InstrumentToolbar->addAction(ui.refreshInstrumentsAction);
+	m_ui.InstrumentToolbar->addSeparator();
+	m_ui.InstrumentToolbar->addAction(m_ui.newInstrumentAction);
+	m_ui.InstrumentToolbar->addAction(m_ui.editInstrumentAction);
+	m_ui.InstrumentToolbar->addAction(m_ui.deleteInstrumentAction);
+	m_ui.InstrumentToolbar->addSeparator();
+	m_ui.InstrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
-    ui.InstrumentTable->setModel(&model);
-    ui.InstrumentTable->setItemDelegate(&delegate);
+	m_ui.InstrumentTable->setModel(&m_model);
+	m_ui.InstrumentTable->setItemDelegate(&m_delegate);
 
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),
 		SLOT(activateMap(int)));
-
 	QObject::connect(
-		ui.refreshInstrumentsAction,
+		m_ui.refreshInstrumentsAction,
 		SIGNAL(triggered()),
-		SLOT(refreshInstruments(void))
-    );
-
+		SLOT(refreshInstruments(void)));
 	QObject::connect(
-		ui.InstrumentTable,
+		m_ui.InstrumentTable,
 		SIGNAL(activated(const QModelIndex&)),
-		SLOT(editInstrument(const QModelIndex&))
-	);
+		SLOT(editInstrument(const QModelIndex&)));
 	QObject::connect(
-		ui.newInstrumentAction,
+		m_ui.newInstrumentAction,
 		SIGNAL(triggered()),
-		SLOT(newInstrument())
-	);
+		SLOT(newInstrument()));
 	QObject::connect(
-		ui.deleteInstrumentAction,
+		m_ui.deleteInstrumentAction,
 		SIGNAL(triggered()),
-		SLOT(deleteInstrument())
-	);
+		SLOT(deleteInstrument()));
 	QObject::connect(
-		ui.editInstrumentAction,
+		m_ui.editInstrumentAction,
 		SIGNAL(triggered()),
-		SLOT(editInstrument())
-	);
+		SLOT(editInstrument()));
+
+	MainForm *pMainForm = MainForm::getInstance();
+	if (pMainForm) {
+		QObject::connect(&m_model,
+			SIGNAL(instrumentsChanged()),
+			pMainForm, SLOT(sessionDirty()));
+	}
 }
 
 
@@ -171,14 +171,14 @@ void InstrumentListForm::activateMap ( int iMap )
 	if (iMidiMap >= 0)
 		pOptions->iMidiMap = iMidiMap;
 
-	model.setMidiMap(iMidiMap);
-	model.refresh();
+	m_model.setMidiMap(iMidiMap);
+	m_model.refresh();
 }
 
 
 void InstrumentListForm::editInstrument (void)
 {
-	editInstrument(ui.InstrumentTable->currentIndex());
+	editInstrument(m_ui.InstrumentTable->currentIndex());
 }
 
 
@@ -212,10 +212,10 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 			// Unmap old instance...
 			oldInstrument.unmapInstrument();
 			// correct the position of the instrument in the model
-			model.resort(*pInstrument);
+			m_model.resort(*pInstrument);
 		}
 		// Notify we've changes...
-		emit model.reset();
+		emit m_model.reset();
 	}
 }
 
@@ -232,7 +232,7 @@ void InstrumentListForm::newInstrument (void)
 	// Commit...
 	instrument.mapInstrument();
 	// add new item to the table model
-	model.resort(instrument);
+	m_model.resort(instrument);
 	// Notify we've changes...
 	//emit model.reset();
 	//FIXME: call above didnt really refresh, so we use this for now ...
@@ -242,7 +242,7 @@ void InstrumentListForm::newInstrument (void)
 
 void InstrumentListForm::deleteInstrument (void)
 {
-	const QModelIndex& index = ui.InstrumentTable->currentIndex();
+	const QModelIndex& index = m_ui.InstrumentTable->currentIndex();
 	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
 		return;
 
@@ -255,9 +255,9 @@ void InstrumentListForm::deleteInstrument (void)
 
 	pInstrument->unmapInstrument();
 	// let the instrument vanish from the table model
-	model.removeInstrument(*pInstrument);
+	m_model.removeInstrument(*pInstrument);
 	// Notify we've changes...
-	emit model.reset();
+	emit m_model.reset();
 }
 
 } // namespace QSampler

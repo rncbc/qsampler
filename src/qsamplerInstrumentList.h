@@ -35,44 +35,54 @@
 // MidiInstrumentsModel - data model for MIDI prog mappings (used for QTableView)
 //
 
-class MidiInstrumentsModel : public QAbstractTableModel {
-Q_OBJECT
+class MidiInstrumentsModel : public QAbstractTableModel
+{
+	Q_OBJECT
+
 public:
-    MidiInstrumentsModel(QObject* parent = 0);
 
-    // overridden methods from subclass(es)
-    int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	MidiInstrumentsModel(QObject* pParent = NULL);
 
-    // make the following method public
-    QAbstractTableModel::reset;
+	// Overridden methods from subclass(es)
+	int rowCount(const QModelIndex& parent) const;
+	int columnCount(const QModelIndex& parent) const;
 
-    // own methods
-    qsamplerInstrument* addInstrument(int iMap = 0, int iBank = -1, int iProg = -1);
-    void removeInstrument(const qsamplerInstrument& instrument);
-    void resort(const qsamplerInstrument instrument);
+	QVariant data(const QModelIndex& index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation,
+		int role = Qt::DisplayRole) const;
 
-    // Map selector.
-    void setMidiMap(int iMidiMap);
-    int midiMap() const;
+	// Make the following method public
+	QAbstractTableModel::reset;
+
+	// Own methods
+	qsamplerInstrument* addInstrument(int iMap = 0,
+		int iBank = -1, int iProg = -1);
+	void removeInstrument(const qsamplerInstrument& instrument);
+
+	void resort(const qsamplerInstrument instrument);
+
+	// Map selector.
+	void setMidiMap(int iMidiMap);
+	int midiMap() const;
 
 signals:
-    // Instrument map/session change signal.
-    void instrumentsChanged();
+
+	// Instrument map/session change signal.
+	void instrumentsChanged();
 
 public slots:
-    // General reloader.
-    void refresh();
+
+	// General reloader.
+	void refresh();
 
 private:
-    typedef QMap<int, QList<qsamplerInstrument> > InstrumentsMap;
 
-    // Current map selection.
-    int m_iMidiMap;
+	typedef QMap<int, QList<qsamplerInstrument> > InstrumentsMap;
 
-    InstrumentsMap instruments;
+	// Current map selection.
+	int m_iMidiMap;
+
+	InstrumentsMap m_instruments;
 };
 
 
@@ -81,20 +91,23 @@ private:
 // (doesn't actually do anything ATM, but is already there for a future
 // cell editor widget implementation)
 
-class MidiInstrumentsDelegate : public QItemDelegate {
-Q_OBJECT
+class MidiInstrumentsDelegate : public QItemDelegate
+{
+	Q_OBJECT
+
 public:
-    MidiInstrumentsDelegate(QObject* parent = 0);
+	MidiInstrumentsDelegate(QObject *pParent = NULL);
 
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option,
-                          const QModelIndex& index) const;
+	QWidget* createEditor(QWidget *pParent,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-    void setEditorData(QWidget* editor, const QModelIndex& index) const;
-    void setModelData(QWidget* editor, QAbstractItemModel* model,
-                      const QModelIndex& index) const;
+	void setEditorData(QWidget *pEditor,
+		const QModelIndex& index) const;
+	void setModelData(QWidget *pEditor,
+		QAbstractItemModel* model, const QModelIndex& index) const;
 
-    void updateEditorGeometry(QWidget* editor,
-        const QStyleOptionViewItem& option, const QModelIndex& index) const;
+	void updateEditorGeometry(QWidget* pEditor,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 

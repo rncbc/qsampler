@@ -47,7 +47,7 @@ static inline long lroundf ( float x )
 InstrumentForm::InstrumentForm ( QWidget* pParent )
 	: QDialog(pParent)
 {
-    ui.setupUi(this);
+	m_ui.setupUi(this);
 
 	// Initialize locals.
 	m_pInstrument = NULL;
@@ -60,40 +60,40 @@ InstrumentForm::InstrumentForm ( QWidget* pParent )
 	adjustSize();
 
 
-	QObject::connect(ui.MapComboBox,
+	QObject::connect(m_ui.MapComboBox,
 		SIGNAL(activated(int)),
 		SLOT(changed()));
-	QObject::connect(ui.BankSpinBox,
+	QObject::connect(m_ui.BankSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(changed()));
-	QObject::connect(ui.ProgSpinBox,
+	QObject::connect(m_ui.ProgSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(changed()));
-	QObject::connect(ui.NameLineEdit,
+	QObject::connect(m_ui.NameLineEdit,
 		SIGNAL(textChanged(const QString&)),
 		SLOT(nameChanged(const QString&)));
-	QObject::connect(ui.EngineNameComboBox,
+	QObject::connect(m_ui.EngineNameComboBox,
 		SIGNAL(activated(int)),
 		SLOT(changed()));
-	QObject::connect(ui.InstrumentFileComboBox,
+	QObject::connect(m_ui.InstrumentFileComboBox,
 		SIGNAL(activated(const QString&)),
 		SLOT(updateInstrumentName()));
-	QObject::connect(ui.InstrumentFileToolButton,
+	QObject::connect(m_ui.InstrumentFileToolButton,
 		SIGNAL(clicked()),
 		SLOT(openInstrumentFile()));
-	QObject::connect(ui.InstrumentNrComboBox,
+	QObject::connect(m_ui.InstrumentNrComboBox,
 		SIGNAL(activated(int)),
 		SLOT(instrumentNrChanged()));
-	QObject::connect(ui.VolumeSpinBox,
+	QObject::connect(m_ui.VolumeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(changed()));
-	QObject::connect(ui.LoadModeComboBox,
+	QObject::connect(m_ui.LoadModeComboBox,
 		SIGNAL(activated(int)),
 		SLOT(changed()));
-	QObject::connect(ui.OkPushButton,
+	QObject::connect(m_ui.OkPushButton,
 		SIGNAL(clicked()),
 		SLOT(accept()));
-	QObject::connect(ui.CancelPushButton,
+	QObject::connect(m_ui.CancelPushButton,
 		SIGNAL(clicked()),
 		SLOT(reject()));
 }
@@ -138,18 +138,19 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	m_iDirtySetup++;
 
 	// Load combo box history...
-	pOptions->loadComboBoxHistory(ui.InstrumentFileComboBox);
+	pOptions->loadComboBoxHistory(m_ui.InstrumentFileComboBox);
 
 	// Populate maps list.
-	ui.MapComboBox->clear();
-	ui.MapComboBox->insertItems(0, qsamplerInstrument::getMapNames());
+	m_ui.MapComboBox->clear();
+	m_ui.MapComboBox->insertItems(0, qsamplerInstrument::getMapNames());
 
 	// Populate Engines list.
-	const char **ppszEngines = ::lscp_list_available_engines(pMainForm->client());
+	const char **ppszEngines
+		= ::lscp_list_available_engines(pMainForm->client());
 	if (ppszEngines) {
-		ui.EngineNameComboBox->clear();
+		m_ui.EngineNameComboBox->clear();
 		for (int iEngine = 0; ppszEngines[iEngine]; iEngine++)
-			ui.EngineNameComboBox->addItem(ppszEngines[iEngine]);
+			m_ui.EngineNameComboBox->addItem(ppszEngines[iEngine]);
 	}
 	else pMainForm->appendMessagesClient("lscp_list_available_engines");
 
@@ -162,14 +163,14 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 		iMap = 0;
 	const QString& sMapName = qsamplerInstrument::getMapName(iMap);
 	if (!sMapName.isEmpty()) {
-		ui.MapComboBox->setItemText(
-			ui.MapComboBox->currentIndex(),
+		m_ui.MapComboBox->setItemText(
+			m_ui.MapComboBox->currentIndex(),
 			sMapName);
 	}
 	// It might be no maps around...
-	bool bMapEnabled = (ui.MapComboBox->count() > 0);
-	ui.MapTextLabel->setEnabled(bMapEnabled);
-	ui.MapComboBox->setEnabled(bMapEnabled);
+	bool bMapEnabled = (m_ui.MapComboBox->count() > 0);
+	m_ui.MapTextLabel->setEnabled(bMapEnabled);
+	m_ui.MapComboBox->setEnabled(bMapEnabled);
 
 	// Instrument bank/program...
 	int iBank = (bNew ? pOptions->iMidiBank : m_pInstrument->bank());
@@ -178,11 +179,11 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 		iProg = 1;
 		iBank++;
 	}
-	ui.BankSpinBox->setValue(iBank);
-	ui.ProgSpinBox->setValue(iProg);
+	m_ui.BankSpinBox->setValue(iBank);
+	m_ui.ProgSpinBox->setValue(iProg);
 
 	// Instrument name...
-	ui.NameLineEdit->setText(m_pInstrument->name());
+	m_ui.NameLineEdit->setText(m_pInstrument->name());
 
 	// Engine name...
 	QString sEngineName = m_pInstrument->engineName();
@@ -190,34 +191,34 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 		sEngineName = pOptions->sEngineName;
 	if (sEngineName.isEmpty())
 		sEngineName = qsamplerChannel::noEngineName();
-	if (ui.EngineNameComboBox->findText(sEngineName,
+	if (m_ui.EngineNameComboBox->findText(sEngineName,
 			Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
-		ui.EngineNameComboBox->addItem(sEngineName);
+		m_ui.EngineNameComboBox->addItem(sEngineName);
 	}
-	ui.EngineNameComboBox->setCurrentIndex(
-		ui.EngineNameComboBox->findText(sEngineName,
+	m_ui.EngineNameComboBox->setCurrentIndex(
+		m_ui.EngineNameComboBox->findText(sEngineName,
 			Qt::MatchExactly | Qt::MatchCaseSensitive));
 
 	// Instrument filename and index...
 	QString sInstrumentFile = m_pInstrument->instrumentFile();
 	if (sInstrumentFile.isEmpty())
 		sInstrumentFile = qsamplerChannel::noInstrumentName();
-	ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
-	ui.InstrumentNrComboBox->clear();
-	ui.InstrumentNrComboBox->insertItems(0,
+	m_ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
+	m_ui.InstrumentNrComboBox->clear();
+	m_ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(sInstrumentFile,
 		pOptions->bInstrumentNames));
-	ui.InstrumentNrComboBox->setCurrentIndex(m_pInstrument->instrumentNr());
+	m_ui.InstrumentNrComboBox->setCurrentIndex(m_pInstrument->instrumentNr());
 
 	// Instrument volume....
 	int iVolume = (bNew ? pOptions->iVolume :
 		::lroundf(100.0f * m_pInstrument->volume()));
-	ui.VolumeSpinBox->setValue(iVolume);
+	m_ui.VolumeSpinBox->setValue(iVolume);
 
 	// Instrument load mode...
 	int iLoadMode = (bNew ? pOptions->iLoadMode :
 		m_pInstrument->loadMode());
-	ui.LoadModeComboBox->setCurrentIndex(iLoadMode);
+	m_ui.LoadModeComboBox->setCurrentIndex(iLoadMode);
 
 	// Done.
 	m_iDirtySetup--;
@@ -262,7 +263,7 @@ void InstrumentForm::openInstrumentFile (void)
 	if (sInstrumentFile.isEmpty())
 		return;
 
-	ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
+	m_ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
 	updateInstrumentName();
 }
 
@@ -280,10 +281,10 @@ void InstrumentForm::updateInstrumentName (void)
 
 	// TODO: this better idea would be to use libgig
 	// to retrieve the REAL instrument names.
-	ui.InstrumentNrComboBox->clear();
-	ui.InstrumentNrComboBox->insertItems(0,
+	m_ui.InstrumentNrComboBox->clear();
+	m_ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(
-			ui.InstrumentFileComboBox->currentText(),
+			m_ui.InstrumentFileComboBox->currentText(),
 			pOptions->bInstrumentNames)
 	);
 
@@ -297,8 +298,8 @@ void InstrumentForm::instrumentNrChanged (void)
 	if (m_iDirtySetup > 0)
 		return;
 
-	if (ui.NameLineEdit->text().isEmpty() || m_iDirtyName == 0) {
-		ui.NameLineEdit->setText(ui.InstrumentNrComboBox->currentText());
+	if (m_ui.NameLineEdit->text().isEmpty() || m_iDirtyName == 0) {
+		m_ui.NameLineEdit->setText(m_ui.InstrumentNrComboBox->currentText());
 		m_iDirtyName = 0;
 	}
 
@@ -323,27 +324,27 @@ void InstrumentForm::accept (void)
 		return;
 
 	if (m_iDirtyCount > 0) {
-		m_pInstrument->setMap(ui.MapComboBox->currentIndex());
-		m_pInstrument->setBank(ui.BankSpinBox->value());
-		m_pInstrument->setProg(ui.ProgSpinBox->value() - 1);
-		m_pInstrument->setName(ui.NameLineEdit->text());
-		m_pInstrument->setEngineName(ui.EngineNameComboBox->currentText());
-		m_pInstrument->setInstrumentFile(ui.InstrumentFileComboBox->currentText());
-		m_pInstrument->setInstrumentNr(ui.InstrumentNrComboBox->currentIndex());
-		m_pInstrument->setVolume(0.01f * float(ui.VolumeSpinBox->value()));
-		m_pInstrument->setLoadMode(ui.LoadModeComboBox->currentIndex());
+		m_pInstrument->setMap(m_ui.MapComboBox->currentIndex());
+		m_pInstrument->setBank(m_ui.BankSpinBox->value());
+		m_pInstrument->setProg(m_ui.ProgSpinBox->value() - 1);
+		m_pInstrument->setName(m_ui.NameLineEdit->text());
+		m_pInstrument->setEngineName(m_ui.EngineNameComboBox->currentText());
+		m_pInstrument->setInstrumentFile(m_ui.InstrumentFileComboBox->currentText());
+		m_pInstrument->setInstrumentNr(m_ui.InstrumentNrComboBox->currentIndex());
+		m_pInstrument->setVolume(0.01f * float(m_ui.VolumeSpinBox->value()));
+		m_pInstrument->setLoadMode(m_ui.LoadModeComboBox->currentIndex());
 	}
 
 	// Save default engine name, instrument directory and history...
 	pOptions->sInstrumentDir = QFileInfo(
-		ui.InstrumentFileComboBox->currentText()).dir().absolutePath();
-	pOptions->sEngineName = ui.EngineNameComboBox->currentText();
-	pOptions->iMidiMap  = ui.MapComboBox->currentIndex();
-	pOptions->iMidiBank = ui.BankSpinBox->value();
-	pOptions->iMidiProg = ui.ProgSpinBox->value();
-	pOptions->iVolume   = ui.VolumeSpinBox->value();
-	pOptions->iLoadMode = ui.LoadModeComboBox->currentIndex();
-	pOptions->saveComboBoxHistory(ui.InstrumentFileComboBox);
+		m_ui.InstrumentFileComboBox->currentText()).dir().absolutePath();
+	pOptions->sEngineName = m_ui.EngineNameComboBox->currentText();
+	pOptions->iMidiMap  = m_ui.MapComboBox->currentIndex();
+	pOptions->iMidiBank = m_ui.BankSpinBox->value();
+	pOptions->iMidiProg = m_ui.ProgSpinBox->value();
+	pOptions->iVolume   = m_ui.VolumeSpinBox->value();
+	pOptions->iLoadMode = m_ui.LoadModeComboBox->currentIndex();
+	pOptions->saveComboBoxHistory(m_ui.InstrumentFileComboBox);
 
 	// Just go with dialog acceptance.
 	QDialog::accept();
@@ -356,7 +357,7 @@ void InstrumentForm::reject (void)
 	bool bReject = true;
 
 	// Check if there's any pending changes...
-	if (m_iDirtyCount > 0 && ui.OkPushButton->isEnabled()) {
+	if (m_iDirtyCount > 0 && m_ui.OkPushButton->isEnabled()) {
 		switch (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Some channel settings have been changed.\n\n"
@@ -393,15 +394,15 @@ void InstrumentForm::changed (void)
 void InstrumentForm::stabilizeForm (void)
 {
 	bool bValid =
-		!ui.NameLineEdit->text().isEmpty() &&
-		ui.EngineNameComboBox->currentIndex() >= 0 &&
-		ui.EngineNameComboBox->currentText() !=
+		!m_ui.NameLineEdit->text().isEmpty() &&
+		m_ui.EngineNameComboBox->currentIndex() >= 0 &&
+		m_ui.EngineNameComboBox->currentText() !=
 		qsamplerChannel::noEngineName();
 
-	const QString& sPath = ui.InstrumentFileComboBox->currentText();
+	const QString& sPath = m_ui.InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
 
-	ui.OkPushButton->setEnabled(m_iDirtyCount > 0 && bValid);
+	m_ui.OkPushButton->setEnabled(m_iDirtyCount > 0 && bValid);
 }
 
 } // namespace QSampler

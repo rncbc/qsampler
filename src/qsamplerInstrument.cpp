@@ -273,12 +273,14 @@ bool qsamplerInstrument::getInstrument (void)
 		return false;
 	}
 
-	m_sName           = qsamplerUtilities::lscpEscapedTextToRaw(pInstrInfo->name);
-	m_sEngineName     = pInstrInfo->engine_name;
-	m_sInstrumentName = qsamplerUtilities::lscpEscapedTextToRaw(pInstrInfo->instrument_name);
-	m_sInstrumentFile = qsamplerUtilities::lscpEscapedPathToPosix(pInstrInfo->instrument_file);
-	m_iInstrumentNr   = pInstrInfo->instrument_nr;
-	m_fVolume         = pInstrInfo->volume;
+	m_sName = qsamplerUtilities::lscpEscapedTextToRaw(pInstrInfo->name);
+	m_sEngineName = pInstrInfo->engine_name;
+	m_sInstrumentName = qsamplerUtilities::lscpEscapedTextToRaw(
+		pInstrInfo->instrument_name);
+	m_sInstrumentFile = qsamplerUtilities::lscpEscapedPathToPosix(
+		pInstrInfo->instrument_file);
+	m_iInstrumentNr = pInstrInfo->instrument_nr;
+	m_fVolume = pInstrInfo->volume;
 
 	switch (pInstrInfo->load_mode) {
 		case LSCP_LOAD_PERSISTENT:
@@ -357,7 +359,8 @@ QString qsamplerInstrument::getMapName ( int iMidiMap )
 		if (::lscp_client_get_errno(pMainForm->client()))
 			pMainForm->appendMessagesClient("lscp_get_midi_instrument_name");
 	}
-	sMapName = QString("%1 - %2").arg(iMidiMap).arg(qsamplerUtilities::lscpEscapedTextToRaw(pszMapName));
+	sMapName = QString("%1 - %2").arg(iMidiMap)
+		.arg(qsamplerUtilities::lscpEscapedTextToRaw(pszMapName));
 #endif
 
 	return sMapName;

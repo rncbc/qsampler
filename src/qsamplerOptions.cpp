@@ -41,46 +41,46 @@
 qsamplerOptions::qsamplerOptions (void)
 	: m_settings(QSAMPLER_DOMAIN, QSAMPLER_TITLE)
 {
-    // Begin into general options group.
-    m_settings.beginGroup("/Options");
+	// Begin into general options group.
+	m_settings.beginGroup("/Options");
 
-    // Load server options...
-    m_settings.beginGroup("/Server");
-    sServerHost    = m_settings.value("/ServerHost", "localhost").toString();
-    iServerPort    = m_settings.value("/ServerPort", 8888).toInt();
-    iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
-    bServerStart   = m_settings.value("/ServerStart", true).toBool();
-    sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
-    iStartDelay    = m_settings.value("/StartDelay", 3).toInt();
-    m_settings.endGroup();
+	// Load server options...
+	m_settings.beginGroup("/Server");
+	sServerHost    = m_settings.value("/ServerHost", "localhost").toString();
+	iServerPort    = m_settings.value("/ServerPort", 8888).toInt();
+	iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
+	bServerStart   = m_settings.value("/ServerStart", true).toBool();
+	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
+	iStartDelay    = m_settings.value("/StartDelay", 3).toInt();
+	m_settings.endGroup();
 
-    // Load display options...
-    m_settings.beginGroup("/Display");
-    sDisplayFont     = m_settings.value("/DisplayFont").toString();
-    bDisplayEffect   = m_settings.value("/DisplayEffect", true).toBool();
-    bAutoRefresh     = m_settings.value("/AutoRefresh", true).toBool();
-    iAutoRefreshTime = m_settings.value("/AutoRefreshTime", 1000).toInt();
-    iMaxVolume       = m_settings.value("/MaxVolume", 100).toInt();
-    sMessagesFont    = m_settings.value("/MessagesFont").toString();
-    bMessagesLimit   = m_settings.value("/MessagesLimit", true).toBool();
-    iMessagesLimitLines = m_settings.value("/MessagesLimitLines", 1000).toInt();
-    bConfirmRemove   = m_settings.value("/ConfirmRemove", true).toBool();
-    bKeepOnTop       = m_settings.value("/KeepOnTop", true).toBool();
-    bStdoutCapture   = m_settings.value("/StdoutCapture", true).toBool();
-    bCompletePath    = m_settings.value("/CompletePath", true).toBool();
-    iMaxRecentFiles  = m_settings.value("/MaxRecentFiles", 5).toInt();
-    bInstrumentNames = m_settings.value("/InstrumentNames", false).toBool();
-    m_settings.endGroup();
+	// Load display options...
+	m_settings.beginGroup("/Display");
+	sDisplayFont     = m_settings.value("/DisplayFont").toString();
+	bDisplayEffect   = m_settings.value("/DisplayEffect", true).toBool();
+	bAutoRefresh     = m_settings.value("/AutoRefresh", true).toBool();
+	iAutoRefreshTime = m_settings.value("/AutoRefreshTime", 1000).toInt();
+	iMaxVolume       = m_settings.value("/MaxVolume", 100).toInt();
+	sMessagesFont    = m_settings.value("/MessagesFont").toString();
+	bMessagesLimit   = m_settings.value("/MessagesLimit", true).toBool();
+	iMessagesLimitLines = m_settings.value("/MessagesLimitLines", 1000).toInt();
+	bConfirmRemove   = m_settings.value("/ConfirmRemove", true).toBool();
+	bKeepOnTop       = m_settings.value("/KeepOnTop", true).toBool();
+	bStdoutCapture   = m_settings.value("/StdoutCapture", true).toBool();
+	bCompletePath    = m_settings.value("/CompletePath", true).toBool();
+	iMaxRecentFiles  = m_settings.value("/MaxRecentFiles", 5).toInt();
+	bInstrumentNames = m_settings.value("/InstrumentNames", false).toBool();
+	m_settings.endGroup();
 
-    // And go into view options group.
-    m_settings.beginGroup("/View");
-    bMenubar     = m_settings.value("/Menubar", true).toBool();
-    bToolbar     = m_settings.value("/Toolbar", true).toBool();
-    bStatusbar   = m_settings.value("/Statusbar", true).toBool();
-    bAutoArrange = m_settings.value("/AutoArrange", true).toBool();
-    m_settings.endGroup();
+	// And go into view options group.
+	m_settings.beginGroup("/View");
+	bMenubar     = m_settings.value("/Menubar", true).toBool();
+	bToolbar     = m_settings.value("/Toolbar", true).toBool();
+	bStatusbar   = m_settings.value("/Statusbar", true).toBool();
+	bAutoArrange = m_settings.value("/AutoArrange", true).toBool();
+	m_settings.endGroup();
 
-    m_settings.endGroup(); // Options group.
+	m_settings.endGroup(); // Options group.
 
 	// Recent file list.
 	recentFiles.clear();
@@ -93,72 +93,72 @@ qsamplerOptions::qsamplerOptions (void)
 	}
 	m_settings.endGroup();
 
-    // Last but not least, get the default directories.
-    m_settings.beginGroup("/Default");
-    sSessionDir    = m_settings.value("/SessionDir").toString();
-    sInstrumentDir = m_settings.value("/InstrumentDir").toString();
-    sEngineName    = m_settings.value("/EngineName").toString();
-    sAudioDriver   = m_settings.value("/AudioDriver").toString();
-    sMidiDriver    = m_settings.value("/MidiDriver").toString();
-    iMidiMap       = m_settings.value("/MidiMap",  0).toInt();
-    iMidiBank      = m_settings.value("/MidiBank", 0).toInt();
-    iMidiProg      = m_settings.value("/MidiProg", 0).toInt();
-    iVolume        = m_settings.value("/Volume", 100).toInt();
-    iLoadMode      = m_settings.value("/Loadmode", 0).toInt();
-    m_settings.endGroup();
+	// Last but not least, get the default directories.
+	m_settings.beginGroup("/Default");
+	sSessionDir    = m_settings.value("/SessionDir").toString();
+	sInstrumentDir = m_settings.value("/InstrumentDir").toString();
+	sEngineName    = m_settings.value("/EngineName").toString();
+	sAudioDriver   = m_settings.value("/AudioDriver").toString();
+	sMidiDriver    = m_settings.value("/MidiDriver").toString();
+	iMidiMap       = m_settings.value("/MidiMap",  0).toInt();
+	iMidiBank      = m_settings.value("/MidiBank", 0).toInt();
+	iMidiProg      = m_settings.value("/MidiProg", 0).toInt();
+	iVolume        = m_settings.value("/Volume", 100).toInt();
+	iLoadMode      = m_settings.value("/Loadmode", 0).toInt();
+	m_settings.endGroup();
 }
 
 
 // Default Destructor.
 qsamplerOptions::~qsamplerOptions (void)
 {
-    // Make program version available in the future.
-    m_settings.beginGroup("/Program");
-    m_settings.setValue("/Version", QSAMPLER_VERSION);
-    m_settings.endGroup();
+	// Make program version available in the future.
+	m_settings.beginGroup("/Program");
+	m_settings.setValue("/Version", QSAMPLER_VERSION);
+	m_settings.endGroup();
 
-    // And go into general options group.
-    m_settings.beginGroup("/Options");
+	// And go into general options group.
+	m_settings.beginGroup("/Options");
 
-    // Save server options.
-    m_settings.beginGroup("/Server");
-    m_settings.setValue("/ServerHost", sServerHost);
-    m_settings.setValue("/ServerPort", iServerPort);
-    m_settings.setValue("/ServerTimeout", iServerTimeout);
-    m_settings.setValue("/ServerStart", bServerStart);
-    m_settings.setValue("/ServerCmdLine", sServerCmdLine);
-    m_settings.setValue("/StartDelay", iStartDelay);
-    m_settings.endGroup();
+	// Save server options.
+	m_settings.beginGroup("/Server");
+	m_settings.setValue("/ServerHost", sServerHost);
+	m_settings.setValue("/ServerPort", iServerPort);
+	m_settings.setValue("/ServerTimeout", iServerTimeout);
+	m_settings.setValue("/ServerStart", bServerStart);
+	m_settings.setValue("/ServerCmdLine", sServerCmdLine);
+	m_settings.setValue("/StartDelay", iStartDelay);
+	m_settings.endGroup();
 
-    // Save display options.
-    m_settings.beginGroup("/Display");
-    m_settings.setValue("/DisplayFont", sDisplayFont);
-    m_settings.setValue("/DisplayEffect", bDisplayEffect);
-    m_settings.setValue("/AutoRefresh", bAutoRefresh);
-    m_settings.setValue("/AutoRefreshTime", iAutoRefreshTime);
-    m_settings.setValue("/MaxVolume", iMaxVolume);
-    m_settings.setValue("/MessagesFont", sMessagesFont);
-    m_settings.setValue("/MessagesLimit", bMessagesLimit);
-    m_settings.setValue("/MessagesLimitLines", iMessagesLimitLines);
-    m_settings.setValue("/ConfirmRemove", bConfirmRemove);
-    m_settings.setValue("/KeepOnTop", bKeepOnTop);
-    m_settings.setValue("/StdoutCapture", bStdoutCapture);
-    m_settings.setValue("/CompletePath", bCompletePath);
-    m_settings.setValue("/MaxRecentFiles", iMaxRecentFiles);
-    m_settings.setValue("/InstrumentNames", bInstrumentNames);
-    m_settings.endGroup();
+	// Save display options.
+	m_settings.beginGroup("/Display");
+	m_settings.setValue("/DisplayFont", sDisplayFont);
+	m_settings.setValue("/DisplayEffect", bDisplayEffect);
+	m_settings.setValue("/AutoRefresh", bAutoRefresh);
+	m_settings.setValue("/AutoRefreshTime", iAutoRefreshTime);
+	m_settings.setValue("/MaxVolume", iMaxVolume);
+	m_settings.setValue("/MessagesFont", sMessagesFont);
+	m_settings.setValue("/MessagesLimit", bMessagesLimit);
+	m_settings.setValue("/MessagesLimitLines", iMessagesLimitLines);
+	m_settings.setValue("/ConfirmRemove", bConfirmRemove);
+	m_settings.setValue("/KeepOnTop", bKeepOnTop);
+	m_settings.setValue("/StdoutCapture", bStdoutCapture);
+	m_settings.setValue("/CompletePath", bCompletePath);
+	m_settings.setValue("/MaxRecentFiles", iMaxRecentFiles);
+	m_settings.setValue("/InstrumentNames", bInstrumentNames);
+	m_settings.endGroup();
 
-    // View options group.
-    m_settings.beginGroup("/View");
-    m_settings.setValue("/Menubar", bMenubar);
-    m_settings.setValue("/Toolbar", bToolbar);
-    m_settings.setValue("/Statusbar", bStatusbar);
-    m_settings.setValue("/AutoArrange", bAutoArrange);
-    m_settings.endGroup();
+	// View options group.
+	m_settings.beginGroup("/View");
+	m_settings.setValue("/Menubar", bMenubar);
+	m_settings.setValue("/Toolbar", bToolbar);
+	m_settings.setValue("/Statusbar", bStatusbar);
+	m_settings.setValue("/AutoArrange", bAutoArrange);
+	m_settings.endGroup();
 
-    m_settings.endGroup(); // Options group.
+	m_settings.endGroup(); // Options group.
 
-    // Recent file list.
+	// Recent file list.
 	int iFile = 0;
 	m_settings.beginGroup("/RecentFiles");
 	QStringListIterator iter(recentFiles);
@@ -166,19 +166,19 @@ qsamplerOptions::~qsamplerOptions (void)
 		m_settings.setValue("/File" + QString::number(++iFile), iter.next());
 	m_settings.endGroup();
 
-    // Default directories.
-    m_settings.beginGroup("/Default");
-    m_settings.setValue("/SessionDir", sSessionDir);
-    m_settings.setValue("/InstrumentDir", sInstrumentDir);
-    m_settings.setValue("/EngineName", sEngineName);
-    m_settings.setValue("/AudioDriver", sAudioDriver);
-    m_settings.setValue("/MidiDriver", sMidiDriver);
-    m_settings.setValue("/MidiMap", iMidiMap);
-    m_settings.setValue("/MidiBank", iMidiBank);
-    m_settings.setValue("/MidiProg", iMidiProg);
-    m_settings.setValue("/Volume", iVolume);
-    m_settings.setValue("/Loadmode", iLoadMode);
-    m_settings.endGroup();
+	// Default directories.
+	m_settings.beginGroup("/Default");
+	m_settings.setValue("/SessionDir", sSessionDir);
+	m_settings.setValue("/InstrumentDir", sInstrumentDir);
+	m_settings.setValue("/EngineName", sEngineName);
+	m_settings.setValue("/AudioDriver", sAudioDriver);
+	m_settings.setValue("/MidiDriver", sMidiDriver);
+	m_settings.setValue("/MidiMap", iMidiMap);
+	m_settings.setValue("/MidiBank", iMidiBank);
+	m_settings.setValue("/MidiProg", iMidiProg);
+	m_settings.setValue("/Volume", iVolume);
+	m_settings.setValue("/Loadmode", iLoadMode);
+	m_settings.endGroup();
 }
 
 //-------------------------------------------------------------------------
@@ -187,7 +187,7 @@ qsamplerOptions::~qsamplerOptions (void)
 
 QSettings& qsamplerOptions::settings (void)
 {
-    return m_settings;
+	return m_settings;
 }
 
 
@@ -215,54 +215,54 @@ void qsamplerOptions::print_usage ( const char *arg0 )
 bool qsamplerOptions::parse_args ( int argc, char **argv )
 {
 	QTextStream out(stderr);
-    const QString sEol = "\n\n";
-    int iCmdArgs = 0;
+	const QString sEol = "\n\n";
+	int iCmdArgs = 0;
 
-    for (int i = 1; i < argc; i++) {
+	for (int i = 1; i < argc; i++) {
 
-        if (iCmdArgs > 0) {
-            sSessionFile += " ";
-            sSessionFile += argv[i];
-            iCmdArgs++;
-            continue;
-        }
+		if (iCmdArgs > 0) {
+			sSessionFile += " ";
+			sSessionFile += argv[i];
+			iCmdArgs++;
+			continue;
+		}
 
-        QString sArg = argv[i];
-        QString sVal = QString::null;
-        int iEqual = sArg.indexOf("=");
-        if (iEqual >= 0) {
-            sVal = sArg.right(sArg.length() - iEqual - 1);
-            sArg = sArg.left(iEqual);
-        }
-        else if (i < argc)
-            sVal = argv[i + 1];
+		QString sArg = argv[i];
+		QString sVal = QString::null;
+		int iEqual = sArg.indexOf("=");
+		if (iEqual >= 0) {
+			sVal = sArg.right(sArg.length() - iEqual - 1);
+			sArg = sArg.left(iEqual);
+		}
+		else if (i < argc)
+			sVal = argv[i + 1];
 
-        if (sArg == "-s" || sArg == "--start") {
-            bServerStart = true;
-        }
-        else if (sArg == "-h" || sArg == "--hostname") {
-            if (sVal.isNull()) {
-                out << QObject::tr("Option -h requires an argument (hostname).") + sEol;
-                return false;
-            }
-            sServerHost = sVal;
-            if (iEqual < 0)
-                i++;
-        }
-        else if (sArg == "-p" || sArg == "--port") {
-            if (sVal.isNull()) {
-                out << QObject::tr("Option -p requires an argument (port).") + sEol;
-                return false;
-            }
-            iServerPort = sVal.toInt();
-            if (iEqual < 0)
-                i++;
-        }
-        else if (sArg == "-?" || sArg == "--help") {
-            print_usage(argv[0]);
-            return false;
-        }
-        else if (sArg == "-v" || sArg == "--version") {
+		if (sArg == "-s" || sArg == "--start") {
+			bServerStart = true;
+		}
+		else if (sArg == "-h" || sArg == "--hostname") {
+			if (sVal.isNull()) {
+				out << QObject::tr("Option -h requires an argument (hostname).") + sEol;
+				return false;
+			}
+			sServerHost = sVal;
+			if (iEqual < 0)
+				i++;
+		}
+		else if (sArg == "-p" || sArg == "--port") {
+			if (sVal.isNull()) {
+				out << QObject::tr("Option -p requires an argument (port).") + sEol;
+				return false;
+			}
+			iServerPort = sVal.toInt();
+			if (iEqual < 0)
+				i++;
+		}
+		else if (sArg == "-?" || sArg == "--help") {
+			print_usage(argv[0]);
+			return false;
+		}
+		else if (sArg == "-v" || sArg == "--version") {
 			out << QObject::tr("Qt: %1\n").arg(qVersion());
 #ifdef CONFIG_LIBGIG
 			out << QString("%1: %2\n")
@@ -273,18 +273,18 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
 				.arg(::lscp_client_package())
 				.arg(::lscp_client_version());
 			out << QObject::tr(QSAMPLER_TITLE ": %1\n").arg(QSAMPLER_VERSION);
-            return false;
-        }
-        else {
-            // If we don't have one by now,
-            // this will be the startup sesion file...
-            sSessionFile += sArg;
-            iCmdArgs++;
-        }
-    }
+			return false;
+		}
+		else {
+			// If we don't have one by now,
+			// this will be the startup sesion file...
+			sSessionFile += sArg;
+			iCmdArgs++;
+		}
+	}
 
-    // Alright with argument parsing.
-    return true;
+	// Alright with argument parsing.
+	return true;
 }
 
 
