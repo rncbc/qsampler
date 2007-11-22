@@ -275,7 +275,7 @@ public:
 
 protected:
 
-	const qsamplerDeviceParamMap *m_params;
+	const qsamplerDeviceParamMap *m_pParams;
 	bool m_bEditable;
 };
 
@@ -305,7 +305,7 @@ public slots:
 
 private:
 
-	qsamplerDevice *m_device;
+	qsamplerDevice *m_pDevice;
 };
 
 
@@ -334,7 +334,7 @@ public slots:
 
 private:
 
-	qsamplerDevicePort* m_port;
+	qsamplerDevicePort* m_pPort;
 };
 
 
@@ -352,7 +352,7 @@ public:
 	QWidget* createEditor(QWidget *pParent,
 		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 	void setEditorData(QWidget *pEditor, const QModelIndex& index) const;
-	void setModelData(QWidget *pEditor, QAbstractItemModel* model,
+	void setModelData(QWidget *pEditor, QAbstractItemModel *pModel,
 		const QModelIndex& index) const;
 	void updateEditorGeometry(QWidget* pEditor,
 		const QStyleOptionViewItem& option, const QModelIndex& index) const;

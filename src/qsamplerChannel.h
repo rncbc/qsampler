@@ -194,39 +194,44 @@ private:
 //
 
 struct ChannelRoutingItem {
-    QStringList options;
-    int         selection;
+	QStringList options;
+	int         selection;
 };
 
 // so we can use it i.e. through QVariant
 Q_DECLARE_METATYPE(ChannelRoutingItem)
 
-class ChannelRoutingModel : public QAbstractTableModel {
-        Q_OBJECT
-    public:
-        ChannelRoutingModel(QObject* parent = 0);
+class ChannelRoutingModel : public QAbstractTableModel
+{
+	Q_OBJECT
+public:
 
-        // overridden methods from subclass(es)
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        int columnCount(const QModelIndex &parent = QModelIndex()) const;
-        Qt::ItemFlags flags(const QModelIndex& index) const;
-        bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
-        QVariant data(const QModelIndex &index, int role) const;
-        QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	ChannelRoutingModel(QObject* pParent = NULL);
 
-        // own methods
-        qsamplerChannelRoutingMap routingMap() const {
-            return routing;
-        }
+	// overridden methods from subclass(es)
+	int rowCount(const QModelIndex& parent = QModelIndex()) const;
+	int columnCount(const QModelIndex& parent = QModelIndex()) const;
+	Qt::ItemFlags flags(const QModelIndex& index) const;
+	bool setData(const QModelIndex& index, const QVariant& value,
+		int role = Qt::EditRole);
+	QVariant data(const QModelIndex &index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation,
+		int role = Qt::DisplayRole) const;
 
-        void clear() { routing.clear(); }
+	// own methods
+	qsamplerChannelRoutingMap routingMap() const { return m_routing; }
 
-    public slots:
-        void refresh(qsamplerDevice *pDevice, const qsamplerChannelRoutingMap& routing);
+	void clear() { m_routing.clear(); }
 
-    private:
-        qsamplerDevice* pDevice;
-        qsamplerChannelRoutingMap routing;
+public slots:
+
+	void refresh(qsamplerDevice *pDevice,
+		const qsamplerChannelRoutingMap& routing);
+
+private:
+
+	qsamplerDevice *m_pDevice;
+	qsamplerChannelRoutingMap m_routing;
 };
 
 
@@ -234,19 +239,21 @@ class ChannelRoutingModel : public QAbstractTableModel {
 // ChannelRoutingDelegate - table cell renderer for audio routing
 //
 
-class ChannelRoutingDelegate : public QItemDelegate {
-        Q_OBJECT
-    public:
-        ChannelRoutingDelegate(QObject* parent = 0);
-        QWidget* createEditor(QWidget* parent,
-                              const QStyleOptionViewItem& option,
-                              const QModelIndex& index) const;
-        void setEditorData(QWidget* editor, const QModelIndex& index) const;
-        void setModelData(QWidget* editor, QAbstractItemModel* model,
-                          const QModelIndex& index) const;
-        void updateEditorGeometry(QWidget* editor,
-                                  const QStyleOptionViewItem& option,
-                                  const QModelIndex& index) const;
+class ChannelRoutingDelegate : public QItemDelegate
+{
+	Q_OBJECT
+
+public:
+
+	ChannelRoutingDelegate(QObject* pParent = NULL);
+
+	QWidget* createEditor(QWidget *pParent,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+	void setEditorData(QWidget *pEditor, const QModelIndex& index) const;
+	void setModelData(QWidget *pEditor, QAbstractItemModel* model,
+		const QModelIndex& index) const;
+	void updateEditorGeometry(QWidget *pEditor,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif  // __qsamplerChannel_h

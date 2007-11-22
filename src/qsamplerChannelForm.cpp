@@ -41,7 +41,7 @@ namespace QSampler {
 ChannelForm::ChannelForm ( QWidget* pParent )
 	: QDialog(pParent)
 {
-    m_ui.setupUi(this);
+	m_ui.setupUi(this);
 
 	// Initialize locals.
 	m_pChannel = NULL;
@@ -60,7 +60,7 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 //	m_ui.AudioRoutingTable->verticalHeader()->hide();
 
 	// This goes initially hidden, and will be shown
-    // on setup() for currently existing channels...
+	// on setup() for currently existing channels...
 	m_ui.AudioRoutingTable->hide();
 
 	// Try to restore normal window positioning.
@@ -218,7 +218,10 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	m_ui.InstrumentNrComboBox->insertItems(0,
 		qsamplerChannel::getInstrumentList(sInstrumentFile,
 		pOptions->bInstrumentNames));
-	m_ui.InstrumentNrComboBox->setCurrentIndex(pChannel->instrumentNr());
+	int iInstrumentNr = pChannel->instrumentNr();
+	if (iInstrumentNr < 0)
+		iInstrumentNr = 0;
+	m_ui.InstrumentNrComboBox->setCurrentIndex(iInstrumentNr);
 
 	// MIDI input device...
 	qsamplerDevice midiDevice(qsamplerDevice::Midi, m_pChannel->midiDevice());
@@ -386,8 +389,10 @@ void ChannelForm::accept (void)
 		if (!m_pChannel->setMidiMap(m_ui.MidiMapComboBox->currentIndex()))
 			iErrors++;
 		// Show error messages?
-		if (iErrors > 0)
-			m_pChannel->appendMessagesError(tr("Some channel settings could not be set.\n\nSorry."));
+		if (iErrors > 0) {
+			m_pChannel->appendMessagesError(
+				tr("Some channel settings could not be set.\n\nSorry."));
+		}
 	}
 
 	// Save default engine name, instrument directory and history...
@@ -504,7 +509,7 @@ void ChannelForm::setupDevice ( qsamplerDevice *pDevice,
 	// Create the device form if not already...
 	if (m_pDeviceForm == NULL) {
 		m_pDeviceForm = new DeviceForm(this, Qt::Dialog);
-        m_pDeviceForm->setAttribute(Qt::WA_ShowModal);
+		m_pDeviceForm->setAttribute(Qt::WA_ShowModal);
 		QObject::connect(m_pDeviceForm, SIGNAL(devicesChanged()),
 			this, SLOT(updateDevices()));
 	}
@@ -553,7 +558,8 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		pDevice = new qsamplerDevice(qsamplerDevice::Midi, piDeviceIDs[i]);
 		if (pDevice->driverName().toUpper() == sDriverName) {
-			m_ui.MidiDeviceComboBox->insertItem(0, midiPixmap, pDevice->deviceName());
+			m_ui.MidiDeviceComboBox->insertItem(0,
+				midiPixmap, pDevice->deviceName());
 			m_midiDevices.append(pDevice);
 		} else {
 			delete pDevice;
@@ -667,7 +673,8 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		pDevice = new qsamplerDevice(qsamplerDevice::Audio, piDeviceIDs[i]);
 		if (pDevice->driverName().toUpper() == sDriverName) {
-			m_ui.AudioDeviceComboBox->insertItem(0, audioPixmap, pDevice->deviceName());
+			m_ui.AudioDeviceComboBox->insertItem(0,
+				audioPixmap, pDevice->deviceName());
 			m_audioDevices.append(pDevice);
 		} else {
 			delete pDevice;
@@ -776,8 +783,8 @@ void ChannelForm::stabilizeForm (void)
 {
 	const bool bValid =
 		m_ui.EngineNameComboBox->currentIndex() >= 0 &&
-		m_ui.EngineNameComboBox->currentText() !=
-		qsamplerChannel::noEngineName();
+		m_ui.EngineNameComboBox->currentText()
+			!= qsamplerChannel::noEngineName();
 #if 0
 	const QString& sPath = InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
@@ -788,9 +795,9 @@ void ChannelForm::stabilizeForm (void)
 
 void ChannelForm::updateTableCellRenderers (void)
 {
-    const int rows = m_routingModel.rowCount();
-    const int cols = m_routingModel.columnCount();
-    updateTableCellRenderers(
+	const int rows = m_routingModel.rowCount();
+	const int cols = m_routingModel.columnCount();
+	updateTableCellRenderers(
 		m_routingModel.index(0, 0),
 		m_routingModel.index(rows - 1, cols - 1));
 }
@@ -799,12 +806,12 @@ void ChannelForm::updateTableCellRenderers (void)
 void ChannelForm::updateTableCellRenderers (
 	const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
-    for (int r = topLeft.row(); r <= bottomRight.row(); r++) {
-        for (int c = topLeft.column(); c <= bottomRight.column(); c++) {
-            const QModelIndex index = m_routingModel.index(r, c);
-            m_ui.AudioRoutingTable->openPersistentEditor(index);
-        }
-    }
+	for (int r = topLeft.row(); r <= bottomRight.row(); r++) {
+		for (int c = topLeft.column(); c <= bottomRight.column(); c++) {
+			const QModelIndex index = m_routingModel.index(r, c);
+			m_ui.AudioRoutingTable->openPersistentEditor(index);
+		}
+	}
 }
 
 } // namespace QSampler

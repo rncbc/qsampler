@@ -38,51 +38,52 @@ class ChannelForm : public QDialog
 
 public:
 
-    ChannelForm(QWidget* parent = 0);
-   ~ChannelForm();
+	ChannelForm(QWidget* pParent = NULL);
+	~ChannelForm();
 
-    void setup(qsamplerChannel* pChannel);
+	void setup(qsamplerChannel* pChannel);
 
-    void setupDevice(qsamplerDevice* pDevice,
+	void setupDevice(qsamplerDevice* pDevice,
 		qsamplerDevice::DeviceType deviceTypeMode,
 		const QString& sDriverName);
 
-    void selectMidiDriverItem(const QString& sMidiDriver);
-    void selectMidiDeviceItem(int iMidiItem);
-    void selectAudioDriverItem(const QString& sAudioDriver);
-    void selectAudioDeviceItem(int iAudioItem);
+	void selectMidiDriverItem(const QString& sMidiDriver);
+	void selectMidiDeviceItem(int iMidiItem);
+	void selectAudioDriverItem(const QString& sAudioDriver);
+	void selectAudioDeviceItem(int iAudioItem);
 
 protected slots:
 
-    void accept();
-    void reject();
-    void openInstrumentFile();
-    void updateInstrumentName();
-    void selectMidiDriver(const QString& sMidiDriver);
-    void selectMidiDevice(int iMidiItem);
-    void setupMidiDevice();
-    void selectAudioDriver(const QString& sAudioDriver);
-    void selectAudioDevice(int iAudioItem);
-    void setupAudioDevice();
-    void updateDevices();
-    void optionsChanged();
-    void stabilizeForm();
+	void accept();
+	void reject();
+	void openInstrumentFile();
+	void updateInstrumentName();
+	void selectMidiDriver(const QString& sMidiDriver);
+	void selectMidiDevice(int iMidiItem);
+	void setupMidiDevice();
+	void selectAudioDriver(const QString& sAudioDriver);
+	void selectAudioDevice(int iAudioItem);
+	void setupAudioDevice();
+	void updateDevices();
+	void optionsChanged();
+	void stabilizeForm();
 
-    void updateTableCellRenderers();
-    void updateTableCellRenderers(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+	void updateTableCellRenderers();
+	void updateTableCellRenderers(
+		const QModelIndex& topLeft, const QModelIndex& bottomRight);
 
 private:
 
-    Ui::qsamplerChannelForm m_ui;
+	Ui::qsamplerChannelForm m_ui;
 
-    qsamplerChannel* m_pChannel;
-    int m_iDirtySetup;
-    int m_iDirtyCount;
-    QList<qsamplerDevice *> m_audioDevices;
-    QList<qsamplerDevice *> m_midiDevices;
-    DeviceForm* m_pDeviceForm;
-    ChannelRoutingModel m_routingModel;
-    ChannelRoutingDelegate m_routingDelegate;
+	qsamplerChannel* m_pChannel;
+	int m_iDirtySetup;
+	int m_iDirtyCount;
+	QList<qsamplerDevice *> m_audioDevices;
+	QList<qsamplerDevice *> m_midiDevices;
+	DeviceForm* m_pDeviceForm;
+	ChannelRoutingModel m_routingModel;
+	ChannelRoutingDelegate m_routingDelegate;
 };
 
 } // namespace QSampler

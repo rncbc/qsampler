@@ -38,53 +38,53 @@ class ChannelStrip : public QWidget
 
 public:
 
-    ChannelStrip(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
-   ~ChannelStrip();
+	ChannelStrip(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+	~ChannelStrip();
 
-    void setup(qsamplerChannel* pChannel);
+	void setup(qsamplerChannel *pChannel);
 
-    qsamplerChannel *channel() const;
+	qsamplerChannel *channel() const;
 
-    void setDisplayFont(const QFont& font);
-    QFont displayFont() const;
+	void setDisplayFont(const QFont& font);
+	QFont displayFont() const;
 
-    void setDisplayEffect(bool bDisplayEffect);
+	void setDisplayEffect(bool bDisplayEffect);
 
-    void setMaxVolume(int iMaxVolume);
+	void setMaxVolume(int iMaxVolume);
 
-    bool updateInstrumentName(bool bForce);
-    bool updateChannelVolume();
-    bool updateChannelInfo();
-    bool updateChannelUsage();
+	bool updateInstrumentName(bool bForce);
+	bool updateChannelVolume();
+	bool updateChannelInfo();
+	bool updateChannelUsage();
 
-    void resetErrorCount();
+	void resetErrorCount();
 
 signals:
 
-    void channelChanged(ChannelStrip*);
+	void channelChanged(ChannelStrip*);
 
 public slots:
 
-    bool channelSetup();
-    bool channelMute(bool bMute);
-    bool channelSolo(bool bSolo);
-    void channelEdit();
-    bool channelReset();
-    void volumeChanged(int iVolume);
+	bool channelSetup();
+	bool channelMute(bool bMute);
+	bool channelSolo(bool bSolo);
+	void channelEdit();
+	bool channelReset();
+	void volumeChanged(int iVolume);
 
 protected:
 
-    void dragEnterEvent(QDragEnterEvent* pDragEnterEvent);
-    void dropEvent(QDropEvent* pDropEvent);
-    void contextMenuEvent(QContextMenuEvent* pEvent);
+	void dragEnterEvent(QDragEnterEvent* pDragEnterEvent);
+	void dropEvent(QDropEvent* pDropEvent);
+	void contextMenuEvent(QContextMenuEvent* pEvent);
 
 private:
 
-    Ui::qsamplerChannelStrip m_ui;
+	Ui::qsamplerChannelStrip m_ui;
 
-    qsamplerChannel* m_pChannel;
-    int m_iDirtyChange;
-    int m_iErrorCount;
+	qsamplerChannel* m_pChannel;
+	int m_iDirtyChange;
+	int m_iErrorCount;
 };
 
 } // namespace QSampler

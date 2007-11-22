@@ -28,25 +28,36 @@
 #include <QDragEnterEvent>
 #include <QUrl>
 
-#include <math.h>
-
 // Channel status/usage usage limit control.
 #define QSAMPLER_ERROR_LIMIT	3
 
+// Needed for lroundf()
+#include <math.h>
+
 namespace QSampler {
+
+#ifndef CONFIG_ROUND
+static inline long lroundf ( float x )
+{
+	if (x >= 0.0f)
+		return long(x + 0.5f);
+	else
+		return long(x - 0.5f);
+}
+#endif
 
 ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	: QWidget(pParent, wflags)
 {
-    m_ui.setupUi(this);
+	m_ui.setupUi(this);
 
-    // Initialize locals.
-    m_pChannel     = NULL;
-    m_iDirtyChange = 0;
-    m_iErrorCount  = 0;
+	// Initialize locals.
+	m_pChannel     = NULL;
+	m_iDirtyChange = 0;
+	m_iErrorCount  = 0;
 
-    // Try to restore normal window positioning.
-    adjustSize();
+	// Try to restore normal window positioning.
+	adjustSize();
 
 	QObject::connect(m_ui.ChannelSetupPushButton,
 		SIGNAL(clicked()),
@@ -69,10 +80,10 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 }
 
 ChannelStrip::~ChannelStrip() {
-    // Destroy existing channel descriptor.
-    if (m_pChannel)
-        delete m_pChannel;
-    m_pChannel = NULL;
+	// Destroy existing channel descriptor.
+	if (m_pChannel)
+		delete m_pChannel;
+	m_pChannel = NULL;
 }
 
 
@@ -134,16 +145,16 @@ void ChannelStrip::dropEvent ( QDropEvent* pDropEvent )
 // Channel strip setup formal initializer.
 void ChannelStrip::setup ( qsamplerChannel *pChannel )
 {
-    // Destroy any previous channel descriptor;
-    // (remember that once setup we own it!)
-    if (m_pChannel)
-        delete m_pChannel;
+	// Destroy any previous channel descriptor;
+	// (remember that once setup we own it!)
+	if (m_pChannel)
+		delete m_pChannel;
 
-    // Set the new one...
-    m_pChannel = pChannel;
+	// Set the new one...
+	m_pChannel = pChannel;
 
-    // Stabilize this around.
-    updateChannelInfo();
+	// Stabilize this around.
+	updateChannelInfo();
 
 	// We'll accept drops from now on...
 	if (m_pChannel)
@@ -153,22 +164,22 @@ void ChannelStrip::setup ( qsamplerChannel *pChannel )
 // Channel secriptor accessor.
 qsamplerChannel *ChannelStrip::channel (void) const
 {
-    return m_pChannel;
+	return m_pChannel;
 }
 
 
 // Messages view font accessors.
 QFont ChannelStrip::displayFont (void) const
 {
-    return m_ui.EngineNameTextLabel->font();
+	return m_ui.EngineNameTextLabel->font();
 }
 
 void ChannelStrip::setDisplayFont ( const QFont & font )
 {
-    m_ui.EngineNameTextLabel->setFont(font);
-    m_ui.MidiPortChannelTextLabel->setFont(font);
-    m_ui.InstrumentNameTextLabel->setFont(font);
-    m_ui.InstrumentStatusTextLabel->setFont(font);
+	m_ui.EngineNameTextLabel->setFont(font);
+	m_ui.MidiPortChannelTextLabel->setFont(font);
+	m_ui.InstrumentNameTextLabel->setFont(font);
+	m_ui.InstrumentStatusTextLabel->setFont(font);
 }
 
 
@@ -194,10 +205,10 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 // Maximum volume slider accessors.
 void ChannelStrip::setMaxVolume ( int iMaxVolume )
 {
-    m_iDirtyChange++;
-    m_ui.VolumeSlider->setRange(0, iMaxVolume);
-    m_ui.VolumeSpinBox->setRange(0, iMaxVolume);
-    m_iDirtyChange--;
+	m_iDirtyChange++;
+	m_ui.VolumeSlider->setRange(0, iMaxVolume);
+	m_ui.VolumeSpinBox->setRange(0, iMaxVolume);
+	m_iDirtyChange--;
 }
 
 
@@ -301,70 +312,58 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 // Do the dirty volume change.
 bool ChannelStrip::updateChannelVolume (void)
 {
-    if (m_pChannel == NULL)
-        return false;
+	if (m_pChannel == NULL)
+		return false;
 
-    // Convert...
-#ifdef CONFIG_ROUND
-    int iVolume = (int) ::round(100.0 * m_pChannel->volume());
-#else
-    double fIPart = 0.0;
-    double fFPart = ::modf(100.0 * m_pChannel->volume(), &fIPart);
-    int iVolume = (int) fIPart;
-    if (fFPart >= +0.5)
-        iVolume++;
-    else
-    if (fFPart <= -0.5)
-        iVolume--;
-#endif
+	// Convert...
+	int iVolume = ::lroundf(100.0f * m_pChannel->volume());
+	// And clip...
+	if (iVolume < 0)
+		iVolume = 0;
 
-    // And clip...
-    if (iVolume < 0)
-        iVolume = 0;
+	// Flag it here, to avoid infinite recursion.
+	m_iDirtyChange++;
+	m_ui.VolumeSlider->setValue(iVolume);
+	m_ui.VolumeSpinBox->setValue(iVolume);
+	m_iDirtyChange--;
 
-    // Flag it here, to avoid infinite recursion.
-    m_iDirtyChange++;
-    m_ui.VolumeSlider->setValue(iVolume);
-    m_ui.VolumeSpinBox->setValue(iVolume);
-    m_iDirtyChange--;
-
-    return true;
+	return true;
 }
 
 
 // Update whole channel info state.
 bool ChannelStrip::updateChannelInfo (void)
 {
-    if (m_pChannel == NULL)
-        return false;
+	if (m_pChannel == NULL)
+		return false;
 
 	// Check for error limit/recycle...
 	if (m_iErrorCount > QSAMPLER_ERROR_LIMIT)
 		return true;
 
-    // Update strip caption.
-    QString sText = m_pChannel->channelName();
-    setWindowTitle(sText);
-    m_ui.ChannelSetupPushButton->setText(sText);
+	// Update strip caption.
+	QString sText = m_pChannel->channelName();
+	setWindowTitle(sText);
+	m_ui.ChannelSetupPushButton->setText(sText);
 
-    // Check if we're up and connected.
+	// Check if we're up and connected.
 	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm->client() == NULL)
 		return false;
 
-    // Read actual channel information.
-    m_pChannel->updateChannelInfo();
+	// Read actual channel information.
+	m_pChannel->updateChannelInfo();
 
-    // Engine name...
-    if (m_pChannel->engineName().isEmpty())
-        m_ui.EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
-    else
-        m_ui.EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
+	// Engine name...
+	if (m_pChannel->engineName().isEmpty())
+		m_ui.EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
+	else
+		m_ui.EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
 
 	// Instrument name...
 	updateInstrumentName(false);
 
-    // MIDI Port/Channel...
+	// MIDI Port/Channel...
 	QString sMidiPortChannel = QString::number(m_pChannel->midiPort()) + " / ";
 	if (m_pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
 		sMidiPortChannel += tr("All");
@@ -376,31 +375,31 @@ bool ChannelStrip::updateChannelInfo (void)
 	QPalette pal;
 	const QColor& rgbFore = pal.color(QPalette::Foreground);
 
-    // Instrument status...
-    int iInstrumentStatus = m_pChannel->instrumentStatus();
-    if (iInstrumentStatus < 0) {
+	// Instrument status...
+	int iInstrumentStatus = m_pChannel->instrumentStatus();
+	if (iInstrumentStatus < 0) {
 		pal.setColor(QPalette::Foreground, Qt::red);
 		m_ui.InstrumentStatusTextLabel->setPalette(pal);
-        m_ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
-        m_iErrorCount++;
-        return false;
-    }
-    // All seems normal...
+		m_ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
+		m_iErrorCount++;
+		return false;
+	}
+	// All seems normal...
 	pal.setColor(QPalette::Foreground,
 		iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
-    m_ui.InstrumentStatusTextLabel->setPalette(pal);
-    m_ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
-    m_iErrorCount = 0;
+	m_ui.InstrumentStatusTextLabel->setPalette(pal);
+	m_ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
+	m_iErrorCount = 0;
 
 #ifdef CONFIG_MUTE_SOLO
-    // Mute/Solo button state coloring...
-    bool bMute = m_pChannel->channelMute();
+	// Mute/Solo button state coloring...
+	bool bMute = m_pChannel->channelMute();
 	const QColor& rgbButton = pal.color(QPalette::Button);
 	pal.setColor(QPalette::Foreground, rgbFore);
 	pal.setColor(QPalette::Button, bMute ? Qt::yellow : rgbButton);
 	m_ui.ChannelMutePushButton->setPalette(pal);
 	m_ui.ChannelMutePushButton->setDown(bMute);
-    bool bSolo = m_pChannel->channelSolo();
+	bool bSolo = m_pChannel->channelSolo();
 	pal.setColor(QPalette::Button, bSolo ? Qt::cyan : rgbButton);	
 	m_ui.ChannelSoloPushButton->setPalette(pal);
 	m_ui.ChannelSoloPushButton->setDown(bSolo);
@@ -409,17 +408,17 @@ bool ChannelStrip::updateChannelInfo (void)
 	m_ui.ChannelSoloPushButton->setEnabled(false);
 #endif
 
-    // And update the both GUI volume elements;
-    // return success if, and only if, intrument is fully loaded...
-    return updateChannelVolume() && (iInstrumentStatus == 100);
+	// And update the both GUI volume elements;
+	// return success if, and only if, intrument is fully loaded...
+	return updateChannelVolume() && (iInstrumentStatus == 100);
 }
 
 
 // Update whole channel usage state.
 bool ChannelStrip::updateChannelUsage (void)
 {
-    if (m_pChannel == NULL)
-        return false;
+	if (m_pChannel == NULL)
+		return false;
 
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm->client() == NULL)
@@ -427,57 +426,57 @@ bool ChannelStrip::updateChannelUsage (void)
 
 	// This only makes sense on fully loaded channels...
 	if (m_pChannel->instrumentStatus() < 100)
-	    return false;
+		return false;
 
-    // Get current channel voice count.
-    int iVoiceCount  = ::lscp_get_channel_voice_count(pMainForm->client(), m_pChannel->channelID());
-   // Get current stream count.
-    int iStreamCount = ::lscp_get_channel_stream_count(pMainForm->client(), m_pChannel->channelID());
-    // Get current channel buffer fill usage.
-    // As benno has suggested this is the percentage usage
-    // of the least filled buffer stream...
-    int iStreamUsage = ::lscp_get_channel_stream_usage(pMainForm->client(), m_pChannel->channelID());;
+	// Get current channel voice count.
+	int iVoiceCount  = ::lscp_get_channel_voice_count(pMainForm->client(), m_pChannel->channelID());
+// Get current stream count.
+	int iStreamCount = ::lscp_get_channel_stream_count(pMainForm->client(), m_pChannel->channelID());
+	// Get current channel buffer fill usage.
+	// As benno has suggested this is the percentage usage
+	// of the least filled buffer stream...
+	int iStreamUsage = ::lscp_get_channel_stream_usage(pMainForm->client(), m_pChannel->channelID());;
 
-    // Update the GUI elements...
-    m_ui.StreamUsageProgressBar->setValue(iStreamUsage);
-    m_ui.StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
+	// Update the GUI elements...
+	m_ui.StreamUsageProgressBar->setValue(iStreamUsage);
+	m_ui.StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
 
-    // We're clean.
-    return true;
+	// We're clean.
+	return true;
 }
 
 
 // Volume change slot.
 void ChannelStrip::volumeChanged ( int iVolume )
 {
-    if (m_pChannel == NULL)
-        return;
+	if (m_pChannel == NULL)
+		return;
 
-    // Avoid recursion.
-    if (m_iDirtyChange > 0)
-        return;
+	// Avoid recursion.
+	if (m_iDirtyChange > 0)
+		return;
 
-    // Convert and clip.
-    float fVolume = (float) iVolume / 100.0;
-    if (fVolume < 0.001)
-        fVolume = 0.0;
+	// Convert and clip.
+	float fVolume = (float) iVolume / 100.0f;
+	if (fVolume < 0.001f)
+		fVolume = 0.0f;
 
-    // Update the GUI elements.
-    if (m_pChannel->setVolume(fVolume)) {
-        updateChannelVolume();
-        emit channelChanged(this);
-    }
+	// Update the GUI elements.
+	if (m_pChannel->setVolume(fVolume)) {
+		updateChannelVolume();
+		emit channelChanged(this);
+	}
 }
 
 
 // Context menu event handler.
 void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
-    if (m_pChannel == NULL)
-        return;
+	if (m_pChannel == NULL)
+		return;
 
-    // We'll just show up the main form's edit menu (thru qsamplerChannel).
-    m_pChannel->contextMenuEvent(pEvent);
+	// We'll just show up the main form's edit menu (thru qsamplerChannel).
+	m_pChannel->contextMenuEvent(pEvent);
 }
 
 

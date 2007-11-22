@@ -62,7 +62,7 @@ qsamplerChannel::qsamplerChannel ( int iChannelID )
 	m_iMidiMap          = -1;
 	m_sAudioDriver      = "ALSA";
 	m_iAudioDevice      = -1;
-	m_fVolume           = 0.0;
+	m_fVolume           = 0.0f;
 	m_bMute             = false;
 	m_bSolo             = false;
 }
@@ -910,80 +910,97 @@ QString qsamplerChannel::loadingInstrument (void) {
 // ChannelRoutingModel - data model for audio routing (used for QTableView)
 //
 
-ChannelRoutingModel::ChannelRoutingModel(QObject* parent) : QAbstractTableModel(parent), pDevice(NULL) {
+ChannelRoutingModel::ChannelRoutingModel ( QObject *pParent )
+	: QAbstractTableModel(pParent), m_pDevice(NULL)
+{
 }
 
-int ChannelRoutingModel::rowCount(const QModelIndex& /*parent*/) const {
-    return routing.size();
+
+int ChannelRoutingModel::rowCount ( const QModelIndex& /*parent*/) const
+{
+	return m_routing.size();
 }
 
-int ChannelRoutingModel::columnCount(const QModelIndex& /*parent*/) const {
-    return 1;
+
+int ChannelRoutingModel::columnCount ( const QModelIndex& /*parent*/) const
+{
+	return 1;
 }
 
-Qt::ItemFlags ChannelRoutingModel::flags(const QModelIndex& /*index*/) const {
-    return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+
+Qt::ItemFlags ChannelRoutingModel::flags ( const QModelIndex& /*index*/) const
+{
+	return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-bool ChannelRoutingModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
-    if (!index.isValid()) {
-        return false;
-    }
 
-    routing[index.row()] = value.toInt();
+bool ChannelRoutingModel::setData ( const QModelIndex& index,
+	const QVariant& value, int /*role*/)
+{
+	if (!index.isValid())
+		return false;
 
-    emit dataChanged(index, index);
-    return true;
+	m_routing[index.row()] = value.toInt();
+
+	emit dataChanged(index, index);
+	return true;
 }
 
-QVariant ChannelRoutingModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid())
-        return QVariant();
-    if (role != Qt::DisplayRole)
-        return QVariant();
-    if (index.column() != 0)
-        return QVariant();
 
-    ChannelRoutingItem item;
+QVariant ChannelRoutingModel::data ( const QModelIndex &index, int role ) const
+{
+	if (!index.isValid())
+		return QVariant();
+	if (role != Qt::DisplayRole)
+		return QVariant();
+	if (index.column() != 0)
+		return QVariant();
 
-    // The common device port item list.
-    qsamplerDevicePortList& ports = pDevice->ports();
+	ChannelRoutingItem item;
+
+	// The common device port item list.
+	qsamplerDevicePortList& ports = m_pDevice->ports();
 	QListIterator<qsamplerDevicePort *> iter(ports);
 	while (iter.hasNext()) {
 		qsamplerDevicePort *pPort = iter.next();
-        item.options.append(
-            pDevice->deviceTypeName()
-            + ' ' + pDevice->driverName()
-            + ' ' + pPort->portName()
-        );
-    }
+		item.options.append(
+			m_pDevice->deviceTypeName()
+			+ ' ' + m_pDevice->driverName()
+			+ ' ' + pPort->portName()
+		);
+	}
 
-    item.selection = routing[index.row()];
+	item.selection = m_routing[index.row()];
 
-    return QVariant::fromValue(item);
+	return QVariant::fromValue(item);
 }
 
-QVariant ChannelRoutingModel::headerData(int section, Qt::Orientation orientation, int role) const {
-    if (role != Qt::DisplayRole) return QVariant();
 
-    switch (orientation) {
-        case Qt::Horizontal:
-            return UNICODE_RIGHT_ARROW + QObject::tr(" Device Channel");
-        case Qt::Vertical:
-            return QObject::tr("Sampler Channel ") +
-                   QString::number(section) + " " + UNICODE_RIGHT_ARROW;
-        default:
-            return QVariant();
-    }
+QVariant ChannelRoutingModel::headerData ( int section,
+	Qt::Orientation orientation, int role) const
+{
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	switch (orientation) {
+		case Qt::Horizontal:
+			return UNICODE_RIGHT_ARROW + QObject::tr(" Device Channel");
+		case Qt::Vertical:
+			return QObject::tr("Sampler Channel ") +
+				QString::number(section) + " " + UNICODE_RIGHT_ARROW;
+		default:
+			return QVariant();
+	}
 }
+
 
 void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
 	const qsamplerChannelRoutingMap& routing )
 {
-    this->pDevice = pDevice;
-    this->routing = routing;
-    // inform the outer world (QTableView) that our data changed
-    QAbstractTableModel::reset();
+	m_pDevice = pDevice;
+	m_routing = routing;
+	// inform the outer world (QTableView) that our data changed
+	QAbstractTableModel::reset();
 }
 
 
@@ -991,46 +1008,55 @@ void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
 // ChannelRoutingDelegate - table cell renderer for audio routing
 //
 
-ChannelRoutingDelegate::ChannelRoutingDelegate(QObject *parent) : QItemDelegate(parent) {
-}
-
-QWidget* ChannelRoutingDelegate::createEditor(QWidget *parent,
-	const QStyleOptionViewItem & option ,
-	const QModelIndex& index) const
+ChannelRoutingDelegate::ChannelRoutingDelegate ( QObject *pParent )
+	: QItemDelegate(pParent)
 {
-    if (!index.isValid()) {
-        return NULL;
-    }
-
-    if (index.column() != 0) {
-        return NULL;
-    }
-
-    ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
-
-    QComboBox* pComboBox = new QComboBox(parent);
-    pComboBox->addItems(item.options);
-    pComboBox->setCurrentIndex(item.selection);
-    pComboBox->setEnabled(true);
-    pComboBox->setGeometry(option.rect);
-    return pComboBox;
 }
 
-void ChannelRoutingDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
-    ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
-    QComboBox* comboBox = static_cast<QComboBox*>(editor);
-    comboBox->setCurrentIndex(item.selection);
-}
 
-void ChannelRoutingDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
-    QComboBox* comboBox = static_cast<QComboBox*>(editor);
-    model->setData(index, comboBox->currentIndex());
-}
-
-void ChannelRoutingDelegate::updateEditorGeometry(QWidget *editor,
-	const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+QWidget* ChannelRoutingDelegate::createEditor ( QWidget *pParent,
+	const QStyleOptionViewItem & option, const QModelIndex& index ) const
 {
-    editor->setGeometry(option.rect);
+	if (!index.isValid())
+		return NULL;
+
+	if (index.column() != 0)
+		return NULL;
+
+	ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
+
+	QComboBox* pComboBox = new QComboBox(pParent);
+	pComboBox->addItems(item.options);
+	pComboBox->setCurrentIndex(item.selection);
+	pComboBox->setEnabled(true);
+	pComboBox->setGeometry(option.rect);
+	return pComboBox;
 }
+
+
+void ChannelRoutingDelegate::setEditorData ( QWidget *pEditor,
+	const QModelIndex &index) const
+{
+	ChannelRoutingItem item = index.model()->data(index,
+		Qt::DisplayRole).value<ChannelRoutingItem> ();
+	QComboBox* pComboBox = static_cast<QComboBox*> (pEditor);
+	pComboBox->setCurrentIndex(item.selection);
+}
+
+
+void ChannelRoutingDelegate::setModelData ( QWidget* pEditor,
+	QAbstractItemModel *pModel, const QModelIndex& index ) const
+{
+	QComboBox *pComboBox = static_cast<QComboBox*> (pEditor);
+	pModel->setData(index, pComboBox->currentIndex());
+}
+
+
+void ChannelRoutingDelegate::updateEditorGeometry ( QWidget *pEditor,
+	const QStyleOptionViewItem& option, const QModelIndex &/* index */) const
+{
+	pEditor->setGeometry(option.rect);
+}
+
 
 // end of qsamplerChannel.cpp

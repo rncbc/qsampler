@@ -34,7 +34,7 @@ namespace QSampler {
 DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 	: QDialog(pParent, wflags)
 {
-    m_ui.setupUi(this);
+	m_ui.setupUi(this);
 
 	// Initialize locals.
 	m_iDirtySetup = 0;
