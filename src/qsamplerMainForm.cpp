@@ -238,6 +238,11 @@ MainForm::MainForm ( QWidget *pParent )
 	WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
 
+	// Some actions surely need those
+	// shortcuts firmly attached...
+	addAction(m_ui.viewMenubarAction);
+	addAction(m_ui.viewToolbarAction);
+
 	QObject::connect(m_ui.fileNewAction,
 		SIGNAL(triggered()),
 		SLOT(fileNew()));

@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Make View/Menubar and Toolbar shortcuts accessible even though
+  the main menu and toobar are not visible.
+
 * Audio routing table is initially hidden in the dialog, when
   creating a new sampler channel.
 
