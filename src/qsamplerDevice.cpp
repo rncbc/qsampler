@@ -337,10 +337,17 @@ bool qsamplerDevice::setParam ( const QString& sParam,
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
 	if (m_iDeviceID >= 0 && sValue != QString::null) {
+
+		// we need temporary byte arrrays with the final strings, because
+		// i.e. QString::toUtf8() only returns a temporary object and the
+		// C-style char* pointers for liblscp would immediately be invalidated
+		QByteArray finalParamKey = sParam.toUtf8();
+		QByteArray finalParamVal = sValue.toUtf8();
+
 		// Prepare parameter struct.
 		lscp_param_t param;
-		param.key   = (char *) sParam.toUtf8().constData();
-		param.value = (char *) sValue.toUtf8().constData();
+		param.key   = (char *) finalParamKey.constData();
+		param.value = (char *) finalParamVal.constData();
 		// Now it depends on the device type...
 		lscp_status_t ret = LSCP_FAILED;
 		switch (m_deviceType) {
@@ -401,15 +408,27 @@ bool qsamplerDevice::createDevice (void)
 	if (pMainForm->client() == NULL)
 		return false;
 
-	// Build the parameter list...
-	lscp_param_t *pParams = new lscp_param_t [m_params.count() + 1];
-	int iParam = 0;
+	// we need temporary lists with the final strings, because i.e.
+	// QString::toUtf8() only returns a temporary object and the
+	// C-style char* pointers for liblscp would immediately be invalidated
+	QList<QByteArray> finalKeys;
+	QList<QByteArray> finalVals;
+
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = m_params.begin(); iter != m_params.end(); ++iter) {
 		if (iter.value().value == QString::null) continue;
-		pParams[iParam].key   = (char *) iter.key().toUtf8().constData();
-		pParams[iParam].value = (char *) iter.value().value.toUtf8().constData();
-		++iParam;
+		finalKeys.push_back(iter.key().toUtf8());
+		finalVals.push_back(iter.value().value.toUtf8());
+	}
+
+	// yeah, we DO HAVE to do the two loops separately !
+
+	// Build the parameter list...
+	lscp_param_t *pParams = new lscp_param_t [finalKeys.count() + 1];
+	int iParam;
+	for (iParam = 0; iParam < finalKeys.count(); iParam++) {
+		pParams[iParam].key   = (char *) finalKeys[iParam].constData();
+		pParams[iParam].value = (char *) finalVals[iParam].constData();
 	}
 	// Null terminated.
 	pParams[iParam].key   = NULL;
@@ -569,12 +588,21 @@ int qsamplerDevice::refreshParam ( const QString& sParam )
 	// Build dependency list...
 	lscp_param_t *pDepends = new lscp_param_t [param.depends.count() + 1];
 	int iDepend = 0;
-	QStringList::ConstIterator iter;
-	for (iter = param.depends.begin(); iter != param.depends.end(); ++iter) {
-		const QString& sDepend = *iter;
-		pDepends[iDepend].key   = (char *) sDepend.toUtf8().constData();
-		pDepends[iDepend].value = (char *) m_params[sDepend.toUpper()].value
-			.toUtf8().constData();
+
+	// we need temporary lists with the final strings, because i.e.
+	// QString::toUtf8() only returns a temporary object and the
+	// C-style char* pointers for liblscp would immediately be invalidated
+	QList<QByteArray> finalKeys;
+	QList<QByteArray> finalVals;
+	for (int i = 0; i < param.depends.count(); i++) {
+		const QString& sDepend = param.depends[i];
+		finalKeys.push_back(sDepend.toUtf8());
+		finalVals.push_back(m_params[sDepend.toUpper()].value.toUtf8());
+	}
+	// yeah, we DO HAVE to do those two loops separately !
+	for (int i = 0; i < param.depends.count(); i++) {
+		pDepends[iDepend].key   = (char *) finalKeys[i].constData();
+		pDepends[iDepend].value = (char *) finalVals[i].constData();
 		++iDepend;
 	}
 	// Null terminated.
@@ -821,10 +849,17 @@ bool qsamplerDevicePort::setParam ( const QString& sParam,
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
 	if (m_device.deviceID() >= 0 && m_iPortID >= 0) {
+
+		// we need temporary byte arrrays with the final strings, because
+		// i.e. QString::toUtf8() only returns a temporary object and the
+		// C-style char* pointers for liblscp would immediately be invalidated
+		QByteArray finalParamKey = sParam.toUtf8();
+		QByteArray finalParamVal = sValue.toUtf8();
+
 		// Prepare parameter struct.
 		lscp_param_t param;
-		param.key   = (char *) sParam.toUtf8().constData();
-		param.value = (char *) sValue.toUtf8().constData();
+		param.key   = (char *) finalParamKey.constData();
+		param.value = (char *) finalParamVal.constData();
 		// Now it depends on the device type...
 		lscp_status_t ret = LSCP_FAILED;
 		switch (m_device.deviceType()) {
@@ -935,25 +970,6 @@ Qt::ItemFlags AbstractDeviceParamModel::flags(const QModelIndex& /*index*/) cons
     return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-QVariant AbstractDeviceParamModel::data(const QModelIndex &index, int role) const {
-    if (!index.isValid()) {
-        //std::cout << "inavlid device model index\n" << std::flush;
-        return QVariant();
-    }
-    if (role != Qt::DisplayRole) {
-        //std::cout << "inavlid display role\n" << std::flush;
-        return QVariant();
-    }
-
-    DeviceParameterRow item;
-    item.name  = params->keys()[index.row()];
-    item.param = (*params)[item.name];
-
-    //std::cout << "item["<<index.row()<<"]=[" << item.name.toUtf8().constData() << "]\n" << std::flush;
-
-    return QVariant::fromValue(item);
-}
-
 QVariant AbstractDeviceParamModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (role != Qt::DisplayRole) return QVariant();
 
@@ -991,6 +1007,24 @@ DeviceParamModel::DeviceParamModel(QObject* parent) : AbstractDeviceParamModel(p
     device = NULL;
 }
 
+QVariant DeviceParamModel::data(const QModelIndex &index, int role) const {
+    if (!index.isValid()) {
+        //std::cout << "inavlid device model index\n" << std::flush;
+        return QVariant();
+    }
+    if (role != Qt::DisplayRole) {
+        //std::cout << "inavlid display role\n" << std::flush;
+        return QVariant();
+    }
+
+    DeviceParameterRow item;
+    item.name  = params->keys()[index.row()];
+    item.param = (*params)[item.name];
+    item.alive = device != NULL && device->deviceID() >= 0;
+
+    return QVariant::fromValue(item);
+}
+
 bool DeviceParamModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
     if (!index.isValid()) {
         return false;
@@ -1019,6 +1053,24 @@ void DeviceParamModel::clear() {
 
 PortParamModel::PortParamModel(QObject* parent) : AbstractDeviceParamModel(parent) {
     port = NULL;
+}
+
+QVariant PortParamModel::data(const QModelIndex &index, int role) const {
+    if (!index.isValid()) {
+        //std::cout << "inavlid device model index\n" << std::flush;
+        return QVariant();
+    }
+    if (role != Qt::DisplayRole) {
+        //std::cout << "inavlid display role\n" << std::flush;
+        return QVariant();
+    }
+
+    DeviceParameterRow item;
+    item.name  = params->keys()[index.row()];
+    item.param = (*params)[item.name];
+    item.alive = port != NULL && port->portID() >= 0;
+
+    return QVariant::fromValue(item);
 }
 
 bool PortParamModel::setData(const QModelIndex& index, const QVariant& value, int /*role*/) {
@@ -1060,7 +1112,9 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
 
     DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
 
-    const bool bEnabled = (/*index.model()->bEditable ||*/ !r.param.fix);
+    const bool bEnabled = (r.alive) ? !r.param.fix : true;
+
+    QString val = (r.alive) ? r.param.value : r.param.defaultv;
 
     switch (index.column()) {
         case 0:
@@ -1068,7 +1122,8 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
         case 1: {
             if (r.param.type == LSCP_TYPE_BOOL) {
                 QCheckBox* pCheckBox = new QCheckBox(parent);
-                pCheckBox->setChecked(r.param.value.toLower() == "true");
+                if (val != QString::null)
+                    pCheckBox->setChecked(val.toLower() == "true");
                 pCheckBox->setEnabled(bEnabled);
                 return pCheckBox;
             } else if (r.param.possibilities.count() > 0) {
@@ -1080,22 +1135,27 @@ QWidget* DeviceParamDelegate::createEditor(QWidget *parent,
                 if (r.param.value.isEmpty())
                     pComboBox->setCurrentIndex(0);
                 else
-                    pComboBox->setCurrentIndex(pComboBox->findText(r.param.value));
+                    pComboBox->setCurrentIndex(pComboBox->findText(val));
                 pComboBox->setEnabled(bEnabled);
                 return pComboBox;
-            } else if (r.param.type == LSCP_TYPE_INT
-                       && !r.param.range_min.isEmpty()
-                       && !r.param.range_max.isEmpty()) {
+            } else if (r.param.type == LSCP_TYPE_INT && bEnabled) {
                 QSpinBox* pSpinBox = new QSpinBox(parent);
-                pSpinBox->setValue(r.param.value.toInt());
-                pSpinBox->setMinimum(r.param.range_min.toInt());
-                pSpinBox->setMaximum(r.param.range_max.toInt());
-                pSpinBox->setEnabled(bEnabled);
+                pSpinBox->setMinimum(
+                    (!r.param.range_min.isEmpty()) ?
+                        r.param.range_min.toInt() : 0 // or better a negative default min value ?
+                );
+                pSpinBox->setMaximum(
+                    (!r.param.range_max.isEmpty()) ?
+                        r.param.range_max.toInt() : (1 << 16) // or better a nigher default max value ?
+                );
+                pSpinBox->setValue(val.toInt());
                 return pSpinBox;
-            } else {
-                QLineEdit* pLineEdit = new QLineEdit(r.param.value, parent);
-                pLineEdit->setEnabled(bEnabled);
+            } else if (bEnabled) {
+                QLineEdit* pLineEdit = new QLineEdit(val, parent);
                 return pLineEdit;
+            } else {
+                QLabel* pLabel = new QLabel(val, parent);
+                return pLabel;
             }
         }
         case 2:
@@ -1112,18 +1172,21 @@ void DeviceParamDelegate::setEditorData(QWidget* /*editor*/, const QModelIndex& 
 void DeviceParamDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const {
     if (index.column() == 1) {
         DeviceParameterRow r = index.model()->data(index, Qt::DisplayRole).value<DeviceParameterRow>();
-        if (r.param.type == LSCP_TYPE_BOOL) {
+        if (editor->metaObject()->className() == "QCheckBox") {
             QCheckBox* pCheckBox = static_cast<QCheckBox*>(editor);
             model->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
-        } else if (r.param.possibilities.count() > 0) {
+        } else if (editor->metaObject()->className() == "QComboBox") {
             QComboBox* pComboBox = static_cast<QComboBox*>(editor);
             model->setData(index, pComboBox->currentText());
-        } else if (r.param.type == LSCP_TYPE_INT) {
+        } else if (editor->metaObject()->className() == "QSpinBox") {
             QSpinBox* pSpinBox = static_cast<QSpinBox*>(editor);
             model->setData(index, pSpinBox->value());
-        } else {
+        } else if (editor->metaObject()->className() == "QLineEdit") {
             QLineEdit* pLineEdit = static_cast<QLineEdit*>(editor);
             model->setData(index, pLineEdit->text());
+        } else if (editor->metaObject()->className() == "QLabel") {
+            QLabel* pLabel = static_cast<QLabel*>(editor);
+            model->setData(index, pLabel->text());
         }
     }
 }

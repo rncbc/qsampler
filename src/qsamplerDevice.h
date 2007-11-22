@@ -246,6 +246,7 @@ private:
 struct DeviceParameterRow {
     QString             name;
     qsamplerDeviceParam param;
+    bool                alive; // whether these params refer to an existing device or for a device that is yet to be created
 };
 
 // so we can use it i.e. through QVariant
@@ -262,7 +263,6 @@ class AbstractDeviceParamModel : public QAbstractTableModel {
         // overridden methods from subclass(es)
         int rowCount(const QModelIndex& parent = QModelIndex()) const;
         int columnCount(const QModelIndex& parent = QModelIndex() ) const;
-        QVariant data(const QModelIndex &index, int role) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
         Qt::ItemFlags flags(const QModelIndex& index) const;
 
@@ -284,6 +284,7 @@ class DeviceParamModel : public AbstractDeviceParamModel {
         DeviceParamModel(QObject* parent = 0);
 
         // overridden methods from subclass(es)
+        QVariant data(const QModelIndex &index, int role) const;
         bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
         void clear();
 
@@ -303,6 +304,7 @@ class PortParamModel : public AbstractDeviceParamModel {
         PortParamModel(QObject* parent = 0);
 
         // overridden methods from subclass(es)
+        QVariant data(const QModelIndex &index, int role) const;
         bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
         void clear();
 
