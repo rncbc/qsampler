@@ -1213,19 +1213,19 @@ void DeviceParamDelegate::setModelData ( QWidget *pEditor,
 	if (index.column() == 1) {
 		DeviceParameterRow r = index.model()->data(index,
 			Qt::DisplayRole).value<DeviceParameterRow> ();
-		if (pEditor->metaObject()->className() == "QCheckBox") {
+		if (pEditor->metaObject()->className() == QString("QCheckBox")) {
 			QCheckBox* pCheckBox = static_cast<QCheckBox*> (pEditor);
 			pModel->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
-		} else if (pEditor->metaObject()->className() == "QComboBox") {
+		} else if (pEditor->metaObject()->className() == QString("QComboBox")) {
 			QComboBox* pComboBox = static_cast<QComboBox*> (pEditor);
 			pModel->setData(index, pComboBox->currentText());
-		} else if (pEditor->metaObject()->className() == "QSpinBox") {
+		} else if (pEditor->metaObject()->className() == QString("QSpinBox")) {
 			QSpinBox* pSpinBox = static_cast<QSpinBox*> (pEditor);
 			pModel->setData(index, pSpinBox->value());
-		} else if (pEditor->metaObject()->className() == "QLineEdit") {
+		} else if (pEditor->metaObject()->className() == QString("QLineEdit")) {
 			QLineEdit* pLineEdit = static_cast<QLineEdit*> (pEditor);
 			pModel->setData(index, pLineEdit->text());
-		} else if (pEditor->metaObject()->className() == "QLabel") {
+		} else if (pEditor->metaObject()->className() == QString("QLabel")) {
 			QLabel* pLabel = static_cast<QLabel*> (pEditor);
 			pModel->setData(index, pLabel->text());
 		}
