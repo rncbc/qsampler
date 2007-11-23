@@ -25,18 +25,25 @@
 
 #include "ui_qsamplerMainForm.h"
 
-#include "qsamplerMessages.h"
-#include "qsamplerChannelStrip.h"
-#include "qsamplerInstrumentListForm.h"
-#include "qsamplerDeviceForm.h"
+#include <lscp/client.h>
 
-class QWorkspace;
+class qsamplerOptions;
+class qsamplerMessages;
+class qsamplerChannel;
+
 class QProcess;
+class QWorkspace;
+class QSpinBox;
+class QSlider;
+class QLabel;
 
 
 namespace QSampler {
 
+class ChannelStrip;
 class DeviceForm;
+class InstrumentListForm;
+
 
 class MainForm : public QMainWindow
 {

@@ -22,6 +22,7 @@
 
 #include "qsamplerUtilities.h"
 
+#include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
 #include <QRegExp>

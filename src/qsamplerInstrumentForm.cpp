@@ -20,9 +20,11 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerInstrumentForm.h"
 
-#include "qsamplerAbout.h"
+#include "qsamplerOptions.h"
+#include "qsamplerChannel.h"
 #include "qsamplerMainForm.h"
 
 #include <QFileDialog>

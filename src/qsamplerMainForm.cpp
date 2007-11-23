@@ -20,9 +20,9 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerMainForm.h"
 
-#include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
 #include "qsamplerChannel.h"
 #include "qsamplerMessages.h"

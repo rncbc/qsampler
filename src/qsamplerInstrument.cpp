@@ -24,6 +24,7 @@
 #include "qsamplerInstrument.h"
 #include "qsamplerUtilities.h"
 
+#include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
 

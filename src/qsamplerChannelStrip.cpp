@@ -79,7 +79,9 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 		SLOT(channelEdit()));
 }
 
-ChannelStrip::~ChannelStrip() {
+
+ChannelStrip::~ChannelStrip (void)
+{
 	// Destroy existing channel descriptor.
 	if (m_pChannel)
 		delete m_pChannel;
@@ -160,6 +162,7 @@ void ChannelStrip::setup ( qsamplerChannel *pChannel )
 	if (m_pChannel)
 		setAcceptDrops(true);
 }
+
 
 // Channel secriptor accessor.
 qsamplerChannel *ChannelStrip::channel (void) const
@@ -298,12 +301,17 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 
 	// Instrument name...
 	if (m_pChannel->instrumentName().isEmpty()) {
-		if (m_pChannel->instrumentStatus() >= 0)
-			m_ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::loadingInstrument());
-		else
-			m_ui.InstrumentNameTextLabel->setText(' ' + qsamplerChannel::noInstrumentName());
-	} else
-		m_ui.InstrumentNameTextLabel->setText(' ' + m_pChannel->instrumentName());
+		if (m_pChannel->instrumentStatus() >= 0) {
+			m_ui.InstrumentNameTextLabel->setText(
+				' ' + qsamplerChannel::loadingInstrument());
+		} else {
+			m_ui.InstrumentNameTextLabel->setText(
+				' ' + qsamplerChannel::noInstrumentName());
+		}
+	} else {
+		m_ui.InstrumentNameTextLabel->setText(
+			' ' + m_pChannel->instrumentName());
+	}
 
 	return true;
 }
@@ -344,7 +352,7 @@ bool ChannelStrip::updateChannelInfo (void)
 	// Update strip caption.
 	QString sText = m_pChannel->channelName();
 	setWindowTitle(sText);
-	m_ui.ChannelSetupPushButton->setText(sText);
+	m_ui.ChannelSetupPushButton->setText('&' + sText);
 
 	// Check if we're up and connected.
 	MainForm* pMainForm = MainForm::getInstance();
@@ -355,10 +363,13 @@ bool ChannelStrip::updateChannelInfo (void)
 	m_pChannel->updateChannelInfo();
 
 	// Engine name...
-	if (m_pChannel->engineName().isEmpty())
-		m_ui.EngineNameTextLabel->setText(' ' + qsamplerChannel::noEngineName());
-	else
-		m_ui.EngineNameTextLabel->setText(' ' + m_pChannel->engineName());
+	if (m_pChannel->engineName().isEmpty()) {
+		m_ui.EngineNameTextLabel->setText(
+			' ' + qsamplerChannel::noEngineName());
+	} else {
+		m_ui.EngineNameTextLabel->setText(
+			' ' + m_pChannel->engineName());
+	}
 
 	// Instrument name...
 	updateInstrumentName(false);
@@ -380,7 +391,8 @@ bool ChannelStrip::updateChannelInfo (void)
 	if (iInstrumentStatus < 0) {
 		pal.setColor(QPalette::Foreground, Qt::red);
 		m_ui.InstrumentStatusTextLabel->setPalette(pal);
-		m_ui.InstrumentStatusTextLabel->setText(tr("ERR%1").arg(iInstrumentStatus));
+		m_ui.InstrumentStatusTextLabel->setText(
+			tr("ERR%1").arg(iInstrumentStatus));
 		m_iErrorCount++;
 		return false;
 	}
@@ -388,7 +400,8 @@ bool ChannelStrip::updateChannelInfo (void)
 	pal.setColor(QPalette::Foreground,
 		iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
 	m_ui.InstrumentStatusTextLabel->setPalette(pal);
-	m_ui.InstrumentStatusTextLabel->setText(QString::number(iInstrumentStatus) + '%');
+	m_ui.InstrumentStatusTextLabel->setText(
+		QString::number(iInstrumentStatus) + '%');
 	m_iErrorCount = 0;
 
 #ifdef CONFIG_MUTE_SOLO
@@ -429,17 +442,21 @@ bool ChannelStrip::updateChannelUsage (void)
 		return false;
 
 	// Get current channel voice count.
-	int iVoiceCount  = ::lscp_get_channel_voice_count(pMainForm->client(), m_pChannel->channelID());
+	int iVoiceCount  = ::lscp_get_channel_voice_count(
+		pMainForm->client(), m_pChannel->channelID());
 // Get current stream count.
-	int iStreamCount = ::lscp_get_channel_stream_count(pMainForm->client(), m_pChannel->channelID());
+	int iStreamCount = ::lscp_get_channel_stream_count(
+		pMainForm->client(), m_pChannel->channelID());
 	// Get current channel buffer fill usage.
 	// As benno has suggested this is the percentage usage
 	// of the least filled buffer stream...
-	int iStreamUsage = ::lscp_get_channel_stream_usage(pMainForm->client(), m_pChannel->channelID());;
+	int iStreamUsage = ::lscp_get_channel_stream_usage(
+		pMainForm->client(), m_pChannel->channelID());;
 
 	// Update the GUI elements...
 	m_ui.StreamUsageProgressBar->setValue(iStreamUsage);
-	m_ui.StreamVoiceCountTextLabel->setText(QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
+	m_ui.StreamVoiceCountTextLabel->setText(
+		QString("%1 / %2").arg(iStreamCount).arg(iVoiceCount));
 
 	// We're clean.
 	return true;

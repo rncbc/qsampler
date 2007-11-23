@@ -56,6 +56,18 @@
    </property>
    <item>
     <widget class="QPushButton" name="ChannelSetupPushButton" >
+     <property name="minimumSize" >
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>140</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="toolTip" >
       <string>Channel setup</string>
      </property>
@@ -67,9 +79,6 @@
      </property>
      <property name="shortcut" >
       <string>Alt+C</string>
-     </property>
-     <property name="flat" >
-      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -99,7 +108,7 @@
       <bool>true</bool>
      </property>
      <property name="frameShape" >
-      <enum>QFrame::Panel</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow" >
       <enum>QFrame::Sunken</enum>
@@ -188,7 +197,7 @@
      <property name="maximumSize" >
       <size>
        <width>48</width>
-       <height>64</height>
+       <height>32</height>
       </size>
      </property>
      <property name="toolTip" >
@@ -210,7 +219,7 @@
      <property name="maximumSize" >
       <size>
        <width>48</width>
-       <height>64</height>
+       <height>32</height>
       </size>
      </property>
      <property name="toolTip" >
@@ -235,6 +244,12 @@
        <height>0</height>
       </size>
      </property>
+     <property name="maximumSize" >
+      <size>
+       <width>32767</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="toolTip" >
       <string>Channel volume</string>
      </property>
@@ -256,14 +271,14 @@
     <widget class="QSpinBox" name="VolumeSpinBox" >
      <property name="minimumSize" >
       <size>
-       <width>40</width>
+       <width>60</width>
        <height>0</height>
       </size>
      </property>
      <property name="maximumSize" >
       <size>
-       <width>60</width>
-       <height>32767</height>
+       <width>120</width>
+       <height>32</height>
       </size>
      </property>
      <property name="toolTip" >
@@ -282,7 +297,7 @@
      <property name="maximumSize" >
       <size>
        <width>48</width>
-       <height>64</height>
+       <height>32</height>
       </size>
      </property>
      <property name="toolTip" >
@@ -315,7 +330,7 @@
      <property name="maximumSize" >
       <size>
        <width>32767</width>
-       <height>22</height>
+       <height>32</height>
       </size>
      </property>
      <property name="toolTip" >
@@ -337,99 +352,8 @@
      <property name="maximumSize" >
       <size>
        <width>32767</width>
-       <height>22</height>
+       <height>32</height>
       </size>
-     </property>
-     <property name="palette" >
-      <palette>
-       <active>
-        <colorrole role="WindowText" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>85</red>
-           <green>255</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="WindowText" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>85</red>
-           <green>255</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>255</red>
-           <green>255</green>
-           <blue>255</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="WindowText" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>119</red>
-           <green>119</green>
-           <blue>119</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Base" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="Window" >
-         <brush brushstyle="SolidPattern" >
-          <color alpha="255" >
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
      </property>
      <property name="toolTip" >
       <string>Stream / Voice count</string>
@@ -438,7 +362,7 @@
       <bool>true</bool>
      </property>
      <property name="frameShape" >
-      <enum>QFrame::Panel</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow" >
       <enum>QFrame::Sunken</enum>
@@ -463,6 +387,7 @@
   <tabstop>ChannelSoloPushButton</tabstop>
   <tabstop>VolumeSlider</tabstop>
   <tabstop>VolumeSpinBox</tabstop>
+  <tabstop>ChannelEditPushButton</tabstop>
  </tabstops>
  <resources>
   <include location="../icons/qsampler.qrc" />

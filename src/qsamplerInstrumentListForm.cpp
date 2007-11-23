@@ -20,12 +20,14 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerInstrumentListForm.h"
 
 #include "qsamplerInstrumentForm.h"
-#include "qsamplerMainForm.h"
+
 #include "qsamplerOptions.h"
 #include "qsamplerInstrument.h"
+#include "qsamplerMainForm.h"
 
 
 namespace QSampler {
