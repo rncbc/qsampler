@@ -59,6 +59,10 @@ public:
 
 	void resetErrorCount();
 
+	// Channel strip activation/selection.
+	void setSelected(bool bSelected);
+	bool isSelected() const;
+
 signals:
 
 	void channelChanged(ChannelStrip*);
@@ -85,6 +89,9 @@ private:
 	qsamplerChannel* m_pChannel;
 	int m_iDirtyChange;
 	int m_iErrorCount;
+
+	// Channel strip activation/selection.
+	static ChannelStrip *g_pSelectedStrip;
 };
 
 } // namespace QSampler

@@ -34,8 +34,6 @@
 // Needed for lroundf()
 #include <math.h>
 
-namespace QSampler {
-
 #ifndef CONFIG_ROUND
 static inline long lroundf ( float x )
 {
@@ -45,6 +43,13 @@ static inline long lroundf ( float x )
 		return long(x - 0.5f);
 }
 #endif
+
+
+namespace QSampler {
+
+// Channel strip activation/selection.
+ChannelStrip *ChannelStrip::g_pSelectedStrip = NULL;
+
 
 ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	: QWidget(pParent, wflags)
@@ -58,6 +63,7 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 
 	// Try to restore normal window positioning.
 	adjustSize();
+	setSelected(false);
 
 	QObject::connect(m_ui.ChannelSetupPushButton,
 		SIGNAL(clicked()),
@@ -502,6 +508,37 @@ void ChannelStrip::resetErrorCount (void)
 {
 	m_iErrorCount = 0;
 }
+
+
+// Channel strip activation/selection.
+void ChannelStrip::setSelected ( bool bSelected )
+{
+	if (bSelected) {
+		if (g_pSelectedStrip == this)
+			return;
+		if (g_pSelectedStrip)
+			g_pSelectedStrip->setSelected(false);
+		g_pSelectedStrip = this;
+	} else {
+		if (g_pSelectedStrip == this)
+			g_pSelectedStrip = NULL;
+	}
+
+	QPalette pal;
+	if (bSelected) {
+		const QColor& color = pal.midlight().color();
+		pal.setColor(QPalette::Background, color.dark(150));
+		pal.setColor(QPalette::Foreground, color.light(150));
+	}
+	QWidget::setPalette(pal);
+}
+
+
+bool ChannelStrip::isSelected (void) const
+{
+	return (this == g_pSelectedStrip);
+}
+
 
 } // namespace QSampler
 

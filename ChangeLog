@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* The current selected/activated channel-strip is now visually
+  evident while in the application workspace (highlighting).
+
 * Make View/Menubar and Toolbar shortcuts accessible even though
   the main menu and toobar are not visible.
 

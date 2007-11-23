@@ -117,6 +117,9 @@ protected slots:
 
 	void updateRecentFilesMenu();
 
+	// Channel strip activation/selection.
+	void activateStrip(QWidget *pWidget);
+
 protected:
 
 	bool queryClose();

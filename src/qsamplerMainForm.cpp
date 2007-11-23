@@ -205,7 +205,7 @@ MainForm::MainForm ( QWidget *pParent )
 	// Set the activation connection.
 	QObject::connect(m_pWorkspace,
 		SIGNAL(windowActivated(QWidget *)),
-		SLOT(stabilizeForm()));
+		SLOT(activateStrip(QWidget *)));
 	// Make it shine :-)
 	setCentralWidget(m_pWorkspace);
 
@@ -2662,6 +2662,19 @@ void MainForm::stopClient (void)
 	// Make visible status.
 	stabilizeForm();
 }
+
+
+// Channel strip activation/selection.
+void MainForm::activateStrip ( QWidget *pWidget )
+{
+	ChannelStrip *pChannelStrip
+		= static_cast<ChannelStrip *> (pWidget);
+	if (pChannelStrip)
+		pChannelStrip->setSelected(true);
+
+	stabilizeForm();
+}
+
 
 } // namespace QSampler
 

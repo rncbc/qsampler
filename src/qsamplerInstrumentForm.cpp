@@ -33,9 +33,6 @@
 // Needed for lroundf()
 #include <math.h>
 
-
-namespace QSampler {
-
 #ifndef CONFIG_ROUND
 static inline long lroundf ( float x )
 {
@@ -45,6 +42,9 @@ static inline long lroundf ( float x )
 		return long(x - 0.5f);
 }
 #endif
+
+
+namespace QSampler {
 
 InstrumentForm::InstrumentForm ( QWidget* pParent )
 	: QDialog(pParent)
