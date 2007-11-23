@@ -8,4 +8,6 @@ TODOs
   - Allowing to create more than the two standard MIDI instrument maps
     ("Chromatic" / "Drumkits").
   - Instruments DB support.
+  - Support for handling sampler events (see chapter 5.2
+    "Subscribe/notify communication method" of the LSCP specs).
 - Any feature one can think of ;)
