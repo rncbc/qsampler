@@ -975,7 +975,7 @@ int AbstractDeviceParamModel::columnCount ( const QModelIndex& /*parent*/) const
 
 Qt::ItemFlags AbstractDeviceParamModel::flags ( const QModelIndex& /*index*/) const
 {
-	return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+	return Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
 
