@@ -63,7 +63,6 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 
 	// Try to restore normal window positioning.
 	adjustSize();
-	setSelected(false);
 
 	QObject::connect(m_ui.ChannelSetupPushButton,
 		SIGNAL(clicked()),
@@ -83,11 +82,15 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.ChannelEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelEdit()));
+
+	setSelected(false);
 }
 
 
 ChannelStrip::~ChannelStrip (void)
 {
+	setSelected(false);
+
 	// Destroy existing channel descriptor.
 	if (m_pChannel)
 		delete m_pChannel;

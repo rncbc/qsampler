@@ -171,7 +171,7 @@ MainForm::MainForm ( QWidget *pParent )
 	// Volume slider...
 	m_ui.channelsToolbar->addSeparator();
 	m_pVolumeSlider = new QSlider(Qt::Horizontal, m_ui.channelsToolbar);
-	m_pVolumeSlider->setTickPosition(QSlider::TicksBelow);
+	m_pVolumeSlider->setTickPosition(QSlider::TicksBothSides);
 	m_pVolumeSlider->setTickInterval(10);
 	m_pVolumeSlider->setPageStep(10);
 	m_pVolumeSlider->setSingleStep(10);
@@ -189,6 +189,7 @@ MainForm::MainForm ( QWidget *pParent )
 	// Volume spin-box
 	m_ui.channelsToolbar->addSeparator();
 	m_pVolumeSpinBox = new QSpinBox(m_ui.channelsToolbar);
+	m_pVolumeSpinBox->setMaximumHeight(24);
 	m_pVolumeSpinBox->setSuffix(" %");
 	m_pVolumeSpinBox->setMinimum(0);
 	m_pVolumeSpinBox->setMaximum(100);
@@ -1331,6 +1332,10 @@ void MainForm::editAddChannel (void)
 		return;
 	}
 
+	// Do we auto-arrange?
+	if (m_pOptions && m_pOptions->bAutoArrange)
+		channelsArrange();
+
 	// Make that an overall update.
 	m_iDirtyCount++;
 	stabilizeForm();
@@ -2171,39 +2176,17 @@ void MainForm::updateMessagesCapture (void)
 // qsamplerMainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
-ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
+ChannelStrip* MainForm::createChannelStrip ( qsamplerChannel *pChannel )
 {
 	if (m_pClient == NULL || pChannel == NULL)
 		return NULL;
 
-	// Prepare for auto-arrange?
-	ChannelStrip* pChannelStrip = NULL;
-	int y = 0;
-	if (m_pOptions && m_pOptions->bAutoArrange) {
-		QWidgetList wlist = m_pWorkspace->windowList();
-		for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-			pChannelStrip = static_cast<ChannelStrip *> (wlist.at(iChannel));
-			if (pChannelStrip) {
-			//  y += pChannelStrip->height()
-			//		+ pChannelStrip->parentWidget()->baseSize().height();
-				y += pChannelStrip->parentWidget()->frameGeometry().height();
-			}
-		}
-	}
-
 	// Add a new channel itema...
-	pChannelStrip = new ChannelStrip();
+	ChannelStrip *pChannelStrip = new ChannelStrip();
 	if (pChannelStrip == NULL)
 		return NULL;
 
-	m_pWorkspace->addWindow(pChannelStrip, Qt::FramelessWindowHint);
-
-	// Actual channel strip setup...
-	pChannelStrip->setup(pChannel);
-	QObject::connect(pChannelStrip,
-		SIGNAL(channelChanged(ChannelStrip*)),
-		SLOT(channelStripChanged(ChannelStrip*)));
-	// Set some initial aesthetic options...
+	// Set some initial channel strip options...
 	if (m_pOptions) {
 		// Background display effect...
 		pChannelStrip->setDisplayEffect(m_pOptions->bDisplayEffect);
@@ -2215,16 +2198,18 @@ ChannelStrip* MainForm::createChannelStrip(qsamplerChannel* pChannel)
 		pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
 	}
 
+	// Add it to workspace...
+	m_pWorkspace->addWindow(pChannelStrip, Qt::FramelessWindowHint);
+
+	// Actual channel strip setup...
+	pChannelStrip->setup(pChannel);
+
+	QObject::connect(pChannelStrip,
+		SIGNAL(channelChanged(ChannelStrip*)),
+		SLOT(channelStripChanged(ChannelStrip*)));
+
 	// Now we show up us to the world.
 	pChannelStrip->show();
-	// Only then, we'll auto-arrange...
-	if (m_pOptions && m_pOptions->bAutoArrange) {
-		int iWidth  = m_pWorkspace->width();
-	//  int iHeight = pChannel->height()
-	//		+ pChannel->parentWidget()->baseSize().height();
-		int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
-		pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
-	}
 
 	// This is pretty new, so we'll watch for it closely.
 	channelStripChanged(pChannelStrip);
