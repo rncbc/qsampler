@@ -10,4 +10,8 @@ TODOs
   - Instruments DB support.
   - Support for handling sampler events (see chapter 5.2
     "Subscribe/notify communication method" of the LSCP specs).
+  - Support for handling "multiplicity" type parameters in the device
+    management dialog (i.e. for parameter "ALSA_SEQ_BINDINGS" of LS's ALSA
+    MIDI driver, allowing to make arbitrary amount of MIDI connections). At
+    the moment one can only set a scalar value for these parameter types.
 - Any feature one can think of ;)
