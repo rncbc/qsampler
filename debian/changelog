@@ -1,3 +1,9 @@
+qsampler (0.2.0-1) unreleased; urgency=low
+
+  * Require Qt 4.2.1 or higher.
+
+ -- Christian Schoenebeck <cuse@users.sourceforge.net>  Sat, 24 Nov 2007 22:36:59 +0100
+
 qsampler (0.1.5-1) unstable; urgency=low
 
   * New Release.
