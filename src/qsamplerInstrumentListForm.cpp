@@ -29,6 +29,8 @@
 #include "qsamplerInstrument.h"
 #include "qsamplerMainForm.h"
 
+#include <QHeaderView>
+
 
 namespace QSampler {
 
@@ -52,8 +54,13 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.InstrumentToolbar->addSeparator();
 	m_ui.InstrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
+	int iRowHeight = m_ui.InstrumentTable->fontMetrics().height() + 4;
+	m_ui.InstrumentTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
+	m_ui.InstrumentTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
 	m_ui.InstrumentTable->setModel(&m_model);
 	m_ui.InstrumentTable->setItemDelegate(&m_delegate);
+	m_ui.InstrumentTable->verticalHeader()->hide();
 
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),

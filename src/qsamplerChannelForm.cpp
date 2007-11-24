@@ -54,6 +54,10 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 
 	m_pDeviceForm = NULL;
 
+	int iRowHeight = m_ui.AudioRoutingTable->fontMetrics().height() + 4;
+	m_ui.AudioRoutingTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
+	m_ui.AudioRoutingTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
 	m_ui.AudioRoutingTable->setModel(&m_routingModel);
 	m_ui.AudioRoutingTable->setItemDelegate(&m_routingDelegate);
 	m_ui.AudioRoutingTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);

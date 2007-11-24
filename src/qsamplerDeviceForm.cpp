@@ -48,6 +48,12 @@ DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.DeviceListView->header()->hide();
 
+	int iRowHeight = m_ui.DeviceParamTable->fontMetrics().height() + 4;
+	m_ui.DeviceParamTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
+	m_ui.DevicePortParamTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
+	m_ui.DeviceParamTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+	m_ui.DevicePortParamTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
 	m_ui.DeviceParamTable->setModel(&m_deviceParamModel);
 	m_ui.DeviceParamTable->setItemDelegate(&m_deviceParamDelegate);
 	m_ui.DeviceParamTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);

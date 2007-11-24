@@ -39,7 +39,7 @@ class InstrumentListForm : public QMainWindow
 public:
 
 	InstrumentListForm(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
-~InstrumentListForm();
+	~InstrumentListForm();
 
 public slots:
 
