@@ -107,7 +107,9 @@ DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 		SLOT(updatePortCellRenderers(const QModelIndex&, const QModelIndex&)));
 }
 
-DeviceForm::~DeviceForm() {
+
+DeviceForm::~DeviceForm (void)
+{
 }
 
 
@@ -118,9 +120,9 @@ void DeviceForm::showEvent ( QShowEvent *pShowEvent )
 	if (pMainForm)
 		pMainForm->stabilizeForm();
 
-	stabilizeForm();
-
 	QWidget::showEvent(pShowEvent);
+
+	refreshDevices();
 }
 
 

@@ -501,9 +501,6 @@ void ChannelForm::setupDevice ( qsamplerDevice *pDevice,
 	qsamplerDevice::DeviceType deviceTypeMode,
 	const QString& sDriverName )
 {
-	if (pDevice == NULL)
-		return;
-
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
