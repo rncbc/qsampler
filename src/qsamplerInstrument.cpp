@@ -40,7 +40,7 @@ qsamplerInstrument::qsamplerInstrument ( int iMap, int iBank, int iProg )
 	m_iMap          = iMap;
 	m_iBank         = iBank;
 	m_iProg         = iProg;
-	m_iInstrumentNr = 0;;
+	m_iInstrumentNr = 0;
 	m_fVolume       = 1.0f;
 	m_iLoadMode     = 0;
 }

@@ -59,7 +59,7 @@ public:
 		int iBank = -1, int iProg = -1);
 	void removeInstrument(const qsamplerInstrument& instrument);
 
-	void resort(const qsamplerInstrument instrument);
+	void resort(const qsamplerInstrument& instrument);
 
 	// Map selector.
 	void setMidiMap(int iMidiMap);
@@ -79,10 +79,10 @@ private:
 
 	typedef QMap<int, QList<qsamplerInstrument> > InstrumentsMap;
 
+	InstrumentsMap m_instruments;
+
 	// Current map selection.
 	int m_iMidiMap;
-
-	InstrumentsMap m_instruments;
 };
 
 

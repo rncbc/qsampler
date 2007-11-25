@@ -175,13 +175,15 @@ qsamplerInstrument* MidiInstrumentsModel::addInstrument (
 		}
 	}
 
-	// resolve the appropriate place, we keep the list sorted that way ...
+	// Resolve the appropriate place, we keep the list sorted that way ...
 	int i = 0;
-	for (; i < m_instruments[iMap].size(); i++)
-		if (iBank > m_instruments[iMap][i].bank()
+	for (; i < m_instruments[iMap].size(); ++i) {
+		if (iBank < m_instruments[iMap][i].bank()
 			|| (iBank == m_instruments[iMap][i].bank() &&
-				iProg > m_instruments[iMap][i].prog()))
+				iProg < m_instruments[iMap][i].prog())) {
 			break;
+		}
+	}
 
 	m_instruments[iMap].insert(i, qsamplerInstrument(iMap, iBank, iProg));
 	qsamplerInstrument& instr = m_instruments[iMap][i];
@@ -209,14 +211,14 @@ void MidiInstrumentsModel::removeInstrument (
 
 
 // Reposition the instrument in the model (called when map/bank/prg changed)
-void MidiInstrumentsModel::resort ( const qsamplerInstrument instrument )
+void MidiInstrumentsModel::resort ( const qsamplerInstrument& instrument )
 {
 	const int iMap  = instrument.map();
 	const int iBank = instrument.bank();
 	const int iProg = instrument.prog();
-	// remove given instrument from its current list
+	// Remove given instrument from its current list
 	removeInstrument(instrument);
-	// re-add the instrument
+	// Re-add the instrument
 	addInstrument(iMap, iBank, iProg);
 }
 
