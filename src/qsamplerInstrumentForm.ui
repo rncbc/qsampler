@@ -62,7 +62,7 @@
      <property name="spacing" >
       <number>4</number>
      </property>
-     <item row="2" column="1" colspan="9" >
+     <item row="2" column="1" colspan="8" >
       <widget class="QComboBox" name="EngineNameComboBox" >
        <property name="sizePolicy" >
         <sizepolicy>

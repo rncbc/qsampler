@@ -271,7 +271,7 @@ void DeviceForm::deleteDevice (void)
 	if (pOptions && pOptions->bConfirmRemove) {
 		if (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
-			tr("Delete device:\n\n"
+			tr("About to delete device:\n\n"
 			"%1\n\n"
 			"Are you sure?")
 			.arg(device.deviceName()),

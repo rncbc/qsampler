@@ -64,6 +64,17 @@
     <number>4</number>
    </attribute>
   </widget>
+  <widget class="QMenu" name="contextMenu" >
+   <property name="title" >
+    <string>&amp;Context</string>
+   </property>
+   <addaction name="newInstrumentAction" />
+   <addaction name="separator" />
+   <addaction name="editInstrumentAction" />
+   <addaction name="deleteInstrumentAction" />
+   <addaction name="separator" />
+   <addaction name="refreshInstrumentsAction" />
+  </widget>
   <action name="newInstrumentAction" >
    <property name="icon" >
     <iconset resource="../icons/qsampler.qrc" >:/icons/itemNew.png</iconset>

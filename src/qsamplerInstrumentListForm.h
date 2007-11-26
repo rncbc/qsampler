@@ -50,6 +50,11 @@ public slots:
 	void refreshInstruments();
 	void activateMap(int);
 
+	void stabilizeForm();
+
+	// Handle custom context menu here...
+	void contextMenu(const QPoint& pos);
+
 protected:
 
 	void showEvent(QShowEvent *);

@@ -30,6 +30,7 @@
 #include "qsamplerMainForm.h"
 
 #include <QHeaderView>
+#include <QMessageBox>
 
 
 namespace QSampler {
@@ -72,15 +73,22 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.InstrumentTable->resizeColumnToContents(4);	// Engine
 	pHeader->resizeSection(5, 240);						// File
 	m_ui.InstrumentTable->resizeColumnToContents(6);	// Nr
-	pHeader->resizeSection(7, 60);						// vol
+	pHeader->resizeSection(7, 60);						// Vol
+
+	// Enable custom context menu...
+	m_ui.InstrumentTable->setContextMenuPolicy(Qt::CustomContextMenu);
 
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),
 		SLOT(activateMap(int)));
 	QObject::connect(
-		m_ui.refreshInstrumentsAction,
-		SIGNAL(triggered()),
-		SLOT(refreshInstruments(void)));
+		m_ui.InstrumentTable,
+		SIGNAL(customContextMenuRequested(const QPoint&)),
+		SLOT(contextMenu(const QPoint&)));
+	QObject::connect(
+		m_ui.InstrumentTable,
+		SIGNAL(pressed(const QModelIndex&)),
+		SLOT(stabilizeForm()));
 	QObject::connect(
 		m_ui.InstrumentTable,
 		SIGNAL(activated(const QModelIndex&)),
@@ -97,6 +105,10 @@ InstrumentListForm::InstrumentListForm (
 		m_ui.editInstrumentAction,
 		SIGNAL(triggered()),
 		SLOT(editInstrument()));
+	QObject::connect(
+		m_ui.refreshInstrumentsAction,
+		SIGNAL(triggered()),
+		SLOT(refreshInstruments()));
 
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm) {
@@ -104,6 +116,9 @@ InstrumentListForm::InstrumentListForm (
 			SIGNAL(instrumentsChanged()),
 			pMainForm, SLOT(sessionDirty()));
 	}
+
+	// Things must be stable from the start.
+	stabilizeForm();
 }
 
 
@@ -194,6 +209,8 @@ void InstrumentListForm::activateMap ( int iMap )
 
 	m_model.setMidiMap(iMidiMap);
 	m_model.refresh();
+
+	stabilizeForm();
 }
 
 
@@ -267,12 +284,29 @@ void InstrumentListForm::deleteInstrument (void)
 	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
 		return;
 
-	qsamplerInstrument* pInstrument =
+	qsamplerInstrument *pInstrument =
 		static_cast<qsamplerInstrument*> (
 			index.data(Qt::UserRole).value<void *> ());
 
 	if (pInstrument == NULL)
 		return;
+
+	MainForm *pMainForm = MainForm::getInstance();
+	if (pMainForm == NULL)
+		return;
+
+	// Prompt user if this is for real...
+	qsamplerOptions *pOptions = pMainForm->options();
+	if (pOptions && pOptions->bConfirmRemove) {
+		if (QMessageBox::warning(this,
+			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("About to delete instrument map entry:\n\n"
+			"%1\n\n"
+			"Are you sure?")
+			.arg(pInstrument->name()),
+			tr("OK"), tr("Cancel")) > 0)
+			return;
+	}
 
 	pInstrument->unmapInstrument();
 	// let the instrument vanish from the table model
@@ -280,6 +314,32 @@ void InstrumentListForm::deleteInstrument (void)
 	// Notify we've changes...
 	emit m_model.reset();
 }
+
+
+// Update form actions enablement...
+void InstrumentListForm::stabilizeForm (void)
+{
+	MainForm *pMainForm = MainForm::getInstance();
+
+	bool bEnabled = (pMainForm && pMainForm->client());
+	m_ui.newInstrumentAction->setEnabled(bEnabled);
+	const QModelIndex& index = m_ui.InstrumentTable->currentIndex();
+	bEnabled = (bEnabled && index.isValid());
+	m_ui.editInstrumentAction->setEnabled(bEnabled);
+	m_ui.deleteInstrumentAction->setEnabled(bEnabled);
+}
+
+
+// Handle custom context menu here...
+void InstrumentListForm::contextMenu ( const QPoint& pos )
+{
+	if (!m_ui.newInstrumentAction->isEnabled())
+		return;
+
+	m_ui.contextMenu->exec(
+		(m_ui.InstrumentTable->viewport())->mapToGlobal(pos));
+}
+
 
 } // namespace QSampler
 
