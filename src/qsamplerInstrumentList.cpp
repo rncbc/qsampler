@@ -96,8 +96,10 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 		for (InstrumentsMap::const_iterator itMap = m_instruments.begin();
 				itMap != m_instruments.end(); ++itMap) {
 			n += (*itMap).size();
-			if (index.row() < n)
+			if (index.row() < n) {
 				pInstr = &(*itMap)[index.row() + (*itMap).size() - n];
+				break;
+			}
 		}
 	} else {
 		// resolve MIDI instrument map
@@ -119,7 +121,7 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 			case 0: return pInstr->name();
 			case 1: return QVariant::fromValue(pInstr->map());
 			case 2: return QVariant::fromValue(pInstr->bank());
-			case 3: return QVariant::fromValue(pInstr->prog());
+			case 3: return QVariant::fromValue(pInstr->prog() + 1);
 			case 4: return pInstr->engineName();
 			case 5: return pInstr->instrumentFile();
 			case 6: return QVariant::fromValue(pInstr->instrumentNr());
@@ -129,7 +131,6 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 					case 3: return QObject::tr("Persistent");
 					case 2: return QObject::tr("On Demand Hold");
 					case 1: return QObject::tr("On Demand");
-					default: return QVariant();
 				}
 			}
 			default: return QVariant();

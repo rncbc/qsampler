@@ -165,10 +165,11 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 		iMap = 0;
 	const QString& sMapName = qsamplerInstrument::getMapName(iMap);
 	if (!sMapName.isEmpty()) {
-		m_ui.MapComboBox->setItemText(
-			m_ui.MapComboBox->currentIndex(),
-			sMapName);
+		m_ui.MapComboBox->setCurrentIndex(
+			m_ui.MapComboBox->findText(sMapName,
+				Qt::MatchExactly | Qt::MatchCaseSensitive));
 	}
+
 	// It might be no maps around...
 	bool bMapEnabled = (m_ui.MapComboBox->count() > 0);
 	m_ui.MapTextLabel->setEnabled(bMapEnabled);

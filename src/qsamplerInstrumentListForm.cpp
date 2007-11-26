@@ -56,11 +56,23 @@ InstrumentListForm::InstrumentListForm (
 
 	int iRowHeight = m_ui.InstrumentTable->fontMetrics().height() + 4;
 	m_ui.InstrumentTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
-	m_ui.InstrumentTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 
 	m_ui.InstrumentTable->setModel(&m_model);
 	m_ui.InstrumentTable->setItemDelegate(&m_delegate);
 	m_ui.InstrumentTable->verticalHeader()->hide();
+
+	QHeaderView *pHeader = m_ui.InstrumentTable->horizontalHeader();
+	pHeader->setDefaultAlignment(Qt::AlignLeft);
+	pHeader->setMovable(false);
+	pHeader->setStretchLastSection(true);
+	pHeader->resizeSection(0, 120);						// Name
+	m_ui.InstrumentTable->resizeColumnToContents(1);	// Map
+	m_ui.InstrumentTable->resizeColumnToContents(2);	// Bank
+	m_ui.InstrumentTable->resizeColumnToContents(3);	// Prog
+	m_ui.InstrumentTable->resizeColumnToContents(4);	// Engine
+	pHeader->resizeSection(5, 240);						// File
+	m_ui.InstrumentTable->resizeColumnToContents(6);	// Nr
+	pHeader->resizeSection(7, 60);						// vol
 
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),
