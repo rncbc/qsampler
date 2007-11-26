@@ -5,6 +5,10 @@ ChangeLog
 
 CVS HEAD
 
+* Added recent new support of libgig for retrieving instrument names in a
+  very fast way. If libgig provides this feature, then the respective
+  name retrieval setting in qsampler is enabled by default.
+
 * The current selected/activated channel-strip is now visually
   evident while in the application workspace (highlighting).
 

@@ -69,7 +69,13 @@ qsamplerOptions::qsamplerOptions (void)
 	bStdoutCapture   = m_settings.value("/StdoutCapture", true).toBool();
 	bCompletePath    = m_settings.value("/CompletePath", true).toBool();
 	iMaxRecentFiles  = m_settings.value("/MaxRecentFiles", 5).toInt();
+// if libgig provides a fast way to retrieve instrument names even for large
+// .gig files, then we enable this feature by default
+#if HAVE_LIBGIG_SETAUTOLOAD
+	bInstrumentNames = m_settings.value("/InstrumentNames", true).toBool();
+#else
 	bInstrumentNames = m_settings.value("/InstrumentNames", false).toBool();
+#endif
 	m_settings.endGroup();
 
 	// And go into view options group.

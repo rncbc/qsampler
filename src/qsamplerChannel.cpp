@@ -835,6 +835,10 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File  *pGig  = new gig::File(pRiff);
+#if HAVE_LIBGIG_SETAUTOLOAD
+			// prevent sleepy response time on large .gig files
+			pGig->SetAutoLoad(false);
+#endif
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {
 				instlist.append((pInstrument->pInfo)->Name.c_str());
@@ -867,6 +871,10 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File *pGig = new gig::File(pRiff);
+#if HAVE_LIBGIG_SETAUTOLOAD
+			// prevent sleepy response time on large .gig files
+			pGig->SetAutoLoad(false);
+#endif
 			int iIndex = 0;
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {

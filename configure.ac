@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.0.20, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.0.21, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -234,6 +234,28 @@ if test "x$ac_libgig" = "xyes"; then
    if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
       ac_libs="$ac_libs -lgig"
+      AC_MSG_CHECKING([for gig::File::SetAutoLoad() method in libgig])
+      AC_LANG_SAVE
+      AC_LANG_CPLUSPLUS
+      CXXFLAGS="$ac_libs"
+      AC_TRY_RUN([
+#include <stdlib.h>
+#include <gig.h>
+int main() {
+    gig::File file;
+    file.SetAutoLoad(false);
+    exit(0);
+}
+      ],
+      have_libgig_setautoload="yes",
+      have_libgig_setautoload="no",
+      have_libgig_setautoload="no"
+      )
+      AC_LANG_RESTORE
+      AC_MSG_RESULT([$have_libgig_setautoload])
+      if test "x$have_libgig_setautoload" = "xyes"; then
+          AC_DEFINE(HAVE_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
+      fi
    fi
 fi
 
@@ -283,6 +305,9 @@ echo "  LSCP audio routing support . . . . . . . . . . . .: $ac_audio_routing"
 echo "  LSCP volume support  . . . . . . . . . . . . . . .: $ac_volume"
 echo "  LSCP edit instrument support . . . . . . . . . . .: $ac_edit_instrument"
 echo "  GigaSampler instrument file support (libgig) . . .: $ac_libgig"
+if test "x$ac_libgig" = "xyes"; then
+echo "  libgig supports fast information retrieval . . . .: $have_libgig_setautoload"
+fi
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo

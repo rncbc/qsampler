@@ -300,6 +300,15 @@ void ChannelForm::setup ( qsamplerChannel *pChannel )
 	// if we're editing an existing sampler channel...
 	m_ui.AudioRoutingTable->setVisible(!bNew);
 
+	const QString sInstrumentNrToolTip =
+		(pOptions->bInstrumentNames) ?
+			"Select an instrument of the file" :
+			"You might want to enable instrument name retrieval in the "
+			"settings dialog";
+	m_ui.InstrumentNrComboBox->setToolTip(
+		QObject::tr(sInstrumentNrToolTip.toUtf8().data())
+	);
+
 	// As convenient, make it ready on stabilizeForm() for
 	// prompt acceptance, if we got the minimum required...
 /*	if (sEngineName != qsamplerChannel::noEngineName() &&
