@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,124 +23,47 @@
 #ifndef __qsamplerInstrumentList_h
 #define __qsamplerInstrumentList_h
 
-#include <qlistview.h>
-#include <qheader.h>
+#include <QListWidget>
+#include <QItemDelegate>
 
 #include <lscp/client.h>
 
-
-// Forward declarations.
-class qsamplerInstrument;
-class qsamplerInstrumentList;
-
-class QAction;
+#include "qsamplerInstrument.h"
 
 
-//----------------------------------------------------------------------
-// class qsamplerInstrumentGroup -- custom group list view item.
+//-------------------------------------------------------------------------
+// MidiInstrumentsModel - data model for MIDI prog mappings (used for QTableView)
 //
 
-class qsamplerInstrumentGroup : public QListViewItem
-{
-public:
-
-	// Constructors.
-	qsamplerInstrumentGroup(qsamplerInstrumentList *pListView,
-		const QString& sName, QListViewItem *pItemAfter = NULL);
-	qsamplerInstrumentGroup(qsamplerInstrumentGroup *pGroupItem,
-		const QString& sName);
-	// Default destructor.
-	virtual ~qsamplerInstrumentGroup();
-
-	// Instance accessors.
-	void setName(const QString& sName);
-	QString name() const;
-
-	qsamplerInstrumentList  *listView() const;
-	qsamplerInstrumentGroup *groupItem() const;
-
-	// To show up whether its open or not.
-	virtual void setOpen(bool bOpen);
-
-	// To virtually distinguish between list view items.
-	virtual int rtti() const;
-};
-
-
-//----------------------------------------------------------------------
-// class qsamplerInstrumentItem -- custom file list view item.
-//
-
-class qsamplerInstrumentItem : public qsamplerInstrumentGroup
-{
-public:
-
-	// Constructors.
-	qsamplerInstrumentItem(qsamplerInstrumentList *pListView,
-		qsamplerInstrument *pInstrument,
-		QListViewItem *pItemAfter = NULL);
-	qsamplerInstrumentItem(qsamplerInstrumentGroup *pGroupItem,
-		qsamplerInstrument *pInstrument);
-	// Default destructor.
-	virtual ~qsamplerInstrumentItem();
-
-	// To virtually distinguish between list view items.
-	virtual int rtti() const;
-
-	// Payload accessor.
-	qsamplerInstrument *instrument() const;
-
-	// View refreshment.
-	void update();
-
-private:
-
-	// File item full path.
-	qsamplerInstrument *m_pInstrument;
-};
-
-
-//----------------------------------------------------------------------------
-// qsamplerInstrumentList -- MIDI instrument list view.
-//
-
-class qsamplerInstrumentList : public QListView
+class MidiInstrumentsModel : public QAbstractTableModel
 {
 	Q_OBJECT
 
 public:
 
-	// Constructor.
-	qsamplerInstrumentList(QWidget *pParent, const char *pszName = NULL);
-	// Default destructor.
-	~qsamplerInstrumentList();
+	MidiInstrumentsModel(QObject* pParent = NULL);
 
-	// QListViewItem::rtti() return values.
-	enum ItemType { Group = 1001, Item = 1002 };
+	// Overridden methods from subclass(es)
+	int rowCount(const QModelIndex& parent) const;
+	int columnCount(const QModelIndex& parent) const;
 
-	// Add a new group/file item, optionally under a given group.
-	qsamplerInstrumentGroup *addGroup(const QString& sName,
-		qsamplerInstrumentGroup *pParentGroup = NULL);
-	qsamplerInstrumentItem *addItem(
-		qsamplerInstrument *pInstrument,
-		qsamplerInstrumentGroup *pParentGroup = NULL);
+	QVariant data(const QModelIndex& index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation,
+		int role = Qt::DisplayRole) const;
 
-	// Find a group/file item, given its name.
-	qsamplerInstrumentGroup *findGroup(const QString& sName) const;
-	qsamplerInstrumentItem  *findItem(
-		qsamplerInstrument *pInstrument) const;
+	// Make the following method public
+	QAbstractTableModel::reset;
+
+	// Own methods
+	qsamplerInstrument* addInstrument(int iMap = 0,
+		int iBank = -1, int iProg = -1);
+	void removeInstrument(const qsamplerInstrument& instrument);
+
+	void resort(const qsamplerInstrument& instrument);
 
 	// Map selector.
 	void setMidiMap(int iMidiMap);
 	int midiMap() const;
-
-	// List actions accessors.
-	QAction *newGroupAction() const;
-	QAction *newItemAction() const;
-	QAction *editItemAction() const;
-	QAction *renameAction() const;
-	QAction *deleteAction() const;
-	QAction *refreshAction() const;
 
 signals:
 
@@ -151,51 +75,43 @@ public slots:
 	// General reloader.
 	void refresh();
 
-protected slots:
-
-	// Add a new group item below the current one.
-	void newGroupSlot();
-	// Add a instrument item below the current one.
-	void newItemSlot();
-	// Change current instrument item.
-	void editItemSlot();
-	// Rename current group/item.
-	void renameSlot();
-	// Remove current group/item.
-	void deleteSlot();
-
-	// In-place selection slot.
-	void selectionChangedSlot();
-
-	// In-place activation slot.
-	void activatedSlot(QListViewItem *pListItem);
-
-	// In-place aliasing slot.
-	void renamedSlot(QListViewItem *pItem);
-
-protected:
-
-	// Find and return the nearest group item...
-	qsamplerInstrumentGroup *groupItem(QListViewItem *pListItem) const;
-
-	// Context menu request event handler.
-	void contextMenuEvent(QContextMenuEvent *pContextMenuEvent);
-
 private:
 
-	// List view actions.
-	QAction *m_pNewGroupAction;
-	QAction *m_pNewItemAction;
-	QAction *m_pEditItemAction;
-	QAction *m_pRenameAction;
-	QAction *m_pDeleteAction;
-	QAction *m_pRefreshAction;
+	typedef QMap<int, QList<qsamplerInstrument> > InstrumentsMap;
+
+	InstrumentsMap m_instruments;
 
 	// Current map selection.
 	int m_iMidiMap;
 };
 
 
+//-------------------------------------------------------------------------
+// MidiInstrumentsDelegate - table cell renderer for MIDI prog mappings
+// (doesn't actually do anything ATM, but is already there for a future
+// cell editor widget implementation)
+
+class MidiInstrumentsDelegate : public QItemDelegate
+{
+	Q_OBJECT
+
+public:
+	MidiInstrumentsDelegate(QObject *pParent = NULL);
+
+	QWidget* createEditor(QWidget *pParent,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+
+	void setEditorData(QWidget *pEditor,
+		const QModelIndex& index) const;
+	void setModelData(QWidget *pEditor,
+		QAbstractItemModel* model, const QModelIndex& index) const;
+
+	void updateEditorGeometry(QWidget* pEditor,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
+
+
 #endif  // __qsamplerInstrumentList_h
+
 
 // end of qsamplerInstrumentList.h

@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,7 +23,8 @@
 #ifndef __qsamplerChannel_h
 #define __qsamplerChannel_h
 
-#include <qtable.h>
+#include <QTableWidgetItem>
+#include <QItemDelegate>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
@@ -188,60 +190,72 @@ private:
 
 
 //-------------------------------------------------------------------------
-// qsamplerChannelRoutingTable - Channel routing table widget.
+// ChannelRoutingModel - data model for audio routing (used for QTableView)
 //
 
-class qsamplerChannelRoutingTable : public QTable
+struct ChannelRoutingItem {
+	QStringList options;
+	int         selection;
+};
+
+// so we can use it i.e. through QVariant
+Q_DECLARE_METATYPE(ChannelRoutingItem)
+
+class ChannelRoutingModel : public QAbstractTableModel
+{
+	Q_OBJECT
+public:
+
+	ChannelRoutingModel(QObject* pParent = NULL);
+
+	// overridden methods from subclass(es)
+	int rowCount(const QModelIndex& parent = QModelIndex()) const;
+	int columnCount(const QModelIndex& parent = QModelIndex()) const;
+	Qt::ItemFlags flags(const QModelIndex& index) const;
+	bool setData(const QModelIndex& index, const QVariant& value,
+		int role = Qt::EditRole);
+	QVariant data(const QModelIndex &index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation,
+		int role = Qt::DisplayRole) const;
+
+	// own methods
+	qsamplerChannelRoutingMap routingMap() const { return m_routing; }
+
+	void clear() { m_routing.clear(); }
+
+public slots:
+
+	void refresh(qsamplerDevice *pDevice,
+		const qsamplerChannelRoutingMap& routing);
+
+private:
+
+	qsamplerDevice *m_pDevice;
+	qsamplerChannelRoutingMap m_routing;
+};
+
+
+//-------------------------------------------------------------------------
+// ChannelRoutingDelegate - table cell renderer for audio routing
+//
+
+class ChannelRoutingDelegate : public QItemDelegate
 {
 	Q_OBJECT
 
 public:
 
-	// Constructor.
-	qsamplerChannelRoutingTable(QWidget *pParent = 0, const char *pszName = 0);
-	// Default destructor.
-	~qsamplerChannelRoutingTable();
+	ChannelRoutingDelegate(QObject* pParent = NULL);
 
-	// Common parameter table renderer.
-	void refresh(qsamplerDevice *pDevice,
-		const qsamplerChannelRoutingMap& routing);
-
-	// Commit any pending editing.
-	void flush();
+	QWidget* createEditor(QWidget *pParent,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+	void setEditorData(QWidget *pEditor, const QModelIndex& index) const;
+	void setModelData(QWidget *pEditor, QAbstractItemModel* model,
+		const QModelIndex& index) const;
+	void updateEditorGeometry(QWidget *pEditor,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
-
-
-//-------------------------------------------------------------------------
-// qsamplerChannelRoutingComboBox - Custom combo box for routing table.
-//
-
-class qsamplerChannelRoutingComboBox : public QTableItem
-{
-public:
-
-	// Constructor.
-	qsamplerChannelRoutingComboBox(QTable *pTable,
-		const QStringList& list, const QPixmap& pixmap);
-
-	// Public accessors.
-	void setCurrentItem(int iCurrentItem);
-	int currentItem() const;
-
-protected:
-
-	// Virtual implemetations.
-	QWidget *createEditor() const;
-	void setContentFromEditor(QWidget *pWidget);
-
-private:
-
-	// Initial value holders
-	QStringList m_list;
-	int m_iCurrentItem;
-};
-
 
 #endif  // __qsamplerChannel_h
-
 
 // end of qsamplerChannel.h

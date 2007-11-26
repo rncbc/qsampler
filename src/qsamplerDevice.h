@@ -1,7 +1,8 @@
 // qsamplerDevice.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,8 +23,17 @@
 #ifndef __qsamplerDevice_h
 #define __qsamplerDevice_h
 
-#include <qlistview.h>
-#include <qtable.h>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QTreeWidgetItem>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QAbstractTableModel>
+#include <QItemDelegate>
+#include <QFontMetrics>
+#include <QModelIndex>
+#include <QSize>
+#include <QList>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
@@ -75,7 +85,7 @@ public:
 typedef QMap<QString, qsamplerDeviceParam> qsamplerDeviceParamMap;
 
 // Typedef'd device port/channels QptrList.
-typedef QPtrList<qsamplerDevicePort> qsamplerDevicePortList;
+typedef QList<qsamplerDevicePort *> qsamplerDevicePortList;
 
 
 //-------------------------------------------------------------------------
@@ -87,26 +97,27 @@ class qsamplerDevice
 public:
 
 	// We use the same class for MIDI and audio device management
-	enum qsamplerDeviceType { None, Midi, Audio };
+	enum DeviceType { None, Midi, Audio };
 
 	// Constructor.
-	qsamplerDevice(qsamplerDeviceType deviceType, int iDeviceID = -1);
+	qsamplerDevice(DeviceType deviceType, int iDeviceID = -1);
 	// Copy constructor.
-    qsamplerDevice(const qsamplerDevice& device);
+	qsamplerDevice(const qsamplerDevice& device);
 	// Default destructor.
 	~qsamplerDevice();
 
 	// Initializer.
-	void setDevice(qsamplerDeviceType deviceType, int iDeviceID = -1);
+	void setDevice(DeviceType deviceType, int iDeviceID = -1);
 
 	// Driver name initializer.
 	void setDriver(const QString& sDriverName);
 
 	// Device property accessors.
-	int                 deviceID()   const;
-	qsamplerDeviceType  deviceType() const;
-	const QString&      deviceTypeName() const;
-	const QString&      driverName() const;
+	int            deviceID() const;
+	DeviceType     deviceType() const;
+	const QString& deviceTypeName() const;
+	const QString& driverName() const;
+
 	// Special device name formatter.
 	QString deviceName() const;
 
@@ -139,26 +150,23 @@ public:
 
 	// Device ids enumerator.
 	static int *getDevices(lscp_client_t *pClient,
-		qsamplerDeviceType deviceType);
+		DeviceType deviceType);
 
 	// Driver names enumerator.
 	static QStringList getDrivers(lscp_client_t *pClient,
-		qsamplerDeviceType deviceType);
+		DeviceType deviceType);
 
 private:
 
 	// Refresh/set given parameter based on driver supplied dependencies.
 	int refreshParam(const QString& sParam);
 
-	// Main application form reference.
-	qsamplerMainForm  *m_pMainForm;
-
 	// Instance variables.
-	int                m_iDeviceID;
-	qsamplerDeviceType m_deviceType;
-	QString            m_sDeviceType;
-	QString            m_sDriverName;
-	QString            m_sDeviceName;
+	int        m_iDeviceID;
+	DeviceType m_deviceType;
+	QString    m_sDeviceType;
+	QString    m_sDriverName;
+	QString    m_sDeviceName;
 
 	// Device parameter list.
 	qsamplerDeviceParamMap m_params;
@@ -212,23 +220,20 @@ private:
 // qsamplerDeviceItem - QListView device item.
 //
 
-class qsamplerDeviceItem : public QListViewItem
+class qsamplerDeviceItem : public QTreeWidgetItem
 {
 public:
 
 	// Constructors.
-	qsamplerDeviceItem(QListView *pListView,
-		qsamplerDevice::qsamplerDeviceType deviceType);
-	qsamplerDeviceItem(QListViewItem *pItem,
-		qsamplerDevice::qsamplerDeviceType deviceType, int iDeviceID);
+	qsamplerDeviceItem(QTreeWidget *pTreeWidget,
+		qsamplerDevice::DeviceType deviceType);
+	qsamplerDeviceItem(QTreeWidgetItem *pItem,
+		qsamplerDevice::DeviceType deviceType, int iDeviceID);
 	// Default destructor.
 	~qsamplerDeviceItem();
 
 	// Instance accessors.
 	qsamplerDevice& device();
-
-	// To virtually distinguish between list view items.
-	virtual int rtti() const;
 
 private:
 
@@ -236,80 +241,123 @@ private:
 	qsamplerDevice m_device;
 };
 
+struct DeviceParameterRow {
+	QString             name;
+	qsamplerDeviceParam param;
+	bool                alive; // whether these params refer to an existing device or for a device that is yet to be created
+};
+
+// so we can use it i.e. through QVariant
+Q_DECLARE_METATYPE(DeviceParameterRow)
+
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTable - Device parameter view table.
+// AbstractDeviceParamModel - data model base class for device parameters
 //
-
-class qsamplerDeviceParamTable : public QTable
+class AbstractDeviceParamModel : public QAbstractTableModel
 {
 	Q_OBJECT
 
 public:
 
-	// Constructor.
-	qsamplerDeviceParamTable(QWidget *pParent = 0, const char *pszName = 0);
-	// Default destructor.
-	~qsamplerDeviceParamTable();
+	AbstractDeviceParamModel(QObject *pParent = NULL);
 
-	// Common parameter table renderer.
-	void refresh(const qsamplerDeviceParamMap& params, bool bEditable);
+	// Overridden methods from subclass(es)
+	int rowCount(const QModelIndex& parent = QModelIndex()) const;
+	int columnCount(const QModelIndex& parent = QModelIndex() ) const;
+	QVariant headerData(int section,
+		Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+	Qt::ItemFlags flags(const QModelIndex& index) const;
+
+	virtual void clear();
+
+	void refresh(const qsamplerDeviceParamMap* params, bool bEditable);
+
+protected:
+
+	const qsamplerDeviceParamMap *m_pParams;
+	bool m_bEditable;
 };
 
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
+// DeviceParamModel - data model for device parameters (used for QTableView)
 //
 
-class qsamplerDeviceParamTableSpinBox : public QTableItem
+class DeviceParamModel : public AbstractDeviceParamModel
 {
+	Q_OBJECT
+
 public:
 
-	// Constructor.
-	qsamplerDeviceParamTableSpinBox (QTable *pTable, EditType editType,
-		const QString& sText);
+	DeviceParamModel(QObject *pParent = NULL);
 
-	// Public accessors.
-	void setMinValue(int iMinValue);
-	void setMaxValue(int iMaxValue);
-	void setValue(int iValue);
+	// Overridden methods from subclass(es)
+	QVariant data(const QModelIndex &index, int role) const;
+	bool setData(const QModelIndex& index,
+		const QVariant& value, int role = Qt::EditRole);
 
-protected:
+	void clear();
 
-	// Virtual implemetations.
-	QWidget *createEditor() const;
-	void setContentFromEditor(QWidget *pWidget);
+public slots:
+
+	void refresh(qsamplerDevice* pDevice, bool bEditable);
 
 private:
 
-	// Initial value holders.
-	int m_iValue;
-	int m_iMinValue;
-	int m_iMaxValue;
+	qsamplerDevice *m_pDevice;
 };
 
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTableEditBox - Custom edit box for parameter table.
+// PortParamModel - data model for port parameters (used for QTableView)
 //
 
-class qsamplerDeviceParamTableEditBox : public QTableItem
+class PortParamModel : public AbstractDeviceParamModel
 {
+	Q_OBJECT
+
 public:
 
-	// Constructor.
-	qsamplerDeviceParamTableEditBox (QTable *pTable, EditType editType,
-		const QString& sText);
+	PortParamModel(QObject *pParent = 0);
 
-protected:
+	// overridden methods from subclass(es)
+	QVariant data(const QModelIndex &index, int role) const;
+	bool setData(const QModelIndex& index,
+		const QVariant& value, int role = Qt::EditRole);
 
-	// Virtual implemetations.
-	QWidget *createEditor() const;
-	void setContentFromEditor(QWidget *pWidget);
+	void clear();
+
+public slots:
+
+	void refresh(qsamplerDevicePort* pPort, bool bEditable);
+
+private:
+
+	qsamplerDevicePort* m_pPort;
 };
 
 
-#endif  // __qsamplerDevice_h
+//-------------------------------------------------------------------------
+// DeviceParamDelegate - table cell renderer for device/port parameters
+//
+class DeviceParamDelegate : public QItemDelegate
+{
+	Q_OBJECT
 
+public:
+
+	DeviceParamDelegate(QObject *pParent = NULL);
+
+	QWidget* createEditor(QWidget *pParent,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+	void setEditorData(QWidget *pEditor, const QModelIndex& index) const;
+	void setModelData(QWidget *pEditor, QAbstractItemModel *pModel,
+		const QModelIndex& index) const;
+	void updateEditorGeometry(QWidget* pEditor,
+		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+};
+
+#endif  // __qsamplerDevice_h
 
 // end of qsamplerDevice.h

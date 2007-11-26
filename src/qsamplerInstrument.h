@@ -1,7 +1,8 @@
 // qsamplerInstrument.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,7 +23,7 @@
 #ifndef __qsamplerInstrument_h
 #define __qsamplerInstrument_h
 
-#include <qstringlist.h>
+#include <QStringList>
 
 
 //-------------------------------------------------------------------------
@@ -93,7 +94,6 @@ private:
 	int     m_iLoadMode;
 
 };
-
 
 #endif  // __qsamplerInstrument_h
 

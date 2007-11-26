@@ -1,7 +1,8 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -25,9 +26,12 @@
 #include "qsamplerMainForm.h"
 #include "qsamplerDeviceForm.h"
 
-#include <qspinbox.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QLineEdit>
 
+
+using namespace QSampler;
 
 //-------------------------------------------------------------------------
 // qsamplerDeviceParam - MIDI/Audio Device parameter structure.
@@ -103,9 +107,9 @@ void qsamplerDeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 //
 
 // Constructor.
-qsamplerDevice::qsamplerDevice ( qsamplerDeviceType deviceType, int iDeviceID )
+qsamplerDevice::qsamplerDevice ( DeviceType deviceType, int iDeviceID )
 {
-	m_ports.setAutoDelete(true);
+//	m_ports.setAutoDelete(true);
 
 	setDevice(deviceType, iDeviceID);
 }
@@ -113,11 +117,13 @@ qsamplerDevice::qsamplerDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 // Default destructor.
 qsamplerDevice::~qsamplerDevice (void)
 {
+	qDeleteAll(m_ports);
+	m_ports.clear();
 }
 
 // Copy constructor.
 qsamplerDevice::qsamplerDevice ( const qsamplerDevice& device )
-	: m_params(device.m_params), m_ports(m_ports)
+	: m_params(device.m_params), m_ports(device.m_ports)
 {
 	m_iDeviceID   = device.m_iDeviceID;
 	m_deviceType  = device.m_deviceType;
@@ -128,9 +134,9 @@ qsamplerDevice::qsamplerDevice ( const qsamplerDevice& device )
 
 
 // Initializer.
-void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
+void qsamplerDevice::setDevice ( DeviceType deviceType, int iDeviceID )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -142,6 +148,7 @@ void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 
 	// Reset device parameters and ports anyway.
 	m_params.clear();
+	qDeleteAll(m_ports);
 	m_ports.clear();
 
 	// Retrieve device info, if any.
@@ -181,20 +188,22 @@ void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 		lscp_param_info_t *pParamInfo = NULL;
 		switch (deviceType) {
 		case qsamplerDevice::Audio:
-			if ((pParamInfo = ::lscp_get_audio_driver_param_info(pMainForm->client(),
-					m_sDriverName.latin1(), sParam.latin1(), NULL)) == NULL)
+			if ((pParamInfo = ::lscp_get_audio_driver_param_info(
+					pMainForm->client(), m_sDriverName.toUtf8().constData(),
+					sParam.toUtf8().constData(), NULL)) == NULL)
 				appendMessagesClient("lscp_get_audio_driver_param_info");
 			break;
 		case qsamplerDevice::Midi:
-			if ((pParamInfo = ::lscp_get_midi_driver_param_info(pMainForm->client(),
-					m_sDriverName.latin1(), sParam.latin1(), NULL)) == NULL)
+			if ((pParamInfo = ::lscp_get_midi_driver_param_info(
+					pMainForm->client(), m_sDriverName.toUtf8().constData(),
+					sParam.toUtf8().constData(), NULL)) == NULL)
 				appendMessagesClient("lscp_get_midi_driver_param_info");
 			break;
 		case qsamplerDevice::None:
 			break;
 		}
 		if (pParamInfo) {
-			m_params[sParam.upper()] = qsamplerDeviceParam(pParamInfo,
+			m_params[sParam.toUpper()] = qsamplerDeviceParam(pParamInfo,
 				pDeviceInfo->params[i].value);
 		}
 	}
@@ -209,7 +218,7 @@ void qsamplerDevice::setDevice ( qsamplerDeviceType deviceType, int iDeviceID )
 // Driver name initializer/settler.
 void qsamplerDevice::setDriver ( const QString& sDriverName )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -221,6 +230,7 @@ void qsamplerDevice::setDriver ( const QString& sDriverName )
 
 	// Reset device parameters and ports anyway.
 	m_params.clear();
+	qDeleteAll(m_ports);
 	m_ports.clear();
 
 	// Retrieve driver info, if any.
@@ -228,12 +238,12 @@ void qsamplerDevice::setDriver ( const QString& sDriverName )
 	switch (m_deviceType) {
 	case qsamplerDevice::Audio:
 		if ((pDriverInfo = ::lscp_get_audio_driver_info(pMainForm->client(),
-				sDriverName.latin1())) == NULL)
+				sDriverName.toUtf8().constData())) == NULL)
 			appendMessagesClient("lscp_get_audio_driver_info");
 		break;
 	case qsamplerDevice::Midi:
 		if ((pDriverInfo = ::lscp_get_midi_driver_info(pMainForm->client(),
-				sDriverName.latin1())) == NULL)
+				sDriverName.toUtf8().constData())) == NULL)
 			appendMessagesClient("lscp_get_midi_driver_info");
 		break;
 	case qsamplerDevice::None:
@@ -253,20 +263,22 @@ void qsamplerDevice::setDriver ( const QString& sDriverName )
 		lscp_param_info_t *pParamInfo = NULL;
 		switch (m_deviceType) {
 		case qsamplerDevice::Audio:
-			if ((pParamInfo = ::lscp_get_audio_driver_param_info(pMainForm->client(),
-					sDriverName.latin1(), sParam.latin1(), NULL)) == NULL)
+			if ((pParamInfo = ::lscp_get_audio_driver_param_info(
+					pMainForm->client(), sDriverName.toUtf8().constData(),
+					sParam.toUtf8().constData(), NULL)) == NULL)
 				appendMessagesClient("lscp_get_audio_driver_param_info");
 			break;
 		case qsamplerDevice::Midi:
-			if ((pParamInfo = ::lscp_get_midi_driver_param_info(pMainForm->client(),
-					sDriverName.latin1(), sParam.latin1(), NULL)) == NULL)
+			if ((pParamInfo = ::lscp_get_midi_driver_param_info(
+					pMainForm->client(), sDriverName.toUtf8().constData(),
+					sParam.toUtf8().constData(), NULL)) == NULL)
 				appendMessagesClient("lscp_get_midi_driver_param_info");
 			break;
 		case qsamplerDevice::None:
 			break;
 		}
 		if (pParamInfo) {
-			m_params[sParam.upper()] = qsamplerDeviceParam(pParamInfo,
+			m_params[sParam.toUpper()] = qsamplerDeviceParam(pParamInfo,
 				pParamInfo->defaultv);
 		}
 	}
@@ -284,7 +296,7 @@ int qsamplerDevice::deviceID (void) const
 	return m_iDeviceID;
 }
 
-qsamplerDevice::qsamplerDeviceType qsamplerDevice::deviceType (void) const
+qsamplerDevice::DeviceType qsamplerDevice::deviceType (void) const
 {
 	return m_deviceType;
 }
@@ -304,7 +316,7 @@ QString qsamplerDevice::deviceName (void) const
 {
 	QString sPrefix;
 	if (m_iDeviceID >= 0)
-	    sPrefix += m_sDeviceType + ' ';
+		sPrefix += m_sDeviceType + ' ';
 	return sPrefix + m_sDeviceName;
 }
 
@@ -313,33 +325,40 @@ QString qsamplerDevice::deviceName (void) const
 bool qsamplerDevice::setParam ( const QString& sParam,
 	const QString& sValue )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
 		return false;
 
 	// Set proper device parameter.
-	m_params[sParam.upper()].value = sValue;
+	m_params[sParam.toUpper()].value = sValue;
 
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
-	if (m_iDeviceID >= 0) {
+	if (m_iDeviceID >= 0 && sValue != QString::null) {
+
+		// we need temporary byte arrrays with the final strings, because
+		// i.e. QString::toUtf8() only returns a temporary object and the
+		// C-style char* pointers for liblscp would immediately be invalidated
+		QByteArray finalParamKey = sParam.toUtf8();
+		QByteArray finalParamVal = sValue.toUtf8();
+
 		// Prepare parameter struct.
 		lscp_param_t param;
-		param.key   = (char *) sParam.latin1();
-		param.value = (char *) sValue.latin1();
+		param.key   = (char *) finalParamKey.constData();
+		param.value = (char *) finalParamVal.constData();
 		// Now it depends on the device type...
 		lscp_status_t ret = LSCP_FAILED;
 		switch (m_deviceType) {
 		case qsamplerDevice::Audio:
-		    if (sParam == "CHANNELS") iRefresh++;
+			if (sParam == "CHANNELS") iRefresh++;
 			if ((ret = ::lscp_set_audio_device_param(pMainForm->client(),
 					m_iDeviceID, &param)) != LSCP_OK)
 				appendMessagesClient("lscp_set_audio_device_param");
 			break;
 		case qsamplerDevice::Midi:
-		    if (sParam == "PORTS") iRefresh++;
+			if (sParam == "PORTS") iRefresh++;
 			if ((ret = ::lscp_set_midi_device_param(pMainForm->client(),
 					m_iDeviceID, &param)) != LSCP_OK)
 				appendMessagesClient("lscp_set_midi_device_param");
@@ -383,20 +402,33 @@ qsamplerDevicePortList& qsamplerDevice::ports (void)
 // Create a new device, as a copy of this current one.
 bool qsamplerDevice::createDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
 		return false;
 
-	// Build the parameter list...
-	lscp_param_t *pParams = new lscp_param_t [m_params.count() + 1];
-	int iParam = 0;
+	// we need temporary lists with the final strings, because i.e.
+	// QString::toUtf8() only returns a temporary object and the
+	// C-style char* pointers for liblscp would immediately be invalidated
+	QList<QByteArray> finalKeys;
+	QList<QByteArray> finalVals;
+
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = m_params.begin(); iter != m_params.end(); ++iter) {
-		pParams[iParam].key   = (char *) iter.key().latin1();
-		pParams[iParam].value = (char *) iter.data().value.latin1();
-		++iParam;
+		if (iter.value().value == QString::null) continue;
+		finalKeys.push_back(iter.key().toUtf8());
+		finalVals.push_back(iter.value().value.toUtf8());
+	}
+
+	// yeah, we DO HAVE to do the two loops separately !
+
+	// Build the parameter list...
+	lscp_param_t *pParams = new lscp_param_t [finalKeys.count() + 1];
+	int iParam;
+	for (iParam = 0; iParam < finalKeys.count(); iParam++) {
+		pParams[iParam].key   = (char *) finalKeys[iParam].constData();
+		pParams[iParam].value = (char *) finalVals[iParam].constData();
 	}
 	// Null terminated.
 	pParams[iParam].key   = NULL;
@@ -406,12 +438,12 @@ bool qsamplerDevice::createDevice (void)
 	switch (m_deviceType) {
 	case qsamplerDevice::Audio:
 		if ((m_iDeviceID = ::lscp_create_audio_device(pMainForm->client(),
-				m_sDriverName.latin1(), pParams)) < 0)
+				m_sDriverName.toUtf8().constData(), pParams)) < 0)
 			appendMessagesClient("lscp_create_audio_device");
 		break;
 	case qsamplerDevice::Midi:
 		if ((m_iDeviceID = ::lscp_create_midi_device(pMainForm->client(),
-				m_sDriverName.latin1(), pParams)) < 0)
+				m_sDriverName.toUtf8().constData(), pParams)) < 0)
 			appendMessagesClient("lscp_create_midi_device");
 		break;
 	case qsamplerDevice::None:
@@ -438,7 +470,7 @@ bool qsamplerDevice::createDevice (void)
 // Destroy existing device.
 bool qsamplerDevice::deleteDevice (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -479,7 +511,7 @@ int qsamplerDevice::refreshParams (void)
 {
 	// This should only make sense for scratch devices...
 	if (m_iDeviceID >= 0)
-	    return 0;
+		return 0;
 	// Refresh all parameters that have dependencies...
 	int iParams = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
@@ -495,7 +527,7 @@ int qsamplerDevice::refreshPorts (void)
 {
 	// This should only make sense for actual devices...
 	if (m_iDeviceID < 0)
-	    return 0;
+		return 0;
 	// Port/channel count determination...
 	int iPorts = 0;
 	switch (m_deviceType) {
@@ -509,6 +541,7 @@ int qsamplerDevice::refreshPorts (void)
 		break;
 	}
 	// Retrieve port/channel information...
+	qDeleteAll(m_ports);
 	m_ports.clear();
 	for (int iPort = 0; iPort < iPorts; iPort++)
 		m_ports.append(new qsamplerDevicePort(*this, iPort));
@@ -522,13 +555,13 @@ int qsamplerDevice::refreshDepends ( const QString& sParam )
 {
 	// This should only make sense for scratch devices...
 	if (m_iDeviceID >= 0)
-	    return 0;
+		return 0;
 	// Refresh all parameters that depend on this one...
 	int iDepends = 0;
 	qsamplerDeviceParamMap::ConstIterator iter;
 	for (iter = m_params.begin(); iter != m_params.end(); ++iter) {
-		const QStringList& depends = iter.data().depends;
-		if (depends.find(sParam) != depends.end())
+		const QStringList& depends = iter.value().depends;
+		if (depends.indexOf(sParam) >= 0)
 			iDepends += refreshParam(iter.key());
 	}
 	// Return how many dependencies have been refreshed...
@@ -539,14 +572,14 @@ int qsamplerDevice::refreshDepends ( const QString& sParam )
 // Refresh/set given parameter based on driver supplied dependencies.
 int qsamplerDevice::refreshParam ( const QString& sParam )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return 0;
 	if (pMainForm->client() == NULL)
 		return 0;
 
 	// Check if we have dependencies...
-	qsamplerDeviceParam& param = m_params[sParam.upper()];
+	qsamplerDeviceParam& param = m_params[sParam.toUpper()];
 	if (param.depends.isEmpty())
 		return 0;
 
@@ -555,11 +588,21 @@ int qsamplerDevice::refreshParam ( const QString& sParam )
 	// Build dependency list...
 	lscp_param_t *pDepends = new lscp_param_t [param.depends.count() + 1];
 	int iDepend = 0;
-	QStringList::ConstIterator iter;
-	for (iter = param.depends.begin(); iter != param.depends.end(); ++iter) {
-		const QString& sDepend = *iter;
-		pDepends[iDepend].key   = (char *) sDepend.latin1();
-		pDepends[iDepend].value = (char *) m_params[sDepend.upper()].value.latin1();
+
+	// we need temporary lists with the final strings, because i.e.
+	// QString::toUtf8() only returns a temporary object and the
+	// C-style char* pointers for liblscp would immediately be invalidated
+	QList<QByteArray> finalKeys;
+	QList<QByteArray> finalVals;
+	for (int i = 0; i < param.depends.count(); i++) {
+		const QString& sDepend = param.depends[i];
+		finalKeys.push_back(sDepend.toUtf8());
+		finalVals.push_back(m_params[sDepend.toUpper()].value.toUtf8());
+	}
+	// yeah, we DO HAVE to do those two loops separately !
+	for (int i = 0; i < param.depends.count(); i++) {
+		pDepends[iDepend].key   = (char *) finalKeys[i].constData();
+		pDepends[iDepend].value = (char *) finalVals[i].constData();
 		++iDepend;
 	}
 	// Null terminated.
@@ -575,20 +618,23 @@ int qsamplerDevice::refreshParam ( const QString& sParam )
 	lscp_param_info_t *pParamInfo = NULL;
 	switch (m_deviceType) {
 	case qsamplerDevice::Audio:
-		if ((pParamInfo = ::lscp_get_audio_driver_param_info(pMainForm->client(),
-				m_sDriverName.latin1(), sParam.latin1(), pDepends)) == NULL)
+		if ((pParamInfo = ::lscp_get_audio_driver_param_info(
+				pMainForm->client(), m_sDriverName.toUtf8().constData(),
+				sParam.toUtf8().constData(), pDepends)) == NULL)
 			appendMessagesClient("lscp_get_audio_driver_param_info");
 		break;
 	case qsamplerDevice::Midi:
-		if ((pParamInfo = ::lscp_get_midi_driver_param_info(pMainForm->client(),
-				m_sDriverName.latin1(), sParam.latin1(), pDepends)) == NULL)
+		if ((pParamInfo = ::lscp_get_midi_driver_param_info(
+				pMainForm->client(), m_sDriverName.toUtf8().constData(),
+				sParam.toUtf8().constData(), pDepends)) == NULL)
 			appendMessagesClient("lscp_get_midi_driver_param_info");
 		break;
 	case qsamplerDevice::None:
 		break;
 	}
 	if (pParamInfo) {
-		param = qsamplerDeviceParam(pParamInfo, QString(param.value));
+		param = qsamplerDeviceParam(pParamInfo,
+			param.value.isEmpty() ? NULL : param.value.toUtf8().constData());
 		iRefresh++;
 	}
 
@@ -603,7 +649,7 @@ int qsamplerDevice::refreshParam ( const QString& sParam )
 // Redirected messages output methods.
 void qsamplerDevice::appendMessages( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessages(deviceName() + ' ' + s);
 }
@@ -611,28 +657,28 @@ void qsamplerDevice::appendMessages( const QString& s ) const
 void qsamplerDevice::appendMessagesColor( const QString& s,
 	const QString& c ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesColor(deviceName() + ' ' + s, c);
 }
 
 void qsamplerDevice::appendMessagesText( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesText(deviceName() + ' ' + s);
 }
 
 void qsamplerDevice::appendMessagesError( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesError(deviceName() + "\n\n" + s);
 }
 
 void qsamplerDevice::appendMessagesClient( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesClient(deviceName() + ' ' + s);
 }
@@ -640,7 +686,7 @@ void qsamplerDevice::appendMessagesClient( const QString& s ) const
 
 // Device ids enumerator.
 int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
-	qsamplerDeviceType deviceType )
+	DeviceType deviceType )
 {
 	int *piDeviceIDs = NULL;
 	switch (deviceType) {
@@ -659,7 +705,7 @@ int *qsamplerDevice::getDevices ( lscp_client_t *pClient,
 
 // Driver names enumerator.
 QStringList qsamplerDevice::getDrivers ( lscp_client_t *pClient,
-	qsamplerDeviceType deviceType )
+	DeviceType deviceType )
 {
 	QStringList drivers;
 
@@ -702,7 +748,7 @@ qsamplerDevicePort::~qsamplerDevicePort (void)
 // Initializer.
 void qsamplerDevicePort::setDevicePort ( int iPortID )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -749,20 +795,20 @@ void qsamplerDevicePort::setDevicePort ( int iPortID )
 		case qsamplerDevice::Audio:
 			if ((pParamInfo = ::lscp_get_audio_channel_param_info(
 					pMainForm->client(), m_device.deviceID(),
-					m_iPortID, sParam.latin1())) == NULL)
+					m_iPortID, sParam.toUtf8().constData())) == NULL)
 				m_device.appendMessagesClient("lscp_get_audio_channel_param_info");
 			break;
 		case qsamplerDevice::Midi:
 			if ((pParamInfo = ::lscp_get_midi_port_param_info(
 					pMainForm->client(), m_device.deviceID(),
-					m_iPortID, sParam.latin1())) == NULL)
+					m_iPortID, sParam.toUtf8().constData())) == NULL)
 				m_device.appendMessagesClient("lscp_get_midi_port_param_info");
 			break;
 		case qsamplerDevice::None:
 			break;
 		}
 		if (pParamInfo) {
-			m_params[sParam.upper()] = qsamplerDeviceParam(pParamInfo,
+			m_params[sParam.toUpper()] = qsamplerDeviceParam(pParamInfo,
 				pPortInfo->params[i].value);
 		}
 	}
@@ -791,22 +837,29 @@ const qsamplerDeviceParamMap& qsamplerDevicePort::params (void) const
 bool qsamplerDevicePort::setParam ( const QString& sParam,
 	const QString& sValue )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
 		return false;
 
 	// Set proper port/channel parameter.
-	m_params[sParam.upper()].value = sValue;
+	m_params[sParam.toUpper()].value = sValue;
 
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
 	if (m_device.deviceID() >= 0 && m_iPortID >= 0) {
+
+		// we need temporary byte arrrays with the final strings, because
+		// i.e. QString::toUtf8() only returns a temporary object and the
+		// C-style char* pointers for liblscp would immediately be invalidated
+		QByteArray finalParamKey = sParam.toUtf8();
+		QByteArray finalParamVal = sValue.toUtf8();
+
 		// Prepare parameter struct.
 		lscp_param_t param;
-		param.key   = (char *) sParam.latin1();
-		param.value = (char *) sValue.latin1();
+		param.key   = (char *) finalParamKey.constData();
+		param.value = (char *) finalParamVal.constData();
 		// Now it depends on the device type...
 		lscp_status_t ret = LSCP_FAILED;
 		switch (m_device.deviceType()) {
@@ -841,249 +894,349 @@ bool qsamplerDevicePort::setParam ( const QString& sParam,
 
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceItem - QListView device item.
+// qsamplerDeviceItem - QTreeWidget device item.
 //
 
 // Constructors.
-qsamplerDeviceItem::qsamplerDeviceItem ( QListView *pListView,
-	qsamplerDevice::qsamplerDeviceType deviceType )
-	: QListViewItem(pListView), m_device(deviceType)
+qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidget* pTreeWidget,
+	qsamplerDevice::DeviceType deviceType )
+	: QTreeWidgetItem(pTreeWidget, QSAMPLER_DEVICE_ITEM),
+	m_device(deviceType)
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio1.png"));
-		QListViewItem::setText(0, QObject::tr("Audio Devices"));
+		setIcon(0, QPixmap(":/icons/audio1.png"));
+		setText(0, QObject::tr("Audio Devices"));
 		break;
 	case qsamplerDevice::Midi:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi1.png"));
-		QListViewItem::setText(0, QObject::tr("MIDI Devices"));
+		setIcon(0, QPixmap(":/icons/midi1.png"));
+		setText(0, QObject::tr("MIDI Devices"));
 		break;
 	case qsamplerDevice::None:
 		break;
 	}
 }
 
-qsamplerDeviceItem::qsamplerDeviceItem ( QListViewItem *pItem,
-	qsamplerDevice::qsamplerDeviceType deviceType,
+qsamplerDeviceItem::qsamplerDeviceItem ( QTreeWidgetItem* pItem,
+	qsamplerDevice::DeviceType deviceType,
 	int iDeviceID )
-	: QListViewItem(pItem), m_device(deviceType, iDeviceID)
+	: QTreeWidgetItem(pItem, QSAMPLER_DEVICE_ITEM),
+	m_device(deviceType, iDeviceID)
 {
 	switch(m_device.deviceType()) {
 	case qsamplerDevice::Audio:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("audio2.png"));
+		setIcon(0, QPixmap(":/icons/audio2.png"));
 		break;
 	case qsamplerDevice::Midi:
-		QListViewItem::setPixmap(0, QPixmap::fromMimeSource("midi2.png"));
+		setIcon(0, QPixmap(":/icons/midi2.png"));
 		break;
 	case qsamplerDevice::None:
 		break;
 	}
 
-	QListViewItem::setText(0, m_device.deviceName());
+	setText(0, m_device.deviceName());
 }
 
 // Default destructor.
-qsamplerDeviceItem::~qsamplerDeviceItem (void)
+qsamplerDeviceItem::~qsamplerDeviceItem ()
 {
 }
 
 // Instance accessors.
-qsamplerDevice& qsamplerDeviceItem::device (void)
+qsamplerDevice& qsamplerDeviceItem::device ()
 {
 	return m_device;
 }
 
-// To virtually distinguish between list view items.
-int qsamplerDeviceItem::rtti() const
-{
-	return QSAMPLER_DEVICE_ITEM;
-}
-
-
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTable - Device parameter view table.
+// AbstractDeviceParamModel - data model base class for device parameters
 //
 
-// Constructor.
-qsamplerDeviceParamTable::qsamplerDeviceParamTable ( QWidget *pParent,
-	const char *pszName )
-	: QTable(pParent, pszName)
+AbstractDeviceParamModel::AbstractDeviceParamModel ( QObject* pParent )
+	: QAbstractTableModel(pParent), m_bEditable(false)
 {
-	// Set fixed number of columns.
-	QTable::setNumCols(3);
-	QTable::setShowGrid(false);
-	QTable::setSorting(false);
-	QTable::setFocusStyle(QTable::FollowStyle);
-	QTable::setSelectionMode(QTable::NoSelection);
-	// No vertical header.
-	QTable::verticalHeader()->hide();
-	QTable::setLeftMargin(0);
-	// Initialize the fixed table column headings.
-	QHeader *pHeader = QTable::horizontalHeader();
-	pHeader->setLabel(0, tr("Parameter"));
-	pHeader->setLabel(1, tr("Description"));
-	pHeader->setLabel(2, tr("Value"));
-	// Set read-onlyness of each column
-	QTable::setColumnReadOnly(0, true);
-	QTable::setColumnReadOnly(1, true);
-//  QTable::setColumnReadOnly(2, false); -- of course not.
-	QTable::setColumnStretchable(1, true);
-}
-
-// Default destructor.
-qsamplerDeviceParamTable::~qsamplerDeviceParamTable (void)
-{
+	m_pParams = NULL;
 }
 
 
-// Common parameter table renderer.
-void qsamplerDeviceParamTable::refresh ( const qsamplerDeviceParamMap& params,
-	bool bEditable )
+int AbstractDeviceParamModel::rowCount ( const QModelIndex& /*parent*/) const
 {
-	// Always (re)start it empty.
-	QTable::setUpdatesEnabled(false);
-	QTable::setNumRows(0);
+	//std::cout << "model size=" << params.size() << "\n" << std::flush;
+	return (m_pParams ? m_pParams->size() : 0);
+}
 
-	// Fill the parameter table...
-	QTable::insertRows(0, params.count());
-	int iRow = 0;
-	qsamplerDeviceParamMap::ConstIterator iter;
-	for (iter = params.begin(); iter != params.end(); ++iter) {
-		const qsamplerDeviceParam& param = iter.data();
-		bool bEnabled = (bEditable || !param.fix);
-		QTable::setText(iRow, 0, iter.key());
-		QTable::setText(iRow, 1, param.description);
-		if (param.type == LSCP_TYPE_BOOL) {
-			QStringList opts;
-			opts.append(tr("false"));
-			opts.append(tr("true"));
-			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
-			pComboItem->setCurrentItem(param.value.lower() == "true" ? 1 : 0);
-			pComboItem->setEnabled(bEnabled);
-			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.possibilities.count() > 0 && bEnabled) {
-			QStringList opts = param.possibilities;
-			if (param.multiplicity)
-				opts.prepend(tr("(none)"));
-			QComboTableItem *pComboItem = new QComboTableItem(this, opts);
-			if (param.value.isEmpty())
-				pComboItem->setCurrentItem(0);
-			else
-				pComboItem->setCurrentItem(param.value);
-			pComboItem->setEnabled(bEnabled);
-			QTable::setItem(iRow, 2, pComboItem);
-		} else if (param.type == LSCP_TYPE_INT && bEnabled
-				&& !param.range_min.isEmpty()
-				&& !param.range_max.isEmpty()) {
-			qsamplerDeviceParamTableSpinBox *pSpinItem =
-				new qsamplerDeviceParamTableSpinBox(this,
-					bEnabled ? QTableItem::OnTyping : QTableItem::Never,
-					param.value);
-			pSpinItem->setMinValue(param.range_min.toInt());
-			pSpinItem->setMaxValue(param.range_max.toInt());
-			QTable::setItem(iRow, 2, pSpinItem);
-		} else {
-			qsamplerDeviceParamTableEditBox *pEditItem =
-				new qsamplerDeviceParamTableEditBox(this,
-					bEnabled ? QTableItem::OnTyping : QTableItem::Never,
-					param.value);
-			QTable::setItem(iRow, 2, pEditItem);
+
+int AbstractDeviceParamModel::columnCount ( const QModelIndex& /*parent*/) const
+{
+	return 3;
+}
+
+
+Qt::ItemFlags AbstractDeviceParamModel::flags ( const QModelIndex& /*index*/) const
+{
+	return Qt::ItemIsEditable | Qt::ItemIsEnabled;
+}
+
+
+QVariant AbstractDeviceParamModel::headerData (
+	int section, Qt::Orientation orientation, int role) const
+{
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	if (orientation == Qt::Horizontal) {
+		switch (section) {
+			case 0:  return tr("Parameter");
+			case 1:  return tr("Value");
+			case 2:  return tr("Description");
+			default: return QVariant();
 		}
-		++iRow;
 	}
 
-	// Adjust optimal column widths.
-	QTable::adjustColumn(0);
-	QTable::adjustColumn(2);
+	return QVariant();
+}
 
-	QTable::setUpdatesEnabled(true);
-	QTable::updateContents();
+
+void AbstractDeviceParamModel::refresh (
+	const qsamplerDeviceParamMap* pParams, bool bEditable )
+{
+	m_pParams   = pParams;
+	m_bEditable = bEditable;
+	// inform the outer world (QTableView) that our data changed
+	QAbstractTableModel::reset();
+}
+
+
+void AbstractDeviceParamModel::clear (void)
+{
+	m_pParams = NULL;
+	// inform the outer world (QTableView) that our data changed
+	QAbstractTableModel::reset();
 }
 
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTableSpinBox - Custom spin box for parameter table.
+// DeviceParamModel - data model for device parameters (used for QTableView)
 //
 
-// Constructor.
-qsamplerDeviceParamTableSpinBox::qsamplerDeviceParamTableSpinBox (
-	QTable *pTable, EditType editType, const QString& sText )
-	: QTableItem(pTable, editType, sText)
+DeviceParamModel::DeviceParamModel ( QObject *pParent )
+	: AbstractDeviceParamModel(pParent)
 {
-	m_iValue = sText.toInt();
-	m_iMinValue = m_iMaxValue = 0;
+	m_pDevice = NULL;
 }
 
-// Public accessors.
-void qsamplerDeviceParamTableSpinBox::setValue ( int iValue )
+QVariant DeviceParamModel::data (
+	const QModelIndex &index, int role) const
 {
-	m_iValue = iValue;
-	QTableItem::setText(QString::number(m_iValue));
+	if (!index.isValid())
+		return QVariant();
+
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	DeviceParameterRow item;
+	item.name  = m_pParams->keys()[index.row()];
+	item.param = (*m_pParams)[item.name];
+	item.alive = (m_pDevice && m_pDevice->deviceID() >= 0);
+
+	return QVariant::fromValue(item);
 }
 
-void qsamplerDeviceParamTableSpinBox::setMinValue ( int iMinValue )
+
+bool DeviceParamModel::setData (
+	const QModelIndex& index, const QVariant& value, int /*role*/)
 {
-	m_iMinValue = iMinValue;
+	if (!index.isValid())
+		return false;
+
+	QString key = m_pParams->keys()[index.row()];
+	//m_pParams[key].value = value.toString();
+	m_pDevice->setParam(key, value.toString());
+	emit dataChanged(index, index);
+	return true;
 }
 
-void qsamplerDeviceParamTableSpinBox::setMaxValue ( int iMaxValue )
+
+void DeviceParamModel::refresh ( qsamplerDevice* pDevice, bool bEditable )
 {
-	m_iMaxValue = iMaxValue;
+	m_pDevice = pDevice;
+	AbstractDeviceParamModel::refresh(&pDevice->params(), bEditable);
 }
 
-// Virtual implemetations.
-QWidget *qsamplerDeviceParamTableSpinBox::createEditor (void) const
-{
-	QSpinBox *pSpinBox = new QSpinBox(QTableItem::table()->viewport());
-	QObject::connect(pSpinBox, SIGNAL(valueChanged(int)),
-		QTableItem::table(), SLOT(doValueChanged()));
-	if (m_iValue >= m_iMinValue && m_iMaxValue >= m_iValue) {
-		pSpinBox->setMinValue(m_iMinValue);
-		pSpinBox->setMaxValue(m_iMaxValue);
-	}
-	pSpinBox->setValue(m_iValue);
-	return pSpinBox;
-}
 
-void qsamplerDeviceParamTableSpinBox::setContentFromEditor ( QWidget *pWidget )
+void DeviceParamModel::clear (void)
 {
-	if (pWidget->inherits("QSpinBox"))
-		QTableItem::setText(QString::number(((QSpinBox *) pWidget)->value()));
-	else
-		QTableItem::setContentFromEditor(pWidget);
+	AbstractDeviceParamModel::clear();
+	m_pDevice = NULL;
 }
 
 
 //-------------------------------------------------------------------------
-// qsamplerDeviceParamTableEditBox - Custom edit box for parameter table.
+// PortParamModel - data model for port parameters (used for QTableView)
 //
 
-// Constructor.
-qsamplerDeviceParamTableEditBox::qsamplerDeviceParamTableEditBox (
-	QTable *pTable, EditType editType, const QString& sText )
-	: QTableItem(pTable, editType, sText)
+PortParamModel::PortParamModel ( QObject *pParent)
+	: AbstractDeviceParamModel(pParent)
+{
+	m_pPort = NULL;
+}
+
+QVariant PortParamModel::data ( const QModelIndex &index, int role ) const
+{
+	if (!index.isValid())
+		return QVariant();
+
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	DeviceParameterRow item;
+	item.name  = m_pParams->keys()[index.row()];
+	item.param = (*m_pParams)[item.name];
+	item.alive = (m_pPort && m_pPort->portID() >= 0);
+
+	return QVariant::fromValue(item);
+}
+
+
+bool PortParamModel::setData (
+	const QModelIndex& index, const QVariant& value, int /*role*/)
+{
+	if (!index.isValid())
+		return false;
+
+	QString key = m_pParams->keys()[index.row()];
+	//params[key].value = value.toString();
+	m_pPort->setParam(key, value.toString());
+	emit dataChanged(index, index);
+	return true;
+}
+
+
+void PortParamModel::refresh ( qsamplerDevicePort* pPort, bool bEditable )
+{
+	m_pPort = pPort;
+	AbstractDeviceParamModel::refresh(&pPort->params(), bEditable);
+}
+
+
+void PortParamModel::clear (void)
+{
+	AbstractDeviceParamModel::clear();
+	m_pPort = NULL;
+}
+
+
+//-------------------------------------------------------------------------
+// DeviceParamDelegate - table cell renderer for device/port parameters
+//
+
+DeviceParamDelegate::DeviceParamDelegate ( QObject *pParent)
+	: QItemDelegate(pParent)
 {
 }
 
-// Virtual implemetations.
-QWidget *qsamplerDeviceParamTableEditBox::createEditor (void) const
+
+QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
+	const QStyleOptionViewItem& /* option */, const QModelIndex& index ) const
 {
-	QLineEdit *pEditBox = new QLineEdit(QTableItem::table()->viewport());
-	QObject::connect(pEditBox, SIGNAL(returnPressed()),
-		QTableItem::table(), SLOT(doValueChanged()));
-	pEditBox->setText(QTableItem::text());
-	return pEditBox;
+	if (!index.isValid())
+		return NULL;
+
+	DeviceParameterRow r = index.model()->data(index,
+		Qt::DisplayRole).value<DeviceParameterRow>();
+
+	const bool bEnabled = (r.alive) ? !r.param.fix : true;
+
+	QString val = (r.alive) ? r.param.value : r.param.defaultv;
+
+	switch (index.column()) {
+		case 0:
+			return new QLabel(r.name, pParent);
+		case 1: {
+			if (r.param.type == LSCP_TYPE_BOOL) {
+				QCheckBox *pCheckBox = new QCheckBox(pParent);
+				if (val != QString::null)
+					pCheckBox->setChecked(val.toLower() == "true");
+				pCheckBox->setEnabled(bEnabled);
+				return pCheckBox;
+			} else if (r.param.possibilities.count() > 0) {
+				QStringList opts = r.param.possibilities;
+				if (r.param.multiplicity)
+					opts.prepend(tr("(none)"));
+				QComboBox *pComboBox = new QComboBox(pParent);
+				pComboBox->addItems(opts);
+				if (r.param.value.isEmpty())
+					pComboBox->setCurrentIndex(0);
+				else
+					pComboBox->setCurrentIndex(pComboBox->findText(val));
+				pComboBox->setEnabled(bEnabled);
+				return pComboBox;
+			} else if (r.param.type == LSCP_TYPE_INT && bEnabled) {
+				QSpinBox *pSpinBox = new QSpinBox(pParent);
+				pSpinBox->setMinimum(
+					(!r.param.range_min.isEmpty()) ?
+						r.param.range_min.toInt() : 0 // or better a negative default min value ?
+				);
+				pSpinBox->setMaximum(
+					(!r.param.range_max.isEmpty()) ?
+						r.param.range_max.toInt() : (1 << 16) // or better a nigher default max value ?
+				);
+				pSpinBox->setValue(val.toInt());
+				return pSpinBox;
+			} else if (bEnabled) {
+				QLineEdit *pLineEdit = new QLineEdit(val, pParent);
+				return pLineEdit;
+			} else {
+				QLabel *pLabel = new QLabel(val, pParent);
+				return pLabel;
+			}
+		}
+		case 2:
+			return new QLabel(r.param.description, pParent);
+		default:
+			return NULL;
+	}
 }
 
-void qsamplerDeviceParamTableEditBox::setContentFromEditor ( QWidget *pWidget )
+
+void DeviceParamDelegate::setEditorData (
+	QWidget* /*pEditor*/, const QModelIndex& /*index*/) const
 {
-	if (pWidget->inherits("QLineEdit"))
-		QTableItem::setText(((QLineEdit *) pWidget)->text());
-	else
-		QTableItem::setContentFromEditor(pWidget);
+	// Unused, since we set the editor data already in createEditor()
 }
 
+
+void DeviceParamDelegate::setModelData ( QWidget *pEditor,
+	QAbstractItemModel *pModel, const QModelIndex& index ) const
+{
+	if (index.column() == 1) {
+		DeviceParameterRow r = index.model()->data(index,
+			Qt::DisplayRole).value<DeviceParameterRow> ();
+		if (pEditor->metaObject()->className() == QString("QCheckBox")) {
+			QCheckBox* pCheckBox = static_cast<QCheckBox*> (pEditor);
+			pModel->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
+		} else if (pEditor->metaObject()->className() == QString("QComboBox")) {
+			QComboBox* pComboBox = static_cast<QComboBox*> (pEditor);
+			pModel->setData(index, pComboBox->currentText());
+		} else if (pEditor->metaObject()->className() == QString("QSpinBox")) {
+			QSpinBox* pSpinBox = static_cast<QSpinBox*> (pEditor);
+			pModel->setData(index, pSpinBox->value());
+		} else if (pEditor->metaObject()->className() == QString("QLineEdit")) {
+			QLineEdit* pLineEdit = static_cast<QLineEdit*> (pEditor);
+			pModel->setData(index, pLineEdit->text());
+		} else if (pEditor->metaObject()->className() == QString("QLabel")) {
+			QLabel* pLabel = static_cast<QLabel*> (pEditor);
+			pModel->setData(index, pLabel->text());
+		}
+	}
+}
+
+void DeviceParamDelegate::updateEditorGeometry ( QWidget *pEditor,
+	const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+	if (pEditor)
+		pEditor->setGeometry(option.rect);
+}
 
 // end of qsamplerDevice.cpp
-

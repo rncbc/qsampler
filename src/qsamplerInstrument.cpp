@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,12 +20,15 @@
 
 *****************************************************************************/
 
-#include "qsamplerUtilities.h"
 #include "qsamplerAbout.h"
 #include "qsamplerInstrument.h"
+#include "qsamplerUtilities.h"
 
+#include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
+
+using namespace QSampler;
 
 //-------------------------------------------------------------------------
 // qsamplerInstrument - MIDI instrument map structure.
@@ -36,7 +40,7 @@ qsamplerInstrument::qsamplerInstrument ( int iMap, int iBank, int iProg )
 	m_iMap          = iMap;
 	m_iBank         = iBank;
 	m_iProg         = iProg;
-	m_iInstrumentNr = 0;;
+	m_iInstrumentNr = 0;
 	m_fVolume       = 1.0f;
 	m_iLoadMode     = 0;
 }
@@ -158,7 +162,7 @@ bool qsamplerInstrument::mapInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -191,12 +195,11 @@ bool qsamplerInstrument::mapInstrument (void)
 	}
 
 	if (::lscp_map_midi_instrument(pMainForm->client(), &instr,
-			m_sEngineName.latin1(),
-			qsamplerUtilities::lscpEscapePath(m_sInstrumentFile).latin1(),
-			m_iInstrumentNr,
-			m_fVolume,
-			load_mode,
-			m_sName.latin1()) != LSCP_OK) {
+			m_sEngineName.toUtf8().constData(),
+			qsamplerUtilities::lscpEscapePath(
+				m_sInstrumentFile).toUtf8().constData(),
+			m_iInstrumentNr, m_fVolume, load_mode,
+			m_sName.toUtf8().constData()) != LSCP_OK) {
 		pMainForm->appendMessagesClient("lscp_map_midi_instrument");
 		return false;
 	}
@@ -218,7 +221,7 @@ bool qsamplerInstrument::unmapInstrument (void)
 	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -252,7 +255,7 @@ bool qsamplerInstrument::getInstrument (void)
 	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
 		return false;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -271,12 +274,14 @@ bool qsamplerInstrument::getInstrument (void)
 		return false;
 	}
 
-	m_sName           = qsamplerUtilities::lscpEscapedTextToRaw(pInstrInfo->name);
-	m_sEngineName     = pInstrInfo->engine_name;
-	m_sInstrumentName = qsamplerUtilities::lscpEscapedTextToRaw(pInstrInfo->instrument_name);
-	m_sInstrumentFile = qsamplerUtilities::lscpEscapedPathToPosix(pInstrInfo->instrument_file);
-	m_iInstrumentNr   = pInstrInfo->instrument_nr;
-	m_fVolume         = pInstrInfo->volume;
+	m_sName = qsamplerUtilities::lscpEscapedTextToRaw(pInstrInfo->name);
+	m_sEngineName = pInstrInfo->engine_name;
+	m_sInstrumentName = qsamplerUtilities::lscpEscapedTextToRaw(
+		pInstrInfo->instrument_name);
+	m_sInstrumentFile = qsamplerUtilities::lscpEscapedPathToPosix(
+		pInstrInfo->instrument_file);
+	m_iInstrumentNr = pInstrInfo->instrument_nr;
+	m_fVolume = pInstrInfo->volume;
 
 	switch (pInstrInfo->load_mode) {
 		case LSCP_LOAD_PERSISTENT:
@@ -313,7 +318,7 @@ QStringList qsamplerInstrument::getMapNames (void)
 {
 	QStringList maps;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return maps;
 	if (pMainForm->client() == NULL)
@@ -341,7 +346,7 @@ QString qsamplerInstrument::getMapName ( int iMidiMap )
 {
 	QString sMapName;
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return sMapName;
 	if (pMainForm->client() == NULL)
@@ -355,7 +360,8 @@ QString qsamplerInstrument::getMapName ( int iMidiMap )
 		if (::lscp_client_get_errno(pMainForm->client()))
 			pMainForm->appendMessagesClient("lscp_get_midi_instrument_name");
 	}
-	sMapName = QString("%1 - %2").arg(iMidiMap).arg(qsamplerUtilities::lscpEscapedTextToRaw(pszMapName));
+	sMapName = QString("%1 - %2").arg(iMidiMap)
+		.arg(qsamplerUtilities::lscpEscapedTextToRaw(pszMapName));
 #endif
 
 	return sMapName;

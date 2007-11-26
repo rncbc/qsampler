@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,13 +23,14 @@
 #ifndef __qsamplerUtilities_h
 #define __qsamplerUtilities_h
 
-#include <qstring.h>
+#include <QString>
+
 
 namespace qsamplerUtilities {
 
 struct lscpVersion_t {
-    int major;
-    int minor;
+	int major;
+	int minor;
 };
 
 QString lscpEscapePath(const QString& sPath);
@@ -38,5 +40,6 @@ QString lscpEscapedTextToRaw(QString txt);
 lscpVersion_t getRemoteLscpVersion();
 
 } // namespace qsamplerUtilities
+
 
 #endif  // __qsamplerUtilities_h

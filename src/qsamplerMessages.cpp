@@ -1,7 +1,8 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,16 +20,16 @@
 
 *****************************************************************************/
 
+#include "qsamplerAbout.h"
 #include "qsamplerMessages.h"
 
-#include <qsocketnotifier.h>
-#include <qstringlist.h>
-#include <qtextedit.h>
-#include <qdatetime.h>
-#include <qtooltip.h>
-#include <qpixmap.h>
-
-#include "config.h"
+#include <QSocketNotifier>
+#include <QTextEdit>
+#include <QTextCursor>
+#include <QTextBlock>
+#include <QScrollBar>
+#include <QDateTime>
+#include <QIcon>
 
 #if !defined(WIN32)
 #include <unistd.h>
@@ -48,44 +49,44 @@
 //
 
 // Constructor.
-qsamplerMessages::qsamplerMessages ( QWidget *pParent, const char *pszName )
-    : QDockWindow(pParent, pszName)
+qsamplerMessages::qsamplerMessages ( QWidget *pParent )
+    : QDockWidget(pParent)
 {
+	// Surely a name is crucial (e.g.for storing geometry settings)
+	QDockWidget::setObjectName("qsamplerMessages");
+
     // Intialize stdout capture stuff.
     m_pStdoutNotifier = NULL;
     m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
     m_fdStdout[QSAMPLER_MESSAGES_FDWRITE] = QSAMPLER_MESSAGES_FDNIL;
 
-    // Surely a name is crucial (e.g.for storing geometry settings)
-    if (pszName == 0)
-        QDockWindow::setName("qsamplerMessages");
-
-    // Create local text view widget.
-    m_pTextView = new QTextEdit(this);
+	// Create local text view widget.
+	m_pTextView = new QTextEdit(this);
 //  QFont font(m_pTextView->font());
 //  font.setFamily("Fixed");
 //  m_pTextView->setFont(font);
-    m_pTextView->setWordWrap(QTextEdit::NoWrap);
-    m_pTextView->setReadOnly(true);
-    m_pTextView->setUndoRedoEnabled(false);
-#if QT_VERSION >= 0x030200
-    m_pTextView->setTextFormat(Qt::LogText);
-#endif
-    // Initialize default message limit.
-    setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
+	m_pTextView->setLineWrapMode(QTextEdit::NoWrap);
+	m_pTextView->setReadOnly(true);
+	m_pTextView->setUndoRedoEnabled(false);
+//	m_pTextView->setTextFormat(Qt::LogText);
 
-    // Prepare the dockable window stuff.
-    QDockWindow::setWidget(m_pTextView);
-    QDockWindow::setOrientation(Qt::Horizontal);
-    QDockWindow::setCloseMode(QDockWindow::Always);
-    QDockWindow::setResizeEnabled(true);
+	// Initialize default message limit.
+	m_iMessagesLines = 0;
+	setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
+
+	// Prepare the dockable window stuff.
+	QDockWidget::setWidget(m_pTextView);
+	QDockWidget::setFeatures(QDockWidget::AllDockWidgetFeatures);
+	QDockWidget::setAllowedAreas(
+		Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 	// Some specialties to this kind of dock window...
-	QDockWindow::setFixedExtentHeight(120);
+	QDockWidget::setMinimumHeight(120);
 
-    // Finally set the default caption and tooltip.
-    QString sCaption = tr("Messages");
-    QToolTip::add(this, sCaption);
-    QDockWindow::setCaption(sCaption);
+	// Finally set the default caption and tooltip.
+	const QString& sCaption = tr("Messages");
+	QDockWidget::setWindowTitle(sCaption);
+//	QDockWidget::setWindowIcon(QIcon(":/icons/qsamplerMessages.png"));
+	QDockWidget::setToolTip(sCaption);
 }
 
 
@@ -97,6 +98,13 @@ qsamplerMessages::~qsamplerMessages (void)
         delete m_pStdoutNotifier;
 
     // No need to delete child widgets, Qt does it all for us.
+}
+
+
+void qsamplerMessages::showEvent (QShowEvent* event)
+{
+    QDockWidget::showEvent(event);
+    emit visibilityChanged(isVisible());
 }
 
 
@@ -117,16 +125,17 @@ void qsamplerMessages::stdoutNotify ( int fd )
 // Stdout buffer handler -- now splitted by complete new-lines...
 void qsamplerMessages::appendStdoutBuffer ( const QString& s )
 {
-    m_sStdoutBuffer.append(s);
+	m_sStdoutBuffer.append(s);
 
-    int iLength = m_sStdoutBuffer.findRev('\n') + 1;
-    if (iLength > 0) {
-        QString sTemp = m_sStdoutBuffer.left(iLength);
-        m_sStdoutBuffer.remove(0, iLength);
-        QStringList list = QStringList::split('\n', sTemp, true);
-        for (QStringList::Iterator iter = list.begin(); iter != list.end(); iter++)
-            appendMessagesText(*iter);
-    }
+	int iLength = m_sStdoutBuffer.lastIndexOf('\n');
+	if (iLength > 0) {
+		QString sTemp = m_sStdoutBuffer.left(iLength);
+		m_sStdoutBuffer.remove(0, iLength + 1);
+		QStringList list = sTemp.split('\n');
+		QStringListIterator iter(list);
+		while (iter.hasNext())
+			appendMessagesText(iter.next());
+	}
 }
 
 
@@ -152,27 +161,30 @@ void qsamplerMessages::setCaptureEnabled ( bool bCapture )
     flushStdoutBuffer();
 
 #if !defined(WIN32)
-    // Destroy if already enabled.
-    if (!bCapture && m_pStdoutNotifier) {
-        delete m_pStdoutNotifier;
-        m_pStdoutNotifier = NULL;
-        // Close the notification pipes.
-        if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
-            ::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
-            m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
-        }
-        if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
-            ::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
-            m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
-        }
-    }
-    // Are we going to make up the capture?
-    if (bCapture && m_pStdoutNotifier == NULL && ::pipe(m_fdStdout) == 0) {
-        ::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDOUT_FILENO);
-        ::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDERR_FILENO);
-        m_pStdoutNotifier = new QSocketNotifier(m_fdStdout[QSAMPLER_MESSAGES_FDREAD], QSocketNotifier::Read, this);
-        QObject::connect(m_pStdoutNotifier, SIGNAL(activated(int)), this, SLOT(stdoutNotify(int)));
-    }
+	// Destroy if already enabled.
+	if (!bCapture && m_pStdoutNotifier) {
+		delete m_pStdoutNotifier;
+		m_pStdoutNotifier = NULL;
+		// Close the notification pipes.
+		if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
+			::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
+			m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
+		}
+		if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
+			::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
+			m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
+		}
+	}
+	// Are we going to make up the capture?
+	if (bCapture && m_pStdoutNotifier == NULL && ::pipe(m_fdStdout) == 0) {
+		::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDOUT_FILENO);
+		::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDERR_FILENO);
+		m_pStdoutNotifier = new QSocketNotifier(
+			m_fdStdout[QSAMPLER_MESSAGES_FDREAD], QSocketNotifier::Read, this);
+		QObject::connect(m_pStdoutNotifier,
+			SIGNAL(activated(int)),
+			SLOT(stdoutNotify(int)));
+	}
 #endif
 }
 
@@ -199,9 +211,6 @@ void qsamplerMessages::setMessagesLimit ( int iMessagesLimit )
 {
     m_iMessagesLimit = iMessagesLimit;
     m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
-#if QT_VERSION >= 0x030200
-	m_pTextView->setMaxLogLines(iMessagesLimit);
-#endif
 }
 
 
@@ -213,35 +222,40 @@ void qsamplerMessages::appendMessages ( const QString& s )
 
 void qsamplerMessages::appendMessagesColor ( const QString& s, const QString &c )
 {
-    appendMessagesText("<font color=\"" + c + "\">" + QTime::currentTime().toString("hh:mm:ss.zzz") + " " + s + "</font>");
+	appendMessagesText("<font color=\"" + c + "\">"
+		+ QTime::currentTime().toString("hh:mm:ss.zzz")
+		+ ' ' + s + "</font>");
 }
 
 void qsamplerMessages::appendMessagesText ( const QString& s )
 {
-#if QT_VERSION < 0x030200
     // Check for message line limit...
-    if (m_iMessagesLimit > 0) {
-        int iParagraphs = m_pTextView->paragraphs();
-        if (iParagraphs > m_iMessagesHigh) {
-            m_pTextView->setUpdatesEnabled(false);
-            while (iParagraphs > m_iMessagesLimit) {
-                m_pTextView->removeParagraph(0);
-                iParagraphs--;
-            }
-            m_pTextView->scrollToBottom();
-            m_pTextView->setUpdatesEnabled(true);
-        }
+    if (m_iMessagesLines > m_iMessagesHigh) {
+		m_pTextView->setUpdatesEnabled(false);
+		QTextCursor textCursor(m_pTextView->document()->begin());
+		while (m_iMessagesLines > m_iMessagesLimit) {
+			// Move cursor extending selection
+			// from start to next line-block...
+			textCursor.movePosition(
+				QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+			m_iMessagesLines--;
+		}
+		// Remove the excessive line-blocks...
+		textCursor.removeSelectedText();
+		m_pTextView->setUpdatesEnabled(true);
     }
-#endif
-    m_pTextView->append(s);
+
+	// Count always as a new line out there...
+	m_pTextView->append(s);
+	m_iMessagesLines++;
 }
 
 
-// One time scroll to the most recent message.
-void qsamplerMessages::scrollToBottom (void)
+// History reset.
+void qsamplerMessages::clear (void)
 {
-    flushStdoutBuffer();
-    m_pTextView->scrollToBottom();
+	m_iMessagesLines = 0;
+	m_pTextView->clear();
 }
 
 

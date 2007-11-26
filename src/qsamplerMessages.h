@@ -1,7 +1,8 @@
 // qsamplerMessages.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -22,7 +23,7 @@
 #ifndef __qsamplerMessages_h
 #define __qsamplerMessages_h
 
-#include <qdockwindow.h>
+#include <QDockWidget>
 
 class QSocketNotifier;
 class QTextEdit;
@@ -32,58 +33,67 @@ class QTextEdit;
 // qsamplerMessages - Messages log dockable window.
 //
 
-class qsamplerMessages : public QDockWindow
+class qsamplerMessages : public QDockWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
 
-    // Constructor.
-    qsamplerMessages(QWidget *pParent, const char *pszName = 0);
-    // Destructor.
-    ~qsamplerMessages();
+	// Constructor.
+	qsamplerMessages(QWidget *pParent);
+	// Destructor.
+	~qsamplerMessages();
 
-    // Stdout/stderr capture accessors.
-    bool isCaptureEnabled();
-    void setCaptureEnabled(bool bCapture);
+	// Stdout/stderr capture accessors.
+	bool isCaptureEnabled();
+	void setCaptureEnabled(bool bCapture);
 
-    // Message font accessors.
-    QFont messagesFont();
-    void setMessagesFont(const QFont & font);
+	// Message font accessors.
+	QFont messagesFont();
+	void setMessagesFont(const QFont & font);
 
-    // Maximum number of message lines accessors.
-    int messagesLimit();
-    void setMessagesLimit(int iMessagesLimit);
-    
-    // The main utility methods.
-    void appendMessages(const QString& s);
-    void appendMessagesColor(const QString& s, const QString &c);
-    void appendMessagesText(const QString& s);
+	// Maximum number of message lines accessors.
+	int messagesLimit();
+	void setMessagesLimit(int iMessagesLimit);
 
-    void scrollToBottom();
+	// The main utility methods.
+	void appendMessages(const QString& s);
+	void appendMessagesColor(const QString& s, const QString &c);
+	void appendMessagesText(const QString& s);
 
-    // Stdout capture functions.
-    void appendStdoutBuffer(const QString& s);
-    void flushStdoutBuffer();
+	// Stdout capture functions.
+	void appendStdoutBuffer(const QString& s);
+	void flushStdoutBuffer();
+
+	// History reset.
+	void clear();
+
+signals:
+
+	void visibilityChanged(bool bVisible);
 
 protected slots:
 
-    // Stdout capture slot.
-    void stdoutNotify(int fd);
+	// overridden method of QWidget
+	void showEvent(QShowEvent* event);
+
+	// Stdout capture slot.
+	void stdoutNotify(int fd);
 
 private:
 
-    // The maximum number of message lines.
-    int m_iMessagesLimit;
-    int m_iMessagesHigh;
+	// The maximum number of message lines.
+	int m_iMessagesLines;
+	int m_iMessagesLimit;
+	int m_iMessagesHigh;
 
-    // The textview main widget.
-    QTextEdit *m_pTextView;
-    
-    // Stdout capture variables.
-    QSocketNotifier *m_pStdoutNotifier;
-    QString          m_sStdoutBuffer;
-    int              m_fdStdout[2];
+	// The textview main widget.
+	QTextEdit *m_pTextView;
+
+	// Stdout capture variables.
+	QSocketNotifier *m_pStdoutNotifier;
+	QString          m_sStdoutBuffer;
+	int              m_fdStdout[2];
 };
 
 

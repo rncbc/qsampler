@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -21,10 +22,13 @@
 
 #include "qsamplerUtilities.h"
 
+#include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
-#include <stdio.h>
-#include <qregexp.h>
+#include <QRegExp>
+
+
+using namespace QSampler;
 
 namespace qsamplerUtilities {
 
@@ -81,11 +85,11 @@ QString lscpEscapePath ( const QString& sPath )
     // TODO: missing code for other systems like Windows
     {
         QRegExp regexp("%[0-9a-fA-F][0-9a-fA-F]");
-        for (int i = path.find(regexp); i >= 0; i = path.find(regexp, i + 4))
+        for (int i = path.indexOf(regexp); i >= 0; i = path.indexOf(regexp, i + 4))
             path.replace(i, 1, "\\x");
     }
     // replace POSIX path escape sequence (%%) by its raw character
-    for (int i = path.find("%%"); i >= 0; i = path.find("%%", ++i))
+    for (int i = path.indexOf("%%"); i >= 0; i = path.indexOf("%%", ++i))
         path.remove(i, 1);
 
     // replace all non-basic characters by LSCP escape sequences
@@ -94,18 +98,21 @@ QString lscpEscapePath ( const QString& sPath )
         QRegExp regexp(QRegExp::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
         for (int i = 0; i < int(path.length()); i++) {
             // first skip all previously added LSCP escape sequences
-            if (path.find(regexp, i) == i) {
+            if (path.indexOf(regexp, i) == i) {
                 i += 3;
                 continue;
             }
             // now match all non-alphanumerics
             // (we could exclude much more characters here, but that way
             // we're sure it just works^TM)
-            const char c = path.at(i).latin1();
+            const char c = path.at(i).toLatin1();
             if (
                 !(c >= '0' && c <= '9') &&
                 !(c >= 'a' && c <= 'z') &&
                 !(c >= 'A' && c <= 'Z') &&
+                #if defined(WIN32)
+                !(c == ':') &&
+                #endif
                 !(c == pathSeparator)
             ) {
                 // convert the non-basic character into a LSCP escape sequence
@@ -126,20 +133,20 @@ QString lscpEscapedPathToPosix(QString path) {
     if (!_remoteSupportsEscapeSequences()) return path;
 
     // first escape all percent ('%') characters for POSIX
-    for (int i = path.find('%'); i >= 0; i = path.find('%', i+2))
+    for (int i = path.indexOf('%'); i >= 0; i = path.indexOf('%', i+2))
         path.replace(i, 1, "%%");
 
     // resolve LSCP hex escape sequences (\xHH)
     QRegExp regexp(QRegExp::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
-    for (int i = path.find(regexp); i >= 0; i = path.find(regexp, i + 4)) {
-        const QString sHex = path.mid(i+2, 2).lower();
+    for (int i = path.indexOf(regexp); i >= 0; i = path.indexOf(regexp, i + 4)) {
+        const QString sHex = path.mid(i+2, 2).toLower();
         // the slash has to be escaped for POSIX as well
         if (sHex == "2f") {
             path.replace(i, 4, "%2f");
             continue;
         }
         // all other characters we simply decode
-        char cAscii = _hexsToNumber(sHex.at(1).latin1(), sHex.at(0).latin1());
+        char cAscii = _hexsToNumber(sHex.at(1).toLatin1(), sHex.at(0).toLatin1());
         path.replace(i, 4, cAscii);
     }
 
@@ -153,10 +160,10 @@ QString lscpEscapedTextToRaw(QString txt) {
 
     // resolve LSCP hex escape sequences (\xHH)
     QRegExp regexp(QRegExp::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
-    for (int i = txt.find(regexp); i >= 0; i = txt.find(regexp, i + 4)) {
-        const QString sHex = txt.mid(i+2, 2).lower();
+    for (int i = txt.indexOf(regexp); i >= 0; i = txt.indexOf(regexp, i + 4)) {
+        const QString sHex = txt.mid(i+2, 2).toLower();
         // decode into raw ASCII character
-        char cAscii = _hexsToNumber(sHex.at(1).latin1(), sHex.at(0).latin1());
+        char cAscii = _hexsToNumber(sHex.at(1).toLatin1(), sHex.at(0).toLatin1());
         txt.replace(i, 4, cAscii);
     }
 
@@ -167,7 +174,7 @@ lscpVersion_t getRemoteLscpVersion (void)
 {
     lscpVersion_t result = { 0, 0 };
 
-    qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+    MainForm* pMainForm = MainForm::getInstance();
     if (pMainForm == NULL)
         return result;
     if (pMainForm->client() == NULL)
@@ -183,3 +190,6 @@ lscpVersion_t getRemoteLscpVersion (void)
 }
 
 } // namespace qsamplerUtilities
+
+
+// end of qsamplerUtilities.cpp

@@ -1,7 +1,8 @@
 // main.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2006, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,12 +20,14 @@
 
 *****************************************************************************/
 
-#include <qapplication.h>
-#include <qtextcodec.h>
-
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
+
+#include <QApplication>
+#include <QTranslator>
+#include <QLocale>
+
 
 //-------------------------------------------------------------------------
 // main - The main program trunk.
@@ -32,38 +35,40 @@
 
 int main ( int argc, char **argv )
 {
-    QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-    // Load translation support.
-    QTranslator translator(0);
-    QString sLocale = QTextCodec::locale();
-    if (sLocale != "C") {
-        QString sLocName = "qsampler_" + sLocale;
-        if (!translator.load(sLocName, ".")) {
-            QString sLocPath = CONFIG_PREFIX "/share/locale";
-            if (!translator.load(sLocName, sLocPath))
-                fprintf(stderr, "Warning: no locale found: %s/%s.qm\n", sLocPath.latin1(), sLocName.latin1());
-        }
-        app.installTranslator(&translator);
-    }
+	// Load translation support.
+	QTranslator translator(0);
+	QLocale loc;
+	if (loc.language() != QLocale::C) {
+		QString sLocName = "qsampler_" + loc.name();
+		if (!translator.load(sLocName, ".")) {
+			QString sLocPath = CONFIG_PREFIX "/share/locale";
+			if (!translator.load(sLocName, sLocPath))
+				fprintf(stderr, "Warning: no locale found: %s/%s.qm\n",
+					sLocPath.toUtf8().constData(),
+					sLocName.toUtf8().constData());
+		}
+		app.installTranslator(&translator);
+	}
 
-    // Construct default settings; override with command line arguments.
-    qsamplerOptions options;
-    if (!options.parse_args(app.argc(), app.argv())) {
-        app.quit();
-        return 1;
-    }
+	// Construct default settings; override with command line arguments.
+	qsamplerOptions options;
+	if (!options.parse_args(app.argc(), app.argv())) {
+		app.quit();
+		return 1;
+	}
 
-    // Construct, setup and show the main form.
-    qsamplerMainForm w;
-	app.setMainWidget(&w);
-    w.setup(&options);
-    w.show();
+	// Construct, setup and show the main form.
+	QSampler::MainForm w;
+	w.setup(&options);
+	w.show();
 
-    // Register the quit signal/slot.
-    // app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+	// Register the quit signal/slot.
+	// app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
-    return app.exec();
+	return app.exec();
 }
+
 
 // end of main.cpp

@@ -1,7 +1,8 @@
-// qsamplerAbout.h
+// qsamplerOptionsForm.h
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,22 +20,49 @@
 
 *****************************************************************************/
 
-#ifndef __qsamplerAbout_h
-#define __qsamplerAbout_h
+#ifndef __qsamplerOptionsForm_h
+#define __qsamplerOptionsForm_h
 
-#include "config.h"
+#include "ui_qsamplerOptionsForm.h"
 
-#define QSAMPLER_TITLE        PACKAGE_NAME
-#define QSAMPLER_VERSION      PACKAGE_VERSION
-
-#define QSAMPLER_SUBTITLE     "A LinuxSampler Qt GUI Interface"
-#define QSAMPLER_WEBSITE      "http://qsampler.sourceforge.net"
-#define QSAMPLER_COPYRIGHT    "Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved."
-#define QSAMPLER_COPYRIGHT2   "Copyright (C) 2007, Christian Schoenebeck"
-
-#define QSAMPLER_DOMAIN       "linuxsampler.org"
-
-#endif  // __qsamplerAbout_h
+#include "qsamplerOptions.h"
 
 
-// end of qsamplerAbout.h
+namespace QSampler {
+
+class OptionsForm : public QDialog
+{
+	Q_OBJECT
+
+public:
+
+	OptionsForm(QWidget *pParent = NULL);
+	~OptionsForm();
+
+	void setup(qsamplerOptions* pOptions);
+
+protected slots:
+
+	void accept();
+	void reject();
+	void optionsChanged();
+	void stabilizeForm();
+	void chooseDisplayFont();
+	void chooseMessagesFont();
+	void toggleDisplayEffect(bool bOn);
+
+private:
+
+	Ui::qsamplerOptionsForm m_ui;
+
+	qsamplerOptions* m_pOptions;
+	int m_iDirtySetup;
+	int m_iDirtyCount;
+};
+
+} // namespace QSampler
+
+#endif // __qsamplerOptionsForm_h
+
+
+// end of qsamplerOptionsForm.h

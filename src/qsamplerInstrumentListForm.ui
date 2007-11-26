@@ -1,8 +1,9 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>qsamplerInstrumentListForm</class>
-<comment>qsampler - A LinuxSampler Qt GUI Interface.
+<ui version="4.0" >
+ <author>rncbc aka Rui Nuno Capela</author>
+ <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,96 +20,121 @@
    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 </comment>
-<author>rncbc aka Rui Nuno Capela</author>
-<widget class="QMainWindow">
-    <property name="name">
-        <cstring>qsamplerInstrumentListForm</cstring>
+ <class>qsamplerInstrumentListForm</class>
+ <widget class="QMainWindow" name="qsamplerInstrumentListForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>340</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Qsampler: Instruments</string>
+  </property>
+  <property name="windowIcon" >
+   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerInstrument.png</iconset>
+  </property>
+  <widget class="QWidget" name="widget" >
+   <layout class="QVBoxLayout" >
+    <property name="margin" >
+     <number>0</number>
     </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>720</width>
-            <height>340</height>
-        </rect>
+    <property name="spacing" >
+     <number>0</number>
     </property>
-    <property name="caption">
-        <string>Qsampler: Instruments</string>
-    </property>
-    <property name="icon">
-        <pixmap>qsamplerInstrument.png</pixmap>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="qsamplerInstrumentList">
-            <property name="name">
-                <cstring>InstrumentList</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>120</width>
-                    <height>40</height>
-                </size>
-            </property>
-        </widget>
-    </vbox>
-</widget>
-<toolbars>
-    <toolbar dock="2">
-        <property name="name">
-            <cstring>InstrumentToolbar</cstring>
-        </property>
-        <property name="label">
-            <string>Instruments Toolbar</string>
-        </property>
-    </toolbar>
-</toolbars>
-<customwidgets>
-    <customwidget>
-        <class>qsamplerInstrumentList</class>
-        <header location="local">qsamplerInstrumentList.h</header>
-        <sizehint>
-            <width>320</width>
-            <height>120</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>7</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-    </customwidget>
-</customwidgets>
-<tabstops>
-    <tabstop>InstrumentList</tabstop>
-</tabstops>
-<forwards>
-    <forward>class QComboBox;</forward>
-</forwards>
-<variables>
-    <variable access="private">QComboBox *m_pMapComboBox;</variable>
-</variables>
-<slots>
-    <slot specifier="non virtual">refreshInstruments()</slot>
-    <slot specifier="non virtual">activateMap(int)</slot>
-</slots>
-<functions>
-    <function access="private" specifier="non virtual">init()</function>
-    <function access="private" specifier="non virtual">destroy()</function>
-    <function access="private" specifier="non virtual">showEvent( QShowEvent * pShowEvent )</function>
-    <function access="private" specifier="non virtual">hideEvent( QHideEvent * pHideEvent )</function>
-</functions>
-<pixmapinproject/>
-<layoutdefaults spacing="0" margin="0"/>
-</UI>
+    <item>
+     <widget class="QTableView" name="InstrumentTable" >
+      <property name="alternatingRowColors" >
+       <bool>true</bool>
+      </property>
+      <property name="selectionBehavior" >
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="InstrumentToolbar" >
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+  </widget>
+  <widget class="QMenu" name="contextMenu" >
+   <property name="title" >
+    <string>&amp;Context</string>
+   </property>
+   <addaction name="newInstrumentAction" />
+   <addaction name="separator" />
+   <addaction name="editInstrumentAction" />
+   <addaction name="deleteInstrumentAction" />
+   <addaction name="separator" />
+   <addaction name="refreshInstrumentsAction" />
+  </widget>
+  <action name="newInstrumentAction" >
+   <property name="icon" >
+    <iconset resource="../icons/qsampler.qrc" >:/icons/itemNew.png</iconset>
+   </property>
+   <property name="text" >
+    <string>New &amp;Instrument...</string>
+   </property>
+   <property name="iconText" >
+    <string>New</string>
+   </property>
+   <property name="shortcut" >
+    <string>Insert</string>
+   </property>
+  </action>
+  <action name="editInstrumentAction" >
+   <property name="icon" >
+    <iconset resource="../icons/qsampler.qrc" >:/icons/formEdit.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Edit...</string>
+   </property>
+   <property name="iconText" >
+    <string>Edit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Enter</string>
+   </property>
+  </action>
+  <action name="deleteInstrumentAction" >
+   <property name="icon" >
+    <iconset resource="../icons/qsampler.qrc" >:/icons/formRemove.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Delete</string>
+   </property>
+   <property name="iconText" >
+    <string>Delete</string>
+   </property>
+   <property name="shortcut" >
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="refreshInstrumentsAction" >
+   <property name="icon" >
+    <iconset resource="../icons/qsampler.qrc" >:/icons/formRefresh.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Refresh</string>
+   </property>
+   <property name="iconText" >
+    <string>Refresh</string>
+   </property>
+   <property name="shortcut" >
+    <string>F5</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="0" margin="0" />
+ <resources>
+  <include location="../icons/qsampler.qrc" />
+ </resources>
+ <connections/>
+</ui>

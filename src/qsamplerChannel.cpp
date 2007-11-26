@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -19,15 +20,15 @@
 
 *****************************************************************************/
 
-#include "qsamplerUtilities.h"
 #include "qsamplerAbout.h"
 #include "qsamplerChannel.h"
+#include "qsamplerUtilities.h"
 
 #include "qsamplerMainForm.h"
 #include "qsamplerChannelForm.h"
 
-#include <qfileinfo.h>
-#include <qcombobox.h>
+#include <QFileInfo>
+#include <QComboBox>
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
@@ -35,6 +36,10 @@
 
 #define QSAMPLER_INSTRUMENT_MAX 100
 
+#define UNICODE_RIGHT_ARROW	QChar(char(0x92), char(0x21))
+
+
+using namespace QSampler;
 
 //-------------------------------------------------------------------------
 // qsamplerChannel - Sampler channel structure.
@@ -57,7 +62,7 @@ qsamplerChannel::qsamplerChannel ( int iChannelID )
 	m_iMidiMap          = -1;
 	m_sAudioDriver      = "ALSA";
 	m_iAudioDevice      = -1;
-	m_fVolume           = 0.0;
+	m_fVolume           = 0.0f;
 	m_bMute             = false;
 	m_bSolo             = false;
 }
@@ -71,7 +76,7 @@ qsamplerChannel::~qsamplerChannel (void)
 // Create a new sampler channel, if not already.
 bool qsamplerChannel::addChannel (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -96,7 +101,7 @@ bool qsamplerChannel::addChannel (void)
 // Remove sampler channel.
 bool qsamplerChannel::removeChannel (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL)
@@ -146,7 +151,7 @@ const QString& qsamplerChannel::engineName (void) const
 
 bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -154,7 +159,8 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 	if (m_iInstrumentStatus == 100 && m_sEngineName == sEngineName)
 		return true;
 
-	if (::lscp_load_engine(pMainForm->client(), sEngineName.latin1(), m_iChannelID) != LSCP_OK) {
+	if (::lscp_load_engine(pMainForm->client(),
+			sEngineName.toUtf8().constData(), m_iChannelID) != LSCP_OK) {
 		appendMessagesClient("lscp_load_engine");
 		return false;
 	}
@@ -193,7 +199,7 @@ int qsamplerChannel::instrumentStatus (void) const
 // Instrument file loader.
 bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -206,7 +212,8 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 	if (
 		::lscp_load_instrument_non_modal(
 			pMainForm->client(),
-			qsamplerUtilities::lscpEscapePath(sInstrumentFile).latin1(),
+			qsamplerUtilities::lscpEscapePath(
+				sInstrumentFile).toUtf8().constData(),
 			iInstrumentNr, m_iChannelID
 		) != LSCP_OK
 	) {
@@ -245,7 +252,7 @@ const QString& qsamplerChannel::midiDriver (void) const
 
 bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -253,7 +260,8 @@ bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 	if (m_iInstrumentStatus == 100 && m_sMidiDriver == sMidiDriver)
 		return true;
 
-	if (::lscp_set_channel_midi_type(pMainForm->client(), m_iChannelID, sMidiDriver.latin1()) != LSCP_OK) {
+	if (::lscp_set_channel_midi_type(pMainForm->client(),
+			m_iChannelID, sMidiDriver.toUtf8().constData()) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_midi_type");
 		return false;
 	}
@@ -273,7 +281,7 @@ int qsamplerChannel::midiDevice (void) const
 
 bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -301,7 +309,7 @@ int qsamplerChannel::midiPort (void) const
 
 bool qsamplerChannel::setMidiPort ( int iMidiPort )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -329,7 +337,7 @@ int qsamplerChannel::midiChannel (void) const
 
 bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -357,7 +365,7 @@ int qsamplerChannel::midiMap (void) const
 
 bool qsamplerChannel::setMidiMap ( int iMidiMap )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -385,7 +393,7 @@ int qsamplerChannel::audioDevice (void) const
 
 bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -413,7 +421,7 @@ const QString& qsamplerChannel::audioDriver (void) const
 
 bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -421,7 +429,8 @@ bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 	if (m_iInstrumentStatus == 100 && m_sAudioDriver == sAudioDriver)
 		return true;
 
-	if (::lscp_set_channel_audio_type(pMainForm->client(), m_iChannelID, sAudioDriver.latin1()) != LSCP_OK) {
+	if (::lscp_set_channel_audio_type(pMainForm->client(),
+			m_iChannelID, sAudioDriver.toUtf8().constData()) != LSCP_OK) {
 		appendMessagesClient("lscp_set_channel_audio_type");
 		return false;
 	}
@@ -441,7 +450,7 @@ float qsamplerChannel::volume (void) const
 
 bool qsamplerChannel::setVolume ( float fVolume )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -469,7 +478,7 @@ bool qsamplerChannel::channelMute (void) const
 
 bool qsamplerChannel::setChannelMute ( bool bMute )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -499,7 +508,7 @@ bool qsamplerChannel::channelSolo (void) const
 
 bool qsamplerChannel::setChannelSolo ( bool bSolo )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -529,7 +538,7 @@ int qsamplerChannel::audioChannel ( int iAudioOut ) const
 
 bool qsamplerChannel::setAudioChannel ( int iAudioOut, int iAudioIn )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -571,7 +580,7 @@ void qsamplerChannel::updateInstrumentName (void)
 // Update whole channel info state.
 bool qsamplerChannel::updateChannelInfo (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -665,7 +674,7 @@ bool qsamplerChannel::updateChannelInfo (void)
 // Reset channel method.
 bool qsamplerChannel::channelReset (void)
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -687,7 +696,7 @@ bool qsamplerChannel::editChannel (void)
 {
 #ifdef CONFIG_EDIT_INSTRUMENT
 
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 	if (pMainForm->client() == NULL || m_iChannelID < 0)
@@ -698,9 +707,9 @@ bool qsamplerChannel::editChannel (void)
 		appendMessagesClient("lscp_edit_channel_instrument");
 		appendMessagesError(QObject::tr(
 			"Could not launch an appropriate instrument editor "
-			"for the given instrument!\n"
+			"for the given instrument!\n\n"
 			"Make sure you have an appropriate "
-			"instrument editor like 'gigedit' installed\n"
+			"instrument editor like 'gigedit' installed "
 			"and that it placed its mandatory DLL file "
 			"into the sampler's plugin directory.")
 		);
@@ -715,7 +724,7 @@ bool qsamplerChannel::editChannel (void)
 
 	appendMessagesError(QObject::tr(
 		"Sorry, QSampler was compiled for a version of liblscp "
-		"which lacks this feature.\n"
+		"which lacks this feature.\n\n"
 		"You may want to update liblscp and recompile QSampler afterwards.")
 	);
 
@@ -728,7 +737,7 @@ bool qsamplerChannel::editChannel (void)
 // Channel setup dialog form.
 bool qsamplerChannel::channelSetup ( QWidget *pParent )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return false;
 
@@ -736,7 +745,7 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 
 	appendMessages(QObject::tr("setup..."));
 
-	qsamplerChannelForm *pChannelForm = new qsamplerChannelForm(pParent);
+	ChannelForm *pChannelForm = new ChannelForm(pParent);
 	if (pChannelForm) {
 		pChannelForm->setup(this);
 		bResult = pChannelForm->exec();
@@ -750,7 +759,7 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 // Redirected messages output methods.
 void qsamplerChannel::appendMessages( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessages(channelName() + ' ' + s);
 }
@@ -758,28 +767,28 @@ void qsamplerChannel::appendMessages( const QString& s ) const
 void qsamplerChannel::appendMessagesColor( const QString& s,
 	const QString& c ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
 }
 
 void qsamplerChannel::appendMessagesText( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesText(channelName() + ' ' + s);
 }
 
 void qsamplerChannel::appendMessagesError( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesError(channelName() + "\n\n" + s);
 }
 
 void qsamplerChannel::appendMessagesClient( const QString& s ) const
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesClient(channelName() + ' ' + s);
 }
@@ -788,7 +797,7 @@ void qsamplerChannel::appendMessagesClient( const QString& s ) const
 // Context menu event handler.
 void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
 {
-	qsamplerMainForm *pMainForm = qsamplerMainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->contextMenuEvent(pEvent);
 }
@@ -800,9 +809,9 @@ bool qsamplerChannel::isInstrumentFile ( const QString& sInstrumentFile )
 	bool bResult = false;
 
 	QFile file(sInstrumentFile);
-	if (file.open(IO_ReadOnly)) {
+	if (file.open(QIODevice::ReadOnly)) {
 		char achHeader[16];
-		if (file.readBlock(achHeader, 16)) {
+		if (file.read(achHeader, 16) > 0) {
 			bResult = (::memcmp(&achHeader[0], "RIFF", 4)     == 0
 					&& ::memcmp(&achHeader[8], "DLS LIST", 8) == 0);
 		}
@@ -823,8 +832,13 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 	if (isInstrumentFile(sInstrumentFile)) {
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
-			RIFF::File *pRiff = new RIFF::File(sInstrumentFile.latin1());
+			RIFF::File *pRiff
+				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File  *pGig  = new gig::File(pRiff);
+#if HAVE_LIBGIG_SETAUTOLOAD
+			// prevent sleepy response time on large .gig files
+			pGig->SetAutoLoad(false);
+#endif
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {
 				instlist.append((pInstrument->pInfo)->Name.c_str());
@@ -854,8 +868,13 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 		sInstrumentName = QFileInfo(sInstrumentFile).fileName();
 #ifdef CONFIG_LIBGIG
 		if (bInstrumentNames) {
-			RIFF::File *pRiff = new RIFF::File(sInstrumentFile.latin1());
-			gig::File  *pGig  = new gig::File(pRiff);
+			RIFF::File *pRiff
+				= new RIFF::File(sInstrumentFile.toUtf8().constData());
+			gig::File *pGig = new gig::File(pRiff);
+#if HAVE_LIBGIG_SETAUTOLOAD
+			// prevent sleepy response time on large .gig files
+			pGig->SetAutoLoad(false);
+#endif
 			int iIndex = 0;
 			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
 			while (pInstrument) {
@@ -895,156 +914,156 @@ QString qsamplerChannel::loadingInstrument (void) {
 }
 
 
-
 //-------------------------------------------------------------------------
-// qsamplerChannelRoutingTable - Channel routing table.
+// ChannelRoutingModel - data model for audio routing (used for QTableView)
 //
 
-// Constructor.
-qsamplerChannelRoutingTable::qsamplerChannelRoutingTable (
-	QWidget *pParent, const char *pszName )
-	: QTable(pParent, pszName)
-{
-	// Set fixed number of columns.
-	QTable::setNumCols(2);
-	QTable::setShowGrid(false);
-	QTable::setSorting(false);
-	QTable::setFocusStyle(QTable::FollowStyle);
-	QTable::setSelectionMode(QTable::NoSelection);
-	// No vertical header.
-	QTable::verticalHeader()->hide();
-	QTable::setLeftMargin(0);
-	// Initialize the fixed table column headings.
-	QHeader *pHeader = QTable::horizontalHeader();
-	pHeader->setLabel(0, tr("Sampler Channel"));
-	pHeader->setLabel(1, tr("Device Channel"));
-	// Set read-onlyness of each column
-	QTable::setColumnReadOnly(0, true);
-//	QTable::setColumnReadOnly(1, false); -- of course not.
-	QTable::setColumnStretchable(1, true);
-}
-
-// Default destructor.
-qsamplerChannelRoutingTable::~qsamplerChannelRoutingTable (void)
+ChannelRoutingModel::ChannelRoutingModel ( QObject *pParent )
+	: QAbstractTableModel(pParent), m_pDevice(NULL)
 {
 }
 
 
-// Routing map table renderer.
-void qsamplerChannelRoutingTable::refresh ( qsamplerDevice *pDevice,
-	const qsamplerChannelRoutingMap& routing )
+int ChannelRoutingModel::rowCount ( const QModelIndex& /*parent*/) const
 {
-	if (pDevice == NULL)
-		return;
+	return m_routing.size();
+}
 
-	// Always (re)start it empty.
-	QTable::setUpdatesEnabled(false);
-	QTable::setNumRows(0);
+
+int ChannelRoutingModel::columnCount ( const QModelIndex& /*parent*/) const
+{
+	return 1;
+}
+
+
+Qt::ItemFlags ChannelRoutingModel::flags ( const QModelIndex& /*index*/) const
+{
+	return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
+}
+
+
+bool ChannelRoutingModel::setData ( const QModelIndex& index,
+	const QVariant& value, int /*role*/)
+{
+	if (!index.isValid())
+		return false;
+
+	m_routing[index.row()] = value.toInt();
+
+	emit dataChanged(index, index);
+	return true;
+}
+
+
+QVariant ChannelRoutingModel::data ( const QModelIndex &index, int role ) const
+{
+	if (!index.isValid())
+		return QVariant();
+	if (role != Qt::DisplayRole)
+		return QVariant();
+	if (index.column() != 0)
+		return QVariant();
+
+	ChannelRoutingItem item;
 
 	// The common device port item list.
-	QStringList opts;
-	qsamplerDevicePortList& ports = pDevice->ports();
-	qsamplerDevicePort *pPort;
-	for (pPort = ports.first(); pPort; pPort = ports.next()) {
-		opts.append(pDevice->deviceTypeName()
-			+ ' ' + pDevice->driverName()
-			+ ' ' + pPort->portName());
+	qsamplerDevicePortList& ports = m_pDevice->ports();
+	QListIterator<qsamplerDevicePort *> iter(ports);
+	while (iter.hasNext()) {
+		qsamplerDevicePort *pPort = iter.next();
+		item.options.append(
+			m_pDevice->deviceTypeName()
+			+ ' ' + m_pDevice->driverName()
+			+ ' ' + pPort->portName()
+		);
 	}
 
-	// Those items shall have a proper pixmap...
-	QPixmap pmChannel = QPixmap::fromMimeSource("qsamplerChannel.png");
-	QPixmap pmDevice;
-	switch (pDevice->deviceType()) {
-	case qsamplerDevice::Audio:
-		pmDevice = QPixmap::fromMimeSource("audio2.png");
-		break;
-	case qsamplerDevice::Midi:
-		pmDevice = QPixmap::fromMimeSource("midi2.png");
-		break;
-	case qsamplerDevice::None:
-		break;
-	}
+	item.selection = m_routing[index.row()];
 
-	// Fill the routing table...
-	QTable::insertRows(0, routing.count());
-	int iRow = 0;
-	qsamplerChannelRoutingMap::ConstIterator iter;
-	for (iter = routing.begin(); iter != routing.end(); ++iter) {
-		QTable::setPixmap(iRow, 0, pmChannel);
-		QTable::setText(iRow, 0, pDevice->deviceTypeName()
-			+ ' ' + QString::number(iter.key()));
-		qsamplerChannelRoutingComboBox *pComboItem =
-			new qsamplerChannelRoutingComboBox(this, opts, pmDevice);
-		pComboItem->setCurrentItem(iter.data());
-		QTable::setItem(iRow, 1, pComboItem);
-		++iRow;
-	}
-
-	// Adjust optimal column widths.
-	QTable::adjustColumn(0);
-	QTable::adjustColumn(1);
-
-	QTable::setUpdatesEnabled(true);
-	QTable::updateContents();
+	return QVariant::fromValue(item);
 }
 
 
-// Commit any pending editing.
-void qsamplerChannelRoutingTable::flush (void)
+QVariant ChannelRoutingModel::headerData ( int section,
+	Qt::Orientation orientation, int role) const
 {
-	if (QTable::isEditing())
-	    QTable::endEdit(QTable::currEditRow(), QTable::currEditCol(), true, true);
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	switch (orientation) {
+		case Qt::Horizontal:
+			return UNICODE_RIGHT_ARROW + QObject::tr(" Device Channel");
+		case Qt::Vertical:
+			return QObject::tr("Sampler Channel ") +
+				QString::number(section) + " " + UNICODE_RIGHT_ARROW;
+		default:
+			return QVariant();
+	}
+}
+
+
+void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
+	const qsamplerChannelRoutingMap& routing )
+{
+	m_pDevice = pDevice;
+	m_routing = routing;
+	// inform the outer world (QTableView) that our data changed
+	QAbstractTableModel::reset();
 }
 
 
 //-------------------------------------------------------------------------
-// qsamplerChannelRoutingComboBox - Custom combo box for routing table.
+// ChannelRoutingDelegate - table cell renderer for audio routing
 //
 
-// Constructor.
-qsamplerChannelRoutingComboBox::qsamplerChannelRoutingComboBox (
-	QTable *pTable, const QStringList& list, const QPixmap& pixmap )
-	: QTableItem(pTable, QTableItem::WhenCurrent, QString::null, pixmap),
-	m_list(list)
+ChannelRoutingDelegate::ChannelRoutingDelegate ( QObject *pParent )
+	: QItemDelegate(pParent)
 {
-	m_iCurrentItem = 0;
 }
 
-// Public accessors.
-void qsamplerChannelRoutingComboBox::setCurrentItem ( int iCurrentItem )
-{
-	m_iCurrentItem = iCurrentItem;
 
-	QTableItem::setText(m_list[iCurrentItem]);
-}
-
-int qsamplerChannelRoutingComboBox::currentItem (void) const
+QWidget* ChannelRoutingDelegate::createEditor ( QWidget *pParent,
+	const QStyleOptionViewItem & option, const QModelIndex& index ) const
 {
-	return m_iCurrentItem;
-}
+	if (!index.isValid())
+		return NULL;
 
-// Virtual implemetations.
-QWidget *qsamplerChannelRoutingComboBox::createEditor (void) const
-{
-	QComboBox *pComboBox = new QComboBox(QTableItem::table()->viewport());
-	QObject::connect(pComboBox, SIGNAL(activated(int)),
-		QTableItem::table(), SLOT(doValueChanged()));
-	for (QStringList::ConstIterator iter = m_list.begin();
-			iter != m_list.end(); iter++) {
-		pComboBox->insertItem(QTableItem::pixmap(), *iter);
-	}
-	pComboBox->setCurrentItem(m_iCurrentItem);
+	if (index.column() != 0)
+		return NULL;
+
+	ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
+
+	QComboBox* pComboBox = new QComboBox(pParent);
+	pComboBox->addItems(item.options);
+	pComboBox->setCurrentIndex(item.selection);
+	pComboBox->setEnabled(true);
+	pComboBox->setGeometry(option.rect);
 	return pComboBox;
 }
 
-void qsamplerChannelRoutingComboBox::setContentFromEditor ( QWidget *pWidget )
+
+void ChannelRoutingDelegate::setEditorData ( QWidget *pEditor,
+	const QModelIndex &index) const
 {
-	if (pWidget->inherits("QComboBox")) {
-		QComboBox *pComboBox = (QComboBox *) pWidget;
-		m_iCurrentItem = pComboBox->currentItem();
-		QTableItem::setText(pComboBox->currentText());
-	}
-	else QTableItem::setContentFromEditor(pWidget);
+	ChannelRoutingItem item = index.model()->data(index,
+		Qt::DisplayRole).value<ChannelRoutingItem> ();
+	QComboBox* pComboBox = static_cast<QComboBox*> (pEditor);
+	pComboBox->setCurrentIndex(item.selection);
+}
+
+
+void ChannelRoutingDelegate::setModelData ( QWidget* pEditor,
+	QAbstractItemModel *pModel, const QModelIndex& index ) const
+{
+	QComboBox *pComboBox = static_cast<QComboBox*> (pEditor);
+	pModel->setData(index, pComboBox->currentIndex());
+}
+
+
+void ChannelRoutingDelegate::updateEditorGeometry ( QWidget *pEditor,
+	const QStyleOptionViewItem& option, const QModelIndex &/* index */) const
+{
+	pEditor->setGeometry(option.rect);
 }
 
 
