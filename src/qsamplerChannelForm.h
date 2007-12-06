@@ -32,6 +32,10 @@
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::Channelform -- Channel form interface.
+//
+
 class ChannelForm : public QDialog
 {
 	Q_OBJECT
@@ -41,10 +45,10 @@ public:
 	ChannelForm(QWidget* pParent = NULL);
 	~ChannelForm();
 
-	void setup(qsamplerChannel* pChannel);
+	void setup(Channel* pChannel);
 
-	void setupDevice(qsamplerDevice* pDevice,
-		qsamplerDevice::DeviceType deviceTypeMode,
+	void setupDevice(Device* pDevice,
+		Device::DeviceType deviceTypeMode,
 		const QString& sDriverName);
 
 	void selectMidiDriverItem(const QString& sMidiDriver);
@@ -76,11 +80,11 @@ private:
 
 	Ui::qsamplerChannelForm m_ui;
 
-	qsamplerChannel* m_pChannel;
+	Channel* m_pChannel;
 	int m_iDirtySetup;
 	int m_iDirtyCount;
-	QList<qsamplerDevice *> m_audioDevices;
-	QList<qsamplerDevice *> m_midiDevices;
+	QList<Device *> m_audioDevices;
+	QList<Device *> m_midiDevices;
 	DeviceForm* m_pDeviceForm;
 	ChannelRoutingModel m_routingModel;
 	ChannelRoutingDelegate m_routingDelegate;

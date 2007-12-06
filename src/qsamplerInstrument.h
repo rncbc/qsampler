@@ -25,20 +25,21 @@
 
 #include <QStringList>
 
+namespace QSampler {
 
 //-------------------------------------------------------------------------
-// qsamplerInstrument - MIDI instrument map structure.
+// QSampler::Instrument - MIDI instrument map structure.
 //
 
-class qsamplerInstrument
+class Instrument
 {
 public:
 
 	// Constructor.
-	qsamplerInstrument(int iMap = 0, int iBank = -1, int iProg = -1);
+	Instrument(int iMap = 0, int iBank = -1, int iProg = -1);
 
 	// Default destructor.
-	~qsamplerInstrument();
+	~Instrument();
 
 	// Instrument accessors.
 	void setMap(int iMap);
@@ -92,8 +93,9 @@ private:
 	int     m_iInstrumentNr;
 	float   m_fVolume;
 	int     m_iLoadMode;
-
 };
+
+} // namespace QSampler
 
 #endif  // __qsamplerInstrument_h
 

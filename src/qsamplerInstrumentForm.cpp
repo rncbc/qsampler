@@ -46,6 +46,10 @@ static inline long lroundf ( float x )
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::InstrumentForm -- Instrument map item form implementation.
+//
+
 InstrumentForm::InstrumentForm ( QWidget* pParent )
 	: QDialog(pParent)
 {
@@ -107,7 +111,7 @@ InstrumentForm::~InstrumentForm (void)
 
 
 // Channel dialog setup formal initializer.
-void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
+void InstrumentForm::setup ( Instrument *pInstrument )
 {
 	m_pInstrument = pInstrument;
 
@@ -125,7 +129,7 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	if (pMainForm->client() == NULL)
 		return;
 
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions == NULL)
 		return;
 
@@ -144,7 +148,7 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 
 	// Populate maps list.
 	m_ui.MapComboBox->clear();
-	m_ui.MapComboBox->insertItems(0, qsamplerInstrument::getMapNames());
+	m_ui.MapComboBox->insertItems(0, Instrument::getMapNames());
 
 	// Populate Engines list.
 	const char **ppszEngines
@@ -163,7 +167,7 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	int iMap = (bNew ? pOptions->iMidiMap : m_pInstrument->map());
 	if (iMap < 0)
 		iMap = 0;
-	const QString& sMapName = qsamplerInstrument::getMapName(iMap);
+	const QString& sMapName = Instrument::getMapName(iMap);
 	if (!sMapName.isEmpty()) {
 		m_ui.MapComboBox->setCurrentIndex(
 			m_ui.MapComboBox->findText(sMapName,
@@ -193,7 +197,7 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	if (sEngineName.isEmpty() || bNew)
 		sEngineName = pOptions->sEngineName;
 	if (sEngineName.isEmpty())
-		sEngineName = qsamplerChannel::noEngineName();
+		sEngineName = Channel::noEngineName();
 	if (m_ui.EngineNameComboBox->findText(sEngineName,
 			Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 		m_ui.EngineNameComboBox->addItem(sEngineName);
@@ -205,11 +209,11 @@ void InstrumentForm::setup ( qsamplerInstrument *pInstrument )
 	// Instrument filename and index...
 	QString sInstrumentFile = m_pInstrument->instrumentFile();
 	if (sInstrumentFile.isEmpty())
-		sInstrumentFile = qsamplerChannel::noInstrumentName();
+		sInstrumentFile = Channel::noInstrumentName();
 	m_ui.InstrumentFileComboBox->setEditText(sInstrumentFile);
 	m_ui.InstrumentNrComboBox->clear();
 	m_ui.InstrumentNrComboBox->insertItems(0,
-		qsamplerChannel::getInstrumentList(sInstrumentFile,
+		Channel::getInstrumentList(sInstrumentFile,
 		pOptions->bInstrumentNames));
 	m_ui.InstrumentNrComboBox->setCurrentIndex(m_pInstrument->instrumentNr());
 
@@ -251,7 +255,7 @@ void InstrumentForm::openInstrumentFile (void)
 	if (pMainForm == NULL)
 		return;
 
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions == NULL)
 		return;
 
@@ -278,7 +282,7 @@ void InstrumentForm::updateInstrumentName (void)
 	if (pMainForm == NULL)
 		return;
 
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions == NULL)
 		return;
 
@@ -286,7 +290,7 @@ void InstrumentForm::updateInstrumentName (void)
 	// to retrieve the REAL instrument names.
 	m_ui.InstrumentNrComboBox->clear();
 	m_ui.InstrumentNrComboBox->insertItems(0,
-		qsamplerChannel::getInstrumentList(
+		Channel::getInstrumentList(
 			m_ui.InstrumentFileComboBox->currentText(),
 			pOptions->bInstrumentNames)
 	);
@@ -322,7 +326,7 @@ void InstrumentForm::accept (void)
 	if (pMainForm->client() == NULL)
 		return;
 
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions == NULL)
 		return;
 
@@ -400,7 +404,7 @@ void InstrumentForm::stabilizeForm (void)
 		!m_ui.NameLineEdit->text().isEmpty() &&
 		m_ui.EngineNameComboBox->currentIndex() >= 0 &&
 		m_ui.EngineNameComboBox->currentText() !=
-		qsamplerChannel::noEngineName();
+		Channel::noEngineName();
 
 	const QString& sPath = m_ui.InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();

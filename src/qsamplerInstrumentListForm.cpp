@@ -35,6 +35,10 @@
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::InstrumentListForm -- Instrument map list form implementation.
+//
+
 InstrumentListForm::InstrumentListForm (
 	QWidget* pParent, Qt::WindowFlags wflags )
 	: QMainWindow(pParent, wflags)
@@ -168,7 +172,7 @@ void InstrumentListForm::refreshInstruments (void)
 	if (pMainForm == NULL)
 		return;
 
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions == NULL)
 		return;
 
@@ -180,7 +184,7 @@ void InstrumentListForm::refreshInstruments (void)
 	// Populate maps list.
 	m_pMapComboBox->clear();
 	m_pMapComboBox->addItem(tr("(All)"));
-	m_pMapComboBox->insertItems(1, qsamplerInstrument::getMapNames());
+	m_pMapComboBox->insertItems(1, Instrument::getMapNames());
 
 	// Adjust to saved selection...
 	if (iMap < 0 || iMap >= m_pMapComboBox->count())
@@ -199,7 +203,7 @@ void InstrumentListForm::activateMap ( int iMap )
 	if (pMainForm == NULL)
 		return;
 
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions == NULL)
 		return;
 
@@ -225,15 +229,15 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
 		return;
 
-	qsamplerInstrument* pInstrument
-		= static_cast<qsamplerInstrument *> (
+	Instrument* pInstrument
+		= static_cast<Instrument *> (
 			index.data(Qt::UserRole).value<void *> ());
 
 	if (pInstrument == NULL)
 		return;
 
 	// Save current key values...
-	qsamplerInstrument oldInstrument(*pInstrument);
+	Instrument oldInstrument(*pInstrument);
 	// Do the edit dance...
 	InstrumentForm form(this);
 	form.setup(pInstrument);
@@ -260,7 +264,7 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 
 void InstrumentListForm::newInstrument (void)
 {
-	qsamplerInstrument instrument;
+	Instrument instrument;
 
 	InstrumentForm form(this);
 	form.setup(&instrument);
@@ -284,8 +288,8 @@ void InstrumentListForm::deleteInstrument (void)
 	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
 		return;
 
-	qsamplerInstrument *pInstrument =
-		static_cast<qsamplerInstrument*> (
+	Instrument *pInstrument =
+		static_cast<Instrument*> (
 			index.data(Qt::UserRole).value<void *> ());
 
 	if (pInstrument == NULL)
@@ -296,7 +300,7 @@ void InstrumentListForm::deleteInstrument (void)
 		return;
 
 	// Prompt user if this is for real...
-	qsamplerOptions *pOptions = pMainForm->options();
+	Options *pOptions = pMainForm->options();
 	if (pOptions && pOptions->bConfirmRemove) {
 		if (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),

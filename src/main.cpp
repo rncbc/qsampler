@@ -53,7 +53,7 @@ int main ( int argc, char **argv )
 	}
 
 	// Construct default settings; override with command line arguments.
-	qsamplerOptions options;
+	QSampler::Options options;
 	if (!options.parse_args(app.argc(), app.argv())) {
 		app.quit();
 		return 1;

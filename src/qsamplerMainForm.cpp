@@ -77,6 +77,15 @@ static inline long lroundf ( float x )
 }
 #endif
 
+
+// All winsock apps needs this.
+#if defined(WIN32)
+static WSADATA _wsaData;
+#endif
+
+
+namespace QSampler {
+
 // Timer constant stuff.
 #define QSAMPLER_TIMER_MSECS    200
 
@@ -87,23 +96,17 @@ static inline long lroundf ( float x )
 #define QSAMPLER_STATUS_SESSION 3       // Current session modification state.
 
 
-// All winsock apps needs this.
-#if defined(WIN32)
-static WSADATA _wsaData;
-#endif
-
-
 //-------------------------------------------------------------------------
-// qsamplerCustomEvent -- specialty for callback comunication.
+// CustomEvent -- specialty for callback comunication.
 
 #define QSAMPLER_CUSTOM_EVENT   QEvent::Type(QEvent::User + 0)
 
-class qsamplerCustomEvent : public QEvent
+class CustomEvent : public QEvent
 {
 public:
 
 	// Constructor.
-	qsamplerCustomEvent(lscp_event_t event, const char *pchData, int cchData)
+	CustomEvent(lscp_event_t event, const char *pchData, int cchData)
 		: QEvent(QSAMPLER_CUSTOM_EVENT)
 	{
 		m_event = event;
@@ -125,8 +128,6 @@ private:
 
 //-------------------------------------------------------------------------
 // qsamplerMainForm -- Main window form implementation.
-
-namespace QSampler {
 
 // Kind of singleton reference.
 MainForm* MainForm::g_pMainForm = NULL;
@@ -366,7 +367,7 @@ MainForm::~MainForm()
 
 
 // Make and set a proper setup options step.
-void MainForm::setup ( qsamplerOptions *pOptions )
+void MainForm::setup ( Options *pOptions )
 {
 	// We got options?
 	m_pOptions = pOptions;
@@ -382,7 +383,7 @@ void MainForm::setup ( qsamplerOptions *pOptions )
 	if (m_pOptions->bKeepOnTop)
 		wflags |= Qt::Tool;
 	// Some child forms are to be created right now.
-	m_pMessages = new qsamplerMessages(this);
+	m_pMessages = new Messages(this);
 	m_pDeviceForm = new DeviceForm(this, wflags);
 #ifdef CONFIG_MIDI_INSTRUMENT
 	m_pInstrumentListForm = new InstrumentListForm(this, wflags);
@@ -511,9 +512,9 @@ void MainForm::dropEvent ( QDropEvent* pDropEvent )
 		QListIterator<QUrl> iter(pMimeData->urls());
 		while (iter.hasNext()) {
 			const QString& sPath = iter.next().toLocalFile();
-			if (qsamplerChannel::isInstrumentFile(sPath)) {
+			if (Channel::isInstrumentFile(sPath)) {
 				// Try to create a new channel from instrument file...
-				qsamplerChannel *pChannel = new qsamplerChannel();
+				Channel *pChannel = new Channel();
 				if (pChannel == NULL)
 					return;
 				// Start setting the instrument filename...
@@ -549,7 +550,7 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 {
 	// For the time being, just pump it to messages.
 	if (pCustomEvent->type() == QSAMPLER_CUSTOM_EVENT) {
-		qsamplerCustomEvent *pEvent = (qsamplerCustomEvent *) pCustomEvent;
+		CustomEvent *pEvent = static_cast<CustomEvent *> (pCustomEvent);
 		if (pEvent->event() == LSCP_EVENT_CHANNEL_INFO) {
 			int iChannelID = pEvent->data().toInt();
 			ChannelStrip *pChannelStrip = channelStrip(iChannelID);
@@ -576,7 +577,7 @@ void MainForm::contextMenuEvent( QContextMenuEvent *pEvent )
 // qsamplerMainForm -- Brainless public property accessors.
 
 // The global options settings property.
-qsamplerOptions *MainForm::options (void) const
+Options *MainForm::options (void) const
 {
 	return m_pOptions;
 }
@@ -737,7 +738,7 @@ bool MainForm::closeSession ( bool bForce )
 		for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
 			ChannelStrip *pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
 			if (pChannelStrip) {
-				qsamplerChannel *pChannel = pChannelStrip->channel();
+				Channel *pChannel = pChannelStrip->channel();
 				if (bForce && pChannel)
 					pChannel->removeChannel();
 				delete pChannelStrip;
@@ -877,33 +878,33 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 
 	// Audio device mapping.
 	QMap<int, int> audioDeviceMap;
-	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Audio);
+	piDeviceIDs = Device::getDevices(m_pClient, Device::Audio);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		ts << endl;
-		qsamplerDevice device(qsamplerDevice::Audio, piDeviceIDs[iDevice]);
+		Device device(Device::Audio, piDeviceIDs[iDevice]);
 		// Audio device specification...
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
-		qsamplerDeviceParamMap::ConstIterator deviceParam;
+		DeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
 				deviceParam != device.params().end();
 					++deviceParam) {
-			const qsamplerDeviceParam& param = deviceParam.value();
+			const DeviceParam& param = deviceParam.value();
 			if (param.value.isEmpty()) ts << "# ";
 			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// Audio channel parameters...
 		int iPort = 0;
-		QListIterator<qsamplerDevicePort *> iter(device.ports());
+		QListIterator<DevicePort *> iter(device.ports());
 		while (iter.hasNext()) {
-			qsamplerDevicePort *pPort = iter.next();
-			qsamplerDeviceParamMap::ConstIterator portParam;
+			DevicePort *pPort = iter.next();
+			DeviceParamMap::ConstIterator portParam;
 			for (portParam = pPort->params().begin();
 					portParam != pPort->params().end();
 						++portParam) {
-				const qsamplerDeviceParam& param = portParam.value();
+				const DeviceParam& param = portParam.value();
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
 					<< " " << iPort << " " << portParam.key()
@@ -919,33 +920,33 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 
 	// MIDI device mapping.
 	QMap<int, int> midiDeviceMap;
-	piDeviceIDs = qsamplerDevice::getDevices(m_pClient, qsamplerDevice::Midi);
+	piDeviceIDs = Device::getDevices(m_pClient, Device::Midi);
 	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
 		ts << endl;
-		qsamplerDevice device(qsamplerDevice::Midi, piDeviceIDs[iDevice]);
+		Device device(Device::Midi, piDeviceIDs[iDevice]);
 		// MIDI device specification...
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
-		qsamplerDeviceParamMap::ConstIterator deviceParam;
+		DeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
 				deviceParam != device.params().end();
 					++deviceParam) {
-			const qsamplerDeviceParam& param = deviceParam.value();
+			const DeviceParam& param = deviceParam.value();
 			if (param.value.isEmpty()) ts << "# ";
 			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
 		ts << endl;
 		// MIDI port parameters...
 		int iPort = 0;
-		QListIterator<qsamplerDevicePort *> iter(device.ports());
+		QListIterator<DevicePort *> iter(device.ports());
 		while (iter.hasNext()) {
-			qsamplerDevicePort *pPort = iter.next();
-			qsamplerDeviceParamMap::ConstIterator portParam;
+			DevicePort *pPort = iter.next();
+			DeviceParamMap::ConstIterator portParam;
 			for (portParam = pPort->params().begin();
 					portParam != pPort->params().end();
 						++portParam) {
-				const qsamplerDeviceParam& param = portParam.value();
+				const DeviceParam& param = portParam.value();
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
 				<< " " << iPort << " " << portParam.key()
@@ -1037,7 +1038,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		ChannelStrip* pChannelStrip
 			= static_cast<ChannelStrip *> (wlist.at(iChannel));
 		if (pChannelStrip) {
-			qsamplerChannel *pChannel = pChannelStrip->channel();
+			Channel *pChannel = pChannelStrip->channel();
 			if (pChannel) {
 				ts << "# " << tr("Channel") << " " << iChannel << endl;
 				ts << "ADD CHANNEL" << endl;
@@ -1069,7 +1070,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				ts << "LOAD INSTRUMENT NON_MODAL '"
 					<< pChannel->instrumentFile() << "' "
 					<< pChannel->instrumentNr() << " " << iChannel << endl;
-				qsamplerChannelRoutingMap::ConstIterator audioRoute;
+				ChannelRoutingMap::ConstIterator audioRoute;
 				for (audioRoute = pChannel->audioRouting().begin();
 						audioRoute != pChannel->audioRouting().end();
 							++audioRoute) {
@@ -1314,7 +1315,7 @@ void MainForm::editAddChannel (void)
 		return;
 
 	// Just create the channel instance...
-	qsamplerChannel *pChannel = new qsamplerChannel();
+	Channel *pChannel = new Channel();
 	if (pChannel == NULL)
 		return;
 
@@ -1352,7 +1353,7 @@ void MainForm::editRemoveChannel (void)
 	if (pChannelStrip == NULL)
 		return;
 
-	qsamplerChannel *pChannel = pChannelStrip->channel();
+	Channel *pChannel = pChannelStrip->channel();
 	if (pChannel == NULL)
 		return;
 
@@ -1924,7 +1925,7 @@ void MainForm::updateSession (void)
 		for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
 			// Check if theres already a channel strip for this one...
 			if (!channelStrip(piChannelIDs[iChannel]))
-				createChannelStrip(new qsamplerChannel(piChannelIDs[iChannel]));
+				createChannelStrip(new Channel(piChannelIDs[iChannel]));
 		}
 		m_pWorkspace->setUpdatesEnabled(true);
 	}
@@ -2176,7 +2177,7 @@ void MainForm::updateMessagesCapture (void)
 // qsamplerMainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
-ChannelStrip* MainForm::createChannelStrip ( qsamplerChannel *pChannel )
+ChannelStrip* MainForm::createChannelStrip ( Channel *pChannel )
 {
 	if (m_pClient == NULL || pChannel == NULL)
 		return NULL;
@@ -2248,7 +2249,7 @@ ChannelStrip* MainForm::channelStrip ( int iChannelID )
 		ChannelStrip* pChannelStrip
 			= static_cast<ChannelStrip*> (wlist.at(iChannel));
 		if (pChannelStrip) {
-			qsamplerChannel *pChannel = pChannelStrip->channel();
+			Channel *pChannel = pChannelStrip->channel();
 			if (pChannel && pChannel->channelID() == iChannelID)
 				return pChannelStrip;
 		}
@@ -2530,7 +2531,7 @@ lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/,
 	// as this is run under some other thread context.
 	// A custom event must be posted here...
 	QApplication::postEvent(pMainForm,
-		new qsamplerCustomEvent(event, pchData, cchData));
+		new CustomEvent(event, pchData, cchData));
 
 	return LSCP_OK;
 }

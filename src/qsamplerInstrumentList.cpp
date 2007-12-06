@@ -53,8 +53,8 @@ using namespace QSampler;
 
 
 //-------------------------------------------------------------------------
-// MidiInstrumentsModel - data model for MIDI prog mappings (used for QTableView)
-//
+// QSampler::MidiInstrumentsModel - data model for MIDI prog mappings
+//                                  (used for QTableView)
 
 MidiInstrumentsModel::MidiInstrumentsModel ( QObject* pParent)
 	: QAbstractTableModel(pParent) 
@@ -89,7 +89,7 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 	if (!index.isValid())
 		return QVariant();
 
-	const qsamplerInstrument* pInstr = NULL;
+	const Instrument* pInstr = NULL;
 
 	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
 		int n = 0;
@@ -162,7 +162,7 @@ QVariant MidiInstrumentsModel::headerData (
 }
 
 
-qsamplerInstrument* MidiInstrumentsModel::addInstrument (
+Instrument* MidiInstrumentsModel::addInstrument (
 	int iMap, int iBank, int iProg )
 {
 	// Check it there's already one instrument item
@@ -186,8 +186,8 @@ qsamplerInstrument* MidiInstrumentsModel::addInstrument (
 		}
 	}
 
-	m_instruments[iMap].insert(i, qsamplerInstrument(iMap, iBank, iProg));
-	qsamplerInstrument& instr = m_instruments[iMap][i];
+	m_instruments[iMap].insert(i, Instrument(iMap, iBank, iProg));
+	Instrument& instr = m_instruments[iMap][i];
 	if (!instr.getInstrument())
 		m_instruments[iMap].removeAt(i);
 
@@ -196,7 +196,7 @@ qsamplerInstrument* MidiInstrumentsModel::addInstrument (
 
 
 void MidiInstrumentsModel::removeInstrument (
-	const qsamplerInstrument& instrument )
+	const Instrument& instrument )
 {
 	const int iMap  = instrument.map();
 	const int iBank = instrument.bank();
@@ -212,7 +212,7 @@ void MidiInstrumentsModel::removeInstrument (
 
 
 // Reposition the instrument in the model (called when map/bank/prg changed)
-void MidiInstrumentsModel::resort ( const qsamplerInstrument& instrument )
+void MidiInstrumentsModel::resort ( const Instrument& instrument )
 {
 	const int iMap  = instrument.map();
 	const int iBank = instrument.bank();
@@ -276,9 +276,9 @@ void MidiInstrumentsModel::refresh (void)
 
 
 //-------------------------------------------------------------------------
-// MidiInstrumentsDelegate - table cell renderer for MIDI prog mappings
-// (doesn't actually do anything ATM, but is already there for a future
-// cell editor widget implementation)
+// QSampler::MidiInstrumentsDelegate - table cell renderer for MIDI prog
+// mappings (doesn't actually do anything ATM, but is already there for a
+// future cell editor widget implementation)
 
 MidiInstrumentsDelegate::MidiInstrumentsDelegate ( QObject* pParent )
 	: QItemDelegate(pParent)

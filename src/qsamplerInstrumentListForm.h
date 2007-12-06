@@ -32,6 +32,10 @@ class QComboBox;
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::InstrumentListForm -- Instrument map list form interface.
+//
+
 class InstrumentListForm : public QMainWindow
 {
 	Q_OBJECT

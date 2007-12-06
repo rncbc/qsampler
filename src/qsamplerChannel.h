@@ -31,25 +31,26 @@
 
 #include "qsamplerOptions.h"
 
-class qsamplerDevice;
+namespace QSampler {
 
+class Device;
 
 // Typedef'd QMap.
-typedef QMap<int, int> qsamplerChannelRoutingMap;
+typedef QMap<int, int> ChannelRoutingMap;
 
 
 //-------------------------------------------------------------------------
-// qsamplerChannel - Sampler channel structure.
+// QSampler::Channel - Sampler channel structure.
 //
 
-class qsamplerChannel
+class Channel
 {
 public:
 
 	// Constructor.
-	qsamplerChannel(int iChannelID = -1);
+	Channel(int iChannelID = -1);
 	// Default destructor.
-	~qsamplerChannel();
+	~Channel();
 
 	// Add/remove sampler channel methods.
 	bool     addChannel();
@@ -121,7 +122,7 @@ public:
 	int      audioChannel(int iAudioOut) const;
 	bool     setAudioChannel(int iAudioOut, int iAudioIn);
 	// The audio routing map itself.
-	const qsamplerChannelRoutingMap& audioRouting() const;
+	const ChannelRoutingMap& audioRouting() const;
 
 	// Istrument name remapper.
 	void     updateInstrumentName();
@@ -185,21 +186,19 @@ private:
 	bool    m_bSolo;
 
 	// The audio routing mapping.
-	qsamplerChannelRoutingMap m_audioRouting;
+	ChannelRoutingMap m_audioRouting;
 };
 
 
 //-------------------------------------------------------------------------
-// ChannelRoutingModel - data model for audio routing (used for QTableView)
+// QSampler::ChannelRoutingModel - data model for audio routing
+//                                 (used for QTableView)
 //
 
 struct ChannelRoutingItem {
 	QStringList options;
 	int         selection;
 };
-
-// so we can use it i.e. through QVariant
-Q_DECLARE_METATYPE(ChannelRoutingItem)
 
 class ChannelRoutingModel : public QAbstractTableModel
 {
@@ -219,24 +218,24 @@ public:
 		int role = Qt::DisplayRole) const;
 
 	// own methods
-	qsamplerChannelRoutingMap routingMap() const { return m_routing; }
+	ChannelRoutingMap routingMap() const { return m_routing; }
 
 	void clear() { m_routing.clear(); }
 
 public slots:
 
-	void refresh(qsamplerDevice *pDevice,
-		const qsamplerChannelRoutingMap& routing);
+	void refresh(Device *pDevice,
+		const ChannelRoutingMap& routing);
 
 private:
 
-	qsamplerDevice *m_pDevice;
-	qsamplerChannelRoutingMap m_routing;
+	Device *m_pDevice;
+	ChannelRoutingMap m_routing;
 };
 
 
 //-------------------------------------------------------------------------
-// ChannelRoutingDelegate - table cell renderer for audio routing
+// QSampler::ChannelRoutingDelegate - table cell renderer for audio routing
 //
 
 class ChannelRoutingDelegate : public QItemDelegate
@@ -256,6 +255,12 @@ public:
 		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
+} // namespace QSampler
+
+// So we can use it i.e. through QVariant
+Q_DECLARE_METATYPE(QSampler::ChannelRoutingItem)
+
 #endif  // __qsamplerChannel_h
+
 
 // end of qsamplerChannel.h

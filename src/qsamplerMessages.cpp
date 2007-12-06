@@ -35,6 +35,9 @@
 #include <unistd.h>
 #endif
 
+
+namespace QSampler {
+
 // The default maximum number of message lines.
 #define QSAMPLER_MESSAGES_MAXLINES  1000
 
@@ -43,13 +46,12 @@
 #define QSAMPLER_MESSAGES_FDREAD    0
 #define QSAMPLER_MESSAGES_FDWRITE   1
 
-
 //-------------------------------------------------------------------------
-// qsamplerMessages - Messages log dockable window.
+// QSampler::Messages - Messages log dockable window.
 //
 
 // Constructor.
-qsamplerMessages::qsamplerMessages ( QWidget *pParent )
+Messages::Messages ( QWidget *pParent )
     : QDockWidget(pParent)
 {
 	// Surely a name is crucial (e.g.for storing geometry settings)
@@ -91,7 +93,7 @@ qsamplerMessages::qsamplerMessages ( QWidget *pParent )
 
 
 // Destructor.
-qsamplerMessages::~qsamplerMessages (void)
+Messages::~Messages (void)
 {
     // No more notifications.
     if (m_pStdoutNotifier)
@@ -101,7 +103,7 @@ qsamplerMessages::~qsamplerMessages (void)
 }
 
 
-void qsamplerMessages::showEvent (QShowEvent* event)
+void Messages::showEvent (QShowEvent* event)
 {
     QDockWidget::showEvent(event);
     emit visibilityChanged(isVisible());
@@ -109,7 +111,7 @@ void qsamplerMessages::showEvent (QShowEvent* event)
 
 
 // Own stdout/stderr socket notifier slot.
-void qsamplerMessages::stdoutNotify ( int fd )
+void Messages::stdoutNotify ( int fd )
 {
 #if !defined(WIN32)
     char achBuffer[1024];
@@ -123,7 +125,7 @@ void qsamplerMessages::stdoutNotify ( int fd )
 
 
 // Stdout buffer handler -- now splitted by complete new-lines...
-void qsamplerMessages::appendStdoutBuffer ( const QString& s )
+void Messages::appendStdoutBuffer ( const QString& s )
 {
 	m_sStdoutBuffer.append(s);
 
@@ -140,7 +142,7 @@ void qsamplerMessages::appendStdoutBuffer ( const QString& s )
 
 
 // Stdout flusher -- show up any unfinished line...
-void qsamplerMessages::flushStdoutBuffer (void)
+void Messages::flushStdoutBuffer (void)
 {
     if (!m_sStdoutBuffer.isEmpty()) {
         appendMessagesText(m_sStdoutBuffer);
@@ -150,12 +152,12 @@ void qsamplerMessages::flushStdoutBuffer (void)
 
 
 // Stdout capture accessors.
-bool qsamplerMessages::isCaptureEnabled (void)
+bool Messages::isCaptureEnabled (void)
 {
     return (bool) (m_pStdoutNotifier != NULL);
 }
 
-void qsamplerMessages::setCaptureEnabled ( bool bCapture )
+void Messages::setCaptureEnabled ( bool bCapture )
 {
     // Flush current buffer.
     flushStdoutBuffer();
@@ -190,24 +192,24 @@ void qsamplerMessages::setCaptureEnabled ( bool bCapture )
 
 
 // Message font accessors.
-QFont qsamplerMessages::messagesFont (void)
+QFont Messages::messagesFont (void)
 {
     return m_pTextView->font();
 }
 
-void qsamplerMessages::setMessagesFont( const QFont& font )
+void Messages::setMessagesFont( const QFont& font )
 {
     m_pTextView->setFont(font);
 }
 
 
 // Maximum number of message lines accessors.
-int qsamplerMessages::messagesLimit (void)
+int Messages::messagesLimit (void)
 {
     return m_iMessagesLimit;
 }
 
-void qsamplerMessages::setMessagesLimit ( int iMessagesLimit )
+void Messages::setMessagesLimit ( int iMessagesLimit )
 {
     m_iMessagesLimit = iMessagesLimit;
     m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
@@ -215,19 +217,19 @@ void qsamplerMessages::setMessagesLimit ( int iMessagesLimit )
 
 
 // The main utility methods.
-void qsamplerMessages::appendMessages ( const QString& s )
+void Messages::appendMessages ( const QString& s )
 {
     appendMessagesColor(s, "#999999");
 }
 
-void qsamplerMessages::appendMessagesColor ( const QString& s, const QString &c )
+void Messages::appendMessagesColor ( const QString& s, const QString &c )
 {
 	appendMessagesText("<font color=\"" + c + "\">"
 		+ QTime::currentTime().toString("hh:mm:ss.zzz")
 		+ ' ' + s + "</font>");
 }
 
-void qsamplerMessages::appendMessagesText ( const QString& s )
+void Messages::appendMessagesText ( const QString& s )
 {
     // Check for message line limit...
     if (m_iMessagesLines > m_iMessagesHigh) {
@@ -252,11 +254,13 @@ void qsamplerMessages::appendMessagesText ( const QString& s )
 
 
 // History reset.
-void qsamplerMessages::clear (void)
+void Messages::clear (void)
 {
 	m_iMessagesLines = 0;
 	m_pTextView->clear();
 }
+
+} // namespace QSampler
 
 
 // end of qsamplerMessages.cpp

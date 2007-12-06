@@ -30,10 +30,11 @@
 
 #include "qsamplerInstrument.h"
 
+namespace QSampler {
 
 //-------------------------------------------------------------------------
-// MidiInstrumentsModel - data model for MIDI prog mappings (used for QTableView)
-//
+// QSampler::MidiInstrumentsModel - data model for MIDI prog mappings
+//                                  (used for QTableView)
 
 class MidiInstrumentsModel : public QAbstractTableModel
 {
@@ -55,11 +56,11 @@ public:
 	QAbstractTableModel::reset;
 
 	// Own methods
-	qsamplerInstrument* addInstrument(int iMap = 0,
+	Instrument* addInstrument(int iMap = 0,
 		int iBank = -1, int iProg = -1);
-	void removeInstrument(const qsamplerInstrument& instrument);
+	void removeInstrument(const Instrument& instrument);
 
-	void resort(const qsamplerInstrument& instrument);
+	void resort(const Instrument& instrument);
 
 	// Map selector.
 	void setMidiMap(int iMidiMap);
@@ -77,7 +78,7 @@ public slots:
 
 private:
 
-	typedef QMap<int, QList<qsamplerInstrument> > InstrumentsMap;
+	typedef QMap<int, QList<Instrument> > InstrumentsMap;
 
 	InstrumentsMap m_instruments;
 
@@ -87,9 +88,9 @@ private:
 
 
 //-------------------------------------------------------------------------
-// MidiInstrumentsDelegate - table cell renderer for MIDI prog mappings
-// (doesn't actually do anything ATM, but is already there for a future
-// cell editor widget implementation)
+// QSampler::MidiInstrumentsDelegate - table cell renderer for MIDI prog
+// mappings (doesn't actually do anything ATM, but is already there for
+// a future cell editor widget implementation)
 
 class MidiInstrumentsDelegate : public QItemDelegate
 {
@@ -110,6 +111,7 @@ public:
 		const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
+} // namespace QSampler
 
 #endif  // __qsamplerInstrumentList_h
 
