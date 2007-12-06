@@ -901,7 +901,7 @@ bool DevicePort::setParam ( const QString& sParam,
 DeviceItem::DeviceItem ( QTreeWidget* pTreeWidget,
 	Device::DeviceType deviceType )
 	: QTreeWidgetItem(pTreeWidget, QSAMPLER_DEVICE_ITEM),
-	m_device(deviceType)
+		m_device(deviceType)
 {
 	switch(m_device.deviceType()) {
 	case Device::Audio:
@@ -924,7 +924,7 @@ DeviceItem::DeviceItem ( QTreeWidgetItem* pItem,
 	Device::DeviceType deviceType,
 	int iDeviceID )
 	: QTreeWidgetItem(pItem, QSAMPLER_DEVICE_ITEM),
-	m_device(deviceType, iDeviceID)
+		m_device(deviceType, iDeviceID)
 {
 	switch(m_device.deviceType()) {
 	case Device::Audio:
@@ -1217,19 +1217,19 @@ void DeviceParamDelegate::setModelData ( QWidget *pEditor,
 		DeviceParameterRow r = index.model()->data(index,
 			Qt::DisplayRole).value<DeviceParameterRow> ();
 		if (pEditor->metaObject()->className() == QString("QCheckBox")) {
-			QCheckBox* pCheckBox = static_cast<QCheckBox*> (pEditor);
+			QCheckBox *pCheckBox = static_cast<QCheckBox *> (pEditor);
 			pModel->setData(index, QVariant(pCheckBox->checkState() == Qt::Checked));
 		} else if (pEditor->metaObject()->className() == QString("QComboBox")) {
-			QComboBox* pComboBox = static_cast<QComboBox*> (pEditor);
+			QComboBox *pComboBox = static_cast<QComboBox *> (pEditor);
 			pModel->setData(index, pComboBox->currentText());
 		} else if (pEditor->metaObject()->className() == QString("QSpinBox")) {
-			QSpinBox* pSpinBox = static_cast<QSpinBox*> (pEditor);
+			QSpinBox *pSpinBox = static_cast<QSpinBox *> (pEditor);
 			pModel->setData(index, pSpinBox->value());
 		} else if (pEditor->metaObject()->className() == QString("QLineEdit")) {
-			QLineEdit* pLineEdit = static_cast<QLineEdit*> (pEditor);
+			QLineEdit *pLineEdit = static_cast<QLineEdit *> (pEditor);
 			pModel->setData(index, pLineEdit->text());
 		} else if (pEditor->metaObject()->className() == QString("QLabel")) {
-			QLabel* pLabel = static_cast<QLabel*> (pEditor);
+			QLabel *pLabel = static_cast<QLabel *> (pEditor);
 			pModel->setData(index, pLabel->text());
 		}
 	}

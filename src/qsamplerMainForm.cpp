@@ -2414,8 +2414,9 @@ void MainForm::startServer (void)
 
 	// Setup stdout/stderr capture...
 //	if (m_pOptions->bStdoutCapture) {
-		//m_pServer->setProcessChannelMode(
-		//	QProcess::StandardOutput);
+#if QT_VERSION >= 0x040200
+		m_pServer->setProcessChannelMode(QProcess::ForwardedChannels);
+#endif
 		QObject::connect(m_pServer,
 			SIGNAL(readyReadStandardOutput()),
 			SLOT(readServerStdout()));
@@ -2426,7 +2427,7 @@ void MainForm::startServer (void)
 
 	// The unforgiveable signal communication...
 	QObject::connect(m_pServer,
-		SIGNAL(finished(int,QProcess::ExitStatus)),
+		SIGNAL(finished(int, QProcess::ExitStatus)),
 		SLOT(processServerExit()));
 
 	// Build process arguments...
@@ -2465,18 +2466,23 @@ void MainForm::stopServer (void)
 	// And try to stop server.
 	if (m_pServer) {
 		appendMessages(tr("Server is stopping..."));
-		if (m_pServer->state() == QProcess::Running)
+		if (m_pServer->state() == QProcess::Running) {
+#if defined(WIN32)
+			// Try harder...
+			m_pServer->kill();
+#else
+			// Try softly...
 			m_pServer->terminate();
-	}
+#endif
+		}
+	}	// Do final processing anyway.
+	else processServerExit();
 
 	// Give it some time to terminate gracefully and stabilize...
 	QTime t;
 	t.start();
 	while (t.elapsed() < QSAMPLER_TIMER_MSECS)
 		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-
-	// Do final processing anyway.
-	processServerExit();
 }
 
 
@@ -2499,14 +2505,20 @@ void MainForm::processServerExit (void)
 		m_pMessages->flushStdoutBuffer();
 
 	if (m_pServer) {
+		if (m_pServer->state() != QProcess::NotRunning) {
+			appendMessages(tr("Server is being forced..."));
+			// Force final server shutdown...
+			m_pServer->kill();
+			// Give it some time to terminate gracefully and stabilize...
+			QTime t;
+			t.start();
+			while (t.elapsed() < QSAMPLER_TIMER_MSECS)
+				QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+		}
 		// Force final server shutdown...
 		appendMessages(
 			tr("Server was stopped with exit status %1.")
 			.arg(m_pServer->exitStatus()));
-		m_pServer->terminate();
-		if (!m_pServer->waitForFinished(2000))
-			m_pServer->kill();
-		// Destroy it.
 		delete m_pServer;
 		m_pServer = NULL;
 	}
