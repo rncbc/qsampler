@@ -32,6 +32,10 @@ class QDragEnterEvent;
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::ChannelStrip -- Channel strip form interface.
+//
+
 class ChannelStrip : public QWidget
 {
 	Q_OBJECT
@@ -41,9 +45,9 @@ public:
 	ChannelStrip(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
 	~ChannelStrip();
 
-	void setup(qsamplerChannel *pChannel);
+	void setup(Channel *pChannel);
 
-	qsamplerChannel *channel() const;
+	Channel *channel() const;
 
 	void setDisplayFont(const QFont& font);
 	QFont displayFont() const;
@@ -86,7 +90,7 @@ private:
 
 	Ui::qsamplerChannelStrip m_ui;
 
-	qsamplerChannel* m_pChannel;
+	Channel* m_pChannel;
 	int m_iDirtyChange;
 	int m_iErrorCount;
 

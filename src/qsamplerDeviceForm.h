@@ -30,7 +30,9 @@
 
 namespace QSampler {
 
-class MainForm;
+//-------------------------------------------------------------------------
+// QSampler::DeviceForm -- Device form interface.
+//
 
 class DeviceForm : public QDialog
 {
@@ -41,9 +43,9 @@ public:
 	DeviceForm(QWidget *pParent = NULL, Qt::WindowFlags wflags = 0);
 	~DeviceForm();
 
-	void setDeviceTypeMode(qsamplerDevice::DeviceType deviceType);
+	void setDeviceTypeMode(Device::DeviceType deviceType);
 	void setDriverName(const QString& sDriverName);
-	void setDevice(qsamplerDevice *pDevice);
+	void setDevice(Device *pDevice);
 
 public slots:
 
@@ -88,10 +90,10 @@ private:
 	int m_iDirtySetup;
 	int m_iDirtyCount;
 	bool m_bNewDevice;
-	qsamplerDevice::DeviceType m_deviceType;
-	qsamplerDevice::DeviceType m_deviceTypeMode;
-	qsamplerDeviceItem *m_pAudioItems;
-	qsamplerDeviceItem *m_pMidiItems;
+	Device::DeviceType m_deviceType;
+	Device::DeviceType m_deviceTypeMode;
+	DeviceItem *m_pAudioItems;
+	DeviceItem *m_pMidiItems;
 };
 
 } // namespace QSampler

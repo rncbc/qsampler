@@ -30,6 +30,10 @@
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::OptionsForm -- Options form interface.
+//
+
 class OptionsForm : public QDialog
 {
 	Q_OBJECT
@@ -39,7 +43,7 @@ public:
 	OptionsForm(QWidget *pParent = NULL);
 	~OptionsForm();
 
-	void setup(qsamplerOptions* pOptions);
+	void setup(Options* pOptions);
 
 protected slots:
 
@@ -55,7 +59,7 @@ private:
 
 	Ui::qsamplerOptionsForm m_ui;
 
-	qsamplerOptions* m_pOptions;
+	Options* m_pOptions;
 	int m_iDirtySetup;
 	int m_iDirtyCount;
 };

@@ -30,19 +30,20 @@
 class QWidget;
 class QComboBox;
 
+namespace QSampler {
 
 //-------------------------------------------------------------------------
-// qsamplerOptions - Prototype settings class.
+// QSampler::Options - Prototype settings class.
 //
 
-class qsamplerOptions
+class Options
 {
 public:
 
 	// Constructor.
-	qsamplerOptions();
+	Options();
 	// Default destructor.
-	~qsamplerOptions();
+	~Options();
 
 	// The settings object accessor.
 	QSettings& settings();
@@ -113,6 +114,8 @@ private:
 	// Settings member variables.
 	QSettings m_settings;
 };
+
+} // namespace QSampler
 
 
 #endif  // __qsamplerOptions_h

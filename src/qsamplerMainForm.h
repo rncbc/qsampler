@@ -27,23 +27,24 @@
 
 #include <lscp/client.h>
 
-class qsamplerOptions;
-class qsamplerMessages;
-class qsamplerChannel;
-
 class QProcess;
 class QWorkspace;
 class QSpinBox;
 class QSlider;
 class QLabel;
 
-
 namespace QSampler {
 
+class Options;
+class Messages;
+class Channel;
 class ChannelStrip;
 class DeviceForm;
 class InstrumentListForm;
 
+//-------------------------------------------------------------------------
+// QSampler::MainForm -- Main window form implementation.
+//
 
 class MainForm : public QMainWindow
 {
@@ -54,9 +55,9 @@ public:
 	MainForm(QWidget *pParent = NULL);
 	~MainForm();
 
-	void setup(qsamplerOptions* pOptions);
+	void setup(Options* pOptions);
 
-	qsamplerOptions* options() const;
+	Options* options() const;
 	lscp_client_t* client() const;
 
 	QString sessionName(const QString& sFilename);
@@ -67,7 +68,7 @@ public:
 	void appendMessagesError(const QString& s);
 	void appendMessagesClient(const QString& s);
 
-	ChannelStrip* createChannelStrip(qsamplerChannel *pChannel);
+	ChannelStrip* createChannelStrip(Channel *pChannel);
 	ChannelStrip* activeChannelStrip();
 	ChannelStrip* channelStripAt(int iChannel);
 	ChannelStrip* channelStrip(int iChannelID);
@@ -153,8 +154,8 @@ private:
 
 	Ui::qsamplerMainForm m_ui;
 
-	qsamplerOptions *m_pOptions;
-	qsamplerMessages *m_pMessages;
+	Options *m_pOptions;
+	Messages *m_pMessages;
 	QWorkspace *m_pWorkspace;
 	QString m_sFilename;
 	int m_iUntitled;

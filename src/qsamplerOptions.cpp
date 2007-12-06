@@ -33,12 +33,14 @@
 #endif
 
 
+namespace QSampler {
+
 //-------------------------------------------------------------------------
-// qsamplerOptions - Prototype settings structure.
+// QSampler::Options - Prototype settings structure.
 //
 
 // Constructor.
-qsamplerOptions::qsamplerOptions (void)
+Options::Options (void)
 	: m_settings(QSAMPLER_DOMAIN, QSAMPLER_TITLE)
 {
 	// Begin into general options group.
@@ -116,7 +118,7 @@ qsamplerOptions::qsamplerOptions (void)
 
 
 // Default Destructor.
-qsamplerOptions::~qsamplerOptions (void)
+Options::~Options (void)
 {
 	// Make program version available in the future.
 	m_settings.beginGroup("/Program");
@@ -191,7 +193,7 @@ qsamplerOptions::~qsamplerOptions (void)
 // Settings accessor.
 //
 
-QSettings& qsamplerOptions::settings (void)
+QSettings& Options::settings (void)
 {
 	return m_settings;
 }
@@ -202,7 +204,7 @@ QSettings& qsamplerOptions::settings (void)
 //
 
 // Help about command line options.
-void qsamplerOptions::print_usage ( const char *arg0 )
+void Options::print_usage ( const char *arg0 )
 {
 	QTextStream out(stderr);
 	out << QObject::tr("Usage: %1 [options] [session-file]\n\n"
@@ -218,7 +220,7 @@ void qsamplerOptions::print_usage ( const char *arg0 )
 
 
 // Parse command line arguments into m_settings.
-bool qsamplerOptions::parse_args ( int argc, char **argv )
+bool Options::parse_args ( int argc, char **argv )
 {
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
@@ -297,7 +299,7 @@ bool qsamplerOptions::parse_args ( int argc, char **argv )
 //---------------------------------------------------------------------------
 // Widget geometry persistence helper methods.
 
-void qsamplerOptions::loadWidgetGeometry ( QWidget *pWidget )
+void Options::loadWidgetGeometry ( QWidget *pWidget )
 {
 	// Try to restore old form window positioning.
 	if (pWidget) {
@@ -325,7 +327,7 @@ void qsamplerOptions::loadWidgetGeometry ( QWidget *pWidget )
 }
 
 
-void qsamplerOptions::saveWidgetGeometry ( QWidget *pWidget )
+void Options::saveWidgetGeometry ( QWidget *pWidget )
 {
 	// Try to save form window position...
 	// (due to X11 window managers ideossincrasies, we better
@@ -348,7 +350,7 @@ void qsamplerOptions::saveWidgetGeometry ( QWidget *pWidget )
 //---------------------------------------------------------------------------
 // Combo box history persistence helper implementation.
 
-void qsamplerOptions::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
+void Options::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 {
 	// Load combobox list from configuration settings file...
 	m_settings.beginGroup("/History/" + pComboBox->objectName());
@@ -371,7 +373,7 @@ void qsamplerOptions::loadComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 }
 
 
-void qsamplerOptions::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
+void Options::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 {
 	// Add current text as latest item...
 	const QString& sCurrentText = pComboBox->currentText();
@@ -399,6 +401,8 @@ void qsamplerOptions::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 	}
 	m_settings.endGroup();
 }
+
+} // namespace QSampler
 
 
 // end of qsamplerOptions.cpp

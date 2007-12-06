@@ -31,6 +31,10 @@
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::OptionsForm -- Options form implementation.
+//
+
 OptionsForm::OptionsForm ( QWidget* pParent )
 	: QDialog(pParent)
 {
@@ -123,7 +127,7 @@ OptionsForm::~OptionsForm()
 }
 
 // Populate (setup) dialog controls from settings descriptors.
-void OptionsForm::setup ( qsamplerOptions *pOptions )
+void OptionsForm::setup ( Options *pOptions )
 {
 	// Set reference descriptor.
 	m_pOptions = pOptions;

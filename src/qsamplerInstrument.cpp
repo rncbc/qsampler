@@ -28,14 +28,14 @@
 #include "qsamplerMainForm.h"
 
 
-using namespace QSampler;
+namespace QSampler {
 
 //-------------------------------------------------------------------------
-// qsamplerInstrument - MIDI instrument map structure.
+// QSampler::Instrument - MIDI instrument map structure.
 //
 
 // Constructor.
-qsamplerInstrument::qsamplerInstrument ( int iMap, int iBank, int iProg )
+Instrument::Instrument ( int iMap, int iBank, int iProg )
 {
 	m_iMap          = iMap;
 	m_iBank         = iBank;
@@ -46,119 +46,119 @@ qsamplerInstrument::qsamplerInstrument ( int iMap, int iBank, int iProg )
 }
 
 // Default destructor.
-qsamplerInstrument::~qsamplerInstrument (void)
+Instrument::~Instrument (void)
 {
 }
 
 
 // Instrument accessors.
-void qsamplerInstrument::setMap ( int iMap )
+void Instrument::setMap ( int iMap )
 {
 	m_iMap = iMap;
 }
 
-int qsamplerInstrument::map (void) const
+int Instrument::map (void) const
 {
 	return m_iMap;
 }
 
 
-void qsamplerInstrument::setBank ( int iBank )
+void Instrument::setBank ( int iBank )
 {
 	m_iBank = iBank;
 }
 
-int qsamplerInstrument::bank (void) const
+int Instrument::bank (void) const
 {
 	return m_iBank;
 }
 
 
-void qsamplerInstrument::setProg ( int iProg )
+void Instrument::setProg ( int iProg )
 {
 	m_iProg = iProg;
 }
 
-int qsamplerInstrument::prog (void) const
+int Instrument::prog (void) const
 {
 	return m_iProg;
 }
 
 
-void qsamplerInstrument::setName ( const QString& sName )
+void Instrument::setName ( const QString& sName )
 {
 	m_sName = sName;
 }
 
-const QString& qsamplerInstrument::name (void) const
+const QString& Instrument::name (void) const
 {
 	return m_sName;
 }
 
 
-void qsamplerInstrument::setEngineName ( const QString& sEngineName )
+void Instrument::setEngineName ( const QString& sEngineName )
 {
 	m_sEngineName = sEngineName;
 }
 
-const QString& qsamplerInstrument::engineName (void) const
+const QString& Instrument::engineName (void) const
 {
 	return m_sEngineName;
 }
 
 
-void qsamplerInstrument::setInstrumentFile ( const QString& sInstrumentFile )
+void Instrument::setInstrumentFile ( const QString& sInstrumentFile )
 {
 	m_sInstrumentFile = sInstrumentFile;
 }
 
-const QString& qsamplerInstrument::instrumentFile (void) const
+const QString& Instrument::instrumentFile (void) const
 {
 	return m_sInstrumentFile;
 }
 
 
-const QString& qsamplerInstrument::instrumentName (void) const
+const QString& Instrument::instrumentName (void) const
 {
 	return m_sInstrumentName;
 }
 
 
-void qsamplerInstrument::setInstrumentNr ( int iInstrumentNr )
+void Instrument::setInstrumentNr ( int iInstrumentNr )
 {
 	m_iInstrumentNr = iInstrumentNr;
 }
 
-int qsamplerInstrument::instrumentNr (void) const
+int Instrument::instrumentNr (void) const
 {
 	return m_iInstrumentNr;
 }
 
 
-void qsamplerInstrument::setVolume ( float fVolume )
+void Instrument::setVolume ( float fVolume )
 {
 	m_fVolume = fVolume;
 }
 
-float qsamplerInstrument::volume (void) const
+float Instrument::volume (void) const
 {
 	return m_fVolume;
 }
 
 
-void qsamplerInstrument::setLoadMode ( int iLoadMode )
+void Instrument::setLoadMode ( int iLoadMode )
 {
 	m_iLoadMode = iLoadMode;
 }
 
-int qsamplerInstrument::loadMode (void) const
+int Instrument::loadMode (void) const
 {
 	return m_iLoadMode;
 }
 
 
 // Sync methods.
-bool qsamplerInstrument::mapInstrument (void)
+bool Instrument::mapInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
@@ -214,7 +214,7 @@ bool qsamplerInstrument::mapInstrument (void)
 }
 
 
-bool qsamplerInstrument::unmapInstrument (void)
+bool Instrument::unmapInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
@@ -248,7 +248,7 @@ bool qsamplerInstrument::unmapInstrument (void)
 }
 
 
-bool qsamplerInstrument::getInstrument (void)
+bool Instrument::getInstrument (void)
 {
 #ifdef CONFIG_MIDI_INSTRUMENT
 
@@ -314,7 +314,7 @@ bool qsamplerInstrument::getInstrument (void)
 
 
 // Instrument map name enumerator.
-QStringList qsamplerInstrument::getMapNames (void)
+QStringList Instrument::getMapNames (void)
 {
 	QStringList maps;
 
@@ -342,7 +342,7 @@ QStringList qsamplerInstrument::getMapNames (void)
 }
 
 // Instrument map name enumerator.
-QString qsamplerInstrument::getMapName ( int iMidiMap )
+QString Instrument::getMapName ( int iMidiMap )
 {
 	QString sMapName;
 
@@ -367,5 +367,6 @@ QString qsamplerInstrument::getMapName ( int iMidiMap )
 	return sMapName;
 }
 
+} // namespace QSampler
 
 // end of qsamplerInstrument.cpp

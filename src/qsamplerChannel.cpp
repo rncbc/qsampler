@@ -34,19 +34,19 @@
 #include "gig.h"
 #endif
 
+namespace QSampler {
+
 #define QSAMPLER_INSTRUMENT_MAX 100
 
 #define UNICODE_RIGHT_ARROW	QChar(char(0x92), char(0x21))
 
 
-using namespace QSampler;
-
 //-------------------------------------------------------------------------
-// qsamplerChannel - Sampler channel structure.
+// QSampler::Channel - Sampler channel structure.
 //
 
 // Constructor.
-qsamplerChannel::qsamplerChannel ( int iChannelID )
+Channel::Channel ( int iChannelID )
 {
 	m_iChannelID = iChannelID;
 
@@ -68,13 +68,13 @@ qsamplerChannel::qsamplerChannel ( int iChannelID )
 }
 
 // Default destructor.
-qsamplerChannel::~qsamplerChannel (void)
+Channel::~Channel (void)
 {
 }
 
 
 // Create a new sampler channel, if not already.
-bool qsamplerChannel::addChannel (void)
+bool Channel::addChannel (void)
 {
 	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -99,7 +99,7 @@ bool qsamplerChannel::addChannel (void)
 
 
 // Remove sampler channel.
-bool qsamplerChannel::removeChannel (void)
+bool Channel::removeChannel (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -125,31 +125,31 @@ bool qsamplerChannel::removeChannel (void)
 
 
 // Channel-ID (aka Sammpler-Channel) accessors.
-int qsamplerChannel::channelID (void) const
+int Channel::channelID (void) const
 {
 	return m_iChannelID;
 }
 
-void qsamplerChannel::setChannelID ( int iChannelID )
+void Channel::setChannelID ( int iChannelID )
 {
 	m_iChannelID = iChannelID;
 }
 
 
 // Readable channel name.
-QString qsamplerChannel::channelName (void) const
+QString Channel::channelName (void) const
 {
 	return (m_iChannelID < 0 ? QObject::tr("New Channel") : QObject::tr("Channel %1").arg(m_iChannelID));
 }
 
 
 // Engine name accessors.
-const QString& qsamplerChannel::engineName (void) const
+const QString& Channel::engineName (void) const
 {
 	return m_sEngineName;
 }
 
-bool qsamplerChannel::loadEngine ( const QString& sEngineName )
+bool Channel::loadEngine ( const QString& sEngineName )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -173,31 +173,31 @@ bool qsamplerChannel::loadEngine ( const QString& sEngineName )
 
 
 // Instrument filename accessor.
-const QString& qsamplerChannel::instrumentFile (void) const
+const QString& Channel::instrumentFile (void) const
 {
 	return m_sInstrumentFile;
 }
 
 // Instrument index accessor.
-int qsamplerChannel::instrumentNr (void) const
+int Channel::instrumentNr (void) const
 {
 	return m_iInstrumentNr;
 }
 
 // Instrument name accessor.
-const QString& qsamplerChannel::instrumentName (void) const
+const QString& Channel::instrumentName (void) const
 {
 	return m_sInstrumentName;
 }
 
 // Instrument status accessor.
-int qsamplerChannel::instrumentStatus (void) const
+int Channel::instrumentStatus (void) const
 {
 	return m_iInstrumentStatus;
 }
 
 // Instrument file loader.
-bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
+bool Channel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -229,7 +229,7 @@ bool qsamplerChannel::loadInstrument ( const QString& sInstrumentFile, int iInst
 
 
 // Special instrument file/name/number settler.
-bool qsamplerChannel::setInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
+bool Channel::setInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
 {
 	m_sInstrumentFile = sInstrumentFile;
 	m_iInstrumentNr = iInstrumentNr;
@@ -245,12 +245,12 @@ bool qsamplerChannel::setInstrument ( const QString& sInstrumentFile, int iInstr
 
 
 // MIDI driver type accessors (DEPRECATED).
-const QString& qsamplerChannel::midiDriver (void) const
+const QString& Channel::midiDriver (void) const
 {
 	return m_sMidiDriver;
 }
 
-bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
+bool Channel::setMidiDriver ( const QString& sMidiDriver )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -274,12 +274,12 @@ bool qsamplerChannel::setMidiDriver ( const QString& sMidiDriver )
 
 
 // MIDI device accessors.
-int qsamplerChannel::midiDevice (void) const
+int Channel::midiDevice (void) const
 {
 	return m_iMidiDevice;
 }
 
-bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
+bool Channel::setMidiDevice ( int iMidiDevice )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -302,12 +302,12 @@ bool qsamplerChannel::setMidiDevice ( int iMidiDevice )
 
 
 // MIDI port number accessor.
-int qsamplerChannel::midiPort (void) const
+int Channel::midiPort (void) const
 {
 	return m_iMidiPort;
 }
 
-bool qsamplerChannel::setMidiPort ( int iMidiPort )
+bool Channel::setMidiPort ( int iMidiPort )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -330,12 +330,12 @@ bool qsamplerChannel::setMidiPort ( int iMidiPort )
 
 
 // MIDI channel accessor.
-int qsamplerChannel::midiChannel (void) const
+int Channel::midiChannel (void) const
 {
 	return m_iMidiChannel;
 }
 
-bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
+bool Channel::setMidiChannel ( int iMidiChannel )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -358,12 +358,12 @@ bool qsamplerChannel::setMidiChannel ( int iMidiChannel )
 
 
 // MIDI instrument map accessor.
-int qsamplerChannel::midiMap (void) const
+int Channel::midiMap (void) const
 {
 	return m_iMidiMap;
 }
 
-bool qsamplerChannel::setMidiMap ( int iMidiMap )
+bool Channel::setMidiMap ( int iMidiMap )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -386,12 +386,12 @@ bool qsamplerChannel::setMidiMap ( int iMidiMap )
 
 
 // Audio device accessor.
-int qsamplerChannel::audioDevice (void) const
+int Channel::audioDevice (void) const
 {
 	return m_iAudioDevice;
 }
 
-bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
+bool Channel::setAudioDevice ( int iAudioDevice )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -414,12 +414,12 @@ bool qsamplerChannel::setAudioDevice ( int iAudioDevice )
 
 
 // Audio driver type accessors (DEPRECATED).
-const QString& qsamplerChannel::audioDriver (void) const
+const QString& Channel::audioDriver (void) const
 {
 	return m_sAudioDriver;
 }
 
-bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
+bool Channel::setAudioDriver ( const QString& sAudioDriver )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -443,12 +443,12 @@ bool qsamplerChannel::setAudioDriver ( const QString& sAudioDriver )
 
 
 // Channel volume accessors.
-float qsamplerChannel::volume (void) const
+float Channel::volume (void) const
 {
 	return m_fVolume;
 }
 
-bool qsamplerChannel::setVolume ( float fVolume )
+bool Channel::setVolume ( float fVolume )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -471,12 +471,12 @@ bool qsamplerChannel::setVolume ( float fVolume )
 
 
 // Sampler channel mute state.
-bool qsamplerChannel::channelMute (void) const
+bool Channel::channelMute (void) const
 {
 	return m_bMute;
 }
 
-bool qsamplerChannel::setChannelMute ( bool bMute )
+bool Channel::setChannelMute ( bool bMute )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -501,12 +501,12 @@ bool qsamplerChannel::setChannelMute ( bool bMute )
 
 
 // Sampler channel solo state.
-bool qsamplerChannel::channelSolo (void) const
+bool Channel::channelSolo (void) const
 {
 	return m_bSolo;
 }
 
-bool qsamplerChannel::setChannelSolo ( bool bSolo )
+bool Channel::setChannelSolo ( bool bSolo )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -531,12 +531,12 @@ bool qsamplerChannel::setChannelSolo ( bool bSolo )
 
 
 // Audio routing accessors.
-int qsamplerChannel::audioChannel ( int iAudioOut ) const
+int Channel::audioChannel ( int iAudioOut ) const
 {
 	return m_audioRouting[iAudioOut];
 }
 
-bool qsamplerChannel::setAudioChannel ( int iAudioOut, int iAudioIn )
+bool Channel::setAudioChannel ( int iAudioOut, int iAudioIn )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -561,14 +561,14 @@ bool qsamplerChannel::setAudioChannel ( int iAudioOut, int iAudioIn )
 }
 
 // The audio routing map itself.
-const qsamplerChannelRoutingMap& qsamplerChannel::audioRouting (void) const
+const ChannelRoutingMap& Channel::audioRouting (void) const
 {
 	return m_audioRouting;
 }
 
 
 // Istrument name remapper.
-void qsamplerChannel::updateInstrumentName (void)
+void Channel::updateInstrumentName (void)
 {
 #ifndef CONFIG_INSTRUMENT_NAME
 	m_sInstrumentName = getInstrumentName(m_sInstrumentFile,
@@ -578,7 +578,7 @@ void qsamplerChannel::updateInstrumentName (void)
 
 
 // Update whole channel info state.
-bool qsamplerChannel::updateChannelInfo (void)
+bool Channel::updateChannelInfo (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -672,7 +672,7 @@ bool qsamplerChannel::updateChannelInfo (void)
 
 
 // Reset channel method.
-bool qsamplerChannel::channelReset (void)
+bool Channel::channelReset (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -692,7 +692,7 @@ bool qsamplerChannel::channelReset (void)
 
 
 // Spawn instrument editor method.
-bool qsamplerChannel::editChannel (void)
+bool Channel::editChannel (void)
 {
 #ifdef CONFIG_EDIT_INSTRUMENT
 
@@ -735,7 +735,7 @@ bool qsamplerChannel::editChannel (void)
 
 
 // Channel setup dialog form.
-bool qsamplerChannel::channelSetup ( QWidget *pParent )
+bool Channel::channelSetup ( QWidget *pParent )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
@@ -757,14 +757,14 @@ bool qsamplerChannel::channelSetup ( QWidget *pParent )
 
 
 // Redirected messages output methods.
-void qsamplerChannel::appendMessages( const QString& s ) const
+void Channel::appendMessages( const QString& s ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessages(channelName() + ' ' + s);
 }
 
-void qsamplerChannel::appendMessagesColor( const QString& s,
+void Channel::appendMessagesColor( const QString& s,
 	const QString& c ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
@@ -772,21 +772,21 @@ void qsamplerChannel::appendMessagesColor( const QString& s,
 		pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
 }
 
-void qsamplerChannel::appendMessagesText( const QString& s ) const
+void Channel::appendMessagesText( const QString& s ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesText(channelName() + ' ' + s);
 }
 
-void qsamplerChannel::appendMessagesError( const QString& s ) const
+void Channel::appendMessagesError( const QString& s ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
 		pMainForm->appendMessagesError(channelName() + "\n\n" + s);
 }
 
-void qsamplerChannel::appendMessagesClient( const QString& s ) const
+void Channel::appendMessagesClient( const QString& s ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
@@ -795,7 +795,7 @@ void qsamplerChannel::appendMessagesClient( const QString& s ) const
 
 
 // Context menu event handler.
-void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
+void Channel::contextMenuEvent( QContextMenuEvent *pEvent )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
@@ -804,7 +804,7 @@ void qsamplerChannel::contextMenuEvent( QContextMenuEvent *pEvent )
 
 
 // FIXME: Check whether a given file is an instrument file.
-bool qsamplerChannel::isInstrumentFile ( const QString& sInstrumentFile )
+bool Channel::isInstrumentFile ( const QString& sInstrumentFile )
 {
 	bool bResult = false;
 
@@ -823,7 +823,7 @@ bool qsamplerChannel::isInstrumentFile ( const QString& sInstrumentFile )
 
 
 // Retrieve the instrument list of a instrument file (.gig).
-QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
+QStringList Channel::getInstrumentList( const QString& sInstrumentFile,
 	bool bInstrumentNames )
 {
 	QString sInstrumentName = QFileInfo(sInstrumentFile).fileName();
@@ -859,7 +859,7 @@ QStringList qsamplerChannel::getInstrumentList( const QString& sInstrumentFile,
 
 
 // Retrieve the spacific instrument name of a instrument file (.gig), given its index.
-QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
+QString Channel::getInstrumentName( const QString& sInstrumentFile,
 	int iInstrumentNr, bool bInstrumentNames )
 {
 	QString sInstrumentName;
@@ -899,24 +899,24 @@ QString qsamplerChannel::getInstrumentName( const QString& sInstrumentFile,
 
 
 // Common invalid name-helpers.
-QString qsamplerChannel::noEngineName (void)
+QString Channel::noEngineName (void)
 {
 	return QObject::tr("(No engine)");
 }
 
-QString qsamplerChannel::noInstrumentName (void)
+QString Channel::noInstrumentName (void)
 {
 	return QObject::tr("(No instrument)");
 }
 
-QString qsamplerChannel::loadingInstrument (void) {
+QString Channel::loadingInstrument (void) {
 	return QObject::tr("(Loading instrument...)");
 }
 
 
 //-------------------------------------------------------------------------
-// ChannelRoutingModel - data model for audio routing (used for QTableView)
-//
+// QSampler::ChannelRoutingModel - data model for audio routing
+//                                 (used for QTableView)
 
 ChannelRoutingModel::ChannelRoutingModel ( QObject *pParent )
 	: QAbstractTableModel(pParent), m_pDevice(NULL)
@@ -967,10 +967,10 @@ QVariant ChannelRoutingModel::data ( const QModelIndex &index, int role ) const
 	ChannelRoutingItem item;
 
 	// The common device port item list.
-	qsamplerDevicePortList& ports = m_pDevice->ports();
-	QListIterator<qsamplerDevicePort *> iter(ports);
+	DevicePortList& ports = m_pDevice->ports();
+	QListIterator<DevicePort *> iter(ports);
 	while (iter.hasNext()) {
-		qsamplerDevicePort *pPort = iter.next();
+		DevicePort *pPort = iter.next();
 		item.options.append(
 			m_pDevice->deviceTypeName()
 			+ ' ' + m_pDevice->driverName()
@@ -1002,8 +1002,8 @@ QVariant ChannelRoutingModel::headerData ( int section,
 }
 
 
-void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
-	const qsamplerChannelRoutingMap& routing )
+void ChannelRoutingModel::refresh ( Device *pDevice,
+	const ChannelRoutingMap& routing )
 {
 	m_pDevice = pDevice;
 	m_routing = routing;
@@ -1013,7 +1013,7 @@ void ChannelRoutingModel::refresh ( qsamplerDevice *pDevice,
 
 
 //-------------------------------------------------------------------------
-// ChannelRoutingDelegate - table cell renderer for audio routing
+// QSampler::ChannelRoutingDelegate - table cell renderer for audio routing
 //
 
 ChannelRoutingDelegate::ChannelRoutingDelegate ( QObject *pParent )
@@ -1065,6 +1065,8 @@ void ChannelRoutingDelegate::updateEditorGeometry ( QWidget *pEditor,
 {
 	pEditor->setGeometry(option.rect);
 }
+
+} // namespace QSampler
 
 
 // end of qsamplerChannel.cpp

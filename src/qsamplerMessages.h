@@ -28,21 +28,22 @@
 class QSocketNotifier;
 class QTextEdit;
 
+namespace QSampler {
 
 //-------------------------------------------------------------------------
-// qsamplerMessages - Messages log dockable window.
+// QSampler::Messages - Messages log dockable window.
 //
 
-class qsamplerMessages : public QDockWidget
+class Messages : public QDockWidget
 {
 	Q_OBJECT
 
 public:
 
 	// Constructor.
-	qsamplerMessages(QWidget *pParent);
+	Messages(QWidget *pParent);
 	// Destructor.
-	~qsamplerMessages();
+	~Messages();
 
 	// Stdout/stderr capture accessors.
 	bool isCaptureEnabled();
@@ -96,6 +97,7 @@ private:
 	int              m_fdStdout[2];
 };
 
+} // namespace QSampler
 
 #endif  // __qsamplerMessages_h
 

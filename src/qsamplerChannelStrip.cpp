@@ -47,9 +47,12 @@ static inline long lroundf ( float x )
 
 namespace QSampler {
 
+//-------------------------------------------------------------------------
+// QSampler::ChannelStrip -- Channel strip form implementation.
+//
+
 // Channel strip activation/selection.
 ChannelStrip *ChannelStrip::g_pSelectedStrip = NULL;
-
 
 ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	: QWidget(pParent, wflags)
@@ -113,7 +116,7 @@ void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 			while (iter.hasNext()) {
 				const QString& sFilename = iter.next().toLocalFile();
 				if (!sFilename.isEmpty()) {
-					bAccept = qsamplerChannel::isInstrumentFile(sFilename);
+					bAccept = Channel::isInstrumentFile(sFilename);
 					break;
 				}
 			}
@@ -154,7 +157,7 @@ void ChannelStrip::dropEvent ( QDropEvent* pDropEvent )
 
 
 // Channel strip setup formal initializer.
-void ChannelStrip::setup ( qsamplerChannel *pChannel )
+void ChannelStrip::setup ( Channel *pChannel )
 {
 	// Destroy any previous channel descriptor;
 	// (remember that once setup we own it!)
@@ -174,7 +177,7 @@ void ChannelStrip::setup ( qsamplerChannel *pChannel )
 
 
 // Channel secriptor accessor.
-qsamplerChannel *ChannelStrip::channel (void) const
+Channel *ChannelStrip::channel (void) const
 {
 	return m_pChannel;
 }
@@ -312,10 +315,10 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 	if (m_pChannel->instrumentName().isEmpty()) {
 		if (m_pChannel->instrumentStatus() >= 0) {
 			m_ui.InstrumentNameTextLabel->setText(
-				' ' + qsamplerChannel::loadingInstrument());
+				' ' + Channel::loadingInstrument());
 		} else {
 			m_ui.InstrumentNameTextLabel->setText(
-				' ' + qsamplerChannel::noInstrumentName());
+				' ' + Channel::noInstrumentName());
 		}
 	} else {
 		m_ui.InstrumentNameTextLabel->setText(
@@ -374,7 +377,7 @@ bool ChannelStrip::updateChannelInfo (void)
 	// Engine name...
 	if (m_pChannel->engineName().isEmpty()) {
 		m_ui.EngineNameTextLabel->setText(
-			' ' + qsamplerChannel::noEngineName());
+			' ' + Channel::noEngineName());
 	} else {
 		m_ui.EngineNameTextLabel->setText(
 			' ' + m_pChannel->engineName());

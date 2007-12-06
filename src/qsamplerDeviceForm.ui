@@ -30,14 +30,6 @@
     <height>378</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="focusPolicy" >
    <enum>Qt::StrongFocus</enum>
   </property>
@@ -125,14 +117,6 @@
           </property>
           <item>
            <widget class="QLabel" name="DeviceNameTextLabel" >
-            <property name="sizePolicy" >
-             <sizepolicy>
-              <hsizetype>0</hsizetype>
-              <vsizetype>0</vsizetype>
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="font" >
              <font>
               <weight>75</weight>
@@ -207,19 +191,6 @@
            <number>6</number>
           </property>
           <item>
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" >
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
            <widget class="QLabel" name="DevicePortTextLabel" >
             <property name="text" >
              <string>Channel:</string>
@@ -239,11 +210,17 @@
            <widget class="QComboBox" name="DevicePortComboBox" >
             <property name="sizePolicy" >
              <sizepolicy>
-              <hsizetype>0</hsizetype>
+              <hsizetype>7</hsizetype>
               <vsizetype>0</vsizetype>
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>120</width>
+              <height>0</height>
+             </size>
             </property>
             <property name="toolTip" >
              <string>Device port/channel</string>
