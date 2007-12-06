@@ -3,7 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-CVS HEAD
+0.2.1  2007-12-06  Qt4 migration was complete.
 
 * Added recent new support of libgig for retrieving instrument names in a
   very fast way. If libgig provides this feature, then the respective
