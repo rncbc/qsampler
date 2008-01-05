@@ -3,6 +3,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+CVS HEAD
+
+* Added dialog when the application exits which lets the user decide
+  whether to keep the LinuxSampler running or not.
+
+
 0.2.1  2007-12-06  Qt4 migration was complete.
 
 * Added recent new support of libgig for retrieving instrument names in a
