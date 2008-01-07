@@ -213,6 +213,7 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 		pal.setColor(QPalette::Background, Qt::black);
 	}
 	m_ui.ChannelInfoFrame->setPalette(pal);
+	m_ui.InstrumentNameTextLabel->setPalette(pal);
 	m_ui.StreamVoiceCountTextLabel->setPalette(pal);
 }
 
