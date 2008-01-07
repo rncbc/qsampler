@@ -471,7 +471,7 @@ bool MainForm::queryClose (void)
 			if (m_pDeviceForm)
 				m_pDeviceForm->close();
 			// Stop client and/or server, gracefully.
-			stopServer();
+			stopServer(true /*interactive*/);
 		}
 	}
 
@@ -2390,7 +2390,7 @@ void MainForm::startServer (void)
 		switch (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Could not start the LinuxSampler server.\n\n"
-			"Maybe it ss already started."),
+			"Maybe it is already started."),
 			tr("Stop"), tr("Kill"), tr("Cancel"))) {
 		case 0:
 			m_pServer->terminate();
@@ -2410,7 +2410,8 @@ void MainForm::startServer (void)
 		return;
 
 	// OK. Let's build the startup process...
-	m_pServer = new QProcess(this);
+	m_pServer = new QProcess();
+	bForceServerStop = true;
 
 	// Setup stdout/stderr capture...
 //	if (m_pOptions->bStdoutCapture) {
@@ -2458,13 +2459,28 @@ void MainForm::startServer (void)
 
 
 // Stop linuxsampler server...
-void MainForm::stopServer (void)
+void MainForm::stopServer (bool bInteractive)
 {
 	// Stop client code.
 	stopClient();
 
+	if (m_pServer && bInteractive) {
+		if (QMessageBox::question(this,
+			QSAMPLER_TITLE ": " + tr("The backend's fate ..."),
+			tr("You have the option to keep the sampler backend (LinuxSampler)\n"
+			"running in the background. The sampler would continue to work\n"
+			"according to your current sampler session and you could alter the\n"
+			"sampler session at any time by relaunching QSampler.\n\n"
+			"Do you want LinuxSampler to stop or to keep running in\n"
+			"the background?"),
+			tr("Stop"), tr("Keep Running")) == 1)
+		{
+			bForceServerStop = false;
+		}
+	}
+
 	// And try to stop server.
-	if (m_pServer) {
+	if (m_pServer && bForceServerStop) {
 		appendMessages(tr("Server is stopping..."));
 		if (m_pServer->state() == QProcess::Running) {
 #if defined(WIN32)
@@ -2504,7 +2520,7 @@ void MainForm::processServerExit (void)
 	if (m_pMessages)
 		m_pMessages->flushStdoutBuffer();
 
-	if (m_pServer) {
+	if (m_pServer && bForceServerStop) {
 		if (m_pServer->state() != QProcess::NotRunning) {
 			appendMessages(tr("Server is being forced..."));
 			// Force final server shutdown...

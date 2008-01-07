@@ -146,7 +146,7 @@ protected:
 	void startSchedule(int iStartDelay);
 	void stopSchedule();
 	void startServer();
-	void stopServer();
+	void stopServer(bool bInteractive = false);
 	bool startClient();
 	void stopClient();
 
@@ -162,6 +162,7 @@ private:
 	int m_iDirtyCount;
 	lscp_client_t *m_pClient;
 	QProcess *m_pServer;
+	bool bForceServerStop;
 	int m_iStartDelay;
 	int m_iTimerDelay;
 	int m_iTimerSlot;
