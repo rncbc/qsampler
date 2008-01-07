@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Color pallete fix for the instrument name display in channel strip,
+  particularly notorious on Mac OS X builds.
+
 * Added dialog when the application exits which lets the user decide
   whether to keep the LinuxSampler running or not.
 
