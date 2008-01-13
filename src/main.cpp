@@ -27,7 +27,9 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
-
+#if defined(__APPLE__)  // Toshi Nagata 20080105
+#include <QDir>
+#endif
 
 //-------------------------------------------------------------------------
 // main - The main program trunk.
@@ -51,6 +53,22 @@ int main ( int argc, char **argv )
 		}
 		app.installTranslator(&translator);
 	}
+
+	#if defined(__APPLE__)  //  Toshi Nagata 20080105
+	{
+		//  Set the plugin path to @exetutable_path/../plugins
+		QDir dir(QApplication::applicationDirPath());
+		dir.cdUp();  // "Contents" directory
+		QApplication::setLibraryPaths(QStringList(dir.absolutePath() + "/plugins"));
+
+		//  Set the PATH environment variable to include @executable_path/../../..
+		dir.cdUp();
+		dir.cdUp();
+		QString path(getenv("PATH"));
+		path = dir.absolutePath() + ":" + path;
+		setenv("PATH", path.toUtf8().constData(), 1);
+	}
+	#endif
 
 	// Construct default settings; override with command line arguments.
 	QSampler::Options options;

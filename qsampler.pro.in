@@ -48,3 +48,8 @@ LANGUAGE  = C++
 
 LIBS     += @ac_libs@
 INCPATH  += @ac_incpath@
+
+macx {
+        QMAKE_MAC_SDK = $$(SDKROOT)
+        CONFIG += $$(QMAKE_ARCHS)
+}

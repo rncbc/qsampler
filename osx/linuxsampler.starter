@@ -1,0 +1,42 @@
+#!/bin/sh
+#  linuxsampler.starter
+#  In the binary distribution, this wrapper script is placed in the same
+#  directory as qsampler.app. The "true" binary of linuxsampler is placed 
+#  as bin/linuxsampler. This wrapper script creates the default instrument 
+#  database if not present, starts the Jack server, launches the JackPilot 
+#  application via AppleScript,
+#  and finally invokes the "true" binary of linuxsampler.
+#  1 Jan 2008 Toshi Nagata
+#  4 Jan 2008 Redirect stderr of osascript to /dev/null to avoid misleading
+#  error messages (Toshi Nagata)
+
+#  Set up the "base" directory
+COMNAME=`which "$0"`
+DIRNAME=`dirname "$COMNAME"`
+
+#  Create database if not present
+if ! test -e $HOME/Library/linuxsampler/linuxsampler.db; then
+    mkdir -p $HOME/Library/linuxsampler/plugins
+    "$DIRNAME/bin/linuxsampler" --create-instruments-db $HOME/Library/linuxsampler/linuxsampler.db
+fi
+
+#  Start jackd
+if test -e $HOME/.jackdrc; then
+    #  Collect the options
+    jackopt=`awk '/^-/ { x = x $0 } END { print x }' $HOME/.jackdrc`
+else
+    jackopt="-R -d coreaudio"
+fi
+/usr/local/bin/jackd $jackopt &  #  If already running, then it just exits
+
+#  Start JackPilot
+#  (Errors will be silently ignored)
+osascript -e 'tell application "JackPilot" to activate' -e 'tell application "qsampler" to activate' 2>/dev/null &
+
+#  Invoke linuxsampler
+if test -e "$DIRNAME/bin/linuxsampler"; then
+    exe="$DIRNAME/bin/linuxsampler"
+else
+    exe="$DIRNAME/linuxsampler"
+fi
+exec "$exe" $@
