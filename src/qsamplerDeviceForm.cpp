@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -613,16 +613,16 @@ void DeviceForm::deviceListViewContextMenu ( const QPoint& pos )
 	bool bClient = (pMainForm->client() != NULL);
 	bool bEnabled = (pItem != NULL);
 	pAction = menu.addAction(
-		QIcon(":/qsampler/pixmaps/deviceCreate.png"),
+		QIcon(":/icons/deviceCreate.png"),
 		tr("&Create device"), this, SLOT(createDevice()));
 	pAction->setEnabled(bEnabled || (bClient && m_bNewDevice));
 	pAction = menu.addAction(
-		QIcon(":/qsampler/pixmaps/deviceDelete.png"),
+		QIcon(":/icons/deviceDelete.png"),
 		tr("&Delete device"), this, SLOT(deleteDevice()));
 	pAction->setEnabled(bEnabled && !m_bNewDevice);
 	menu.addSeparator();
 	pAction = menu.addAction(
-		QIcon(":/qsampler/pixmaps/formRefresh.png"),
+		QIcon(":/icons/formRefresh.png"),
 		tr("&Refresh"), this, SLOT(refreshDevices()));
 	pAction->setEnabled(bClient);
 

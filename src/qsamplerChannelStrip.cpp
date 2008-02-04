@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -25,6 +25,9 @@
 
 #include "qsamplerMainForm.h"
 
+#include "qsamplerChannelFxForm.h"
+
+#include <QMessageBox>
 #include <QDragEnterEvent>
 #include <QUrl>
 
@@ -85,6 +88,9 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.ChannelEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelEdit()));
+	QObject::connect(m_ui.FxPushButton,
+		SIGNAL(clicked()),
+		SLOT(channelFxEdit()));
 
 	setSelected(false);
 }
@@ -285,6 +291,33 @@ void ChannelStrip::channelEdit (void)
 	m_pChannel->editChannel();
 }
 
+bool ChannelStrip::channelFxEdit (void)
+{
+	MainForm *pMainForm = MainForm::getInstance();
+	if (!pMainForm || !channel())
+		return false;
+
+	pMainForm->appendMessages(QObject::tr("channel fx sends..."));
+
+	bool bResult = false;
+
+#if CONFIG_FXSEND
+	ChannelFxForm *pChannelFxForm =
+		new ChannelFxForm(channel()->channelID(), parentWidget());
+	if (pChannelFxForm) {
+		//pChannelForm->setup(this);
+		bResult = pChannelFxForm->exec();
+		delete pChannelFxForm;
+	}
+#else // CONFIG_FXSEND
+	QMessageBox::critical(this,
+		QSAMPLER_TITLE ": " + tr("Unavailable"),
+			tr("Sorry, QSampler was built without FX send support!\n\n"
+			   "(Make sure you have a recent liblscp when recompiling QSampler)"));
+#endif // CONFIG_FXSEND
+
+	return bResult;
+}
 
 // Channel reset slot.
 bool ChannelStrip::channelReset (void)

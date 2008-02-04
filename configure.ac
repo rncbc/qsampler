@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.1.2, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.1.3, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -205,6 +205,10 @@ if test "x$ac_fxsend" = "xyes"; then
   if test "x$ac_fxsend_level" = "xyes"; then
 	  AC_DEFINE(CONFIG_FXSEND_LEVEL, 1, [Define if FX send level is available.])
   fi
+  AC_CHECK_LIB(lscp, lscp_set_fxsend_name, [ac_fxsend_rename="yes"], [ac_fxsend_rename="no"])
+  if test "x$ac_fxsend_rename" = "xyes"; then
+	  AC_DEFINE(CONFIG_FXSEND_RENAME, 1, [Define if FX send rename is available.])
+  fi
 fi
 
 AC_CACHE_CHECK([for audio_routing array type],
@@ -301,6 +305,7 @@ echo "  LSCP mute/solo support . . . . . . . . . . . . . .: $ac_mute_solo"
 echo "  LSCP MIDI instrument support . . . . . . . . . . .: $ac_midi_instrument"
 echo "  LSCP FX send support . . . . . . . . . . . . . . .: $ac_fxsend"
 echo "  LSCP FX send level support . . . . . . . . . . . .: $ac_fxsend_level"
+echo "  LSCP FX send rename support  . . . . . . . . . . .: $ac_fxsend_rename"
 echo "  LSCP audio routing support . . . . . . . . . . . .: $ac_audio_routing"
 echo "  LSCP volume support  . . . . . . . . . . . . . . .: $ac_volume"
 echo "  LSCP edit instrument support . . . . . . . . . . .: $ac_edit_instrument"

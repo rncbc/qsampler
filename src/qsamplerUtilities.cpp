@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -151,6 +151,35 @@ QString lscpEscapedPathToPosix(QString path) {
     }
 
     return path;
+}
+
+// converts the given text as expected by LSCP 1.2
+// (that is by encoding special characters with LSCP escape sequences)
+QString lscpEscapeText(const QString& txt) {
+    if (!_remoteSupportsEscapeSequences()) return txt;
+
+    QString text(txt);
+
+    // replace all non-basic characters by LSCP escape sequences
+    for (int i = 0; i < int(text.length()); ++i) {
+        // match all non-alphanumerics
+        // (we could exclude much more characters here, but that way
+        // we're sure it just works^TM)
+        const char c = text.at(i).toLatin1();
+        if (
+            !(c >= '0' && c <= '9') &&
+            !(c >= 'a' && c <= 'z') &&
+            !(c >= 'A' && c <= 'Z')
+        ) {
+            // convert the non-basic character into a LSCP escape sequence
+            char buf[5];
+            ::snprintf(buf, sizeof(buf), "\\x%02x", static_cast<unsigned char>(c));
+            text.replace(i, 1, buf);
+            i += 3;
+        }
+    }
+
+    return text;
 }
 
 // converts a text returned by a LSCP command and may contain escape

@@ -3,7 +3,7 @@
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -26,14 +26,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>795</width>
+    <width>815</width>
     <height>56</height>
    </rect>
   </property>
   <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>7</hsizetype>
-    <vsizetype>1</vsizetype>
+   <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -48,10 +46,19 @@
    <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerChannel.png</iconset>
   </property>
   <layout class="QHBoxLayout" >
-   <property name="margin" >
+   <property name="spacing" >
     <number>4</number>
    </property>
-   <property name="spacing" >
+   <property name="leftMargin" >
+    <number>4</number>
+   </property>
+   <property name="topMargin" >
+    <number>4</number>
+   </property>
+   <property name="rightMargin" >
+    <number>4</number>
+   </property>
+   <property name="bottomMargin" >
     <number>4</number>
    </property>
    <item>
@@ -85,9 +92,7 @@
    <item>
     <widget class="QFrame" name="ChannelInfoFrame" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
+      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -114,18 +119,28 @@
       <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>2</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>2</number>
+      </property>
+      <property name="rightMargin" >
+       <number>2</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>2</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>0</number>
       </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="EngineNameTextLabel" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+         <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -293,6 +308,25 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="FxPushButton" >
+     <property name="maximumSize" >
+      <size>
+       <width>48</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Edit Channel's Effect Settings</string>
+     </property>
+     <property name="text" >
+      <string>&amp;FX</string>
+     </property>
+     <property name="shortcut" >
+      <string>Alt+F</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="ChannelEditPushButton" >
      <property name="maximumSize" >
       <size>
@@ -314,9 +348,7 @@
    <item>
     <widget class="QProgressBar" name="StreamUsageProgressBar" >
      <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>1</hsizetype>
-       <vsizetype>0</vsizetype>
+      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -392,4 +424,5 @@
  <resources>
   <include location="../icons/qsampler.qrc" />
  </resources>
+ <connections/>
 </ui>
