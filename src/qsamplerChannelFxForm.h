@@ -24,6 +24,9 @@
 
 #include "ui_qsamplerChannelFxForm.h"
 
+#include "qsamplerChannel.h"
+#include "qsamplerDevice.h"
+
 #include <QDialog>
 
 namespace QSampler {
@@ -31,7 +34,7 @@ namespace QSampler {
 class ChannelFxForm : public QDialog {
 	Q_OBJECT
 public:
-	ChannelFxForm(int SamplerChannelID, QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+	ChannelFxForm(Channel* pSamplerChannel, QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
 	~ChannelFxForm();
 
 protected slots:
@@ -39,11 +42,19 @@ protected slots:
 	void onButtonClicked(QAbstractButton* button);
 	void onCreateFxSend();
 	void onDestroyFxSend();
+	void onDepthCtrlChanged(int iMidiCtrl);
+	void onCurrentSendDepthChanged(int depthPercent);
+	void onRoutingTableChanged();
+	void updateTableCellRenderers();
+	void updateTableCellRenderers(const QModelIndex& topLeft,
+		const QModelIndex& bottomRight);
 
 private:
 	Ui::qsamplerChannelFxForm m_ui;
 
-	int m_SamplerChannelID;
+	Channel* m_pSamplerChannel;
+	//int m_SamplerChannelID;
+	Device* m_pAudioDevice;
 };
 
 } // namespace QSampler

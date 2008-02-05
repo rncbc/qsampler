@@ -147,7 +147,7 @@ bool FxSend::getFromSampler() {
 
 	m_AudioRouting.clear();
 	if (pFxSendInfo->audio_routing)
-		for (int i = 0; pFxSendInfo->audio_routing[i]; ++i)
+		for (int i = 0; pFxSendInfo->audio_routing[i] != -1; ++i)
 			m_AudioRouting[i] = pFxSendInfo->audio_routing[i];
 
 	return true;

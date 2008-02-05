@@ -58,6 +58,8 @@ signals:
 public slots:
 	void cleanRefresh();
 	void applyToSampler();
+	// not pretty, but more efficient than wiring connections for each element
+	void onExternalModifiication(const QModelIndex& index);
 
 private:
 	typedef QList<FxSend> FxSendsList;

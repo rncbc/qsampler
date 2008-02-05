@@ -89,7 +89,7 @@ to actually create it on sampler side.</string>
           <item>
            <widget class="QPushButton" name="destroyPushButton" >
             <property name="toolTip" >
-             <string>Schedules the seleted FX send for deletion.
+             <string>Schedules the selected FX send for deletion.
 You have to select 'Apply' afterwards to
 actually destroy it on sampler side.</string>
             </property>
@@ -109,7 +109,7 @@ actually destroy it on sampler side.</string>
      <item>
       <layout class="QVBoxLayout" >
        <item>
-        <widget class="QGroupBox" name="groupBox_2" >
+        <widget class="QGroupBox" name="mainParametersGroupBox" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
            <horstretch>0</horstretch>
@@ -129,7 +129,7 @@ MIDI Controller:</string>
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QComboBox" name="DepthCtrlComboBox" />
+           <widget class="QComboBox" name="depthCtrlComboBox" />
           </item>
           <item row="1" column="0" >
            <widget class="QLabel" name="label_2" >
@@ -139,7 +139,7 @@ MIDI Controller:</string>
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="QSpinBox" name="DepthSpinBox" >
+           <widget class="QSpinBox" name="depthSpinBox" >
             <property name="alignment" >
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
@@ -155,7 +155,7 @@ MIDI Controller:</string>
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_3" >
+        <widget class="QGroupBox" name="audioRoutingGroupBox" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
            <horstretch>0</horstretch>
@@ -167,7 +167,7 @@ MIDI Controller:</string>
          </property>
          <layout class="QHBoxLayout" >
           <item>
-           <widget class="QTableView" name="AudioRoutingTable" />
+           <widget class="QTableView" name="audioRoutingTable" />
           </item>
          </layout>
         </widget>

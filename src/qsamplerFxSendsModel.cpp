@@ -156,6 +156,12 @@ void FxSendsModel::cleanRefresh() {
 	emit fxSendsDirtyChanged(false);
 }
 
+void FxSendsModel::onExternalModifiication(const QModelIndex& index) {
+	if (!index.isValid()) return;
+	emit dataChanged(index, index);
+	emit fxSendsDirtyChanged(true);
+}
+
 void FxSendsModel::applyToSampler() {
 	for (int i = 0; i < m_FxSends.size(); ++i)
 		m_FxSends[i].applyToSampler();

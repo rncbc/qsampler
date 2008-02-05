@@ -303,7 +303,7 @@ bool ChannelStrip::channelFxEdit (void)
 
 #if CONFIG_FXSEND
 	ChannelFxForm *pChannelFxForm =
-		new ChannelFxForm(channel()->channelID(), parentWidget());
+		new ChannelFxForm(channel(), parentWidget());
 	if (pChannelFxForm) {
 		//pChannelForm->setup(this);
 		bResult = pChannelFxForm->exec();
