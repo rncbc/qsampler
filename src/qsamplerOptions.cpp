@@ -50,9 +50,18 @@ Options::Options (void)
 	m_settings.beginGroup("/Server");
 	sServerHost    = m_settings.value("/ServerHost", "localhost").toString();
 	iServerPort    = m_settings.value("/ServerPort", 8888).toInt();
+	#if defined(__APPLE__)  //  Toshi Nagata 20080105
+	//  TODO: Should this be a configure option?
+	iServerTimeout = m_settings.value("/ServerTimeout", 10000).toInt();
+	#else
 	iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
+	#endif
 	bServerStart   = m_settings.value("/ServerStart", true).toBool();
+	#if defined(__APPLE__)  //  Toshi Nagata 20080113
+	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler.starter").toString();
+	#else
 	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
+	#endif
 	iStartDelay    = m_settings.value("/StartDelay", 3).toInt();
 	m_settings.endGroup();
 

@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Added FX Sends Dialog to Channel Strips.
+
 * Color pallete fix for the instrument name display in channel strip,
   particularly notorious on Mac OS X builds.
 

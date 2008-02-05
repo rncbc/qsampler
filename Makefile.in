@@ -11,12 +11,15 @@ headers = config.h \
 	src/qsamplerInstrument.h \
 	src/qsamplerInstrumentList.h \
 	src/qsamplerDevice.h \
+	src/qsamplerFxSend.h \
+	src/qsamplerFxSendsModel.h \
 	src/qsamplerUtilities.h \
 	src/qsamplerInstrumentForm.h \
 	src/qsamplerInstrumentListForm.h \
 	src/qsamplerDeviceForm.h \
 	src/qsamplerChannelStrip.h \
 	src/qsamplerChannelForm.h \
+	src/qsamplerChannelFxForm.h \
 	src/qsamplerOptionsForm.h \
 	src/qsamplerMainForm.h
 
@@ -27,12 +30,15 @@ sources = src/main.cpp \
 	src/qsamplerInstrument.cpp \
 	src/qsamplerInstrumentList.cpp \
 	src/qsamplerDevice.cpp \
+	src/qsamplerFxSend.cpp \
+	src/qsamplerFxSendsModel.cpp \
 	src/qsamplerUtilities.cpp \
 	src/qsamplerInstrumentForm.cpp \
 	src/qsamplerInstrumentListForm.cpp \
 	src/qsamplerDeviceForm.cpp \
 	src/qsamplerChannelStrip.cpp \
 	src/qsamplerChannelForm.cpp \
+	src/qsamplerChannelFxForm.cpp \
 	src/qsamplerOptionsForm.cpp \
 	src/qsamplerMainForm.cpp
 
@@ -42,6 +48,7 @@ forms = \
 	src/qsamplerDeviceForm.ui \
 	src/qsamplerChannelStrip.ui \
 	src/qsamplerChannelForm.ui \
+	src/qsamplerChannelFxForm.ui \
 	src/qsamplerOptionsForm.ui \
 	src/qsamplerMainForm.ui
 
