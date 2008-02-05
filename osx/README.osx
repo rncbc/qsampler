@@ -1,0 +1,92 @@
+Compiling QSampler for Mac OS X with XCode
+==============================================
+
+Requirements
+------------
+
+  QSampler requires Qt4. You need to install Qt4/Mac from the source codes.
+  Go to Trolltech website (http://trolltech.com/products/qt) and find the 
+  necessary information.
+  
+  If you want to build a "standalone" application that does not require Qt
+  at runtime (i.e. containing the necessary Qt frameworks in the package),
+  you need to install the binary distribution of Qt4/Mac as well.
+  
+  QSampler is also dependent on liblscp, so build liblscp before building
+  QSampler. Please read "README.osx" in the liblscp source distribution.
+  
+  The XCode project uses autotools build files. On Mac OS 10.4, you need
+  to install pkg-config (available at http://pkgconfig.freedesktop.org/wiki/).
+  
+Layout of the Directories
+-------------------------
+
+  The XCode project for qsampler creates a temporary build directory as
+  "$QS/../temp_build/$BUILD_STYLE" (where $QS is the qsampler 
+  directory, and $BUILD_STYLE is the build style defined in the XCode 
+  project). In this directory, the following subdirectories are created 
+  and used:
+    $BASE.build:
+      Intermediate build directory. Symbolic links to the original 
+      source files are placed and "configure && make" is performed in 
+      this directory. ($BASE is the basename of the qsampler 
+      directory.)
+    local:
+      The qsampler application package is created in this directory as 
+      local/bin/qsampler.app.
+  
+  This layout of the directories is similar to that of the liblscp
+  project, on which qsampler is dependent. You need to compile
+  liblscp first (with the same settings as this qsampler XCode
+  project). So it is best to create a common directory, place the 
+  liblscp and qsampler directories in it, and build liblscp and
+  qsampler in this order. See also "osx/README.mac" in liblscp.
+
+  You may have built linuxsampler as well. If you have done so,
+  you should have created a common directory for libgig and linuxsampler.
+  It is a good idea to place the liblscp and qsampler directories in
+  this same place.
+
+Universal Binaries
+------------------
+
+  You can create the Universal Binaries by selecting "Deployment_UB" build
+  style and build. The binaries for i386 and ppc architectures are built
+  separately and then automatically combined. The Universal version of
+  qsampler is found in $QS/../temp_build/Deployment_UB/local/bin.
+
+  You do not need to have the Universal version of liblscp, but you _do_
+  need to build liblscp both for i386 and ppc architectures.
+
+  The Universal version of qsampler.app is intended for binary distribution,
+  so it has some additional features as follows:
+  
+  (1) On startup, QSampler modifies the PATH environment variable so that the 
+  directory in which qsampler.app resides is included in the search path.
+  This feature allows the user to place the linuxsampler binary in the same 
+  directory as qsampler.app, making the installation/uninstallation simple. 
+  In addition, the default setting invokes the "linuxsampler.starter" script
+  instead of the linuxsampler binary itself. This script creates the instrument
+  database if not present, start up the Jack deamon, and invokes the linuxsampler
+  binary. This script will be copied to $QS/../temp_build/Deployment_UB/local/bin
+  when building the "Deployment_UB" target.
+  
+  (2) If you have the binary package of Qt4/Mac installed, the runtime Qt 
+  frameworks are copied in Contents/Frameworks. This should 
+  enable qsampler.app to run on machines without Qt installed. On the
+  other hand, the size of qsampler.app is bloated to about 30MB (without
+  the frameworks it is something like 2MB).
+  
+  (3) The application icon is placed in Contents/Resources.
+  
+Additional Information
+----------------------
+
+  The XCode project just invokes autoconf_builder.sh with after
+  setting relevant environmental variables. If you are interested
+  (or feel suspicious), please examine autoconf_builder.sh.
+
+6 May 2007: First written (for libgig) by Toshi Nagata
+9 May 2007: Updated to account for the Deployment_UB target
+30 Dec 2007: Updated for QSampler
+13 Jan 2008: Small modification

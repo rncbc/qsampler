@@ -1,0 +1,252 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXFileReference section */
+		E4019E270BED928D0094EB0E /* autoconf_builder.sh */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text.script.sh; path = autoconf_builder.sh; sourceTree = "<group>"; };
+		E4019E280BED928D0094EB0E /* wrapper.sh */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text.script.sh; path = wrapper.sh; sourceTree = "<group>"; };
+		E43B2BDC0D22A64F009BAC44 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E43B2BDD0D22A64F009BAC44 /* qsamplerAbout.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerAbout.h; sourceTree = "<group>"; };
+		E43B2BDE0D22A64F009BAC44 /* qsamplerChannel.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerChannel.cpp; sourceTree = "<group>"; };
+		E43B2BDF0D22A64F009BAC44 /* qsamplerChannel.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerChannel.h; sourceTree = "<group>"; };
+		E43B2BE00D22A64F009BAC44 /* qsamplerChannelForm.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerChannelForm.cpp; sourceTree = "<group>"; };
+		E43B2BE10D22A64F009BAC44 /* qsamplerChannelForm.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerChannelForm.h; sourceTree = "<group>"; };
+		E43B2BE20D22A650009BAC44 /* qsamplerChannelForm.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerChannelForm.ui; sourceTree = "<group>"; };
+		E43B2BE30D22A650009BAC44 /* qsamplerChannelStrip.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerChannelStrip.cpp; sourceTree = "<group>"; };
+		E43B2BE40D22A650009BAC44 /* qsamplerChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerChannelStrip.h; sourceTree = "<group>"; };
+		E43B2BE50D22A650009BAC44 /* qsamplerChannelStrip.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerChannelStrip.ui; sourceTree = "<group>"; };
+		E43B2BE60D22A650009BAC44 /* qsamplerDevice.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerDevice.cpp; sourceTree = "<group>"; };
+		E43B2BE70D22A650009BAC44 /* qsamplerDevice.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerDevice.h; sourceTree = "<group>"; };
+		E43B2BE80D22A650009BAC44 /* qsamplerDeviceForm.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerDeviceForm.cpp; sourceTree = "<group>"; };
+		E43B2BE90D22A650009BAC44 /* qsamplerDeviceForm.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerDeviceForm.h; sourceTree = "<group>"; };
+		E43B2BEA0D22A650009BAC44 /* qsamplerDeviceForm.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerDeviceForm.ui; sourceTree = "<group>"; };
+		E43B2BEB0D22A650009BAC44 /* qsamplerInstrument.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerInstrument.cpp; sourceTree = "<group>"; };
+		E43B2BEC0D22A650009BAC44 /* qsamplerInstrument.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerInstrument.h; sourceTree = "<group>"; };
+		E43B2BED0D22A650009BAC44 /* qsamplerInstrumentForm.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerInstrumentForm.cpp; sourceTree = "<group>"; };
+		E43B2BEE0D22A650009BAC44 /* qsamplerInstrumentForm.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerInstrumentForm.h; sourceTree = "<group>"; };
+		E43B2BEF0D22A650009BAC44 /* qsamplerInstrumentForm.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerInstrumentForm.ui; sourceTree = "<group>"; };
+		E43B2BF00D22A650009BAC44 /* qsamplerInstrumentList.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerInstrumentList.cpp; sourceTree = "<group>"; };
+		E43B2BF10D22A650009BAC44 /* qsamplerInstrumentList.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerInstrumentList.h; sourceTree = "<group>"; };
+		E43B2BF20D22A650009BAC44 /* qsamplerInstrumentListForm.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerInstrumentListForm.cpp; sourceTree = "<group>"; };
+		E43B2BF30D22A650009BAC44 /* qsamplerInstrumentListForm.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerInstrumentListForm.h; sourceTree = "<group>"; };
+		E43B2BF40D22A650009BAC44 /* qsamplerInstrumentListForm.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerInstrumentListForm.ui; sourceTree = "<group>"; };
+		E43B2BF50D22A650009BAC44 /* qsamplerMainForm.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerMainForm.cpp; sourceTree = "<group>"; };
+		E43B2BF60D22A650009BAC44 /* qsamplerMainForm.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerMainForm.h; sourceTree = "<group>"; };
+		E43B2BF70D22A650009BAC44 /* qsamplerMainForm.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerMainForm.ui; sourceTree = "<group>"; };
+		E43B2BF80D22A650009BAC44 /* qsamplerMessages.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerMessages.cpp; sourceTree = "<group>"; };
+		E43B2BF90D22A650009BAC44 /* qsamplerMessages.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerMessages.h; sourceTree = "<group>"; };
+		E43B2BFA0D22A650009BAC44 /* qsamplerOptions.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerOptions.cpp; sourceTree = "<group>"; };
+		E43B2BFB0D22A650009BAC44 /* qsamplerOptions.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerOptions.h; sourceTree = "<group>"; };
+		E43B2BFC0D22A650009BAC44 /* qsamplerOptionsForm.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerOptionsForm.cpp; sourceTree = "<group>"; };
+		E43B2BFD0D22A650009BAC44 /* qsamplerOptionsForm.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerOptionsForm.h; sourceTree = "<group>"; };
+		E43B2BFE0D22A650009BAC44 /* qsamplerOptionsForm.ui */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = qsamplerOptionsForm.ui; sourceTree = "<group>"; };
+		E43B2BFF0D22A650009BAC44 /* qsamplerUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.cpp.cpp; path = qsamplerUtilities.cpp; sourceTree = "<group>"; };
+		E43B2C000D22A650009BAC44 /* qsamplerUtilities.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = qsamplerUtilities.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* LinuxSampler */ = {
+			isa = PBXGroup;
+			children = (
+				E4019E270BED928D0094EB0E /* autoconf_builder.sh */,
+				E4019E280BED928D0094EB0E /* wrapper.sh */,
+				E43B2BDB0D22A64F009BAC44 /* src */,
+			);
+			name = LinuxSampler;
+			sourceTree = "<group>";
+		};
+		E43B2BDB0D22A64F009BAC44 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E43B2BDC0D22A64F009BAC44 /* main.cpp */,
+				E43B2BDD0D22A64F009BAC44 /* qsamplerAbout.h */,
+				E43B2BDE0D22A64F009BAC44 /* qsamplerChannel.cpp */,
+				E43B2BDF0D22A64F009BAC44 /* qsamplerChannel.h */,
+				E43B2BE00D22A64F009BAC44 /* qsamplerChannelForm.cpp */,
+				E43B2BE10D22A64F009BAC44 /* qsamplerChannelForm.h */,
+				E43B2BE20D22A650009BAC44 /* qsamplerChannelForm.ui */,
+				E43B2BE30D22A650009BAC44 /* qsamplerChannelStrip.cpp */,
+				E43B2BE40D22A650009BAC44 /* qsamplerChannelStrip.h */,
+				E43B2BE50D22A650009BAC44 /* qsamplerChannelStrip.ui */,
+				E43B2BE60D22A650009BAC44 /* qsamplerDevice.cpp */,
+				E43B2BE70D22A650009BAC44 /* qsamplerDevice.h */,
+				E43B2BE80D22A650009BAC44 /* qsamplerDeviceForm.cpp */,
+				E43B2BE90D22A650009BAC44 /* qsamplerDeviceForm.h */,
+				E43B2BEA0D22A650009BAC44 /* qsamplerDeviceForm.ui */,
+				E43B2BEB0D22A650009BAC44 /* qsamplerInstrument.cpp */,
+				E43B2BEC0D22A650009BAC44 /* qsamplerInstrument.h */,
+				E43B2BED0D22A650009BAC44 /* qsamplerInstrumentForm.cpp */,
+				E43B2BEE0D22A650009BAC44 /* qsamplerInstrumentForm.h */,
+				E43B2BEF0D22A650009BAC44 /* qsamplerInstrumentForm.ui */,
+				E43B2BF00D22A650009BAC44 /* qsamplerInstrumentList.cpp */,
+				E43B2BF10D22A650009BAC44 /* qsamplerInstrumentList.h */,
+				E43B2BF20D22A650009BAC44 /* qsamplerInstrumentListForm.cpp */,
+				E43B2BF30D22A650009BAC44 /* qsamplerInstrumentListForm.h */,
+				E43B2BF40D22A650009BAC44 /* qsamplerInstrumentListForm.ui */,
+				E43B2BF50D22A650009BAC44 /* qsamplerMainForm.cpp */,
+				E43B2BF60D22A650009BAC44 /* qsamplerMainForm.h */,
+				E43B2BF70D22A650009BAC44 /* qsamplerMainForm.ui */,
+				E43B2BF80D22A650009BAC44 /* qsamplerMessages.cpp */,
+				E43B2BF90D22A650009BAC44 /* qsamplerMessages.h */,
+				E43B2BFA0D22A650009BAC44 /* qsamplerOptions.cpp */,
+				E43B2BFB0D22A650009BAC44 /* qsamplerOptions.h */,
+				E43B2BFC0D22A650009BAC44 /* qsamplerOptionsForm.cpp */,
+				E43B2BFD0D22A650009BAC44 /* qsamplerOptionsForm.h */,
+				E43B2BFE0D22A650009BAC44 /* qsamplerOptionsForm.ui */,
+				E43B2BFF0D22A650009BAC44 /* qsamplerUtilities.cpp */,
+				E43B2C000D22A650009BAC44 /* qsamplerUtilities.h */,
+			);
+			name = src;
+			path = ../src;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		E4102B730BCBD832006B57FE /* qsampler */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = "$(PROJECT_DIR)/wrapper.sh";
+			buildConfigurationList = E4102B740BCBD85E006B57FE /* Build configuration list for PBXLegacyTarget "qsampler" */;
+			buildPhases = (
+			);
+			buildToolPath = /bin/sh;
+			buildWorkingDirectory = ..;
+			dependencies = (
+			);
+			name = qsampler;
+			passBuildSettingsInEnvironment = 1;
+			productName = libgig;
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "qsampler" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* LinuxSampler */;
+			projectDirPath = "";
+			targets = (
+				E4102B730BCBD832006B57FE /* qsampler */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB919408733D9F0010E9CD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Development;
+		};
+		E4102B750BCBD85E006B57FE /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = linuxsampler;
+			};
+			name = Development;
+		};
+		E4102B770BCBD8A9006B57FE /* Deployment_ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = linuxsampler;
+			};
+			name = Deployment_ppc;
+		};
+		E4102B780BCBD8A9006B57FE /* Deployment_i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = linuxsampler;
+			};
+			name = Deployment_i386;
+		};
+		E4102B7B0BCBD8A9006B57FE /* Deployment_ppc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment_ppc;
+		};
+		E4102B7C0BCBD8A9006B57FE /* Deployment_i386 */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment_i386;
+		};
+		E49D6A780BEE280600432768 /* Deployment_UB */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = linuxsampler;
+			};
+			name = Deployment_UB;
+		};
+		E49D6A790BEE280600432768 /* Deployment_UB */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Deployment_UB;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB919308733D9F0010E9CD /* Build configuration list for PBXProject "qsampler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB919408733D9F0010E9CD /* Development */,
+				E4102B7B0BCBD8A9006B57FE /* Deployment_ppc */,
+				E4102B7C0BCBD8A9006B57FE /* Deployment_i386 */,
+				E49D6A790BEE280600432768 /* Deployment_UB */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		E4102B740BCBD85E006B57FE /* Build configuration list for PBXLegacyTarget "qsampler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4102B750BCBD85E006B57FE /* Development */,
+				E4102B770BCBD8A9006B57FE /* Deployment_ppc */,
+				E4102B780BCBD8A9006B57FE /* Deployment_i386 */,
+				E49D6A780BEE280600432768 /* Deployment_UB */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
