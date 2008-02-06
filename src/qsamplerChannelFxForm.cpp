@@ -258,7 +258,7 @@ void ChannelFxForm::onFxSendSelection(const QModelIndex& index) {
 
 	m_ui.depthCtrlComboBox->setCurrentIndex(pFxSend->sendDepthMidiCtrl());
 	m_ui.depthSpinBox->setValue(
-		::round(pFxSend->currentDepth() * 100.0)
+		int(::round(pFxSend->currentDepth() * 100.0))
 	);
 }
 
