@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Implemented MIDI activity indicator on channel strips.
+
 * Added FX Sends Dialog to Channel Strips.
 
 * Color pallete fix for the instrument name display in channel strip,

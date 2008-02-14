@@ -26,6 +26,7 @@
 #include "ui_qsamplerChannelStrip.h"
 
 #include "qsamplerChannel.h"
+#include <QTimer>
 
 class QDragEnterEvent;
 
@@ -80,12 +81,17 @@ public slots:
 	bool channelFxEdit();
 	bool channelReset();
 	void volumeChanged(int iVolume);
+	void midiArrived();
 
 protected:
 
 	void dragEnterEvent(QDragEnterEvent* pDragEnterEvent);
 	void dropEvent(QDropEvent* pDropEvent);
 	void contextMenuEvent(QContextMenuEvent* pEvent);
+
+protected slots:
+
+	void midiDataCeased();
 
 private:
 
@@ -94,6 +100,7 @@ private:
 	Channel* m_pChannel;
 	int m_iDirtyChange;
 	int m_iErrorCount;
+	QTimer* pMidiActivityTimer;
 
 	// Channel strip activation/selection.
 	static ChannelStrip *g_pSelectedStrip;

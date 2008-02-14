@@ -551,15 +551,27 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 	// For the time being, just pump it to messages.
 	if (pCustomEvent->type() == QSAMPLER_CUSTOM_EVENT) {
 		CustomEvent *pEvent = static_cast<CustomEvent *> (pCustomEvent);
-		if (pEvent->event() == LSCP_EVENT_CHANNEL_INFO) {
-			int iChannelID = pEvent->data().toInt();
-			ChannelStrip *pChannelStrip = channelStrip(iChannelID);
-			if (pChannelStrip)
-				channelStripChanged(pChannelStrip);
-		} else {
-			appendMessagesColor(tr("Notify event: %1 data: %2")
-				.arg(::lscp_event_to_text(pEvent->event()))
-				.arg(pEvent->data()), "#996699");
+		switch (pEvent->event()) {
+			case LSCP_EVENT_CHANNEL_INFO: {
+				int iChannelID = pEvent->data().toInt();
+				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
+				if (pChannelStrip)
+					channelStripChanged(pChannelStrip);
+				break;
+			}
+#if CONFIG_LSCP_CHANNEL_MIDI
+			case LSCP_EVENT_CHANNEL_MIDI: {
+				int iChannelID = pEvent->data().toInt();
+				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
+				if (pChannelStrip)
+					pChannelStrip->midiArrived();
+				break;
+			}
+#endif
+			default:
+				appendMessagesColor(tr("Notify event: %1 data: %2")
+					.arg(::lscp_event_to_text(pEvent->event()))
+					.arg(pEvent->data()), "#996699");
 		}
 	}
 }
@@ -2605,7 +2617,13 @@ bool MainForm::startClient (void)
 
 	// Subscribe to channel info change notifications...
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO) != LSCP_OK)
-		appendMessagesClient("lscp_client_subscribe");
+		appendMessagesClient("lscp_client_subscribe(CHANNEL_INFO)");
+
+#if CONFIG_LSCP_CHANNEL_MIDI
+	// Subscribe to channel MIDI data notifications...
+	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI) != LSCP_OK)
+		appendMessagesClient("lscp_client_subscribe(CHANNEL_MIDI)");
+#endif
 
 	// We may stop scheduling around.
 	stopSchedule();
@@ -2659,6 +2677,9 @@ void MainForm::stopClient (void)
 	closeSession(false);
 
 	// Close us as a client...
+#if CONFIG_LSCP_CHANNEL_MIDI
+	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI);
+#endif
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO);
 	::lscp_client_destroy(m_pClient);
 	m_pClient = NULL;

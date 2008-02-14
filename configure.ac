@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.1.5, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.1.6, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -232,6 +232,20 @@ if test "x$ac_edit_instrument" = "xyes"; then
   AC_DEFINE(CONFIG_EDIT_INSTRUMENT, 1, [Define if instrument editing is available.])
 fi
 
+AC_CACHE_CHECK([for CHANNEL_MIDI LSCP event support in liblscp],
+  ac_lscp_channel_midi_event, [
+  AC_TRY_COMPILE([
+	#include "lscp/client.h"
+	#include "lscp/event.h"
+	], [
+	lscp_event_t ev;
+	ev = LSCP_EVENT_CHANNEL_MIDI;
+    ], ac_lscp_channel_midi_event="yes", ac_lscp_channel_midi_event="no")
+])
+if test "x$ac_lscp_channel_midi_event" = "xyes"; then
+   AC_DEFINE(CONFIG_LSCP_CHANNEL_MIDI, 1, [Define if LSCP CHANNEL_MIDI event support is available.])
+fi
+
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
@@ -313,6 +327,7 @@ echo "  GigaSampler instrument file support (libgig) . . .: $ac_libgig"
 if test "x$ac_libgig" = "xyes"; then
 echo "  libgig supports fast information retrieval . . . .: $have_libgig_setautoload"
 fi
+echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_lscp_channel_midi_event"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo
