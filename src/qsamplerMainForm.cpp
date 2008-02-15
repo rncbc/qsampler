@@ -561,7 +561,7 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 			}
 #if CONFIG_LSCP_CHANNEL_MIDI
 			case LSCP_EVENT_CHANNEL_MIDI: {
-				int iChannelID = pEvent->data().toInt();
+				int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 				if (pChannelStrip)
 					pChannelStrip->midiArrived();
