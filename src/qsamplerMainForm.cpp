@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include "qsamplerInstrumentListForm.h"
 #include "qsamplerDeviceForm.h"
 #include "qsamplerOptionsForm.h"
+#include "qsamplerDeviceStatusForm.h"
 
 #include <QApplication>
 #include <QWorkspace>
@@ -559,12 +560,27 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 					channelStripChanged(pChannelStrip);
 				break;
 			}
+			case LSCP_EVENT_MIDI_INPUT_DEVICE_COUNT:
+				DeviceStatusForm::onDevicesChanged();
+				updateViewMidiDeviceStatusMenu();
+				break; //TODO: refresh device dialog as well
 #if CONFIG_LSCP_CHANNEL_MIDI
 			case LSCP_EVENT_CHANNEL_MIDI: {
-				int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
+				const int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 				if (pChannelStrip)
 					pChannelStrip->midiArrived();
+				break;
+			}
+#endif
+#if CONFIG_LSCP_DEVICE_MIDI
+			case LSCP_EVENT_DEVICE_MIDI: {
+				const int iDeviceID = pEvent->data().section(' ', 0, 0).toInt();
+				const int iPortID   = pEvent->data().section(' ', 1, 1).toInt();
+				DeviceStatusForm* pDeviceStatusForm =
+					DeviceStatusForm::getInstance(iDeviceID);
+				if (pDeviceStatusForm)
+					pDeviceStatusForm->midiArrived(iPortID);
 				break;
 			}
 #endif
@@ -573,6 +589,21 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 					.arg(::lscp_event_to_text(pEvent->event()))
 					.arg(pEvent->data()), "#996699");
 		}
+	}
+}
+
+void MainForm::updateViewMidiDeviceStatusMenu() {
+	m_ui.viewMidiDeviceStatusMenu->clear();
+	const std::map<int, DeviceStatusForm*> statusForms =
+		DeviceStatusForm::getInstances();
+	for (
+		std::map<int, DeviceStatusForm*>::const_iterator iter = statusForms.begin();
+		iter != statusForms.end(); ++iter
+	) {
+		DeviceStatusForm* pForm = iter->second;
+		m_ui.viewMidiDeviceStatusMenu->addAction(
+			pForm->visibleAction()
+		);
 	}
 }
 
@@ -2619,10 +2650,21 @@ bool MainForm::startClient (void)
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO) != LSCP_OK)
 		appendMessagesClient("lscp_client_subscribe(CHANNEL_INFO)");
 
+	DeviceStatusForm::onDevicesChanged(); // initialize
+	updateViewMidiDeviceStatusMenu();
+	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_MIDI_INPUT_DEVICE_COUNT) != LSCP_OK)
+		appendMessagesClient("lscp_client_subscribe(MIDI_INPUT_DEVICE_COUNT)");
+
 #if CONFIG_LSCP_CHANNEL_MIDI
 	// Subscribe to channel MIDI data notifications...
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI) != LSCP_OK)
 		appendMessagesClient("lscp_client_subscribe(CHANNEL_MIDI)");
+#endif
+
+#if CONFIG_LSCP_DEVICE_MIDI
+	// Subscribe to channel MIDI data notifications...
+	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_DEVICE_MIDI) != LSCP_OK)
+		appendMessagesClient("lscp_client_subscribe(DEVICE_MIDI)");
 #endif
 
 	// We may stop scheduling around.
@@ -2677,9 +2719,13 @@ void MainForm::stopClient (void)
 	closeSession(false);
 
 	// Close us as a client...
+#if CONFIG_LSCP_DEVICE_MIDI
+	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_DEVICE_MIDI);
+#endif
 #if CONFIG_LSCP_CHANNEL_MIDI
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI);
 #endif
+	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_MIDI_INPUT_DEVICE_COUNT);
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO);
 	::lscp_client_destroy(m_pClient);
 	m_pClient = NULL;

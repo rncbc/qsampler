@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Implemented MIDI device activity windows, selectable from the "View"
+  main menu.
+
 * Implemented MIDI activity indicator on channel strips.
 
 * Added FX Sends Dialog to Channel Strips.

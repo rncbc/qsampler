@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -700,6 +700,17 @@ int *Device::getDevices ( lscp_client_t *pClient,
 		break;
 	}
 	return piDeviceIDs;
+}
+
+std::set<int> Device::getDeviceIDs(lscp_client_t *pClient,
+	DeviceType deviceType)
+{
+	std::set<int> result;
+	int* piDeviceIDs = getDevices(pClient, deviceType);
+	if (!piDeviceIDs) return result;
+	for (int i = 0; piDeviceIDs[i] != -1; ++i)
+		result.insert(piDeviceIDs[i]);
+	return result;
 }
 
 

@@ -17,6 +17,7 @@ headers = config.h \
 	src/qsamplerInstrumentForm.h \
 	src/qsamplerInstrumentListForm.h \
 	src/qsamplerDeviceForm.h \
+	src/qsamplerDeviceStatusForm.h \
 	src/qsamplerChannelStrip.h \
 	src/qsamplerChannelForm.h \
 	src/qsamplerChannelFxForm.h \
@@ -36,6 +37,7 @@ sources = src/main.cpp \
 	src/qsamplerInstrumentForm.cpp \
 	src/qsamplerInstrumentListForm.cpp \
 	src/qsamplerDeviceForm.cpp \
+	src/qsamplerDeviceStatusForm.cpp \
 	src/qsamplerChannelStrip.cpp \
 	src/qsamplerChannelForm.cpp \
 	src/qsamplerChannelFxForm.cpp \
