@@ -482,9 +482,10 @@ bool MainForm::queryClose (void)
 
 void MainForm::closeEvent ( QCloseEvent *pCloseEvent )
 {
-	if (queryClose())
+	if (queryClose()) {
+		DeviceStatusForm::deleteAllInstances();
 		pCloseEvent->accept();
-	else
+	} else
 		pCloseEvent->ignore();
 }
 
@@ -561,9 +562,16 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 				break;
 			}
 			case LSCP_EVENT_MIDI_INPUT_DEVICE_COUNT:
+				if (m_pDeviceForm) m_pDeviceForm->refreshDevices();
 				DeviceStatusForm::onDevicesChanged();
 				updateViewMidiDeviceStatusMenu();
-				break; //TODO: refresh device dialog as well
+				break;
+			case LSCP_EVENT_MIDI_INPUT_DEVICE_INFO: {
+				if (m_pDeviceForm) m_pDeviceForm->refreshDevices();
+				const int iDeviceID = pEvent->data().section(' ', 0, 0).toInt();
+				DeviceStatusForm::onDeviceChanged(iDeviceID);
+				break;
+			}
 #if CONFIG_LSCP_CHANNEL_MIDI
 			case LSCP_EVENT_CHANNEL_MIDI: {
 				const int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
@@ -2654,6 +2662,8 @@ bool MainForm::startClient (void)
 	updateViewMidiDeviceStatusMenu();
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_MIDI_INPUT_DEVICE_COUNT) != LSCP_OK)
 		appendMessagesClient("lscp_client_subscribe(MIDI_INPUT_DEVICE_COUNT)");
+	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_MIDI_INPUT_DEVICE_INFO) != LSCP_OK)
+		appendMessagesClient("lscp_client_subscribe(MIDI_INPUT_DEVICE_INFO)");
 
 #if CONFIG_LSCP_CHANNEL_MIDI
 	// Subscribe to channel MIDI data notifications...
@@ -2725,6 +2735,7 @@ void MainForm::stopClient (void)
 #if CONFIG_LSCP_CHANNEL_MIDI
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI);
 #endif
+	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_MIDI_INPUT_DEVICE_INFO);
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_MIDI_INPUT_DEVICE_COUNT);
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO);
 	::lscp_client_destroy(m_pClient);

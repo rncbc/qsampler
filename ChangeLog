@@ -5,6 +5,10 @@ ChangeLog
 
 CVS HEAD
 
+* Refresh device management dialog when device informations changed,
+  e.g. on changes caused by other frontends
+  (fixes segfault on device changes)
+
 * Implemented MIDI device activity windows, selectable from the "View"
   main menu.
 

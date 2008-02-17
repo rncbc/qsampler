@@ -57,9 +57,12 @@ public:
 	static DeviceStatusForm* getInstance(int iDeviceID);
 	static const std::map<int, DeviceStatusForm*>& getInstances();
 	static void onDevicesChanged();
+	static void onDeviceChanged(int iDeviceID);
+	static void deleteAllInstances();
 
 protected:
 	void closeEvent(QCloseEvent* event);
+	void updateGUIPorts();
 
 	std::vector<MidiActivityLED*> midiActivityLEDs;
 
