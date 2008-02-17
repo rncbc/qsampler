@@ -69,6 +69,7 @@ public:
 	void appendMessagesClient(const QString& s);
 
 	ChannelStrip* createChannelStrip(Channel *pChannel);
+	void destroyChannelStrip(ChannelStrip* pChannelStrip);
 	ChannelStrip* activeChannelStrip();
 	ChannelStrip* channelStripAt(int iChannel);
 	ChannelStrip* channelStrip(int iChannelID);
@@ -144,6 +145,7 @@ protected:
 	void updateMessagesLimit();
 	void updateMessagesCapture();
 	void updateViewMidiDeviceStatusMenu();
+	void updateAllChannelStrips(bool bRemoveDeadStrips);
 	void startSchedule(int iStartDelay);
 	void stopSchedule();
 	void startServer();
