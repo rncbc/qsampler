@@ -40,7 +40,7 @@ MidiActivityLED::MidiActivityLED(QString text, QWidget* parent) : QLabel(text, p
 	setAutoFillBackground(true);
 #else
 	setText("X");
-	setTooltip("MIDI Activity Disabled");
+	setToolTip("MIDI Activity Disabled");
 #endif
 	timer.setSingleShot(true);
 	QObject::connect(

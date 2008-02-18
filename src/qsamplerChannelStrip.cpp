@@ -107,7 +107,7 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	m_ui.MidiActivityLabel->setAutoFillBackground(true);
 #else
 	m_ui.MidiActivityLabel->setText("X");
-	m_ui.MidiActivityLabel->setTooltip("MIDI Activity Disabled");
+	m_ui.MidiActivityLabel->setToolTip("MIDI Activity Disabled");
 #endif
 
 	setSelected(false);
