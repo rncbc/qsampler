@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -69,6 +69,7 @@ public:
 	void appendMessagesClient(const QString& s);
 
 	ChannelStrip* createChannelStrip(Channel *pChannel);
+	void destroyChannelStrip(ChannelStrip* pChannelStrip);
 	ChannelStrip* activeChannelStrip();
 	ChannelStrip* channelStripAt(int iChannel);
 	ChannelStrip* channelStrip(int iChannelID);
@@ -143,6 +144,8 @@ protected:
 	void updateMessagesFont();
 	void updateMessagesLimit();
 	void updateMessagesCapture();
+	void updateViewMidiDeviceStatusMenu();
+	void updateAllChannelStrips(bool bRemoveDeadStrips);
 	void startSchedule(int iStartDelay);
 	void stopSchedule();
 	void startServer();

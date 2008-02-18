@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <QModelIndex>
 #include <QSize>
 #include <QList>
+#include <set>
 
 #include <lscp/client.h>
 #include <lscp/device.h>
@@ -151,6 +152,8 @@ public:
 
 	// Device ids enumerator.
 	static int *getDevices(lscp_client_t *pClient,
+		DeviceType deviceType);
+	static std::set<int> getDeviceIDs(lscp_client_t *pClient,
 		DeviceType deviceType);
 
 	// Driver names enumerator.

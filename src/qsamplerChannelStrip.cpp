@@ -31,6 +31,9 @@
 #include <QDragEnterEvent>
 #include <QUrl>
 
+#define MIDI_OFF_COLOR			Qt::darkGreen
+#define MIDI_ON_COLOR			Qt::green
+
 // Channel status/usage usage limit control.
 #define QSAMPLER_ERROR_LIMIT	3
 
@@ -91,6 +94,21 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.FxPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelFxEdit()));
+
+	pMidiActivityTimer = new QTimer(this);
+	pMidiActivityTimer->setSingleShot(true);
+	QObject::connect(
+		pMidiActivityTimer, SIGNAL(timeout()),
+		this, SLOT(midiDataCeased())
+	);
+
+#if CONFIG_LSCP_CHANNEL_MIDI
+	m_ui.MidiActivityLabel->setPalette(MIDI_OFF_COLOR);
+	m_ui.MidiActivityLabel->setAutoFillBackground(true);
+#else
+	m_ui.MidiActivityLabel->setText("X");
+	m_ui.MidiActivityLabel->setTooltip("MIDI Activity Disabled");
+#endif
 
 	setSelected(false);
 }
@@ -531,6 +549,10 @@ void ChannelStrip::volumeChanged ( int iVolume )
 	}
 }
 
+void ChannelStrip::midiArrived() {
+	m_ui.MidiActivityLabel->setPalette(MIDI_ON_COLOR);
+	pMidiActivityTimer->start(50);
+}
 
 // Context menu event handler.
 void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
@@ -542,6 +564,9 @@ void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 	m_pChannel->contextMenuEvent(pEvent);
 }
 
+void ChannelStrip::midiDataCeased() {
+	m_ui.MidiActivityLabel->setPalette(MIDI_OFF_COLOR);
+}
 
 // Error count hackish accessors.
 void ChannelStrip::resetErrorCount (void)
