@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.1.9, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.1.10, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -243,7 +243,7 @@ AC_CACHE_CHECK([for CHANNEL_MIDI LSCP event support in liblscp],
     ], ac_lscp_channel_midi_event="yes", ac_lscp_channel_midi_event="no")
 ])
 if test "x$ac_lscp_channel_midi_event" = "xyes"; then
-   AC_DEFINE(CONFIG_LSCP_CHANNEL_MIDI, 1, [Define if LSCP CHANNEL_MIDI event support is available.])
+   AC_DEFINE(CONFIG_EVENT_CHANNEL_MIDI, 1, [Define if LSCP CHANNEL_MIDI event support is available.])
 fi
 
 AC_CACHE_CHECK([for DEVICE_MIDI LSCP event support in liblscp],
@@ -257,7 +257,7 @@ AC_CACHE_CHECK([for DEVICE_MIDI LSCP event support in liblscp],
     ], ac_lscp_device_midi_event="yes", ac_lscp_device_midi_event="no")
 ])
 if test "x$ac_lscp_device_midi_event" = "xyes"; then
-   AC_DEFINE(CONFIG_LSCP_DEVICE_MIDI, 1, [Define if LSCP DEVICE_MIDI event support is available.])
+   AC_DEFINE(CONFIG_EVENT_DEVICE_MIDI, 1, [Define if LSCP DEVICE_MIDI event support is available.])
 fi
 
 # Check for optional libraries.
