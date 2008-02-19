@@ -117,7 +117,7 @@ ChannelFxForm::ChannelFxForm (
 	FxSendsModel* pModel =
 		new FxSendsModel(m_pSamplerChannel->channelID(), m_ui.SendsListView);
 	m_ui.SendsListView->setModel(pModel);
-#ifdef QT_VERSION >= 0x040300
+#if QT_VERSION >= 0x040300
 	m_ui.SendsListView->setSelectionRectVisible(true);
 #endif
 
