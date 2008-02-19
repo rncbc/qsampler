@@ -102,7 +102,7 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 		this, SLOT(midiDataCeased())
 	);
 
-#if CONFIG_LSCP_CHANNEL_MIDI
+#if CONFIG_EVENT_CHANNEL_MIDI
 	m_ui.MidiActivityLabel->setPalette(MIDI_OFF_COLOR);
 	m_ui.MidiActivityLabel->setAutoFillBackground(true);
 #else

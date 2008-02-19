@@ -581,7 +581,7 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 			case LSCP_EVENT_AUDIO_OUTPUT_DEVICE_INFO:
 				if (m_pDeviceForm) m_pDeviceForm->refreshDevices();
 				break;
-#if CONFIG_LSCP_CHANNEL_MIDI
+#if CONFIG_EVENT_CHANNEL_MIDI
 			case LSCP_EVENT_CHANNEL_MIDI: {
 				const int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
@@ -590,7 +590,7 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 				break;
 			}
 #endif
-#if CONFIG_LSCP_DEVICE_MIDI
+#if CONFIG_EVENT_DEVICE_MIDI
 			case LSCP_EVENT_DEVICE_MIDI: {
 				const int iDeviceID = pEvent->data().section(' ', 0, 0).toInt();
 				const int iPortID   = pEvent->data().section(' ', 1, 1).toInt();
@@ -2721,13 +2721,13 @@ bool MainForm::startClient (void)
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_AUDIO_OUTPUT_DEVICE_INFO) != LSCP_OK)
 		appendMessagesClient("lscp_client_subscribe(AUDIO_OUTPUT_DEVICE_INFO)");
 
-#if CONFIG_LSCP_CHANNEL_MIDI
+#if CONFIG_EVENT_CHANNEL_MIDI
 	// Subscribe to channel MIDI data notifications...
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI) != LSCP_OK)
 		appendMessagesClient("lscp_client_subscribe(CHANNEL_MIDI)");
 #endif
 
-#if CONFIG_LSCP_DEVICE_MIDI
+#if CONFIG_EVENT_DEVICE_MIDI
 	// Subscribe to channel MIDI data notifications...
 	if (::lscp_client_subscribe(m_pClient, LSCP_EVENT_DEVICE_MIDI) != LSCP_OK)
 		appendMessagesClient("lscp_client_subscribe(DEVICE_MIDI)");
@@ -2785,10 +2785,10 @@ void MainForm::stopClient (void)
 	closeSession(false);
 
 	// Close us as a client...
-#if CONFIG_LSCP_DEVICE_MIDI
+#if CONFIG_EVENT_DEVICE_MIDI
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_DEVICE_MIDI);
 #endif
-#if CONFIG_LSCP_CHANNEL_MIDI
+#if CONFIG_EVENT_CHANNEL_MIDI
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_MIDI);
 #endif
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_AUDIO_OUTPUT_DEVICE_INFO);
