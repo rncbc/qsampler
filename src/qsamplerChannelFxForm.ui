@@ -51,9 +51,6 @@
           <property name="alternatingRowColors" >
            <bool>true</bool>
           </property>
-          <property name="selectionRectVisible" >
-           <bool>true</bool>
-          </property>
          </widget>
         </item>
         <item>

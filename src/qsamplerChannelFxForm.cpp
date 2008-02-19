@@ -117,6 +117,9 @@ ChannelFxForm::ChannelFxForm (
 	FxSendsModel* pModel =
 		new FxSendsModel(m_pSamplerChannel->channelID(), m_ui.SendsListView);
 	m_ui.SendsListView->setModel(pModel);
+#ifdef QT_VERSION >= 0x040300
+	m_ui.SendsListView->setSelectionRectVisible(true);
+#endif
 
 	const int iRowHeight = m_ui.audioRoutingTable->fontMetrics().height() + 4;
 	m_ui.audioRoutingTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
