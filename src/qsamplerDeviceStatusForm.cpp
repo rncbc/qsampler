@@ -35,12 +35,12 @@ namespace QSampler {
 //
 
 MidiActivityLED::MidiActivityLED(QString text, QWidget* parent) : QLabel(text, parent) {
-#if CONFIG_LSCP_DEVICE_MIDI
+#if CONFIG_EVENT_DEVICE_MIDI
 	setPalette(MIDI_OFF_COLOR);
 	setAutoFillBackground(true);
 #else
 	setText("X");
-	setToolTip("MIDI Activity Disabled");
+	setToolTip("MIDI Activity Disabled\n(at compile time)");
 #endif
 	timer.setSingleShot(true);
 	QObject::connect(
@@ -50,12 +50,16 @@ MidiActivityLED::MidiActivityLED(QString text, QWidget* parent) : QLabel(text, p
 }
 
 void MidiActivityLED::midiDataArrived() {
+#if CONFIG_EVENT_DEVICE_MIDI
 	setPalette(MIDI_ON_COLOR);
 	timer.start(50);
+#endif
 }
 
 void MidiActivityLED::midiDataCeased() {
+#if CONFIG_EVENT_DEVICE_MIDI
 	setPalette(MIDI_OFF_COLOR);
+#endif
 }
 
 //-------------------------------------------------------------------------

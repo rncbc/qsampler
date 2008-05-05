@@ -5,6 +5,9 @@ ChangeLog
 
 CVS HEAD
 
+* Bugfix in sampler channel dialog, driver combo boxes' content were
+  screwed.
+
 * Automatically add & remove channel strips as they were removed e.g. by
   other frontends.
 

@@ -2,7 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ void ChannelForm::setup ( Channel *pChannel )
 		return;
 
 	// It can be a brand new channel, remember?
-	bool bNew = (m_pChannel->channelID() < 0);
+	const bool bNew = (m_pChannel->channelID() < 0);
 	setWindowTitle(QSAMPLER_TITLE ": " + m_pChannel->channelName());
 
 	// Check if we're up and connected.
@@ -242,9 +242,10 @@ void ChannelForm::setup ( Channel *pChannel )
 				Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 			m_ui.MidiDriverComboBox->insertItem(0, sMidiDriver);
 		}
-		m_ui.MidiDriverComboBox->setItemText(
-			m_ui.MidiDriverComboBox->currentIndex(),
-			sMidiDriver);
+		m_ui.MidiDriverComboBox->setCurrentIndex(
+			m_ui.MidiDriverComboBox->findText(sMidiDriver,
+				Qt::MatchExactly | Qt::MatchCaseSensitive)
+		);
 	}
 	selectMidiDriverItem(sMidiDriver);
 	if (!bNew) {
@@ -288,9 +289,10 @@ void ChannelForm::setup ( Channel *pChannel )
 				Qt::MatchExactly | Qt::MatchCaseSensitive) < 0) {
 			m_ui.AudioDriverComboBox->insertItem(0, sAudioDriver);
 		}
-		m_ui.AudioDriverComboBox->setItemText(
-			m_ui.AudioDriverComboBox->currentIndex(),
-			sAudioDriver);
+ 		m_ui.AudioDriverComboBox->setCurrentIndex(
+			m_ui.AudioDriverComboBox->findText(sAudioDriver,
+				Qt::MatchExactly | Qt::MatchCaseSensitive)
+		);
 	}
 	selectAudioDriverItem(sAudioDriver);
 	if (!bNew) {
