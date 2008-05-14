@@ -1,7 +1,7 @@
 // qsamplerMessages.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 
 class QSocketNotifier;
 class QTextEdit;
+class QFile;
 
 namespace QSampler {
 
@@ -57,6 +58,10 @@ public:
 	int messagesLimit();
 	void setMessagesLimit(int iMessagesLimit);
 
+	// Logging settings.
+	bool isLogging() const;
+	void setLogging(bool bEnabled, const QString& sFilename = QString());
+
 	// The main utility methods.
 	void appendMessages(const QString& s);
 	void appendMessagesColor(const QString& s, const QString &c);
@@ -75,8 +80,12 @@ signals:
 
 protected slots:
 
+	// Message executives.
+	void appendMessagesLine(const QString& s);
+	void appendMessagesLog(const QString& s);
+
 	// overridden method of QWidget
-	void showEvent(QShowEvent* event);
+	void showEvent(QShowEvent *pEvent);
 
 	// Stdout capture slot.
 	void stdoutNotify(int fd);
@@ -89,12 +98,15 @@ private:
 	int m_iMessagesHigh;
 
 	// The textview main widget.
-	QTextEdit *m_pTextView;
+	QTextEdit *m_pMessagesTextView;
 
 	// Stdout capture variables.
 	QSocketNotifier *m_pStdoutNotifier;
 	QString          m_sStdoutBuffer;
 	int              m_fdStdout[2];
+
+	// Logging stuff.
+	QFile *m_pMessagesLog;	
 };
 
 } // namespace QSampler
