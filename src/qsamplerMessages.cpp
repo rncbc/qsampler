@@ -55,15 +55,15 @@ namespace QSampler {
 
 // Constructor.
 Messages::Messages ( QWidget *pParent )
-    : QDockWidget(pParent)
+	: QDockWidget(pParent)
 {
 	// Surely a name is crucial (e.g.for storing geometry settings)
 	QDockWidget::setObjectName("qsamplerMessages");
 
-    // Intialize stdout capture stuff.
-    m_pStdoutNotifier = NULL;
-    m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
-    m_fdStdout[QSAMPLER_MESSAGES_FDWRITE] = QSAMPLER_MESSAGES_FDNIL;
+	// Intialize stdout capture stuff.
+	m_pStdoutNotifier = NULL;
+	m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
+	m_fdStdout[QSAMPLER_MESSAGES_FDWRITE] = QSAMPLER_MESSAGES_FDNIL;
 
 	// Create local text view widget.
 	m_pMessagesTextView = new QTextEdit(this);
@@ -100,20 +100,21 @@ Messages::Messages ( QWidget *pParent )
 // Destructor.
 Messages::~Messages (void)
 {
+	// Turn off and close logging.
 	setLogging(false);
 
-    // No more notifications.
-    if (m_pStdoutNotifier)
-        delete m_pStdoutNotifier;
+	// No more notifications.
+	if (m_pStdoutNotifier)
+		delete m_pStdoutNotifier;
 
-    // No need to delete child widgets, Qt does it all for us.
+	// No need to delete child widgets, Qt does it all for us.
 }
 
 
 void Messages::showEvent ( QShowEvent *pEvent )
 {
-    QDockWidget::showEvent(pEvent);
-    emit visibilityChanged(isVisible());
+	QDockWidget::showEvent(pEvent);
+	emit visibilityChanged(isVisible());
 }
 
 
@@ -121,12 +122,12 @@ void Messages::showEvent ( QShowEvent *pEvent )
 void Messages::stdoutNotify ( int fd )
 {
 #if !defined(WIN32)
-    char achBuffer[1024];
-    int  cchBuffer = ::read(fd, achBuffer, sizeof(achBuffer) - 1);
-    if (cchBuffer > 0) {
-        achBuffer[cchBuffer] = (char) 0;
-        appendStdoutBuffer(achBuffer);
-    }
+	char achBuffer[1024];
+	int  cchBuffer = ::read(fd, achBuffer, sizeof(achBuffer) - 1);
+	if (cchBuffer > 0) {
+		achBuffer[cchBuffer] = (char) 0;
+		appendStdoutBuffer(achBuffer);
+	}
 #endif
 }
 
@@ -151,23 +152,23 @@ void Messages::appendStdoutBuffer ( const QString& s )
 // Stdout flusher -- show up any unfinished line...
 void Messages::flushStdoutBuffer (void)
 {
-    if (!m_sStdoutBuffer.isEmpty()) {
-        appendMessagesText(m_sStdoutBuffer);
-        m_sStdoutBuffer.truncate(0);
-    }
+	if (!m_sStdoutBuffer.isEmpty()) {
+		appendMessagesText(m_sStdoutBuffer);
+		m_sStdoutBuffer.truncate(0);
+	}
 }
 
 
 // Stdout capture accessors.
 bool Messages::isCaptureEnabled (void)
 {
-    return (bool) (m_pStdoutNotifier != NULL);
+	return (bool) (m_pStdoutNotifier != NULL);
 }
 
 void Messages::setCaptureEnabled ( bool bCapture )
 {
-    // Flush current buffer.
-    flushStdoutBuffer();
+	// Flush current buffer.
+	flushStdoutBuffer();
 
 #if !defined(WIN32)
 	// Destroy if already enabled.
@@ -201,25 +202,25 @@ void Messages::setCaptureEnabled ( bool bCapture )
 // Message font accessors.
 QFont Messages::messagesFont (void)
 {
-    return m_pMessagesTextView->font();
+	return m_pMessagesTextView->font();
 }
 
 void Messages::setMessagesFont ( const QFont& font )
 {
-    m_pMessagesTextView->setFont(font);
+	m_pMessagesTextView->setFont(font);
 }
 
 
 // Maximum number of message lines accessors.
 int Messages::messagesLimit (void)
 {
-    return m_iMessagesLimit;
+	return m_iMessagesLimit;
 }
 
 void Messages::setMessagesLimit ( int iMessagesLimit )
 {
-    m_iMessagesLimit = iMessagesLimit;
-    m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
+	m_iMessagesLimit = iMessagesLimit;
+	m_iMessagesHigh  = iMessagesLimit + (iMessagesLimit / 3);
 }
 
 // Messages logging stuff.
@@ -287,13 +288,12 @@ void Messages::appendMessagesLine ( const QString& s )
 // The main utility methods.
 void Messages::appendMessages ( const QString& s )
 {
-    appendMessagesColor(s, "#999999");
+	appendMessagesColor(s, "#999999");
 }
 
 void Messages::appendMessagesColor ( const QString& s, const QString &c )
 {
 	QString sText = QTime::currentTime().toString("hh:mm:ss.zzz") + ' ' + s;
-	
 	appendMessagesLine("<font color=\"" + c + "\">" + sText + "</font>");
 	appendMessagesLog(sText);
 }
