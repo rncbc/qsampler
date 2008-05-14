@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 
 #include <QMessageBox>
 #include <QFontDialog>
+#include <QFileDialog>
 
 
 namespace QSampler {
@@ -72,6 +73,15 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	QObject::connect(m_ui.StartDelaySpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(optionsChanged()));
+	QObject::connect(m_ui.MessagesLogCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.MessagesLogPathComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.MessagesLogPathToolButton,
+		SIGNAL(clicked()),
+		SLOT(browseMessagesLogPath()));
 	QObject::connect(m_ui.DisplayFontPushButton,
 		SIGNAL(clicked()),
 		SLOT(chooseDisplayFont()));
@@ -141,6 +151,7 @@ void OptionsForm::setup ( Options *pOptions )
 	m_pOptions->loadComboBoxHistory(m_ui.ServerHostComboBox);
 	m_pOptions->loadComboBoxHistory(m_ui.ServerPortComboBox);
 	m_pOptions->loadComboBoxHistory(m_ui.ServerCmdLineComboBox);
+	m_pOptions->loadComboBoxHistory(m_ui.MessagesLogPathComboBox);
 
 	// Load Server settings...
 	m_ui.ServerHostComboBox->setEditText(m_pOptions->sServerHost);
@@ -149,6 +160,10 @@ void OptionsForm::setup ( Options *pOptions )
 	m_ui.ServerStartCheckBox->setChecked(m_pOptions->bServerStart);
 	m_ui.ServerCmdLineComboBox->setEditText(m_pOptions->sServerCmdLine);
 	m_ui.StartDelaySpinBox->setValue(m_pOptions->iStartDelay);
+
+	// Logging options...
+	m_ui.MessagesLogCheckBox->setChecked(m_pOptions->bMessagesLog);
+	m_ui.MessagesLogPathComboBox->setEditText(m_pOptions->sMessagesLogPath);
 
 	// Load Display options...
 	QFont font;
@@ -215,7 +230,10 @@ void OptionsForm::accept (void)
 		m_pOptions->iServerTimeout = m_ui.ServerTimeoutSpinBox->value();
 		m_pOptions->bServerStart   = m_ui.ServerStartCheckBox->isChecked();
 		m_pOptions->sServerCmdLine = m_ui.ServerCmdLineComboBox->currentText().trimmed();
-		m_pOptions->iStartDelay      = m_ui.StartDelaySpinBox->value();
+		m_pOptions->iStartDelay    = m_ui.StartDelaySpinBox->value();
+		// Logging options...
+		m_pOptions->bMessagesLog   = m_ui.MessagesLogCheckBox->isChecked();
+		m_pOptions->sMessagesLogPath = m_ui.MessagesLogPathComboBox->currentText();
 		// Channels options...
 		m_pOptions->sDisplayFont   = m_ui.DisplayFontTextLabel->font().toString();
 		m_pOptions->bDisplayEffect = m_ui.DisplayEffectCheckBox->isChecked();
@@ -241,6 +259,7 @@ void OptionsForm::accept (void)
 	m_pOptions->saveComboBoxHistory(m_ui.ServerHostComboBox);
 	m_pOptions->saveComboBoxHistory(m_ui.ServerPortComboBox);
 	m_pOptions->saveComboBoxHistory(m_ui.ServerCmdLineComboBox);
+	m_pOptions->saveComboBoxHistory(m_ui.MessagesLogPathComboBox);
 
 	// Just go with dialog acceptance.
 	QDialog::accept();
@@ -288,18 +307,46 @@ void OptionsForm::optionsChanged (void)
 // Stabilize current form state.
 void OptionsForm::stabilizeForm (void)
 {
+	bool bValid = (m_iDirtyCount > 0);
+
 	bool bEnabled = m_ui.ServerStartCheckBox->isChecked();
 	m_ui.ServerCmdLineTextLabel->setEnabled(bEnabled);
 	m_ui.ServerCmdLineComboBox->setEnabled(bEnabled);
 	m_ui.StartDelayTextLabel->setEnabled(bEnabled);
 	m_ui.StartDelaySpinBox->setEnabled(bEnabled);
 
+	bEnabled = m_ui.MessagesLogCheckBox->isChecked();
+	m_ui.MessagesLogPathComboBox->setEnabled(bEnabled);
+	m_ui.MessagesLogPathToolButton->setEnabled(bEnabled);
+	if (bEnabled && bValid) {
+		const QString& sPath = m_ui.MessagesLogPathComboBox->currentText();
+		bValid = !sPath.isEmpty();
+	}
+
 	m_ui.AutoRefreshTimeSpinBox->setEnabled(
 		m_ui.AutoRefreshCheckBox->isChecked());
 	m_ui.MessagesLimitLinesSpinBox->setEnabled(
 		m_ui.MessagesLimitCheckBox->isChecked());
 
-	m_ui.OkPushButton->setEnabled(m_iDirtyCount > 0);
+	m_ui.OkPushButton->setEnabled(bValid);
+}
+
+
+// Messages log path browse slot.
+void OptionsForm::browseMessagesLogPath (void)
+{
+	QString sFileName = QFileDialog::getSaveFileName(
+		this,											// Parent.
+		tr("Messages Log"),				                // Caption.
+		m_ui.MessagesLogPathComboBox->currentText(),	// Start here.
+		tr("Log files") + " (*.log)"	                // Filter (log files)
+	);
+
+	if (!sFileName.isEmpty()) {
+		m_ui.MessagesLogPathComboBox->setEditText(sFileName);
+		m_ui.MessagesLogPathComboBox->setFocus();
+		optionsChanged();
+	}
 }
 
 

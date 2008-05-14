@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -63,6 +63,12 @@ Options::Options (void)
 	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
 	#endif
 	iStartDelay    = m_settings.value("/StartDelay", 3).toInt();
+	m_settings.endGroup();
+
+	// Load logging options...
+	m_settings.beginGroup("/Logging");
+	bMessagesLog     = m_settings.value("/MessagesLog", false).toBool();
+	sMessagesLogPath = m_settings.value("/MessagesLogPath", "qsampler.log").toString();
 	m_settings.endGroup();
 
 	// Load display options...
@@ -145,6 +151,12 @@ Options::~Options (void)
 	m_settings.setValue("/ServerStart", bServerStart);
 	m_settings.setValue("/ServerCmdLine", sServerCmdLine);
 	m_settings.setValue("/StartDelay", iStartDelay);
+	m_settings.endGroup();
+
+	// Save logging options...
+	m_settings.beginGroup("/Logging");
+	m_settings.setValue("/MessagesLog", bMessagesLog);
+	m_settings.setValue("/MessagesLogPath", sMessagesLogPath);
 	m_settings.endGroup();
 
 	// Save display options.

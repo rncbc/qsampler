@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@ protected slots:
 	void reject();
 	void optionsChanged();
 	void stabilizeForm();
+	void browseMessagesLogPath();
 	void chooseDisplayFont();
 	void chooseMessagesFont();
 	void toggleDisplayEffect(bool bOn);

@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -391,6 +391,8 @@ void MainForm::setup ( Options *pOptions )
 #else
 	viewInstrumentsAction->setEnabled(false);
 #endif
+	// Setup appropriately...
+	m_pMessages->setLogging(m_pOptions->bMessagesLog, m_pOptions->sMessagesLogPath);
 	// Set message defaults...
 	updateMessagesFont();
 	updateMessagesLimit();
@@ -1616,6 +1618,8 @@ void MainForm::viewOptions (void)
 		int     iOldServerTimeout   = m_pOptions->iServerTimeout;
 		bool    bOldServerStart     = m_pOptions->bServerStart;
 		QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
+		bool    bOldMessagesLog     = m_pOptions->bMessagesLog; 
+		QString sOldMessagesLogPath = m_pOptions->sMessagesLogPath;
 		QString sOldDisplayFont     = m_pOptions->sDisplayFont;
 		bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
 		int     iOldMaxVolume       = m_pOptions->iMaxVolume;
@@ -1643,6 +1647,11 @@ void MainForm::viewOptions (void)
 				updateMessagesCapture();
 			}
 			// Check wheather something immediate has changed.
+			if (( bOldMessagesLog && !m_pOptions->bMessagesLog) ||
+				(!bOldMessagesLog &&  m_pOptions->bMessagesLog) ||
+				(sOldMessagesLogPath != m_pOptions->sMessagesLogPath))
+				m_pMessages->setLogging(
+					m_pOptions->bMessagesLog, m_pOptions->sMessagesLogPath);
 			if (( bOldCompletePath && !m_pOptions->bCompletePath) ||
 				(!bOldCompletePath &&  m_pOptions->bCompletePath) ||
 				(iOldMaxRecentFiles != m_pOptions->iMaxRecentFiles))
