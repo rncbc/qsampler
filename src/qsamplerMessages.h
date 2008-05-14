@@ -78,7 +78,7 @@ signals:
 
 	void visibilityChanged(bool bVisible);
 
-protected slots:
+protected:
 
 	// Message executives.
 	void appendMessagesLine(const QString& s);
@@ -86,6 +86,8 @@ protected slots:
 
 	// overridden method of QWidget
 	void showEvent(QShowEvent *pEvent);
+
+protected slots:
 
 	// Stdout capture slot.
 	void stdoutNotify(int fd);

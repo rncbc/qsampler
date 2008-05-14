@@ -391,8 +391,10 @@ void MainForm::setup ( Options *pOptions )
 #else
 	viewInstrumentsAction->setEnabled(false);
 #endif
-	// Setup appropriately...
-	m_pMessages->setLogging(m_pOptions->bMessagesLog, m_pOptions->sMessagesLogPath);
+	// Setup messages logging appropriately...
+	m_pMessages->setLogging(
+		m_pOptions->bMessagesLog,
+		m_pOptions->sMessagesLogPath);
 	// Set message defaults...
 	updateMessagesFont();
 	updateMessagesLimit();
