@@ -1633,6 +1633,7 @@ void MainForm::viewOptions (void)
 		bool    bOldCompletePath    = m_pOptions->bCompletePath;
 		bool    bOldInstrumentNames = m_pOptions->bInstrumentNames;
 		int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
+		int     iOldBaseFontSize    = m_pOptions->iBaseFontSize;
 		// Load the current setup settings.
 		pOptionsForm->setup(m_pOptions);
 		// Show the setup dialog...
@@ -1641,7 +1642,8 @@ void MainForm::viewOptions (void)
 			if (( bOldStdoutCapture && !m_pOptions->bStdoutCapture) ||
 				(!bOldStdoutCapture &&  m_pOptions->bStdoutCapture) ||
 				( bOldKeepOnTop     && !m_pOptions->bKeepOnTop)     ||
-				(!bOldKeepOnTop     &&  m_pOptions->bKeepOnTop)) {
+				(!bOldKeepOnTop     &&  m_pOptions->bKeepOnTop)     ||
+				(iOldBaseFontSize   !=  m_pOptions->iBaseFontSize)) {
 				QMessageBox::information(this,
 					QSAMPLER_TITLE ": " + tr("Information"),
 					tr("Some settings may be only effective\n"

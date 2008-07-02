@@ -82,6 +82,7 @@ public:
 	bool    bStdoutCapture;
 	bool    bCompletePath;
 	bool    bInstrumentNames;
+	int     iBaseFontSize;
 
 	// View options...
 	bool    bMenubar;

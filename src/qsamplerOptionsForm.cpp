@@ -124,6 +124,9 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	QObject::connect(m_ui.InstrumentNamesCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
+	QObject::connect(m_ui.BaseFontSizeComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(optionsChanged()));
 	QObject::connect(m_ui.OkPushButton,
 		SIGNAL(clicked()),
 		SLOT(accept()));
@@ -208,6 +211,10 @@ void OptionsForm::setup ( Options *pOptions )
 	m_ui.CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
 	m_ui.InstrumentNamesCheckBox->setChecked(m_pOptions->bInstrumentNames);
 	m_ui.MaxRecentFilesSpinBox->setValue(m_pOptions->iMaxRecentFiles);
+	if (m_pOptions->iBaseFontSize > 0)
+		m_ui.BaseFontSizeComboBox->setEditText(QString::number(m_pOptions->iBaseFontSize));
+	else
+		m_ui.BaseFontSizeComboBox->setCurrentIndex(0);
 
 #ifndef CONFIG_LIBGIG
 	m_ui.InstrumentNamesCheckBox->setEnabled(false);
@@ -251,6 +258,7 @@ void OptionsForm::accept (void)
 		m_pOptions->bCompletePath  = m_ui.CompletePathCheckBox->isChecked();
 		m_pOptions->bInstrumentNames = m_ui.InstrumentNamesCheckBox->isChecked();
 		m_pOptions->iMaxRecentFiles  = m_ui.MaxRecentFilesSpinBox->value();
+		m_pOptions->iBaseFontSize  = m_ui.BaseFontSizeComboBox->currentText().toInt();
 		// Reset dirty flag.
 		m_iDirtyCount = 0;
 	}

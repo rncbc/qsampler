@@ -5,6 +5,10 @@ ChangeLog
 
 CVS HEAD
 
+* Due to some trouble with newer Qt >= 4.4 applications regarding font
+  size configuration, a new global user option is now available to the
+  rescue: View/Options... /Display/Other/Base font size (default none).
+
 * Attempt to load Qt's own translation support and get rid of
   the ever warning startup message, unless built in debug mode.
   (transaction by Guido Scholz, while on qsynth-devel, thanks).

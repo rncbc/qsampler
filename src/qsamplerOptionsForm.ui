@@ -19,30 +19,23 @@
    with this program; if not, write to the Free Software Foundation, Inc.,
    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-</comment>
+ </comment>
  <class>qsamplerOptionsForm</class>
  <widget class="QDialog" name="qsamplerOptionsForm" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>481</height>
+    <width>537</width>
+    <height>368</height>
    </rect>
-  </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>1</hsizetype>
-    <vsizetype>1</vsizetype>
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle" >
    <string>Qsampler: Options</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../icons/qsampler.qrc" >:/icons/qsampler.png</iconset>
+   <iconset resource="../icons/qsampler.qrc" >
+    <normaloff>:/icons/qsampler.png</normaloff>:/icons/qsampler.png</iconset>
   </property>
   <property name="sizeGripEnabled" >
    <bool>true</bool>
@@ -56,11 +49,11 @@
    </property>
    <item row="1" column="0" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>4</number>
+     </property>
+     <property name="margin" >
+      <number>0</number>
      </property>
      <item>
       <spacer>
@@ -70,7 +63,7 @@
        <property name="sizeType" >
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>250</width>
          <height>16</height>
@@ -84,7 +77,8 @@
         <string>OK</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/formAccept.png</iconset>
+        <iconset resource="../icons/qsampler.qrc" >
+         <normaloff>:/icons/formAccept.png</normaloff>:/icons/formAccept.png</iconset>
        </property>
       </widget>
      </item>
@@ -94,7 +88,8 @@
         <string>Cancel</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/formReject.png</iconset>
+        <iconset resource="../icons/qsampler.qrc" >
+         <normaloff>:/icons/formReject.png</normaloff>:/icons/formReject.png</iconset>
        </property>
       </widget>
      </item>
@@ -109,15 +104,23 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="ServerTabPage" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>523</width>
+        <height>301</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>&amp;Server</string>
       </attribute>
       <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>8</number>
-       </property>
        <property name="spacing" >
         <number>4</number>
+       </property>
+       <property name="margin" >
+        <number>8</number>
        </property>
        <item>
         <widget class="QGroupBox" name="SettingsGroupBox" >
@@ -219,7 +222,7 @@
           </item>
           <item row="0" column="1" colspan="2" >
            <widget class="QComboBox" name="ServerHostComboBox" >
-            <property name="sizePolicy" >
+             <property name="sizePolicy" >
              <sizepolicy>
               <hsizetype>7</hsizetype>
               <vsizetype>0</vsizetype>
@@ -366,11 +369,11 @@
             <property name="suffix" >
              <string> secs</string>
             </property>
-            <property name="maximum" >
-             <number>100</number>
-            </property>
             <property name="minimum" >
              <number>1</number>
+            </property>
+            <property name="maximum" >
+             <number>100</number>
             </property>
             <property name="value" >
              <number>3</number>
@@ -385,7 +388,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>320</width>
               <height>16</height>
@@ -401,7 +404,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>20</width>
               <height>20</height>
@@ -417,7 +420,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>320</width>
               <height>16</height>
@@ -453,11 +456,11 @@
             <property name="suffix" >
              <string> msec</string>
             </property>
-            <property name="maximum" >
-             <number>60000</number>
-            </property>
             <property name="minimum" >
              <number>100</number>
+            </property>
+            <property name="maximum" >
+             <number>60000</number>
             </property>
             <property name="singleStep" >
              <number>100</number>
@@ -497,7 +500,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>20</width>
               <height>20</height>
@@ -609,16 +612,18 @@
       </layout>
      </widget>
      <widget class="QWidget" name="DisplayTabPage" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>523</width>
+        <height>301</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>&amp;Display</string>
       </attribute>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>8</number>
-       </property>
-       <property name="spacing" >
-        <number>4</number>
-       </property>
+      <layout class="QVBoxLayout" name="verticalLayout" >
        <item>
         <widget class="QGroupBox" name="ChannelsGroupBox" >
          <property name="font" >
@@ -642,12 +647,6 @@
           </property>
           <item row="0" column="0" >
            <widget class="QLabel" name="DisplayFontTextLabel" >
-            <property name="font" >
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
             <property name="sizePolicy" >
              <sizepolicy>
               <hsizetype>3</hsizetype>
@@ -667,6 +666,12 @@
               <width>180</width>
               <height>32767</height>
              </size>
+            </property>
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
             </property>
             <property name="toolTip" >
              <string>Sample channel display font display</string>
@@ -721,7 +726,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>56</width>
               <height>16</height>
@@ -792,11 +797,11 @@
             <property name="suffix" >
              <string> msec</string>
             </property>
-            <property name="maximum" >
-             <number>20000</number>
-            </property>
             <property name="minimum" >
              <number>200</number>
+            </property>
+            <property name="maximum" >
+             <number>20000</number>
             </property>
             <property name="singleStep" >
              <number>100</number>
@@ -876,10 +881,10 @@
           <bool>true</bool>
          </property>
          <layout class="QHBoxLayout" >
-          <property name="margin" >
+          <property name="spacing" >
            <number>4</number>
           </property>
-          <property name="spacing" >
+          <property name="margin" >
            <number>4</number>
           </property>
           <item>
@@ -892,12 +897,6 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="font" >
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
             <property name="minimumSize" >
              <size>
               <width>180</width>
@@ -909,6 +908,12 @@
               <width>180</width>
               <height>32767</height>
              </size>
+            </property>
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
             </property>
             <property name="toolTip" >
              <string>Sample messages text font display</string>
@@ -960,7 +965,7 @@
             <property name="sizeType" >
              <enum>QSizePolicy::Expanding</enum>
             </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
               <width>49</width>
               <height>16</height>
@@ -1001,11 +1006,11 @@
             <property name="suffix" >
              <string> lines</string>
             </property>
-            <property name="maximum" >
-             <number>10000</number>
-            </property>
             <property name="minimum" >
              <number>100</number>
+            </property>
+            <property name="maximum" >
+             <number>10000</number>
             </property>
             <property name="singleStep" >
              <number>100</number>
@@ -1033,119 +1038,8 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>4</number>
-          </property>
-          <property name="spacing" >
-           <number>4</number>
-          </property>
-          <item rowspan="2" row="0" column="0" >
-           <layout class="QVBoxLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>4</number>
-            </property>
-            <item>
-             <widget class="QCheckBox" name="ConfirmRemoveCheckBox" >
-              <property name="font" >
-               <font>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="toolTip" >
-               <string>Whether to ask for confirmation on removals</string>
-              </property>
-              <property name="text" >
-               <string>&amp;Confirm removals</string>
-              </property>
-              <property name="shortcut" >
-               <string>Alt+C</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="KeepOnTopCheckBox" >
-              <property name="font" >
-               <font>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="toolTip" >
-               <string>Whether to keep all child windows on top of the main window</string>
-              </property>
-              <property name="text" >
-               <string>&amp;Keep child windows always on top</string>
-              </property>
-              <property name="shortcut" >
-               <string>Alt+K</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="StdoutCaptureCheckBox" >
-              <property name="font" >
-               <font>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="toolTip" >
-               <string>Whether to capture standard output (stdout/stderr) into messages window</string>
-              </property>
-              <property name="text" >
-               <string>Capture standard &amp;output</string>
-              </property>
-              <property name="shortcut" >
-               <string>Alt+O</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="CompletePathCheckBox" >
-              <property name="font" >
-               <font>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="toolTip" >
-               <string>Whether to show the complete directory path of loaded session files</string>
-              </property>
-              <property name="text" >
-               <string>Show complete &amp;path of session files</string>
-              </property>
-              <property name="shortcut" >
-               <string>Alt+P</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="InstrumentNamesCheckBox" >
-              <property name="font" >
-               <font>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="toolTip" >
-               <string>Whether to show the actual instrument names as read from instrument file (using libgig)</string>
-              </property>
-              <property name="text" >
-               <string>Show actual &amp;instrument names</string>
-              </property>
-              <property name="shortcut" >
-               <string>Alt+I</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="3" >
-           <widget class="QSpinBox" name="MaxRecentFilesSpinBox" >
+          <item row="0" column="0" >
+           <widget class="QCheckBox" name="ConfirmRemoveCheckBox" >
             <property name="font" >
              <font>
               <weight>50</weight>
@@ -1153,20 +1047,17 @@
              </font>
             </property>
             <property name="toolTip" >
-             <string>The maximum number of recent files to keep in menu</string>
+             <string>Whether to ask for confirmation on removals</string>
             </property>
-            <property name="maximum" >
-             <number>20</number>
+            <property name="text" >
+             <string>&amp;Confirm removals</string>
             </property>
-            <property name="minimum" >
-             <number>0</number>
-            </property>
-            <property name="value" >
-             <number>5</number>
+            <property name="shortcut" >
+             <string>Alt+C</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2" >
+          <item row="0" column="1" colspan="2" >
            <widget class="QLabel" name="MaxRecentFilesTextLabel" >
             <property name="font" >
              <font>
@@ -1188,37 +1079,181 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" >
-           <spacer>
+          <item row="0" column="3" >
+           <widget class="QSpinBox" name="MaxRecentFilesSpinBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>The maximum number of recent files to keep in menu</string>
+            </property>
+            <property name="minimum" >
+             <number>0</number>
+            </property>
+            <property name="maximum" >
+             <number>20</number>
+            </property>
+            <property name="value" >
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
+           <widget class="QCheckBox" name="KeepOnTopCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>Whether to keep all child windows on top of the main window</string>
+            </property>
+            <property name="text" >
+             <string>&amp;Keep child windows always on top</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+K</string>
+            </property>
+           </widget>
+          </item>
+          <item rowspan="3" row="1" column="1" colspan="3" >
+           <spacer name="horizontalSpacer" >
             <property name="orientation" >
              <enum>Qt::Horizontal</enum>
             </property>
-            <property name="sizeType" >
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" >
+            <property name="sizeHint" stdset="0" >
              <size>
-              <width>110</width>
-              <height>16</height>
+              <width>281</width>
+              <height>48</height>
              </size>
             </property>
            </spacer>
           </item>
-          <item row="1" column="1" colspan="3" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
+          <item row="2" column="0" >
+           <widget class="QCheckBox" name="StdoutCaptureCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
             </property>
-            <property name="sizeType" >
-             <enum>QSizePolicy::Expanding</enum>
+            <property name="toolTip" >
+             <string>Whether to capture standard output (stdout/stderr) into messages window</string>
             </property>
-            <property name="sizeHint" >
-             <size>
-              <width>280</width>
-              <height>16</height>
-             </size>
+            <property name="text" >
+             <string>Capture standard &amp;output</string>
             </property>
-           </spacer>
+            <property name="shortcut" >
+             <string>Alt+O</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" >
+           <widget class="QCheckBox" name="CompletePathCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>Whether to show the complete directory path of loaded session files</string>
+            </property>
+            <property name="text" >
+             <string>Show complete &amp;path of session files</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+P</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" >
+           <widget class="QCheckBox" name="InstrumentNamesCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>Whether to show the actual instrument names as read from instrument file (using libgig)</string>
+            </property>
+            <property name="text" >
+             <string>Show actual &amp;instrument names</string>
+            </property>
+            <property name="shortcut" >
+             <string>Alt+I</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="2" >
+           <widget class="QLabel" name="BaseFontSizeTextLabel" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text" >
+             <string>&amp;Base font size:</string>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="buddy" >
+             <cstring>BaseFontSizeComboBox</cstring>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3" >
+           <widget class="QComboBox" name="BaseFontSizeComboBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>Base application font size (pt.)</string>
+            </property>
+            <property name="editable" >
+             <bool>true</bool>
+            </property>
+            <item>
+             <property name="text" >
+              <string>(default)</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>8</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>9</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>10</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>11</string>
+             </property>
+            </item>
+            <item>
+             <property name="text" >
+              <string>12</string>
+             </property>
+            </item>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -1255,10 +1290,12 @@
   <tabstop>CompletePathCheckBox</tabstop>
   <tabstop>InstrumentNamesCheckBox</tabstop>
   <tabstop>MaxRecentFilesSpinBox</tabstop>
+  <tabstop>BaseFontSizeComboBox</tabstop>
   <tabstop>OkPushButton</tabstop>
   <tabstop>CancelPushButton</tabstop>
  </tabstops>
  <resources>
   <include location="../icons/qsampler.qrc" />
  </resources>
+ <connections/>
 </ui>

@@ -86,6 +86,7 @@ Options::Options (void)
 	bStdoutCapture   = m_settings.value("/StdoutCapture", true).toBool();
 	bCompletePath    = m_settings.value("/CompletePath", true).toBool();
 	iMaxRecentFiles  = m_settings.value("/MaxRecentFiles", 5).toInt();
+	iBaseFontSize    = m_settings.value("/BaseFontSize", 0).toInt();
 // if libgig provides a fast way to retrieve instrument names even for large
 // .gig files, then we enable this feature by default
 #if HAVE_LIBGIG_SETAUTOLOAD
@@ -174,6 +175,7 @@ Options::~Options (void)
 	m_settings.setValue("/StdoutCapture", bStdoutCapture);
 	m_settings.setValue("/CompletePath", bCompletePath);
 	m_settings.setValue("/MaxRecentFiles", iMaxRecentFiles);
+	m_settings.setValue("/BaseFontSize", iBaseFontSize);
 	m_settings.setValue("/InstrumentNames", bInstrumentNames);
 	m_settings.endGroup();
 
