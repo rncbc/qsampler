@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Fait-divers: desktop menu file touched to openSUSE conventions.
+
 * Due to some trouble with newer Qt >= 4.4 applications regarding font
   size configuration, a new global user option is now available to the
   rescue: View/Options... /Display/Other/Base font size (default none).

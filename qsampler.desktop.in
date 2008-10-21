@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=Qsampler
+GenericName=LinuxSampler GUI
 Comment=Qsampler is a LinuxSampler Qt GUI Interface
 Exec=@ac_prefix@/bin/qsampler
 Icon=@ac_prefix@/share/pixmaps/qsampler.png
-Categories=Applications;Multimedia;AudioVideo;MIDI;JACK;ALSA;Qt;
+Categories=Audio;AudioVideo;MIDI;JACK;ALSA;Qt;
 Terminal=false
 Type=Application
+X-SuSE-translate=true
