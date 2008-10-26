@@ -192,9 +192,9 @@ void OptionsForm::setup ( Options *pOptions )
 	// Messages font.
 	if (m_pOptions->sMessagesFont.isEmpty()
 		|| !font.fromString(m_pOptions->sMessagesFont))
-		font = QFont("Fixed", 8);
+		font = QFont("Monospace", 8);
 	pal = m_ui.MessagesFontTextLabel->palette();
-	pal.setColor(QPalette::Background, Qt::white);
+	pal.setColor(QPalette::Background, pal.base().color());
 	m_ui.MessagesFontTextLabel->setPalette(pal);
 	m_ui.MessagesFontTextLabel->setFont(font);
 	m_ui.MessagesFontTextLabel->setText(font.family()
