@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.1.19, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.1.20, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -260,6 +260,11 @@ if test "x$ac_lscp_device_midi_event" = "xyes"; then
    AC_DEFINE(CONFIG_EVENT_DEVICE_MIDI, 1, [Define if LSCP DEVICE_MIDI event support is available.])
 fi
 
+AC_CHECK_LIB(lscp, lscp_get_voices, [ac_max_voices="yes"], [ac_max_voices="no"])
+if test "x$ac_max_voices" = "xyes"; then
+  AC_DEFINE(CONFIG_MAX_VOICES, 1, [Define if max. voices / streams is available.])
+fi
+
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
@@ -343,6 +348,7 @@ echo "  libgig supports fast information retrieval . . . .: $have_libgig_setauto
 fi
 echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_lscp_channel_midi_event"
 echo "  LSCP device MIDI event support . . . . . . . . . .: $ac_lscp_device_midi_event"
+echo "  LSCP runtime max. voices / disk streams support  .: $ac_max_voices"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
 echo

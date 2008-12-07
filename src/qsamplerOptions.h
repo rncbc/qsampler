@@ -114,10 +114,24 @@ public:
 	void loadComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
 	void saveComboBoxHistory(QComboBox *pComboBox, int iLimit = 8);
 
+	int  getMaxVoices();
+	int  getEffectiveMaxVoices();
+	void setMaxVoices(int iMaxVoices);
+
+	int  getMaxStreams();
+	int  getEffectiveMaxStreams();
+	void setMaxStreams(int iMaxStreams);
+
+	void sendFineTuningSettings();
+
 private:
 
 	// Settings member variables.
 	QSettings m_settings;
+
+	// Tuning
+	int iMaxVoices;
+	int iMaxStreams;
 };
 
 } // namespace QSampler

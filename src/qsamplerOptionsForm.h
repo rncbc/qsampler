@@ -55,6 +55,8 @@ protected slots:
 	void chooseDisplayFont();
 	void chooseMessagesFont();
 	void toggleDisplayEffect(bool bOn);
+	void maxVoicesChanged(int iMaxVoices);
+	void maxStreamsChanged(int iMaxStreams);
 
 private:
 
@@ -63,6 +65,8 @@ private:
 	Options* m_pOptions;
 	int m_iDirtySetup;
 	int m_iDirtyCount;
+	bool bMaxVoicesModified;
+	bool bMaxStreamsModified;
 };
 
 } // namespace QSampler

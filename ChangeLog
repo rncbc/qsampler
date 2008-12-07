@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Added support for runtime max. voices / disk streams setting.
+
 * Grayed/disabled palette color group fix for dark color themes.
 
 * Fait-divers: desktop menu file touched to openSUSE conventions.

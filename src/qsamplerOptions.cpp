@@ -22,6 +22,7 @@
 
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
+#include "qsamplerMainForm.h"
 
 #include <QTextStream>
 #include <QComboBox>
@@ -117,6 +118,12 @@ Options::Options (void)
 	}
 	m_settings.endGroup();
 
+	// Sampler fine tuning settings.
+	m_settings.beginGroup("/Tuning");
+	iMaxVoices  = m_settings.value("/MaxVoices",  -1).toInt();
+	iMaxStreams = m_settings.value("/MaxStreams",  -1).toInt();
+	m_settings.endGroup();
+
 	// Last but not least, get the default directories.
 	m_settings.beginGroup("/Default");
 	sSessionDir    = m_settings.value("/SessionDir").toString();
@@ -195,6 +202,14 @@ Options::~Options (void)
 	QStringListIterator iter(recentFiles);
 	while (iter.hasNext())
 		m_settings.setValue("/File" + QString::number(++iFile), iter.next());
+	m_settings.endGroup();
+
+	// Sampler fine tuning settings.
+	m_settings.beginGroup("/Tuning");
+	if (iMaxVoices > 0)
+		m_settings.setValue("/MaxVoices", iMaxVoices);
+	if (iMaxStreams >= 0)
+		m_settings.setValue("/MaxStreams", iMaxStreams);
 	m_settings.endGroup();
 
 	// Default directories.
@@ -423,6 +438,99 @@ void Options::saveComboBoxHistory ( QComboBox *pComboBox, int iLimit )
 		m_settings.setValue("/Item" + QString::number(i + 1), sText);
 	}
 	m_settings.endGroup();
+}
+
+int Options::getMaxVoices() {
+#ifndef CONFIG_MAX_VOICES
+	return -1;
+#else
+	if (iMaxVoices > 0) return iMaxVoices;
+	return getEffectiveMaxVoices();
+#endif // CONFIG_MAX_VOICES
+}
+
+int Options::getEffectiveMaxVoices() {
+#ifndef CONFIG_MAX_VOICES
+	return -1;
+#else
+	MainForm *pMainForm = MainForm::getInstance();
+	if (!pMainForm || !pMainForm->client())
+		return -1;
+
+	return ::lscp_get_voices(pMainForm->client());
+#endif // CONFIG_MAX_VOICES
+}
+
+void Options::setMaxVoices(int iMaxVoices) {
+#ifdef CONFIG_MAX_VOICES
+	if (iMaxVoices < 1) return;
+
+	MainForm *pMainForm = MainForm::getInstance();
+	if (!pMainForm || !pMainForm->client())
+		return;
+
+	lscp_status_t result =
+		::lscp_set_voices(pMainForm->client(), iMaxVoices);
+
+	if (result != LSCP_OK) {
+		pMainForm->appendMessagesClient("lscp_set_voices");
+		return;
+	}
+
+	this->iMaxVoices = iMaxVoices;
+#endif // CONFIG_MAX_VOICES
+}
+
+int Options::getMaxStreams() {
+#ifndef CONFIG_MAX_VOICES
+	return -1;
+#else
+	if (iMaxStreams > 0) return iMaxStreams;
+	return getEffectiveMaxStreams();
+#endif // CONFIG_MAX_VOICES
+}
+
+int Options::getEffectiveMaxStreams() {
+#ifndef CONFIG_MAX_VOICES
+	return -1;
+#else
+	MainForm *pMainForm = MainForm::getInstance();
+	if (!pMainForm || !pMainForm->client())
+		return -1;
+
+	return ::lscp_get_streams(pMainForm->client());
+#endif // CONFIG_MAX_VOICES
+}
+
+void Options::setMaxStreams(int iMaxStreams) {
+#ifdef CONFIG_MAX_VOICES
+	if (iMaxStreams < 0) return;
+
+	MainForm *pMainForm = MainForm::getInstance();
+	if (!pMainForm || !pMainForm->client())
+		return;
+
+	lscp_status_t result =
+		::lscp_set_streams(pMainForm->client(), iMaxStreams);
+
+	if (result != LSCP_OK) {
+		pMainForm->appendMessagesClient("lscp_set_streams");
+		return;
+	}
+
+	this->iMaxStreams = iMaxStreams;
+#endif // CONFIG_MAX_VOICES
+}
+
+void Options::sendFineTuningSettings() {
+	setMaxVoices(iMaxVoices);
+	setMaxStreams(iMaxStreams);
+
+	MainForm *pMainForm = MainForm::getInstance();
+	if (!pMainForm || !pMainForm->client())
+		return;
+
+	pMainForm->appendMessages(QObject::tr("Sent fine tuning settings."));
 }
 
 } // namespace QSampler
