@@ -5,7 +5,11 @@ ChangeLog
 
 CVS HEAD
 
-* Added support for runtime max. voices / disk streams setting.
+* Added support for runtime max. voices / disk streams setting
+  (accessible from the "Options..." dialog). Those fine tuning
+  settings will be saved in case the user modified them and
+  automatically restored to the sampler when reconnecting to
+  a sampler the next time. 
 
 * Grayed/disabled palette color group fix for dark color themes.
 
