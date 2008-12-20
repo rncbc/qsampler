@@ -127,6 +127,12 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	QObject::connect(m_ui.BaseFontSizeComboBox,
 		SIGNAL(editTextChanged(const QString&)),
 		SLOT(optionsChanged()));
+	QObject::connect(m_ui.MaxVoicesSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(maxVoicesChanged(int)));
+	QObject::connect(m_ui.MaxStreamsSpinBox,
+		SIGNAL(valueChanged(int)),
+		SLOT(maxStreamsChanged(int)));
 	QObject::connect(m_ui.OkPushButton,
 		SIGNAL(clicked()),
 		SLOT(accept()));
@@ -220,6 +226,49 @@ void OptionsForm::setup ( Options *pOptions )
 	m_ui.InstrumentNamesCheckBox->setEnabled(false);
 #endif
 
+	bMaxVoicesModified = bMaxStreamsModified = false;
+#ifdef CONFIG_MAX_VOICES
+	const bool bMaxVoicesSupported =
+		m_pOptions->getEffectiveMaxVoices() >= 0;
+	const bool bMaxStreamsSupported =
+		m_pOptions->getEffectiveMaxStreams() >= 0;
+
+	m_ui.MaxVoicesSpinBox->setEnabled(bMaxVoicesSupported);
+	m_ui.MaxVoicesSpinBox->setValue(m_pOptions->getMaxVoices());
+	if (!bMaxVoicesSupported)
+		m_ui.MaxVoicesSpinBox->setToolTip(
+			tr("This parameter is not supported by the current sampler "
+			   "version in use.")
+		);
+	else
+		m_ui.MaxVoicesSpinBox->setToolTip(
+			tr("The max. amount of voices the sampler shall process "
+			   "simultaniously.")
+		);
+
+	m_ui.MaxStreamsSpinBox->setEnabled(bMaxStreamsSupported);
+	m_ui.MaxStreamsSpinBox->setValue(m_pOptions->getMaxStreams());
+	if (!bMaxStreamsSupported)
+		m_ui.MaxStreamsSpinBox->setToolTip(
+			tr("This parameter is not supported by the current sampler "
+			   "version in use.")
+		);
+	else
+		m_ui.MaxStreamsSpinBox->setToolTip(
+			tr("The max. amount of disk streams the sampler shall process "
+			   "simultaniously.")
+		);
+#else
+	m_ui.MaxVoicesSpinBox->setEnabled(false);
+	m_ui.MaxStreamsSpinBox->setEnabled(false);
+	m_ui.MaxVoicesSpinBox->setToolTip(
+		tr("QSampler was built without support for this parameter.")
+	);
+	m_ui.MaxStreamsSpinBox->setToolTip(
+		tr("QSampler was built without support for this parameter.")
+	);
+#endif // CONFIG_MAX_VOICES
+
 	// Done.
 	m_iDirtySetup--;
 	stabilizeForm();
@@ -262,6 +311,13 @@ void OptionsForm::accept (void)
 		// Reset dirty flag.
 		m_iDirtyCount = 0;
 	}
+
+	// if the user modified the limits, apply them to the sampler
+	// (and store it later in qsampler's configuration)
+	if (bMaxVoicesModified && m_ui.MaxVoicesSpinBox->isEnabled())
+		m_pOptions->setMaxVoices(m_ui.MaxVoicesSpinBox->value());
+	if (bMaxStreamsModified && m_ui.MaxStreamsSpinBox->isEnabled())
+		m_pOptions->setMaxStreams(m_ui.MaxStreamsSpinBox->value());
 
 	// Save combobox history...
 	m_pOptions->saveComboBoxHistory(m_ui.ServerHostComboBox);
@@ -404,7 +460,18 @@ void OptionsForm::toggleDisplayEffect ( bool bOn )
 	optionsChanged();
 }
 
-} // namespace QSampler
+void OptionsForm::maxVoicesChanged(int /*iMaxVoices*/)
+{
+	bMaxVoicesModified = true;
+	optionsChanged();
+}
 
+void OptionsForm::maxStreamsChanged(int /*iMaxStreams*/)
+{
+	bMaxStreamsModified = true;
+	optionsChanged();
+}
+
+} // namespace QSampler
 
 // end of qsamplerOptionsForm.cpp

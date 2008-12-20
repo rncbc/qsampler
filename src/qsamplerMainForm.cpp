@@ -1620,7 +1620,7 @@ void MainForm::viewOptions (void)
 		int     iOldServerTimeout   = m_pOptions->iServerTimeout;
 		bool    bOldServerStart     = m_pOptions->bServerStart;
 		QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
-		bool    bOldMessagesLog     = m_pOptions->bMessagesLog; 
+		bool    bOldMessagesLog     = m_pOptions->bMessagesLog;
 		QString sOldMessagesLogPath = m_pOptions->sMessagesLogPath;
 		QString sOldDisplayFont     = m_pOptions->sDisplayFont;
 		bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
@@ -2770,6 +2770,9 @@ bool MainForm::startClient (void)
 			return true;
 		}
 	}
+
+	// send the current / loaded fine tuning settings to the sampler
+	m_pOptions->sendFineTuningSettings();
 
 	// Make a new session
 	return newSession();
