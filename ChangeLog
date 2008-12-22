@@ -15,18 +15,19 @@ CVS HEAD
 
 * Fait-divers: desktop menu file touched to openSUSE conventions.
 
-* Due to some trouble with newer Qt >= 4.4 applications regarding font
-  size configuration, a new global user option is now available to the
-  rescue: View/Options... /Display/Other/Base font size (default none).
+* Due to some trouble with newer Qt >= 4.4 applications regarding
+  font size configuration, a new global user option is now available
+  to the rescue: View/Options... /Display/Other/Base font size
+  (default none).
 
 * Attempt to load Qt's own translation support and get rid of
   the ever warning startup message, unless built in debug mode.
   (transaction by Guido Scholz, while on qsynth-devel, thanks).
 
-* Only one application instance is now allowed to be up and running,
-  with immediate but graceful termination upon startup iif an already
-  running instance is detected, which will see its main widget shown
-  up automatically (Qt/X11 platform only).
+* Only one application instance is now allowed to be up and
+  running, with immediate but graceful termination upon startup
+  iif an already running instance is detected, which will see its
+  main widget shown up automatically (Qt/X11 platform only).
 
 * Messages file logging makes its first long overdue appearance,
   with user configurable settings in View/Options.../Server/Logging.
@@ -34,32 +35,33 @@ CVS HEAD
 * Bugfix in sampler channel dialog, driver combo boxes' content were
   screwed.
 
-* Automatically add & remove channel strips as they were removed e.g. by
-  other frontends.
+* Automatically add & remove channel strips as they were removed
+  e.g. by other frontends.
 
 * Refresh device management dialog when device informations changed,
   e.g. on changes caused by other frontends
   (fixes segfault on device changes)
 
-* Implemented MIDI device activity windows, selectable from the "View"
-  main menu.
+* Implemented MIDI device activity windows, selectable from the
+  "View" main menu.
 
 * Implemented MIDI activity indicator on channel strips.
 
 * Added FX Sends Dialog to Channel Strips.
 
-* Color pallete fix for the instrument name display in channel strip,
-  particularly notorious on Mac OS X builds.
+* Color pallete fix for the instrument name display in channel
+  strip, particularly notorious on Mac OS X builds.
 
-* Added dialog when the application exits which lets the user decide
-  whether to keep the LinuxSampler running or not.
+* Added dialog when the application exits which lets the user
+  decide whether to keep the LinuxSampler running or not.
 
 
 0.2.1  2007-12-06  Qt4 migration was complete.
 
-* Added recent new support of libgig for retrieving instrument names in a
-  very fast way. If libgig provides this feature, then the respective
-  name retrieval setting in qsampler is enabled by default.
+* Added recent new support of libgig for retrieving instrument
+  names in avery fast way. If libgig provides this feature, then
+  the respective name retrieval setting in qsampler is enabled by
+  default.
 
 * The current selected/activated channel-strip is now visually
   evident while in the application workspace (highlighting).
