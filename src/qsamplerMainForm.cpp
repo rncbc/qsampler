@@ -1810,6 +1810,21 @@ void MainForm::helpAbout (void)
 	sText += tr("Instrument editing support disabled.");
 	sText += "</font></small><br />";
 #endif
+#ifndef CONFIG_EVENT_CHANNEL_MIDI
+	sText += "<small><font color=\"red\">";
+	sText += tr("Channel MIDI event support disabled.");
+	sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_EVENT_DEVICE_MIDI
+	sText += "<small><font color=\"red\">";
+	sText += tr("Device MIDI event support disabled.");
+	sText += "</font></small><br />";
+#endif
+#ifndef CONFIG_MAX_VOICES
+	sText += "<small><font color=\"red\">";
+	sText += tr("Runtime max. voices / disk streams support disabled.");
+	sText += "</font></small><br />";
+#endif
 	sText += "<br />\n";
 	sText += tr("Using") + ": ";
 	sText += ::lscp_client_package();
