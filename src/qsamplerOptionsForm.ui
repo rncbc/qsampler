@@ -27,7 +27,7 @@
     <x>0</x>
     <y>0</y>
     <width>539</width>
-    <height>368</height>
+    <height>422</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -104,6 +104,14 @@
       <number>0</number>
      </property>
      <widget class="QWidget" name="ServerTabPage" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>527</width>
+        <height>352</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>&amp;Server</string>
       </attribute>
@@ -594,6 +602,14 @@
       </layout>
      </widget>
      <widget class="QWidget" name="TuningTabPage" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>527</width>
+        <height>352</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>&amp;Tuning</string>
       </attribute>
@@ -643,6 +659,9 @@
             <property name="toolTip" >
              <string>Maximum number of voices</string>
             </property>
+            <property name="maximum" >
+             <number>999999999</number>
+            </property>
            </widget>
           </item>
           <item rowspan="2" row="0" column="2" >
@@ -688,6 +707,9 @@
             <property name="toolTip" >
              <string>Maximum number of disk streams</string>
             </property>
+            <property name="maximum" >
+             <number>999999999</number>
+            </property>
            </widget>
           </item>
           <item row="2" column="0" colspan="3" >
@@ -709,6 +731,14 @@
       </layout>
      </widget>
      <widget class="QWidget" name="DisplayTabPage" >
+      <property name="geometry" >
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>800</width>
+        <height>480</height>
+       </rect>
+      </property>
       <attribute name="title" >
        <string>&amp;Display</string>
       </attribute>
