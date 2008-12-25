@@ -58,6 +58,10 @@ LANGUAGE  = C++
 LIBS     += @ac_libs@
 INCPATH  += @ac_incpath@
 
+OBJECTS_DIR = .obj
+MOC_DIR     = .moc
+UI_DIR      = .ui
+
 macx {
         QMAKE_MAC_SDK = $$(SDKROOT)
         CONFIG += $$(QMAKE_ARCHS)
