@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.1.22, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.1.23, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -104,13 +104,12 @@ done
 
 # Check for proper Qt version.
 AC_CACHE_CHECK([for Qt library version >= 4.1],
-  ac_qtlib_version, [
+  ac_cv_qtversion, [
   AC_TRY_LINK([#include "Qt/qglobal.h"], [
 #if QT_VERSION < 0x040100
 #error Qt library 4.1 or greater required.
 #endif
-    ],
-    ac_qtlib_version="yes", [
+    ], ac_cv_qtversion="yes", [
       echo "no; Qt 4.1 or greater is required"
       exit
     ])
@@ -159,24 +158,26 @@ fi
 ac_libs="$ac_libs -llscp"
 
 AC_CACHE_CHECK([for instrument_name in lscp_channel_info_t],
-  ac_instrument_name, [
+  ac_cv_instrument_name, [
   AC_TRY_COMPILE([#include "lscp/client.h"], [
 	lscp_channel_info_t info;
 	info.instrument_name = 0;
-    ], ac_instrument_name="yes", ac_instrument_name="no")
+    ], ac_cv_instrument_name="yes", ac_cv_instrument_name="no")
 ])
+ac_instrument_name=$ac_cv_instrument_name
 if test "x$ac_instrument_name" = "xyes"; then
    AC_DEFINE(CONFIG_INSTRUMENT_NAME, 1, [Define if instrument_name is available.])
 fi
 
 AC_CACHE_CHECK([for mute/solo in lscp_channel_info_t],
-  ac_mute_solo, [
+  ac_cv_mute_solo, [
   AC_TRY_COMPILE([#include "lscp/client.h"], [
 	lscp_channel_info_t info;
 	info.mute = 0;
 	info.solo = 0;
-    ], ac_mute_solo="yes", ac_mute_solo="no")
+    ], ac_cv_mute_solo="yes", ac_cv_mute_solo="no")
 ])
+ac_mute_solo=$ac_cv_mute_solo
 if test "x$ac_mute_solo" = "xyes"; then
    AC_CHECK_LIB(lscp, lscp_set_channel_mute, [ac_mute_solo="yes"], [ac_mute_solo="no"])
 fi
@@ -196,12 +197,13 @@ AC_CHECK_LIB(lscp, lscp_create_fxsend, [ac_fxsend="yes"], [ac_fxsend="no"])
 if test "x$ac_fxsend" = "xyes"; then
   AC_DEFINE(CONFIG_FXSEND, 1, [Define if FX sends is available.])
   AC_CACHE_CHECK([for FX send level in lscp_fxsend_info_t],
-    ac_fxsend_level, [
+    ac_cv_fxsend_level, [
     AC_TRY_COMPILE([#include "lscp/client.h"], [
 	  lscp_fxsend_info_t info;
 	  info.level = 0.0f;
-      ], ac_fxsend_level="yes", ac_fxsend_level="no")
+      ], ac_cv_fxsend_level="yes", ac_cv_fxsend_level="no")
   ])
+  ac_fxsend_level=$ac_cv_fxsend_level
   if test "x$ac_fxsend_level" = "xyes"; then
 	  AC_DEFINE(CONFIG_FXSEND_LEVEL, 1, [Define if FX send level is available.])
   fi
@@ -212,12 +214,13 @@ if test "x$ac_fxsend" = "xyes"; then
 fi
 
 AC_CACHE_CHECK([for audio_routing array type],
-  ac_audio_routing, [
+  ac_cv_audio_routing, [
   AC_TRY_COMPILE([#include "lscp/client.h"], [
     lscp_channel_info_t info;
     char ch = info.audio_routing[0][0];
-    ], ac_audio_routing="no", ac_audio_routing="yes")
+    ], ac_cv_audio_routing="no", ac_cv_audio_routing="yes")
 ])
+ac_audio_routing=$ac_cv_audio_routing
 if test "x$ac_audio_routing" = "xyes"; then
    AC_DEFINE(CONFIG_AUDIO_ROUTING, 1, [Define if audio_routing is an integer array.])
 fi
@@ -233,30 +236,32 @@ if test "x$ac_edit_instrument" = "xyes"; then
 fi
 
 AC_CACHE_CHECK([for CHANNEL_MIDI LSCP event support in liblscp],
-  ac_lscp_channel_midi_event, [
+  ac_cv_channel_midi_event, [
   AC_TRY_COMPILE([
 	#include "lscp/client.h"
 	#include "lscp/event.h"
 	], [
 	lscp_event_t ev;
 	ev = LSCP_EVENT_CHANNEL_MIDI;
-    ], ac_lscp_channel_midi_event="yes", ac_lscp_channel_midi_event="no")
+    ], ac_cv_channel_midi_event="yes", ac_cv_channel_midi_event="no")
 ])
-if test "x$ac_lscp_channel_midi_event" = "xyes"; then
+ac_channel_midi_event=$ac_cv_channel_midi_event
+if test "x$ac_channel_midi_event" = "xyes"; then
    AC_DEFINE(CONFIG_EVENT_CHANNEL_MIDI, 1, [Define if LSCP CHANNEL_MIDI event support is available.])
 fi
 
 AC_CACHE_CHECK([for DEVICE_MIDI LSCP event support in liblscp],
-  ac_lscp_device_midi_event, [
+  ac_cv_device_midi_event, [
   AC_TRY_COMPILE([
 	#include "lscp/client.h"
 	#include "lscp/event.h"
 	], [
 	lscp_event_t ev;
 	ev = LSCP_EVENT_DEVICE_MIDI;
-    ], ac_lscp_device_midi_event="yes", ac_lscp_device_midi_event="no")
+    ], ac_cv_device_midi_event="yes", ac_cv_device_midi_event="no")
 ])
-if test "x$ac_lscp_device_midi_event" = "xyes"; then
+ac_device_midi_event=$ac_cv_device_midi_event
+if test "x$ac_device_midi_event" = "xyes"; then
    AC_DEFINE(CONFIG_EVENT_DEVICE_MIDI, 1, [Define if LSCP DEVICE_MIDI event support is available.])
 fi
 
@@ -346,8 +351,8 @@ echo "  GigaSampler instrument file support (libgig) . . .: $ac_libgig"
 if test "x$ac_libgig" = "xyes"; then
 echo "  libgig supports fast information retrieval . . . .: $have_libgig_setautoload"
 fi
-echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_lscp_channel_midi_event"
-echo "  LSCP device MIDI event support . . . . . . . . . .: $ac_lscp_device_midi_event"
+echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_channel_midi_event"
+echo "  LSCP device MIDI event support . . . . . . . . . .: $ac_device_midi_event"
 echo "  LSCP runtime max. voices / disk streams support  .: $ac_max_voices"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
