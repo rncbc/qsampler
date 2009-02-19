@@ -5,6 +5,8 @@ ChangeLog
 
 CVS HEAD
 
+* Converted obsolete QMessageBox forms to standard buttons.
+
 * Added support for runtime max. voices / disk streams setting
   (accessible from the "Options..." dialog). Those fine tuning
   settings will be saved in case the user modified them and
