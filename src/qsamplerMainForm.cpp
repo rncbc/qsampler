@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -759,7 +759,8 @@ bool MainForm::saveSession ( bool bPrompt )
 				"\"%1\"\n\n"
 				"Do you want to replace it?")
 				.arg(sFilename),
-				tr("Replace"), tr("Cancel")) > 0)
+				QMessageBox::Yes | QMessageBox::No)
+				== QMessageBox::No)
 				return false;
 		}
 	}
@@ -782,11 +783,13 @@ bool MainForm::closeSession ( bool bForce )
 			"\"%1\"\n\n"
 			"Do you want to save the changes?")
 			.arg(sessionName(m_sFilename)),
-			tr("Save"), tr("Discard"), tr("Cancel"))) {
-		case 0:     // Save...
+			QMessageBox::Save |
+			QMessageBox::Discard |
+			QMessageBox::Cancel)) {
+		case QMessageBox::Save:
 			bClose = saveSession(false);
 			// Fall thru....
-		case 1:     // Discard
+		case QMessageBox::Discard:
 			break;
 		default:    // Cancel.
 			bClose = false;
@@ -1307,7 +1310,8 @@ void MainForm::fileReset (void)
 		"Please note that this operation may cause\n"
 		"temporary MIDI and Audio disruption.\n\n"
 		"Do you want to reset the sampler engine now?"),
-		tr("Reset"), tr("Cancel")) > 0)
+		QMessageBox::Ok | QMessageBox::Cancel)
+		== QMessageBox::Cancel)
 		return;
 
 	// Trye closing the current session, first...
@@ -1348,7 +1352,7 @@ void MainForm::fileRestart (void)
 			"Please note that this operation may cause\n"
 			"temporary MIDI and Audio disruption.\n\n"
 			"Do you want to restart the connection now?"),
-			tr("Restart"), tr("Cancel")) == 0);
+			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok);
 	}
 
 	// Are we still for it?
@@ -1429,7 +1433,8 @@ void MainForm::editRemoveChannel (void)
 			"%1\n\n"
 			"Are you sure?")
 			.arg(pChannelStrip->windowTitle()),
-			tr("OK"), tr("Cancel")) > 0)
+			QMessageBox::Ok | QMessageBox::Cancel)
+			== QMessageBox::Cancel)
 			return;
 	}
 
@@ -1647,7 +1652,7 @@ void MainForm::viewOptions (void)
 				QMessageBox::information(this,
 					QSAMPLER_TITLE ": " + tr("Information"),
 					tr("Some settings may be only effective\n"
-					"next time you start this program."), tr("OK"));
+					"next time you start this program."));
 				updateMessagesCapture();
 			}
 			// Check wheather something immediate has changed.
@@ -2228,7 +2233,7 @@ void MainForm::appendMessagesError( const QString& s )
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
 	QMessageBox::critical(this,
-		QSAMPLER_TITLE ": " + tr("Error"), s, tr("Cancel"));
+		QSAMPLER_TITLE ": " + tr("Error"), s, QMessageBox::Cancel);
 }
 
 
@@ -2516,17 +2521,13 @@ void MainForm::startServer (void)
 
 	// Is the server process instance still here?
 	if (m_pServer) {
-		switch (QMessageBox::warning(this,
+		if (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Could not start the LinuxSampler server.\n\n"
 			"Maybe it is already started."),
-			tr("Stop"), tr("Kill"), tr("Cancel"))) {
-		case 0:
+			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
 			m_pServer->terminate();
-			break;
-		case 1:
 			m_pServer->kill();
-			break;
 		}
 		return;
 	}
@@ -2602,7 +2603,7 @@ void MainForm::stopServer (bool bInteractive)
 			"sampler session at any time by relaunching QSampler.\n\n"
 			"Do you want LinuxSampler to stop or to keep running in\n"
 			"the background?"),
-			tr("Stop"), tr("Keep Running")) == 1)
+			QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
 		{
 			bForceServerStop = false;
 		}

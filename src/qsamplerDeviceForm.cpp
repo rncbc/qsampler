@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -279,7 +279,8 @@ void DeviceForm::deleteDevice (void)
 			"%1\n\n"
 			"Are you sure?")
 			.arg(device.deviceName()),
-			tr("OK"), tr("Cancel")) > 0)
+			QMessageBox::Ok | QMessageBox::Cancel)
+			== QMessageBox::Cancel)
 			return;
 	}
 

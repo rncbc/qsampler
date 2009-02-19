@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -308,7 +308,8 @@ void InstrumentListForm::deleteInstrument (void)
 			"%1\n\n"
 			"Are you sure?")
 			.arg(pInstrument->name()),
-			tr("OK"), tr("Cancel")) > 0)
+			QMessageBox::Ok | QMessageBox::Cancel)
+			== QMessageBox::Cancel)
 			return;
 	}
 

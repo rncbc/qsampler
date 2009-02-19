@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -341,11 +341,13 @@ void OptionsForm::reject (void)
 			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Some settings have been changed.\n\n"
 			"Do you want to apply the changes?"),
-			tr("Apply"), tr("Discard"), tr("Cancel"))) {
-		case 0:     // Apply...
+			QMessageBox::Apply |
+			QMessageBox::Discard |
+			QMessageBox::Cancel)) {
+		case QMessageBox::Apply:
 			accept();
 			return;
-		case 1:     // Discard
+		case QMessageBox::Discard:
 			break;
 		default:    // Cancel.
 			bReject = false;
