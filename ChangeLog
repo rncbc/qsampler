@@ -5,6 +5,10 @@ ChangeLog
 
 CVS HEAD
 
+* Russian (qsampler_ru.ts by Alexandre Prokoudine) makes it as
+  brand first translation delivered. Thanks and welcomes whom
+  ever may follow ;)
+
 * Converted obsolete QMessageBox forms to standard buttons.
 
 * Added support for runtime max. voices / disk streams setting
