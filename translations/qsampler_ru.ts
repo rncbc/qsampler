@@ -340,24 +340,24 @@ Sorry.</source>
 </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="291"/>
+        <location filename="../src/qsamplerOptions.cpp" line="292"/>
         <source>Option -h requires an argument (hostname).</source>
         <translation>Ключу -h нужен аргумент (имя хоста).</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="300"/>
+        <location filename="../src/qsamplerOptions.cpp" line="301"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="312"/>
+        <location filename="../src/qsamplerOptions.cpp" line="313"/>
         <source>Qt: %1
 </source>
         <translation>Qt: %1
 </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="533"/>
+        <location filename="../src/qsamplerOptions.cpp" line="534"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1038,7 +1038,7 @@ sampler session at any time by relaunching QSampler.
 
 Do you want LinuxSampler to stop or to keep running in
 the background?</source>
-        <translation>Вы можете оставить движок сэмплера (LinuxSampler)
+        <translation type="obsolete">Вы можете оставить движок сэмплера (LinuxSampler)
 работающим в фоновом режиме. Сэмплер продолжит
 работать с текущим сеансом, и при следующем запуске
 QSampler вы сможете изменить параметры сеанса.
@@ -1047,27 +1047,27 @@ QSampler вы сможете изменить параметры сеанса.
 его работающим в фоновом режиме?</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2614"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2613"/>
         <source>Server is stopping...</source>
         <translation>Останавливается сервер...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2655"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2654"/>
         <source>Server is being forced...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2667"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2666"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Сервер был остановлен со статусом выхода %1.</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2710"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2709"/>
         <source>Client connecting...</source>
         <translation>Устанавливается соединения клиента...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2722"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2721"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1076,24 +1076,34 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2734"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2733"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2772"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2771"/>
         <source>Client connected.</source>
         <translation>Клиент соединился.</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2805"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2804"/>
         <source>Client disconnecting...</source>
         <translation>Выполняется отсоединение клиента...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerMainForm.cpp" line="2843"/>
+        <location filename="../src/qsamplerMainForm.cpp" line="2842"/>
         <source>Client disconnected.</source>
         <translation>Клиент отсоединен.</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerMainForm.cpp" line="2604"/>
+        <source>You have the option to keep the sampler backend (LinuxSampler)
+running in the background. The sampler would continue to work
+according to your current sampler session and you could alter the
+sampler session at any time by relaunching QSampler.
+
+Do you want LinuxSampler to stop?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
