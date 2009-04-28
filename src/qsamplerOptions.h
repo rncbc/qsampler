@@ -1,7 +1,7 @@
 // qsamplerOptions.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -49,9 +49,9 @@ public:
 	QSettings& settings();
 
 	// Command line arguments parser.
-	bool parse_args(int argc, char **argv);
+	bool parse_args(const QStringList& args);
 	// Command line usage helper.
-	void print_usage(const char *arg0);
+	void print_usage(const QString& arg0);
 
 	// Startup supplied session file.
 	QString sSessionFile;

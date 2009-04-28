@@ -2601,8 +2601,7 @@ void MainForm::stopServer (bool bInteractive)
 			"running in the background. The sampler would continue to work\n"
 			"according to your current sampler session and you could alter the\n"
 			"sampler session at any time by relaunching QSampler.\n\n"
-			"Do you want LinuxSampler to stop or to keep running in\n"
-			"the background?"),
+			"Do you want LinuxSampler to stop?"),
 			QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
 		{
 			bForceServerStop = false;

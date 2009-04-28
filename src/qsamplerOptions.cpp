@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -242,7 +242,7 @@ QSettings& Options::settings (void)
 //
 
 // Help about command line options.
-void Options::print_usage ( const char *arg0 )
+void Options::print_usage ( const QString& arg0 )
 {
 	QTextStream out(stderr);
 	out << QObject::tr("Usage: %1 [options] [session-file]\n\n"
@@ -258,30 +258,31 @@ void Options::print_usage ( const char *arg0 )
 
 
 // Parse command line arguments into m_settings.
-bool Options::parse_args ( int argc, char **argv )
+bool Options::parse_args ( const QStringList& args )
 {
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
 	int iCmdArgs = 0;
+	int argc = args.count();
 
 	for (int i = 1; i < argc; i++) {
 
 		if (iCmdArgs > 0) {
 			sSessionFile += " ";
-			sSessionFile += argv[i];
+			sSessionFile += args.at(i);
 			iCmdArgs++;
 			continue;
 		}
 
-		QString sArg = argv[i];
+		QString sArg = args.at(i);
 		QString sVal = QString::null;
 		int iEqual = sArg.indexOf("=");
 		if (iEqual >= 0) {
 			sVal = sArg.right(sArg.length() - iEqual - 1);
 			sArg = sArg.left(iEqual);
 		}
-		else if (i < argc)
-			sVal = argv[i + 1];
+		else if (i < argc - 1)
+			sVal = args.at(i + 1);
 
 		if (sArg == "-s" || sArg == "--start") {
 			bServerStart = true;
@@ -305,7 +306,7 @@ bool Options::parse_args ( int argc, char **argv )
 				i++;
 		}
 		else if (sArg == "-?" || sArg == "--help") {
-			print_usage(argv[0]);
+			print_usage(args.at(0));
 			return false;
 		}
 		else if (sArg == "-v" || sArg == "--version") {
