@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.1.25, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.1.26, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
 AC_CONFIG_HEADERS(config.h)
@@ -37,7 +37,7 @@ AC_ARG_ENABLE(libgig,
 ac_with_paths="/usr /usr/local"
 
 # Some a-la-debian alternatives...
-for X in /usr/lib /usr/share; do
+for X in /usr/lib /usr/lib64 /usr/share; do
   for Y in qt qt4; do
     if test -d $X/$Y/bin; then
       ac_with_paths="$ac_with_paths $X/$Y"

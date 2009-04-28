@@ -1,7 +1,7 @@
 // main.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -262,7 +262,7 @@ int main ( int argc, char **argv )
 
 	// Construct default settings; override with command line arguments.
 	QSampler::Options options;
-	if (!options.parse_args(app.argc(), app.argv())) {
+	if (!options.parse_args(app.arguments())) {
 		app.quit();
 		return 1;
 	}
