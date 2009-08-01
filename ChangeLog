@@ -3,7 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-CVS HEAD
+0.2.2  2009-08-01  New release cycle.
 
 * Russian (qsampler_ru.ts by Alexandre Prokoudine) makes it as
   brand first translation delivered. Thanks and welcomes whom
