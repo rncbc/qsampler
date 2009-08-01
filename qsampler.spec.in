@@ -49,6 +49,7 @@ export PATH=$QTDIR/bin:$PATH
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
+%{_datadir}/locale/%{name}_*.qm
 
 %changelog
 * Sat Aug  1 2009 Rui Nuno Capela <rncbc@users.sourceforge.net>
