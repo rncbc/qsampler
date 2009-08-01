@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 10
+%define release 11
 %define prefix  @ac_prefix@
 
 Summary:	A LinuxSampler Qt GUI interface
@@ -51,6 +51,8 @@ export PATH=$QTDIR/bin:$PATH
 %{_datadir}/pixmaps/%{name}.png
 
 %changelog
+* Sat Aug  1 2009 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- New 0.2.2 release.
 * Thu Dec 6 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - Qt4 migration complete.
 * Mon Jun 25 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>

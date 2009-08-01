@@ -1,3 +1,9 @@
+qsampler (0.2.2-1) unstable; urgency=low
+
+  * New Release.
+
+ -- Rui Nuno Capela <rncbc@users.sourceforge.net>  Sat,  1 Aug 2009 17:20:20 +0100
+
 qsampler (0.2.1-1) unstable; urgency=low
 
   * New Release. Qt4 migration complete.
