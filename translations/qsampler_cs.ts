@@ -331,7 +331,7 @@ Promiňte.</translation>
         <translation>Na požádání</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="249"/>
+        <location filename="../src/qsamplerOptions.cpp" line="267"/>
         <source>Usage: %1 [options] [session-file]
 
 </source>
@@ -340,24 +340,24 @@ Promiňte.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="292"/>
+        <location filename="../src/qsamplerOptions.cpp" line="310"/>
         <source>Option -h requires an argument (hostname).</source>
         <translation>Volba -h vyžaduje argument (název hostitele).</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="301"/>
+        <location filename="../src/qsamplerOptions.cpp" line="319"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Volba -p vyžaduje argument (název přípojky - brány).</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="313"/>
+        <location filename="../src/qsamplerOptions.cpp" line="331"/>
         <source>Qt: %1
 </source>
         <translation>Qt: %1
 </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="534"/>
+        <location filename="../src/qsamplerOptions.cpp" line="552"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>
@@ -1151,12 +1151,12 @@ Chcete zastavit LinuxSampler?</translation>
         <translation>QSampler byl sestaven bez podpory pro tento parametr.</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="341"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="344"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="343"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="346"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1180,12 +1180,12 @@ Chcete použít změny?</translation>
         <translation type="obsolete">Отменить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="406"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="409"/>
         <source>Messages Log</source>
         <translation>Zápis hlášení</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="408"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="411"/>
         <source>Log files</source>
         <translation>Soubory s hlášeními</translation>
     </message>

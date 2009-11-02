@@ -325,6 +325,9 @@ void OptionsForm::accept (void)
 	m_pOptions->saveComboBoxHistory(m_ui.ServerCmdLineComboBox);
 	m_pOptions->saveComboBoxHistory(m_ui.MessagesLogPathComboBox);
 
+	// Save/commit to disk.
+	m_pOptions->saveOptions();
+
 	// Just go with dialog acceptance.
 	QDialog::accept();
 }

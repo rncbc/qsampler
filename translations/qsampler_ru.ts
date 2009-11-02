@@ -331,7 +331,7 @@ Sorry.</source>
         <translation>По требованию</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="249"/>
+        <location filename="../src/qsamplerOptions.cpp" line="267"/>
         <source>Usage: %1 [options] [session-file]
 
 </source>
@@ -340,24 +340,24 @@ Sorry.</source>
 </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="292"/>
+        <location filename="../src/qsamplerOptions.cpp" line="310"/>
         <source>Option -h requires an argument (hostname).</source>
         <translation>Ключу -h нужен аргумент (имя хоста).</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="301"/>
+        <location filename="../src/qsamplerOptions.cpp" line="319"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="313"/>
+        <location filename="../src/qsamplerOptions.cpp" line="331"/>
         <source>Qt: %1
 </source>
         <translation>Qt: %1
 </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptions.cpp" line="534"/>
+        <location filename="../src/qsamplerOptions.cpp" line="552"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1147,12 +1147,12 @@ Do you want LinuxSampler to stop?</source>
         <translation>QSampler был собран без поддержки этого параметра.</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="341"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="344"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="343"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="346"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1176,12 +1176,12 @@ Do you want to apply the changes?</source>
         <translation type="obsolete">Отменить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="406"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="409"/>
         <source>Messages Log</source>
         <translation>Журнал сообщений</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerOptionsForm.cpp" line="408"/>
+        <location filename="../src/qsamplerOptionsForm.cpp" line="411"/>
         <source>Log files</source>
         <translation>Файлы журналов</translation>
     </message>
