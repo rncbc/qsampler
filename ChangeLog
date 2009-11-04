@@ -3,6 +3,14 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+SVN HEAD
+
+- Global configuration state is now explicitly saved/committed to
+  disk when View/Options... dialog changes are accepted and applied.
+
+- Czech (cs) translation added (by Pavel Fric).
+
+
 0.2.2  2009-08-01  New release cycle.
 
 * Russian (qsampler_ru.ts by Alexandre Prokoudine) makes it as

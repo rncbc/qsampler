@@ -44,6 +44,20 @@ namespace QSampler {
 Options::Options (void)
 	: m_settings(QSAMPLER_DOMAIN, QSAMPLER_TITLE)
 {
+	loadOptions();
+}
+
+
+// Default Destructor.
+Options::~Options (void)
+{
+	saveOptions();
+}
+
+
+// Explicit load method.
+void Options::loadOptions (void)
+{
 	// Begin into general options group.
 	m_settings.beginGroup("/Options");
 
@@ -140,8 +154,8 @@ Options::Options (void)
 }
 
 
-// Default Destructor.
-Options::~Options (void)
+// Explicit save method.
+void Options::saveOptions (void)
 {
 	// Make program version available in the future.
 	m_settings.beginGroup("/Program");
@@ -225,7 +239,11 @@ Options::~Options (void)
 	m_settings.setValue("/Volume", iVolume);
 	m_settings.setValue("/Loadmode", iLoadMode);
 	m_settings.endGroup();
+
+	// Save/commit to disk.
+	m_settings.sync();
 }
+
 
 //-------------------------------------------------------------------------
 // Settings accessor.

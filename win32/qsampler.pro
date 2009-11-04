@@ -57,10 +57,12 @@ LANGUAGE  = C++
 
 LIBS     += -llscp
 
+TRANSLATIONS = \
+    ../translations/qsampler_cs.ts \
+    ../translations/qsampler_ru.ts
+
 win32 {
 	CONFIG  += console
 	INCPATH += C:\usr\local\include
 	LIBS    += -LC:\usr\local\lib -lws2_32
 }
-
-TRANSLATIONS = ../translations/qsampler_ru.ts

@@ -48,6 +48,10 @@ public:
 	// The settings object accessor.
 	QSettings& settings();
 
+	// explicit I/O methods.
+	void loadOptions();
+	void saveOptions();
+
 	// Command line arguments parser.
 	bool parse_args(const QStringList& args);
 	// Command line usage helper.

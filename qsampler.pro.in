@@ -55,7 +55,9 @@ TEMPLATE  = app
 CONFIG   += qt thread warn_on @ac_debug@
 LANGUAGE  = C++
 
-TRANSLATIONS += translations/qsampler_ru.ts
+TRANSLATIONS = \
+    translations/qsampler_cs.ts \
+    translations/qsampler_ru.ts
 
 LIBS     += @ac_libs@
 INCPATH  += @ac_incpath@

@@ -27,7 +27,7 @@ endif
 config.status:
 	dh_testdir
 	# Add here commands to configure the package.
-	$(MAKE) -f Makefile.cvs
+	$(MAKE) -f Makefile.svn
 	chmod a+x configure
 	CFLAGS="$(CFLAGS)" ./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info
 
@@ -49,7 +49,7 @@ clean:
 	rm -f build-stamp
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) -f Makefile.cvs
+	-$(MAKE) -f Makefile.svn
 	chmod a+x configure
 	-$(MAKE) distclean
 ifneq "$(wildcard /usr/share/misc/config.sub)" ""

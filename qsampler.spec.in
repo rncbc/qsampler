@@ -30,7 +30,7 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %prep
 %setup
-[ -f Makefile.cvs ] && %__make -f Makefile.cvs
+[ -f Makefile.svn ] && %__make -f Makefile.svn
 
 %build
 export PATH=$QTDIR/bin:$PATH

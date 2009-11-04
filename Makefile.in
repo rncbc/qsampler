@@ -57,9 +57,11 @@ forms = \
 	src/qsamplerMainForm.ui
 
 translations_sources = \
+	translations/qsampler_cs.ts \
 	translations/qsampler_ru.ts
 
 translations_targets = \
+	translations/qsampler_cs.qm \
 	translations/qsampler_ru.qm
 
 all:	$(name) $(translations_targets)
