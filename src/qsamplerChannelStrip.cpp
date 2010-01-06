@@ -1,7 +1,7 @@
 // qsamplerChannelStrip.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -29,10 +29,9 @@
 
 #include <QMessageBox>
 #include <QDragEnterEvent>
+#include <QTimer>
 #include <QUrl>
 
-#define MIDI_OFF_COLOR			Qt::darkGreen
-#define MIDI_ON_COLOR			Qt::green
 
 // Channel status/usage usage limit control.
 #define QSAMPLER_ERROR_LIMIT	3
@@ -57,6 +56,11 @@ namespace QSampler {
 // QSampler::ChannelStrip -- Channel strip form implementation.
 //
 
+// MIDI activity pixmap common resources.
+int      ChannelStrip::g_iMidiActivityRefCount = 0;
+QPixmap *ChannelStrip::g_pMidiActivityLedOn    = NULL;
+QPixmap *ChannelStrip::g_pMidiActivityLedOff   = NULL;
+
 // Channel strip activation/selection.
 ChannelStrip *ChannelStrip::g_pSelectedStrip = NULL;
 
@@ -69,6 +73,25 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	m_pChannel     = NULL;
 	m_iDirtyChange = 0;
 	m_iErrorCount  = 0;
+
+	if (++g_iMidiActivityRefCount == 1) {
+		g_pMidiActivityLedOn  = new QPixmap(":/icons/ledon1.png");
+		g_pMidiActivityLedOff = new QPixmap(":/icons/ledoff1.png");
+	}
+
+	m_ui.MidiActivityLabel->setPixmap(*g_pMidiActivityLedOff);
+
+#ifndef CONFIG_EVENT_CHANNEL_MIDI
+	m_ui.MidiActivityLabel->setToolTip("MIDI activity (disabled)");
+#endif
+
+	m_pMidiActivityTimer = new QTimer(this);
+	m_pMidiActivityTimer->setSingleShot(true);
+
+	QObject::connect(m_pMidiActivityTimer,
+		SIGNAL(timeout()),
+		SLOT(midiActivityLedOff())
+	);
 
 	// Try to restore normal window positioning.
 	adjustSize();
@@ -95,21 +118,6 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 		SIGNAL(clicked()),
 		SLOT(channelFxEdit()));
 
-	pMidiActivityTimer = new QTimer(this);
-	pMidiActivityTimer->setSingleShot(true);
-	QObject::connect(
-		pMidiActivityTimer, SIGNAL(timeout()),
-		this, SLOT(midiDataCeased())
-	);
-
-#if CONFIG_EVENT_CHANNEL_MIDI
-	m_ui.MidiActivityLabel->setPalette(MIDI_OFF_COLOR);
-	m_ui.MidiActivityLabel->setAutoFillBackground(true);
-#else
-	m_ui.MidiActivityLabel->setText("X");
-	m_ui.MidiActivityLabel->setToolTip("MIDI Activity Disabled");
-#endif
-
 	setSelected(false);
 }
 
@@ -122,6 +130,15 @@ ChannelStrip::~ChannelStrip (void)
 	if (m_pChannel)
 		delete m_pChannel;
 	m_pChannel = NULL;
+
+	if (--g_iMidiActivityRefCount == 0) {
+		if (g_pMidiActivityLedOn)
+			delete g_pMidiActivityLedOn;
+		g_pMidiActivityLedOn = NULL;
+		if (g_pMidiActivityLedOff)
+			delete g_pMidiActivityLedOff;
+		g_pMidiActivityLedOff = NULL;
+	}
 }
 
 
@@ -549,10 +566,6 @@ void ChannelStrip::volumeChanged ( int iVolume )
 	}
 }
 
-void ChannelStrip::midiArrived() {
-	m_ui.MidiActivityLabel->setPalette(MIDI_ON_COLOR);
-	pMidiActivityTimer->start(50);
-}
 
 // Context menu event handler.
 void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
@@ -564,9 +577,19 @@ void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 	m_pChannel->contextMenuEvent(pEvent);
 }
 
-void ChannelStrip::midiDataCeased() {
-	m_ui.MidiActivityLabel->setPalette(MIDI_OFF_COLOR);
+
+void ChannelStrip::midiActivityLedOn (void)
+{
+	m_ui.MidiActivityLabel->setPixmap(*g_pMidiActivityLedOn);
+	m_pMidiActivityTimer->start(50);
 }
+
+
+void ChannelStrip::midiActivityLedOff (void)
+{
+	m_ui.MidiActivityLabel->setPixmap(*g_pMidiActivityLedOff);
+}
+
 
 // Error count hackish accessors.
 void ChannelStrip::resetErrorCount (void)

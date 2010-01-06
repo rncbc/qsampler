@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -585,26 +585,26 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 			case LSCP_EVENT_AUDIO_OUTPUT_DEVICE_INFO:
 				if (m_pDeviceForm) m_pDeviceForm->refreshDevices();
 				break;
-#if CONFIG_EVENT_CHANNEL_MIDI
+		#if CONFIG_EVENT_CHANNEL_MIDI
 			case LSCP_EVENT_CHANNEL_MIDI: {
 				const int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 				if (pChannelStrip)
-					pChannelStrip->midiArrived();
+					pChannelStrip->midiActivityLedOn();
 				break;
 			}
-#endif
-#if CONFIG_EVENT_DEVICE_MIDI
+		#endif
+		#if CONFIG_EVENT_DEVICE_MIDI
 			case LSCP_EVENT_DEVICE_MIDI: {
 				const int iDeviceID = pEvent->data().section(' ', 0, 0).toInt();
 				const int iPortID   = pEvent->data().section(' ', 1, 1).toInt();
-				DeviceStatusForm* pDeviceStatusForm =
-					DeviceStatusForm::getInstance(iDeviceID);
+				DeviceStatusForm *pDeviceStatusForm
+					= DeviceStatusForm::getInstance(iDeviceID);
 				if (pDeviceStatusForm)
 					pDeviceStatusForm->midiArrived(iPortID);
 				break;
 			}
-#endif
+		#endif
 			default:
 				appendMessagesColor(tr("Notify event: %1 data: %2")
 					.arg(::lscp_event_to_text(pEvent->event()))

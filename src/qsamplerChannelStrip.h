@@ -1,7 +1,7 @@
 // qsamplerChannelStrip.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@
 #include "ui_qsamplerChannelStrip.h"
 
 #include "qsamplerChannel.h"
-#include <QTimer>
 
 class QDragEnterEvent;
+class QTimer;
 
 
 namespace QSampler {
@@ -81,7 +81,8 @@ public slots:
 	bool channelFxEdit();
 	bool channelReset();
 	void volumeChanged(int iVolume);
-	void midiArrived();
+
+	void midiActivityLedOn();
 
 protected:
 
@@ -91,16 +92,22 @@ protected:
 
 protected slots:
 
-	void midiDataCeased();
+	void midiActivityLedOff();
 
 private:
 
 	Ui::qsamplerChannelStrip m_ui;
 
-	Channel* m_pChannel;
+	Channel *m_pChannel;
 	int m_iDirtyChange;
 	int m_iErrorCount;
-	QTimer* pMidiActivityTimer;
+
+	QTimer  *m_pMidiActivityTimer;
+
+	// MIDI activity pixmap common resources.
+	static int      g_iMidiActivityRefCount;
+	static QPixmap *g_pMidiActivityLedOn;
+	static QPixmap *g_pMidiActivityLedOff;
 
 	// Channel strip activation/selection.
 	static ChannelStrip *g_pSelectedStrip;
