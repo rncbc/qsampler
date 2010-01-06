@@ -5,10 +5,13 @@ ChangeLog
 
 SVN HEAD
 
-- Global configuration state is now explicitly saved/committed to
+* MIDI activity indicator on channel strips is now implemented as
+  a flashing green LED, instead of a lame solid background :).
+
+* Global configuration state is now explicitly saved/committed to
   disk when View/Options... dialog changes are accepted and applied.
 
-- Czech (cs) translation added (by Pavel Fric).
+* Czech (cs) translation added (by Pavel Fric).
 
 
 0.2.2  2009-08-01  New release cycle.
