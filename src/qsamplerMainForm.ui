@@ -117,6 +117,7 @@
     <addaction name="viewMessagesAction" />
     <addaction name="viewInstrumentsAction" />
     <addaction name="viewDevicesAction" />
+    <addaction name="separator" />
     <addaction name="viewMidiDeviceStatusMenu" />
     <addaction name="separator" />
     <addaction name="viewOptionsAction" />

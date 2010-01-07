@@ -581,7 +581,7 @@ void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 void ChannelStrip::midiActivityLedOn (void)
 {
 	m_ui.MidiActivityLabel->setPixmap(*g_pMidiActivityLedOn);
-	m_pMidiActivityTimer->start(200);
+	m_pMidiActivityTimer->start(100);
 }
 
 
