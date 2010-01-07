@@ -142,13 +142,14 @@ void DeviceStatusForm::updateGUIPorts (void)
 
 	// rebuild the GUI
 	for (int i = 0; i < ports.size(); ++i) {
-		QLabel *pLabel
-			= new QLabel(tr("MIDI port %1").arg(ports[i]->portName()));
-		pLabel->setToolTip(tr("Device ID %1").arg(ports[i]->portID()));
-		pLayout->addWidget(pLabel, i, 0, Qt::AlignLeft);
 		MidiActivityLED *pLED = new MidiActivityLED();
 		m_midiActivityLEDs.push_back(pLED);
-		pLayout->addWidget(pLED, i, 1);
+		pLayout->addWidget(pLED, i, 0);
+		QLabel *pLabel = new QLabel(
+			m_pDevice->deviceTypeName()
+			+ ' ' + m_pDevice->driverName()
+			+ ' ' + ports[i]->portName());
+		pLayout->addWidget(pLabel, i, 1, Qt::AlignLeft);
 	}
 }
 
@@ -223,7 +224,7 @@ void DeviceStatusForm::onDevicesChanged (void)
 		}
 		// create status forms for new devices
 		std::set<int>::iterator it = deviceIDs.begin();
-		for ( ; it != deviceIDs.end(); ++iter) {
+		for ( ; it != deviceIDs.end(); ++it) {
 			if (g_instances.find(*it) == g_instances.end()) {
 				// What style do we create these forms?
 				Qt::WindowFlags wflags = Qt::Window

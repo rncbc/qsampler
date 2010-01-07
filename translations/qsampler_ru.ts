@@ -532,16 +532,6 @@ Are you sure?</source>
         <source>%1 Status</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../src/qsamplerDeviceStatusForm.cpp" line="146"/>
-        <source>MIDI port %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/qsamplerDeviceStatusForm.cpp" line="147"/>
-        <source>Device ID %1</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QSampler::InstrumentForm</name>
