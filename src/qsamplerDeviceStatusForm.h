@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2008, Christian Schoenebeck
+   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -29,52 +30,78 @@
 #include <QCloseEvent>
 #include <QLabel>
 #include <QTimer>
+
 #include <map>
+
 
 namespace QSampler {
 
-class MidiActivityLED : public QLabel {
+class MidiActivityLED : public QLabel
+{
 	Q_OBJECT
+
 public:
-	MidiActivityLED(QString text = "", QWidget* parent = 0);
-	void midiDataArrived();
+
+	MidiActivityLED(QString sText = QString(), QWidget *pParent = 0);
+	~MidiActivityLED();
+
+	void midiActivityLedOn();
 
 protected slots:
-	void midiDataCeased();
+
+	void midiActivityLedOff();
 
 private:
-	QTimer timer;
+
+	QTimer m_timer;
+
+	// MIDI activity pixmap common resources.
+	static int      g_iMidiActivityRefCount;
+	static QPixmap *g_pMidiActivityLedOn;
+	static QPixmap *g_pMidiActivityLedOff;
 };
 
-class DeviceStatusForm : public QMainWindow {
+
+class DeviceStatusForm : public QWidget
+{
 	Q_OBJECT
+
 public:
-	DeviceStatusForm(int DeviceID, QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+
+	DeviceStatusForm(int DeviceID,
+		QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
 	~DeviceStatusForm();
-	QAction* visibleAction();
+
+	QAction *visibleAction();
+
 	void midiArrived(int iPort);
 
-	static DeviceStatusForm* getInstance(int iDeviceID);
-	static const std::map<int, DeviceStatusForm*>& getInstances();
+	static DeviceStatusForm *getInstance(int iDeviceID);
+	static const std::map<int, DeviceStatusForm *>& getInstances();
+
 	static void onDevicesChanged();
 	static void onDeviceChanged(int iDeviceID);
+
 	static void deleteAllInstances();
 
 protected:
-	void closeEvent(QCloseEvent* event);
+
+	void closeEvent(QCloseEvent *pCloseEvent);
 	void updateGUIPorts();
 
-	std::vector<MidiActivityLED*> midiActivityLEDs;
-
 private:
-	int m_DeviceID;
-	Device* m_pDevice;
-	QAction* m_pVisibleAction;
 
-	static std::map<int, DeviceStatusForm*> instances;
+	int      m_DeviceID;
+	Device  *m_pDevice;
+	QAction *m_pVisibleAction;
+
+	std::vector<MidiActivityLED *> m_midiActivityLEDs;
+
+	static std::map<int, DeviceStatusForm*> g_instances;
 };
 
 } // namespace QSampler
+
 
 #endif // __qsamplerDeviceStatusForm_h
 

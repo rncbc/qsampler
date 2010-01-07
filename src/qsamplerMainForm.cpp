@@ -56,6 +56,14 @@
 #include <QTimer>
 #include <QDateTime>
 
+#if QT_VERSION < 0x040500
+namespace Qt {
+const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
+#if QT_VERSION < 0x040200
+const WindowFlags CustomizeWindowHint   = WindowFlags(0x02000000);
+#endif
+}
+#endif
 
 #ifdef HAVE_SIGNAL_H
 #include <signal.h>
@@ -375,26 +383,28 @@ void MainForm::setup ( Options *pOptions )
 
 	// What style do we create these forms?
 	Qt::WindowFlags wflags = Qt::Window
-#if QT_VERSION >= 0x040200
 		| Qt::CustomizeWindowHint
-#endif
 		| Qt::WindowTitleHint
 		| Qt::WindowSystemMenuHint
-		| Qt::WindowMinMaxButtonsHint;
+		| Qt::WindowMinMaxButtonsHint
+		| Qt::WindowCloseButtonHint;
 	if (m_pOptions->bKeepOnTop)
 		wflags |= Qt::Tool;
+
 	// Some child forms are to be created right now.
 	m_pMessages = new Messages(this);
 	m_pDeviceForm = new DeviceForm(this, wflags);
 #ifdef CONFIG_MIDI_INSTRUMENT
 	m_pInstrumentListForm = new InstrumentListForm(this, wflags);
 #else
-	viewInstrumentsAction->setEnabled(false);
+	m_ui.viewInstrumentsAction->setEnabled(false);
 #endif
+
 	// Setup messages logging appropriately...
 	m_pMessages->setLogging(
 		m_pOptions->bMessagesLog,
 		m_pOptions->sMessagesLogPath);
+
 	// Set message defaults...
 	updateMessagesFont();
 	updateMessagesLimit();
@@ -613,20 +623,21 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 	}
 }
 
-void MainForm::updateViewMidiDeviceStatusMenu() {
+
+void MainForm::updateViewMidiDeviceStatusMenu (void)
+{
 	m_ui.viewMidiDeviceStatusMenu->clear();
-	const std::map<int, DeviceStatusForm*> statusForms =
-		DeviceStatusForm::getInstances();
-	for (
-		std::map<int, DeviceStatusForm*>::const_iterator iter = statusForms.begin();
-		iter != statusForms.end(); ++iter
-	) {
-		DeviceStatusForm* pForm = iter->second;
+	const std::map<int, DeviceStatusForm *> statusForms
+		= DeviceStatusForm::getInstances();
+	std::map<int, DeviceStatusForm *>::const_iterator iter
+		= statusForms.begin();
+	for ( ; iter != statusForms.end(); ++iter) {
+		DeviceStatusForm *pStatusForm = iter->second;
 		m_ui.viewMidiDeviceStatusMenu->addAction(
-			pForm->visibleAction()
-		);
+			pStatusForm->visibleAction());
 	}
 }
+
 
 // Context menu event handler.
 void MainForm::contextMenuEvent( QContextMenuEvent *pEvent )
@@ -1870,9 +1881,10 @@ void MainForm::stabilizeForm (void)
 	setWindowTitle(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
 
 	// Update the main menu state...
-	ChannelStrip* pChannelStrip = activeChannelStrip();
-	bool bHasClient  = (m_pOptions != NULL && m_pClient != NULL);
+	ChannelStrip *pChannelStrip = activeChannelStrip();
+	bool bHasClient = (m_pOptions != NULL && m_pClient != NULL);
 	bool bHasChannel = (bHasClient && pChannelStrip != NULL);
+	bool bHasChannels = (bHasClient && m_pWorkspace->windowList().count() > 0);
 	m_ui.fileNewAction->setEnabled(bHasClient);
 	m_ui.fileOpenAction->setEnabled(bHasClient);
 	m_ui.fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
@@ -1888,7 +1900,7 @@ void MainForm::stabilizeForm (void)
 	m_ui.editEditChannelAction->setEnabled(false);
 #endif
 	m_ui.editResetChannelAction->setEnabled(bHasChannel);
-	m_ui.editResetAllChannelsAction->setEnabled(bHasChannel);
+	m_ui.editResetAllChannelsAction->setEnabled(bHasChannels);
 	m_ui.viewMessagesAction->setChecked(m_pMessages && m_pMessages->isVisible());
 #ifdef CONFIG_MIDI_INSTRUMENT
 	m_ui.viewInstrumentsAction->setChecked(m_pInstrumentListForm
@@ -1900,7 +1912,9 @@ void MainForm::stabilizeForm (void)
 	m_ui.viewDevicesAction->setChecked(m_pDeviceForm
 		&& m_pDeviceForm->isVisible());
 	m_ui.viewDevicesAction->setEnabled(bHasClient);
-	m_ui.channelsArrangeAction->setEnabled(bHasChannel);
+	m_ui.viewMidiDeviceStatusMenu->setEnabled(
+		DeviceStatusForm::getInstances().size() > 0);
+	m_ui.channelsArrangeAction->setEnabled(bHasChannels);
 
 #ifdef CONFIG_VOLUME
 	// Toolbar widgets are also affected...

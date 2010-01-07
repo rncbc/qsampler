@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2008, Christian Schoenebeck
+   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -21,12 +22,11 @@
 
 #include "qsamplerAbout.h"
 #include "qsamplerDeviceStatusForm.h"
+
 #include "qsamplerMainForm.h"
 
 #include <QGridLayout>
 
-#define MIDI_OFF_COLOR			Qt::darkGreen
-#define MIDI_ON_COLOR			Qt::green
 
 namespace QSampler {
 
@@ -34,50 +34,72 @@ namespace QSampler {
 // QSampler::MidiActivityLED -- Graphical indicator for MIDI activity.
 //
 
-MidiActivityLED::MidiActivityLED(QString text, QWidget* parent) : QLabel(text, parent) {
-#if CONFIG_EVENT_DEVICE_MIDI
-	setPalette(MIDI_OFF_COLOR);
-	setAutoFillBackground(true);
-#else
-	setText("X");
-	setToolTip("MIDI Activity Disabled\n(at compile time)");
+// MIDI activity pixmap common resources.
+int      MidiActivityLED::g_iMidiActivityRefCount = 0;
+QPixmap *MidiActivityLED::g_pMidiActivityLedOn    = NULL;
+QPixmap *MidiActivityLED::g_pMidiActivityLedOff   = NULL;
+
+
+MidiActivityLED::MidiActivityLED ( QString sText, QWidget *pParent )
+	: QLabel(sText, pParent)
+{
+	if (++g_iMidiActivityRefCount == 1) {
+		g_pMidiActivityLedOn  = new QPixmap(":/icons/ledon1.png");
+		g_pMidiActivityLedOff = new QPixmap(":/icons/ledoff1.png");
+	}
+
+	setPixmap(*g_pMidiActivityLedOff);
+#ifndef CONFIG_EVENT_DEVICE_MIDI
+	setToolTip("MIDI Activity disabled");
 #endif
-	timer.setSingleShot(true);
-	QObject::connect(
-		&timer, SIGNAL(timeout()),
-		this, SLOT(midiDataCeased())
+	m_timer.setSingleShot(true);
+
+	QObject::connect(&m_timer,
+		SIGNAL(timeout()),
+		SLOT(midiActivityLedOff())
 	);
 }
 
-void MidiActivityLED::midiDataArrived() {
-#if CONFIG_EVENT_DEVICE_MIDI
-	setPalette(MIDI_ON_COLOR);
-	timer.start(50);
-#endif
+MidiActivityLED::~MidiActivityLED (void)
+{
+	if (--g_iMidiActivityRefCount == 0) {
+		if (g_pMidiActivityLedOn)
+			delete g_pMidiActivityLedOn;
+		g_pMidiActivityLedOn = NULL;
+		if (g_pMidiActivityLedOff)
+			delete g_pMidiActivityLedOff;
+		g_pMidiActivityLedOff = NULL;
+	}
 }
 
-void MidiActivityLED::midiDataCeased() {
-#if CONFIG_EVENT_DEVICE_MIDI
-	setPalette(MIDI_OFF_COLOR);
-#endif
+
+void MidiActivityLED::midiActivityLedOn (void)
+{
+	setPixmap(*g_pMidiActivityLedOn);
+	m_timer.start(100);
 }
+
+
+void MidiActivityLED::midiActivityLedOff (void)
+{
+	setPixmap(*g_pMidiActivityLedOff);
+}
+
 
 //-------------------------------------------------------------------------
 // QSampler::DeviceStatusForm -- Device status informations window.
 //
 
-std::map<int, DeviceStatusForm*> DeviceStatusForm::instances;
+std::map<int, DeviceStatusForm *> DeviceStatusForm::g_instances;
+
 
 DeviceStatusForm::DeviceStatusForm (
-	int DeviceID, QWidget* pParent, Qt::WindowFlags wflags )
-	: QMainWindow(pParent, wflags)
+	int DeviceID, QWidget *pParent, Qt::WindowFlags wflags )
+	: QWidget(pParent, wflags)
 {
 	m_pDevice = new Device(Device::Midi, DeviceID);
 
-	if (!centralWidget()) setCentralWidget(new QWidget(this));
-
-	QGridLayout* pLayout = new QGridLayout(centralWidget());
-	centralWidget()->setLayout(pLayout);
+	setLayout(new QGridLayout(/*this*/));
 	updateGUIPorts(); // build the GUI
 
 	m_pVisibleAction = new QAction(this);
@@ -88,116 +110,149 @@ DeviceStatusForm::DeviceStatusForm (
 		QString("MIDI Device ID: ") +
 		QString::number(m_pDevice->deviceID())
 	);
-	QObject::connect(
-		m_pVisibleAction, SIGNAL(toggled(bool)),
-		this, SLOT(setVisible(bool))
+
+	QObject::connect(m_pVisibleAction,
+		SIGNAL(toggled(bool)),
+		SLOT(setVisible(bool))
 	);
 
-	setWindowTitle(m_pDevice->deviceName() + " Status");
+	setWindowTitle(tr("%1 Status").arg(m_pDevice->deviceName()));
 }
 
-void DeviceStatusForm::updateGUIPorts() {
+
+void DeviceStatusForm::updateGUIPorts (void)
+{
 	// refresh device informations
 	m_pDevice->setDevice(m_pDevice->deviceType(), m_pDevice->deviceID());
 	DevicePortList ports = m_pDevice->ports();
 
 	// clear the GUI
-	QGridLayout* pLayout = (QGridLayout*) centralWidget()->layout();
+	QGridLayout *pLayout = static_cast<QGridLayout *> (layout());
 	for (int i = pLayout->count() - 1; i >= 0; --i) {
-		QLayoutItem* pItem = pLayout->itemAt(i);
-		if (!pItem) continue;
-		pLayout->removeItem(pItem);
-		if (pItem->widget()) delete pItem->widget();
-		delete pItem;
+		QLayoutItem *pItem = pLayout->itemAt(i);
+		if (pItem) {
+			pLayout->removeItem(pItem);
+			if (pItem->widget())
+				delete pItem->widget();
+			delete pItem;
+		}
 	}
-	midiActivityLEDs.clear();
+
+	m_midiActivityLEDs.clear();
 
 	// rebuild the GUI
 	for (int i = 0; i < ports.size(); ++i) {
-		QLabel* pLabel =
-			new QLabel(QString("MIDI port \"") + ports[i]->portName() + "\": ");
-		pLabel->setToolTip(QString("Device ID ") + QString::number(ports[i]->portID()));
+		QLabel *pLabel
+			= new QLabel(tr("MIDI port %1").arg(ports[i]->portName()));
+		pLabel->setToolTip(tr("Device ID %1").arg(ports[i]->portID()));
 		pLayout->addWidget(pLabel, i, 0, Qt::AlignLeft);
-		MidiActivityLED* pLED = new MidiActivityLED();
-		midiActivityLEDs.push_back(pLED);
+		MidiActivityLED *pLED = new MidiActivityLED();
+		m_midiActivityLEDs.push_back(pLED);
 		pLayout->addWidget(pLED, i, 1);
 	}
 }
 
-DeviceStatusForm::~DeviceStatusForm() {
+
+DeviceStatusForm::~DeviceStatusForm (void)
+{
 	if (m_pDevice) delete m_pDevice;
 }
 
-QAction* DeviceStatusForm::visibleAction() {
+
+QAction* DeviceStatusForm::visibleAction (void)
+{
 	return m_pVisibleAction;
 }
 
-void DeviceStatusForm::closeEvent(QCloseEvent* event) {
+void DeviceStatusForm::closeEvent ( QCloseEvent *pCloseEvent )
+{
 	m_pVisibleAction->setChecked(false);
-	event->accept();
+
+	pCloseEvent->accept();
 }
 
-void DeviceStatusForm::midiArrived(int iPort) {
-	if (uint(iPort) >= midiActivityLEDs.size()) return;
-	midiActivityLEDs[iPort]->midiDataArrived();
+
+void DeviceStatusForm::midiArrived ( int iPort )
+{
+	if (uint(iPort) >= m_midiActivityLEDs.size())
+		return;
+
+	m_midiActivityLEDs[iPort]->midiActivityLedOn();
 }
 
-DeviceStatusForm* DeviceStatusForm::getInstance(int iDeviceID) {
-	std::map<int, DeviceStatusForm*>::iterator iter =
-		instances.find(iDeviceID);
-	return (iter != instances.end()) ? iter->second : NULL;
+
+DeviceStatusForm *DeviceStatusForm::getInstance ( int iDeviceID )
+{
+	std::map<int, DeviceStatusForm *>::iterator iter
+		= g_instances.find(iDeviceID);
+	return ((iter != g_instances.end()) ? iter->second : NULL);
 }
 
-const std::map<int, DeviceStatusForm*>& DeviceStatusForm::getInstances() {
-	return instances;
+
+const std::map<int, DeviceStatusForm *>& DeviceStatusForm::getInstances (void)
+{
+	return g_instances;
 }
 
-void DeviceStatusForm::deleteAllInstances() {
-	for (
-		std::map<int, DeviceStatusForm*>::iterator iter = instances.begin();
-		iter != instances.end(); ++iter
-	) {
+void DeviceStatusForm::deleteAllInstances (void)
+{
+	std::map<int, DeviceStatusForm *>::iterator iter = g_instances.begin();
+	for ( ; iter != g_instances.end(); ++iter) {
 		iter->second->hide();
 		delete iter->second;
 	}
-	instances.clear();
+
+	g_instances.clear();
 }
 
-void DeviceStatusForm::onDevicesChanged() {
+
+void DeviceStatusForm::onDevicesChanged (void)
+{
 	MainForm* pMainForm = MainForm::getInstance();
 	if (pMainForm && pMainForm->client()) {
-		std::set<int> deviceIDs =
-			Device::getDeviceIDs(pMainForm->client(), Device::Midi);
+		std::set<int> deviceIDs
+			= Device::getDeviceIDs(pMainForm->client(), Device::Midi);
 		// hide and delete status forms whose device has been destroyed
-		for (
-			std::map<int, DeviceStatusForm*>::iterator iter = instances.begin();
-			iter != instances.end(); ++iter
-		) {
+		std::map<int, DeviceStatusForm *>::iterator iter = g_instances.begin();
+		for ( ; iter != g_instances.end(); ++iter) {
 			if (deviceIDs.find(iter->first) == deviceIDs.end()) {
 				iter->second->hide();
 				delete iter->second;
-				instances.erase(iter);
+				g_instances.erase(iter);
 			}
 		}
 		// create status forms for new devices
-		for (
-			std::set<int>::iterator iter = deviceIDs.begin();
-			iter != deviceIDs.end(); ++iter
-		) {
-			if (instances.find(*iter) == instances.end()) {
-				DeviceStatusForm* pStatusForm =
-					new DeviceStatusForm(*iter);
-				instances[*iter] = pStatusForm;
+		std::set<int>::iterator it = deviceIDs.begin();
+		for ( ; it != deviceIDs.end(); ++iter) {
+			if (g_instances.find(*it) == g_instances.end()) {
+				// What style do we create these forms?
+				Qt::WindowFlags wflags = Qt::Window
+					| Qt::CustomizeWindowHint
+					| Qt::WindowTitleHint
+					| Qt::WindowSystemMenuHint
+					| Qt::WindowMinMaxButtonsHint
+					| Qt::WindowCloseButtonHint;
+				Options *pOptions = pMainForm->options();
+				if (pOptions && pOptions->bKeepOnTop)
+					wflags |= Qt::Tool;
+				// Create the form, giving it the device id.
+				DeviceStatusForm *pStatusForm
+					= new DeviceStatusForm(*it, NULL, wflags);
+				g_instances[*it] = pStatusForm;
 			}
 		}
 	}
 }
 
-void DeviceStatusForm::onDeviceChanged(int iDeviceID) {
-	DeviceStatusForm* pForm = DeviceStatusForm::getInstance(iDeviceID);
-	if (!pForm) return;
-	pForm->updateGUIPorts();
+
+void DeviceStatusForm::onDeviceChanged ( int iDeviceID )
+{
+	DeviceStatusForm *pStatusForm
+		= DeviceStatusForm::getInstance(iDeviceID);
+	if (pStatusForm)
+		pStatusForm->updateGUIPorts();
 }
+
 
 } // namespace QSampler
 

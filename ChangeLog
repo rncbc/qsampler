@@ -3,10 +3,17 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-SVN HEAD
+SVN TRUNK
 
-* MIDI activity indicator on channel strips is now implemented as
-  a flashing green LED, instead of a lame solid background :).
+* MIDI Device Status menu is disabled when no MIDI device exists;
+  a menu separator has been added.
+
+* Window manager's close button was found missing from the Devices
+  and Instruments widgets when on Qt >= 4.5, now fixed.
+
+* MIDI activity indicator on channel strips and MIDI device status
+  widgets is now implemented as a flashing green LED, instead of a
+  lame green solid background :).
 
 * Global configuration state is now explicitly saved/committed to
   disk when View/Options... dialog changes are accepted and applied.
