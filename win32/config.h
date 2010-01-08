@@ -1,6 +1,6 @@
 
 #define PACKAGE_NAME    "Qsampler"
-#define PACKAGE_VERSION "0.2.2.6"
+#define PACKAGE_VERSION "0.2.2.7"
 
 #define CONFIG_PREFIX   "."
 #define CONFIG_DEBUG    1
