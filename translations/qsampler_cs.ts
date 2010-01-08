@@ -528,7 +528,7 @@ Jste si jistý?</translation>
 <context>
     <name>QSampler::DeviceStatusForm</name>
     <message>
-        <location filename="../src/qsamplerDeviceStatusForm.cpp" line="119"/>
+        <location filename="../src/qsamplerDeviceStatusForm.cpp" line="128"/>
         <source>%1 Status</source>
         <translation type="unfinished"></translation>
     </message>
