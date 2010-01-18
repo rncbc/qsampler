@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+* LADISH Level 1 support has been added: SIGUSR1 signal trap
+  just makes it a shortcut to File/Save.
+
 * MIDI Device Status menu is disabled when no MIDI device exists;
   a menu separator has been added.
 

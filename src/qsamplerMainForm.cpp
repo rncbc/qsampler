@@ -105,18 +105,22 @@ namespace QSampler {
 #define QSAMPLER_STATUS_SESSION 3       // Current session modification state.
 
 
+// Specialties for thread-callback comunication.
+#define QSAMPLER_LSCP_EVENT   QEvent::Type(QEvent::User + 1)
+#define QSAMPLER_SAVE_EVENT   QEvent::Type(QEvent::User + 2)
+
+
 //-------------------------------------------------------------------------
-// CustomEvent -- specialty for callback comunication.
+// LscpEvent -- specialty for LSCP callback comunication.
 
-#define QSAMPLER_CUSTOM_EVENT   QEvent::Type(QEvent::User + 0)
 
-class CustomEvent : public QEvent
+class LscpEvent : public QEvent
 {
 public:
 
 	// Constructor.
-	CustomEvent(lscp_event_t event, const char *pchData, int cchData)
-		: QEvent(QSAMPLER_CUSTOM_EVENT)
+	LscpEvent(lscp_event_t event, const char *pchData, int cchData)
+		: QEvent(QSAMPLER_LSCP_EVENT)
 	{
 		m_event = event;
 		m_data  = QString::fromUtf8(pchData, cchData);
@@ -133,6 +137,17 @@ private:
 	// The event data as a string.
 	QString      m_data;
 };
+
+
+//-------------------------------------------------------------------------
+// LADISH Level 1 support stuff.
+
+void qsampler_on_sigusr1 ( int /*signo*/ )
+{
+	QApplication::postEvent(
+		MainForm::getInstance(),
+		new QEvent(QSAMPLER_SAVE_EVENT));
+}
 
 
 //-------------------------------------------------------------------------
@@ -172,6 +187,8 @@ MainForm::MainForm ( QWidget *pParent )
 #ifdef HAVE_SIGNAL_H
 	// Set to ignore any fatal "Broken pipe" signals.
 	::signal(SIGPIPE, SIG_IGN);
+	// LADISH Level 1 suport.
+	::signal(SIGUSR1, qsampler_on_sigusr1);
 #endif
 
 #ifdef CONFIG_VOLUME
@@ -562,17 +579,17 @@ void MainForm::dropEvent ( QDropEvent* pDropEvent )
 
 
 // Custome event handler.
-void MainForm::customEvent(QEvent* pCustomEvent)
+void MainForm::customEvent ( QEvent* pEvent )
 {
 	// For the time being, just pump it to messages.
-	if (pCustomEvent->type() == QSAMPLER_CUSTOM_EVENT) {
-		CustomEvent *pEvent = static_cast<CustomEvent *> (pCustomEvent);
-		switch (pEvent->event()) {
+	if (pEvent->type() == QSAMPLER_LSCP_EVENT) {
+		LscpEvent *pLscpEvent = static_cast<LscpEvent *> (pEvent);
+		switch (pLscpEvent->event()) {
 			case LSCP_EVENT_CHANNEL_COUNT:
 				updateAllChannelStrips(true);
 				break;
 			case LSCP_EVENT_CHANNEL_INFO: {
-				int iChannelID = pEvent->data().toInt();
+				int iChannelID = pLscpEvent->data().toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 				if (pChannelStrip)
 					channelStripChanged(pChannelStrip);
@@ -585,7 +602,7 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 				break;
 			case LSCP_EVENT_MIDI_INPUT_DEVICE_INFO: {
 				if (m_pDeviceForm) m_pDeviceForm->refreshDevices();
-				const int iDeviceID = pEvent->data().section(' ', 0, 0).toInt();
+				const int iDeviceID = pLscpEvent->data().section(' ', 0, 0).toInt();
 				DeviceStatusForm::onDeviceChanged(iDeviceID);
 				break;
 			}
@@ -597,7 +614,7 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 				break;
 		#if CONFIG_EVENT_CHANNEL_MIDI
 			case LSCP_EVENT_CHANNEL_MIDI: {
-				const int iChannelID = pEvent->data().section(' ', 0, 0).toInt();
+				const int iChannelID = pLscpEvent->data().section(' ', 0, 0).toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 				if (pChannelStrip)
 					pChannelStrip->midiActivityLedOn();
@@ -606,8 +623,8 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 		#endif
 		#if CONFIG_EVENT_DEVICE_MIDI
 			case LSCP_EVENT_DEVICE_MIDI: {
-				const int iDeviceID = pEvent->data().section(' ', 0, 0).toInt();
-				const int iPortID   = pEvent->data().section(' ', 1, 1).toInt();
+				const int iDeviceID = pLscpEvent->data().section(' ', 0, 0).toInt();
+				const int iPortID   = pLscpEvent->data().section(' ', 1, 1).toInt();
 				DeviceStatusForm *pDeviceStatusForm
 					= DeviceStatusForm::getInstance(iDeviceID);
 				if (pDeviceStatusForm)
@@ -616,11 +633,13 @@ void MainForm::customEvent(QEvent* pCustomEvent)
 			}
 		#endif
 			default:
-				appendMessagesColor(tr("Notify event: %1 data: %2")
-					.arg(::lscp_event_to_text(pEvent->event()))
-					.arg(pEvent->data()), "#996699");
+				appendMessagesColor(tr("LSCP Event: %1 data: %2")
+					.arg(::lscp_event_to_text(pLscpEvent->event()))
+					.arg(pLscpEvent->data()), "#996699");
 		}
-	}
+	}	// LADISH1 Level 1 support...
+	else if (pEvent->type() == QSAMPLER_SAVE_EVENT)
+		saveSession(false);
 }
 
 
@@ -2702,7 +2721,7 @@ lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/,
 	// as this is run under some other thread context.
 	// A custom event must be posted here...
 	QApplication::postEvent(pMainForm,
-		new CustomEvent(event, pchData, cchData));
+		new LscpEvent(event, pchData, cchData));
 
 	return LSCP_OK;
 }
