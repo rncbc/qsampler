@@ -4,56 +4,46 @@
 <context>
     <name>MidiInstrumentsModel</name>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="151"/>
         <source>Name</source>
-        <translation>Название</translation>
+        <translation type="obsolete">Название</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="152"/>
         <source>Map</source>
-        <translation>Карта</translation>
+        <translation type="obsolete">Карта</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="153"/>
         <source>Bank</source>
-        <translation>Банк</translation>
+        <translation type="obsolete">Банк</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="154"/>
         <source>Prog</source>
-        <translation>Программа</translation>
+        <translation type="obsolete">Программа</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="155"/>
         <source>Engine</source>
-        <translation>Движок</translation>
+        <translation type="obsolete">Движок</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="156"/>
         <source>File</source>
-        <translation>Файл</translation>
+        <translation type="obsolete">Файл</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="157"/>
         <source>Nr</source>
-        <translation>№</translation>
+        <translation type="obsolete">№</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="158"/>
         <source>Vol</source>
-        <translation>Громкость</translation>
+        <translation type="obsolete">Громкость</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="159"/>
         <source>Mode</source>
-        <translation>Режим</translation>
+        <translation type="obsolete">Режим</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="270"/>
         <source>Could not get current list of MIDI instrument mappings.
 
 Sorry.</source>
-        <translation>Не удалось получить актуальный список привязок инструментов MIDI.
+        <translation type="obsolete">Не удалось получить актуальный список привязок инструментов MIDI.
 
 Извините.</translation>
     </message>
@@ -1126,6 +1116,63 @@ Do you want LinuxSampler to stop?</source>
         <location filename="../src/qsamplerMessages.cpp" line="245"/>
         <source>Logging started --- %1 ---</source>
         <translation>Ведение журнала начато --- %1 ---</translation>
+    </message>
+</context>
+<context>
+    <name>QSampler::MidiInstrumentsModel</name>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="151"/>
+        <source>Name</source>
+        <translation type="unfinished">Название</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="152"/>
+        <source>Map</source>
+        <translation type="unfinished">Карта</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="153"/>
+        <source>Bank</source>
+        <translation type="unfinished">Банк</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="154"/>
+        <source>Prog</source>
+        <translation type="unfinished">Программа</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="155"/>
+        <source>Engine</source>
+        <translation type="unfinished">Движок</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="156"/>
+        <source>File</source>
+        <translation type="unfinished">Файл</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="157"/>
+        <source>Nr</source>
+        <translation type="unfinished">№</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="158"/>
+        <source>Vol</source>
+        <translation type="unfinished">Громкость</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="159"/>
+        <source>Mode</source>
+        <translation type="unfinished">Режим</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="270"/>
+        <source>Could not get current list of MIDI instrument mappings.
+
+Sorry.</source>
+        <translation type="unfinished">Не удалось получить актуальный список привязок инструментов MIDI.
+
+Извините.</translation>
     </message>
 </context>
 <context>

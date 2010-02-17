@@ -1,7 +1,7 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -1194,7 +1194,7 @@ QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
 				);
 				pSpinBox->setMaximum(
 					(!r.param.range_max.isEmpty()) ?
-						r.param.range_max.toInt() : (1 << 16) // or better a nigher default max value ?
+						r.param.range_max.toInt() : (1 << 24) // or better a higher default max value ?
 				);
 				pSpinBox->setValue(val.toInt());
 				return pSpinBox;
