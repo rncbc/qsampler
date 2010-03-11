@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -36,13 +36,13 @@ namespace QSampler {
 // QSampler::MidiInstrumentsModel - data model for MIDI prog mappings
 //                                  (used for QTableView)
 
-class MidiInstrumentsModel : public QAbstractTableModel
+class MidiInstrumentsModel : public QAbstractItemModel
 {
 	Q_OBJECT
 
 public:
 
-	MidiInstrumentsModel(QObject* pParent = NULL);
+	MidiInstrumentsModel(QObject *pParent = NULL);
 
 	// Overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent) const;
@@ -53,10 +53,11 @@ public:
 		int role = Qt::DisplayRole) const;
 
 	// Make the following method public
-	QAbstractTableModel::reset;
+	void beginReset();
+	void endReset();
 
 	// Own methods
-	Instrument* addInstrument(int iMap = 0,
+	Instrument *addInstrument(int iMap = 0,
 		int iBank = -1, int iProg = -1);
 	void removeInstrument(const Instrument& instrument);
 
@@ -76,9 +77,15 @@ public slots:
 	// General reloader.
 	void refresh();
 
+protected:
+
+	QModelIndex index(int row, int col, const QModelIndex& parent) const;
+	QModelIndex parent(const QModelIndex& child) const;
+
 private:
 
-	typedef QMap<int, QList<Instrument> > InstrumentsMap;
+	typedef QList<Instrument> InstrumentList;
+	typedef QMap<int, InstrumentList> InstrumentsMap;
 
 	InstrumentsMap m_instruments;
 
@@ -86,30 +93,6 @@ private:
 	int m_iMidiMap;
 };
 
-
-//-------------------------------------------------------------------------
-// QSampler::MidiInstrumentsDelegate - table cell renderer for MIDI prog
-// mappings (doesn't actually do anything ATM, but is already there for
-// a future cell editor widget implementation)
-
-class MidiInstrumentsDelegate : public QItemDelegate
-{
-	Q_OBJECT
-
-public:
-	MidiInstrumentsDelegate(QObject *pParent = NULL);
-
-	QWidget* createEditor(QWidget *pParent,
-		const QStyleOptionViewItem& option, const QModelIndex& index) const;
-
-	void setEditorData(QWidget *pEditor,
-		const QModelIndex& index) const;
-	void setModelData(QWidget *pEditor,
-		QAbstractItemModel* model, const QModelIndex& index) const;
-
-	void updateEditorGeometry(QWidget* pEditor,
-		const QStyleOptionViewItem& option, const QModelIndex& index) const;
-};
 
 } // namespace QSampler
 

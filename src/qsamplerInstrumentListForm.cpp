@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -22,6 +22,8 @@
 
 #include "qsamplerAbout.h"
 #include "qsamplerInstrumentListForm.h"
+
+#include "qsamplerInstrumentList.h"
 
 #include "qsamplerInstrumentForm.h"
 
@@ -45,6 +47,9 @@ InstrumentListForm::InstrumentListForm (
 {
 	m_ui.setupUi(this);
 
+	m_pListModel = new MidiInstrumentsModel(this);
+	m_ui.InstrumentTable->setModel(m_pListModel);
+
 	// Setup toolbar widgets.
 	m_pMapComboBox = new QComboBox(m_ui.InstrumentToolbar);
 	m_pMapComboBox->setMinimumWidth(120);
@@ -59,14 +64,8 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.InstrumentToolbar->addSeparator();
 	m_ui.InstrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
-	int iRowHeight = m_ui.InstrumentTable->fontMetrics().height() + 4;
-	m_ui.InstrumentTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
 
-	m_ui.InstrumentTable->setModel(&m_model);
-	m_ui.InstrumentTable->setItemDelegate(&m_delegate);
-	m_ui.InstrumentTable->verticalHeader()->hide();
-
-	QHeaderView *pHeader = m_ui.InstrumentTable->horizontalHeader();
+	QHeaderView *pHeader = m_ui.InstrumentTable->header();
 	pHeader->setDefaultAlignment(Qt::AlignLeft);
 	pHeader->setMovable(false);
 	pHeader->setStretchLastSection(true);
@@ -116,7 +115,7 @@ InstrumentListForm::InstrumentListForm (
 
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm) {
-		QObject::connect(&m_model,
+		QObject::connect(m_pListModel,
 			SIGNAL(instrumentsChanged()),
 			pMainForm, SLOT(sessionDirty()));
 	}
@@ -129,6 +128,7 @@ InstrumentListForm::InstrumentListForm (
 InstrumentListForm::~InstrumentListForm (void)
 {
 	delete m_pMapComboBox;
+	delete m_pListModel;
 }
 
 
@@ -211,8 +211,8 @@ void InstrumentListForm::activateMap ( int iMap )
 	if (iMidiMap >= 0)
 		pOptions->iMidiMap = iMidiMap;
 
-	m_model.setMidiMap(iMidiMap);
-	m_model.refresh();
+	m_pListModel->setMidiMap(iMidiMap);
+	m_pListModel->refresh();
 
 	stabilizeForm();
 }
@@ -254,10 +254,11 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 			// Unmap old instance...
 			oldInstrument.unmapInstrument();
 			// correct the position of the instrument in the model
-			m_model.resort(*pInstrument);
+			m_pListModel->beginReset();
+			m_pListModel->resort(*pInstrument);
+			// Notify we've changes...
+			m_pListModel->endReset();
 		}
-		// Notify we've changes...
-		emit m_model.reset();
 	}
 }
 
@@ -274,11 +275,12 @@ void InstrumentListForm::newInstrument (void)
 	// Commit...
 	instrument.mapInstrument();
 	// add new item to the table model
-	m_model.resort(instrument);
+	m_pListModel->beginReset();
+	m_pListModel->resort(instrument);
 	// Notify we've changes...
-	//emit model.reset();
+	m_pListModel->endReset();
 	//FIXME: call above didnt really refresh, so we use this for now ...
-	refreshInstruments();
+	//refreshInstruments();
 }
 
 
@@ -315,9 +317,10 @@ void InstrumentListForm::deleteInstrument (void)
 
 	pInstrument->unmapInstrument();
 	// let the instrument vanish from the table model
-	m_model.removeInstrument(*pInstrument);
+	m_pListModel->beginReset();
+	m_pListModel->removeInstrument(*pInstrument);
 	// Notify we've changes...
-	emit m_model.reset();
+	m_pListModel->endReset();
 }
 
 

@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -36,45 +36,37 @@
 #include <QCursor>
 #include <QFileInfo>
 
-// Needed for lroundf()
-#include <math.h>
-
-#ifndef CONFIG_ROUND
-static inline long lroundf ( float x )
-{
-	if (x >= 0.0f)
-		return long(x + 0.5f);
-	else
-		return long(x - 0.5f);
-}
-#endif
-
-using namespace QSampler;
-
+namespace QSampler {
 
 //-------------------------------------------------------------------------
 // QSampler::MidiInstrumentsModel - data model for MIDI prog mappings
-//                                  (used for QTableView)
+//                                  (used for QTreeView)
 
-MidiInstrumentsModel::MidiInstrumentsModel ( QObject* pParent)
-	: QAbstractTableModel(pParent) 
+MidiInstrumentsModel::MidiInstrumentsModel ( QObject *pParent )
+	: QAbstractItemModel(pParent)
 {
 	m_iMidiMap = LSCP_MIDI_MAP_ALL;
+
+	QAbstractItemModel::reset();
 }
 
 
 int MidiInstrumentsModel::rowCount ( const QModelIndex& /*parent*/) const
 {
+	int nrows = 0;
+
 	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
-		int n = 0;
-		for (InstrumentsMap::const_iterator itMap = m_instruments.begin();
-				itMap != m_instruments.end(); ++itMap)
-			n += (*itMap).size();
-		return n;
+		InstrumentsMap::const_iterator itMap = m_instruments.begin();
+		for ( ; itMap != m_instruments.end(); ++itMap)
+			nrows += (*itMap).size();
+	} else {
+		InstrumentsMap::const_iterator itMap
+			= m_instruments.find(m_iMidiMap);
+		if (itMap != m_instruments.end())
+			nrows += (*itMap).size();
 	}
-	InstrumentsMap::const_iterator itMap = m_instruments.find(m_iMidiMap);
-	if (itMap == m_instruments.end()) return 0;
-	return (*itMap).size();
+
+	return nrows;
 }
 
 
@@ -89,34 +81,10 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 	if (!index.isValid())
 		return QVariant();
 
-	const Instrument* pInstr = NULL;
+	const Instrument *pInstr
+		= static_cast<Instrument *> (index.internalPointer());
 
-	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
-		int n = 0;
-		for (InstrumentsMap::const_iterator itMap = m_instruments.begin();
-				itMap != m_instruments.end(); ++itMap) {
-			n += (*itMap).size();
-			if (index.row() < n) {
-				pInstr = &(*itMap)[index.row() + (*itMap).size() - n];
-				break;
-			}
-		}
-	} else {
-		// resolve MIDI instrument map
-		InstrumentsMap::const_iterator itMap = m_instruments.find(m_iMidiMap);
-		if (itMap == m_instruments.end()) return QVariant();
-		// resolve instrument in that map
-		if (index.row() >= (*itMap).size()) return QVariant();
-		pInstr = &(*itMap)[index.row()];
-	}
-
-	if (!pInstr)
-		return QVariant();
-
-	if (role == Qt::UserRole)
-		return QVariant::fromValue((void *) pInstr);
-
-	if (role == Qt::DisplayRole) {
+	if (pInstr && role == Qt::DisplayRole) {
 		switch (index.column()) {
 			case 0: return pInstr->name();
 			case 1: return QVariant::fromValue(pInstr->map());
@@ -128,12 +96,13 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 			case 7: return QString::number(pInstr->volume() * 100.0) + " %";
 			case 8: {
 				switch (pInstr->loadMode()) {
-					case 3: return QObject::tr("Persistent");
-					case 2: return QObject::tr("On Demand Hold");
-					case 1: return QObject::tr("On Demand");
+					case 3: return tr("Persistent");
+					case 2: return tr("On Demand Hold");
+					case 1: return tr("On Demand");
 				}
 			}
-			default: return QVariant();
+			default:
+				break;
 		}
 	}
 
@@ -141,55 +110,96 @@ QVariant MidiInstrumentsModel::data ( const QModelIndex &index, int role ) const
 }
 
 
-QVariant MidiInstrumentsModel::headerData (
-	int section, Qt::Orientation orientation, int role ) const
+QModelIndex MidiInstrumentsModel::index ( int row, int col,
+	const QModelIndex& /*parent*/ ) const
 {
-	if (orientation != Qt::Horizontal || role != Qt::DisplayRole)
-		return QVariant();
+	const Instrument *pInstr = NULL;
 
-	switch (section) {
-		case 0: return tr("Name");
-		case 1: return tr("Map");
-		case 2: return tr("Bank");
-		case 3: return tr("Prog");
-		case 4: return tr("Engine");
-		case 5: return tr("File");
-		case 6: return tr("Nr");
-		case 7: return tr("Vol");
-		case 8: return tr("Mode");
-		default: return QVariant();
+	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
+		int nrows = 0;
+		InstrumentsMap::const_iterator itMap = m_instruments.begin();
+		for ( ;	itMap != m_instruments.end(); ++itMap) {
+			nrows += (*itMap).size();
+			if (row < nrows) {
+				pInstr = &(*itMap)[row + (*itMap).size() - nrows];
+				break;
+			}
+		}
+	} else {
+		// Resolve MIDI instrument map...
+		InstrumentsMap::const_iterator itMap
+			= m_instruments.find(m_iMidiMap);
+		if (itMap != m_instruments.end()) {
+			// resolve instrument in that map
+			if (row < (*itMap).size())
+				pInstr = &(*itMap)[row];
+		}
 	}
+
+	if (pInstr)
+		return createIndex(row, col, (void *) pInstr);
+	else
+		return QModelIndex();
 }
 
 
-Instrument* MidiInstrumentsModel::addInstrument (
+QModelIndex MidiInstrumentsModel::parent ( const QModelIndex& child ) const
+{
+	return QModelIndex();
+}
+
+
+QVariant MidiInstrumentsModel::headerData (
+	int section, Qt::Orientation orientation, int role ) const
+{
+	if (orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+		switch (section) {
+			case 0: return tr("Name");
+			case 1: return tr("Map");
+			case 2: return tr("Bank");
+			case 3: return tr("Prog");
+			case 4: return tr("Engine");
+			case 5: return tr("File");
+			case 6: return tr("Nr");
+			case 7: return tr("Vol");
+			case 8: return tr("Mode");
+		}
+	}
+
+	return QAbstractItemModel::headerData(section, orientation, role);
+}
+
+
+Instrument *MidiInstrumentsModel::addInstrument (
 	int iMap, int iBank, int iProg )
 {
 	// Check it there's already one instrument item
 	// with the very same key (bank, program);
 	// if yes, just remove it without prejudice...
-	for (int i = 0; i < m_instruments[iMap].size(); i++) {
-		if (m_instruments[iMap][i].bank() == iBank &&
-			m_instruments[iMap][i].prog() == iProg) {
-			m_instruments[iMap].removeAt(i);
+	InstrumentList& list = m_instruments[iMap];
+	for (int i = 0; i < list.size(); ++i) {
+		const Instrument& instr = list[i];
+		if (instr.bank() == iBank && instr.prog() == iProg) {
+			list.removeAt(i);
 			break;
 		}
 	}
 
-	// Resolve the appropriate place, we keep the list sorted that way ...
+	// Resolve the appropriate place, we keep the list sorted that way...
 	int i = 0;
-	for (; i < m_instruments[iMap].size(); ++i) {
-		if (iBank < m_instruments[iMap][i].bank()
-			|| (iBank == m_instruments[iMap][i].bank() &&
-				iProg < m_instruments[iMap][i].prog())) {
+	for ( ; i < list.size(); ++i) {
+		const Instrument& instr = list[i];
+		if (iBank < instr.bank()
+			|| (iBank == instr.bank() && iProg < instr.prog())) {
 			break;
 		}
 	}
 
-	m_instruments[iMap].insert(i, Instrument(iMap, iBank, iProg));
-	Instrument& instr = m_instruments[iMap][i];
+	list.insert(i, Instrument(iMap, iBank, iProg));
+
+	Instrument& instr = list[i];
 	if (!instr.getInstrument())
-		m_instruments[iMap].removeAt(i);
+		list.removeAt(i);
 
 	return &instr;
 }
@@ -201,10 +211,12 @@ void MidiInstrumentsModel::removeInstrument (
 	const int iMap  = instrument.map();
 	const int iBank = instrument.bank();
 	const int iProg = instrument.prog();
-	for (int i = 0; i < m_instruments[iMap].size(); i++) {
-		if (m_instruments[iMap][i].bank() == iBank &&
-			m_instruments[iMap][i].prog() == iProg) {
-			m_instruments[iMap].removeAt(i);
+
+	InstrumentList& list = m_instruments[iMap];
+	for (int i = 0; i < list.size(); ++i) {
+		const Instrument& instr = list[i];
+		if (instr.bank() == iBank && instr.prog() == iProg) {
+			list.removeAt(i);
 			break;
 		}
 	}
@@ -217,9 +229,10 @@ void MidiInstrumentsModel::resort ( const Instrument& instrument )
 	const int iMap  = instrument.map();
 	const int iBank = instrument.bank();
 	const int iProg = instrument.prog();
-	// Remove given instrument from its current list
+
+	// Remove given instrument from its current list...
 	removeInstrument(instrument);
-	// Re-add the instrument
+	// Re-add the instrument...
 	addInstrument(iMap, iBank, iProg);
 }
 
@@ -240,9 +253,7 @@ int MidiInstrumentsModel::midiMap (void) const
 
 void MidiInstrumentsModel::refresh (void)
 {
-	m_instruments.clear();
-
-	MainForm* pMainForm = MainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm == NULL)
 		return;
 	if (pMainForm->client() == NULL)
@@ -250,8 +261,12 @@ void MidiInstrumentsModel::refresh (void)
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
+	beginReset();
+
+	m_instruments.clear();
+
 	// Load the whole bunch of instrument items...
-	lscp_midi_instrument_t* pInstrs
+	lscp_midi_instrument_t *pInstrs
 		= ::lscp_list_midi_instruments(pMainForm->client(), m_iMidiMap);
 	for (int iInstr = 0; pInstrs && pInstrs[iInstr].map >= 0; ++iInstr) {
 		const int iMap  = pInstrs[iInstr].map;
@@ -262,6 +277,9 @@ void MidiInstrumentsModel::refresh (void)
 		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 
+	// Inform the outer world (QTableView) that our data changed...
+	endReset();
+
 	QApplication::restoreOverrideCursor();
 
 	if (pInstrs == NULL && ::lscp_client_get_errno(pMainForm->client())) {
@@ -269,49 +287,26 @@ void MidiInstrumentsModel::refresh (void)
 		pMainForm->appendMessagesError(
 			tr("Could not get current list of MIDI instrument mappings.\n\nSorry."));
 	}
-
-	// inform the outer world (QTableView) that our data changed
-	QAbstractTableModel::reset();
 }
 
-
-//-------------------------------------------------------------------------
-// QSampler::MidiInstrumentsDelegate - table cell renderer for MIDI prog
-// mappings (doesn't actually do anything ATM, but is already there for a
-// future cell editor widget implementation)
-
-MidiInstrumentsDelegate::MidiInstrumentsDelegate ( QObject* pParent )
-	: QItemDelegate(pParent)
+void MidiInstrumentsModel::beginReset (void)
 {
+#if QT_VERSION >= 0x040600
+	QAbstractItemModel::beginResetModel();
+#endif
 }
 
-
-QWidget* MidiInstrumentsDelegate::createEditor ( QWidget* pParent,
-	const QStyleOptionViewItem& option, const QModelIndex& index ) const
+void MidiInstrumentsModel::endReset (void)
 {
-	return QItemDelegate::createEditor(pParent, option, index);
-//	return new QLabel(index.model()->data(index, Qt::DisplayRole).toString(), parent);
+#if QT_VERSION >= 0x040600
+	QAbstractItemModel::endResetModel();
+#else
+	QAbstractItemModel::reset();
+#endif
 }
 
 
-void MidiInstrumentsDelegate::setEditorData ( QWidget */*pEditor*/,
-	const QModelIndex& /*index*/) const
-{
-}
-
-
-void MidiInstrumentsDelegate::setModelData ( QWidget */*pEditor*/,
-	QAbstractItemModel* /*model*/, const QModelIndex& /*index*/) const
-{
-}
-
-
-void MidiInstrumentsDelegate::updateEditorGeometry ( QWidget *pEditor,
-	const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-	QItemDelegate::updateEditorGeometry(pEditor, option, index);
-//	if (pEditor) pEditor->setGeometry(option.rect);
-}
+} // namespace QSampler
 
 
 // end of qsamplerInstrumentList.cpp
