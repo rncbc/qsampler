@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -23,26 +23,27 @@
 #ifndef __qsamplerInstrumentList_h
 #define __qsamplerInstrumentList_h
 
-#include <QListWidget>
-#include <QItemDelegate>
-
-#include <lscp/client.h>
-
-#include "qsamplerInstrument.h"
+#include <QTreeView>
 
 namespace QSampler {
 
-//-------------------------------------------------------------------------
-// QSampler::MidiInstrumentsModel - data model for MIDI prog mappings
-//                                  (used for QTableView)
+class Instrument;
 
-class MidiInstrumentsModel : public QAbstractTableModel
+//-------------------------------------------------------------------------
+// QSampler:InstrumentListModel - data model for MIDI prog mappings
+//
+
+class InstrumentListModel : public QAbstractItemModel
 {
 	Q_OBJECT
 
 public:
 
-	MidiInstrumentsModel(QObject* pParent = NULL);
+	// Constructor.
+	InstrumentListModel(QObject *pParent = NULL);
+
+	// Destructor.
+	~InstrumentListModel();
 
 	// Overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent) const;
@@ -52,35 +53,36 @@ public:
 	QVariant headerData(int section, Qt::Orientation orientation,
 		int role = Qt::DisplayRole) const;
 
-	// Make the following method public
-	QAbstractTableModel::reset;
-
-	// Own methods
-	Instrument* addInstrument(int iMap = 0,
-		int iBank = -1, int iProg = -1);
-	void removeInstrument(const Instrument& instrument);
-
-	void resort(const Instrument& instrument);
-
 	// Map selector.
 	void setMidiMap(int iMidiMap);
 	int midiMap() const;
 
-signals:
-
-	// Instrument map/session change signal.
-	void instrumentsChanged();
-
-public slots:
+	// Own methods
+	const Instrument *addInstrument(int iMap, int iBank, int iProg);
+	void removeInstrument(const Instrument *pInstrument);
+	void updateInstrument(const Instrument *pInstrument);
 
 	// General reloader.
 	void refresh();
 
+	// Make the following method public
+	void beginReset();
+	void endReset();
+
+	// Map clear.
+	void clear();
+
+protected:
+
+	QModelIndex index(int row, int col, const QModelIndex& parent) const;
+	QModelIndex parent(const QModelIndex& child) const;
+
 private:
 
-	typedef QMap<int, QList<Instrument> > InstrumentsMap;
+	typedef QList<Instrument *> InstrumentList;
+	typedef QMap<int, InstrumentList> InstrumentMap;
 
-	InstrumentsMap m_instruments;
+	InstrumentMap m_instruments;
 
 	// Current map selection.
 	int m_iMidiMap;
@@ -88,28 +90,39 @@ private:
 
 
 //-------------------------------------------------------------------------
-// QSampler::MidiInstrumentsDelegate - table cell renderer for MIDI prog
-// mappings (doesn't actually do anything ATM, but is already there for
-// a future cell editor widget implementation)
+// QSampler::InstrumentListView - list view for MIDI prog mappings
+//
 
-class MidiInstrumentsDelegate : public QItemDelegate
+class InstrumentListView : public QTreeView
 {
 	Q_OBJECT
 
 public:
-	MidiInstrumentsDelegate(QObject *pParent = NULL);
 
-	QWidget* createEditor(QWidget *pParent,
-		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+	// Constructor.
+	InstrumentListView(QWidget *pParent = 0);
 
-	void setEditorData(QWidget *pEditor,
-		const QModelIndex& index) const;
-	void setModelData(QWidget *pEditor,
-		QAbstractItemModel* model, const QModelIndex& index) const;
+	// Destructor.
+	~InstrumentListView();
 
-	void updateEditorGeometry(QWidget* pEditor,
-		const QStyleOptionViewItem& option, const QModelIndex& index) const;
+	// Map selector.
+	void setMidiMap(int iMidiMap);
+	int midiMap() const;
+
+	// Own methods
+	const Instrument *addInstrument(int iMap, int iBank, int iProg);
+	void removeInstrument(const Instrument *pInstrument);
+	void updateInstrument(const Instrument *pInstrument);
+
+	// General reloader.
+	void refresh();
+
+private:
+
+	// Instance variables.
+	InstrumentListModel *m_pListModel;
 };
+
 
 } // namespace QSampler
 

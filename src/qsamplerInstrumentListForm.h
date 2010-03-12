@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -25,12 +25,11 @@
 
 #include "ui_qsamplerInstrumentListForm.h"
 
-#include "qsamplerInstrumentList.h"
-
 class QComboBox;
 
-
 namespace QSampler {
+
+class InstrumentListView;
 
 //-------------------------------------------------------------------------
 // QSampler::InstrumentListForm -- Instrument map list form interface.
@@ -42,7 +41,7 @@ class InstrumentListForm : public QMainWindow
 
 public:
 
-	InstrumentListForm(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+	InstrumentListForm(QWidget *pParent = NULL, Qt::WindowFlags wflags = 0);
 	~InstrumentListForm();
 
 public slots:
@@ -69,10 +68,9 @@ private:
 
 	Ui::qsamplerInstrumentListForm m_ui;
 
-	MidiInstrumentsModel m_model;
-	MidiInstrumentsDelegate m_delegate;
+	QComboBox *m_pMapComboBox;
 
-	QComboBox* m_pMapComboBox;
+	InstrumentListView *m_pInstrumentListView;
 };
 
 } // namespace QSampler

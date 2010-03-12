@@ -52,7 +52,7 @@ FORMS     = ../src/qsamplerInstrumentForm.ui \
 RESOURCES = ../icons/qsampler.qrc
 
 TEMPLATE  = app
-CONFIG   += qt thread warn_on release
+CONFIG   += qt thread warn_on debug
 LANGUAGE  = C++
 
 LIBS     += -llscp

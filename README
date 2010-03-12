@@ -29,7 +29,7 @@ The software requirements for build and runtime are listed as follows:
 
   - Qt 4 (core, gui), C++ class library and tools for
         crossplatform development and internationalization
-        http://www.trolltech.org/products/qt/
+        http://qt.nokia.com/products/
 
   - liblscp, C library for LinuxSampler control protocol API.
         http://www.linuxsampler.org/
@@ -64,10 +64,10 @@ Just launch ${prefix}/bin/qsampler and you're off (hopefully).
 
 Note that the default installation path ${prefix} is /usr/local.
 
-If you're checking out from CVS, you'll have to prepare the configure
-script just before you proceed with the above instructions:
+If you're checking out from Subversion (SVN), you'll have to prepare the
+configure script just before you proceed with the above instructions:
 
-   make -f Makefile.cvs
+   make -f Makefile.svn
 
 
 Configuration
