@@ -52,6 +52,9 @@
       <property name="selectionBehavior" >
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
+      <property name="rootIsDecorated" >
+       <bool>false</bool>
+      </property>
      </widget>
     </item>
    </layout>

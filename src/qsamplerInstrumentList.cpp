@@ -50,19 +50,24 @@ MidiInstrumentsModel::MidiInstrumentsModel ( QObject *pParent )
 	QAbstractItemModel::reset();
 }
 
+MidiInstrumentsModel::~MidiInstrumentsModel (void)
+{
+	clear();
+}
+
 
 int MidiInstrumentsModel::rowCount ( const QModelIndex& /*parent*/) const
 {
 	int nrows = 0;
 
 	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
-		InstrumentsMap::const_iterator itMap = m_instruments.begin();
-		for ( ; itMap != m_instruments.end(); ++itMap)
+		InstrumentsMap::const_iterator itMap = m_instruments.constBegin();
+		for ( ; itMap != m_instruments.constEnd(); ++itMap)
 			nrows += (*itMap).size();
 	} else {
 		InstrumentsMap::const_iterator itMap
 			= m_instruments.find(m_iMidiMap);
-		if (itMap != m_instruments.end())
+		if (itMap != m_instruments.constEnd())
 			nrows += (*itMap).size();
 	}
 
@@ -117,11 +122,12 @@ QModelIndex MidiInstrumentsModel::index ( int row, int col,
 
 	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
 		int nrows = 0;
-		InstrumentsMap::const_iterator itMap = m_instruments.begin();
-		for ( ;	itMap != m_instruments.end(); ++itMap) {
-			nrows += (*itMap).size();
+		InstrumentsMap::const_iterator itMap = m_instruments.constBegin();
+		for ( ;	itMap != m_instruments.constEnd(); ++itMap) {
+			const InstrumentList& list = *itMap;
+			nrows += list.size();
 			if (row < nrows) {
-				pInstr = &(*itMap)[row + (*itMap).size() - nrows];
+				pInstr = list.at(row + list.size() - nrows);
 				break;
 			}
 		}
@@ -129,10 +135,11 @@ QModelIndex MidiInstrumentsModel::index ( int row, int col,
 		// Resolve MIDI instrument map...
 		InstrumentsMap::const_iterator itMap
 			= m_instruments.find(m_iMidiMap);
-		if (itMap != m_instruments.end()) {
+		if (itMap != m_instruments.constEnd()) {
+			const InstrumentList& list = *itMap;
 			// resolve instrument in that map
-			if (row < (*itMap).size())
-				pInstr = &(*itMap)[row];
+			if (row < list.size())
+				pInstr = list.at(row);
 		}
 	}
 
@@ -178,8 +185,9 @@ Instrument *MidiInstrumentsModel::addInstrument (
 	// if yes, just remove it without prejudice...
 	InstrumentList& list = m_instruments[iMap];
 	for (int i = 0; i < list.size(); ++i) {
-		const Instrument& instr = list[i];
-		if (instr.bank() == iBank && instr.prog() == iProg) {
+		const Instrument *pInstr = list.at(i);
+		if (pInstr->bank() == iBank && pInstr->prog() == iProg) {
+			delete pInstr;
 			list.removeAt(i);
 			break;
 		}
@@ -188,20 +196,22 @@ Instrument *MidiInstrumentsModel::addInstrument (
 	// Resolve the appropriate place, we keep the list sorted that way...
 	int i = 0;
 	for ( ; i < list.size(); ++i) {
-		const Instrument& instr = list[i];
-		if (iBank < instr.bank()
-			|| (iBank == instr.bank() && iProg < instr.prog())) {
+		const Instrument *pInstr = list.at(i);
+		if (iBank < pInstr->bank()
+			|| (iBank == pInstr->bank() && iProg < pInstr->prog())) {
 			break;
 		}
 	}
 
-	list.insert(i, Instrument(iMap, iBank, iProg));
+	Instrument *pInstr = new Instrument(iMap, iBank, iProg);
+	if (pInstr->getInstrument()) {
+		list.insert(i, pInstr);
+	} else {
+		delete pInstr;
+		pInstr = NULL;
+	}
 
-	Instrument& instr = list[i];
-	if (!instr.getInstrument())
-		list.removeAt(i);
-
-	return &instr;
+	return pInstr;
 }
 
 
@@ -212,12 +222,15 @@ void MidiInstrumentsModel::removeInstrument (
 	const int iBank = instrument.bank();
 	const int iProg = instrument.prog();
 
-	InstrumentList& list = m_instruments[iMap];
-	for (int i = 0; i < list.size(); ++i) {
-		const Instrument& instr = list[i];
-		if (instr.bank() == iBank && instr.prog() == iProg) {
-			list.removeAt(i);
-			break;
+	if (m_instruments.contains(iMap)) {
+		InstrumentList& list = m_instruments[iMap];
+		for (int i = 0; i < list.size(); ++i) {
+			const Instrument *pInstr = list.at(i);
+			if (pInstr->bank() == iBank && pInstr->prog() == iProg) {
+				delete pInstr;
+				list.removeAt(i);
+				break;
+			}
 		}
 	}
 }
@@ -263,7 +276,7 @@ void MidiInstrumentsModel::refresh (void)
 
 	beginReset();
 
-	m_instruments.clear();
+	clear();
 
 	// Load the whole bunch of instrument items...
 	lscp_midi_instrument_t *pInstrs
@@ -303,6 +316,20 @@ void MidiInstrumentsModel::endReset (void)
 #else
 	QAbstractItemModel::reset();
 #endif
+}
+
+
+// Map clear.
+void MidiInstrumentsModel::clear (void)
+{
+	InstrumentsMap::iterator itMap = m_instruments.begin();
+	for ( ;	itMap != m_instruments.end(); ++itMap) {
+		InstrumentList& list = itMap.value();
+		qDeleteAll(list);
+		list.clear();
+	}
+
+	m_instruments.clear();
 }
 
 

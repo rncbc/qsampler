@@ -42,7 +42,11 @@ class MidiInstrumentsModel : public QAbstractItemModel
 
 public:
 
+	// Constructor.
 	MidiInstrumentsModel(QObject *pParent = NULL);
+
+	// Destructor.
+	~MidiInstrumentsModel();
 
 	// Overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent) const;
@@ -67,6 +71,9 @@ public:
 	void setMidiMap(int iMidiMap);
 	int midiMap() const;
 
+	// Map clear.
+	void clear();
+
 signals:
 
 	// Instrument map/session change signal.
@@ -84,7 +91,7 @@ protected:
 
 private:
 
-	typedef QList<Instrument> InstrumentList;
+	typedef QList<Instrument *> InstrumentList;
 	typedef QMap<int, InstrumentList> InstrumentsMap;
 
 	InstrumentsMap m_instruments;
