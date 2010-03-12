@@ -29,7 +29,7 @@ class QComboBox;
 
 namespace QSampler {
 
-class MidiInstrumentsModel;
+class InstrumentListView;
 
 //-------------------------------------------------------------------------
 // QSampler::InstrumentListForm -- Instrument map list form interface.
@@ -41,7 +41,7 @@ class InstrumentListForm : public QMainWindow
 
 public:
 
-	InstrumentListForm(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+	InstrumentListForm(QWidget *pParent = NULL, Qt::WindowFlags wflags = 0);
 	~InstrumentListForm();
 
 public slots:
@@ -68,9 +68,9 @@ private:
 
 	Ui::qsamplerInstrumentListForm m_ui;
 
-	MidiInstrumentsModel *m_pListModel;
-
 	QComboBox *m_pMapComboBox;
+
+	InstrumentListView *m_pInstrumentListView;
 };
 
 } // namespace QSampler

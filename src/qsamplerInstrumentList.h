@@ -23,30 +23,27 @@
 #ifndef __qsamplerInstrumentList_h
 #define __qsamplerInstrumentList_h
 
-#include <QListWidget>
-#include <QItemDelegate>
-
-#include <lscp/client.h>
-
-#include "qsamplerInstrument.h"
+#include <QTreeView>
 
 namespace QSampler {
 
-//-------------------------------------------------------------------------
-// QSampler::MidiInstrumentsModel - data model for MIDI prog mappings
-//                                  (used for QTableView)
+class Instrument;
 
-class MidiInstrumentsModel : public QAbstractItemModel
+//-------------------------------------------------------------------------
+// QSampler:InstrumentListModel - data model for MIDI prog mappings
+//
+
+class InstrumentListModel : public QAbstractItemModel
 {
 	Q_OBJECT
 
 public:
 
 	// Constructor.
-	MidiInstrumentsModel(QObject *pParent = NULL);
+	InstrumentListModel(QObject *pParent = NULL);
 
 	// Destructor.
-	~MidiInstrumentsModel();
+	~InstrumentListModel();
 
 	// Overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent) const;
@@ -56,33 +53,24 @@ public:
 	QVariant headerData(int section, Qt::Orientation orientation,
 		int role = Qt::DisplayRole) const;
 
-	// Make the following method public
-	void beginReset();
-	void endReset();
-
-	// Own methods
-	Instrument *addInstrument(int iMap = 0,
-		int iBank = -1, int iProg = -1);
-	void removeInstrument(const Instrument& instrument);
-
-	void resort(const Instrument& instrument);
-
 	// Map selector.
 	void setMidiMap(int iMidiMap);
 	int midiMap() const;
 
-	// Map clear.
-	void clear();
-
-signals:
-
-	// Instrument map/session change signal.
-	void instrumentsChanged();
-
-public slots:
+	// Own methods
+	const Instrument *addInstrument(int iMap, int iBank, int iProg);
+	void removeInstrument(const Instrument *pInstrument);
+	void updateInstrument(const Instrument *pInstrument);
 
 	// General reloader.
 	void refresh();
+
+	// Make the following method public
+	void beginReset();
+	void endReset();
+
+	// Map clear.
+	void clear();
 
 protected:
 
@@ -92,12 +80,47 @@ protected:
 private:
 
 	typedef QList<Instrument *> InstrumentList;
-	typedef QMap<int, InstrumentList> InstrumentsMap;
+	typedef QMap<int, InstrumentList> InstrumentMap;
 
-	InstrumentsMap m_instruments;
+	InstrumentMap m_instruments;
 
 	// Current map selection.
 	int m_iMidiMap;
+};
+
+
+//-------------------------------------------------------------------------
+// QSampler::InstrumentListView - list view for MIDI prog mappings
+//
+
+class InstrumentListView : public QTreeView
+{
+	Q_OBJECT
+
+public:
+
+	// Constructor.
+	InstrumentListView(QWidget *pParent = 0);
+
+	// Destructor.
+	~InstrumentListView();
+
+	// Map selector.
+	void setMidiMap(int iMidiMap);
+	int midiMap() const;
+
+	// Own methods
+	const Instrument *addInstrument(int iMap, int iBank, int iProg);
+	void removeInstrument(const Instrument *pInstrument);
+	void updateInstrument(const Instrument *pInstrument);
+
+	// General reloader.
+	void refresh();
+
+private:
+
+	// Instance variables.
+	InstrumentListModel *m_pListModel;
 };
 
 

@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+* Attempt to fix broken instrument list model/view on Qt >= 4.6.
+
 * Device parameter spin-box default maximum has been set higher:
   now at a magic 24-bit limit (16777216) instead of older 16-bit
   (65536), possibly fixing bug #136.

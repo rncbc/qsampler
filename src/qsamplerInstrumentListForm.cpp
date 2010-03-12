@@ -47,9 +47,6 @@ InstrumentListForm::InstrumentListForm (
 {
 	m_ui.setupUi(this);
 
-	m_pListModel = new MidiInstrumentsModel(this);
-	m_ui.InstrumentTable->setModel(m_pListModel);
-
 	// Setup toolbar widgets.
 	m_pMapComboBox = new QComboBox(m_ui.InstrumentToolbar);
 	m_pMapComboBox->setMinimumWidth(120);
@@ -64,36 +61,39 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.InstrumentToolbar->addSeparator();
 	m_ui.InstrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
+	m_pInstrumentListView = new InstrumentListView(this);
 
-	QHeaderView *pHeader = m_ui.InstrumentTable->header();
+	QHeaderView *pHeader = m_pInstrumentListView->header();
 	pHeader->setDefaultAlignment(Qt::AlignLeft);
 	pHeader->setMovable(false);
 	pHeader->setStretchLastSection(true);
 	pHeader->resizeSection(0, 120);						// Name
-	m_ui.InstrumentTable->resizeColumnToContents(1);	// Map
-	m_ui.InstrumentTable->resizeColumnToContents(2);	// Bank
-	m_ui.InstrumentTable->resizeColumnToContents(3);	// Prog
-	m_ui.InstrumentTable->resizeColumnToContents(4);	// Engine
+	m_pInstrumentListView->resizeColumnToContents(1);	// Map
+	m_pInstrumentListView->resizeColumnToContents(2);	// Bank
+	m_pInstrumentListView->resizeColumnToContents(3);	// Prog
+	m_pInstrumentListView->resizeColumnToContents(4);	// Engine
 	pHeader->resizeSection(5, 240);						// File
-	m_ui.InstrumentTable->resizeColumnToContents(6);	// Nr
+	m_pInstrumentListView->resizeColumnToContents(6);	// Nr
 	pHeader->resizeSection(7, 60);						// Vol
 
 	// Enable custom context menu...
-	m_ui.InstrumentTable->setContextMenuPolicy(Qt::CustomContextMenu);
+	m_pInstrumentListView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+	QMainWindow::setCentralWidget(m_pInstrumentListView);
 
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),
 		SLOT(activateMap(int)));
 	QObject::connect(
-		m_ui.InstrumentTable,
+		m_pInstrumentListView,
 		SIGNAL(customContextMenuRequested(const QPoint&)),
 		SLOT(contextMenu(const QPoint&)));
 	QObject::connect(
-		m_ui.InstrumentTable,
+		m_pInstrumentListView,
 		SIGNAL(pressed(const QModelIndex&)),
 		SLOT(stabilizeForm()));
 	QObject::connect(
-		m_ui.InstrumentTable,
+		m_pInstrumentListView,
 		SIGNAL(activated(const QModelIndex&)),
 		SLOT(editInstrument(const QModelIndex&)));
 	QObject::connect(
@@ -113,13 +113,6 @@ InstrumentListForm::InstrumentListForm (
 		SIGNAL(triggered()),
 		SLOT(refreshInstruments()));
 
-	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm) {
-		QObject::connect(m_pListModel,
-			SIGNAL(instrumentsChanged()),
-			pMainForm, SLOT(sessionDirty()));
-	}
-
 	// Things must be stable from the start.
 	stabilizeForm();
 }
@@ -127,8 +120,8 @@ InstrumentListForm::InstrumentListForm (
 
 InstrumentListForm::~InstrumentListForm (void)
 {
+	delete m_pInstrumentListView;
 	delete m_pMapComboBox;
-	delete m_pListModel;
 }
 
 
@@ -211,8 +204,8 @@ void InstrumentListForm::activateMap ( int iMap )
 	if (iMidiMap >= 0)
 		pOptions->iMidiMap = iMidiMap;
 
-	m_pListModel->setMidiMap(iMidiMap);
-	m_pListModel->refresh();
+	m_pInstrumentListView->setMidiMap(iMidiMap);
+	m_pInstrumentListView->refresh();
 
 	stabilizeForm();
 }
@@ -220,24 +213,29 @@ void InstrumentListForm::activateMap ( int iMap )
 
 void InstrumentListForm::editInstrument (void)
 {
-	editInstrument(m_ui.InstrumentTable->currentIndex());
+	editInstrument(m_pInstrumentListView->currentIndex());
 }
 
 
 void InstrumentListForm::editInstrument ( const QModelIndex& index )
 {
-	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
+	if (!index.isValid())
 		return;
 
-	Instrument* pInstrument
-		= static_cast<Instrument *> (
-			index.data(Qt::UserRole).value<void *> ());
+	Instrument *pInstrument
+		= static_cast<Instrument *> (index.internalPointer());
+	if (pInstrument == NULL)
+		return;
 
 	if (pInstrument == NULL)
 		return;
 
 	// Save current key values...
-	Instrument oldInstrument(*pInstrument);
+	Instrument oldInstrument(
+		pInstrument->map(),
+		pInstrument->bank(),
+		pInstrument->prog());
+
 	// Do the edit dance...
 	InstrumentForm form(this);
 	form.setup(pInstrument);
@@ -254,10 +252,7 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 			// Unmap old instance...
 			oldInstrument.unmapInstrument();
 			// correct the position of the instrument in the model
-			m_pListModel->beginReset();
-			m_pListModel->resort(*pInstrument);
-			// Notify we've changes...
-			m_pListModel->endReset();
+			m_pInstrumentListView->updateInstrument(pInstrument);
 		}
 	}
 }
@@ -274,26 +269,23 @@ void InstrumentListForm::newInstrument (void)
 
 	// Commit...
 	instrument.mapInstrument();
+
 	// add new item to the table model
-	m_pListModel->beginReset();
-	m_pListModel->resort(instrument);
-	// Notify we've changes...
-	m_pListModel->endReset();
-	//FIXME: call above didnt really refresh, so we use this for now ...
-	//refreshInstruments();
+	m_pInstrumentListView->addInstrument(
+		instrument.map(),
+		instrument.bank(),
+		instrument.prog());
 }
 
 
 void InstrumentListForm::deleteInstrument (void)
 {
-	const QModelIndex& index = m_ui.InstrumentTable->currentIndex();
-	if (!index.isValid() || !index.data(Qt::UserRole).isValid())
+	const QModelIndex& index = m_pInstrumentListView->currentIndex();
+	if (!index.isValid())
 		return;
 
-	Instrument *pInstrument =
-		static_cast<Instrument*> (
-			index.data(Qt::UserRole).value<void *> ());
-
+	Instrument *pInstrument
+		= static_cast<Instrument *> (index.internalPointer());
 	if (pInstrument == NULL)
 		return;
 
@@ -316,11 +308,9 @@ void InstrumentListForm::deleteInstrument (void)
 	}
 
 	pInstrument->unmapInstrument();
+
 	// let the instrument vanish from the table model
-	m_pListModel->beginReset();
-	m_pListModel->removeInstrument(*pInstrument);
-	// Notify we've changes...
-	m_pListModel->endReset();
+	m_pInstrumentListView->removeInstrument(pInstrument);
 }
 
 
@@ -331,7 +321,7 @@ void InstrumentListForm::stabilizeForm (void)
 
 	bool bEnabled = (pMainForm && pMainForm->client());
 	m_ui.newInstrumentAction->setEnabled(bEnabled);
-	const QModelIndex& index = m_ui.InstrumentTable->currentIndex();
+	const QModelIndex& index = m_pInstrumentListView->currentIndex();
 	bEnabled = (bEnabled && index.isValid());
 	m_ui.editInstrumentAction->setEnabled(bEnabled);
 	m_ui.deleteInstrumentAction->setEnabled(bEnabled);
@@ -345,7 +335,7 @@ void InstrumentListForm::contextMenu ( const QPoint& pos )
 		return;
 
 	m_ui.contextMenu->exec(
-		(m_ui.InstrumentTable->viewport())->mapToGlobal(pos));
+		(m_pInstrumentListView->viewport())->mapToGlobal(pos));
 }
 
 
