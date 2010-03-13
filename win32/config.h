@@ -1,6 +1,6 @@
 
 #define PACKAGE_NAME    "Qsampler"
-#define PACKAGE_VERSION "0.2.2.11"
+#define PACKAGE_VERSION "0.2.2.13"
 
 #define CONFIG_PREFIX   "."
 #define CONFIG_DEBUG    1
@@ -24,6 +24,5 @@
 
 #define CONFIG_MAX_VOICES       1
 
+#undef  CONFIG_STACKTRACE
 #undef  HAVE_SIGNAL_H
-
-

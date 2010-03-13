@@ -39,10 +39,8 @@ namespace QSampler {
 //
 
 InstrumentListModel::InstrumentListModel ( QObject *pParent )
-	: QAbstractItemModel(pParent)
+	: QAbstractItemModel(pParent), m_iMidiMap(LSCP_MIDI_MAP_ALL)
 {
-	m_iMidiMap = LSCP_MIDI_MAP_ALL;
-
 	QAbstractItemModel::reset();
 }
 
@@ -145,7 +143,7 @@ QModelIndex InstrumentListModel::index (
 }
 
 
-QModelIndex InstrumentListModel::parent ( const QModelIndex& child ) const
+QModelIndex InstrumentListModel::parent ( const QModelIndex& /*child*/ ) const
 {
 	return QModelIndex();
 }
@@ -335,6 +333,25 @@ InstrumentListView::InstrumentListView ( QWidget *pParent )
 	m_pListModel = new InstrumentListModel(this);
 
 	QTreeView::setModel(m_pListModel);
+
+	QTreeView::setRootIsDecorated(false);
+	QTreeView::setUniformRowHeights(true);
+	QTreeView::setAlternatingRowColors(true);
+	QTreeView::setSelectionBehavior(QAbstractItemView::SelectRows);
+	QTreeView::setSelectionMode(QAbstractItemView::SingleSelection);
+	
+	QHeaderView *pHeader = QTreeView::header();
+	pHeader->setDefaultAlignment(Qt::AlignLeft);
+	pHeader->setMovable(false);
+	pHeader->setStretchLastSection(true);
+	pHeader->resizeSection(0, 120);			// Name
+	QTreeView::resizeColumnToContents(1);	// Map
+	QTreeView::resizeColumnToContents(2);	// Bank
+	QTreeView::resizeColumnToContents(3);	// Prog
+	QTreeView::resizeColumnToContents(4);	// Engine
+	pHeader->resizeSection(5, 240);			// File
+	QTreeView::resizeColumnToContents(6);	// Nr
+	pHeader->resizeSection(7, 60);			// Vol
 }
 
 

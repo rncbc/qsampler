@@ -48,37 +48,21 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.setupUi(this);
 
 	// Setup toolbar widgets.
-	m_pMapComboBox = new QComboBox(m_ui.InstrumentToolbar);
+	m_pMapComboBox = new QComboBox(m_ui.instrumentToolbar);
 	m_pMapComboBox->setMinimumWidth(120);
 	m_pMapComboBox->setEnabled(false);
 	m_pMapComboBox->setToolTip(tr("Instrument Map"));
-	m_ui.InstrumentToolbar->addWidget(m_pMapComboBox);
+	m_ui.instrumentToolbar->addWidget(m_pMapComboBox);
 
-	m_ui.InstrumentToolbar->addSeparator();
-	m_ui.InstrumentToolbar->addAction(m_ui.newInstrumentAction);
-	m_ui.InstrumentToolbar->addAction(m_ui.editInstrumentAction);
-	m_ui.InstrumentToolbar->addAction(m_ui.deleteInstrumentAction);
-	m_ui.InstrumentToolbar->addSeparator();
-	m_ui.InstrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
+	m_ui.instrumentToolbar->addSeparator();
+	m_ui.instrumentToolbar->addAction(m_ui.newInstrumentAction);
+	m_ui.instrumentToolbar->addAction(m_ui.editInstrumentAction);
+	m_ui.instrumentToolbar->addAction(m_ui.deleteInstrumentAction);
+	m_ui.instrumentToolbar->addSeparator();
+	m_ui.instrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
 	m_pInstrumentListView = new InstrumentListView(this);
-
-	QHeaderView *pHeader = m_pInstrumentListView->header();
-	pHeader->setDefaultAlignment(Qt::AlignLeft);
-	pHeader->setMovable(false);
-	pHeader->setStretchLastSection(true);
-	pHeader->resizeSection(0, 120);						// Name
-	m_pInstrumentListView->resizeColumnToContents(1);	// Map
-	m_pInstrumentListView->resizeColumnToContents(2);	// Bank
-	m_pInstrumentListView->resizeColumnToContents(3);	// Prog
-	m_pInstrumentListView->resizeColumnToContents(4);	// Engine
-	pHeader->resizeSection(5, 240);						// File
-	m_pInstrumentListView->resizeColumnToContents(6);	// Nr
-	pHeader->resizeSection(7, 60);						// Vol
-
-	// Enable custom context menu...
 	m_pInstrumentListView->setContextMenuPolicy(Qt::CustomContextMenu);
-
 	QMainWindow::setCentralWidget(m_pInstrumentListView);
 
 	QObject::connect(m_pMapComboBox,
@@ -90,11 +74,11 @@ InstrumentListForm::InstrumentListForm (
 		SLOT(contextMenu(const QPoint&)));
 	QObject::connect(
 		m_pInstrumentListView,
-		SIGNAL(pressed(const QModelIndex&)),
+		SIGNAL(activated(const QModelIndex&)),
 		SLOT(stabilizeForm()));
 	QObject::connect(
 		m_pInstrumentListView,
-		SIGNAL(activated(const QModelIndex&)),
+		SIGNAL(doubleClicked(const QModelIndex&)),
 		SLOT(editInstrument(const QModelIndex&)));
 	QObject::connect(
 		m_ui.newInstrumentAction,
@@ -227,34 +211,34 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 	if (pInstrument == NULL)
 		return;
 
-	if (pInstrument == NULL)
-		return;
-
 	// Save current key values...
-	Instrument oldInstrument(
-		pInstrument->map(),
-		pInstrument->bank(),
-		pInstrument->prog());
+	int iMap  = pInstrument->map();
+	int iBank = pInstrument->bank();
+	int iProg = pInstrument->prog();
+
+	Instrument instrument(iMap, iBank, iProg);
 
 	// Do the edit dance...
 	InstrumentForm form(this);
-	form.setup(pInstrument);
+	form.setup(&instrument);
 	if (form.exec()) {
 		// Commit...
-		pInstrument->mapInstrument();
+		instrument.mapInstrument();
 		// Check whether we changed instrument key...
-		if (oldInstrument.map()  == pInstrument->map()  &&
-			oldInstrument.bank() == pInstrument->bank() &&
-			oldInstrument.prog() == pInstrument->prog()) {
+		if (instrument.map()  == iMap  &&
+			instrument.bank() == iBank &&
+			instrument.prog() == iProg) {
 			// Just update tree item...
 			//pItem->update();
 		} else {
 			// Unmap old instance...
-			oldInstrument.unmapInstrument();
+			Instrument(iMap, iBank, iProg).unmapInstrument();
 			// correct the position of the instrument in the model
 			m_pInstrumentListView->updateInstrument(pInstrument);
 		}
 	}
+
+	stabilizeForm();
 }
 
 
@@ -275,6 +259,8 @@ void InstrumentListForm::newInstrument (void)
 		instrument.map(),
 		instrument.bank(),
 		instrument.prog());
+
+	stabilizeForm();
 }
 
 
@@ -311,6 +297,8 @@ void InstrumentListForm::deleteInstrument (void)
 
 	// let the instrument vanish from the table model
 	m_pInstrumentListView->removeInstrument(pInstrument);
+
+	stabilizeForm();
 }
 
 

@@ -558,22 +558,22 @@ Chcete použít změny?</translation>
 <context>
     <name>QSampler::InstrumentListForm</name>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="57"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="54"/>
         <source>Instrument Map</source>
         <translation>Zobrazení nástrojů</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="186"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="163"/>
         <source>(All)</source>
         <translation>(Vše)</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="308"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="286"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="309"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="287"/>
         <source>About to delete instrument map entry:
 
 %1
@@ -592,6 +592,78 @@ Jste si jistý?</translation>
     <message>
         <source>Cancel</source>
         <translation type="obsolete">Отменить</translation>
+    </message>
+</context>
+<context>
+    <name>QSampler::InstrumentListModel</name>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="98"/>
+        <source>Persistent</source>
+        <translation type="unfinished">Trvalý</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="99"/>
+        <source>On Demand Hold</source>
+        <translation type="unfinished">Držení na požádání</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="100"/>
+        <source>On Demand</source>
+        <translation type="unfinished">Na požádání</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="157"/>
+        <source>Name</source>
+        <translation type="unfinished">Název</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="158"/>
+        <source>Map</source>
+        <translation type="unfinished">Přiřazení</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="159"/>
+        <source>Bank</source>
+        <translation type="unfinished">Banka</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="160"/>
+        <source>Prog</source>
+        <translation type="unfinished">Program</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="161"/>
+        <source>Engine</source>
+        <translation type="unfinished">Stroj</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="162"/>
+        <source>File</source>
+        <translation type="unfinished">Soubor</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="163"/>
+        <source>Nr</source>
+        <translation type="unfinished">Číslo</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="164"/>
+        <source>Vol</source>
+        <translation type="unfinished">Hlasitost</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="165"/>
+        <source>Mode</source>
+        <translation type="unfinished">Režim</translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="290"/>
+        <source>Could not get current list of MIDI instrument mappings.
+
+Sorry.</source>
+        <translation type="unfinished">Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
+
+Promiňte.</translation>
     </message>
 </context>
 <context>
@@ -1126,71 +1198,58 @@ Chcete zastavit LinuxSampler?</translation>
 <context>
     <name>QSampler::MidiInstrumentsModel</name>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="99"/>
         <source>Persistent</source>
-        <translation type="unfinished">Trvalý</translation>
+        <translation type="obsolete">Trvalý</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="100"/>
         <source>On Demand Hold</source>
-        <translation type="unfinished">Držení na požádání</translation>
+        <translation type="obsolete">Držení na požádání</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="101"/>
         <source>On Demand</source>
-        <translation type="unfinished">Na požádání</translation>
+        <translation type="obsolete">Na požádání</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="157"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation type="obsolete">Název</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="158"/>
         <source>Map</source>
-        <translation type="unfinished">Přiřazení</translation>
+        <translation type="obsolete">Přiřazení</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="159"/>
         <source>Bank</source>
-        <translation type="unfinished">Banka</translation>
+        <translation type="obsolete">Banka</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="160"/>
         <source>Prog</source>
-        <translation type="unfinished">Program</translation>
+        <translation type="obsolete">Program</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="161"/>
         <source>Engine</source>
-        <translation type="unfinished">Stroj</translation>
+        <translation type="obsolete">Stroj</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="162"/>
         <source>File</source>
-        <translation type="unfinished">Soubor</translation>
+        <translation type="obsolete">Soubor</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="163"/>
         <source>Nr</source>
-        <translation type="unfinished">Číslo</translation>
+        <translation type="obsolete">Číslo</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="164"/>
         <source>Vol</source>
-        <translation type="unfinished">Hlasitost</translation>
+        <translation type="obsolete">Hlasitost</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="165"/>
         <source>Mode</source>
-        <translation type="unfinished">Režim</translation>
+        <translation type="obsolete">Režim</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="288"/>
         <source>Could not get current list of MIDI instrument mappings.
 
 Sorry.</source>
-        <translation type="unfinished">Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
+        <translation type="obsolete">Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
 
 Promiňte.</translation>
     </message>
@@ -1943,68 +2002,76 @@ hloubky MIDI:</translation>
 <context>
     <name>qsamplerInstrumentListForm</name>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="34"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="35"/>
         <source>Qsampler: Instruments</source>
         <translation>Qsampler: Nástroje</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="72"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="43"/>
         <source>&amp;Context</source>
         <translation>&amp;Souvislosti</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="86"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="68"/>
         <source>New &amp;Instrument...</source>
         <translation>&amp;Nový nástroj...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="89"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="71"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="92"/>
         <source>Insert</source>
-        <translation>Vložit</translation>
+        <translation type="obsolete">Vložit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="100"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="74"/>
+        <source>Ins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="82"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Upravit...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="103"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="85"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="106"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="88"/>
         <source>Enter</source>
         <translation>Enter</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="114"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="96"/>
         <source>&amp;Delete</source>
         <translation>&amp;Smazat</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="117"/>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="120"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="99"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="128"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="102"/>
+        <source>Del</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="110"/>
         <source>&amp;Refresh</source>
         <translation>&amp;Obnovit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="131"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="113"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="134"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="116"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
