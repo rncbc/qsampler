@@ -38,17 +38,6 @@
    <iconset resource="../icons/qsampler.qrc">:/icons/qsamplerInstrument.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget" />
-  <widget class="QMenu" name="contextMenu">
-   <property name="title">
-    <string>&amp;Context</string>
-   </property>
-   <addaction name="newInstrumentAction"/>
-   <addaction name="separator"/>
-   <addaction name="editInstrumentAction"/>
-   <addaction name="deleteInstrumentAction"/>
-   <addaction name="separator"/>
-   <addaction name="refreshInstrumentsAction"/>
-  </widget>
   <widget class="QToolBar" name="instrumentToolbar">
    <property name="orientation">
     <enum>Qt::Horizontal</enum>

@@ -568,12 +568,12 @@ Chcete použít změny?</translation>
         <translation>(Vše)</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="281"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="283"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="282"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="284"/>
         <source>About to delete instrument map entry:
 
 %1
@@ -2007,17 +2007,16 @@ hloubky MIDI:</translation>
         <translation>Qsampler: Nástroje</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="43"/>
         <source>&amp;Context</source>
-        <translation>&amp;Souvislosti</translation>
+        <translation type="obsolete">&amp;Souvislosti</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="68"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="57"/>
         <source>New &amp;Instrument...</source>
         <translation>&amp;Nový nástroj...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="71"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="60"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
@@ -2026,52 +2025,52 @@ hloubky MIDI:</translation>
         <translation type="obsolete">Vložit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="74"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="63"/>
         <source>Ins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="82"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="71"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Upravit...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="85"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="74"/>
         <source>Edit</source>
         <translation>Upravit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="88"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="77"/>
         <source>Enter</source>
         <translation>Enter</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="96"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="85"/>
         <source>&amp;Delete</source>
         <translation>&amp;Smazat</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="99"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="88"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="102"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="91"/>
         <source>Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="110"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="99"/>
         <source>&amp;Refresh</source>
         <translation>&amp;Obnovit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="113"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="102"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="116"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="105"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>

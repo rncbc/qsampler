@@ -568,12 +568,12 @@ Do you want to apply the changes?</source>
         <translation>(Все)</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="281"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="283"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="282"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="284"/>
         <source>About to delete instrument map entry:
 
 %1
@@ -2000,17 +2000,16 @@ MIDI Controller:</source>
         <translation>Qsampler: Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="43"/>
         <source>&amp;Context</source>
-        <translation>&amp;Контекст</translation>
+        <translation type="obsolete">&amp;Контекст</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="68"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="57"/>
         <source>New &amp;Instrument...</source>
         <translation>&amp;Создать инструмент...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="71"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="60"/>
         <source>New</source>
         <translation>Создать</translation>
     </message>
@@ -2019,52 +2018,52 @@ MIDI Controller:</source>
         <translation type="obsolete">Вставить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="74"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="63"/>
         <source>Ins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="82"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="71"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Изменить...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="85"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="74"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="88"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="77"/>
         <source>Enter</source>
         <translation>Enter</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="96"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="85"/>
         <source>&amp;Delete</source>
         <translation>&amp;Удалить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="99"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="88"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="102"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="91"/>
         <source>Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="110"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="99"/>
         <source>&amp;Refresh</source>
         <translation>О&amp;бновить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="113"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="102"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="116"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="105"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>
