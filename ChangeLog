@@ -5,6 +5,11 @@ ChangeLog
 
 SVN TRUNK
 
+* Automatic crash-dump reports, debugger stack-traces (gdb), back-
+  traces, whatever, are being introduced as a brand new configure
+  option (--enable-stacktrace) and default enabled on debug build
+  targets (--enable-debug).
+
 * Attempt to fix broken instrument list model/view on Qt >= 4.6.
 
 * Device parameter spin-box default maximum has been set higher:

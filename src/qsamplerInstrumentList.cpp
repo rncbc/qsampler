@@ -39,10 +39,8 @@ namespace QSampler {
 //
 
 InstrumentListModel::InstrumentListModel ( QObject *pParent )
-	: QAbstractItemModel(pParent)
+	: QAbstractItemModel(pParent), m_iMidiMap(LSCP_MIDI_MAP_ALL)
 {
-	m_iMidiMap = LSCP_MIDI_MAP_ALL;
-
 	QAbstractItemModel::reset();
 }
 

@@ -563,17 +563,17 @@ Do you want to apply the changes?</source>
         <translation>Карта инструментов</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="179"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="163"/>
         <source>(All)</source>
         <translation>(Все)</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="300"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="286"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="301"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="287"/>
         <source>About to delete instrument map entry:
 
 %1
@@ -597,67 +597,67 @@ Are you sure?</source>
 <context>
     <name>QSampler::InstrumentListModel</name>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="100"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="98"/>
         <source>Persistent</source>
         <translation type="unfinished">Непрерывно</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="101"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="99"/>
         <source>On Demand Hold</source>
         <translation type="unfinished"> </translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="102"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="100"/>
         <source>On Demand</source>
         <translation type="unfinished">По требованию</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="159"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="157"/>
         <source>Name</source>
         <translation type="unfinished">Название</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="160"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="158"/>
         <source>Map</source>
         <translation type="unfinished">Карта</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="161"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="159"/>
         <source>Bank</source>
         <translation type="unfinished">Банк</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="162"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="160"/>
         <source>Prog</source>
         <translation type="unfinished">Программа</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="163"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="161"/>
         <source>Engine</source>
         <translation type="unfinished">Движок</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="164"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="162"/>
         <source>File</source>
         <translation type="unfinished">Файл</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="165"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="163"/>
         <source>Nr</source>
         <translation type="unfinished">№</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="166"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="164"/>
         <source>Vol</source>
         <translation type="unfinished">Громкость</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="167"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="165"/>
         <source>Mode</source>
         <translation type="unfinished">Режим</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentList.cpp" line="292"/>
+        <location filename="../src/qsamplerInstrumentList.cpp" line="290"/>
         <source>Could not get current list of MIDI instrument mappings.
 
 Sorry.</source>
@@ -2000,17 +2000,17 @@ MIDI Controller:</source>
         <translation>Qsampler: Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="42"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="43"/>
         <source>&amp;Context</source>
         <translation>&amp;Контекст</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="67"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="68"/>
         <source>New &amp;Instrument...</source>
         <translation>&amp;Создать инструмент...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="70"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="71"/>
         <source>New</source>
         <translation>Создать</translation>
     </message>
@@ -2019,52 +2019,52 @@ MIDI Controller:</source>
         <translation type="obsolete">Вставить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="73"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="74"/>
         <source>Ins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="81"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="82"/>
         <source>&amp;Edit...</source>
         <translation>&amp;Изменить...</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="84"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="85"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="87"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="88"/>
         <source>Enter</source>
         <translation>Enter</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="95"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="96"/>
         <source>&amp;Delete</source>
         <translation>&amp;Удалить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="98"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="99"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="101"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="102"/>
         <source>Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="109"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="110"/>
         <source>&amp;Refresh</source>
         <translation>О&amp;бновить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="112"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="113"/>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.ui" line="115"/>
+        <location filename="../src/qsamplerInstrumentListForm.ui" line="116"/>
         <source>F5</source>
         <translation>F5</translation>
     </message>

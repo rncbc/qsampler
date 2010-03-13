@@ -48,22 +48,21 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.setupUi(this);
 
 	// Setup toolbar widgets.
-	m_pMapComboBox = new QComboBox(m_ui.InstrumentToolbar);
+	m_pMapComboBox = new QComboBox(m_ui.instrumentToolbar);
 	m_pMapComboBox->setMinimumWidth(120);
 	m_pMapComboBox->setEnabled(false);
 	m_pMapComboBox->setToolTip(tr("Instrument Map"));
-	m_ui.InstrumentToolbar->addWidget(m_pMapComboBox);
+	m_ui.instrumentToolbar->addWidget(m_pMapComboBox);
 
-	m_ui.InstrumentToolbar->addSeparator();
-	m_ui.InstrumentToolbar->addAction(m_ui.newInstrumentAction);
-	m_ui.InstrumentToolbar->addAction(m_ui.editInstrumentAction);
-	m_ui.InstrumentToolbar->addAction(m_ui.deleteInstrumentAction);
-	m_ui.InstrumentToolbar->addSeparator();
-	m_ui.InstrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
+	m_ui.instrumentToolbar->addSeparator();
+	m_ui.instrumentToolbar->addAction(m_ui.newInstrumentAction);
+	m_ui.instrumentToolbar->addAction(m_ui.editInstrumentAction);
+	m_ui.instrumentToolbar->addAction(m_ui.deleteInstrumentAction);
+	m_ui.instrumentToolbar->addSeparator();
+	m_ui.instrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
 	m_pInstrumentListView = new InstrumentListView(this);
 	m_pInstrumentListView->setContextMenuPolicy(Qt::CustomContextMenu);
-
 	QMainWindow::setCentralWidget(m_pInstrumentListView);
 
 	QObject::connect(m_pMapComboBox,
@@ -212,30 +211,28 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 	if (pInstrument == NULL)
 		return;
 
-	if (pInstrument == NULL)
-		return;
-
 	// Save current key values...
-	Instrument oldInstrument(
-		pInstrument->map(),
-		pInstrument->bank(),
-		pInstrument->prog());
+	int iMap  = pInstrument->map();
+	int iBank = pInstrument->bank();
+	int iProg = pInstrument->prog();
+
+	Instrument instrument(iMap, iBank, iProg);
 
 	// Do the edit dance...
 	InstrumentForm form(this);
-	form.setup(pInstrument);
+	form.setup(&instrument);
 	if (form.exec()) {
 		// Commit...
-		pInstrument->mapInstrument();
+		instrument.mapInstrument();
 		// Check whether we changed instrument key...
-		if (oldInstrument.map()  == pInstrument->map()  &&
-			oldInstrument.bank() == pInstrument->bank() &&
-			oldInstrument.prog() == pInstrument->prog()) {
+		if (instrument.map()  == iMap  &&
+			instrument.bank() == iBank &&
+			instrument.prog() == iProg) {
 			// Just update tree item...
 			//pItem->update();
 		} else {
 			// Unmap old instance...
-			oldInstrument.unmapInstrument();
+			Instrument(iMap, iBank, iProg).unmapInstrument();
 			// correct the position of the instrument in the model
 			m_pInstrumentListView->updateInstrument(pInstrument);
 		}
