@@ -73,7 +73,7 @@ InstrumentListForm::InstrumentListForm (
 		SLOT(stabilizeForm()));
 	QObject::connect(
 		m_pInstrumentListView,
-		SIGNAL(doubleClicked(const QModelIndex&)),
+		SIGNAL(activated(const QModelIndex&)),
 		SLOT(editInstrument(const QModelIndex&)));
 	QObject::connect(
 		m_ui.newInstrumentAction,
@@ -190,6 +190,28 @@ void InstrumentListForm::activateMap ( int iMap )
 }
 
 
+void InstrumentListForm::newInstrument (void)
+{
+	Instrument instrument;
+
+	InstrumentForm form(this);
+	form.setup(&instrument);
+	if (!form.exec())
+		return;
+
+	// Commit...
+	instrument.mapInstrument();
+
+	// add new item to the table model
+	m_pInstrumentListView->addInstrument(
+		instrument.map(),
+		instrument.bank(),
+		instrument.prog());
+
+	stabilizeForm();
+}
+
+
 void InstrumentListForm::editInstrument (void)
 {
 	editInstrument(m_pInstrumentListView->currentIndex());
@@ -216,44 +238,24 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 	// Do the edit dance...
 	InstrumentForm form(this);
 	form.setup(&instrument);
-	if (form.exec()) {
-		// Commit...
-		instrument.mapInstrument();
-		// Check whether we changed instrument key...
-		if (instrument.map()  == iMap  &&
-			instrument.bank() == iBank &&
-			instrument.prog() == iProg) {
-			// Just update tree item...
-			//pItem->update();
-		} else {
-			// Unmap old instance...
-			Instrument(iMap, iBank, iProg).unmapInstrument();
-			// correct the position of the instrument in the model
-			m_pInstrumentListView->updateInstrument(pInstrument);
-		}
-	}
-
-	stabilizeForm();
-}
-
-
-void InstrumentListForm::newInstrument (void)
-{
-	Instrument instrument;
-
-	InstrumentForm form(this);
-	form.setup(&instrument);
 	if (!form.exec())
 		return;
-
+	
 	// Commit...
 	instrument.mapInstrument();
 
-	// add new item to the table model
-	m_pInstrumentListView->addInstrument(
-		instrument.map(),
-		instrument.bank(),
-		instrument.prog());
+	// Check whether we changed instrument key...
+	if (instrument.map()  == iMap  &&
+		instrument.bank() == iBank &&
+		instrument.prog() == iProg) {
+		// Just update tree item...
+		//pItem->update();
+	} else {
+		// Unmap old instance...
+		Instrument(iMap, iBank, iProg).unmapInstrument();
+		// correct the position of the instrument in the model
+		m_pInstrumentListView->updateInstrument(pInstrument);
+	}
 
 	stabilizeForm();
 }
@@ -315,8 +317,16 @@ void InstrumentListForm::stabilizeForm (void)
 void InstrumentListForm::contextMenuEvent (
 	QContextMenuEvent *pContextMenuEvent )
 {
-	if (m_ui.newInstrumentAction->isEnabled())
-		m_ui.contextMenu->exec(pContextMenuEvent->globalPos());
+	QMenu menu(this);
+
+	menu.addAction(m_ui.newInstrumentAction);
+	menu.addSeparator();
+	menu.addAction(m_ui.editInstrumentAction);
+	menu.addAction(m_ui.deleteInstrumentAction);
+	menu.addSeparator();
+	menu.addAction(m_ui.refreshInstrumentsAction);
+
+	menu.exec(pContextMenuEvent->globalPos());
 }
 
 

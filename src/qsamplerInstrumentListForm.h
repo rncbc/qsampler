@@ -46,9 +46,9 @@ public:
 
 public slots:
 
+	void newInstrument();
 	void editInstrument();
 	void editInstrument(const QModelIndex& index);
-	void newInstrument();
 	void deleteInstrument();
 	void refreshInstruments();
 	void activateMap(int);
