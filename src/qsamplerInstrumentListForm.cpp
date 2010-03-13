@@ -33,6 +33,7 @@
 
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QContextMenuEvent>
 
 
 namespace QSampler {
@@ -47,13 +48,16 @@ InstrumentListForm::InstrumentListForm (
 {
 	m_ui.setupUi(this);
 
+	m_pInstrumentListView = new InstrumentListView(this);
+	QMainWindow::setCentralWidget(m_pInstrumentListView);
+
 	// Setup toolbar widgets.
 	m_pMapComboBox = new QComboBox(m_ui.instrumentToolbar);
 	m_pMapComboBox->setMinimumWidth(120);
 	m_pMapComboBox->setEnabled(false);
 	m_pMapComboBox->setToolTip(tr("Instrument Map"));
+	
 	m_ui.instrumentToolbar->addWidget(m_pMapComboBox);
-
 	m_ui.instrumentToolbar->addSeparator();
 	m_ui.instrumentToolbar->addAction(m_ui.newInstrumentAction);
 	m_ui.instrumentToolbar->addAction(m_ui.editInstrumentAction);
@@ -61,20 +65,11 @@ InstrumentListForm::InstrumentListForm (
 	m_ui.instrumentToolbar->addSeparator();
 	m_ui.instrumentToolbar->addAction(m_ui.refreshInstrumentsAction);
 
-	m_pInstrumentListView = new InstrumentListView(this);
-	m_pInstrumentListView->setContextMenuPolicy(Qt::CustomContextMenu);
-	QMainWindow::setCentralWidget(m_pInstrumentListView);
-
 	QObject::connect(m_pMapComboBox,
 		SIGNAL(activated(int)),
 		SLOT(activateMap(int)));
-	QObject::connect(
-		m_pInstrumentListView,
-		SIGNAL(customContextMenuRequested(const QPoint&)),
-		SLOT(contextMenu(const QPoint&)));
-	QObject::connect(
-		m_pInstrumentListView,
-		SIGNAL(activated(const QModelIndex&)),
+	QObject::connect(m_pInstrumentListView->selectionModel(),
+		SIGNAL(currentRowChanged(const QModelIndex&,const QModelIndex&)),
 		SLOT(stabilizeForm()));
 	QObject::connect(
 		m_pInstrumentListView,
@@ -104,8 +99,8 @@ InstrumentListForm::InstrumentListForm (
 
 InstrumentListForm::~InstrumentListForm (void)
 {
-	delete m_pInstrumentListView;
 	delete m_pMapComboBox;
+	delete m_pInstrumentListView;
 }
 
 
@@ -316,14 +311,12 @@ void InstrumentListForm::stabilizeForm (void)
 }
 
 
-// Handle custom context menu here...
-void InstrumentListForm::contextMenu ( const QPoint& pos )
+// Context menu request.
+void InstrumentListForm::contextMenuEvent (
+	QContextMenuEvent *pContextMenuEvent )
 {
-	if (!m_ui.newInstrumentAction->isEnabled())
-		return;
-
-	m_ui.contextMenu->exec(
-		(m_pInstrumentListView->viewport())->mapToGlobal(pos));
+	if (m_ui.newInstrumentAction->isEnabled())
+		m_ui.contextMenu->exec(pContextMenuEvent->globalPos());
 }
 
 

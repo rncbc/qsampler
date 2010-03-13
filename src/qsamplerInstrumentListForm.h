@@ -55,14 +55,13 @@ public slots:
 
 	void stabilizeForm();
 
-	// Handle custom context menu here...
-	void contextMenu(const QPoint& pos);
-
 protected:
 
 	void showEvent(QShowEvent *);
 	void hideEvent(QHideEvent *);
 	void closeEvent(QCloseEvent *);
+
+	void contextMenuEvent(QContextMenuEvent *);
 
 private:
 

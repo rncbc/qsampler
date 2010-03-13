@@ -558,22 +558,22 @@ Do you want to apply the changes?</source>
 <context>
     <name>QSampler::InstrumentListForm</name>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="54"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="58"/>
         <source>Instrument Map</source>
         <translation>Карта инструментов</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="163"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="158"/>
         <source>(All)</source>
         <translation>(Все)</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="286"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="281"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="287"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="282"/>
         <source>About to delete instrument map entry:
 
 %1
