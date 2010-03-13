@@ -35,8 +35,6 @@ class Instrument;
 
 class InstrumentListModel : public QAbstractItemModel
 {
-	Q_OBJECT
-
 public:
 
 	// Constructor.
@@ -95,12 +93,10 @@ private:
 
 class InstrumentListView : public QTreeView
 {
-	Q_OBJECT
-
 public:
 
 	// Constructor.
-	InstrumentListView(QWidget *pParent = 0);
+	InstrumentListView(QWidget *pParent = NULL);
 
 	// Destructor.
 	~InstrumentListView();

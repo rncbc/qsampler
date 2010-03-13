@@ -558,22 +558,22 @@ Chcete použít změny?</translation>
 <context>
     <name>QSampler::InstrumentListForm</name>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="54"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="58"/>
         <source>Instrument Map</source>
         <translation>Zobrazení nástrojů</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="163"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="158"/>
         <source>(All)</source>
         <translation>(Vše)</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="286"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="281"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../src/qsamplerInstrumentListForm.cpp" line="287"/>
+        <location filename="../src/qsamplerInstrumentListForm.cpp" line="282"/>
         <source>About to delete instrument map entry:
 
 %1
