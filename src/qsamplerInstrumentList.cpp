@@ -41,7 +41,7 @@ namespace QSampler {
 InstrumentListModel::InstrumentListModel ( QObject *pParent )
 	: QAbstractItemModel(pParent), m_iMidiMap(LSCP_MIDI_MAP_ALL)
 {
-	QAbstractItemModel::reset();
+//	QAbstractItemModel::reset();
 }
 
 InstrumentListModel::~InstrumentListModel (void)
@@ -79,7 +79,6 @@ QVariant InstrumentListModel::data (
 {
 	if (!index.isValid())
 		return QVariant();
-
 	const Instrument *pInstr
 		= static_cast<Instrument *> (index.internalPointer());
 
@@ -130,7 +129,6 @@ QModelIndex InstrumentListModel::index (
 		InstrumentMap::const_iterator itMap	= m_instruments.find(m_iMidiMap);
 		if (itMap != m_instruments.constEnd()) {
 			const InstrumentList& list = *itMap;
-			// resolve instrument in that map
 			if (row < list.size())
 				pInstr = list.at(row);
 		}
@@ -399,7 +397,8 @@ void InstrumentListView::updateInstrument ( const Instrument *pInstrument )
 {
 	m_pListModel->beginReset();
 	m_pListModel->updateInstrument(pInstrument);
-	m_pListModel->endReset();}
+	m_pListModel->endReset();
+}
 
 
 // Refreshener.
