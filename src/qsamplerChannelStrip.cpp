@@ -489,12 +489,15 @@ bool ChannelStrip::updateChannelInfo (void)
 	// Mute/Solo button state coloring...
 	bool bMute = m_pChannel->channelMute();
 	const QColor& rgbButton = pal.color(QPalette::Button);
+	const QColor& rgbButtonText = pal.color(QPalette::ButtonText);
 	pal.setColor(QPalette::Foreground, rgbFore);
 	pal.setColor(QPalette::Button, bMute ? Qt::yellow : rgbButton);
+	pal.setColor(QPalette::ButtonText, bMute ? Qt::darkYellow : rgbButtonText);
 	m_ui.ChannelMutePushButton->setPalette(pal);
 	m_ui.ChannelMutePushButton->setDown(bMute);
 	bool bSolo = m_pChannel->channelSolo();
 	pal.setColor(QPalette::Button, bSolo ? Qt::cyan : rgbButton);	
+	pal.setColor(QPalette::ButtonText, bSolo ? Qt::darkCyan : rgbButtonText);
 	m_ui.ChannelSoloPushButton->setPalette(pal);
 	m_ui.ChannelSoloPushButton->setDown(bSolo);
 #else

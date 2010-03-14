@@ -253,7 +253,7 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 	} else {
 		// Unmap old instance...
 		Instrument(iMap, iBank, iProg).unmapInstrument();
-		// correct the position of the instrument in the model
+		// Correct the position of the instrument in the model
 		m_pInstrumentListView->updateInstrument(pInstrument);
 	}
 
