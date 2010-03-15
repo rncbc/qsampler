@@ -1,7 +1,7 @@
 // qsamplerInstrumentForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@ namespace QSampler {
 // QSampler::InstrumentForm -- Instrument map item form implementation.
 //
 
-InstrumentForm::InstrumentForm ( QWidget* pParent )
+InstrumentForm::InstrumentForm ( QWidget *pParent )
 	: QDialog(pParent)
 {
 	m_ui.setupUi(this);
@@ -230,10 +230,6 @@ void InstrumentForm::setup ( Instrument *pInstrument )
 	// Done.
 	m_iDirtySetup--;
 	stabilizeForm();
-
-	// Done.
-	m_iDirtySetup--;
-	stabilizeForm();
 }
 
 
@@ -402,11 +398,9 @@ void InstrumentForm::changed (void)
 // Stabilize current form state.
 void InstrumentForm::stabilizeForm (void)
 {
-	bool bValid =
-		!m_ui.NameLineEdit->text().isEmpty() &&
-		m_ui.EngineNameComboBox->currentIndex() >= 0 &&
-		m_ui.EngineNameComboBox->currentText() !=
-		Channel::noEngineName();
+	bool bValid = !m_ui.NameLineEdit->text().isEmpty()
+		&& m_ui.EngineNameComboBox->currentIndex() >= 0
+		&& m_ui.EngineNameComboBox->currentText() != Channel::noEngineName();
 
 	const QString& sPath = m_ui.InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
