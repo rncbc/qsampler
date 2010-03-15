@@ -57,8 +57,9 @@ public:
 
 	// Own methods
 	const Instrument *addInstrument(int iMap, int iBank, int iProg);
-	void removeInstrument(const Instrument *pInstrument);
-	void updateInstrument(const Instrument *pInstrument);
+	void removeInstrument(Instrument *pInstrument);
+	void updateInstrument(Instrument *pInstrument);
+	void resortInstrument(Instrument *pInstrument);
 
 	// General reloader.
 	void refresh();
@@ -107,8 +108,9 @@ public:
 
 	// Own methods
 	const Instrument *addInstrument(int iMap, int iBank, int iProg);
-	void removeInstrument(const Instrument *pInstrument);
-	void updateInstrument(const Instrument *pInstrument);
+	void removeInstrument(Instrument *pInstrument);
+	void updateInstrument(Instrument *pInstrument);
+	void resortInstrument(Instrument *pInstrument);
 
 	// General reloader.
 	void refresh();

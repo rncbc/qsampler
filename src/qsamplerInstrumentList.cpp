@@ -221,7 +221,7 @@ const Instrument *InstrumentListModel::addInstrument (
 }
 
 
-void InstrumentListModel::removeInstrument ( const Instrument *pInstrument )
+void InstrumentListModel::removeInstrument ( Instrument *pInstrument )
 {
 	const int iMap  = pInstrument->map();
 	const int iBank = pInstrument->bank();
@@ -241,8 +241,14 @@ void InstrumentListModel::removeInstrument ( const Instrument *pInstrument )
 }
 
 
+void InstrumentListModel::updateInstrument ( Instrument *pInstrument )
+{
+	pInstrument->getInstrument();
+}
+
+
 // Reposition the instrument in the model (called when map/bank/prg changed)
-void InstrumentListModel::updateInstrument ( const Instrument *pInstrument )
+void InstrumentListModel::resortInstrument ( Instrument *pInstrument )
 {
 	const int iMap  = pInstrument->map();
 	const int iBank = pInstrument->bank();
@@ -385,7 +391,7 @@ const Instrument *InstrumentListView::addInstrument (
 }
 
 
-void InstrumentListView::removeInstrument ( const Instrument *pInstrument )
+void InstrumentListView::removeInstrument ( Instrument *pInstrument )
 {
 	m_pListModel->beginReset();
 	m_pListModel->removeInstrument(pInstrument);
@@ -393,11 +399,19 @@ void InstrumentListView::removeInstrument ( const Instrument *pInstrument )
 }
 
 
-// Reposition the instrument in the model (called when map/bank/prg changed)
-void InstrumentListView::updateInstrument ( const Instrument *pInstrument )
+void InstrumentListView::updateInstrument ( Instrument *pInstrument )
 {
 	m_pListModel->beginReset();
 	m_pListModel->updateInstrument(pInstrument);
+	m_pListModel->endReset();
+}
+
+
+// Reposition the instrument in the model (called when map/bank/prg changed)
+void InstrumentListView::resortInstrument ( Instrument *pInstrument )
+{
+	m_pListModel->beginReset();
+	m_pListModel->resortInstrument(pInstrument);
 	m_pListModel->endReset();
 }
 
