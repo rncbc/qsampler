@@ -337,7 +337,8 @@ InstrumentListView::InstrumentListView ( QWidget *pParent )
 	QTreeView::setAlternatingRowColors(true);
 	QTreeView::setSelectionBehavior(QAbstractItemView::SelectRows);
 	QTreeView::setSelectionMode(QAbstractItemView::SingleSelection);
-	
+	QTreeView::setItemsExpandable(false);
+
 	QHeaderView *pHeader = QTreeView::header();
 	pHeader->setDefaultAlignment(Qt::AlignLeft);
 	pHeader->setMovable(false);

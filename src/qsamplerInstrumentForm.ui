@@ -2,7 +2,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
    with this program; if not, write to the Free Software Foundation, Inc.,
    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-</comment>
+ </comment>
  <class>qsamplerInstrumentForm</class>
  <widget class="QDialog" name="qsamplerInstrumentForm" >
   <property name="geometry" >
@@ -29,14 +29,6 @@
     <width>452</width>
     <height>226</height>
    </rect>
-  </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>7</hsizetype>
-    <vsizetype>1</vsizetype>
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="focusPolicy" >
    <enum>Qt::StrongFocus</enum>
@@ -64,14 +56,6 @@
      </property>
      <item row="2" column="1" colspan="8" >
       <widget class="QComboBox" name="EngineNameComboBox" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip" >
         <string>Engine name</string>
        </property>
@@ -182,14 +166,6 @@
      </item>
      <item row="3" column="1" colspan="8" >
       <widget class="QComboBox" name="InstrumentFileComboBox" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="minimumSize" >
         <size>
          <width>320</width>
@@ -270,14 +246,6 @@
      </item>
      <item row="0" column="1" colspan="2" >
       <widget class="QComboBox" name="MapComboBox" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip" >
         <string>Instrument map</string>
        </property>
@@ -301,14 +269,6 @@
      </item>
      <item row="4" column="1" colspan="9" >
       <widget class="QComboBox" name="InstrumentNrComboBox" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="minimumSize" >
         <size>
          <width>320</width>
@@ -342,14 +302,6 @@
      </item>
      <item row="5" column="6" colspan="4" >
       <widget class="QComboBox" name="LoadModeComboBox" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>7</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="toolTip" >
         <string>Load mode</string>
        </property>
@@ -377,14 +329,6 @@
      </item>
      <item row="3" column="9" >
       <widget class="QToolButton" name="InstrumentFileToolButton" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
        <property name="minimumSize" >
         <size>
          <width>24</width>
