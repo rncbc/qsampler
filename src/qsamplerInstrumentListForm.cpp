@@ -249,12 +249,12 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 		instrument.bank() == iBank &&
 		instrument.prog() == iProg) {
 		// Just update tree item...
-		//pItem->update();
+		m_pInstrumentListView->updateInstrument(pInstrument);
 	} else {
 		// Unmap old instance...
 		Instrument(iMap, iBank, iProg).unmapInstrument();
 		// Correct the position of the instrument in the model
-		m_pInstrumentListView->updateInstrument(pInstrument);
+		m_pInstrumentListView->resortInstrument(pInstrument);
 	}
 
 	stabilizeForm();
