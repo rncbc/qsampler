@@ -190,7 +190,9 @@ const Instrument *InstrumentListModel::addInstrument (
 	// with the very same key (bank, program);
 	// if yes, just remove it without prejudice...
 	InstrumentList& list = m_instruments[iMap];
-	for (int i = 0; i < list.size(); ++i) {
+
+	int i = 0;
+	for ( ; i < list.size(); ++i) {
 		const Instrument *pInstr = list.at(i);
 		if (pInstr->bank() == iBank && pInstr->prog() == iProg) {
 			delete pInstr;
@@ -200,8 +202,7 @@ const Instrument *InstrumentListModel::addInstrument (
 	}
 
 	// Resolve the appropriate place, we keep the list sorted that way...
-	int i = 0;
-	for ( ; i < list.size(); ++i) {
+	for (i = 0; i < list.size(); ++i) {
 		const Instrument *pInstr = list.at(i);
 		if (iBank < pInstr->bank()
 			|| (iBank == pInstr->bank() && iProg < pInstr->prog())) {
@@ -223,16 +224,13 @@ const Instrument *InstrumentListModel::addInstrument (
 
 void InstrumentListModel::removeInstrument ( Instrument *pInstrument )
 {
-	const int iMap  = pInstrument->map();
-	const int iBank = pInstrument->bank();
-	const int iProg = pInstrument->prog();
+	const int iMap = pInstrument->map();
 
 	if (m_instruments.contains(iMap)) {
 		InstrumentList& list = m_instruments[iMap];
 		for (int i = 0; i < list.size(); ++i) {
-			const Instrument *pInstr = list.at(i);
-			if (pInstr->bank() == iBank && pInstr->prog() == iProg) {
-				delete pInstr;
+			if (pInstrument == list.at(i)) {
+				delete pInstrument;
 				list.removeAt(i);
 				break;
 			}
