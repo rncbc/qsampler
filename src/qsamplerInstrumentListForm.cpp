@@ -237,22 +237,22 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 
 	// Do the edit dance...
 	InstrumentForm form(this);
-	form.setup(&instrument);
+	form.setup(pInstrument);
 	if (!form.exec())
 		return;
 	
 	// Commit...
-	instrument.mapInstrument();
+	pInstrument->mapInstrument();
 
 	// Check whether we changed instrument key...
-	if (instrument.map()  == iMap  &&
-		instrument.bank() == iBank &&
-		instrument.prog() == iProg) {
+	if (pInstrument->map()  == iMap  &&
+		pInstrument->bank() == iBank &&
+		pInstrument->prog() == iProg) {
 		// Just update tree item...
 		m_pInstrumentListView->updateInstrument(pInstrument);
 	} else {
 		// Unmap old instance...
-		Instrument(iMap, iBank, iProg).unmapInstrument();
+		instrument.unmapInstrument();
 		// Correct the position of the instrument in the model
 		m_pInstrumentListView->resortInstrument(pInstrument);
 	}
@@ -292,7 +292,7 @@ void InstrumentListForm::deleteInstrument (void)
 
 	pInstrument->unmapInstrument();
 
-	// let the instrument vanish from the table model
+	// Let the instrument vanish from the table model...
 	m_pInstrumentListView->removeInstrument(pInstrument);
 
 	stabilizeForm();
