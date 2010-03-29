@@ -2,7 +2,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2005-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2005-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@
    <string>Qsampler: Channel</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerChannel.png</iconset>
+   <iconset resource="qsampler.qrc" >:/images/qsamplerChannel.png</iconset>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
@@ -94,7 +94,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/fileOpen.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/fileOpen.png</iconset>
        </property>
       </widget>
      </item>
@@ -275,7 +275,7 @@
            <string/>
           </property>
           <property name="icon" >
-           <iconset resource="../icons/qsampler.qrc" >:/icons/midi1.png</iconset>
+           <iconset resource="qsampler.qrc" >:/images/midi1.png</iconset>
           </property>
          </widget>
         </item>
@@ -620,7 +620,7 @@
              <string/>
             </property>
             <property name="icon" >
-             <iconset resource="../icons/qsampler.qrc" >:/icons/audio1.png</iconset>
+             <iconset resource="qsampler.qrc" >:/images/audio1.png</iconset>
             </property>
            </widget>
           </item>
@@ -755,7 +755,7 @@
         <string>OK</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/formAccept.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/formAccept.png</iconset>
        </property>
       </widget>
      </item>
@@ -765,7 +765,7 @@
         <string>Cancel</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/formReject.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/formReject.png</iconset>
        </property>
       </widget>
      </item>
@@ -783,6 +783,6 @@
   <tabstop>CancelPushButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/qsampler.qrc" />
+  <include location="qsampler.qrc" />
  </resources>
 </ui>

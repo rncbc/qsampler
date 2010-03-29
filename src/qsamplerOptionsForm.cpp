@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -455,7 +455,7 @@ void OptionsForm::toggleDisplayEffect ( bool bOn )
 	QPalette pal;
 	pal.setColor(QPalette::Foreground, Qt::green);
 	if (bOn) {
-		QPixmap pm(":/icons/displaybg1.png");
+		QPixmap pm(":/images/displaybg1.png");
 		pal.setBrush(QPalette::Background, QBrush(pm));
 	} else {
 		pal.setColor(QPalette::Background, Qt::black);

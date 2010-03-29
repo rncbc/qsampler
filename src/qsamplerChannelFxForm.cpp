@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2008, Christian Schoenebeck
+   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -136,15 +137,15 @@ ChannelFxForm::ChannelFxForm (
 	QAbstractButton* pApplyButton =
 		m_ui.buttonBox->button(QDialogButtonBox::Apply);
 	pApplyButton->setEnabled(false);
-	pApplyButton->setIcon(QIcon(":/icons/formEdit.png"));
+	pApplyButton->setIcon(QIcon(":/images/formEdit.png"));
 
 	QAbstractButton* pCancelButton =
 		m_ui.buttonBox->button(QDialogButtonBox::Cancel);
-	pCancelButton->setIcon(QIcon(":/icons/formRemove.png"));
+	pCancelButton->setIcon(QIcon(":/images/formRemove.png"));
 
 	QAbstractButton* pOkButton =
 		m_ui.buttonBox->button(QDialogButtonBox::Ok);
-	pOkButton->setIcon(QIcon(":/icons/formAccept.png"));
+	pOkButton->setIcon(QIcon(":/images/formAccept.png"));
 
 	QAbstractButton* pResetButton =
 		m_ui.buttonBox->button(QDialogButtonBox::Reset);

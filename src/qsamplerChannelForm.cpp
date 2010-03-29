@@ -1,7 +1,7 @@
 // qsamplerChannelForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -570,7 +570,7 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	m_midiDevices.clear();
 
 	// Populate with the current ones...
-	const QPixmap midiPixmap(":/icons/midi2.png");
+	const QPixmap midiPixmap(":/images/midi2.png");
 	int *piDeviceIDs = Device::getDevices(pMainForm->client(),
 		Device::Midi);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
@@ -685,7 +685,7 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	m_audioDevices.clear();
 
 	// Populate with the current ones...
-	const QPixmap audioPixmap(":/icons/audio2.png");
+	const QPixmap audioPixmap(":/images/audio2.png");
 	int *piDeviceIDs = Device::getDevices(pMainForm->client(),
 		Device::Audio);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {

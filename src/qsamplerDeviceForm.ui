@@ -2,7 +2,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@
    <string>Qsampler: Devices</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerDevice.png</iconset>
+   <iconset resource="qsampler.qrc" >:/images/qsamplerDevice.png</iconset>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
@@ -264,7 +264,7 @@
         <string>&amp;Refresh</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/formRefresh.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/formRefresh.png</iconset>
        </property>
        <property name="shortcut" >
         <string>Alt+R</string>
@@ -296,7 +296,7 @@
         <string>&amp;Create</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/deviceCreate.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/deviceCreate.png</iconset>
        </property>
        <property name="shortcut" >
         <string>Alt+C</string>
@@ -312,7 +312,7 @@
         <string>&amp;Delete</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/deviceDelete.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/deviceDelete.png</iconset>
        </property>
        <property name="shortcut" >
         <string>Alt+D</string>
@@ -328,7 +328,7 @@
         <string>Close</string>
        </property>
        <property name="icon" >
-        <iconset resource="../icons/qsampler.qrc" >:/icons/formReject.png</iconset>
+        <iconset resource="qsampler.qrc" >:/images/formReject.png</iconset>
        </property>
        <property name="shortcut" >
         <string/>
@@ -350,7 +350,7 @@
   <tabstop>ClosePushButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/qsampler.qrc" />
+  <include location="qsampler.qrc" />
  </resources>
  <connections/>
 </ui>
