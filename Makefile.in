@@ -60,6 +60,9 @@ forms = \
 	src/qsamplerOptionsForm.ui \
 	src/qsamplerMainForm.ui
 
+resources = \
+	src/qsampler.qrc
+
 translations_sources = \
 	translations/qsampler_cs.ts \
 	translations/qsampler_ru.ts
