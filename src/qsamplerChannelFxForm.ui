@@ -1,7 +1,9 @@
 <ui version="4.0" >
  <author>Christian Schoenebeck</author>
  <comment>
+
    Copyright (C) 2008, Christian Schoenebeck
+   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -79,7 +81,7 @@ to actually create it on sampler side.</string>
              <string>Create</string>
             </property>
             <property name="icon" >
-             <iconset resource="../icons/qsampler.qrc" >:/icons/itemNew.png</iconset>
+             <iconset resource="qsampler.qrc">:/images/itemNew.png</iconset>
             </property>
            </widget>
           </item>
@@ -94,7 +96,7 @@ actually destroy it on sampler side.</string>
              <string>Destroy</string>
             </property>
             <property name="icon" >
-             <iconset resource="../icons/qsampler.qrc" >:/icons/formRemove.png</iconset>
+             <iconset resource="qsampler.qrc">:/images/formRemove.png</iconset>
             </property>
            </widget>
           </item>
@@ -186,7 +188,7 @@ MIDI Controller:</string>
   </layout>
  </widget>
  <resources>
-  <include location="../icons/qsampler.qrc" />
+  <include location="qsampler.qrc" />
  </resources>
  <connections>
   <connection>

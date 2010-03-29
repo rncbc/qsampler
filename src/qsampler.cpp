@@ -1,4 +1,4 @@
-// main.cpp
+// qsampler.cpp
 //
 /****************************************************************************
    Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
@@ -374,4 +374,4 @@ int main ( int argc, char **argv )
 }
 
 
-// end of main.cpp
+// end of qsampler.cpp

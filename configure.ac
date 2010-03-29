@@ -1,9 +1,9 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.2.16, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.2.17, rncbc@rncbc.org, qsampler)
 
-AC_CONFIG_SRCDIR(src/qsamplerMainForm.ui)
-AC_CONFIG_HEADERS(config.h)
-AC_CONFIG_FILES(Makefile qsampler.pro qsampler.spec qsampler.desktop)
+AC_CONFIG_SRCDIR(src/qsampler.cpp)
+AC_CONFIG_HEADERS(src/config.h)
+AC_CONFIG_FILES(Makefile qsampler.spec src/src.pri src/qsampler.desktop)
 
 # Set default installation prefix.
 AC_PREFIX_DEFAULT(/usr/local)

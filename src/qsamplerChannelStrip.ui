@@ -43,7 +43,7 @@
    <string>Qsampler: Channel</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerChannel.png</iconset>
+   <iconset resource="qsampler.qrc" >:/images/qsamplerChannel.png</iconset>
   </property>
   <layout class="QHBoxLayout" >
    <property name="spacing" >
@@ -73,7 +73,7 @@
       <string>&amp;Channel</string>
      </property>
      <property name="icon" >
-      <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerChannel.png</iconset>
+      <iconset resource="qsampler.qrc" >:/images/qsamplerChannel.png</iconset>
      </property>
      <property name="shortcut" >
       <string>Alt+C</string>
@@ -447,7 +447,7 @@
   <tabstop>ChannelEditPushButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../icons/qsampler.qrc" />
+  <include location="qsampler.qrc" />
  </resources>
  <connections/>
 </ui>

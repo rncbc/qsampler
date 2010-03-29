@@ -2,6 +2,7 @@
 //
 /****************************************************************************
    Copyright (C) 2008, Christian Schoenebeck
+   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -68,12 +69,12 @@ QVariant FxSendsModel::data(const QModelIndex& index, int role) const {
 			break;
 		case Qt::DecorationRole:
 			if (m_FxSends[index.row()].deletion())
-				return QIcon(":/icons/formRemove.png");
+				return QIcon(":/images/formRemove.png");
 			if (m_FxSends[index.row()].isNew())
-				return QIcon(":/icons/itemNew.png");
+				return QIcon(":/images/itemNew.png");
 			if (m_FxSends[index.row()].isModified())
-				return QIcon(":/icons/formEdit.png");
-			return QIcon(":/icons/itemFile.png");
+				return QIcon(":/images/formEdit.png");
+			return QIcon(":/images/itemFile.png");
 		case Qt::FontRole: {
 			if (m_FxSends[index.row()].isModified()) {
 				QFont font;

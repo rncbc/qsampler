@@ -34,7 +34,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../icons/qsampler.qrc" >:/icons/qsampler.png</iconset>
+   <iconset resource="qsampler.qrc" >:/images/qsampler.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget" />
   <widget class="QToolBar" name="fileToolbar" >
@@ -168,7 +168,7 @@
   <widget class="QStatusBar" name="statusbar" />
   <action name="fileNewAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/fileNew.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/fileNew.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;New</string>
@@ -188,7 +188,7 @@
   </action>
   <action name="fileOpenAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/fileOpen.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/fileOpen.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Open...</string>
@@ -208,7 +208,7 @@
   </action>
   <action name="fileSaveAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/fileSave.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/fileSave.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Save</string>
@@ -242,7 +242,7 @@
   </action>
   <action name="fileResetAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/fileReset.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/fileReset.png</iconset>
    </property>
    <property name="text" >
     <string>Rese&amp;t</string>
@@ -262,7 +262,7 @@
   </action>
   <action name="fileRestartAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/fileRestart.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/fileRestart.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Restart</string>
@@ -296,7 +296,7 @@
   </action>
   <action name="editAddChannelAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/editAddChannel.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/editAddChannel.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Add Channel</string>
@@ -316,7 +316,7 @@
   </action>
   <action name="editRemoveChannelAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/editRemoveChannel.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/editRemoveChannel.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Remove Channel</string>
@@ -336,7 +336,7 @@
   </action>
   <action name="editResetChannelAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/editResetChannel.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/editResetChannel.png</iconset>
    </property>
    <property name="text" >
     <string>Re&amp;set Channel</string>
@@ -356,7 +356,7 @@
   </action>
   <action name="editResetAllChannelsAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/editResetAllChannels.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/editResetAllChannels.png</iconset>
    </property>
    <property name="text" >
     <string>R&amp;eset All Channels</string>
@@ -376,7 +376,7 @@
   </action>
   <action name="editSetupChannelAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/editSetupChannel.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/editSetupChannel.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Setup Channel...</string>
@@ -396,7 +396,7 @@
   </action>
   <action name="editEditChannelAction" >
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/editEditChannel.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/editEditChannel.png</iconset>
    </property>
    <property name="text" >
     <string>Ed&amp;it Channel...</string>
@@ -499,7 +499,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerInstrument.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/qsamplerInstrument.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Instruments</string>
@@ -522,7 +522,7 @@
     <bool>true</bool>
    </property>
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/qsamplerDevice.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/qsamplerDevice.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Devices</string>
@@ -562,7 +562,7 @@
     <bool>false</bool>
    </property>
    <property name="icon" >
-    <iconset resource="../icons/qsampler.qrc" >:/icons/channelsArrange.png</iconset>
+    <iconset resource="qsampler.qrc" >:/images/channelsArrange.png</iconset>
    </property>
    <property name="text" >
     <string>&amp;Arrange</string>
@@ -630,6 +630,6 @@
   </action>
  </widget>
  <resources>
-  <include location="../icons/qsampler.qrc" />
+  <include location="qsampler.qrc" />
  </resources>
 </ui>

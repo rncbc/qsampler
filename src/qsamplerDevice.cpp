@@ -916,11 +916,11 @@ DeviceItem::DeviceItem ( QTreeWidget* pTreeWidget,
 {
 	switch(m_device.deviceType()) {
 	case Device::Audio:
-		setIcon(0, QPixmap(":/icons/audio1.png"));
+		setIcon(0, QPixmap(":/images/audio1.png"));
 		setText(0, QObject::tr("Audio Devices"));
 		break;
 	case Device::Midi:
-		setIcon(0, QPixmap(":/icons/midi1.png"));
+		setIcon(0, QPixmap(":/images/midi1.png"));
 		setText(0, QObject::tr("MIDI Devices"));
 		break;
 	case Device::None:
@@ -939,10 +939,10 @@ DeviceItem::DeviceItem ( QTreeWidgetItem* pItem,
 {
 	switch(m_device.deviceType()) {
 	case Device::Audio:
-		setIcon(0, QPixmap(":/icons/audio2.png"));
+		setIcon(0, QPixmap(":/images/audio2.png"));
 		break;
 	case Device::Midi:
-		setIcon(0, QPixmap(":/icons/midi2.png"));
+		setIcon(0, QPixmap(":/images/midi2.png"));
 		break;
 	case Device::None:
 		break;

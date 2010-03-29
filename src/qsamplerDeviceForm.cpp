@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2009, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -453,10 +453,10 @@ void DeviceForm::selectDevice ()
 		QPixmap pixmap;
 		switch (device.deviceType()) {
 		case Device::Audio:
-			pixmap = QPixmap(":/icons/audio2.png");
+			pixmap = QPixmap(":/images/audio2.png");
 			break;
 		case Device::Midi:
-			pixmap = QPixmap(":/icons/midi2.png");
+			pixmap = QPixmap(":/images/midi2.png");
 			break;
 		case Device::None:
 			break;
@@ -614,16 +614,16 @@ void DeviceForm::deviceListViewContextMenu ( const QPoint& pos )
 	bool bClient = (pMainForm->client() != NULL);
 	bool bEnabled = (pItem != NULL);
 	pAction = menu.addAction(
-		QIcon(":/icons/deviceCreate.png"),
+		QIcon(":/images/deviceCreate.png"),
 		tr("&Create device"), this, SLOT(createDevice()));
 	pAction->setEnabled(bEnabled || (bClient && m_bNewDevice));
 	pAction = menu.addAction(
-		QIcon(":/icons/deviceDelete.png"),
+		QIcon(":/images/deviceDelete.png"),
 		tr("&Delete device"), this, SLOT(deleteDevice()));
 	pAction->setEnabled(bEnabled && !m_bNewDevice);
 	menu.addSeparator();
 	pAction = menu.addAction(
-		QIcon(":/icons/formRefresh.png"),
+		QIcon(":/images/formRefresh.png"),
 		tr("&Refresh"), this, SLOT(refreshDevices()));
 	pAction->setEnabled(bClient);
 

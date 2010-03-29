@@ -75,8 +75,8 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	m_iErrorCount  = 0;
 
 	if (++g_iMidiActivityRefCount == 1) {
-		g_pMidiActivityLedOn  = new QPixmap(":/icons/ledon1.png");
-		g_pMidiActivityLedOff = new QPixmap(":/icons/ledoff1.png");
+		g_pMidiActivityLedOn  = new QPixmap(":/images/ledon1.png");
+		g_pMidiActivityLedOff = new QPixmap(":/images/ledoff1.png");
 	}
 
 	m_ui.MidiActivityLabel->setPixmap(*g_pMidiActivityLedOff);
@@ -248,7 +248,7 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 	m_ui.MidiPortChannelTextLabel->setPalette(pal);
 	pal.setColor(QPalette::Foreground, Qt::green);
 	if (bDisplayEffect) {
-		QPixmap pm(":/icons/displaybg1.png");
+		QPixmap pm(":/images/displaybg1.png");
 		pal.setBrush(QPalette::Background, QBrush(pm));
 	} else {
 		pal.setColor(QPalette::Background, Qt::black);

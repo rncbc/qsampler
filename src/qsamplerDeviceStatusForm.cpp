@@ -53,8 +53,8 @@ MidiActivityLED::MidiActivityLED ( QString sText, QWidget *pParent )
 	: QLabel(sText, pParent)
 {
 	if (++g_iMidiActivityRefCount == 1) {
-		g_pMidiActivityLedOn  = new QPixmap(":/icons/ledon1.png");
-		g_pMidiActivityLedOff = new QPixmap(":/icons/ledoff1.png");
+		g_pMidiActivityLedOn  = new QPixmap(":/images/ledon1.png");
+		g_pMidiActivityLedOff = new QPixmap(":/images/ledoff1.png");
 	}
 
 	setPixmap(*g_pMidiActivityLedOff);
