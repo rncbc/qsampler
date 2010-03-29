@@ -64,12 +64,12 @@ resources = \
 	src/qsampler.qrc
 
 translations_sources = \
-	translations/qsampler_cs.ts \
-	translations/qsampler_ru.ts
+	src/translations/qsampler_cs.ts \
+	src/translations/qsampler_ru.ts
 
 translations_targets = \
-	translations/qsampler_cs.qm \
-	translations/qsampler_ru.qm
+	src/translations/qsampler_cs.qm \
+	src/translations/qsampler_ru.qm
 
 all:	$(target) $(translations_targets)
 
@@ -91,7 +91,6 @@ $(name).mak:	$(name).pro
 install:	$(target) $(translations_targets)
 	@make -f $(name).mak install
 	@install -d -v -m 0755 $(DESTDIR)$(prefix)/share/locale
-	@install -d -v -m 0755 $(DESTDIR)$(prefix)/share/man/man1
 	@install -v -m 0644 $(translations_targets) $(DESTDIR)$(prefix)/share/locale
 
 uninstall:	$(DESTDIR)$(prefix)/bin/$(name)
