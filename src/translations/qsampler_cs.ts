@@ -597,67 +597,67 @@ Jste si jistý?</translation>
 <context>
     <name>QSampler::InstrumentListModel</name>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="97"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="98"/>
         <source>Persistent</source>
         <translation type="unfinished">Trvalý</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="98"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="99"/>
         <source>On Demand Hold</source>
         <translation type="unfinished">Držení na požádání</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="99"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="100"/>
         <source>On Demand</source>
         <translation type="unfinished">Na požádání</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="155"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="156"/>
         <source>Name</source>
         <translation type="unfinished">Název</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="156"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="157"/>
         <source>Map</source>
         <translation type="unfinished">Přiřazení</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="157"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="158"/>
         <source>Bank</source>
         <translation type="unfinished">Banka</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="158"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="159"/>
         <source>Prog</source>
         <translation type="unfinished">Program</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="159"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="160"/>
         <source>Engine</source>
         <translation type="unfinished">Stroj</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="160"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="161"/>
         <source>File</source>
         <translation type="unfinished">Soubor</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="161"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="162"/>
         <source>Nr</source>
         <translation type="unfinished">Číslo</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="162"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="163"/>
         <source>Vol</source>
         <translation type="unfinished">Hlasitost</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="163"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="164"/>
         <source>Mode</source>
         <translation type="unfinished">Režim</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentList.cpp" line="292"/>
+        <location filename="../qsamplerInstrumentList.cpp" line="293"/>
         <source>Could not get current list of MIDI instrument mappings.
 
 Sorry.</source>

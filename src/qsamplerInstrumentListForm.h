@@ -25,6 +25,7 @@
 
 #include "ui_qsamplerInstrumentListForm.h"
 
+class QModelIndex;
 class QComboBox;
 
 namespace QSampler {
