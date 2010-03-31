@@ -452,7 +452,7 @@ void MainForm::setup ( Options *pOptions )
 	}
 
 	// Try to restore old window positioning and initial visibility.
-	m_pOptions->loadWidgetGeometry(this);
+	m_pOptions->loadWidgetGeometry(this, true);
 	m_pOptions->loadWidgetGeometry(m_pInstrumentListForm);
 	m_pOptions->loadWidgetGeometry(m_pDeviceForm);
 
@@ -496,7 +496,7 @@ bool MainForm::queryClose (void)
 			// And the children, and the main windows state,.
 			m_pOptions->saveWidgetGeometry(m_pDeviceForm);
 			m_pOptions->saveWidgetGeometry(m_pInstrumentListForm);
-			m_pOptions->saveWidgetGeometry(this);
+			m_pOptions->saveWidgetGeometry(this, true);
 			// Close popup widgets.
 			if (m_pInstrumentListForm)
 				m_pInstrumentListForm->close();
