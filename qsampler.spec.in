@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 11
+%define release 12
 %define prefix  @ac_prefix@
 
 Summary:	A LinuxSampler Qt GUI interface
@@ -15,17 +15,13 @@ URL:		http://qsampler.sourceforge.net/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-Requires:	qt >= 4.2
-Requires:	liblscp >= 0.5.5
-Requires:	libgig >= 3.2.0
-
-BuildRequires:	qt-devel >= 4.2
+BuildRequires:	libqt4-devel >= 4.1
 BuildRequires:	liblscp-devel >= 0.5.5
 BuildRequires:	libgig-devel >= 3.2.0
 
 %description
 QSampler is a LinuxSampler GUI front-end application written in C++ around
-the Qt3 toolkit using Qt Designer. For the moment it just wraps the client
+the Qt4 toolkit using Qt Designer. For the moment it just wraps the client
 interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %prep
