@@ -29,6 +29,7 @@
 #include "qsamplerMainForm.h"
 
 #include <QApplication>
+#include <QHeaderView>
 #include <QCursor>
 
 
