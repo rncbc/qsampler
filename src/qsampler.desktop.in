@@ -1,5 +1,6 @@
 [Desktop Entry]
-Name=Qsampler
+Name=@PACKAGE_NAME@
+Version=@PACKAGE_VERSION@
 GenericName=LinuxSampler GUI
 Comment=Qsampler is a LinuxSampler Qt GUI Interface
 Exec=@ac_prefix@/bin/qsampler
