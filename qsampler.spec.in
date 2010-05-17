@@ -42,11 +42,18 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %defattr(-,root,root)
 %doc AUTHORS COPYING ChangeLog README TODO
 %{_bindir}/%{name}
+%dir %{_datadir}/applications
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/%{name}.png
+%dir %{_datadir}/icons/hicolor
+%dir %{_datadir}/icons/hicolor/32x32
+%dir %{_datadir}/icons/hicolor/32x32/apps
+%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
+%dir %{_datadir}/locale
 %{_datadir}/locale/%{name}_*.qm
 
 %changelog
+* Mon May 17 2010 Rui Nuno Capela <rncbc@users.sourceforge.net>
+- Standard desktop icon fixing. 
 * Sat Aug  1 2009 Rui Nuno Capela <rncbc@users.sourceforge.net>
 - New 0.2.2 release.
 * Thu Dec 6 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
