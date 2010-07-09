@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+* General standard dialog buttons layout is now in place.
+
 * Initial widget geometry and visibility persistence logic has
   been slightly revised as much to avoid crash failures due to
   wrong main widget hidden state.

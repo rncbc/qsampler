@@ -47,54 +47,6 @@
    <property name="spacing" >
     <number>4</number>
    </property>
-   <item row="1" column="0" >
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>4</number>
-     </property>
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0" >
-        <size>
-         <width>250</width>
-         <height>16</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="OkPushButton" >
-       <property name="text" >
-        <string>OK</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="qsampler.qrc" >
-         <normaloff>:/images/formAccept.png</normaloff>:/images/formAccept.png</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="CancelPushButton" >
-       <property name="text" >
-        <string>Cancel</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="qsampler.qrc" >
-         <normaloff>:/images/formReject.png</normaloff>:/images/formReject.png</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="0" column="0" >
     <widget class="QTabWidget" name="OptionsTabWidget" >
      <property name="acceptDrops" >
@@ -1383,6 +1335,16 @@
      </widget>
     </widget>
    </item>
+   <item row="1" column="0" >
+    <widget class="QDialogButtonBox" name="DialogButtonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="4" margin="4" />
@@ -1412,8 +1374,7 @@
   <tabstop>InstrumentNamesCheckBox</tabstop>
   <tabstop>MaxRecentFilesSpinBox</tabstop>
   <tabstop>BaseFontSizeComboBox</tabstop>
-  <tabstop>OkPushButton</tabstop>
-  <tabstop>CancelPushButton</tabstop>
+  <tabstop>DialogButtonBox</tabstop>
  </tabstops>
  <resources>
   <include location="qsampler.qrc" />
