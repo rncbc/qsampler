@@ -27,8 +27,9 @@
 #include "qsamplerChannel.h"
 #include "qsamplerMainForm.h"
 
-#include <QFileDialog>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QFileDialog>
 
 // Needed for lroundf()
 #include <math.h>
@@ -96,11 +97,11 @@ InstrumentForm::InstrumentForm ( QWidget *pParent )
 	QObject::connect(m_ui.LoadModeComboBox,
 		SIGNAL(activated(int)),
 		SLOT(changed()));
-	QObject::connect(m_ui.OkPushButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(accepted()),
 		SLOT(accept()));
-	QObject::connect(m_ui.CancelPushButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(rejected()),
 		SLOT(reject()));
 }
 
@@ -360,7 +361,7 @@ void InstrumentForm::reject (void)
 	bool bReject = true;
 
 	// Check if there's any pending changes...
-	if (m_iDirtyCount > 0 && m_ui.OkPushButton->isEnabled()) {
+	if (m_iDirtyCount > 0) {
 		switch (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Some channel settings have been changed.\n\n"
@@ -405,7 +406,8 @@ void InstrumentForm::stabilizeForm (void)
 	const QString& sPath = m_ui.InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
 
-	m_ui.OkPushButton->setEnabled(m_iDirtyCount > 0 && bValid);
+	m_ui.DialogButtonBox->button(
+		QDialogButtonBox::Ok)->setEnabled(m_iDirtyCount > 0 && bValid);
 }
 
 } // namespace QSampler

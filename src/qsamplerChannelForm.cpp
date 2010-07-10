@@ -107,11 +107,11 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 	QObject::connect(m_ui.AudioDeviceComboBox,
 		SIGNAL(activated(int)),
 		SLOT(selectAudioDevice(int)));
-	QObject::connect(m_ui.OkPushButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(accepted()),
 		SLOT(accept()));
-	QObject::connect(m_ui.CancelPushButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(rejected()),
 		SLOT(reject()));
 	QObject::connect(m_ui.MidiDeviceToolButton,
 		SIGNAL(clicked()),
@@ -434,7 +434,7 @@ void ChannelForm::reject (void)
 	bool bReject = true;
 
 	// Check if there's any pending changes...
-	if (m_iDirtyCount > 0 && m_ui.OkPushButton->isEnabled()) {
+	if (m_iDirtyCount > 0) {
 		switch (QMessageBox::warning(this,
 			QSAMPLER_TITLE ": " + tr("Warning"),
 			tr("Some channel settings have been changed.\n\n"
@@ -807,7 +807,8 @@ void ChannelForm::stabilizeForm (void)
 	const QString& sPath = InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
 #endif
-	m_ui.OkPushButton->setEnabled(m_iDirtyCount > 0 && bValid);
+	m_ui.DialogButtonBox->button(
+		QDialogButtonBox::Ok)->setEnabled(m_iDirtyCount > 0 && bValid);
 }
 
 

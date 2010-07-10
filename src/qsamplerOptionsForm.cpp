@@ -133,11 +133,11 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	QObject::connect(m_ui.MaxStreamsSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(maxStreamsChanged(int)));
-	QObject::connect(m_ui.OkPushButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(accepted()),
 		SLOT(accept()));
-	QObject::connect(m_ui.CancelPushButton,
-		SIGNAL(clicked()),
+	QObject::connect(m_ui.DialogButtonBox,
+		SIGNAL(rejected()),
 		SLOT(reject()));
 }
 
@@ -397,7 +397,7 @@ void OptionsForm::stabilizeForm (void)
 	m_ui.MessagesLimitLinesSpinBox->setEnabled(
 		m_ui.MessagesLimitCheckBox->isChecked());
 
-	m_ui.OkPushButton->setEnabled(bValid);
+	m_ui.DialogButtonBox->button(QDialogButtonBox::Ok)->setEnabled(bValid);
 }
 
 
