@@ -29,6 +29,7 @@
 
 #include <QMessageBox>
 #include <QDragEnterEvent>
+#include <QFileInfo>
 #include <QTimer>
 #include <QUrl>
 
@@ -157,7 +158,8 @@ void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 			while (iter.hasNext()) {
 				const QString& sFilename = iter.next().toLocalFile();
 				if (!sFilename.isEmpty()) {
-					bAccept = Channel::isInstrumentFile(sFilename);
+				//	bAccept = Channel::isDlsInstrumentFile(sFilename);
+					bAccept = QFileInfo(sFilename).exists();
 					break;
 				}
 			}

@@ -473,10 +473,17 @@ void ChannelForm::openInstrumentFile (void)
 
 	// FIXME: the instrument file filters should be restricted,
 	// depending on the current engine.
+	QStringList filters;
+	filters << tr("GIG Instrument files") + " (*.gig *.dls)";
+	filters << tr("SFZ Instrument files") + " (*.sfz)";
+//	filters << tr("SF2 Instrument files") + " (*.sf2)";
+	filters << tr("All files") + " (*.*)";
+	const QString& filter = filters.join(";;");
+
 	QString sInstrumentFile = QFileDialog::getOpenFileName(this,
 		QSAMPLER_TITLE ": " + tr("Instrument files"), // Caption.
-		pOptions->sInstrumentDir,                 // Start here.
-		tr("Instrument files") + " (*.gig *.dls)" // Filter (GIG and DLS files)
+		pOptions->sInstrumentDir, // Start here.
+		filter                    // File filter.
 	);
 
 	if (sInstrumentFile.isEmpty())
