@@ -545,7 +545,8 @@ void MainForm::dropEvent ( QDropEvent* pDropEvent )
 		QListIterator<QUrl> iter(pMimeData->urls());
 		while (iter.hasNext()) {
 			const QString& sPath = iter.next().toLocalFile();
-			if (Channel::isInstrumentFile(sPath)) {
+		//	if (Channel::isDlsInstrumentFile(sPath)) {
+			if (QFileInfo(sPath).exists()) {
 				// Try to create a new channel from instrument file...
 				Channel *pChannel = new Channel();
 				if (pChannel == NULL)
