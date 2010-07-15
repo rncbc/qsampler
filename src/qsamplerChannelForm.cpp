@@ -476,7 +476,7 @@ void ChannelForm::openInstrumentFile (void)
 	QStringList filters;
 	filters << tr("GIG Instrument files") + " (*.gig *.dls)";
 	filters << tr("SFZ Instrument files") + " (*.sfz)";
-//	filters << tr("SF2 Instrument files") + " (*.sf2)";
+	filters << tr("SF2 Instrument files") + " (*.sf2)";
 	filters << tr("All files") + " (*.*)";
 	const QString& filter = filters.join(";;");
 
