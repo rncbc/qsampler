@@ -258,11 +258,14 @@ void InstrumentForm::openInstrumentFile (void)
 
 	// FIXME: the instrument file filters should be restricted,
 	// depending on the current engine.
+	const QString& sEngineName = m_ui.EngineNameComboBox->currentText().toUpper();
 	QStringList filters;
-	filters << tr("GIG Instrument files") + " (*.gig *.dls)";
-	filters << tr("SFZ Instrument files") + " (*.sfz)";
-	filters << tr("SF2 Instrument files") + " (*.sf2)";
-	filters << tr("All files") + " (*.*)";
+	if (sEngineName.contains("GIG"))
+		filters << tr("GIG Instrument files") + " (*.gig *.dls)";
+	if (sEngineName.contains("SFZ"))
+		filters << tr("SFZ Instrument files") + " (*.sfz)";
+	if (sEngineName.contains("SF2"))
+		filters << tr("SF2 Instrument files") + " (*.sf2)";
 	const QString& filter = filters.join(";;");
 
 	QString sInstrumentFile = QFileDialog::getOpenFileName(this,

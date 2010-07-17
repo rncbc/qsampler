@@ -6,8 +6,9 @@ ChangeLog
 SVN TRUNK
 
 * Sampler channel and instrument file requester support for
-  other than GIG instrument files (*gig *.dls) has been added,
-  now also allowing for SFZ instrument files (*.sfz) loading.
+  other than GIG engine instrument files (*gig; *.dls) has
+  been added, making roads for the newer SFZ and SF2 engines
+  instrument files (*.sfz; *.sf2).
 
 * General standard dialog buttons layout is now in place.
 
