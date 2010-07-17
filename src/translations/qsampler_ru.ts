@@ -395,22 +395,22 @@ Do you want to apply the changes?</source>
 Вы хотите применить эти изменения?</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="477"/>
+        <location filename="../qsamplerChannelForm.cpp" line="479"/>
         <source>GIG Instrument files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="478"/>
+        <location filename="../qsamplerChannelForm.cpp" line="481"/>
         <source>SFZ Instrument files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="479"/>
+        <location filename="../qsamplerChannelForm.cpp" line="483"/>
         <source>SF2 Instrument files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="480"/>
+        <location filename="../qsamplerChannelForm.cpp" line="484"/>
         <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -427,17 +427,17 @@ Do you want to apply the changes?</source>
         <translation type="obsolete">Отменить</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="484"/>
+        <location filename="../qsamplerChannelForm.cpp" line="488"/>
         <source>Instrument files</source>
         <translation>Файлы инструментов</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="611"/>
+        <location filename="../qsamplerChannelForm.cpp" line="615"/>
         <source>(New MIDI %1 device)</source>
         <translation>(Новое устройство MIDI %1)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="726"/>
+        <location filename="../qsamplerChannelForm.cpp" line="730"/>
         <source>(New Audio %1 device)</source>
         <translation>(Новое звуковое устройство %1)</translation>
     </message>
@@ -542,37 +542,32 @@ Are you sure?</source>
 <context>
     <name>QSampler::InstrumentForm</name>
     <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="262"/>
+        <location filename="../qsamplerInstrumentForm.cpp" line="264"/>
         <source>GIG Instrument files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="263"/>
+        <location filename="../qsamplerInstrumentForm.cpp" line="266"/>
         <source>SFZ Instrument files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="264"/>
+        <location filename="../qsamplerInstrumentForm.cpp" line="268"/>
         <source>SF2 Instrument files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="265"/>
-        <source>All files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="269"/>
+        <location filename="../qsamplerInstrumentForm.cpp" line="272"/>
         <source>Instrument files</source>
         <translation>Файлы инструментов</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="373"/>
+        <location filename="../qsamplerInstrumentForm.cpp" line="376"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentForm.cpp" line="374"/>
+        <location filename="../qsamplerInstrumentForm.cpp" line="377"/>
         <source>Some channel settings have been changed.
 
 Do you want to apply the changes?</source>
