@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+* Moving from old deprecated Qt3'ish custom event post handling
+  into regular asynchronous signal/slot strategy. (EXPERIMENTAL)
+
 * Sampler channel and instrument file requester support for
   other than GIG engine instrument files (*gig; *.dls) has
   been added, making roads for the newer SFZ and SF2 engines
