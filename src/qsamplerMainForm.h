@@ -29,6 +29,7 @@
 
 class QProcess;
 class QWorkspace;
+class QSocketNotifier;
 class QSpinBox;
 class QSlider;
 class QLabel;
@@ -115,6 +116,8 @@ public slots:
 	void sessionDirty();
 	void stabilizeForm();
 
+	void handle_sigusr1();
+
 protected slots:
 
 	void updateRecentFilesMenu();
@@ -160,6 +163,7 @@ private:
 	Options *m_pOptions;
 	Messages *m_pMessages;
 	QWorkspace *m_pWorkspace;
+	QSocketNotifier *m_pUsr1Notifier;
 	QString m_sFilename;
 	int m_iUntitled;
 	int m_iDirtyCount;

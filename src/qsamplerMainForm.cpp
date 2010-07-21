@@ -93,6 +93,36 @@ static WSADATA _wsaData;
 #endif
 
 
+//-------------------------------------------------------------------------
+// LADISH Level 1 support stuff.
+
+#ifdef HAVE_SIGNAL_H
+
+#include <QSocketNotifier>
+
+#include <sys/types.h>
+#include <sys/socket.h>
+
+#include <signal.h>
+
+// File descriptor for SIGUSR1 notifier.
+static int g_fdUsr1[2];
+
+// Unix SIGUSR1 signal handler.
+static void qsampler_sigusr1_handler ( int /* signo */ )
+{
+	char c = 1;
+
+	(::write(g_fdUsr1[0], &c, sizeof(c)) > 0);
+}
+
+#endif	// HAVE_SIGNAL_H
+
+
+//-------------------------------------------------------------------------
+// qsampler -- namespace
+
+
 namespace QSampler {
 
 // Timer constant stuff.
@@ -107,7 +137,6 @@ namespace QSampler {
 
 // Specialties for thread-callback comunication.
 #define QSAMPLER_LSCP_EVENT   QEvent::Type(QEvent::User + 1)
-#define QSAMPLER_SAVE_EVENT   QEvent::Type(QEvent::User + 2)
 
 
 //-------------------------------------------------------------------------
@@ -137,17 +166,6 @@ private:
 	// The event data as a string.
 	QString      m_data;
 };
-
-
-//-------------------------------------------------------------------------
-// LADISH Level 1 support stuff.
-
-void qsampler_on_sigusr1 ( int /*signo*/ )
-{
-	QApplication::postEvent(
-		MainForm::getInstance(),
-		new QEvent(QSAMPLER_SAVE_EVENT));
-}
 
 
 //-------------------------------------------------------------------------
@@ -185,11 +203,34 @@ MainForm::MainForm ( QWidget *pParent )
 	m_iTimerSlot = 0;
 
 #ifdef HAVE_SIGNAL_H
+
 	// Set to ignore any fatal "Broken pipe" signals.
 	::signal(SIGPIPE, SIG_IGN);
+
 	// LADISH Level 1 suport.
-	::signal(SIGUSR1, qsampler_on_sigusr1);
-#endif
+
+	// Initialize file descriptors for SIGUSR1 socket notifier.
+	::socketpair(AF_UNIX, SOCK_STREAM, 0, g_fdUsr1);
+	m_pUsr1Notifier
+		= new QSocketNotifier(g_fdUsr1[1], QSocketNotifier::Read, this);
+
+	QObject::connect(m_pUsr1Notifier,
+		SIGNAL(activated(int)),
+		SLOT(handle_sigusr1()));
+
+	// Install SIGUSR1 signal handler.
+    struct sigaction usr1;
+    usr1.sa_handler = qsampler_sigusr1_handler;
+    ::sigemptyset(&usr1.sa_mask);
+    usr1.sa_flags = 0;
+    usr1.sa_flags |= SA_RESTART;
+    ::sigaction(SIGUSR1, &usr1, NULL);
+
+#else	// HAVE_SIGNAL_H
+
+	m_pSocketNotifier = NULL;
+	
+#endif	// !HAVE_SIGNAL_H
 
 #ifdef CONFIG_VOLUME
 	// Make some extras into the toolbar...
@@ -360,6 +401,11 @@ MainForm::~MainForm()
 
 #if defined(WIN32)
 	WSACleanup();
+#endif
+
+#ifdef HAVE_SIGNAL_H
+	if (m_pUsr1Notifier)
+		delete m_pUsr1Notifier;
 #endif
 
 	// Finally drop any widgets around...
@@ -638,8 +684,16 @@ void MainForm::customEvent ( QEvent* pEvent )
 					.arg(::lscp_event_to_text(pLscpEvent->event()))
 					.arg(pLscpEvent->data()), "#996699");
 		}
-	}	// LADISH1 Level 1 support...
-	else if (pEvent->type() == QSAMPLER_SAVE_EVENT)
+	}
+}
+
+
+// LADISH Level 1 -- SIGUSR1 signal handler.
+void MainForm::handle_sigusr1 (void)
+{
+	char c;
+
+	if (::read(g_fdUsr1[1], &c, sizeof(c)) > 0)
 		saveSession(false);
 }
 
