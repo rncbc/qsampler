@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.2.26, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.2.27, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -333,6 +333,9 @@ fi
 if test "x$ac_stacktrace" = "xyes"; then
    AC_DEFINE(CONFIG_STACKTRACE, 1, [Define if debugger stack-trace is enabled.])
 fi
+
+# Some recent distros (eg. fedora, debian) require this.
+ac_libs="$ac_libs -lX11"
 
 AC_SUBST(ac_libs)
 AC_SUBST(ac_incpath)
