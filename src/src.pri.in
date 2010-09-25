@@ -1,7 +1,6 @@
 # qsampler.pri
 #
-PREFIX   = @ac_prefix@
-
-CONFIG  += @ac_debug@
-LIBS    += @ac_libs@
+PREFIX  = @ac_prefix@
+CONFIG += @ac_debug@
 INCPATH += @ac_incpath@
+LIBS += @ac_libs@
