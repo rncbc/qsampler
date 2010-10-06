@@ -41,6 +41,7 @@ AC_ARG_ENABLE(stacktrace,
   [ac_stacktrace="$enableval"])
 
 
+if test "$cross_compiling" != yes; then
 # Standard installation base dirs.
 ac_with_paths="/usr /usr/local"
 
@@ -52,6 +53,7 @@ for X in /usr/lib /usr/lib64 /usr/share; do
     fi
   done
 done
+fi
 
 # Set for alternate Qt installation dir.
 AC_ARG_WITH(qt,
@@ -178,6 +180,12 @@ if test "x$ac_liblscp" = "xno"; then
    AC_MSG_ERROR([LSCP library not found.])
 fi
 ac_libs="$ac_libs -llscp"
+case "{$host}" in
+     *mingw*)
+     ac_libs="$ac_libs -lws2_32"
+     LIBS="$LIBS -lws2_32"
+     ;;
+esac
 
 AC_CACHE_CHECK([for instrument_name in lscp_channel_info_t],
   ac_cv_instrument_name, [
@@ -302,17 +310,14 @@ if test "x$ac_libgig" = "xyes"; then
       AC_LANG_SAVE
       AC_LANG_CPLUSPLUS
       CXXFLAGS="$ac_libs"
-      AC_TRY_RUN([
+      AC_TRY_COMPILE([
 #include <stdlib.h>
 #include <gig.h>
-int main() {
+      ],[
     gig::File file;
     file.SetAutoLoad(false);
-    exit(0);
-}
       ],
       have_libgig_setautoload="yes",
-      have_libgig_setautoload="no",
       have_libgig_setautoload="no"
       )
       AC_LANG_RESTORE
@@ -335,7 +340,9 @@ if test "x$ac_stacktrace" = "xyes"; then
 fi
 
 # Some recent distros (eg. fedora, debian) require this.
-ac_libs="$ac_libs -lX11"
+if test "x$ac_cv_lib_X11_main" = "xyes"; then
+   ac_libs="$ac_libs -lX11"
+fi
 
 AC_SUBST(ac_libs)
 AC_SUBST(ac_incpath)
@@ -343,7 +350,7 @@ AC_SUBST(ac_incpath)
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h signal.h)
+AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h signal.h sys/socket.h)
 
 AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
 if test "x$ac_lscp_h" = "xno"; then

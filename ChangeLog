@@ -5,6 +5,11 @@ ChangeLog
 
 SVN TRUNK
 
+* Made lookup of translation files more robust on Windows
+
+* Fixes for cross compiling and building for Windows with configure
+  and make.
+
 * libX11 is now being added explicitly to the build link phase,
   as seen necessary on some bleeding-edge distros eg. Fedora 13,
   Debian 6.
