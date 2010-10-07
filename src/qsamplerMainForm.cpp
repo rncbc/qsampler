@@ -96,7 +96,7 @@ static WSADATA _wsaData;
 //-------------------------------------------------------------------------
 // LADISH Level 1 support stuff.
 
-#ifdef HAVE_SIGNAL_H
+#if defined(HAVE_SIGNAL_H) && defined(HAVE_SYS_SOCKET_H)
 
 #include <QSocketNotifier>
 
@@ -202,7 +202,7 @@ MainForm::MainForm ( QWidget *pParent )
 
 	m_iTimerSlot = 0;
 
-#ifdef HAVE_SIGNAL_H
+#if defined(HAVE_SIGNAL_H) && defined(HAVE_SYS_SOCKET_H)
 
 	// Set to ignore any fatal "Broken pipe" signals.
 	::signal(SIGPIPE, SIG_IGN);
@@ -403,7 +403,7 @@ MainForm::~MainForm()
 	WSACleanup();
 #endif
 
-#ifdef HAVE_SIGNAL_H
+#if defined(HAVE_SIGNAL_H) && defined(HAVE_SYS_SOCKET_H)
 	if (m_pUsr1Notifier)
 		delete m_pUsr1Notifier;
 #endif
@@ -691,7 +691,7 @@ void MainForm::customEvent ( QEvent* pEvent )
 // LADISH Level 1 -- SIGUSR1 signal handler.
 void MainForm::handle_sigusr1 (void)
 {
-#ifdef HAVE_SIGNAL_H
+#if defined(HAVE_SIGNAL_H) && defined(HAVE_SYS_SOCKET_H)
 
 	char c;
 

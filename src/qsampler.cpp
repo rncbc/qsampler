@@ -71,6 +71,12 @@ public:
 			if (m_pQtTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pQtTranslator);
 			} else {
+		#if WIN32
+				sLocPath = QApplication::applicationDirPath() + "/share/locale";
+				if (m_pQtTranslator->load(sLocName, sLocPath)) {
+					QApplication::installTranslator(m_pQtTranslator);
+				} else {
+		#endif
 				delete m_pQtTranslator;
 				m_pQtTranslator = 0;
 		#ifdef CONFIG_DEBUG
@@ -79,6 +85,9 @@ public:
 					sLocPath.toUtf8().constData(),
 					sLocName.toUtf8().constData());
 		#endif
+		#if WIN32
+				}
+		#endif
 			}
 			// Try own application translation...
 			m_pMyTranslator = new QTranslator(this);
@@ -86,7 +95,11 @@ public:
 			if (m_pMyTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pMyTranslator);
 			} else {
+		#if WIN32
+				sLocPath = QApplication::applicationDirPath() + "/share/locale";
+		#else
 				sLocPath = CONFIG_PREFIX "/share/locale";
+		#endif
 				if (m_pMyTranslator->load(sLocName, sLocPath)) {
 					QApplication::installTranslator(m_pMyTranslator);
 				} else {

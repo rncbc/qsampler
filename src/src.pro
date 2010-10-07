@@ -99,9 +99,9 @@ unix {
 
 win32 {
 
-    contains(CONFIG, debug) { 
-        CONFIG += console
-    }
+	CONFIG(debug, debug|release): CONFIG += console
+	INSTALLS += target
+	target.path = $$PREFIX/bin
 }
 
 macx {
