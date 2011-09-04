@@ -5,13 +5,13 @@ ChangeLog
 
 SVN TRUNK
 
-* Made lookup of translation files work inside a Mac OS X bundle
+* Made lookup of translation files work inside a Mac OS X bundle.
 
-* Minor Mac OS X compilation error fix
+* Minor Mac OS X compilation error fix.
 
 * Debugging stacktrace now applies to all working threads.
 
-* Made lookup of translation files more robust on Windows
+* Made lookup of translation files more robust on Windows.
 
 * Fixes for cross compiling and building for Windows with configure
   and make.
