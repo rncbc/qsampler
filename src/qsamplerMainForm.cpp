@@ -221,7 +221,7 @@ MainForm::MainForm ( QWidget *pParent )
 	// Install SIGUSR1 signal handler.
     struct sigaction usr1;
     usr1.sa_handler = qsampler_sigusr1_handler;
-    ::sigemptyset(&usr1.sa_mask);
+    sigemptyset(&usr1.sa_mask);
     usr1.sa_flags = 0;
     usr1.sa_flags |= SA_RESTART;
     ::sigaction(SIGUSR1, &usr1, NULL);

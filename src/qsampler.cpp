@@ -37,6 +37,12 @@
 #define darker(x)	dark(x)
 #endif
 
+#if WIN32
+#define RELATIVE_LOCALE_DIR "/share/locale"
+#elif defined(__APPLE__)
+#define RELATIVE_LOCALE_DIR "/../Resources"
+#endif
+
 
 //-------------------------------------------------------------------------
 // Singleton application instance stuff (Qt/X11 only atm.)
@@ -71,8 +77,8 @@ public:
 			if (m_pQtTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pQtTranslator);
 			} else {
-		#if WIN32
-				sLocPath = QApplication::applicationDirPath() + "/share/locale";
+		#ifdef RELATIVE_LOCALE_DIR
+				sLocPath = QApplication::applicationDirPath() + RELATIVE_LOCALE_DIR;
 				if (m_pQtTranslator->load(sLocName, sLocPath)) {
 					QApplication::installTranslator(m_pQtTranslator);
 				} else {
@@ -85,7 +91,7 @@ public:
 					sLocPath.toUtf8().constData(),
 					sLocName.toUtf8().constData());
 		#endif
-		#if WIN32
+		#ifdef RELATIVE_LOCALE_DIR
 				}
 		#endif
 			}
@@ -95,8 +101,8 @@ public:
 			if (m_pMyTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pMyTranslator);
 			} else {
-		#if WIN32
-				sLocPath = QApplication::applicationDirPath() + "/share/locale";
+		#ifdef RELATIVE_LOCALE_DIR
+				sLocPath = QApplication::applicationDirPath() + RELATIVE_LOCALE_DIR;
 		#else
 				sLocPath = CONFIG_PREFIX "/share/locale";
 		#endif
