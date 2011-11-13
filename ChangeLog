@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+* Fixed Makefile.in handling of installation directories to
+  the configure script eg. --bindir, --datadir, --localedir.
+
 * Made lookup of translation files work inside a Mac OS X bundle.
 
 * Minor Mac OS X compilation error fix.

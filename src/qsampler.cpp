@@ -37,6 +37,21 @@
 #define darker(x)	dark(x)
 #endif
 
+#define CONFIG_QUOTE1(x) #x
+#define CONFIG_QUOTED(x) CONFIG_QUOTE1(x)
+
+#if defined(DATADIR)
+#define CONFIG_DATADIR CONFIG_QUOTED(DATADIR)
+#else
+#define CONFIG_DATADIR CONFIG_PREFIX "/share"
+#endif
+
+#if defined(LOCALEDIR)
+#define CONFIG_LOCALEDIR CONFIG_QUOTED(LOCALEDIR)
+#else
+#define CONFIG_LOCALEDIR CONFIG_DATADIR "/locale"
+#endif
+
 #if WIN32
 #define RELATIVE_LOCALE_DIR "/share/locale"
 #elif defined(__APPLE__)
@@ -104,7 +119,7 @@ public:
 		#ifdef RELATIVE_LOCALE_DIR
 				sLocPath = QApplication::applicationDirPath() + RELATIVE_LOCALE_DIR;
 		#else
-				sLocPath = CONFIG_PREFIX "/share/locale";
+				sLocPath = CONFIG_LOCALEDIR;
 		#endif
 				if (m_pMyTranslator->load(sLocName, sLocPath)) {
 					QApplication::installTranslator(m_pMyTranslator);
