@@ -103,7 +103,7 @@ win32 {
 
 	CONFIG(debug, debug|release): CONFIG += console
 	INSTALLS += target
-	target.path = $$BINDIR
+	target.path = $$PREFIX/bin
 }
 
 macx {
