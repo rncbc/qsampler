@@ -72,6 +72,7 @@ translations_targets = \
 	src/translations/qsampler_ru.qm
 
 
+export datarootdir = @datarootdir@
 export localedir = @localedir@
 
 
