@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.2.33, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.2.34, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -115,7 +115,7 @@ done
 # Check for proper Qt version.
 AC_CACHE_CHECK([for Qt library version >= 4.2],
   ac_cv_qtversion, [
-  AC_TRY_LINK([#include "Qt/qglobal.h"], [
+  AC_TRY_LINK([#include "QtCore/qglobal.h"], [
 #if QT_VERSION < 0x040200
 #error Qt library 4.2 or greater required.
 #endif

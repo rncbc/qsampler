@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -1021,7 +1021,12 @@ void ChannelRoutingModel::refresh ( Device *pDevice,
 	m_pDevice = pDevice;
 	m_routing = routing;
 	// inform the outer world (QTableView) that our data changed
+#if QT_VERSION < 0x050000
 	QAbstractTableModel::reset();
+#else
+	QAbstractTableModel::beginResetModel();
+	QAbstractTableModel::endResetModel();
+#endif
 }
 
 

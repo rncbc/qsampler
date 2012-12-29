@@ -1,7 +1,7 @@
 // qsamplerChannelForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -64,7 +64,9 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 
 	m_ui.AudioRoutingTable->setModel(&m_routingModel);
 	m_ui.AudioRoutingTable->setItemDelegate(&m_routingDelegate);
+#if QT_VERSION < 0x050000
 	m_ui.AudioRoutingTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+#endif
 //	m_ui.AudioRoutingTable->verticalHeader()->hide();
 
 	// This goes initially hidden, and will be shown

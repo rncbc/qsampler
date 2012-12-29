@@ -114,3 +114,6 @@ macx {
 	QMAKE_MAC_SDK = $$(SDKROOT)
 	CONFIG += $$(QMAKE_ARCHS)
 }
+
+# QT5 Support
+QT += widgets

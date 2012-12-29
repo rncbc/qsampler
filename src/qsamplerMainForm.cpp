@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -35,8 +35,10 @@
 #include "qsamplerOptionsForm.h"
 #include "qsamplerDeviceStatusForm.h"
 
+#include <QMdiArea>
+#include <QMdiSubWindow>
+
 #include <QApplication>
-#include <QWorkspace>
 #include <QProcess>
 #include <QMessageBox>
 
@@ -55,6 +57,10 @@
 #include <QLabel>
 #include <QTimer>
 #include <QDateTime>
+
+#if QT_VERSION >= 0x050000
+#include <QMimeData>
+#endif
 
 #if QT_VERSION < 0x040500
 namespace Qt {
@@ -269,12 +275,11 @@ MainForm::MainForm ( QWidget *pParent )
 #endif
 
 	// Make it an MDI workspace.
-	m_pWorkspace = new QWorkspace(this);
-	m_pWorkspace->setScrollBarsEnabled(true);
+	m_pWorkspace = new QMdiArea(this);
 	// Set the activation connection.
 	QObject::connect(m_pWorkspace,
-		SIGNAL(windowActivated(QWidget *)),
-		SLOT(activateStrip(QWidget *)));
+		SIGNAL(subWindowActivated(QMdiSubWindow *)),
+		SLOT(activateStrip(QMdiSubWindow *)));
 	// Make it shine :-)
 	setCentralWidget(m_pWorkspace);
 
@@ -890,9 +895,12 @@ bool MainForm::closeSession ( bool bForce )
 	if (bClose) {
 		// Remove all channel strips from sight...
 		m_pWorkspace->setUpdatesEnabled(false);
-		QWidgetList wlist = m_pWorkspace->windowList();
-		for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-			ChannelStrip *pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
+		QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+		for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+			ChannelStrip *pChannelStrip = NULL;
+			QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+			if (pMdiSubWindow)
+				pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 			if (pChannelStrip) {
 				Channel *pChannel = pChannelStrip->channel();
 				if (bForce && pChannel)
@@ -1189,10 +1197,12 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 #endif	// CONFIG_MIDI_INSTRUMENT
 
 	// Sampler channel mapping.
-	QWidgetList wlist = m_pWorkspace->windowList();
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip
-			= static_cast<ChannelStrip *> (wlist.at(iChannel));
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip) {
 			Channel *pChannel = pChannelStrip->channel();
 			if (pChannel) {
@@ -1506,7 +1516,7 @@ void MainForm::editRemoveChannel (void)
 	if (m_pClient == NULL)
 		return;
 
-	ChannelStrip* pChannelStrip = activeChannelStrip();
+	ChannelStrip *pChannelStrip = activeChannelStrip();
 	if (pChannelStrip == NULL)
 		return;
 
@@ -1550,7 +1560,7 @@ void MainForm::editSetupChannel (void)
 	if (m_pClient == NULL)
 		return;
 
-	ChannelStrip* pChannelStrip = activeChannelStrip();
+	ChannelStrip *pChannelStrip = activeChannelStrip();
 	if (pChannelStrip == NULL)
 		return;
 
@@ -1565,7 +1575,7 @@ void MainForm::editEditChannel (void)
 	if (m_pClient == NULL)
 		return;
 
-	ChannelStrip* pChannelStrip = activeChannelStrip();
+	ChannelStrip *pChannelStrip = activeChannelStrip();
 	if (pChannelStrip == NULL)
 		return;
 
@@ -1580,7 +1590,7 @@ void MainForm::editResetChannel (void)
 	if (m_pClient == NULL)
 		return;
 
-	ChannelStrip* pChannelStrip = activeChannelStrip();
+	ChannelStrip *pChannelStrip = activeChannelStrip();
 	if (pChannelStrip == NULL)
 		return;
 
@@ -1598,9 +1608,12 @@ void MainForm::editResetAllChannels (void)
 	// Invoque the channel strip procedure,
 	// for all channels out there...
 	m_pWorkspace->setUpdatesEnabled(false);
-	QWidgetList wlist = m_pWorkspace->windowList();
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
 			pChannelStrip->channelReset();
 	}
@@ -1703,7 +1716,7 @@ void MainForm::viewOptions (void)
 	OptionsForm* pOptionsForm = new OptionsForm(this);
 	if (pOptionsForm) {
 		// Check out some initial nullities(tm)...
-		ChannelStrip* pChannelStrip = activeChannelStrip();
+		ChannelStrip *pChannelStrip = activeChannelStrip();
 		if (m_pOptions->sDisplayFont.isEmpty() && pChannelStrip)
 			m_pOptions->sDisplayFont = pChannelStrip->displayFont().toString();
 		if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
@@ -1796,28 +1809,33 @@ void MainForm::viewOptions (void)
 void MainForm::channelsArrange (void)
 {
 	// Full width vertical tiling
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
 	int y = 0;
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
-	/*  if (pChannelStrip->testWState(WState_Maximized | WState_Minimized)) {
-			// Prevent flicker...
-			pChannelStrip->hide();
-			pChannelStrip->showNormal();
-		}   */
-		pChannelStrip->adjustSize();
-		int iWidth  = m_pWorkspace->width();
-		if (iWidth < pChannelStrip->width())
-			iWidth = pChannelStrip->width();
-	//  int iHeight = pChannelStrip->height()
-	//		+ pChannelStrip->parentWidget()->baseSize().height();
-		int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
-		pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
-		y += iHeight;
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
+		if (pChannelStrip) {
+		/*  if (pChannelStrip->testWState(WState_Maximized | WState_Minimized)) {
+				// Prevent flicker...
+				pChannelStrip->hide();
+				pChannelStrip->showNormal();
+			}   */
+			pChannelStrip->adjustSize();
+			int iWidth  = m_pWorkspace->width();
+			if (iWidth < pChannelStrip->width())
+				iWidth = pChannelStrip->width();
+		//  int iHeight = pChannelStrip->height()
+		//		+ pChannelStrip->parentWidget()->baseSize().height();
+			int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
+			pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+			y += iHeight;
+		}
 	}
 	m_pWorkspace->setUpdatesEnabled(true);
 
@@ -1962,7 +1980,7 @@ void MainForm::stabilizeForm (void)
 	ChannelStrip *pChannelStrip = activeChannelStrip();
 	bool bHasClient = (m_pOptions != NULL && m_pClient != NULL);
 	bool bHasChannel = (bHasClient && pChannelStrip != NULL);
-	bool bHasChannels = (bHasClient && m_pWorkspace->windowList().count() > 0);
+	bool bHasChannels = (bHasClient && m_pWorkspace->subWindowList().count() > 0);
 	m_ui.fileNewAction->setEnabled(bHasClient);
 	m_ui.fileOpenAction->setEnabled(bHasClient);
 	m_ui.fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
@@ -2058,7 +2076,7 @@ void MainForm::volumeChanged ( int iVolume )
 
 
 // Channel change receiver slot.
-void MainForm::channelStripChanged(ChannelStrip* pChannelStrip)
+void MainForm::channelStripChanged ( ChannelStrip *pChannelStrip )
 {
 	// Add this strip to the changed list...
 	if (!m_changedStrips.contains(pChannelStrip)) {
@@ -2109,7 +2127,9 @@ void MainForm::updateSession (void)
 		m_pDeviceForm->refreshDevices();
 }
 
-void MainForm::updateAllChannelStrips(bool bRemoveDeadStrips) {
+
+void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
+{
 	// Retrieve the current channel list.
 	int *piChannelIDs = ::lscp_list_channels(m_pClient);
 	if (piChannelIDs == NULL) {
@@ -2121,37 +2141,44 @@ void MainForm::updateAllChannelStrips(bool bRemoveDeadStrips) {
 	} else {
 		// Try to (re)create each channel.
 		m_pWorkspace->setUpdatesEnabled(false);
-		for (int iChannel = 0; piChannelIDs[iChannel] >= 0; iChannel++) {
+		for (int iChannel = 0; piChannelIDs[iChannel] >= 0; ++iChannel) {
 			// Check if theres already a channel strip for this one...
 			if (!channelStrip(piChannelIDs[iChannel]))
 				createChannelStrip(new Channel(piChannelIDs[iChannel]));
 		}
-
 		// Do we auto-arrange?
 		if (m_pOptions && m_pOptions->bAutoArrange)
 			channelsArrange();
-
-		stabilizeForm();
-
 		// remove dead channel strips
 		if (bRemoveDeadStrips) {
-			for (int i = 0; channelStripAt(i); ++i) {
-				ChannelStrip* pChannelStrip = channelStripAt(i);
-				bool bExists = false;
-				for (int j = 0; piChannelIDs[j] >= 0; ++j) {
-					if (!pChannelStrip->channel()) break;
-					if (piChannelIDs[j] == pChannelStrip->channel()->channelID()) {
-						// strip exists, don't touch it
-						bExists = true;
-						break;
+			QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+			for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+				ChannelStrip *pChannelStrip = NULL;
+				QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+				if (pMdiSubWindow)
+					pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
+				if (pChannelStrip) {
+					bool bExists = false;
+					for (int j = 0; piChannelIDs[j] >= 0; ++j) {
+						if (!pChannelStrip->channel())
+							break;
+						if (piChannelIDs[j] == pChannelStrip->channel()->channelID()) {
+							// strip exists, don't touch it
+							bExists = true;
+							break;
+						}
 					}
+					if (!bExists)
+						destroyChannelStrip(pChannelStrip);
 				}
-				if (!bExists) destroyChannelStrip(pChannelStrip);
 			}
 		}
 		m_pWorkspace->setUpdatesEnabled(true);
 	}
+
+	stabilizeForm();
 }
+
 
 // Update the recent files list and menu.
 void MainForm::updateRecentFiles ( const QString& sFilename )
@@ -2199,12 +2226,12 @@ void MainForm::updateRecentFilesMenu (void)
 void MainForm::updateInstrumentNames (void)
 {
 	// Full channel list update...
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
 		ChannelStrip *pChannelStrip = (ChannelStrip *) wlist.at(iChannel);
 		if (pChannelStrip)
 			pChannelStrip->updateInstrumentName(true);
@@ -2228,13 +2255,16 @@ void MainForm::updateDisplayFont (void)
 		return;
 
 	// Full channel list update...
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
 			pChannelStrip->setDisplayFont(font);
 	}
@@ -2246,13 +2276,16 @@ void MainForm::updateDisplayFont (void)
 void MainForm::updateDisplayEffect (void)
 {
 	// Full channel list update...
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
 			pChannelStrip->setDisplayEffect(m_pOptions->bDisplayEffect);
 	}
@@ -2274,13 +2307,16 @@ void MainForm::updateMaxVolume (void)
 #endif
 
 	// Full channel list update...
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip = (ChannelStrip*) wlist.at(iChannel);
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
 			pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
 	}
@@ -2388,7 +2424,7 @@ void MainForm::updateMessagesCapture (void)
 // qsamplerMainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
-ChannelStrip* MainForm::createChannelStrip ( Channel *pChannel )
+ChannelStrip *MainForm::createChannelStrip ( Channel *pChannel )
 {
 	if (m_pClient == NULL || pChannel == NULL)
 		return NULL;
@@ -2411,14 +2447,14 @@ ChannelStrip* MainForm::createChannelStrip ( Channel *pChannel )
 	}
 
 	// Add it to workspace...
-	m_pWorkspace->addWindow(pChannelStrip, Qt::FramelessWindowHint);
+	m_pWorkspace->addSubWindow(pChannelStrip, Qt::FramelessWindowHint);
 
 	// Actual channel strip setup...
 	pChannelStrip->setup(pChannel);
 
 	QObject::connect(pChannelStrip,
-		SIGNAL(channelChanged(ChannelStrip*)),
-		SLOT(channelStripChanged(ChannelStrip*)));
+		SIGNAL(channelChanged(ChannelStrip *)),
+		SLOT(channelStripChanged(ChannelStrip *)));
 
 	// Now we show up us to the world.
 	pChannelStrip->show();
@@ -2430,7 +2466,9 @@ ChannelStrip* MainForm::createChannelStrip ( Channel *pChannel )
 	return pChannelStrip;
 }
 
-void MainForm::destroyChannelStrip(ChannelStrip* pChannelStrip) {
+
+void MainForm::destroyChannelStrip ( ChannelStrip *pChannelStrip )
+{
 	// Just delete the channel strip.
 	delete pChannelStrip;
 
@@ -2441,39 +2479,50 @@ void MainForm::destroyChannelStrip(ChannelStrip* pChannelStrip) {
 	stabilizeForm();
 }
 
+
 // Retrieve the active channel strip.
-ChannelStrip* MainForm::activeChannelStrip (void)
+ChannelStrip *MainForm::activeChannelStrip (void)
 {
-	return static_cast<ChannelStrip *> (m_pWorkspace->activeWindow());
+	QMdiSubWindow *pMdiSubWindow = m_pWorkspace->activeSubWindow();
+	if (pMdiSubWindow)
+		return static_cast<ChannelStrip *> (pMdiSubWindow->widget());
+	else
+		return NULL;
 }
 
 
 // Retrieve a channel strip by index.
-ChannelStrip* MainForm::channelStripAt ( int iChannel )
+ChannelStrip *MainForm::channelStripAt ( int iChannel )
 {
 	if (!m_pWorkspace) return NULL;
 
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return NULL;
 
 	if (iChannel < 0 || iChannel >= wlist.size())
 		return NULL;
 
-	return dynamic_cast<ChannelStrip *> (wlist.at(iChannel));
+	QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+	if (pMdiSubWindow)
+		return static_cast<ChannelStrip *> (pMdiSubWindow->widget());
+	else
+		return NULL;
 }
 
 
 // Retrieve a channel strip by sampler channel id.
-ChannelStrip* MainForm::channelStrip ( int iChannelID )
+ChannelStrip *MainForm::channelStrip ( int iChannelID )
 {
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return NULL;
 
-	for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-		ChannelStrip* pChannelStrip
-			= static_cast<ChannelStrip*> (wlist.at(iChannel));
+	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip) {
 			Channel *pChannel = pChannelStrip->channel();
 			if (pChannel && pChannel->channelID() == iChannelID)
@@ -2493,12 +2542,14 @@ void MainForm::channelsMenuAboutToShow (void)
 	m_ui.channelsMenu->addAction(m_ui.channelsArrangeAction);
 	m_ui.channelsMenu->addAction(m_ui.channelsAutoArrangeAction);
 
-	QWidgetList wlist = m_pWorkspace->windowList();
+	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
 	if (!wlist.isEmpty()) {
 		m_ui.channelsMenu->addSeparator();
-		for (int iChannel = 0; iChannel < (int) wlist.count(); iChannel++) {
-			ChannelStrip* pChannelStrip
-				= static_cast<ChannelStrip*> (wlist.at(iChannel));
+		for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+			ChannelStrip *pChannelStrip = NULL;
+			QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+			if (pMdiSubWindow)
+				pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 			if (pChannelStrip) {
 				QAction *pAction = m_ui.channelsMenu->addAction(
 					pChannelStrip->windowTitle(),
@@ -2520,7 +2571,7 @@ void MainForm::channelsMenuActivated (void)
 	if (pAction == NULL)
 		return;
 
-	ChannelStrip* pChannelStrip = channelStripAt(pAction->data().toInt());
+	ChannelStrip *pChannelStrip = channelStripAt(pAction->data().toInt());
 	if (pChannelStrip) {
 		pChannelStrip->showNormal();
 		pChannelStrip->setFocus();
@@ -2581,11 +2632,12 @@ void MainForm::timerSlot (void)
 			if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
 				m_iTimerSlot = 0;
 				// Update the channel stream usage for each strip...
-				QWidgetList wlist = m_pWorkspace->windowList();
-				for (int iChannel = 0;
-						iChannel < (int) wlist.count(); iChannel++) {
-					ChannelStrip* pChannelStrip
-						= (ChannelStrip*) wlist.at(iChannel);
+				QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+				for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+					ChannelStrip *pChannelStrip = NULL;
+					QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+					if (pMdiSubWindow)
+						pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 					if (pChannelStrip && pChannelStrip->isVisible())
 						pChannelStrip->updateChannelUsage();
 				}
@@ -2939,10 +2991,11 @@ void MainForm::stopClient (void)
 
 
 // Channel strip activation/selection.
-void MainForm::activateStrip ( QWidget *pWidget )
+void MainForm::activateStrip ( QMdiSubWindow *pMdiSubWindow )
 {
-	ChannelStrip *pChannelStrip
-		= static_cast<ChannelStrip *> (pWidget);
+	ChannelStrip *pChannelStrip = NULL;
+	if (pMdiSubWindow)
+		pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 	if (pChannelStrip)
 		pChannelStrip->setSelected(true);
 

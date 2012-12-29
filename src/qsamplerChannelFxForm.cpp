@@ -1,8 +1,8 @@
 // qsamplerChannelFxForm.cpp
 //
 /****************************************************************************
+   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -131,7 +131,9 @@ ChannelFxForm::ChannelFxForm (
 	ChannelRoutingDelegate* pRoutingDelegate =
 		new ChannelRoutingDelegate(m_ui.audioRoutingTable);
 	m_ui.audioRoutingTable->setItemDelegate(pRoutingDelegate);
+#if QT_VERSION < 0x050000
 	m_ui.audioRoutingTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+#endif
 //	m_ui.audioRoutingTable->verticalHeader()->hide();
 
 	QAbstractButton* pApplyButton =

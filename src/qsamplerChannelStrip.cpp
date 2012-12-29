@@ -1,7 +1,7 @@
 // qsamplerChannelStrip.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -33,6 +33,9 @@
 #include <QTimer>
 #include <QUrl>
 
+#if QT_VERSION >= 0x050000
+#include <QMimeData>
+#endif
 
 // Channel status/usage usage limit control.
 #define QSAMPLER_ERROR_LIMIT	3
