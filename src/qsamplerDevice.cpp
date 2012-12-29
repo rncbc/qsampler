@@ -1,7 +1,7 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -1018,7 +1018,12 @@ void AbstractDeviceParamModel::refresh (
 	m_pParams   = pParams;
 	m_bEditable = bEditable;
 	// inform the outer world (QTableView) that our data changed
+#if QT_VERSION < 0x050000
 	QAbstractTableModel::reset();
+#else
+	QAbstractTableModel::beginResetModel();
+	QAbstractTableModel::endResetModel();
+#endif
 }
 
 
@@ -1026,7 +1031,12 @@ void AbstractDeviceParamModel::clear (void)
 {
 	m_pParams = NULL;
 	// inform the outer world (QTableView) that our data changed
+#if QT_VERSION < 0x050000
 	QAbstractTableModel::reset();
+#else
+	QAbstractTableModel::beginResetModel();
+	QAbstractTableModel::endResetModel();
+#endif
 }
 
 

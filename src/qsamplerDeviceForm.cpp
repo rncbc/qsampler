@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -60,12 +60,16 @@ DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.DeviceParamTable->setModel(&m_deviceParamModel);
 	m_ui.DeviceParamTable->setItemDelegate(&m_deviceParamDelegate);
+#if QT_VERSION < 0x050000
 	m_ui.DeviceParamTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+#endif
 	m_ui.DeviceParamTable->verticalHeader()->hide();
 
 	m_ui.DevicePortParamTable->setModel(&m_devicePortParamModel);
 	m_ui.DevicePortParamTable->setItemDelegate(&m_devicePortParamDelegate);
+#if QT_VERSION < 0x050000
 	m_ui.DevicePortParamTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+#endif
 	m_ui.DevicePortParamTable->verticalHeader()->hide();
 
 	// Initial contents.

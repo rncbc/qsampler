@@ -1,8 +1,8 @@
 // qsamplerFxSendList.cpp
 //
 /****************************************************************************
+   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -121,7 +121,12 @@ FxSend* FxSendsModel::addFxSend() {
 	fxSend.setName("New FX Send");
 	m_FxSends.push_back(fxSend);
 	QModelIndex index = createIndex(m_FxSends.size() - 1, 0);
+#if QT_VERSION < 0x050000
 	QAbstractListModel::reset();
+#else
+	QAbstractListModel::beginResetModel();
+	QAbstractListModel::endResetModel();
+#endif
 	emit fxSendsDirtyChanged(true);
 	return &m_FxSends.last();
 #else // CONFIG_FXSEND
@@ -140,7 +145,12 @@ void FxSendsModel::removeFxSend(const QModelIndex& index) {
 	FxSend* pFxSend = fxSend(index);
 	if (!pFxSend) return;
 	pFxSend->setDeletion(true);
+#if QT_VERSION < 0x050000
 	QAbstractListModel::reset();
+#else
+	QAbstractListModel::beginResetModel();
+	QAbstractListModel::endResetModel();
+#endif
 	emit fxSendsDirtyChanged(true);
 }
 
@@ -153,7 +163,12 @@ void FxSendsModel::cleanRefresh() {
 		fxSend.getFromSampler();
 		m_FxSends.push_back(fxSend);
 	}
+#if QT_VERSION < 0x050000
 	QAbstractListModel::reset();
+#else
+	QAbstractListModel::beginResetModel();
+	QAbstractListModel::endResetModel();
+#endif
 	emit fxSendsDirtyChanged(false);
 }
 

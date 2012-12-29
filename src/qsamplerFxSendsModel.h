@@ -1,8 +1,8 @@
 // qsamplerFxSendList.h
 //
 /****************************************************************************
+   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
-   Copyright (C) 2010, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -44,9 +44,6 @@ public:
 	QVariant headerData(int section, Qt::Orientation orientation,
 		int role = Qt::DisplayRole) const;
 	Qt::ItemFlags flags(const QModelIndex& index) const;
-
-	// Make the following method public
-	QAbstractListModel::reset;
 
 	// Own methods
 	FxSend* addFxSend();
