@@ -60,14 +60,18 @@ DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 
 	m_ui.DeviceParamTable->setModel(&m_deviceParamModel);
 	m_ui.DeviceParamTable->setItemDelegate(&m_deviceParamDelegate);
-#if QT_VERSION < 0x050000
+#if QT_VERSION >= 0x050000
+	m_ui.DeviceParamTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+#else
 	m_ui.DeviceParamTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
 #endif
 	m_ui.DeviceParamTable->verticalHeader()->hide();
 
 	m_ui.DevicePortParamTable->setModel(&m_devicePortParamModel);
 	m_ui.DevicePortParamTable->setItemDelegate(&m_devicePortParamDelegate);
-#if QT_VERSION < 0x050000
+#if QT_VERSION >= 0x050000
+	m_ui.DevicePortParamTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+#else
 	m_ui.DevicePortParamTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
 #endif
 	m_ui.DevicePortParamTable->verticalHeader()->hide();
