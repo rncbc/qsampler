@@ -66,7 +66,7 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 	m_ui.AudioRoutingTable->setItemDelegate(&m_routingDelegate);
 #if QT_VERSION >= 0x050000
 	m_ui.AudioRoutingTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-else
+#else
 	m_ui.AudioRoutingTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
 #endif
 //	m_ui.AudioRoutingTable->verticalHeader()->hide();
