@@ -115,5 +115,8 @@ macx {
 	CONFIG += $$(QMAKE_ARCHS)
 }
 
-# QT5 Support
-QT += widgets
+
+# QT5 support
+!lessThan(QT_MAJOR_VERSION, 5) {
+	QT += widgets
+}
