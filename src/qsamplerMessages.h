@@ -1,7 +1,7 @@
 // qsamplerMessages.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -74,9 +74,12 @@ public:
 	// History reset.
 	void clear();
 
+#if QT_VERSION < 0x040300
 signals:
 
 	void visibilityChanged(bool bVisible);
+
+#endif
 
 protected:
 
@@ -84,8 +87,12 @@ protected:
 	void appendMessagesLine(const QString& s);
 	void appendMessagesLog(const QString& s);
 
-	// overridden method of QWidget
+#if QT_VERSION < 0x040300
+
+	// Overridden method of QWidget
 	void showEvent(QShowEvent *pEvent);
+
+#endif
 
 protected slots:
 

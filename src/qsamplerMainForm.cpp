@@ -276,6 +276,8 @@ MainForm::MainForm ( QWidget *pParent )
 
 	// Make it an MDI workspace.
 	m_pWorkspace = new QMdiArea(this);
+	m_pWorkspace->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	m_pWorkspace->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	// Set the activation connection.
 	QObject::connect(m_pWorkspace,
 		SIGNAL(subWindowActivated(QMdiSubWindow *)),
@@ -907,6 +909,8 @@ bool MainForm::closeSession ( bool bForce )
 					pChannel->removeChannel();
 				delete pChannelStrip;
 			}
+			if (pMdiSubWindow)
+				delete pMdiSubWindow;
 		}
 		m_pWorkspace->setUpdatesEnabled(true);
 		// We're now clean, for sure.
@@ -1250,13 +1254,13 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 					ts << "SET CHANNEL MUTE " << iChannel << " 1" << endl;
 				if (pChannel->channelSolo())
 					ts << "SET CHANNEL SOLO " << iChannel << " 1" << endl;
-#ifdef CONFIG_MIDI_INSTRUMENT
+			#ifdef CONFIG_MIDI_INSTRUMENT
 				if (pChannel->midiMap() >= 0) {
 					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannel
 						<< " " << midiInstrumentMap[pChannel->midiMap()] << endl;
 				}
-#endif
-#ifdef CONFIG_FXSEND
+			#endif
+			#ifdef CONFIG_FXSEND
 				int iChannelID = pChannel->channelID();
 				int *piFxSends = ::lscp_list_fxsends(m_pClient, iChannelID);
 				for (int iFxSend = 0;
@@ -1280,18 +1284,18 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 								<< " " << iAudioSrc
 								<< " " << piRouting[iAudioSrc] << endl;
 						}
-#ifdef CONFIG_FXSEND_LEVEL
+					#ifdef CONFIG_FXSEND_LEVEL
 						ts << "SET FX_SEND LEVEL " << iChannel
 							<< " " << iFxSend
 							<< " " << pFxSendInfo->level << endl;
-#endif
+					#endif
 					}	// Check for errors...
 					else if (::lscp_client_get_errno(m_pClient)) {
 						appendMessagesClient("lscp_get_fxsend_info");
 						iErrors++;
 					}
 				}
-#endif
+			#endif
 				ts << endl;
 			}
 		}
@@ -1541,16 +1545,11 @@ void MainForm::editRemoveChannel (void)
 	if (!pChannel->removeChannel())
 		return;
 
-	// Just delete the channel strip.
-	delete pChannelStrip;
-
-	// Do we auto-arrange?
-	if (m_pOptions && m_pOptions->bAutoArrange)
-		channelsArrange();
-
 	// We'll be dirty, for sure...
 	m_iDirtyCount++;
-	stabilizeForm();
+
+	// Just delete the channel strip.
+	destroyChannelStrip(pChannelStrip);
 }
 
 
@@ -2447,7 +2446,8 @@ ChannelStrip *MainForm::createChannelStrip ( Channel *pChannel )
 	}
 
 	// Add it to workspace...
-	m_pWorkspace->addSubWindow(pChannelStrip, Qt::FramelessWindowHint);
+	m_pWorkspace->addSubWindow(pChannelStrip,
+		Qt::SubWindow | Qt::FramelessWindowHint);
 
 	// Actual channel strip setup...
 	pChannelStrip->setup(pChannel);
@@ -2469,8 +2469,14 @@ ChannelStrip *MainForm::createChannelStrip ( Channel *pChannel )
 
 void MainForm::destroyChannelStrip ( ChannelStrip *pChannelStrip )
 {
+	QMdiSubWindow *pMdiSubWindow
+		= static_cast<QMdiSubWindow *> (pChannelStrip->parentWidget());
+	if (pMdiSubWindow == NULL)
+		return;
+
 	// Just delete the channel strip.
 	delete pChannelStrip;
+	delete pMdiSubWindow;
 
 	// Do we auto-arrange?
 	if (m_pOptions && m_pOptions->bAutoArrange)
@@ -2689,9 +2695,9 @@ void MainForm::startServer (void)
 
 	// Setup stdout/stderr capture...
 //	if (m_pOptions->bStdoutCapture) {
-#if QT_VERSION >= 0x040200
+	#if QT_VERSION >= 0x040200
 		m_pServer->setProcessChannelMode(QProcess::ForwardedChannels);
-#endif
+	#endif
 		QObject::connect(m_pServer,
 			SIGNAL(readyReadStandardOutput()),
 			SLOT(readServerStdout()));
@@ -2756,13 +2762,13 @@ void MainForm::stopServer (bool bInteractive)
 	if (m_pServer && bForceServerStop) {
 		appendMessages(tr("Server is stopping..."));
 		if (m_pServer->state() == QProcess::Running) {
-#if defined(WIN32)
+		#if defined(WIN32)
 			// Try harder...
 			m_pServer->kill();
-#else
+		#else
 			// Try softly...
 			m_pServer->terminate();
-#endif
+		#endif
 		}
 	}	// Do final processing anyway.
 	else processServerExit();

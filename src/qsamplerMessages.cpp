@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2008, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -111,12 +111,13 @@ Messages::~Messages (void)
 }
 
 
+#if QT_VERSION < 0x040300
 void Messages::showEvent ( QShowEvent *pEvent )
 {
 	QDockWidget::showEvent(pEvent);
 	emit visibilityChanged(isVisible());
 }
-
+#endif
 
 // Own stdout/stderr socket notifier slot.
 void Messages::stdoutNotify ( int fd )
