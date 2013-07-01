@@ -57,46 +57,47 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/32x32/apps/%{name}.png
+%{_datadir}/icons/hicolor/32x32/mimetypes/application-x-%{name}*.png
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svgz
 %{_datadir}/icons/hicolor/scalable/mimetypes/application-x-%{name}*.svgz
 %{_datadir}/locale/%{name}_*.qm
 
 %changelog
-* Mon May 17 2010 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Mon May 17 2010 Rui Nuno Capela <rncbc@rncbc.org>
 - Standard desktop icon fixing. 
-* Sat Aug  1 2009 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Sat Aug  1 2009 Rui Nuno Capela <rncbc@rncbc.org>
 - New 0.2.2 release.
-* Thu Dec 6 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Thu Dec 6 2007 Rui Nuno Capela <rncbc@rncbc.org>
 - Qt4 migration complete.
-* Mon Jun 25 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Mon Jun 25 2007 Rui Nuno Capela <rncbc@rncbc.org>
 - Application icon is now installed to (prefix)/share/pixmaps.
 - Declared fundamental build and run-time requirements.
 - Destination install directory prefix is now in spec.
 - Spec is now a bit more openSUSE compliant.
-* Mon Jan 15 2007 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Mon Jan 15 2007 Rui Nuno Capela <rncbc@rncbc.org>
 - Added sampler channel FX send support at session save code-level.
 - Global sampler volume slider/spinbox combo is now featured.
-* Thu Dec 17 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Thu Dec 17 2006 Rui Nuno Capela <rncbc@rncbc.org>
 - Added preliminary MIDI instrument mapping support.
-* Thu Jun 01 2006 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Thu Jun 01 2006 Rui Nuno Capela <rncbc@rncbc.org>
 - Take a chance for a new 0.1.3 release.
 - Changed deprecated copyright attribute to license.
-* Wed Aug 24 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Wed Aug 24 2005 Rui Nuno Capela <rncbc@rncbc.org>
 - Prepared auto-generation from configure.
-* Tue Aug 16 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Tue Aug 16 2005 Rui Nuno Capela <rncbc@rncbc.org>
 - Get in sync with latest offerings from liblscp (0.3.1) and
   specially libgig (2.0.2) which broke previous ABI, somewhat.
-* Thu Jun 23 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Thu Jun 23 2005 Rui Nuno Capela <rncbc@rncbc.org>
 - Even minor workings needs a rest.
-* Mon Jun 13 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Mon Jun 13 2005 Rui Nuno Capela <rncbc@rncbc.org>
 - The mantra of bugfixes.
-* Mon May 23 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Mon May 23 2005 Rui Nuno Capela <rncbc@rncbc.org>
 - Device configuration breakthrough.
-* Fri Mar 4 2005 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Fri Mar 4 2005 Rui Nuno Capela <rncbc@rncbc.org>
 - Fifth alpha-release.
-* Wed Nov 16 2004 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Wed Nov 16 2004 Rui Nuno Capela <rncbc@rncbc.org>
 - Prepared for the fourth alpha release.
-* Wed Nov 16 2004 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Wed Nov 16 2004 Rui Nuno Capela <rncbc@rncbc.org>
 - Prepared for the fourth alpha release.
-* Wed Jun 2 2004 Rui Nuno Capela <rncbc@users.sourceforge.net>
+* Wed Jun 2 2004 Rui Nuno Capela <rncbc@rncbc.org>
 - Created initial qsampler.spec
