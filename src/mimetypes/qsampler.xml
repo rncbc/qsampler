@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-qsampler-session">
+    <sub-class-of type="text/xml"/>
+    <comment>Qsampler session (LSCP)</comment>
+    <glob pattern="*.lscp"/>
+  </mime-type>
+</mime-info>
