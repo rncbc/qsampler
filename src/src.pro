@@ -1,6 +1,6 @@
 # qsampler.pro
 #
-NAME = qtractor
+NAME = qsampler
 
 TARGET = $${NAME}
 TEMPLATE = app
