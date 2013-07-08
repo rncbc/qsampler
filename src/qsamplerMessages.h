@@ -74,25 +74,11 @@ public:
 	// History reset.
 	void clear();
 
-#if QT_VERSION < 0x040300
-signals:
-
-	void visibilityChanged(bool bVisible);
-
-#endif
-
 protected:
 
 	// Message executives.
 	void appendMessagesLine(const QString& s);
 	void appendMessagesLog(const QString& s);
-
-#if QT_VERSION < 0x040300
-
-	// Overridden method of QWidget
-	void showEvent(QShowEvent *pEvent);
-
-#endif
 
 protected slots:
 

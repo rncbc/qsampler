@@ -65,9 +65,6 @@
 #if QT_VERSION < 0x040500
 namespace Qt {
 const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
-#if QT_VERSION < 0x040200
-const WindowFlags CustomizeWindowHint   = WindowFlags(0x02000000);
-#endif
 }
 #endif
 
@@ -2695,9 +2692,7 @@ void MainForm::startServer (void)
 
 	// Setup stdout/stderr capture...
 //	if (m_pOptions->bStdoutCapture) {
-	#if QT_VERSION >= 0x040200
 		m_pServer->setProcessChannelMode(QProcess::ForwardedChannels);
-	#endif
 		QObject::connect(m_pServer,
 			SIGNAL(readyReadStandardOutput()),
 			SLOT(readServerStdout()));
