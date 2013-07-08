@@ -1,7 +1,7 @@
 // qsamplerChannelFxForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -14,9 +14,9 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU General Public License along
+   with this program; if not, write to the Free Software Foundation, Inc.,
+   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 *****************************************************************************/
 
@@ -118,9 +118,7 @@ ChannelFxForm::ChannelFxForm (
 	FxSendsModel* pModel =
 		new FxSendsModel(m_pSamplerChannel->channelID(), m_ui.SendsListView);
 	m_ui.SendsListView->setModel(pModel);
-#if QT_VERSION >= 0x040300
 	m_ui.SendsListView->setSelectionRectVisible(true);
-#endif
 
 	const int iRowHeight = m_ui.audioRoutingTable->fontMetrics().height() + 4;
 	m_ui.audioRoutingTable->verticalHeader()->setDefaultSectionSize(iRowHeight);

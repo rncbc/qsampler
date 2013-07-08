@@ -111,14 +111,6 @@ Messages::~Messages (void)
 }
 
 
-#if QT_VERSION < 0x040300
-void Messages::showEvent ( QShowEvent *pEvent )
-{
-	QDockWidget::showEvent(pEvent);
-	emit visibilityChanged(isVisible());
-}
-#endif
-
 // Own stdout/stderr socket notifier slot.
 void Messages::stdoutNotify ( int fd )
 {

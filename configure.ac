@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.2.39, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.2.40, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -87,9 +87,9 @@ for X in $ac_with_paths; do
   if test -d $X/bin; then
     ac_path="$X/bin:$ac_path"
   fi
-  if test -x $X/qmake; then
-    ac_path="$X:$ac_path"
-  fi
+# if test -x $X/qmake; then
+#   ac_path="$X:$ac_path"
+# fi
   if test -d $X/include; then
     for Y in qt qt4; do
       if test -d $X/include/$Y; then
@@ -113,14 +113,14 @@ for X in $ac_with_paths; do
 done
 
 # Check for proper Qt version.
-AC_CACHE_CHECK([for Qt library version >= 4.2],
+AC_CACHE_CHECK([for Qt library version >= 4.4],
   ac_cv_qtversion, [
   AC_TRY_LINK([#include "QtCore/qglobal.h"], [
-#if QT_VERSION < 0x040200
-#error Qt library 4.2 or greater required.
+#if QT_VERSION < 0x040400
+#error Qt library 4.4 or greater required.
 #endif
     ], ac_cv_qtversion="yes", [
-      echo "no; Qt 4.2 or greater is required"
+      echo "no; Qt 4.4 or greater is required"
       exit
     ])
 ])

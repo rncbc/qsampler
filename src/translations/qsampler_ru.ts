@@ -135,7 +135,7 @@ Sorry.</source>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="466"/>
-        <location filename="../qsamplerMainForm.cpp" line="2064"/>
+        <location filename="../qsamplerMainForm.cpp" line="2061"/>
         <source>Volume: %1.</source>
         <translation>Громкость: %1.</translation>
     </message>
@@ -534,7 +534,7 @@ Are you sure?</source>
 <context>
     <name>QSampler::DeviceStatusForm</name>
     <message>
-        <location filename="../qsamplerDeviceStatusForm.cpp" line="128"/>
+        <location filename="../qsamplerDeviceStatusForm.cpp" line="125"/>
         <source>%1 Status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -702,65 +702,65 @@ Sorry.</source>
 <context>
     <name>QSampler::MainForm</name>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="243"/>
+        <location filename="../qsamplerMainForm.cpp" line="240"/>
         <source>Master volume</source>
         <translation>Общая громкость</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="291"/>
-        <location filename="../qsamplerMainForm.cpp" line="2022"/>
+        <location filename="../qsamplerMainForm.cpp" line="288"/>
+        <location filename="../qsamplerMainForm.cpp" line="2019"/>
         <source>Connected</source>
         <translation>Установлено соединение с</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="307"/>
-        <location filename="../qsamplerMainForm.cpp" line="2036"/>
+        <location filename="../qsamplerMainForm.cpp" line="304"/>
+        <location filename="../qsamplerMainForm.cpp" line="2033"/>
         <source>MOD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="518"/>
+        <location filename="../qsamplerMainForm.cpp" line="515"/>
         <source>Ready</source>
         <translation>Готов</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="769"/>
+        <location filename="../qsamplerMainForm.cpp" line="766"/>
         <source>Untitled</source>
         <translation>Без названия</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="792"/>
+        <location filename="../qsamplerMainForm.cpp" line="789"/>
         <source>New session: &quot;%1&quot;.</source>
         <translation>Новый сеанс: &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="807"/>
+        <location filename="../qsamplerMainForm.cpp" line="804"/>
         <source>Open Session</source>
         <translation>Открыть сеанс</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="809"/>
-        <location filename="../qsamplerMainForm.cpp" line="842"/>
+        <location filename="../qsamplerMainForm.cpp" line="806"/>
+        <location filename="../qsamplerMainForm.cpp" line="839"/>
         <source>LSCP Session files</source>
         <translation>Файлы сеансов LSCP</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="840"/>
+        <location filename="../qsamplerMainForm.cpp" line="837"/>
         <source>Save Session</source>
         <translation>Сохранить сеанс</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="853"/>
-        <location filename="../qsamplerMainForm.cpp" line="877"/>
-        <location filename="../qsamplerMainForm.cpp" line="1410"/>
-        <location filename="../qsamplerMainForm.cpp" line="1452"/>
-        <location filename="../qsamplerMainForm.cpp" line="1534"/>
-        <location filename="../qsamplerMainForm.cpp" line="2675"/>
+        <location filename="../qsamplerMainForm.cpp" line="850"/>
+        <location filename="../qsamplerMainForm.cpp" line="874"/>
+        <location filename="../qsamplerMainForm.cpp" line="1407"/>
+        <location filename="../qsamplerMainForm.cpp" line="1449"/>
+        <location filename="../qsamplerMainForm.cpp" line="1531"/>
+        <location filename="../qsamplerMainForm.cpp" line="2672"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="854"/>
+        <location filename="../qsamplerMainForm.cpp" line="851"/>
         <source>The file already exists:
 
 &quot;%1&quot;
@@ -781,7 +781,7 @@ Do you want to replace it?</source>
         <translation type="obsolete">Отменить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="878"/>
+        <location filename="../qsamplerMainForm.cpp" line="875"/>
         <source>The current session has been changed:
 
 &quot;%1&quot;
@@ -802,8 +802,8 @@ Do you want to save the changes?</source>
         <translation type="obsolete">Отказаться</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="934"/>
-        <location filename="../qsamplerMainForm.cpp" line="1016"/>
+        <location filename="../qsamplerMainForm.cpp" line="931"/>
+        <location filename="../qsamplerMainForm.cpp" line="1013"/>
         <source>Could not open &quot;%1&quot; session file.
 
 Sorry.</source>
@@ -812,7 +812,7 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="980"/>
+        <location filename="../qsamplerMainForm.cpp" line="977"/>
         <source>Session loaded with errors
 from &quot;%1&quot;.
 
@@ -823,55 +823,55 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="992"/>
+        <location filename="../qsamplerMainForm.cpp" line="989"/>
         <source>Open session: &quot;%1&quot;.</source>
         <translation>Открыть сеанс: &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1028"/>
-        <location filename="../qsamplerMainForm.cpp" line="1877"/>
+        <location filename="../qsamplerMainForm.cpp" line="1025"/>
+        <location filename="../qsamplerMainForm.cpp" line="1874"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1030"/>
-        <location filename="../qsamplerMainForm.cpp" line="1878"/>
+        <location filename="../qsamplerMainForm.cpp" line="1027"/>
+        <location filename="../qsamplerMainForm.cpp" line="1875"/>
         <source>Build</source>
         <translation>Сборка</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1033"/>
+        <location filename="../qsamplerMainForm.cpp" line="1030"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1035"/>
+        <location filename="../qsamplerMainForm.cpp" line="1032"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1055"/>
-        <location filename="../qsamplerMainForm.cpp" line="1097"/>
+        <location filename="../qsamplerMainForm.cpp" line="1052"/>
+        <location filename="../qsamplerMainForm.cpp" line="1094"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1140"/>
+        <location filename="../qsamplerMainForm.cpp" line="1137"/>
         <source>MIDI instrument map</source>
         <translation>Карта инструментов MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1213"/>
+        <location filename="../qsamplerMainForm.cpp" line="1210"/>
         <source>Channel</source>
         <translation>Канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1307"/>
+        <location filename="../qsamplerMainForm.cpp" line="1304"/>
         <source>Global volume level</source>
         <translation>Общий уровень громкости</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1321"/>
+        <location filename="../qsamplerMainForm.cpp" line="1318"/>
         <source>Some settings could not be saved
 to &quot;%1&quot; session file.
 
@@ -882,12 +882,12 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1334"/>
+        <location filename="../qsamplerMainForm.cpp" line="1331"/>
         <source>Save session: &quot;%1&quot;.</source>
         <translation>Сохранить сеанс: &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1411"/>
+        <location filename="../qsamplerMainForm.cpp" line="1408"/>
         <source>Resetting the sampler instance will close
 all device and channel configurations.
 
@@ -908,7 +908,7 @@ Do you want to reset the sampler engine now?</source>
         <translation type="obsolete">Сбросить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1428"/>
+        <location filename="../qsamplerMainForm.cpp" line="1425"/>
         <source>Could not reset sampler instance.
 
 Sorry.</source>
@@ -917,12 +917,12 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1433"/>
+        <location filename="../qsamplerMainForm.cpp" line="1430"/>
         <source>Sampler reset.</source>
         <translation>Перезагрузка сэмплера.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1453"/>
+        <location filename="../qsamplerMainForm.cpp" line="1450"/>
         <source>New settings will be effective after
 restarting the client/server connection.
 
@@ -943,7 +943,7 @@ Do you want to restart the connection now?</source>
         <translation type="obsolete">Перезапустить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1535"/>
+        <location filename="../qsamplerMainForm.cpp" line="1532"/>
         <source>About to remove channel:
 
 %1
@@ -960,119 +960,119 @@ Are you sure?</source>
         <translation type="obsolete">OK</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="690"/>
+        <location filename="../qsamplerMainForm.cpp" line="687"/>
         <source>LSCP Event: %1 data: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1754"/>
+        <location filename="../qsamplerMainForm.cpp" line="1751"/>
         <source>Information</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1755"/>
+        <location filename="../qsamplerMainForm.cpp" line="1752"/>
         <source>Some settings may be only effective
 next time you start this program.</source>
         <translation>Некоторые новые параметры возымеют силу
 только при следующем запуске программы.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1881"/>
+        <location filename="../qsamplerMainForm.cpp" line="1878"/>
         <source>Debugging option enabled.</source>
         <translation>Функция отладки включена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1886"/>
+        <location filename="../qsamplerMainForm.cpp" line="1883"/>
         <source>GIG (libgig) file support disabled.</source>
         <translation>Поддержка сэмплов GIG (libgig) отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1891"/>
+        <location filename="../qsamplerMainForm.cpp" line="1888"/>
         <source>LSCP (liblscp) instrument_name support disabled.</source>
         <translation>Поддержка функции instrument_name в LSCP (liblscp) отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1896"/>
+        <location filename="../qsamplerMainForm.cpp" line="1893"/>
         <source>Sampler channel Mute/Solo support disabled.</source>
         <translation>Поддержка приглушения/солирования канала отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1901"/>
+        <location filename="../qsamplerMainForm.cpp" line="1898"/>
         <source>LSCP (liblscp) audio_routing support disabled.</source>
         <translation>Поддержка функции audio_routing в LSCP (liblscp) отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1906"/>
+        <location filename="../qsamplerMainForm.cpp" line="1903"/>
         <source>Sampler channel Effect Sends support disabled.</source>
         <translation>Поддержка поканального посыла эффектов отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1911"/>
+        <location filename="../qsamplerMainForm.cpp" line="1908"/>
         <source>Global volume support disabled.</source>
         <translation>Поддержка общего регулятора громкости отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1916"/>
+        <location filename="../qsamplerMainForm.cpp" line="1913"/>
         <source>MIDI instrument mapping support disabled.</source>
         <translation>Поддержка свызывания инструментов MIDI отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1921"/>
+        <location filename="../qsamplerMainForm.cpp" line="1918"/>
         <source>Instrument editing support disabled.</source>
         <translation>Функция редактирования инструментов отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1926"/>
+        <location filename="../qsamplerMainForm.cpp" line="1923"/>
         <source>Channel MIDI event support disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1931"/>
+        <location filename="../qsamplerMainForm.cpp" line="1928"/>
         <source>Device MIDI event support disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1936"/>
+        <location filename="../qsamplerMainForm.cpp" line="1933"/>
         <source>Runtime max. voices / disk streams support disabled.</source>
         <translation>Поддержка ограничения числа голосов/дисковых потоков отключена.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1940"/>
+        <location filename="../qsamplerMainForm.cpp" line="1937"/>
         <source>Using</source>
         <translation>Использует</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1952"/>
+        <location filename="../qsamplerMainForm.cpp" line="1949"/>
         <source>Website</source>
         <translation>Сайт</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1958"/>
+        <location filename="../qsamplerMainForm.cpp" line="1955"/>
         <source>This program is free software; you can redistribute it and/or modify it</source>
         <translation>Эта программа является свободной; вы можете распространять и/или</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1959"/>
+        <location filename="../qsamplerMainForm.cpp" line="1956"/>
         <source>under the terms of the GNU General Public License version 2 or later.</source>
         <translation> изменять ее на условиях GNU GPL версии 2  или новее.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1963"/>
+        <location filename="../qsamplerMainForm.cpp" line="1960"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2110"/>
+        <location filename="../qsamplerMainForm.cpp" line="2107"/>
         <source>Chromatic</source>
         <translation>Хроматическая</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2112"/>
+        <location filename="../qsamplerMainForm.cpp" line="2109"/>
         <source>Drum Kits</source>
         <translation>Перкуссия</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2138"/>
+        <location filename="../qsamplerMainForm.cpp" line="2135"/>
         <source>Could not get current list of channels.
 
 Sorry.</source>
@@ -1081,12 +1081,12 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2363"/>
+        <location filename="../qsamplerMainForm.cpp" line="2360"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2676"/>
+        <location filename="../qsamplerMainForm.cpp" line="2673"/>
         <source>Could not start the LinuxSampler server.
 
 Maybe it is already started.</source>
@@ -1103,12 +1103,12 @@ Maybe it is already started.</source>
         <translation type="obsolete">Убить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2719"/>
+        <location filename="../qsamplerMainForm.cpp" line="2714"/>
         <source>Server is starting...</source>
         <translation>Запускается сервер...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2725"/>
+        <location filename="../qsamplerMainForm.cpp" line="2720"/>
         <source>Could not start server.
 
 Sorry.</source>
@@ -1117,12 +1117,12 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2732"/>
+        <location filename="../qsamplerMainForm.cpp" line="2727"/>
         <source>Server was started with PID=%1.</source>
         <translation>Сервер запущен с PID=%1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2749"/>
+        <location filename="../qsamplerMainForm.cpp" line="2744"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Что делать с движком</translation>
     </message>
@@ -1143,27 +1143,27 @@ QSampler вы сможете изменить параметры сеанса.
 его работающим в фоновом режиме?</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2763"/>
+        <location filename="../qsamplerMainForm.cpp" line="2758"/>
         <source>Server is stopping...</source>
         <translation>Останавливается сервер...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2804"/>
+        <location filename="../qsamplerMainForm.cpp" line="2799"/>
         <source>Server is being forced...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2815"/>
+        <location filename="../qsamplerMainForm.cpp" line="2810"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Сервер был остановлен со статусом выхода %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2859"/>
+        <location filename="../qsamplerMainForm.cpp" line="2854"/>
         <source>Client connecting...</source>
         <translation>Устанавливается соединения клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2871"/>
+        <location filename="../qsamplerMainForm.cpp" line="2866"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1172,27 +1172,27 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2882"/>
+        <location filename="../qsamplerMainForm.cpp" line="2877"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2921"/>
+        <location filename="../qsamplerMainForm.cpp" line="2916"/>
         <source>Client connected.</source>
         <translation>Клиент соединился.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2954"/>
+        <location filename="../qsamplerMainForm.cpp" line="2949"/>
         <source>Client disconnecting...</source>
         <translation>Выполняется отсоединение клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2992"/>
+        <location filename="../qsamplerMainForm.cpp" line="2987"/>
         <source>Client disconnected.</source>
         <translation>Клиент отсоединен.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2750"/>
+        <location filename="../qsamplerMainForm.cpp" line="2745"/>
         <source>You have the option to keep the sampler backend (LinuxSampler)
 running in the background. The sampler would continue to work
 according to your current sampler session and you could alter the
@@ -1210,12 +1210,12 @@ Do you want LinuxSampler to stop?</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="236"/>
+        <location filename="../qsamplerMessages.cpp" line="228"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Ведение журнала остановлено --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="246"/>
+        <location filename="../qsamplerMessages.cpp" line="238"/>
         <source>Logging started --- %1 ---</source>
         <translation>Ведение журнала начато --- %1 ---</translation>
     </message>

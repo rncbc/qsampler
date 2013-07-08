@@ -28,13 +28,9 @@
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QLocale>
+
 #if defined(__APPLE__)  // Toshi Nagata 20080105
 #include <QDir>
-#endif
-
-#if QT_VERSION < 0x040300
-#define lighter(x)	light(x)
-#define darker(x)	dark(x)
 #endif
 
 #define CONFIG_QUOTE1(x) #x

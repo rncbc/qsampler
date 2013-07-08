@@ -16,7 +16,7 @@ URL:		http://qsampler.sourceforge.net/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-BuildRequires:	libqt4-devel >= 4.2
+BuildRequires:	libqt4-devel >= 4.4
 BuildRequires:	liblscp-devel >= 0.5.6
 BuildRequires:	libgig-devel >= 3.3.0
 
