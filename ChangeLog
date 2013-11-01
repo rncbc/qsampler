@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+* More preparations for Qt5 configure build.
+
 * Standard scalable format (SVG) and MIME type icons support for
   session files (*.lscp) is now being added.
 
