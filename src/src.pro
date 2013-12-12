@@ -103,7 +103,7 @@ unix {
 	icon.files += images/$${NAME}.png
 
 	icon_scalable.path = $${DATADIR}/icons/hicolor/scalable/apps
-	icon_scalable.files += images/$${NAME}.svgz
+	icon_scalable.files += images/$${NAME}.svg
 
 	mimeinfo.path = $${DATADIR}/mime/packages
 	mimeinfo.files += mimetypes/$${NAME}.xml
@@ -112,7 +112,7 @@ unix {
 	mimetypes.files += mimetypes/application-x-$${NAME}-session.png
 
 	mimetypes_scalable.path = $${DATADIR}/icons/hicolor/scalable/mimetypes
-	mimetypes_scalable.files += mimetypes/application-x-$${NAME}-session.svgz
+	mimetypes_scalable.files += mimetypes/application-x-$${NAME}-session.svg
 }
 
 win32 {
