@@ -2,13 +2,14 @@ Source: qsampler
 Section: sound
 Priority: optional
 Maintainer: Matt Flax <flatmax@pgb.unsw.edu.au>
-Build-Depends: debhelper (>= 5), libqt4-dev (>= 4.4), liblscp-dev, libgig-dev, libx11-dev, x11proto-core-dev
+Build-Depends: debhelper (>= 5), libqt4-dev (>= 4.4), liblscp-dev, libgig-dev,
+  libx11-dev, x11proto-core-dev
 Standards-Version: 3.6.1
 
 Package: qsampler
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: LinuxSampler GUI frontend based on the Qt toolkit
- QSampler is a LinuxSampler GUI front-end application written in C++ around
- the Qt4 toolkit using Qt Designer. At the moment it just wraps as a client
- reference interface for the LinuxSampler Control Protocol (LSCP).
+  QSampler is a LinuxSampler GUI front-end application written in C++ around
+  the Qt4 toolkit using Qt Designer. At the moment it just wraps as a client
+  reference interface for the LinuxSampler Control Protocol (LSCP).

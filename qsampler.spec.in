@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 14
+%define release 15
 
 %define _prefix	@ac_prefix@
 
@@ -63,9 +63,11 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %{_datadir}/locale/%{name}_*.qm
 
 %changelog
+* Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.2.3
+- A fifth of a Jubilee release.
 * Mon May 17 2010 Rui Nuno Capela <rncbc@rncbc.org>
 - Standard desktop icon fixing. 
-* Sat Aug  1 2009 Rui Nuno Capela <rncbc@rncbc.org>
+* Sat Aug  1 2009 Rui Nuno Capela <rncbc@rncbc.org> 0.2.2
 - New 0.2.2 release.
 * Thu Dec 6 2007 Rui Nuno Capela <rncbc@rncbc.org>
 - Qt4 migration complete.

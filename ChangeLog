@@ -3,7 +3,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-SVN TRUNK
+0.2.3  2013-12-31  A fifth of a Jubilee.
 
 * More preparations for Qt5 configure build.
 
@@ -35,7 +35,7 @@ SVN TRUNK
   Debian 6.
 
 * Moving from old deprecated Qt3'ish custom event post handling
-  into regular asynchronous signal/slot strategy. (EXPERIMENTAL)
+  into regular asynchronous signal/slot strategy.
 
 * Sampler channel and instrument file requester support for
   other than GIG engine instrument files (*gig; *.dls) has
