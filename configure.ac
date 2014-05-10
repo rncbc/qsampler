@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.3.1, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.3.2, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -78,6 +78,12 @@ AC_ARG_WITH(liblscp,
 AC_ARG_WITH(libgig,
   AC_HELP_STRING([--with-libgig=PATH], [use alternate libgig install path]),
   [ac_with_paths="$ac_with_paths $withval"])
+
+
+# Honor user specified flags.
+ac_cflags=$CFLAGS
+ac_ldflags=$LDFLAGS
+
 
 # Checks for programs.
 AC_PROG_CC
@@ -387,6 +393,8 @@ fi
 
 AC_SUBST(ac_libs)
 AC_SUBST(ac_incpath)
+AC_SUBST(ac_cflags)
+AC_SUBST(ac_ldflags)
 
 # Checks for header files.
 AC_HEADER_STDC

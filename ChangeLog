@@ -5,6 +5,8 @@ ChangeLog
 
 0.2.3  2013-12-31  A fifth of a Jubilee.
 
+* Allow the build system to include an user specified LDFLAGS.
+
 * More preparations for Qt5 configure build.
 
 * Standard scalable format (SVG) and MIME type icons support for
