@@ -1,7 +1,7 @@
 // qsamplerChannel.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -156,6 +156,7 @@ public:
 
 	// Check whether a given file is an instrument file.
 	static bool isDlsInstrumentFile (const QString& sInstrumentFile);
+	static bool isSf2InstrumentFile (const QString& sInstrumentFile);
 
 	// Retrieve the available instrument name(s) of an instrument file (.gig).
 	static QString getInstrumentName (const QString& sInstrumentFile,
