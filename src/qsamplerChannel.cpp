@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -32,11 +32,12 @@
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
+#include "SF.h"
 #endif
 
 namespace QSampler {
 
-#define QSAMPLER_INSTRUMENT_MAX 100
+#define QSAMPLER_INSTRUMENT_MAX 128
 
 #define UNICODE_RIGHT_ARROW	QChar(char(0x92), char(0x21))
 
@@ -822,15 +823,40 @@ bool Channel::isDlsInstrumentFile ( const QString& sInstrumentFile )
 }
 
 
+// FIXME: Check whether a given file is an instrument file (SF2 only).
+bool Channel::isSf2InstrumentFile ( const QString& sInstrumentFile )
+{
+	bool bResult = false;
+
+	QFile file(sInstrumentFile);
+	if (file.open(QIODevice::ReadOnly)) {
+		char achHeader[8];
+		if (file.read(achHeader, 8) > 0) {
+			bResult = (::memcmp(&achHeader[0], "RIFF", 4) == 0
+					&& ::memcmp(&achHeader[4], "sfbk", 4) == 0);
+		}
+		file.close();
+	}
+
+	return bResult;
+}
+
+
 // Retrieve the instrument list of a instrument file (.gig).
-QStringList Channel::getInstrumentList( const QString& sInstrumentFile,
-	bool bInstrumentNames )
+QStringList Channel::getInstrumentList(
+	const QString& sInstrumentFile,	bool bInstrumentNames )
 {
 	QStringList instlist;
 
-	if (isDlsInstrumentFile(sInstrumentFile)) {
-	#ifdef CONFIG_LIBGIG
-		if (bInstrumentNames) {
+	const QFileInfo fi(sInstrumentFile);
+	if (!fi.exists()) {
+		instlist.append(noInstrumentName());
+		return instlist;
+	}
+
+#ifdef CONFIG_LIBGIG
+	if (bInstrumentNames) {
+		if (isDlsInstrumentFile(sInstrumentFile)) {
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File  *pGig  = new gig::File(pRiff);
@@ -846,20 +872,32 @@ QStringList Channel::getInstrumentList( const QString& sInstrumentFile,
 			delete pGig;
 			delete pRiff;
 		}
-	#endif
+		else
+		if (isSf2InstrumentFile(sInstrumentFile)) {
+			RIFF::File *pRiff
+				= new RIFF::File(sInstrumentFile.toUtf8().constData());
+			sf2::File *pSf2 = new sf2::File(pRiff);
+			const int iPresetCount = pSf2->GetPresetCount();
+			for (int iIndex = 0; iIndex < iPresetCount; ++iIndex) {
+				sf2::Preset *pPreset = pSf2->GetPreset(iIndex);
+				if (pPreset) {
+					instlist.append(pPreset->Name.c_str());
+				} else {
+					instlist.append(fi.fileName()
+						+ " [" + QString::number(iIndex) + "]");
+				}
+			}
+			delete pSf2;
+			delete pRiff;
+		}
 	}
+#endif
 
 	if (instlist.isEmpty()) {
-		QFileInfo fi(sInstrumentFile);
-		if (fi.exists()) {
-			QString sInstrumentName = fi.fileName();
-			int iInstrumentNr = 0;
-			while (iInstrumentNr < QSAMPLER_INSTRUMENT_MAX) {
-				instlist.append(sInstrumentName
-					+ " [" + QString::number(++iInstrumentNr) + "]");
-			}
+		for (int iIndex = 0; iIndex < QSAMPLER_INSTRUMENT_MAX; ++iIndex) {
+			instlist.append(fi.fileName()
+				+ " [" + QString::number(iIndex) + "]");
 		}
-		else instlist.append(noInstrumentName());
 	}
 
 	return instlist;
@@ -867,14 +905,18 @@ QStringList Channel::getInstrumentList( const QString& sInstrumentFile,
 
 
 // Retrieve the spacific instrument name of a instrument file (.gig), given its index.
-QString Channel::getInstrumentName( const QString& sInstrumentFile,
-	int iInstrumentNr, bool bInstrumentNames )
+QString Channel::getInstrumentName (
+	const QString& sInstrumentFile, int iInstrumentNr, bool bInstrumentNames )
 {
+	const QFileInfo fi(sInstrumentFile);
+	if (!fi.exists())
+		return noInstrumentName();
+
 	QString sInstrumentName;
 
-	if (isDlsInstrumentFile(sInstrumentFile)) {
-	#ifdef CONFIG_LIBGIG
-		if (bInstrumentNames) {
+#ifdef CONFIG_LIBGIG
+	if (bInstrumentNames) {
+		if (isDlsInstrumentFile(sInstrumentFile)) {
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File *pGig = new gig::File(pRiff);
@@ -895,16 +937,23 @@ QString Channel::getInstrumentName( const QString& sInstrumentFile,
 			delete pGig;
 			delete pRiff;
 		}
-	#endif
+		else
+		if (isSf2InstrumentFile(sInstrumentFile)) {
+			RIFF::File *pRiff
+				= new RIFF::File(sInstrumentFile.toUtf8().constData());
+			sf2::File *pSf2 = new sf2::File(pRiff);
+			sf2::Preset *pPreset = pSf2->GetPreset(iInstrumentNr);
+			if (pPreset)
+				sInstrumentName = pPreset->Name.c_str();
+			delete pSf2;
+			delete pRiff;
+		}
 	}
+#endif
 
 	if (sInstrumentName.isEmpty()) {
-		QFileInfo fi(sInstrumentFile);
-		if (fi.exists()) {
-			sInstrumentName  = fi.fileName();
-			sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
-		}
-		else sInstrumentName = noInstrumentName();
+		sInstrumentName  = fi.fileName();
+		sInstrumentName += " [" + QString::number(iInstrumentNr) + "]";
 	}
 
 	return sInstrumentName;
