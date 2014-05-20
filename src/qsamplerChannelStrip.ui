@@ -1,9 +1,10 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, 2008 Christian Schoenebeck
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -21,211 +22,216 @@
 
 </comment>
  <class>qsamplerChannelStrip</class>
- <widget class="QWidget" name="qsamplerChannelStrip" >
-  <property name="geometry" >
+ <widget class="QWidget" name="qsamplerChannelStrip">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>815</width>
-    <height>52</height>
+    <height>61</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Minimum" hsizetype="Expanding" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="focusPolicy" >
+  <property name="focusPolicy">
    <enum>Qt::StrongFocus</enum>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Qsampler: Channel</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="qsampler.qrc" >:/images/qsamplerChannel.png</iconset>
+  <property name="windowIcon">
+   <iconset resource="qsampler.qrc">
+    <normaloff>:/images/qsamplerChannel.png</normaloff>:/images/qsamplerChannel.png</iconset>
   </property>
-  <layout class="QHBoxLayout" >
-   <property name="spacing" >
+  <layout class="QHBoxLayout">
+   <property name="spacing">
     <number>4</number>
    </property>
-   <property name="margin" >
+   <property name="margin">
     <number>4</number>
    </property>
    <item>
-    <widget class="QPushButton" name="ChannelSetupPushButton" >
-     <property name="minimumSize" >
+    <widget class="QPushButton" name="ChannelSetupPushButton">
+     <property name="minimumSize">
       <size>
        <width>100</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>120</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Channel setup</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>&amp;Channel</string>
      </property>
-     <property name="icon" >
-      <iconset resource="qsampler.qrc" >:/images/qsamplerChannel.png</iconset>
+     <property name="icon">
+      <iconset resource="qsampler.qrc">
+       <normaloff>:/images/qsamplerChannel.png</normaloff>:/images/qsamplerChannel.png</iconset>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+C</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QFrame" name="ChannelInfoFrame" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+    <widget class="QFrame" name="ChannelInfoFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>180</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>320</width>
        <height>64</height>
       </size>
      </property>
-     <property name="autoFillBackground" >
+     <property name="autoFillBackground">
       <bool>true</bool>
      </property>
-     <property name="frameShape" >
+     <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="frameShadow" >
+     <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
-     <layout class="QGridLayout" >
-      <property name="spacing" >
-       <number>0</number>
-      </property>
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="margin">
        <number>2</number>
       </property>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="EngineNameTextLabel" >
-        <property name="text" >
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="EngineNameTextLabel">
+        <property name="text">
          <string>--</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="InstrumentNameTextLabel" >
-        <property name="toolTip" >
-         <string>Instrument name</string>
-        </property>
-        <property name="text" >
-         <string>--</string>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="MidiPortChannelTextLabel" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+      <item row="0" column="2">
+       <widget class="QLabel" name="MidiPortChannelTextLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>20</width>
           <height>0</height>
          </size>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>MIDI port / channel</string>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>-- / --</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignHCenter|Qt::AlignTop</set>
         </property>
-        <property name="wordWrap" >
+        <property name="wordWrap">
          <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="InstrumentStatusTextLabel" >
-        <property name="minimumSize" >
+      <item row="1" column="2">
+       <widget class="QLabel" name="InstrumentStatusTextLabel">
+        <property name="minimumSize">
          <size>
           <width>20</width>
           <height>0</height>
          </size>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Instrument load status</string>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>--</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
-        <property name="wordWrap" >
+        <property name="wordWrap">
          <bool>false</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLabel" name="MidiActivityLabel" >
-        <property name="sizePolicy" >
-         <sizepolicy vsizetype="Maximum" hsizetype="Maximum" >
+      <item row="0" column="1">
+       <widget class="QLabel" name="MidiActivityLabel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>16</width>
           <height>16</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>16</width>
           <height>16</height>
          </size>
         </property>
-        <property name="baseSize" >
+        <property name="baseSize">
          <size>
           <width>16</width>
           <height>16</height>
          </size>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>MIDI activity</string>
         </property>
-        <property name="frameShape" >
+        <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="frameShadow" >
+        <property name="frameShadow">
          <enum>QFrame::Plain</enum>
         </property>
-        <property name="text" >
+        <property name="text">
          <string/>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="InstrumentNamePushButton">
+        <property name="toolTip">
+         <string>Instrument name</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">text-align: left; margin: 0px;</string>
+        </property>
+        <property name="text">
+         <string>--</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -233,211 +239,211 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="ChannelMutePushButton" >
-     <property name="maximumSize" >
+    <widget class="QPushButton" name="ChannelMutePushButton">
+     <property name="maximumSize">
       <size>
        <width>48</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Channel mute</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>&amp;Mute</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+M</string>
      </property>
-     <property name="checkable" >
+     <property name="checkable">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="ChannelSoloPushButton" >
-     <property name="maximumSize" >
+    <widget class="QPushButton" name="ChannelSoloPushButton">
+     <property name="maximumSize">
       <size>
        <width>48</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Channel solo</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>&amp;Solo</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+S</string>
      </property>
-     <property name="checkable" >
+     <property name="checkable">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QSlider" name="VolumeSlider" >
-     <property name="minimumSize" >
+    <widget class="QSlider" name="VolumeSlider">
+     <property name="minimumSize">
       <size>
        <width>100</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>32767</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Channel volume</string>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <number>100</number>
      </property>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="tickPosition" >
+     <property name="tickPosition">
       <enum>QSlider::TicksBothSides</enum>
      </property>
-     <property name="tickInterval" >
+     <property name="tickInterval">
       <number>10</number>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="VolumeSpinBox" >
-     <property name="minimumSize" >
+    <widget class="QSpinBox" name="VolumeSpinBox">
+     <property name="minimumSize">
       <size>
        <width>60</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>120</width>
        <height>24</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Channel volume</string>
      </property>
-     <property name="suffix" >
+     <property name="suffix">
       <string> %</string>
      </property>
-     <property name="maximum" >
+     <property name="maximum">
       <number>100</number>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="FxPushButton" >
-     <property name="maximumSize" >
+    <widget class="QPushButton" name="FxPushButton">
+     <property name="maximumSize">
       <size>
        <width>48</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Edit Channel's Effect Settings</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>&amp;FX</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+F</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="ChannelEditPushButton" >
-     <property name="maximumSize" >
+    <widget class="QPushButton" name="ChannelEditPushButton">
+     <property name="maximumSize">
       <size>
        <width>48</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Edit channel's instrument</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>&amp;Edit</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+E</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QProgressBar" name="StreamUsageProgressBar" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+    <widget class="QProgressBar" name="StreamUsageProgressBar">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>64</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>32767</width>
        <height>24</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Least buffer fill stream usage (%)</string>
      </property>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="StreamVoiceCountTextLabel" >
-     <property name="minimumSize" >
+    <widget class="QLabel" name="StreamVoiceCountTextLabel">
+     <property name="minimumSize">
       <size>
        <width>48</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>32767</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Stream / Voice count</string>
      </property>
-     <property name="autoFillBackground" >
+     <property name="autoFillBackground">
       <bool>true</bool>
      </property>
-     <property name="frameShape" >
+     <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
-     <property name="frameShadow" >
+     <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>--/--</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
-     <property name="wordWrap" >
+     <property name="wordWrap">
       <bool>false</bool>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="0" margin="0" />
+ <layoutdefault spacing="0" margin="0"/>
  <tabstops>
   <tabstop>ChannelSetupPushButton</tabstop>
   <tabstop>ChannelMutePushButton</tabstop>
@@ -447,7 +453,7 @@
   <tabstop>ChannelEditPushButton</tabstop>
  </tabstops>
  <resources>
-  <include location="qsampler.qrc" />
+  <include location="qsampler.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -8,6 +8,10 @@ SVN TRUNK
 * Added support for SF2 instrument names/preset enumeration.
   (EXPERIMENTAL)
 
+* Added instrument list popup on channel strip which shows up when
+  the instrument name is clicked. Allows faster switching among
+  instruments of the same file.
+
 
 0.2.3  2013-12-31  A fifth of a Jubilee.
 

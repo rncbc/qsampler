@@ -1,8 +1,8 @@
 // qsamplerChannelStrip.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, 2008 Christian Schoenebeck
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 
 class QDragEnterEvent;
 class QTimer;
+class QMenu;
 
 
 namespace QSampler {
@@ -93,6 +94,7 @@ protected:
 protected slots:
 
 	void midiActivityLedOff();
+	void instrumentListPopupItemClicked(QAction* action);
 
 private:
 
@@ -101,6 +103,7 @@ private:
 	Channel *m_pChannel;
 	int m_iDirtyChange;
 	int m_iErrorCount;
+	QMenu* m_instrumentListPopupMenu;
 
 	QTimer  *m_pMidiActivityTimer;
 

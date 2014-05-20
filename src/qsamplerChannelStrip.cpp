@@ -1,8 +1,8 @@
 // qsamplerChannelStrip.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, 2008 Christian Schoenebeck
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 #include <QFileInfo>
 #include <QTimer>
 #include <QUrl>
+#include <QMenu>
 
 #if QT_VERSION >= 0x050000
 #include <QMimeData>
@@ -77,6 +78,7 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	m_pChannel     = NULL;
 	m_iDirtyChange = 0;
 	m_iErrorCount  = 0;
+	m_instrumentListPopupMenu = NULL;
 
 	if (++g_iMidiActivityRefCount == 1) {
 		g_pMidiActivityLedOn  = new QPixmap(":/images/ledon1.png");
@@ -239,7 +241,8 @@ void ChannelStrip::setDisplayFont ( const QFont & font )
 {
 	m_ui.EngineNameTextLabel->setFont(font);
 	m_ui.MidiPortChannelTextLabel->setFont(font);
-	m_ui.InstrumentNameTextLabel->setFont(font);
+	m_ui.InstrumentNamePushButton->setFont(font);
+	m_ui.InstrumentNamePushButton->setFont(font);
 	m_ui.InstrumentStatusTextLabel->setFont(font);
 }
 
@@ -249,6 +252,7 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
 	QPalette pal;
 	pal.setColor(QPalette::Foreground, Qt::yellow);
+	pal.setColor(QPalette::ButtonText, Qt::yellow);
 	m_ui.EngineNameTextLabel->setPalette(pal);
 	m_ui.MidiPortChannelTextLabel->setPalette(pal);
 	pal.setColor(QPalette::Foreground, Qt::green);
@@ -259,7 +263,7 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 		pal.setColor(QPalette::Background, Qt::black);
 	}
 	m_ui.ChannelInfoFrame->setPalette(pal);
-	m_ui.InstrumentNameTextLabel->setPalette(pal);
+	m_ui.InstrumentNamePushButton->setPalette(pal);
 	m_ui.StreamVoiceCountTextLabel->setPalette(pal);
 }
 
@@ -388,20 +392,67 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 	// Instrument name...
 	if (m_pChannel->instrumentName().isEmpty()) {
 		if (m_pChannel->instrumentStatus() >= 0) {
-			m_ui.InstrumentNameTextLabel->setText(
+			m_ui.InstrumentNamePushButton->setText(
 				' ' + Channel::loadingInstrument());
 		} else {
-			m_ui.InstrumentNameTextLabel->setText(
+			m_ui.InstrumentNamePushButton->setText(
 				' ' + Channel::noInstrumentName());
 		}
 	} else {
-		m_ui.InstrumentNameTextLabel->setText(
+		m_ui.InstrumentNamePushButton->setText(
 			' ' + m_pChannel->instrumentName());
+	}
+	
+	bool bShowInstrumentPopup = false;
+
+	// Instrument list popup (for fast switching among sounds of the same file)
+	if (!m_pChannel->instrumentFile().isEmpty()) {
+		QStringList instruments = Channel::getInstrumentList(
+			m_pChannel->instrumentFile(), true
+		);
+		if (!instruments.isEmpty()) {
+			bShowInstrumentPopup = true;
+			if (!m_instrumentListPopupMenu) {
+				m_instrumentListPopupMenu = new QMenu(m_ui.InstrumentNamePushButton);
+				m_instrumentListPopupMenu->setTitle(tr("Instruments"));
+				m_instrumentListPopupMenu->setMinimumWidth(118); // for cosmetical reasons, should have at least the width of the instrument name label
+				m_ui.InstrumentNamePushButton->setMenu(m_instrumentListPopupMenu);
+				QObject::connect(
+					m_instrumentListPopupMenu, SIGNAL(triggered(QAction*)),
+					this, SLOT(instrumentListPopupItemClicked(QAction*))
+				);
+			} else m_instrumentListPopupMenu->clear();
+
+			for (int i = 0; i < instruments.size(); ++i) {
+				QAction* action =
+					m_instrumentListPopupMenu->addAction(instruments.at(i));
+				action->setData(i);
+				if (i == m_pChannel->instrumentNr()) {
+					action->setCheckable(true);
+					action->setChecked(true);
+				}
+			}
+		}
+	}
+
+	if (!bShowInstrumentPopup && m_instrumentListPopupMenu) {
+		delete m_instrumentListPopupMenu;
+		m_instrumentListPopupMenu = NULL;
 	}
 
 	return true;
 }
 
+void ChannelStrip::instrumentListPopupItemClicked (QAction* action) 
+{
+	if (!action) return;
+
+	QVariant data = action->data();
+	if (data.isValid() && !m_pChannel->instrumentFile().isEmpty()) {
+		m_pChannel->loadInstrument(m_pChannel->instrumentFile(), data.toInt());
+		emit channelChanged(this);
+	}
+}
 
 // Do the dirty volume change.
 bool ChannelStrip::updateChannelVolume (void)
