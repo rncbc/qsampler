@@ -830,10 +830,10 @@ bool Channel::isSf2InstrumentFile ( const QString& sInstrumentFile )
 
 	QFile file(sInstrumentFile);
 	if (file.open(QIODevice::ReadOnly)) {
-		char achHeader[8];
-		if (file.read(achHeader, 8) > 0) {
+		char achHeader[12];
+		if (file.read(achHeader, 12) > 0) {
 			bResult = (::memcmp(&achHeader[0], "RIFF", 4) == 0
-					&& ::memcmp(&achHeader[4], "sfbk", 4) == 0);
+					&& ::memcmp(&achHeader[8], "sfbk", 4) == 0);
 		}
 		file.close();
 	}
@@ -843,7 +843,7 @@ bool Channel::isSf2InstrumentFile ( const QString& sInstrumentFile )
 
 
 // Retrieve the instrument list of a instrument file (.gig).
-QStringList Channel::getInstrumentList(
+QStringList Channel::getInstrumentList (
 	const QString& sInstrumentFile,	bool bInstrumentNames )
 {
 	QStringList instlist;
@@ -859,7 +859,7 @@ QStringList Channel::getInstrumentList(
 		if (isDlsInstrumentFile(sInstrumentFile)) {
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
-			gig::File  *pGig  = new gig::File(pRiff);
+			gig::File *pGig = new gig::File(pRiff);
 		#if HAVE_LIBGIG_SETAUTOLOAD
 			// prevent sleepy response time on large .gig files
 			pGig->SetAutoLoad(false);
