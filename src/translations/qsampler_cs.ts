@@ -51,7 +51,7 @@ Promiňte.</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="91"/>
+        <location filename="../qsamplerChannel.cpp" line="92"/>
         <source>Could not add channel.
 
 Sorry.</source>
@@ -60,12 +60,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="93"/>
+        <location filename="../qsamplerChannel.cpp" line="94"/>
         <source>added.</source>
         <translation>přidán.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="114"/>
+        <location filename="../qsamplerChannel.cpp" line="115"/>
         <source>Could not remove channel.
 
 Sorry.</source>
@@ -74,88 +74,88 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="117"/>
+        <location filename="../qsamplerChannel.cpp" line="118"/>
         <source>removed.</source>
         <translation>odstraněn.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="142"/>
+        <location filename="../qsamplerChannel.cpp" line="143"/>
         <source>New Channel</source>
         <translation>Nový kanál</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="142"/>
+        <location filename="../qsamplerChannel.cpp" line="143"/>
         <source>Channel %1</source>
         <translation>Kanál %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="168"/>
+        <location filename="../qsamplerChannel.cpp" line="169"/>
         <source>Engine: %1.</source>
         <translation>Stroj: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="224"/>
+        <location filename="../qsamplerChannel.cpp" line="225"/>
         <source>Instrument: &quot;%1&quot; (%2).</source>
         <translation>Nástroj: &quot;%1&quot; (%2).</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="269"/>
+        <location filename="../qsamplerChannel.cpp" line="270"/>
         <source>MIDI driver: %1.</source>
         <translation>Ovladač MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="297"/>
+        <location filename="../qsamplerChannel.cpp" line="298"/>
         <source>MIDI device: %1.</source>
         <translation>Zařízení MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="325"/>
+        <location filename="../qsamplerChannel.cpp" line="326"/>
         <source>MIDI port: %1.</source>
         <translation>Přípojka MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="353"/>
+        <location filename="../qsamplerChannel.cpp" line="354"/>
         <source>MIDI channel: %1.</source>
         <translation>Kanál MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="381"/>
+        <location filename="../qsamplerChannel.cpp" line="382"/>
         <source>MIDI map: %1.</source>
         <translation>Přiřazení MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="409"/>
+        <location filename="../qsamplerChannel.cpp" line="410"/>
         <source>Audio device: %1.</source>
         <translation>Zvukové zařízení: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="438"/>
+        <location filename="../qsamplerChannel.cpp" line="439"/>
         <source>Audio driver: %1.</source>
         <translation>Zvukový ovladač: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="466"/>
+        <location filename="../qsamplerChannel.cpp" line="467"/>
         <location filename="../qsamplerMainForm.cpp" line="2061"/>
         <source>Volume: %1.</source>
         <translation>Hlasitost: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="494"/>
+        <location filename="../qsamplerChannel.cpp" line="495"/>
         <source>Mute: %1.</source>
         <translation>Ztlumení: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="524"/>
+        <location filename="../qsamplerChannel.cpp" line="525"/>
         <source>Solo: %1.</source>
         <translation>Sólo: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="556"/>
+        <location filename="../qsamplerChannel.cpp" line="557"/>
         <source>Audio Channel: %1 -&gt; %2.</source>
         <translation>Zvukový kanál: %1 -&gt; %2.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="593"/>
+        <location filename="../qsamplerChannel.cpp" line="594"/>
         <source>Could not get channel information.
 
 Sorry.</source>
@@ -164,17 +164,17 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="640"/>
+        <location filename="../qsamplerChannel.cpp" line="641"/>
         <source>(none)</source>
         <translation>(žádná)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="688"/>
+        <location filename="../qsamplerChannel.cpp" line="689"/>
         <source>reset.</source>
         <translation>znovu nastaven.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="708"/>
+        <location filename="../qsamplerChannel.cpp" line="709"/>
         <source>Could not launch an appropriate instrument editor for the given instrument!
 
 Make sure you have an appropriate instrument editor like &apos;gigedit&apos; installed and that it placed its mandatory DLL file into the sampler&apos;s plugin directory.</source>
@@ -183,12 +183,12 @@ Make sure you have an appropriate instrument editor like &apos;gigedit&apos; ins
 Ujistěte se, že máte nainstalován vhodný editor nástrojů, jakým je &apos;gigedit&apos;, a že tento umístil svůj povinný soubor DLL do adresáře sampleru, ve kterém jsou přídavné moduly.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="719"/>
+        <location filename="../qsamplerChannel.cpp" line="720"/>
         <source>edit instrument.</source>
         <translation>upravit nástroj.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="725"/>
+        <location filename="../qsamplerChannel.cpp" line="726"/>
         <source>Sorry, QSampler was compiled for a version of liblscp which lacks this feature.
 
 You may want to update liblscp and recompile QSampler afterwards.</source>
@@ -197,32 +197,32 @@ You may want to update liblscp and recompile QSampler afterwards.</source>
 Můžete chtít povýšit liblscp a sestavit QSampler později znovu.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="746"/>
+        <location filename="../qsamplerChannel.cpp" line="747"/>
         <source>setup...</source>
         <translation>nastavit...</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="917"/>
+        <location filename="../qsamplerChannel.cpp" line="966"/>
         <source>(No engine)</source>
         <translation>(Není stroj)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="922"/>
+        <location filename="../qsamplerChannel.cpp" line="971"/>
         <source>(No instrument)</source>
         <translation>(Není nástroj)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="926"/>
+        <location filename="../qsamplerChannel.cpp" line="975"/>
         <source>(Loading instrument...)</source>
         <translation>(Nahrává se nástroj...)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1008"/>
+        <location filename="../qsamplerChannel.cpp" line="1057"/>
         <source> Device Channel</source>
         <translation>Kanál zařízení</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1010"/>
+        <location filename="../qsamplerChannel.cpp" line="1059"/>
         <source>Audio Channel </source>
         <translation>Zvukový kanál</translation>
     </message>
