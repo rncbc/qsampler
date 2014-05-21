@@ -227,7 +227,7 @@ You may want to update liblscp and recompile QSampler afterwards.</source>
         <translation>Звуковой канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.cpp" line="340"/>
+        <location filename="../qsamplerChannelStrip.cpp" line="344"/>
         <source>channel fx sends...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -445,12 +445,12 @@ Do you want to apply the changes?</source>
 <context>
     <name>QSampler::ChannelStrip</name>
     <message>
-        <location filename="../qsamplerChannelStrip.cpp" line="354"/>
+        <location filename="../qsamplerChannelStrip.cpp" line="358"/>
         <source>Unavailable</source>
         <translation>Недоступно</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.cpp" line="355"/>
+        <location filename="../qsamplerChannelStrip.cpp" line="359"/>
         <source>Sorry, QSampler was built without FX send support!
 
 (Make sure you have a recent liblscp when recompiling QSampler)</source>
@@ -459,12 +459,17 @@ Do you want to apply the changes?</source>
 Убедитесь, что в системе установлена достаточно новая версия liblscp.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.cpp" line="466"/>
+        <location filename="../qsamplerChannelStrip.cpp" line="417"/>
+        <source>Instruments</source>
+        <translation type="unfinished">Инструменты</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerChannelStrip.cpp" line="517"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.cpp" line="481"/>
+        <location filename="../qsamplerChannelStrip.cpp" line="532"/>
         <source>ERR%1</source>
         <translation>ERR%1</translation>
     </message>
@@ -1635,49 +1640,49 @@ MIDI Controller:</source>
 <context>
     <name>qsamplerChannelStrip</name>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="43"/>
+        <location filename="../qsamplerChannelStrip.ui" line="44"/>
         <source>Qsampler: Channel</source>
         <translation>Qsampler: Канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="70"/>
+        <location filename="../qsamplerChannelStrip.ui" line="72"/>
         <source>Channel setup</source>
         <translation>Настроить канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="73"/>
+        <location filename="../qsamplerChannelStrip.ui" line="75"/>
         <source>&amp;Channel</source>
         <translation>&amp;Канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="79"/>
+        <location filename="../qsamplerChannelStrip.ui" line="82"/>
         <source>Alt+C</source>
         <translation>Alt+к</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="122"/>
-        <location filename="../qsamplerChannelStrip.ui" line="132"/>
-        <location filename="../qsamplerChannelStrip.ui" line="179"/>
+        <location filename="../qsamplerChannelStrip.ui" line="125"/>
+        <location filename="../qsamplerChannelStrip.ui" line="169"/>
+        <location filename="../qsamplerChannelStrip.ui" line="231"/>
         <source>--</source>
         <translation>--</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="129"/>
+        <location filename="../qsamplerChannelStrip.ui" line="225"/>
         <source>Instrument name</source>
         <translation>Название инструмента</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="154"/>
+        <location filename="../qsamplerChannelStrip.ui" line="144"/>
         <source>MIDI port / channel</source>
         <translation>Порт/канал MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="157"/>
+        <location filename="../qsamplerChannelStrip.ui" line="147"/>
         <source>-- / --</source>
         <translation>-- / --</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="176"/>
+        <location filename="../qsamplerChannelStrip.ui" line="166"/>
         <source>Instrument load status</source>
         <translation>Статус загрузки инструмента</translation>
     </message>
@@ -1686,93 +1691,93 @@ MIDI Controller:</source>
         <translation type="obsolete">Активность MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="216"/>
+        <location filename="../qsamplerChannelStrip.ui" line="206"/>
         <source>MIDI activity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="244"/>
+        <location filename="../qsamplerChannelStrip.ui" line="250"/>
         <source>Channel mute</source>
         <translation>Приглушить канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="247"/>
+        <location filename="../qsamplerChannelStrip.ui" line="253"/>
         <source>&amp;Mute</source>
         <translation>&amp;Тихо</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="250"/>
+        <location filename="../qsamplerChannelStrip.ui" line="256"/>
         <source>Alt+M</source>
         <translation>Alt+т</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="266"/>
+        <location filename="../qsamplerChannelStrip.ui" line="272"/>
         <source>Channel solo</source>
         <translation>Солирование канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="269"/>
+        <location filename="../qsamplerChannelStrip.ui" line="275"/>
         <source>&amp;Solo</source>
         <translation>&amp;Соло</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="272"/>
+        <location filename="../qsamplerChannelStrip.ui" line="278"/>
         <source>Alt+S</source>
         <translation>Alt+с</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="294"/>
-        <location filename="../qsamplerChannelStrip.ui" line="325"/>
+        <location filename="../qsamplerChannelStrip.ui" line="300"/>
+        <location filename="../qsamplerChannelStrip.ui" line="331"/>
         <source>Channel volume</source>
         <translation>Громкость канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="328"/>
+        <location filename="../qsamplerChannelStrip.ui" line="334"/>
         <source> %</source>
         <translation> %</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="344"/>
+        <location filename="../qsamplerChannelStrip.ui" line="350"/>
         <source>Edit Channel&apos;s Effect Settings</source>
         <translation>Изменить эффекты канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="347"/>
+        <location filename="../qsamplerChannelStrip.ui" line="353"/>
         <source>&amp;FX</source>
         <translation>&amp;Эффекты</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="350"/>
+        <location filename="../qsamplerChannelStrip.ui" line="356"/>
         <source>Alt+F</source>
         <translation>Alt+э</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="363"/>
+        <location filename="../qsamplerChannelStrip.ui" line="369"/>
         <source>Edit channel&apos;s instrument</source>
         <translation>Изменить инструмент канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="366"/>
+        <location filename="../qsamplerChannelStrip.ui" line="372"/>
         <source>&amp;Edit</source>
         <translation>&amp;Изменить</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="369"/>
+        <location filename="../qsamplerChannelStrip.ui" line="375"/>
         <source>Alt+E</source>
         <translation>Alt+и</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="394"/>
+        <location filename="../qsamplerChannelStrip.ui" line="400"/>
         <source>Least buffer fill stream usage (%)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="416"/>
+        <location filename="../qsamplerChannelStrip.ui" line="422"/>
         <source>Stream / Voice count</source>
         <translation>Счетчик потоков/голосов</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelStrip.ui" line="428"/>
+        <location filename="../qsamplerChannelStrip.ui" line="434"/>
         <source>--/--</source>
         <translation>--/--</translation>
     </message>

@@ -242,7 +242,6 @@ void ChannelStrip::setDisplayFont ( const QFont & font )
 	m_ui.EngineNameTextLabel->setFont(font);
 	m_ui.MidiPortChannelTextLabel->setFont(font);
 	m_ui.InstrumentNamePushButton->setFont(font);
-	m_ui.InstrumentNamePushButton->setFont(font);
 	m_ui.InstrumentStatusTextLabel->setFont(font);
 }
 
@@ -256,6 +255,7 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 	m_ui.EngineNameTextLabel->setPalette(pal);
 	m_ui.MidiPortChannelTextLabel->setPalette(pal);
 	pal.setColor(QPalette::Foreground, Qt::green);
+	pal.setColor(QPalette::ButtonText, Qt::green);
 	if (bDisplayEffect) {
 		QPixmap pm(":/images/displaybg1.png");
 		pal.setBrush(QPalette::Background, QBrush(pm));
@@ -407,30 +407,30 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 
 	// Instrument list popup (for fast switching among sounds of the same file)
 	if (!m_pChannel->instrumentFile().isEmpty()) {
-		QStringList instruments = Channel::getInstrumentList(
-			m_pChannel->instrumentFile(), true
-		);
+		const QStringList instruments
+			= Channel::getInstrumentList(m_pChannel->instrumentFile(), true);
 		if (!instruments.isEmpty()) {
 			bShowInstrumentPopup = true;
 			if (!m_instrumentListPopupMenu) {
-				m_instrumentListPopupMenu = new QMenu(m_ui.InstrumentNamePushButton);
+				m_instrumentListPopupMenu
+					= new QMenu(m_ui.InstrumentNamePushButton);
 				m_instrumentListPopupMenu->setTitle(tr("Instruments"));
-				m_instrumentListPopupMenu->setMinimumWidth(118); // for cosmetical reasons, should have at least the width of the instrument name label
+				// for cosmetical reasons, should have at least
+				// the width of the instrument name label...
+				m_instrumentListPopupMenu->setMinimumWidth(120);
 				m_ui.InstrumentNamePushButton->setMenu(m_instrumentListPopupMenu);
-				QObject::connect(
-					m_instrumentListPopupMenu, SIGNAL(triggered(QAction*)),
-					this, SLOT(instrumentListPopupItemClicked(QAction*))
-				);
-			} else m_instrumentListPopupMenu->clear();
-
+				QObject::connect(m_instrumentListPopupMenu,
+					SIGNAL(triggered(QAction*)),
+					SLOT(instrumentListPopupItemClicked(QAction *)));
+			} else {
+				m_instrumentListPopupMenu->clear();
+			}
+			QAction *action;
 			for (int i = 0; i < instruments.size(); ++i) {
-				QAction* action =
-					m_instrumentListPopupMenu->addAction(instruments.at(i));
+				action = m_instrumentListPopupMenu->addAction(instruments.at(i));
 				action->setData(i);
-				if (i == m_pChannel->instrumentNr()) {
-					action->setCheckable(true);
-					action->setChecked(true);
-				}
+				action->setCheckable(true);
+				action->setChecked(i == m_pChannel->instrumentNr());
 			}
 		}
 	}
@@ -443,7 +443,7 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 	return true;
 }
 
-void ChannelStrip::instrumentListPopupItemClicked (QAction* action) 
+void ChannelStrip::instrumentListPopupItemClicked ( QAction *action )
 {
 	if (!action) return;
 
@@ -524,7 +524,7 @@ bool ChannelStrip::updateChannelInfo (void)
 	const QColor& rgbFore = pal.color(QPalette::Foreground);
 
 	// Instrument status...
-	int iInstrumentStatus = m_pChannel->instrumentStatus();
+	const int iInstrumentStatus = m_pChannel->instrumentStatus();
 	if (iInstrumentStatus < 0) {
 		pal.setColor(QPalette::Foreground, Qt::red);
 		m_ui.InstrumentStatusTextLabel->setPalette(pal);
@@ -533,6 +533,7 @@ bool ChannelStrip::updateChannelInfo (void)
 		m_iErrorCount++;
 		return false;
 	}
+
 	// All seems normal...
 	pal.setColor(QPalette::Foreground,
 		iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
