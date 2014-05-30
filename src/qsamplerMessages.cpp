@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -48,6 +48,7 @@ namespace QSampler {
 #define QSAMPLER_MESSAGES_FDNIL    -1
 #define QSAMPLER_MESSAGES_FDREAD    0
 #define QSAMPLER_MESSAGES_FDWRITE   1
+
 
 //-------------------------------------------------------------------------
 // QSampler::Messages - Messages log dockable window.
@@ -116,7 +117,7 @@ void Messages::stdoutNotify ( int fd )
 {
 #if !defined(WIN32)
 	char achBuffer[1024];
-	int  cchBuffer = ::read(fd, achBuffer, sizeof(achBuffer) - 1);
+	const int cchBuffer = ::read(fd, achBuffer, sizeof(achBuffer) - 1);
 	if (cchBuffer > 0) {
 		achBuffer[cchBuffer] = (char) 0;
 		appendStdoutBuffer(achBuffer);
@@ -130,9 +131,9 @@ void Messages::appendStdoutBuffer ( const QString& s )
 {
 	m_sStdoutBuffer.append(s);
 
-	int iLength = m_sStdoutBuffer.lastIndexOf('\n');
+	const int iLength = m_sStdoutBuffer.lastIndexOf('\n');
 	if (iLength > 0) {
-		QString sTemp = m_sStdoutBuffer.left(iLength);
+		const QString& sTemp = m_sStdoutBuffer.left(iLength);
 		m_sStdoutBuffer.remove(0, iLength + 1);
 		QStringList list = sTemp.split('\n');
 		QStringListIterator iter(list);
@@ -155,7 +156,7 @@ void Messages::flushStdoutBuffer (void)
 // Stdout capture accessors.
 bool Messages::isCaptureEnabled (void)
 {
-	return (bool) (m_pStdoutNotifier != NULL);
+	return (m_pStdoutNotifier != NULL);
 }
 
 void Messages::setCaptureEnabled ( bool bCapture )
@@ -169,10 +170,6 @@ void Messages::setCaptureEnabled ( bool bCapture )
 		delete m_pStdoutNotifier;
 		m_pStdoutNotifier = NULL;
 		// Close the notification pipes.
-		if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
-			::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
-			m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
-		}
 		if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
 			::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
 			m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
@@ -286,7 +283,7 @@ void Messages::appendMessages ( const QString& s )
 
 void Messages::appendMessagesColor ( const QString& s, const QString &c )
 {
-	QString sText = QTime::currentTime().toString("hh:mm:ss.zzz") + ' ' + s;
+	const QString& sText = QTime::currentTime().toString("hh:mm:ss.zzz") + ' ' + s;
 	appendMessagesLine("<font color=\"" + c + "\">" + sText + "</font>");
 	appendMessagesLog(sText);
 }
