@@ -1210,17 +1210,17 @@ Do you want LinuxSampler to stop?</source>
 <context>
     <name>QSampler::Messages</name>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="93"/>
+        <location filename="../qsamplerMessages.cpp" line="94"/>
         <source>Messages</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="228"/>
+        <location filename="../qsamplerMessages.cpp" line="225"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Ведение журнала остановлено --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="238"/>
+        <location filename="../qsamplerMessages.cpp" line="235"/>
         <source>Logging started --- %1 ---</source>
         <translation>Ведение журнала начато --- %1 ---</translation>
     </message>

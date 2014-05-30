@@ -1218,17 +1218,17 @@ Chcete zastavit LinuxSampler?</translation>
 <context>
     <name>QSampler::Messages</name>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="93"/>
+        <location filename="../qsamplerMessages.cpp" line="94"/>
         <source>Messages</source>
         <translation>Hlášení</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="228"/>
+        <location filename="../qsamplerMessages.cpp" line="225"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Vedení zápisu zastaveno --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="238"/>
+        <location filename="../qsamplerMessages.cpp" line="235"/>
         <source>Logging started --- %1 ---</source>
         <translation>Vedení zápisu spuštěno --- %1 ---</translation>
     </message>
