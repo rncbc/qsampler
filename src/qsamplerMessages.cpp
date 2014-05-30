@@ -283,7 +283,8 @@ void Messages::appendMessages ( const QString& s )
 
 void Messages::appendMessagesColor ( const QString& s, const QString &c )
 {
-	const QString& sText = QTime::currentTime().toString("hh:mm:ss.zzz") + ' ' + s;
+	const QString& sText
+		= QTime::currentTime().toString("hh:mm:ss.zzz") + ' ' + s;
 	appendMessagesLine("<font color=\"" + c + "\">" + sText + "</font>");
 	appendMessagesLog(sText);
 }
