@@ -96,6 +96,7 @@ AC_PROG_GCC_TRADITIONAL
 AC_LANG_C
 AC_LANG_CPLUSPLUS
 
+PKG_PROG_PKG_CONFIG
 
 # Check for proper flags.
 ac_arch=`uname -m`
@@ -349,29 +350,15 @@ fi
 
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
-   AC_CHECK_LIB(gig, main, [ac_libgig="yes"], [ac_libgig="no"])
+   PKG_CHECK_MODULES(LIBGIG, gig >= 3.3.0, [ac_libgig="yes"], [ac_libgig="no"])
+   AC_SUBST(LIBGIG_CFLAGS)
+   AC_SUBST(LIBGIG_LIBS)
+   ac_cflags="$ac_libs $LIBGIG_CFLAGS"
+   ac_libs="$ac_libs $LIBGIG_LIBS"
    if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
-      ac_libs="$ac_libs -lgig"
-      AC_MSG_CHECKING([for gig::File::SetAutoLoad() method in libgig])
-      AC_LANG_SAVE
-      AC_LANG_CPLUSPLUS
-      CXXFLAGS="$ac_libs"
-      AC_TRY_COMPILE([
-#include <stdlib.h>
-#include <gig.h>
-      ],[
-    gig::File file;
-    file.SetAutoLoad(false);
-      ],
-      have_libgig_setautoload="yes",
-      have_libgig_setautoload="no"
-      )
-      AC_LANG_RESTORE
-      AC_MSG_RESULT([$have_libgig_setautoload])
-      if test "x$have_libgig_setautoload" = "xyes"; then
-          AC_DEFINE(HAVE_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
-      fi
+      AC_DEFINE(HAVE_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
+      have_libgig_setautoload="yes"
    fi
 fi
 

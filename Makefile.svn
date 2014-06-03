@@ -1,6 +1,7 @@
 all:	configure
 
 configure:	 Makefile.in configure.ac
+	@aclocal
 	@autoheader
 	@autoconf
 	@rm -rf *.cache
