@@ -52,8 +52,8 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %dir %{_datadir}/icons/hicolor/scalable
 %dir %{_datadir}/icons/hicolor/scalable/apps
 %dir %{_datadir}/icons/hicolor/scalable/mimetypes
-#dir %{_datadir}/%{name}
-#dir %{_datadir}/%{name}/translations
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/translations
 %{_bindir}/%{name}
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/applications/%{name}.desktop
