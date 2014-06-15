@@ -1,7 +1,7 @@
 // qsampler.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -40,12 +40,6 @@
 #define CONFIG_DATADIR CONFIG_QUOTED(DATADIR)
 #else
 #define CONFIG_DATADIR CONFIG_PREFIX "/share"
-#endif
-
-#if defined(LOCALEDIR)
-#define CONFIG_LOCALEDIR CONFIG_QUOTED(LOCALEDIR)
-#else
-#define CONFIG_LOCALEDIR CONFIG_DATADIR "/locale"
 #endif
 
 #if WIN32
@@ -88,23 +82,23 @@ public:
 			if (m_pQtTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pQtTranslator);
 			} else {
-		#ifdef RELATIVE_LOCALE_DIR
+			#ifdef RELATIVE_LOCALE_DIR
 				sLocPath = QApplication::applicationDirPath() + RELATIVE_LOCALE_DIR;
 				if (m_pQtTranslator->load(sLocName, sLocPath)) {
 					QApplication::installTranslator(m_pQtTranslator);
 				} else {
-		#endif
+			#endif
 				delete m_pQtTranslator;
 				m_pQtTranslator = 0;
-		#ifdef CONFIG_DEBUG
+			#ifdef CONFIG_DEBUG
 				qWarning("Warning: no translation found for '%s' locale: %s/%s.qm",
 					loc.name().toUtf8().constData(),
 					sLocPath.toUtf8().constData(),
 					sLocName.toUtf8().constData());
-		#endif
-		#ifdef RELATIVE_LOCALE_DIR
+			#endif
+			#ifdef RELATIVE_LOCALE_DIR
 				}
-		#endif
+			#endif
 			}
 			// Try own application translation...
 			m_pMyTranslator = new QTranslator(this);
@@ -112,22 +106,22 @@ public:
 			if (m_pMyTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pMyTranslator);
 			} else {
-		#ifdef RELATIVE_LOCALE_DIR
+			#ifdef RELATIVE_LOCALE_DIR
 				sLocPath = QApplication::applicationDirPath() + RELATIVE_LOCALE_DIR;
-		#else
-				sLocPath = CONFIG_LOCALEDIR;
-		#endif
+			#else
+				sLocPath = CONFIG_DATADIR "/qsampler/translations";
+			#endif
 				if (m_pMyTranslator->load(sLocName, sLocPath)) {
 					QApplication::installTranslator(m_pMyTranslator);
 				} else {
 					delete m_pMyTranslator;
 					m_pMyTranslator = 0;
-		#ifdef CONFIG_DEBUG
+				#ifdef CONFIG_DEBUG
 					qWarning("Warning: no translation found for '%s' locale: %s/%s.qm",
 						loc.name().toUtf8().constData(),
 						sLocPath.toUtf8().constData(),
 						sLocName.toUtf8().constData());
-		#endif
+				#endif
 				}
 			}
 		}
