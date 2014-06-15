@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+* Translations install directory change. (EXPERIMENTAL)
+
 * Added support for SF2 instrument names/preset enumeration.
   (EXPERIMENTAL)
 
