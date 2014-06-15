@@ -62,11 +62,7 @@ AC_ARG_ENABLE(stacktrace,
 
 
 # Standard installation base dirs.
-if test "$cross_compiling" = yes; then
-  ac_with_paths=""
-else
-  ac_with_paths="/usr /usr/local"
-fi
+ac_with_paths="/usr /usr/local"
 
 # Set for alternate Qt installation dir.
 AC_ARG_WITH(qt,
@@ -357,7 +353,7 @@ if test "x$ac_libgig" = "xyes"; then
    PKG_CHECK_MODULES(LIBGIG, gig >= 3.3.0, [ac_libgig="yes"], [ac_libgig="no"])
    AC_SUBST(LIBGIG_CFLAGS)
    AC_SUBST(LIBGIG_LIBS)
-   ac_cflags="$ac_cflags $LIBGIG_CFLAGS"
+   ac_cflags="$ac_libs $LIBGIG_CFLAGS"
    ac_libs="$ac_libs $LIBGIG_LIBS"
    if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
