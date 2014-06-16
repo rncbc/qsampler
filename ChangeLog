@@ -5,6 +5,9 @@ ChangeLog
 
 SVN TRUNK
 
+* A man page has beed added (making up Matt Flax's work on
+  debian, thanks).
+
 * Translations install directory change. (EXPERIMENTAL)
 
 * Added support for SF2 instrument names/preset enumeration.
