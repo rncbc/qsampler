@@ -329,24 +329,28 @@ Sorry.</source>
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="310"/>
         <source>Option -h requires an argument (hostname).</source>
-        <translation>Ключу -h нужен аргумент (имя хоста).</translation>
+        <translation type="obsolete">Ключу -h нужен аргумент (имя хоста).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="319"/>
+        <location filename="../qsamplerOptions.cpp" line="313"/>
+        <source>Option -h requires an argument (host).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="322"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="331"/>
+        <location filename="../qsamplerOptions.cpp" line="334"/>
         <source>Qt: %1
 </source>
         <translation>Qt: %1
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="551"/>
+        <location filename="../qsamplerOptions.cpp" line="554"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>

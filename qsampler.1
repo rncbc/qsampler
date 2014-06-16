@@ -1,0 +1,51 @@
+.TH QSAMPLER 1 "June 2014"
+.SH NAME
+Qsampler \- A LinuxSampler Qt GUI Interface
+.SH SYNOPSIS
+.B qsampler
+[\fIoptions\fR] [\fIsession-file\fR]
+.SH DESCRIPTION
+This manual page documents briefly the
+.B qsampler
+command.
+.PP
+\fBQsampler\fP is a LinuxSampler GUI front-end application written
+in C++ around the Qt4 toolkit using Qt Designer. At the moment it
+just wraps as a client reference interface for the LinuxSampler
+Control Protocol (LSCP).
+.PP
+LinuxSampler is a work in progress. The goal is to produce a free,
+open source pure software audio sampler with professional grade
+features, comparable to both hardware and commercial Windows/Mac
+software samplers.
+.PP
+The initial platform will be Linux because it is one of the most
+promising open source multimedia operating systems. Thanks to various
+kernel patches and the Jack Audio Connection Kit, Linux is currently
+able to deliver rock solid sub-5 millisecond MIDI-to-Audio response.
+.SH OPTIONS
+.HP
+\fB\-s, \fB\-\-start\fR
+.IP
+Start linuxsampler server locally
+.HP
+\fB\-h, \fB\-\-hostname\fR=[\fIhost\fR]
+.IP
+Specify linuxsampler server hostname (default = localhost)
+.HP
+\fB\-p, \fB\-\-port\fR=[\fIport\fR]
+.IP
+Specify linuxsampler server port number (default = 8888)
+.HP
+\fB\-?, \fB\-\-help\fR
+.IP
+Show help about command line options
+.HP
+\fB\-v, \fB\-\-version\fR
+.IP
+Show version information
+.SH AUTHOR
+qsampler was written by Rui Nuno Capela, Christian Schoenebeck.
+.PP
+This manual page was written by Matt Flax <flatmax@Matt.Flax>,
+for the Debian project (but may be used by others).

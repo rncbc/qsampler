@@ -329,24 +329,28 @@ Promiňte.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="310"/>
         <source>Option -h requires an argument (hostname).</source>
-        <translation>Volba -h vyžaduje argument (název hostitele).</translation>
+        <translation type="obsolete">Volba -h vyžaduje argument (název hostitele).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="319"/>
+        <location filename="../qsamplerOptions.cpp" line="313"/>
+        <source>Option -h requires an argument (host).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="322"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Volba -p vyžaduje argument (název přípojky - brány).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="331"/>
+        <location filename="../qsamplerOptions.cpp" line="334"/>
         <source>Qt: %1
 </source>
         <translation>Qt: %1
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="551"/>
+        <location filename="../qsamplerOptions.cpp" line="554"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>

@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -65,18 +65,18 @@ void Options::loadOptions (void)
 	m_settings.beginGroup("/Server");
 	sServerHost    = m_settings.value("/ServerHost", "localhost").toString();
 	iServerPort    = m_settings.value("/ServerPort", 8888).toInt();
-	#if defined(__APPLE__)  //  Toshi Nagata 20080105
+#if defined(__APPLE__)  //  Toshi Nagata 20080105
 	//  TODO: Should this be a configure option?
 	iServerTimeout = m_settings.value("/ServerTimeout", 10000).toInt();
-	#else
+#else
 	iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
-	#endif
+#endif
 	bServerStart   = m_settings.value("/ServerStart", true).toBool();
-	#if defined(__APPLE__)  //  Toshi Nagata 20080113
+#if defined(__APPLE__)  //  Toshi Nagata 20080113
 	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler.starter").toString();
-	#else
+#else
 	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
-	#endif
+#endif
 	iStartDelay    = m_settings.value("/StartDelay", 3).toInt();
 	m_settings.endGroup();
 
@@ -267,8 +267,8 @@ void Options::print_usage ( const QString& arg0 )
 		QSAMPLER_TITLE " - " QSAMPLER_SUBTITLE "\n\n"
 		"Options:\n\n"
 		"  -s, --start\n\tStart linuxsampler server locally\n\n"
-		"  -h, --hostname\n\tSpecify linuxsampler server hostname\n\n"
-		"  -p, --port\n\tSpecify linuxsampler server port number\n\n"
+		"  -h, --hostname\n\tSpecify linuxsampler server hostname (default = localhost)\n\n"
+		"  -p, --port\n\tSpecify linuxsampler server port number (default = 8888)\n\n"
 		"  -?, --help\n\tShow help about command line options\n\n"
 		"  -v, --version\n\tShow version information\n\n")
 		.arg(arg0);
@@ -281,7 +281,7 @@ bool Options::parse_args ( const QStringList& args )
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
 	int iCmdArgs = 0;
-	int argc = args.count();
+	const int argc = args.count();
 
 	for (int i = 1; i < argc; i++) {
 
@@ -294,20 +294,23 @@ bool Options::parse_args ( const QStringList& args )
 
 		QString sArg = args.at(i);
 		QString sVal = QString::null;
-		int iEqual = sArg.indexOf("=");
+		const int iEqual = sArg.indexOf("=");
 		if (iEqual >= 0) {
 			sVal = sArg.right(sArg.length() - iEqual - 1);
 			sArg = sArg.left(iEqual);
 		}
-		else if (i < argc - 1)
+		else if (i < argc - 1) {
 			sVal = args.at(i + 1);
+			if (sVal[0] == '-')
+				sVal.clear();
+		}
 
 		if (sArg == "-s" || sArg == "--start") {
 			bServerStart = true;
 		}
 		else if (sArg == "-h" || sArg == "--hostname") {
 			if (sVal.isNull()) {
-				out << QObject::tr("Option -h requires an argument (hostname).") + sEol;
+				out << QObject::tr("Option -h requires an argument (host).") + sEol;
 				return false;
 			}
 			sServerHost = sVal;
@@ -329,11 +332,11 @@ bool Options::parse_args ( const QStringList& args )
 		}
 		else if (sArg == "-v" || sArg == "--version") {
 			out << QObject::tr("Qt: %1\n").arg(qVersion());
-#ifdef CONFIG_LIBGIG
+		#ifdef CONFIG_LIBGIG
 			out << QString("%1: %2\n")
 				.arg(gig::libraryName().c_str())
 				.arg(gig::libraryVersion().c_str());
-#endif
+		#endif
 			out << QString("%1: %2\n")
 				.arg(::lscp_client_package())
 				.arg(::lscp_client_version());
