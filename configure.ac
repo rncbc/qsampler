@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.3.10, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.3.11, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -361,8 +361,8 @@ if test "x$ac_libgig" = "xyes"; then
    ac_libs="$ac_libs $LIBGIG_LIBS"
    if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
-      AC_DEFINE(HAVE_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
-      have_libgig_setautoload="yes"
+      AC_DEFINE(CONFIG_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
+      ac_libgig_setautoload="yes"
    fi
 fi
 
@@ -397,6 +397,13 @@ if test "x$ac_lscp_h" = "xno"; then
    AC_MSG_ERROR([LSCP headers not found.])
 fi
 
+if test "x$ac_libgig" = "xyes"; then
+   AC_CHECK_HEADER(SF.h, [ac_libgig_sf2="yes"], [ac_libgig_sf2="no"])
+   if test "x$ac_libgig_sf2" = "xyes"; then
+      AC_DEFINE(CONFIG_LIBGIG_SF2, 1, [Define if libgig SF.h is available.])
+   fi
+fi
+
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_C_CONST
 
@@ -426,7 +433,8 @@ echo "  LSCP volume support  . . . . . . . . . . . . . . .: $ac_volume"
 echo "  LSCP edit instrument support . . . . . . . . . . .: $ac_edit_instrument"
 echo "  GigaSampler instrument file support (libgig) . . .: $ac_libgig"
 if test "x$ac_libgig" = "xyes"; then
-echo "  libgig supports fast information retrieval . . . .: $have_libgig_setautoload"
+echo "  libgig supports fast information retrieval . . . .: $ac_libgig_setautoload"
+echo "  libgig supports SoundFont2 instruments files . . .: $ac_libgig_sf2"
 fi
 echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_channel_midi_event"
 echo "  LSCP device MIDI event support . . . . . . . . . .: $ac_device_midi_event"
