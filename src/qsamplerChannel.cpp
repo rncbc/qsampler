@@ -32,7 +32,7 @@
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
-#ifdef CONFIG_LIBGIG_SF_H
+#ifdef CONFIG_LIBGIG_SF2
 #include "SF.h"
 #endif
 #endif
