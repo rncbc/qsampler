@@ -104,7 +104,7 @@ void Options::loadOptions (void)
 	iBaseFontSize    = m_settings.value("/BaseFontSize", 0).toInt();
 // if libgig provides a fast way to retrieve instrument names even for large
 // .gig files, then we enable this feature by default
-#if HAVE_LIBGIG_SETAUTOLOAD
+#ifdef CONFIG_LIBGIG_SETAUTOLOAD
 	bInstrumentNames = m_settings.value("/InstrumentNames", true).toBool();
 #else
 	bInstrumentNames = m_settings.value("/InstrumentNames", false).toBool();

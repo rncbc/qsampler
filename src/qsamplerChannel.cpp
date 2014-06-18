@@ -32,7 +32,9 @@
 
 #ifdef CONFIG_LIBGIG
 #include "gig.h"
+#ifdef CONFIG_LIBGIG_SF_H
 #include "SF.h"
+#endif
 #endif
 
 namespace QSampler {
@@ -860,7 +862,7 @@ QStringList Channel::getInstrumentList (
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File *pGig = new gig::File(pRiff);
-		#if HAVE_LIBGIG_SETAUTOLOAD
+		#ifdef CONFIG_LIBGIG_SETAUTOLOAD
 			// prevent sleepy response time on large .gig files
 			pGig->SetAutoLoad(false);
 		#endif
@@ -872,6 +874,7 @@ QStringList Channel::getInstrumentList (
 			delete pGig;
 			delete pRiff;
 		}
+	#ifdef CONFIG_LIBGIG_SF2
 		else
 		if (isSf2InstrumentFile(sInstrumentFile)) {
 			RIFF::File *pRiff
@@ -890,6 +893,7 @@ QStringList Channel::getInstrumentList (
 			delete pSf2;
 			delete pRiff;
 		}
+	#endif
 	}
 #endif
 
@@ -920,7 +924,7 @@ QString Channel::getInstrumentName (
 			RIFF::File *pRiff
 				= new RIFF::File(sInstrumentFile.toUtf8().constData());
 			gig::File *pGig = new gig::File(pRiff);
-		#if HAVE_LIBGIG_SETAUTOLOAD
+		#ifdef CONFIG_LIBGIG_SETAUTOLOAD
 			// prevent sleepy response time on large .gig files
 			pGig->SetAutoLoad(false);
 		#endif
@@ -937,6 +941,7 @@ QString Channel::getInstrumentName (
 			delete pGig;
 			delete pRiff;
 		}
+	#ifdef CONFIG_LIBGIG_SF2
 		else
 		if (isSf2InstrumentFile(sInstrumentFile)) {
 			RIFF::File *pRiff
@@ -948,6 +953,7 @@ QString Channel::getInstrumentName (
 			delete pSf2;
 			delete pRiff;
 		}
+	#endif
 	}
 #endif
 
