@@ -51,7 +51,7 @@ Sorry.</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="92"/>
+        <location filename="../qsamplerChannel.cpp" line="94"/>
         <source>Could not add channel.
 
 Sorry.</source>
@@ -60,12 +60,12 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="94"/>
+        <location filename="../qsamplerChannel.cpp" line="96"/>
         <source>added.</source>
         <translation>добавлен.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="115"/>
+        <location filename="../qsamplerChannel.cpp" line="117"/>
         <source>Could not remove channel.
 
 Sorry.</source>
@@ -74,88 +74,88 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="118"/>
+        <location filename="../qsamplerChannel.cpp" line="120"/>
         <source>removed.</source>
         <translation>удален.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="143"/>
+        <location filename="../qsamplerChannel.cpp" line="145"/>
         <source>New Channel</source>
         <translation>Новый канал</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="143"/>
+        <location filename="../qsamplerChannel.cpp" line="145"/>
         <source>Channel %1</source>
         <translation>Канал %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="169"/>
+        <location filename="../qsamplerChannel.cpp" line="171"/>
         <source>Engine: %1.</source>
         <translation>Движок: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="225"/>
+        <location filename="../qsamplerChannel.cpp" line="227"/>
         <source>Instrument: &quot;%1&quot; (%2).</source>
         <translation>Инструмент: &quot;%1&quot; (%2).</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="270"/>
+        <location filename="../qsamplerChannel.cpp" line="272"/>
         <source>MIDI driver: %1.</source>
         <translation>Драйвер MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="298"/>
+        <location filename="../qsamplerChannel.cpp" line="300"/>
         <source>MIDI device: %1.</source>
         <translation>Устройство MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="326"/>
+        <location filename="../qsamplerChannel.cpp" line="328"/>
         <source>MIDI port: %1.</source>
         <translation>Порт MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="354"/>
+        <location filename="../qsamplerChannel.cpp" line="356"/>
         <source>MIDI channel: %1.</source>
         <translation>Канал MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="382"/>
+        <location filename="../qsamplerChannel.cpp" line="384"/>
         <source>MIDI map: %1.</source>
         <translation>Карта MIDI: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="410"/>
+        <location filename="../qsamplerChannel.cpp" line="412"/>
         <source>Audio device: %1.</source>
         <translation>Звуковое устройство: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="439"/>
+        <location filename="../qsamplerChannel.cpp" line="441"/>
         <source>Audio driver: %1.</source>
         <translation>Звуковой драйвер: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="467"/>
+        <location filename="../qsamplerChannel.cpp" line="469"/>
         <location filename="../qsamplerMainForm.cpp" line="2061"/>
         <source>Volume: %1.</source>
         <translation>Громкость: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="495"/>
+        <location filename="../qsamplerChannel.cpp" line="497"/>
         <source>Mute: %1.</source>
         <translation>Приглушение: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="525"/>
+        <location filename="../qsamplerChannel.cpp" line="527"/>
         <source>Solo: %1.</source>
         <translation>Солирование: %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="557"/>
+        <location filename="../qsamplerChannel.cpp" line="559"/>
         <source>Audio Channel: %1 -&gt; %2.</source>
         <translation>Звуковой канал: %1 -&gt; %2.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="594"/>
+        <location filename="../qsamplerChannel.cpp" line="596"/>
         <source>Could not get channel information.
 
 Sorry.</source>
@@ -164,17 +164,17 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="641"/>
+        <location filename="../qsamplerChannel.cpp" line="643"/>
         <source>(none)</source>
         <translation>(нет)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="689"/>
+        <location filename="../qsamplerChannel.cpp" line="691"/>
         <source>reset.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="709"/>
+        <location filename="../qsamplerChannel.cpp" line="711"/>
         <source>Could not launch an appropriate instrument editor for the given instrument!
 
 Make sure you have an appropriate instrument editor like &apos;gigedit&apos; installed and that it placed its mandatory DLL file into the sampler&apos;s plugin directory.</source>
@@ -183,12 +183,12 @@ Make sure you have an appropriate instrument editor like &apos;gigedit&apos; ins
 Убедитесь, что в системе установлен необходимый редактор вроде gigedit, и что его файл DLL размещен в папке с расширениями сэмплера.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="720"/>
+        <location filename="../qsamplerChannel.cpp" line="722"/>
         <source>edit instrument.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="726"/>
+        <location filename="../qsamplerChannel.cpp" line="728"/>
         <source>Sorry, QSampler was compiled for a version of liblscp which lacks this feature.
 
 You may want to update liblscp and recompile QSampler afterwards.</source>
@@ -197,32 +197,32 @@ You may want to update liblscp and recompile QSampler afterwards.</source>
 Вероятно вам стоит обновить версию liblscp и пересобрать QSampler.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="747"/>
+        <location filename="../qsamplerChannel.cpp" line="749"/>
         <source>setup...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="966"/>
+        <location filename="../qsamplerChannel.cpp" line="972"/>
         <source>(No engine)</source>
         <translation>(нет движка)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="971"/>
+        <location filename="../qsamplerChannel.cpp" line="977"/>
         <source>(No instrument)</source>
         <translation>(нет инструмента)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="975"/>
+        <location filename="../qsamplerChannel.cpp" line="981"/>
         <source>(Loading instrument...)</source>
         <translation>(загружается инструмент...)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1057"/>
+        <location filename="../qsamplerChannel.cpp" line="1063"/>
         <source> Device Channel</source>
         <translation>Канал устройства</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1059"/>
+        <location filename="../qsamplerChannel.cpp" line="1065"/>
         <source>Audio Channel </source>
         <translation>Звуковой канал</translation>
     </message>

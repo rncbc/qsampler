@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.2.3.11, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.2.3.12, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -355,12 +355,14 @@ fi
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    PKG_CHECK_MODULES(LIBGIG, gig >= 3.3.0, [ac_libgig="yes"], [ac_libgig="no"])
-   AC_SUBST(LIBGIG_CFLAGS)
-   AC_SUBST(LIBGIG_LIBS)
-   ac_cflags="$ac_cflags $LIBGIG_CFLAGS"
-   ac_libs="$ac_libs $LIBGIG_LIBS"
    if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
+      AC_SUBST(LIBGIG_CFLAGS)
+      AC_SUBST(LIBGIG_LIBS)
+      ac_cflags="$ac_cflags $LIBGIG_CFLAGS"
+      ac_libs="$ac_libs $LIBGIG_LIBS"
+      CFLAGS="$ac_cflags"
+      CPPFLAGS="$ac_cflags"
       AC_DEFINE(CONFIG_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
       ac_libgig_setautoload="yes"
    fi
@@ -398,9 +400,9 @@ if test "x$ac_lscp_h" = "xno"; then
 fi
 
 if test "x$ac_libgig" = "xyes"; then
-   AC_CHECK_HEADER(SF.h, [ac_libgig_sf2="yes"], [ac_libgig_sf2="no"])
+   AC_CHECK_HEADER(libgig/SF.h, [ac_libgig_sf2="yes"], [ac_libgig_sf2="no"])
    if test "x$ac_libgig_sf2" = "xyes"; then
-      AC_DEFINE(CONFIG_LIBGIG_SF2, 1, [Define if libgig SF.h is available.])
+      AC_DEFINE(CONFIG_LIBGIG_SF2, 1, [Define if libgig/SF.h is available.])
    fi
 fi
 

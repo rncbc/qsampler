@@ -5,6 +5,8 @@ ChangeLog
 
 SVN TRUNK
 
+* Adjusted configure check for libgig to detect the new includedir.
+
 * A man page has beed added (making up Matt Flax's work on
   debian, thanks).
 
