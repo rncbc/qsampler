@@ -36,6 +36,7 @@
 
 #if !defined(WIN32)
 #include <unistd.h>
+#include <fcntl.h>
 #endif
 
 
@@ -116,12 +117,24 @@ Messages::~Messages (void)
 void Messages::stdoutNotify ( int fd )
 {
 #if !defined(WIN32)
+	// Set non-blocking reads, if not already...
+	const int iFlags = ::fcntl(fd, F_GETFL, 0);
+	int iBlock = ((iFlags & O_NONBLOCK) == 0);
+	if (iBlock)
+		iBlock = ::fcntl(fd, F_SETFL, iFlags | O_NONBLOCK);
+	// Read as much as is available...
+	QString sTemp;
 	char achBuffer[1024];
-	const int cchBuffer = ::read(fd, achBuffer, sizeof(achBuffer) - 1);
-	if (cchBuffer > 0) {
-		achBuffer[cchBuffer] = (char) 0;
-		appendStdoutBuffer(achBuffer);
+	const int cchBuffer = sizeof(achBuffer) - 1;
+	int cchRead = ::read(fd, achBuffer, cchBuffer);
+	while (cchRead > 0) {
+		achBuffer[cchRead] = (char) 0;
+		sTemp.append(achBuffer);
+		cchRead = (iBlock ? 0 : ::read(fd, achBuffer, cchBuffer));
 	}
+	// Needs to be non-empty...
+	if (!sTemp.isEmpty())
+		appendStdoutBuffer(sTemp);
 #endif
 }
 
@@ -148,7 +161,7 @@ void Messages::flushStdoutBuffer (void)
 {
 	if (!m_sStdoutBuffer.isEmpty()) {
 		appendMessagesText(m_sStdoutBuffer);
-		m_sStdoutBuffer.truncate(0);
+		m_sStdoutBuffer.clear();
 	}
 }
 
