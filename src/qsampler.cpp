@@ -393,10 +393,8 @@ int main ( int argc, char **argv )
 	}
 
 	// Set default base font...
-	int iBaseFontSize = app.font().pointSize();
 	if (options.iBaseFontSize > 0)
-		iBaseFontSize = options.iBaseFontSize;
-	app.setFont(QFont(app.font().family(), iBaseFontSize));
+		app.setFont(QFont(app.font().family(), options.iBaseFontSize));
 
 	// Construct, setup and show the main form.
 	QSampler::MainForm w;
