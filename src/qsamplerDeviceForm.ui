@@ -2,7 +2,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -266,9 +266,6 @@
        <property name="icon" >
         <iconset resource="qsampler.qrc" >:/images/formRefresh.png</iconset>
        </property>
-       <property name="shortcut" >
-        <string>Alt+R</string>
-       </property>
       </widget>
      </item>
      <item>
@@ -298,9 +295,6 @@
        <property name="icon" >
         <iconset resource="qsampler.qrc" >:/images/deviceCreate.png</iconset>
        </property>
-       <property name="shortcut" >
-        <string>Alt+C</string>
-       </property>
       </widget>
      </item>
      <item>
@@ -314,9 +308,6 @@
        <property name="icon" >
         <iconset resource="qsampler.qrc" >:/images/deviceDelete.png</iconset>
        </property>
-       <property name="shortcut" >
-        <string>Alt+D</string>
-       </property>
       </widget>
      </item>
      <item>
@@ -329,9 +320,6 @@
        </property>
        <property name="icon" >
         <iconset resource="qsampler.qrc" >:/images/formReject.png</iconset>
-       </property>
-       <property name="shortcut" >
-        <string/>
        </property>
       </widget>
      </item>
