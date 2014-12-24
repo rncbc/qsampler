@@ -3,7 +3,10 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
-SVN TRUNK
+GIT HEAD
+
+* Master volume slider now getting proper layout when changing its
+  main toolbar orientation.
 
 * Messages standard output capture has been slightly improved
   as for non-blocking i/o, whenever available. (EXPERIMENTAL)

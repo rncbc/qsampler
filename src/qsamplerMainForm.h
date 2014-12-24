@@ -1,7 +1,7 @@
 // qsamplerMainForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -125,6 +125,9 @@ protected slots:
 
 	// Channel strip activation/selection.
 	void activateStrip(QMdiSubWindow *pMdiSubWindow);
+
+	// Channel toolbar orientation change.
+	void channelsToolbarOrientation(Qt::Orientation orientation);
 
 protected:
 

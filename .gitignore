@@ -1,0 +1,16 @@
+Makefile
+config.*
+configure
+*.mak
+*.spec
+*.desktop
+*.pri
+*.qm
+*.o
+*.so
+*.pro.user
+qrc_*.cpp
+.moc
+.obj
+.ui
+qsampler

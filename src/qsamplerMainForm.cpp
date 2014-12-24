@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -254,13 +254,10 @@ MainForm::MainForm ( QWidget *pParent )
 	QObject::connect(m_pVolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
-	//m_ui.channelsToolbar->setHorizontallyStretchable(true);
-	//m_ui.channelsToolbar->setStretchableWidget(m_pVolumeSlider);
 	m_ui.channelsToolbar->addWidget(m_pVolumeSlider);
 	// Volume spin-box
 	m_ui.channelsToolbar->addSeparator();
 	m_pVolumeSpinBox = new QSpinBox(m_ui.channelsToolbar);
-	m_pVolumeSpinBox->setMaximumHeight(24);
 	m_pVolumeSpinBox->setSuffix(" %");
 	m_pVolumeSpinBox->setMinimum(0);
 	m_pVolumeSpinBox->setMaximum(100);
@@ -395,6 +392,11 @@ MainForm::MainForm ( QWidget *pParent )
 	QObject::connect(m_ui.channelsMenu,
 		SIGNAL(aboutToShow()),
 		SLOT(channelsMenuAboutToShow()));
+#ifdef CONFIG_VOLUME
+	QObject::connect(m_ui.channelsToolbar,
+		SIGNAL(orientationChanged(Qt::Orientation)),
+		SLOT(channelsToolbarOrientation(Qt::Orientation)));
+#endif
 }
 
 // Destructor.
@@ -3001,6 +3003,30 @@ void MainForm::activateStrip ( QMdiSubWindow *pMdiSubWindow )
 		pChannelStrip->setSelected(true);
 
 	stabilizeForm();
+}
+
+
+// Channel toolbar orientation change.
+void MainForm::channelsToolbarOrientation ( Qt::Orientation orientation )
+{
+#ifdef CONFIG_VOLUME
+	m_pVolumeSlider->setOrientation(orientation);
+	if (orientation == Qt::Horizontal) {
+		m_pVolumeSlider->setMinimumHeight(24);
+		m_pVolumeSlider->setMaximumHeight(32);
+		m_pVolumeSlider->setMinimumWidth(120);
+		m_pVolumeSlider->setMaximumWidth(640);
+		m_pVolumeSpinBox->setMaximumWidth(64);
+		m_pVolumeSpinBox->setButtonSymbols(QSpinBox::UpDownArrows);
+	} else {
+		m_pVolumeSlider->setMinimumHeight(120);
+		m_pVolumeSlider->setMaximumHeight(480);
+		m_pVolumeSlider->setMinimumWidth(24);
+		m_pVolumeSlider->setMaximumWidth(32);
+		m_pVolumeSpinBox->setMaximumWidth(32);
+		m_pVolumeSpinBox->setButtonSymbols(QSpinBox::NoButtons);
+	}
+#endif
 }
 
 
