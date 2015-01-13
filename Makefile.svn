@@ -1,0 +1,9 @@
+default: all
+
+.PHONY: all clean
+
+all:
+	make -f Makefile.git
+
+clean:
+	make -f Makefile.git clean
