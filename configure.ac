@@ -361,8 +361,6 @@ if test "x$ac_libgig" = "xyes"; then
       AC_SUBST(LIBGIG_LIBS)
       ac_cflags="$ac_cflags $LIBGIG_CFLAGS"
       ac_libs="$ac_libs $LIBGIG_LIBS"
-      CFLAGS="$ac_cflags"
-      CPPFLAGS="$ac_cflags"
       AC_DEFINE(CONFIG_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
       ac_libgig_setautoload="yes"
    fi
