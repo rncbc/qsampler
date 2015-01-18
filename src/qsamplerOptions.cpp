@@ -72,8 +72,8 @@ void Options::loadOptions (void)
 	iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
 #endif
 	bServerStart   = m_settings.value("/ServerStart", true).toBool();
-#if defined(__APPLE__)  //  Toshi Nagata 20080113
-	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler.starter").toString();
+#if defined(__APPLE__)
+	sServerCmdLine = m_settings.value("/ServerCmdLine", "/usr/local/bin/linuxsampler").toString();
 #else
 	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
 #endif
