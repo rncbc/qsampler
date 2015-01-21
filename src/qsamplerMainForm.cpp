@@ -2749,7 +2749,8 @@ void MainForm::stopServer (bool bInteractive)
 			"according to your current sampler session and you could alter the\n"
 			"sampler session at any time by relaunching QSampler.\n\n"
 			"Do you want LinuxSampler to stop?"),
-			QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+			QMessageBox::Yes | QMessageBox::No,
+			QMessageBox::Yes) == QMessageBox::No)
 		{
 			bForceServerStop = false;
 		}

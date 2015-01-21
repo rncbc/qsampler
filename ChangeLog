@@ -30,6 +30,9 @@ GIT HEAD
 
 * Mac OS X: Fixed default path of linuxsampler binary.
 
+* When closing qsampler and showing the user the dialog whether to stop the
+  LinuxSampler backend, set the default selection to "Yes".
+
 
 0.2.3  2013-12-31  A fifth of a Jubilee.
 
