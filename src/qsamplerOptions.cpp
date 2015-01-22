@@ -1,8 +1,8 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, Christian Schoenebeck
+   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -72,8 +72,8 @@ void Options::loadOptions (void)
 	iServerTimeout = m_settings.value("/ServerTimeout", 1000).toInt();
 #endif
 	bServerStart   = m_settings.value("/ServerStart", true).toBool();
-#if defined(__APPLE__)  //  Toshi Nagata 20080113
-	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler.starter").toString();
+#if defined(__APPLE__)
+	sServerCmdLine = m_settings.value("/ServerCmdLine", "/usr/local/bin/linuxsampler").toString();
 #else
 	sServerCmdLine = m_settings.value("/ServerCmdLine", "linuxsampler").toString();
 #endif

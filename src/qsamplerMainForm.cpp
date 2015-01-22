@@ -1,8 +1,8 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007, 2008 Christian Schoenebeck
+   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -2749,7 +2749,8 @@ void MainForm::stopServer (bool bInteractive)
 			"according to your current sampler session and you could alter the\n"
 			"sampler session at any time by relaunching QSampler.\n\n"
 			"Do you want LinuxSampler to stop?"),
-			QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+			QMessageBox::Yes | QMessageBox::No,
+			QMessageBox::Yes) == QMessageBox::No)
 		{
 			bForceServerStop = false;
 		}
