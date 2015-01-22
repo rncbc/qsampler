@@ -3,7 +3,13 @@ Qsampler - A LinuxSampler Qt GUI Interface
 
 ChangeLog
 
+
 GIT HEAD
+
+* Mac OS X: Fixed default path of linuxsampler binary.
+
+* When closing qsampler and showing the user the dialog whether to
+  stop the LinuxSampler backend, set the default selection to "Yes".
 
 * Master volume slider now getting proper layout when changing its
   main toolbar orientation.
@@ -27,11 +33,6 @@ GIT HEAD
 
 * Adjusted configure check for libgig to detect its new libdir
   (impolitely forcing the user now to have at least libgig 3.3.0).
-
-* Mac OS X: Fixed default path of linuxsampler binary.
-
-* When closing qsampler and showing the user the dialog whether to stop the
-  LinuxSampler backend, set the default selection to "Yes".
 
 
 0.2.3  2013-12-31  A fifth of a Jubilee.
