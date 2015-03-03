@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -49,8 +49,10 @@ protected slots:
 
 	void accept();
 	void reject();
+
 	void optionsChanged();
 	void stabilizeForm();
+
 	void browseMessagesLogPath();
 	void chooseDisplayFont();
 	void chooseMessagesFont();
@@ -63,8 +65,10 @@ private:
 	Ui::qsamplerOptionsForm m_ui;
 
 	Options* m_pOptions;
+
 	int m_iDirtySetup;
 	int m_iDirtyCount;
+
 	bool bMaxVoicesModified;
 	bool bMaxStreamsModified;
 };

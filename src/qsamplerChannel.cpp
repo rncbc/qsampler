@@ -760,45 +760,45 @@ bool Channel::channelSetup ( QWidget *pParent )
 
 
 // Redirected messages output methods.
-void Channel::appendMessages( const QString& s ) const
+void Channel::appendMessages ( const QString& sText ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
-		pMainForm->appendMessages(channelName() + ' ' + s);
+		pMainForm->appendMessages(channelName() + ' ' + sText);
 }
 
-void Channel::appendMessagesColor( const QString& s,
-	const QString& c ) const
+void Channel::appendMessagesColor (
+	const QString& sText, const QString& sColor ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
-		pMainForm->appendMessagesColor(channelName() + ' ' + s, c);
+		pMainForm->appendMessagesColor(channelName() + ' ' + sText, sColor);
 }
 
-void Channel::appendMessagesText( const QString& s ) const
+void Channel::appendMessagesText ( const QString& sText ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
-		pMainForm->appendMessagesText(channelName() + ' ' + s);
+		pMainForm->appendMessagesText(channelName() + ' ' + sText);
 }
 
-void Channel::appendMessagesError( const QString& s ) const
+void Channel::appendMessagesError ( const QString& sText ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
-		pMainForm->appendMessagesError(channelName() + "\n\n" + s);
+		pMainForm->appendMessagesError(channelName() + "\n\n" + sText);
 }
 
-void Channel::appendMessagesClient( const QString& s ) const
+void Channel::appendMessagesClient ( const QString& sText ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
-		pMainForm->appendMessagesClient(channelName() + ' ' + s);
+		pMainForm->appendMessagesClient(channelName() + ' ' + sText);
 }
 
 
 // Context menu event handler.
-void Channel::contextMenuEvent( QContextMenuEvent *pEvent )
+void Channel::contextMenuEvent ( QContextMenuEvent *pEvent )
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)

@@ -2,7 +2,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2005-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2005-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -26,8 +26,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>539</width>
-    <height>422</height>
+    <width>520</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -1156,18 +1156,21 @@
             </property>
            </widget>
           </item>
-          <item rowspan="3" row="1" column="1" colspan="3" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
+          <item row="1" column="2" colspan="2">
+           <widget class="QCheckBox" name="ConfirmResetCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
             </property>
-            <property name="sizeHint" stdset="0" >
-             <size>
-              <width>281</width>
-              <height>48</height>
-             </size>
+            <property name="toolTip" >
+             <string>Whether to ask for session reset</string>
             </property>
-           </spacer>
+            <property name="text" >
+             <string>&amp;Confirm session reset</string>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0" >
            <widget class="QCheckBox" name="StdoutCaptureCheckBox" >
@@ -1185,6 +1188,22 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="2" colspan="2">
+           <widget class="QCheckBox" name="ConfirmRestartCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>Whether to ask for session restart</string>
+            </property>
+            <property name="text" >
+             <string>&amp;Confirm session restart</string>
+            </property>
+           </widget>
+          </item>
           <item row="3" column="0" >
            <widget class="QCheckBox" name="CompletePathCheckBox" >
             <property name="font" >
@@ -1198,6 +1217,22 @@
             </property>
             <property name="text" >
              <string>Show complete &amp;path of session files</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="2">
+           <widget class="QCheckBox" name="ConfirmErrorCheckBox" >
+            <property name="font" >
+             <font>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="toolTip" >
+             <string>Whether to show session errors</string>
+            </property>
+            <property name="text" >
+             <string>&amp;Confirm session errors</string>
             </property>
            </widget>
           </item>
@@ -1337,6 +1372,9 @@
   <tabstop>CompletePathCheckBox</tabstop>
   <tabstop>InstrumentNamesCheckBox</tabstop>
   <tabstop>MaxRecentFilesSpinBox</tabstop>
+  <tabstop>ConfirmResetCheckBox</tabstop>
+  <tabstop>ConfirmRestartCheckBox</tabstop>
+  <tabstop>ConfirmErrorCheckBox</tabstop>
   <tabstop>BaseFontSizeComboBox</tabstop>
   <tabstop>DialogButtonBox</tabstop>
  </tabstops>

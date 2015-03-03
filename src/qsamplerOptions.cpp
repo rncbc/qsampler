@@ -97,6 +97,9 @@ void Options::loadOptions (void)
 	bMessagesLimit   = m_settings.value("/MessagesLimit", true).toBool();
 	iMessagesLimitLines = m_settings.value("/MessagesLimitLines", 1000).toInt();
 	bConfirmRemove   = m_settings.value("/ConfirmRemove", true).toBool();
+	bConfirmReset    = m_settings.value("/ConfirmReset", true).toBool();
+	bConfirmRestart  = m_settings.value("/ConfirmRestart", true).toBool();
+	bConfirmError    = m_settings.value("/ConfirmError", true).toBool();
 	bKeepOnTop       = m_settings.value("/KeepOnTop", true).toBool();
 	bStdoutCapture   = m_settings.value("/StdoutCapture", true).toBool();
 	bCompletePath    = m_settings.value("/CompletePath", true).toBool();
@@ -192,6 +195,9 @@ void Options::saveOptions (void)
 	m_settings.setValue("/MessagesLimit", bMessagesLimit);
 	m_settings.setValue("/MessagesLimitLines", iMessagesLimitLines);
 	m_settings.setValue("/ConfirmRemove", bConfirmRemove);
+	m_settings.setValue("/ConfirmReset", bConfirmReset);
+	m_settings.setValue("/ConfirmRestart", bConfirmRestart);
+	m_settings.setValue("/ConfirmError", bConfirmError);
 	m_settings.setValue("/KeepOnTop", bKeepOnTop);
 	m_settings.setValue("/StdoutCapture", bStdoutCapture);
 	m_settings.setValue("/CompletePath", bCompletePath);

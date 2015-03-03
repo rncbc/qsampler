@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -109,6 +109,15 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	QObject::connect(m_ui.ConfirmRemoveCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
+	QObject::connect(m_ui.ConfirmResetCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.ConfirmRestartCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.ConfirmErrorCheckBox,
+		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
 	QObject::connect(m_ui.KeepOnTopCheckBox,
 		SIGNAL(stateChanged(int)),
 		SLOT(optionsChanged()));
@@ -212,6 +221,9 @@ void OptionsForm::setup ( Options *pOptions )
 
 	// Other options finally.
 	m_ui.ConfirmRemoveCheckBox->setChecked(m_pOptions->bConfirmRemove);
+	m_ui.ConfirmRestartCheckBox->setChecked(m_pOptions->bConfirmRestart);
+	m_ui.ConfirmResetCheckBox->setChecked(m_pOptions->bConfirmReset);
+	m_ui.ConfirmErrorCheckBox->setChecked(m_pOptions->bConfirmError);
 	m_ui.KeepOnTopCheckBox->setChecked(m_pOptions->bKeepOnTop);
 	m_ui.StdoutCaptureCheckBox->setChecked(m_pOptions->bStdoutCapture);
 	m_ui.CompletePathCheckBox->setChecked(m_pOptions->bCompletePath);
@@ -302,6 +314,9 @@ void OptionsForm::accept (void)
 		m_pOptions->iMessagesLimitLines = m_ui.MessagesLimitLinesSpinBox->value();
 		// Other options...
 		m_pOptions->bConfirmRemove = m_ui.ConfirmRemoveCheckBox->isChecked();
+		m_pOptions->bConfirmRestart = m_ui.ConfirmRestartCheckBox->isChecked();
+		m_pOptions->bConfirmReset  = m_ui.ConfirmResetCheckBox->isChecked();
+		m_pOptions->bConfirmError  = m_ui.ConfirmErrorCheckBox->isChecked();
 		m_pOptions->bKeepOnTop     = m_ui.KeepOnTopCheckBox->isChecked();
 		m_pOptions->bStdoutCapture = m_ui.StdoutCaptureCheckBox->isChecked();
 		m_pOptions->bCompletePath  = m_ui.CompletePathCheckBox->isChecked();

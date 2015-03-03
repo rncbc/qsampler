@@ -64,11 +64,11 @@ public:
 
 	QString sessionName(const QString& sFilename);
 
-	void appendMessages(const QString& s);
-	void appendMessagesColor(const QString& s, const QString& c);
-	void appendMessagesText(const QString& s);
-	void appendMessagesError(const QString& s);
-	void appendMessagesClient(const QString& s);
+	void appendMessages(const QString& sText);
+	void appendMessagesColor(const QString& sText, const QString& sColor);
+	void appendMessagesText(const QString& sText);
+	void appendMessagesError(const QString& sText);
+	void appendMessagesClient(const QString& sText);
 
 	ChannelStrip *createChannelStrip(Channel *pChannel);
 	void destroyChannelStrip(ChannelStrip *pChannelStrip);

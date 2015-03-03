@@ -135,7 +135,7 @@ Promiňte.</translation>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="469"/>
-        <location filename="../qsamplerMainForm.cpp" line="2063"/>
+        <location filename="../qsamplerMainForm.cpp" line="2116"/>
         <source>Volume: %1.</source>
         <translation>Hlasitost: %1.</translation>
     </message>
@@ -320,7 +320,7 @@ Promiňte.</translation>
         <translation type="obsolete">Na požádání</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="266"/>
+        <location filename="../qsamplerOptions.cpp" line="272"/>
         <source>Usage: %1 [options] [session-file]
 
 </source>
@@ -333,24 +333,24 @@ Promiňte.</translation>
         <translation type="obsolete">Volba -h vyžaduje argument (název hostitele).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="313"/>
+        <location filename="../qsamplerOptions.cpp" line="319"/>
         <source>Option -h requires an argument (host).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="322"/>
+        <location filename="../qsamplerOptions.cpp" line="328"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Volba -p vyžaduje argument (název přípojky - brány).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="334"/>
+        <location filename="../qsamplerOptions.cpp" line="340"/>
         <source>Qt: %1
 </source>
         <translation>Qt: %1
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="554"/>
+        <location filename="../qsamplerOptions.cpp" line="560"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>
@@ -481,12 +481,12 @@ Chcete použít změny?</translation>
 <context>
     <name>QSampler::DeviceForm</name>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="285"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="286"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="286"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="287"/>
         <source>About to delete device:
 
 %1
@@ -507,27 +507,32 @@ Jste si jistý?</translation>
         <translation type="obsolete">О&amp;тменить</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="446"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="302"/>
+        <source>Don&apos;t ask this again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerDeviceForm.cpp" line="464"/>
         <source>Ch&amp;annel:</source>
         <translation>&amp;Каnál:</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="449"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="467"/>
         <source>P&amp;ort:</source>
         <translation>&amp;Přípojka:</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="626"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="644"/>
         <source>&amp;Create device</source>
         <translation>&amp;Vytvořit zařízení</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="630"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
         <source>&amp;Delete device</source>
         <translation>&amp;Smazat zařízení</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="635"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="653"/>
         <source>&amp;Refresh</source>
         <translation>&amp;Obnovit</translation>
     </message>
@@ -600,22 +605,22 @@ Chcete použít změny?</translation>
 <context>
     <name>QSampler::InstrumentListForm</name>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="58"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="60"/>
         <source>Instrument Map</source>
         <translation>Zobrazení nástrojů</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="158"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="160"/>
         <source>(All)</source>
         <translation>(Vše)</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="283"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="284"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="284"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="285"/>
         <source>About to delete instrument map entry:
 
 %1
@@ -626,6 +631,11 @@ Are you sure?</source>
 %1
 
 Jste si jistý?</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="300"/>
+        <source>Don&apos;t ask this again</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OK</source>
@@ -717,13 +727,13 @@ Promiňte.</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="285"/>
-        <location filename="../qsamplerMainForm.cpp" line="2021"/>
+        <location filename="../qsamplerMainForm.cpp" line="2074"/>
         <source>Connected</source>
         <translation>Spojeno</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="301"/>
-        <location filename="../qsamplerMainForm.cpp" line="2035"/>
+        <location filename="../qsamplerMainForm.cpp" line="2088"/>
         <source>MOD</source>
         <translation>MOD</translation>
     </message>
@@ -766,9 +776,9 @@ Promiňte.</translation>
         <location filename="../qsamplerMainForm.cpp" line="852"/>
         <location filename="../qsamplerMainForm.cpp" line="876"/>
         <location filename="../qsamplerMainForm.cpp" line="1409"/>
-        <location filename="../qsamplerMainForm.cpp" line="1451"/>
-        <location filename="../qsamplerMainForm.cpp" line="1533"/>
-        <location filename="../qsamplerMainForm.cpp" line="2674"/>
+        <location filename="../qsamplerMainForm.cpp" line="1468"/>
+        <location filename="../qsamplerMainForm.cpp" line="1569"/>
+        <location filename="../qsamplerMainForm.cpp" line="2743"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
@@ -842,13 +852,13 @@ Promiňte.</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="1027"/>
-        <location filename="../qsamplerMainForm.cpp" line="1876"/>
+        <location filename="../qsamplerMainForm.cpp" line="1929"/>
         <source>Version</source>
         <translation>Verze</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="1029"/>
-        <location filename="../qsamplerMainForm.cpp" line="1877"/>
+        <location filename="../qsamplerMainForm.cpp" line="1930"/>
         <source>Build</source>
         <translation>Sestavení</translation>
     </message>
@@ -921,7 +931,7 @@ Chcete přenastavit stroj sampleru nyní?</translation>
         <translation type="obsolete">Сбросить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1427"/>
+        <location filename="../qsamplerMainForm.cpp" line="1445"/>
         <source>Could not reset sampler instance.
 
 Sorry.</source>
@@ -930,12 +940,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1432"/>
+        <location filename="../qsamplerMainForm.cpp" line="1450"/>
         <source>Sampler reset.</source>
         <translation>Přenastavení sampleru.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1452"/>
+        <location filename="../qsamplerMainForm.cpp" line="1469"/>
         <source>New settings will be effective after
 restarting the client/server connection.
 
@@ -956,7 +966,7 @@ Chcete spojení spustit znovu nyní?</translation>
         <translation type="obsolete">Перезапустить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1534"/>
+        <location filename="../qsamplerMainForm.cpp" line="1570"/>
         <source>About to remove channel:
 
 %1
@@ -978,114 +988,121 @@ Jste si jistý?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1753"/>
+        <location filename="../qsamplerMainForm.cpp" line="1426"/>
+        <location filename="../qsamplerMainForm.cpp" line="1485"/>
+        <location filename="../qsamplerMainForm.cpp" line="1585"/>
+        <source>Don&apos;t ask this again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerMainForm.cpp" line="1806"/>
         <source>Information</source>
         <translation>Informace</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1754"/>
+        <location filename="../qsamplerMainForm.cpp" line="1807"/>
         <source>Some settings may be only effective
 next time you start this program.</source>
         <translation>Některá nastavení se projeví až tehdy,
 když příště spustíte tento program.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1880"/>
+        <location filename="../qsamplerMainForm.cpp" line="1933"/>
         <source>Debugging option enabled.</source>
         <translation>Povolena volba ladění.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1885"/>
+        <location filename="../qsamplerMainForm.cpp" line="1938"/>
         <source>GIG (libgig) file support disabled.</source>
         <translation>Zakázána podpora pro soubor GIG (libgig).</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1890"/>
+        <location filename="../qsamplerMainForm.cpp" line="1943"/>
         <source>LSCP (liblscp) instrument_name support disabled.</source>
         <translation>Zakázána podpora pro instrument_name v LSCP (liblscp).</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1895"/>
+        <location filename="../qsamplerMainForm.cpp" line="1948"/>
         <source>Sampler channel Mute/Solo support disabled.</source>
         <translation>Zakázána podpora pro Ztlumení/Sólo kanálu sampleru.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1900"/>
+        <location filename="../qsamplerMainForm.cpp" line="1953"/>
         <source>LSCP (liblscp) audio_routing support disabled.</source>
         <translation>Zakázána podpora pro  audio_routing v LSCP (liblscp).</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1905"/>
+        <location filename="../qsamplerMainForm.cpp" line="1958"/>
         <source>Sampler channel Effect Sends support disabled.</source>
         <translation>Zakázána podpora pro poslání efektu kanálu sampleru.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1910"/>
+        <location filename="../qsamplerMainForm.cpp" line="1963"/>
         <source>Global volume support disabled.</source>
         <translation>Zakázána podpora pro celkovou hlasitost.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1915"/>
+        <location filename="../qsamplerMainForm.cpp" line="1968"/>
         <source>MIDI instrument mapping support disabled.</source>
         <translation>Zakázána podpora pro zobrazení nástrojů MIDI.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1920"/>
+        <location filename="../qsamplerMainForm.cpp" line="1973"/>
         <source>Instrument editing support disabled.</source>
         <translation>Zakázána podpora pro úpravy nástrojů.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1925"/>
+        <location filename="../qsamplerMainForm.cpp" line="1978"/>
         <source>Channel MIDI event support disabled.</source>
         <translation>Zakázána podpora pro události kanálů MIDI.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1930"/>
+        <location filename="../qsamplerMainForm.cpp" line="1983"/>
         <source>Device MIDI event support disabled.</source>
         <translation>Zakázána podpora pro události zařízení MIDI.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1935"/>
+        <location filename="../qsamplerMainForm.cpp" line="1988"/>
         <source>Runtime max. voices / disk streams support disabled.</source>
         <translation>Zakázána podpora pro největší množství hlasů/diskových proudy běžících současně.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1939"/>
+        <location filename="../qsamplerMainForm.cpp" line="1992"/>
         <source>Using</source>
         <translation>Pomocí</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1951"/>
+        <location filename="../qsamplerMainForm.cpp" line="2004"/>
         <source>Website</source>
         <translation>Stránky</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1957"/>
+        <location filename="../qsamplerMainForm.cpp" line="2010"/>
         <source>This program is free software; you can redistribute it and/or modify it</source>
         <translation>Tento program je svobodným programem. Můžete jej šířit a/nebo upravit</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1958"/>
+        <location filename="../qsamplerMainForm.cpp" line="2011"/>
         <source>under the terms of the GNU General Public License version 2 or later.</source>
         <translation>za podmínek GNU General Public License ve verzi 2 nebo pozdější.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1962"/>
+        <location filename="../qsamplerMainForm.cpp" line="2015"/>
         <source>About</source>
         <translation>O programu</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2109"/>
+        <location filename="../qsamplerMainForm.cpp" line="2162"/>
         <source>Chromatic</source>
         <translation>Chromatický</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2111"/>
+        <location filename="../qsamplerMainForm.cpp" line="2164"/>
         <source>Drum Kits</source>
         <translation>Bicí</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2137"/>
+        <location filename="../qsamplerMainForm.cpp" line="2190"/>
         <source>Could not get current list of channels.
 
 Sorry.</source>
@@ -1093,12 +1110,17 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2362"/>
+        <location filename="../qsamplerMainForm.cpp" line="2415"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2675"/>
+        <location filename="../qsamplerMainForm.cpp" line="2424"/>
+        <source>Don&apos;t show this again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerMainForm.cpp" line="2744"/>
         <source>Could not start the LinuxSampler server.
 
 Maybe it is already started.</source>
@@ -1115,12 +1137,12 @@ Možná je už spuštěn.</translation>
         <translation type="obsolete">Убить</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2716"/>
+        <location filename="../qsamplerMainForm.cpp" line="2785"/>
         <source>Server is starting...</source>
         <translation>Spouští se server...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2722"/>
+        <location filename="../qsamplerMainForm.cpp" line="2791"/>
         <source>Could not start server.
 
 Sorry.</source>
@@ -1129,12 +1151,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2729"/>
+        <location filename="../qsamplerMainForm.cpp" line="2798"/>
         <source>Server was started with PID=%1.</source>
         <translation>Server byl spuštěn s PID=%1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2746"/>
+        <location filename="../qsamplerMainForm.cpp" line="2815"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Osud zadní části programu...</translation>
     </message>
@@ -1155,27 +1177,27 @@ QSampler вы сможете изменить параметры сеанса.
 его работающим в фоновом режиме?</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2760"/>
+        <location filename="../qsamplerMainForm.cpp" line="2830"/>
         <source>Server is stopping...</source>
         <translation>Zastavuje se server...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2801"/>
+        <location filename="../qsamplerMainForm.cpp" line="2871"/>
         <source>Server is being forced...</source>
         <translation>Server je nucen...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2812"/>
+        <location filename="../qsamplerMainForm.cpp" line="2882"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Server byl zastaven se stavem ukončení %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2856"/>
+        <location filename="../qsamplerMainForm.cpp" line="2926"/>
         <source>Client connecting...</source>
         <translation>Připojuje se klient...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2868"/>
+        <location filename="../qsamplerMainForm.cpp" line="2938"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1184,27 +1206,27 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2879"/>
+        <location filename="../qsamplerMainForm.cpp" line="2949"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation>Přerušení přijetí klienta je nastavena na %1 msec.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2918"/>
+        <location filename="../qsamplerMainForm.cpp" line="2988"/>
         <source>Client connected.</source>
         <translation>Klient připojen.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2951"/>
+        <location filename="../qsamplerMainForm.cpp" line="3021"/>
         <source>Client disconnecting...</source>
         <translation>Odpojuje se klient...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2989"/>
+        <location filename="../qsamplerMainForm.cpp" line="3059"/>
         <source>Client disconnected.</source>
         <translation>Klient odpojen.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2747"/>
+        <location filename="../qsamplerMainForm.cpp" line="2816"/>
         <source>You have the option to keep the sampler backend (LinuxSampler)
 running in the background. The sampler would continue to work
 according to your current sampler session and you could alter the
@@ -1299,34 +1321,34 @@ Promiňte.</translation>
 <context>
     <name>QSampler::OptionsForm</name>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="240"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="253"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="252"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="265"/>
         <source>This parameter is not supported by the current sampler version in use.</source>
         <translation>Tento parametr není podporován současnou používanou verzí sampleru.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="245"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="257"/>
         <source>The max. amount of voices the sampler shall process simultaniously.</source>
         <translation>Největší množství hlasů, které sampler zpracovává zároveň.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="258"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="270"/>
         <source>The max. amount of disk streams the sampler shall process simultaniously.</source>
         <translation>Největší množství diskových proudů, které sampler zpracovává zároveň.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="265"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="268"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="277"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="280"/>
         <source>QSampler was built without support for this parameter.</source>
         <translation>QSampler byl sestaven bez podpory pro tento parametr.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="344"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="359"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="345"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="360"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1347,12 +1369,12 @@ Chcete použít změny?</translation>
         <translation type="obsolete">Отменить</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="409"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="424"/>
         <source>Messages Log</source>
         <translation>Zápis hlášení</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="411"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="426"/>
         <source>Log files</source>
         <translation>Soubory s hlášeními</translation>
     </message>
@@ -2823,6 +2845,36 @@ hloubky MIDI:</translation>
         <translation>Soubor se &amp;zápisem hlášení:</translation>
     </message>
     <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1168"/>
+        <source>Whether to ask for session reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1171"/>
+        <source>&amp;Confirm session reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1200"/>
+        <source>Whether to ask for session restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1203"/>
+        <source>&amp;Confirm session restart</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1232"/>
+        <source>Whether to show session errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1235"/>
+        <source>&amp;Confirm session errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Alt+M</source>
         <translation type="obsolete">Alt+M</translation>
     </message>
@@ -3013,12 +3065,12 @@ hloubky MIDI:</translation>
         <translation type="obsolete">Alt+K</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1181"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1184"/>
         <source>Whether to capture standard output (stdout/stderr) into messages window</source>
         <translation>Zachytit obvyklý výstup (stdout/stderr) do okna s hlášeními</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1184"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1187"/>
         <source>Capture standard &amp;output</source>
         <translation>Zachytit obvyklý &amp;výstup</translation>
     </message>
@@ -3027,12 +3079,12 @@ hloubky MIDI:</translation>
         <translation type="obsolete">Alt+O</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1197"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1216"/>
         <source>Whether to show the complete directory path of loaded session files</source>
         <translation>Ukázat úplnou cestu k adresáři s nahranými soubory se sezeními</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1200"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1219"/>
         <source>Show complete &amp;path of session files</source>
         <translation>Ukázat úplnou &amp;cestu k souborům se sezeními</translation>
     </message>
@@ -3041,12 +3093,12 @@ hloubky MIDI:</translation>
         <translation type="obsolete">Alt+P</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1213"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1248"/>
         <source>Whether to show the actual instrument names as read from instrument file (using libgig)</source>
         <translation>Ukázat skutečné názvy nástrojů, jak jsou přečteny ze souborů s nástroji (pomocí libgig)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1216"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1251"/>
         <source>Show actual &amp;instrument names</source>
         <translation>Ukázat skutečné názvy &amp;nástrojů</translation>
     </message>
@@ -3055,52 +3107,52 @@ hloubky MIDI:</translation>
         <translation type="obsolete">Alt+I</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1229"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1264"/>
         <source>&amp;Base font size:</source>
         <translation>&amp;Velikost písma uživatelského rozhraní:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1248"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1283"/>
         <source>Base application font size (pt.)</source>
         <translation>Základní velikost písma v programu (v bodech)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1255"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1290"/>
         <source>(default)</source>
         <translation>(výchozí)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1260"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1295"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1265"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1300"/>
         <source>7</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1270"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1305"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1275"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1310"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1280"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1315"/>
         <source>10</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1285"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1320"/>
         <source>11</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1290"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1325"/>
         <source>12</source>
         <translation>12</translation>
     </message>
