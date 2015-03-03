@@ -1405,16 +1405,34 @@ void MainForm::fileReset (void)
 		return;
 
 	// Ask user whether he/she want's an internal sampler reset...
-	if (QMessageBox::warning(this,
-		QSAMPLER_TITLE ": " + tr("Warning"),
-		tr("Resetting the sampler instance will close\n"
-		"all device and channel configurations.\n\n"
-		"Please note that this operation may cause\n"
-		"temporary MIDI and Audio disruption.\n\n"
-		"Do you want to reset the sampler engine now?"),
-		QMessageBox::Ok | QMessageBox::Cancel)
-		== QMessageBox::Cancel)
-		return;
+	if (m_pOptions && m_pOptions->bConfirmReset) {
+		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sText = tr(
+			"Resetting the sampler instance will close\n"
+			"all device and channel configurations.\n\n"
+			"Please note that this operation may cause\n"
+			"temporary MIDI and Audio disruption.\n\n"
+			"Do you want to reset the sampler engine now?");
+	#if 0
+		if (QMessageBox::warning(this, sTitle, sText,
+			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
+			return;
+	#else
+		QMessageBox mbox(this);
+		mbox.setIcon(QMessageBox::Warning);
+		mbox.setWindowTitle(sTitle);
+		mbox.setText(sText);
+		mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		QCheckBox cbox(tr("Don't ask this again"));
+		cbox.setChecked(false);
+		cbox.blockSignals(true);
+		mbox.addButton(&cbox, QMessageBox::ActionRole);
+		if (mbox.exec() == QMessageBox::Cancel)
+			return;
+		if (cbox.isChecked())
+			m_pOptions->bConfirmReset = false;
+	#endif
+	}
 
 	// Trye closing the current session, first...
 	if (!closeSession(true))
@@ -1446,15 +1464,34 @@ void MainForm::fileRestart (void)
 
 	// Ask user whether he/she want's a complete restart...
 	// (if we're currently up and running)
-	if (bRestart && m_pClient) {
-		bRestart = (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
-			tr("New settings will be effective after\n"
+	if (m_pOptions && m_pOptions->bConfirmRestart) {
+		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sText = tr(
+			"New settings will be effective after\n"
 			"restarting the client/server connection.\n\n"
 			"Please note that this operation may cause\n"
 			"temporary MIDI and Audio disruption.\n\n"
-			"Do you want to restart the connection now?"),
-			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok);
+			"Do you want to restart the connection now?");
+	#if 0
+		if (QMessageBox::warning(this, sTitle, sText,
+			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
+			bRestart = false;
+	#else
+		QMessageBox mbox(this);
+		mbox.setIcon(QMessageBox::Warning);
+		mbox.setWindowTitle(sTitle);
+		mbox.setText(sText);
+		mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		QCheckBox cbox(tr("Don't ask this again"));
+		cbox.setChecked(false);
+		cbox.blockSignals(true);
+		mbox.addButton(&cbox, QMessageBox::ActionRole);
+		if (mbox.exec() == QMessageBox::Cancel)
+			bRestart = false;
+		else
+		if (cbox.isChecked())
+			m_pOptions->bConfirmRestart = false;
+	#endif
 	}
 
 	// Are we still for it?
@@ -1529,15 +1566,31 @@ void MainForm::editRemoveChannel (void)
 
 	// Prompt user if he/she's sure about this...
 	if (m_pOptions && m_pOptions->bConfirmRemove) {
-		if (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
-			tr("About to remove channel:\n\n"
+		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sText = tr(
+			"About to remove channel:\n\n"
 			"%1\n\n"
 			"Are you sure?")
-			.arg(pChannelStrip->windowTitle()),
-			QMessageBox::Ok | QMessageBox::Cancel)
-			== QMessageBox::Cancel)
+			.arg(pChannelStrip->windowTitle());
+	#if 0
+		if (QMessageBox::warning(this, sTitle, sText,
+			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
 			return;
+	#else
+		QMessageBox mbox(this);
+		mbox.setIcon(QMessageBox::Warning);
+		mbox.setWindowTitle(sTitle);
+		mbox.setText(sText);
+		mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		QCheckBox cbox(tr("Don't ask this again"));
+		cbox.setChecked(false);
+		cbox.blockSignals(true);
+		mbox.addButton(&cbox, QMessageBox::ActionRole);
+		if (mbox.exec() == QMessageBox::Cancel)
+			return;
+		if (cbox.isChecked())
+			m_pOptions->bConfirmRemove = false;
+	#endif
 	}
 
 	// Remove the existing sampler channel.
@@ -2348,18 +2401,34 @@ void MainForm::appendMessagesText( const QString& s )
 		m_pMessages->appendMessagesText(s);
 }
 
-void MainForm::appendMessagesError( const QString& s )
+void MainForm::appendMessagesError( const QString& sText )
 {
 	if (m_pMessages)
 		m_pMessages->show();
 
-	appendMessagesColor(s.simplified(), "#ff0000");
+	appendMessagesColor(sText.simplified(), "#ff0000");
 
 	// Make it look responsive...:)
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
-	QMessageBox::critical(this,
-		QSAMPLER_TITLE ": " + tr("Error"), s, QMessageBox::Cancel);
+	if (m_pOptions && m_pOptions->bConfirmError) {
+		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Error");
+	#if 0
+		QMessageBox::critical(this, sTitle, sText, QMessageBox::Cancel);
+	#else
+		QMessageBox mbox(this);
+		mbox.setIcon(QMessageBox::Critical);
+		mbox.setWindowTitle(sTitle);
+		mbox.setText(sText);
+		mbox.setStandardButtons(QMessageBox::Cancel);
+		QCheckBox cbox(tr("Don't show this again"));
+		cbox.setChecked(false);
+		cbox.blockSignals(true);
+		mbox.addButton(&cbox, QMessageBox::ActionRole);
+		if (mbox.exec() && cbox.isChecked())
+			m_pOptions->bConfirmError = false;
+	#endif
+	}
 }
 
 

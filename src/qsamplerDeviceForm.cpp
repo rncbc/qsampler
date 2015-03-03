@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -27,6 +27,8 @@
 
 #include <QHeaderView>
 #include <QMessageBox>
+
+#include <QCheckBox>
 
 
 namespace QSampler {
@@ -281,15 +283,31 @@ void DeviceForm::deleteDevice (void)
 	// Prompt user if this is for real...
 	Options *pOptions = pMainForm->options();
 	if (pOptions && pOptions->bConfirmRemove) {
-		if (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
-			tr("About to delete device:\n\n"
+		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sText = tr(
+			"About to delete device:\n\n"
 			"%1\n\n"
 			"Are you sure?")
-			.arg(device.deviceName()),
-			QMessageBox::Ok | QMessageBox::Cancel)
-			== QMessageBox::Cancel)
+			.arg(device.deviceName());
+	#if 0
+		if (QMessageBox::warning(this, sTitle, sText,
+			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
 			return;
+	#else
+		QMessageBox mbox(this);
+		mbox.setIcon(QMessageBox::Warning);
+		mbox.setWindowTitle(sTitle);
+		mbox.setText(sText);
+		mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		QCheckBox cbox(tr("Don't ask this again"));
+		cbox.setChecked(false);
+		cbox.blockSignals(true);
+		mbox.addButton(&cbox, QMessageBox::ActionRole);
+		if (mbox.exec() == QMessageBox::Cancel)
+			return;
+		if (cbox.isChecked())
+			pOptions->bConfirmRemove = false;
+	#endif
 	}
 
 	// Go and destroy...

@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -34,6 +34,8 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QContextMenuEvent>
+
+#include <QCheckBox>
 
 
 namespace QSampler {
@@ -279,15 +281,31 @@ void InstrumentListForm::deleteInstrument (void)
 	// Prompt user if this is for real...
 	Options *pOptions = pMainForm->options();
 	if (pOptions && pOptions->bConfirmRemove) {
-		if (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
-			tr("About to delete instrument map entry:\n\n"
+		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sText = tr(
+			"About to delete instrument map entry:\n\n"
 			"%1\n\n"
 			"Are you sure?")
-			.arg(pInstrument->name()),
-			QMessageBox::Ok | QMessageBox::Cancel)
-			== QMessageBox::Cancel)
-			return;
+			.arg(pInstrument->name());
+	 #if 0
+		 if (QMessageBox::warning(this, sTitle, sText,
+			 QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
+			 return;
+	 #else
+		 QMessageBox mbox(this);
+		 mbox.setIcon(QMessageBox::Warning);
+		 mbox.setWindowTitle(sTitle);
+		 mbox.setText(sText);
+		 mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		 QCheckBox cbox(tr("Don't ask this again"));
+		 cbox.setChecked(false);
+		 cbox.blockSignals(true);
+		 mbox.addButton(&cbox, QMessageBox::ActionRole);
+		 if (mbox.exec() == QMessageBox::Cancel)
+			 return;
+		 if (cbox.isChecked())
+			 pOptions->bConfirmRemove = false;
+	 #endif
 	}
 
 	pInstrument->unmapInstrument();
