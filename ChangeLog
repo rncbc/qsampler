@@ -6,9 +6,11 @@ ChangeLog
 
 GIT HEAD
 
+* Added application description as freedesktop.org's AppData.
+
 * Added this "Don't ask/show this again" option to some if not most
   of the nagging warning/error message boxes. (EXPERIMENTAL)
- 
+
 * Mac OS X: Fixed default path of linuxsampler binary.
 
 * When closing qsampler and showing the user the dialog whether to
