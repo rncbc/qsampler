@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2004-2015 Rui Nuno Capela <rncbc@rncbc.org> -->
+<component type="desktop">
+ <id>qsampler.desktop</id>
+ <metadata_license>GPL-2.0+</metadata_license>
+ <project_license>GPL-2.0+</project_license>
+ <name>Qsampler</name>
+ <summary>A LinuxSampler Qt GUI interface</summary>
+ <description>
+  <p>QSampler is a LinuxSampler GUI front-end application written in C++ around
+  the Qt4 toolkit using Qt Designer. For the moment it just wraps the client
+  interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).</p>
+ </description>
+ <screenshots>
+  <screenshot type="default">
+   <image>http://qsampler.sourceforge.net/qsampler-screenshot1.png</image>
+   <caption>The main window showing the application in action</caption>
+  </screenshot>
+ </screenshots>
+ <url type="homepage">http://qsampler.sourceforge.net</url>
+ <updatecontact>rncbc@rncbc.org</updatecontact>
+ <project_group>linuxsampler.org</project_group>
+</component>
