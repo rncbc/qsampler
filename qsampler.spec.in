@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 15
+%define release 13
 
 %define _prefix	@ac_prefix@
 
@@ -21,7 +21,7 @@ BuildRequires:	liblscp-devel >= 0.5.6
 BuildRequires:	libgig-devel >= 3.3.0
 
 %description
-QSampler is a LinuxSampler GUI front-end application written in C++ around
+Qsampler is a LinuxSampler GUI front-end application written in C++ around
 the Qt4 toolkit using Qt Designer. For the moment it just wraps the client
 interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
@@ -69,6 +69,8 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
+* Wed Mar 25 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.3.0
+- Pre-LAC2015 release frenzy.
 * Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.2.3
 - A fifth of a Jubilee release.
 * Mon May 17 2010 Rui Nuno Capela <rncbc@rncbc.org>

@@ -4,12 +4,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+0.3.0  2015-03-25  Pre-LAC2015 release frenzy.
 
 * Added application description as freedesktop.org's AppData.
 
 * Added this "Don't ask/show this again" option to some if not most
-  of the nagging warning/error message boxes. (EXPERIMENTAL)
+  of the nagging warning/error message boxes.
 
 * Mac OS X: Fixed default path of linuxsampler binary.
 
@@ -20,23 +20,22 @@ GIT HEAD
   main toolbar orientation.
 
 * Messages standard output capture has been slightly improved
-  as for non-blocking i/o, whenever available. (EXPERIMENTAL)
+  as for non-blocking i/o, whenever available.
 
-* Adjusted configure check for libgig to detect the new includedir.
+* Adjusted configure check for libgig to detect the new --includedir.
 
 * A man page has beed added (making up Matt Flax's work on
   debian, thanks).
 
-* Translations install directory change. (EXPERIMENTAL)
+* Translations install directory change.
 
 * Added support for SF2 instrument names/preset enumeration.
-  (EXPERIMENTAL)
 
 * Added instrument list popup on channel strip which shows up when
   the instrument name is clicked. Allows faster switching among
   instruments of the same file.
 
-* Adjusted configure check for libgig to detect its new libdir
+* Adjusted configure check for libgig to detect its new --libdir
   (impolitely forcing the user now to have at least libgig 3.3.0).
 
 
