@@ -4,6 +4,11 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
+GIT HEAD
+
+- Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
+
+
 0.3.0  2015-03-25  Pre-LAC2015 release frenzy.
 
 * Added application description as freedesktop.org's AppData.
