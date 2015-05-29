@@ -22,7 +22,7 @@ BuildRequires:	libgig-devel >= 3.3.0
 
 %description
 Qsampler is a LinuxSampler GUI front-end application written in C++ around
-the Qt4 toolkit using Qt Designer. For the moment it just wraps the client
+the Qt framework using Qt Designer. For the moment it just wraps the client
 interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %prep
