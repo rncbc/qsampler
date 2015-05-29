@@ -2,7 +2,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ------------------------------------------
 
 Qsampler is a LinuxSampler GUI front-end application written in C++ around
-the Qt4 toolkit using Qt Designer. At the moment it just wraps as a client
+the Qt framework using Qt Designer. At the moment it just wraps as a client
 reference interface for the LinuxSampler Control Protocol (LSCP).
 
 LinuxSampler is a work in progress. The goal is to produce a free, open source
@@ -27,9 +27,9 @@ The software requirements for build and runtime are listed as follows:
 
   Mandatory:
 
-  - Qt 4 (core, gui), C++ class library and tools for
-        crossplatform development and internationalization
-        http://qt-project.org/
+  - Qt framework, C++ class library and tools for
+        cross-platform application and UI development
+        http://qt.io/
 
   - liblscp, C library for LinuxSampler control protocol API.
         http://www.linuxsampler.org/
