@@ -2,8 +2,8 @@ Source: qsampler
 Section: sound
 Priority: optional
 Maintainer: Matt Flax <flatmax@pgb.unsw.edu.au>
-Build-Depends: debhelper (>= 5), libqt4-dev (>= 4.4), automake, pkg-config,
-  liblscp-dev, libgig-dev, libx11-dev, x11proto-core-dev
+Build-Depends: debhelper (>= 5), qtbase5-dev (>= 5.1), automake, pkg-config,
+  liblscp-dev, libgig-dev (>= 3.3.0), libx11-dev, x11proto-core-dev
 Standards-Version: 3.6.1
 
 Package: qsampler

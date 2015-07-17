@@ -32,14 +32,14 @@ AC_SUBST(ac_debug)
 
 # Enable Qt4/5 availability.
 AC_ARG_ENABLE(qt4,
-  AC_HELP_STRING([--enable-qt4], [enable Qt4 build (default=yes)]),
+  AC_HELP_STRING([--enable-qt4], [enable Qt4 build (default=no)]),
   [ac_qt4="$enableval"],
-  [ac_qt4="yes"])
+  [ac_qt4="no"])
 
 AC_ARG_ENABLE(qt5,
-  AC_HELP_STRING([--enable-qt5], [enable Qt5 build (default=no)]),
+  AC_HELP_STRING([--enable-qt5], [enable Qt5 build (default=yes)]),
   [ac_qt5="$enableval"],
-  [ac_qt5="no"])
+  [ac_qt5="yes"])
 
 
 
@@ -81,11 +81,12 @@ if test "x$ac_qt5_path" != "xno"; then
    ac_qt5="yes"
 fi
 
-if test "x$ac_qt4" = "xno"; then
+if test "x$ac_qt4" != "xyes"; then
    ac_qt5="yes"
-fi
-if test "x$ac_qt5" = "xyes"; then
    ac_qt4="no"
+else
+   ac_qt5="no"
+   ac_qt4="yes"
 fi
 
 # Set for alternate liblscp installation dir.
@@ -154,17 +155,20 @@ done
 
 # Prepend alternate dependencies paths.
 ac_path=$PATH
+ac_base_inc="include include/${ac_arch}-linux-gnu"
 for X in $ac_with_paths; do
   if test -d $X/bin; then
     ac_path="$X/bin:$ac_path"
   fi
   if test -d $X/include; then
     for Y in $ac_qtdirs; do
-      if test -d $X/include/$Y; then
-        CFLAGS="-I$X/include/$Y $CFLAGS"
-        CPPFLAGS="-I$X/include/$Y $CPPFLAGS"
-        ac_incpath="$X/include/$Y $ac_incpath"
-      fi
+      for Z in $ac_base_inc; do
+        if test -d "$X/$Z/$Y"; then
+          CFLAGS="-I$X/$Z/$Y $CFLAGS"
+          CPPFLAGS="-I$X/$Z/$Y $CPPFLAGS"
+          ac_incpath="$X/$Z/$Y $ac_incpath"
+        fi
+      done
     done
     CFLAGS="$CFLAGS -I$X/include"
     CPPFLAGS="$CPPFLAGS -I$X/include"
