@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 13
+%define release 14
 
 %define _prefix	@ac_prefix@
 
@@ -16,7 +16,7 @@ URL:		http://qsampler.sourceforge.net/
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-BuildRequires:	libqt4-devel >= 4.4
+BuildRequires:	libqt5-qtbase-devel >= 5.1
 BuildRequires:	liblscp-devel >= 0.5.6
 BuildRequires:	libgig-devel >= 3.3.0
 

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.3.0.4, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.3.1, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -81,12 +81,11 @@ if test "x$ac_qt5_path" != "xno"; then
    ac_qt5="yes"
 fi
 
-if test "x$ac_qt4" != "xyes"; then
-   ac_qt5="yes"
-   ac_qt4="no"
-else
-   ac_qt5="no"
+if test "x$ac_qt5" = "xno"; then
    ac_qt4="yes"
+fi
+if test "x$ac_qt4" = "xyes"; then
+   ac_qt5="no"
 fi
 
 # Set for alternate liblscp installation dir.
@@ -147,7 +146,7 @@ for X in $ac_topdirs; do
   for Y in share $ac_subdirs; do
     for Z in $ac_qtdirs; do
       if test -d $X/$Y/$Z/bin; then
-         ac_with_paths="$X/$Y/$Z $ac_with_paths"
+         ac_with_paths="$ac_with_paths $X/$Y/$Z"
       fi
     done
   done
@@ -155,18 +154,18 @@ done
 
 # Prepend alternate dependencies paths.
 ac_path=$PATH
-ac_base_inc="include include/${ac_arch}-linux-gnu"
+
 for X in $ac_with_paths; do
   if test -d $X/bin; then
     ac_path="$X/bin:$ac_path"
   fi
   if test -d $X/include; then
-    for Y in $ac_qtdirs; do
-      for Z in $ac_base_inc; do
-        if test -d "$X/$Z/$Y"; then
-          CFLAGS="-I$X/$Z/$Y $CFLAGS"
-          CPPFLAGS="-I$X/$Z/$Y $CPPFLAGS"
-          ac_incpath="$X/$Z/$Y $ac_incpath"
+    for Y in include include/${ac_arch}-linux-gnu; do
+      for Z in $ac_qtdirs; do
+        if test -d "$X/$Y/$Z"; then
+          CFLAGS="-I$X/$Y/$Z $CFLAGS"
+          CPPFLAGS="-I$X/$Y/$Z $CPPFLAGS"
+          ac_incpath="$X/$Y/$Z $ac_incpath"
         fi
       done
     done
