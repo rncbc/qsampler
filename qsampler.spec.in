@@ -1,6 +1,6 @@
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 14
+%define release 15
 
 %define _prefix	@ac_prefix@
 
@@ -69,6 +69,8 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %{_datadir}/man/man1/%{name}.1.gz
 
 %changelog
+* Sun Jul 15 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.3.1
+- Summer'15 release frenzy.
 * Wed Mar 25 2015 Rui Nuno Capela <rncbc@rncbc.org> 0.3.0
 - Pre-LAC2015 release frenzy.
 * Tue Dec 31 2013 Rui Nuno Capela <rncbc@rncbc.org> 0.2.3
