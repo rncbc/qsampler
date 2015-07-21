@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -35,6 +35,8 @@ class Instrument;
 
 class InstrumentListModel : public QAbstractItemModel
 {
+	Q_OBJECT
+
 public:
 
 	// Constructor.
