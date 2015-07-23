@@ -96,6 +96,8 @@ private:
 
 class InstrumentListView : public QTreeView
 {
+	Q_OBJECT
+
 public:
 
 	// Constructor.

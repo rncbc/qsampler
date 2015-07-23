@@ -131,10 +131,10 @@ if test "x$ac_qt5" = "xyes"; then
 fi
 
 ac_topdirs="/usr/local /usr"
-ac_subdirs="lib"
+ac_libdirs="lib"
 
 if test "x$ac_arch" = "xx86_64"; then
-   ac_subdirs="$ac_subdirs lib64"
+   ac_libdirs="$ac_libdirs lib64"
 fi
 
 if test "x$ac_arch" = "xx86_64" -o "x$ac_qt5" = "xyes"; then
@@ -143,11 +143,13 @@ if test "x$ac_arch" = "xx86_64" -o "x$ac_qt5" = "xyes"; then
 fi
 
 for X in $ac_topdirs; do
-  for Y in share $ac_subdirs; do
-    for Z in $ac_qtdirs; do
-      if test -d $X/$Y/$Z/bin; then
-         ac_with_paths="$ac_with_paths $X/$Y/$Z"
-      fi
+  for Y1 in share $ac_libdirs; do
+    for Y2 in $Y1 $Y1/${ac_arch}-linux-gnu; do
+      for Z in $ac_qtdirs; do
+        if test -d $X/$Y2/$Z/bin; then
+           ac_with_paths="$ac_with_paths $X/$Y2/$Z"
+        fi
+      done
     done
   done
 done
@@ -173,11 +175,13 @@ for X in $ac_with_paths; do
     CPPFLAGS="$CPPFLAGS -I$X/include"
     ac_incpath="$ac_incpath $X/include"
   fi
-  for Y in $ac_subdirs; do
-    if test -d $X/$Y; then
-       LIBS="-L$X/$Y $LIBS"
-       ac_libs="-L$X/$Y $ac_libs"
-    fi
+  for Y1 in $ac_libdirs; do
+    for Y2 in $Y1 $Y1/${ac_arch}-linux-gnu; do
+      if test -d $X/$Y2; then
+         LIBS="-L$X/$Y2 $LIBS"
+         ac_libs="-L$X/$Y2 $ac_libs"
+      fi
+    done
   done
 done
 
