@@ -4,7 +4,6 @@ APPNAME := qsampler
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-
 CFLAGS = -Wall -g
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -18,7 +17,7 @@ configure-stamp:
 	dh_testdir
 
 	# Add here commands to configure the package.
-	QT_SELECT=5 $(MAKE) -f Makefile.git
+	-$(MAKE) -f Makefile.git
 
 	QT_SELECT=5 ./configure --prefix=/usr
 	touch configure-stamp
@@ -42,7 +41,7 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	QT_SELECT=5 $(MAKE) -f Makefile.git clean
+	-$(MAKE) -f Makefile.git clean
 
 	dh_clean 
 
