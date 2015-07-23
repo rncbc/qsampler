@@ -4,7 +4,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-0.3.1  2015-07-15  Summer'15 release frenzy.
+0.3.1  2015-07-19  Summer'15 release frenzy.
 
 * Fixed configure script's Qt include directory lookup for some
   64bit Linux flavours.

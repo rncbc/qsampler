@@ -4,6 +4,8 @@ APPNAME := qsampler
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+export QT_SELECT=5
+
 
 CFLAGS = -Wall -g
 
@@ -18,9 +20,9 @@ configure-stamp:
 	dh_testdir
 
 	# Add here commands to configure the package.
-	QT_SELECT=5 $(MAKE) -f Makefile.git
+	-$(MAKE) -f Makefile.git
 
-	QT_SELECT=5 ./configure --prefix=/usr
+	./configure --prefix=/usr
 	touch configure-stamp
 
 
@@ -30,7 +32,7 @@ build-stamp: configure-stamp
 	dh_testdir
 
 	# Add here commands to compile the package.
-	QT_SELECT=5 $(MAKE)
+	$(MAKE)
 
 	#docbook-to-man debian/$(APPNAME).sgml > $(APPNAME).1
 
@@ -42,18 +44,18 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	QT_SELECT=5 $(MAKE) -f Makefile.git clean
+	-$(MAKE) -f Makefile.git clean
 
-	dh_clean 
+	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 
 	# Add here commands to install the package
-	QT_SELECT=5 $(MAKE) DESTDIR=$(CURDIR)/debian/$(APPNAME) install
+	$(MAKE) DESTDIR=$(CURDIR)/debian/$(APPNAME) install
 
 
 # Build architecture-independent files here.
@@ -69,7 +71,7 @@ binary-arch: build install
 	dh_installexamples
 	dh_install
 #	dh_installmenu
-#	dh_installdebconf	
+#	dh_installdebconf
 #	dh_installlogrotate
 #	dh_installemacsen
 #	dh_installpam
