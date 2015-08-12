@@ -64,9 +64,10 @@ FORMS += \
 RESOURCES += \
 	qsampler.qrc
 
+
 TRANSLATIONS += \
-    translations/qsampler_cs.ts \
-    translations/qsampler_ru.ts
+	translations/qsampler_cs.ts \
+	translations/qsampler_ru.ts
 
 
 unix {
