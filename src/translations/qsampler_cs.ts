@@ -2,53 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="cs_CZ">
 <context>
-    <name>MidiInstrumentsModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Název</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Přiřazení</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Banka</translation>
-    </message>
-    <message>
-        <source>Prog</source>
-        <translation type="obsolete">Program</translation>
-    </message>
-    <message>
-        <source>Engine</source>
-        <translation type="obsolete">Stroj</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="obsolete">Soubor</translation>
-    </message>
-    <message>
-        <source>Nr</source>
-        <translation type="obsolete">Číslo</translation>
-    </message>
-    <message>
-        <source>Vol</source>
-        <translation type="obsolete">Hlasitost</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation type="obsolete">Režim</translation>
-    </message>
-    <message>
-        <source>Could not get current list of MIDI instrument mappings.
-
-Sorry.</source>
-        <translation type="obsolete">Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
-
-Promiňte.</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../qsamplerChannel.cpp" line="94"/>
@@ -308,18 +261,6 @@ Promiňte.</translation>
         <translation>Zařízení MIDI</translation>
     </message>
     <message>
-        <source>Persistent</source>
-        <translation type="obsolete">Trvalý</translation>
-    </message>
-    <message>
-        <source>On Demand Hold</source>
-        <translation type="obsolete">Držení na požádání</translation>
-    </message>
-    <message>
-        <source>On Demand</source>
-        <translation type="obsolete">Na požádání</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptions.cpp" line="272"/>
         <source>Usage: %1 [options] [session-file]
 
@@ -327,10 +268,6 @@ Promiňte.</translation>
         <translation>Použití: %1 [volby] [soubor sezení]
 
 </translation>
-    </message>
-    <message>
-        <source>Option -h requires an argument (hostname).</source>
-        <translation type="obsolete">Volba -h vyžaduje argument (název hostitele).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="319"/>
@@ -419,18 +356,6 @@ Chcete použít změny?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Apply</source>
-        <translation type="obsolete">Применить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelForm.cpp" line="492"/>
         <source>Instrument files</source>
         <translation>Soubory s nástroji</translation>
@@ -497,14 +422,6 @@ Are you sure?</source>
 %1
 
 Jste si jistý?</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">&amp;OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">О&amp;тменить</translation>
     </message>
     <message>
         <location filename="../qsamplerDeviceForm.cpp" line="302"/>
@@ -589,18 +506,6 @@ Do you want to apply the changes?</source>
 
 Chcete použít změny?</translation>
     </message>
-    <message>
-        <source>Apply</source>
-        <translation type="obsolete">Применить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
 </context>
 <context>
     <name>QSampler::InstrumentListForm</name>
@@ -636,14 +541,6 @@ Jste si jistý?</translation>
         <location filename="../qsamplerInstrumentListForm.cpp" line="300"/>
         <source>Don&apos;t ask this again</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
     </message>
 </context>
 <context>
@@ -743,10 +640,6 @@ Promiňte.</translation>
         <translation>Připraven</translation>
     </message>
     <message>
-        <source>Notify event: %1 data: %2</source>
-        <translation type="obsolete">Oznámit událost: %1 data: %2</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="768"/>
         <source>Untitled</source>
         <translation>Bez názvu</translation>
@@ -796,14 +689,6 @@ Do you want to replace it?</source>
 Chcete jej nahradit?</translation>
     </message>
     <message>
-        <source>Replace</source>
-        <translation type="obsolete">Заменить</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="877"/>
         <source>The current session has been changed:
 
@@ -815,14 +700,6 @@ Do you want to save the changes?</source>
 &quot;%1&quot;
 
 Chcete uložit změny?</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Сохранить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="933"/>
@@ -927,10 +804,6 @@ dočasné rušení MIDI a zvuku.
 Chcete přenastavit stroj sampleru nyní?</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation type="obsolete">Сбросить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="1445"/>
         <source>Could not reset sampler instance.
 
@@ -962,10 +835,6 @@ dočasné rušení MIDI a zvuku.
 Chcete spojení spustit znovu nyní?</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation type="obsolete">Перезапустить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="1570"/>
         <source>About to remove channel:
 
@@ -977,10 +846,6 @@ Are you sure?</source>
 %1
 
 Jste si jistý?</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="689"/>
@@ -1129,14 +994,6 @@ Maybe it is already started.</source>
 Možná je už spuštěn.</translation>
     </message>
     <message>
-        <source>Stop</source>
-        <translation type="obsolete">Остановить</translation>
-    </message>
-    <message>
-        <source>Kill</source>
-        <translation type="obsolete">Убить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="2785"/>
         <source>Server is starting...</source>
         <translation>Spouští se server...</translation>
@@ -1159,22 +1016,6 @@ Promiňte.</translation>
         <location filename="../qsamplerMainForm.cpp" line="2815"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Osud zadní části programu...</translation>
-    </message>
-    <message>
-        <source>You have the option to keep the sampler backend (LinuxSampler)
-running in the background. The sampler would continue to work
-according to your current sampler session and you could alter the
-sampler session at any time by relaunching QSampler.
-
-Do you want LinuxSampler to stop or to keep running in
-the background?</source>
-        <translation type="obsolete">Вы можете оставить движок сэмплера (LinuxSampler)
-работающим в фоновом режиме. Сэмплер продолжит
-работать с текущим сеансом, и при следующем запуске
-QSampler вы сможете изменить параметры сеанса.
-
-Хотите ли вы остановить LinuxSampler или же оставить
-его работающим в фоновом режиме?</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2830"/>
@@ -1260,65 +1101,6 @@ Chcete zastavit LinuxSampler?</translation>
     </message>
 </context>
 <context>
-    <name>QSampler::MidiInstrumentsModel</name>
-    <message>
-        <source>Persistent</source>
-        <translation type="obsolete">Trvalý</translation>
-    </message>
-    <message>
-        <source>On Demand Hold</source>
-        <translation type="obsolete">Držení na požádání</translation>
-    </message>
-    <message>
-        <source>On Demand</source>
-        <translation type="obsolete">Na požádání</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Název</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Přiřazení</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Banka</translation>
-    </message>
-    <message>
-        <source>Prog</source>
-        <translation type="obsolete">Program</translation>
-    </message>
-    <message>
-        <source>Engine</source>
-        <translation type="obsolete">Stroj</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="obsolete">Soubor</translation>
-    </message>
-    <message>
-        <source>Nr</source>
-        <translation type="obsolete">Číslo</translation>
-    </message>
-    <message>
-        <source>Vol</source>
-        <translation type="obsolete">Hlasitost</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation type="obsolete">Režim</translation>
-    </message>
-    <message>
-        <source>Could not get current list of MIDI instrument mappings.
-
-Sorry.</source>
-        <translation type="obsolete">Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
-
-Promiňte.</translation>
-    </message>
-</context>
-<context>
     <name>QSampler::OptionsForm</name>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="252"/>
@@ -1355,18 +1137,6 @@ Do you want to apply the changes?</source>
         <translation>Některá nastavení byla změněna.
 
 Chcete použít změny?</translation>
-    </message>
-    <message>
-        <source>Apply</source>
-        <translation type="obsolete">Применить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="424"/>
@@ -1593,14 +1363,6 @@ Chcete použít změny?</translation>
         <source>Audio routing table</source>
         <translation>Tabulka vedení zvuku</translation>
     </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">&amp;OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Zrušit</translation>
-    </message>
 </context>
 <context>
     <name>qsamplerChannelFxForm</name>
@@ -1688,10 +1450,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Каnál</translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="obsolete">Alt+C</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="122"/>
         <location filename="../qsamplerChannelStrip.ui" line="166"/>
         <location filename="../qsamplerChannelStrip.ui" line="228"/>
@@ -1719,10 +1477,6 @@ hloubky MIDI:</translation>
         <translation>Stav nahrání nástroje</translation>
     </message>
     <message>
-        <source>MIDI Activity</source>
-        <translation type="obsolete">Činnost MIDI</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="203"/>
         <source>MIDI activity</source>
         <translation type="unfinished"></translation>
@@ -1738,10 +1492,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Ztlumení</translation>
     </message>
     <message>
-        <source>Alt+M</source>
-        <translation type="obsolete">Alt+M</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="266"/>
         <source>Channel solo</source>
         <translation>Sólo kanálu</translation>
@@ -1750,10 +1500,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerChannelStrip.ui" line="269"/>
         <source>&amp;Solo</source>
         <translation>&amp;Sólo</translation>
-    </message>
-    <message>
-        <source>Alt+S</source>
-        <translation type="obsolete">Alt+S</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="291"/>
@@ -1777,10 +1523,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Efekty (FX)</translation>
     </message>
     <message>
-        <source>Alt+F</source>
-        <translation type="obsolete">Alt+F</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="357"/>
         <source>Edit channel&apos;s instrument</source>
         <translation>Upravit nástroj kanálu</translation>
@@ -1789,10 +1531,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerChannelStrip.ui" line="360"/>
         <source>&amp;Edit</source>
         <translation>&amp;Upravit</translation>
-    </message>
-    <message>
-        <source>Alt+E</source>
-        <translation type="obsolete">Alt+E</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="385"/>
@@ -1863,10 +1601,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Obnovit</translation>
     </message>
     <message>
-        <source>Alt+R</source>
-        <translation type="obsolete">Alt+R</translation>
-    </message>
-    <message>
         <location filename="../qsamplerDeviceForm.ui" line="290"/>
         <source>Create device</source>
         <translation>Vytvořit zařízení</translation>
@@ -1877,10 +1611,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Vytvořit</translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="obsolete">Alt+C</translation>
-    </message>
-    <message>
         <location filename="../qsamplerDeviceForm.ui" line="303"/>
         <source>Delete device</source>
         <translation>Smazat zařízení</translation>
@@ -1889,10 +1619,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerDeviceForm.ui" line="306"/>
         <source>&amp;Delete</source>
         <translation>&amp;Smazat</translation>
-    </message>
-    <message>
-        <source>Alt+D</source>
-        <translation type="obsolete">Alt+D</translation>
     </message>
     <message>
         <location filename="../qsamplerDeviceForm.ui" line="316"/>
@@ -2032,22 +1758,6 @@ hloubky MIDI:</translation>
         <source>Browse for instrument filename</source>
         <translation>Procházet názvy souborů s nástroji</translation>
     </message>
-    <message>
-        <source>O&amp;K</source>
-        <translation type="obsolete">&amp;OK</translation>
-    </message>
-    <message>
-        <source>Alt+K</source>
-        <translation type="obsolete">Alt+K</translation>
-    </message>
-    <message>
-        <source>C&amp;ancel</source>
-        <translation type="obsolete">&amp;Zrušit</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation type="obsolete">Alt+A</translation>
-    </message>
 </context>
 <context>
     <name>qsamplerInstrumentListForm</name>
@@ -2055,10 +1765,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerInstrumentListForm.ui" line="35"/>
         <source>Qsampler: Instruments</source>
         <translation>Qsampler: Nástroje</translation>
-    </message>
-    <message>
-        <source>&amp;Context</source>
-        <translation type="obsolete">&amp;Souvislosti</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="57"/>
@@ -2069,10 +1775,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerInstrumentListForm.ui" line="60"/>
         <source>New</source>
         <translation>Nový</translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation type="obsolete">Vložit</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="63"/>
@@ -2707,14 +2409,6 @@ hloubky MIDI:</translation>
         <translation>Qsampler: Volby</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Zrušit</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="68"/>
         <source>&amp;Server</source>
         <translation>&amp;Server</translation>
@@ -2768,10 +2462,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerOptionsForm.ui" line="236"/>
         <source>&amp;Start server locally</source>
         <translation>&amp;Spustit server místně</translation>
-    </message>
-    <message>
-        <source>Alt+S</source>
-        <translation type="obsolete">Alt+S</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="255"/>
@@ -2875,10 +2565,6 @@ hloubky MIDI:</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Alt+M</source>
-        <translation type="obsolete">Alt+M</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="560"/>
         <source>&amp;Tuning</source>
         <translation>&amp;Ladění</translation>
@@ -2935,10 +2621,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Písmo...</translation>
     </message>
     <message>
-        <source>Alt+F</source>
-        <translation type="obsolete">Alt+F</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="806"/>
         <source>Whether to refresh the channels view automatically</source>
         <translation>Obnovit pohled na kanály automaticky</translation>
@@ -2947,10 +2629,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerOptionsForm.ui" line="809"/>
         <source>&amp;Auto refresh:</source>
         <translation>&amp;Automatické obnovení:</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation type="obsolete">Alt+A</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="822"/>
@@ -2981,10 +2659,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerOptionsForm.ui" line="912"/>
         <source>Display shiny glass light &amp;effect</source>
         <translation>Zobrazit lesklý skelný světelný &amp;efekt</translation>
-    </message>
-    <message>
-        <source>Alt+E</source>
-        <translation type="obsolete">Alt+E</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="928"/>
@@ -3037,10 +2711,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Potvrdit odstranění</translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="obsolete">Alt+C</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="1108"/>
         <source>&amp;Number of recent files:</source>
         <translation>&amp;Počet nedávných souborů:</translation>
@@ -3061,10 +2731,6 @@ hloubky MIDI:</translation>
         <translation>&amp;Uchovávat další okna vždy nahoře</translation>
     </message>
     <message>
-        <source>Alt+K</source>
-        <translation type="obsolete">Alt+K</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="1184"/>
         <source>Whether to capture standard output (stdout/stderr) into messages window</source>
         <translation>Zachytit obvyklý výstup (stdout/stderr) do okna s hlášeními</translation>
@@ -3073,10 +2739,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerOptionsForm.ui" line="1187"/>
         <source>Capture standard &amp;output</source>
         <translation>Zachytit obvyklý &amp;výstup</translation>
-    </message>
-    <message>
-        <source>Alt+O</source>
-        <translation type="obsolete">Alt+O</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1216"/>
@@ -3089,10 +2751,6 @@ hloubky MIDI:</translation>
         <translation>Ukázat úplnou &amp;cestu k souborům se sezeními</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation type="obsolete">Alt+P</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="1248"/>
         <source>Whether to show the actual instrument names as read from instrument file (using libgig)</source>
         <translation>Ukázat skutečné názvy nástrojů, jak jsou přečteny ze souborů s nástroji (pomocí libgig)</translation>
@@ -3101,10 +2759,6 @@ hloubky MIDI:</translation>
         <location filename="../qsamplerOptionsForm.ui" line="1251"/>
         <source>Show actual &amp;instrument names</source>
         <translation>Ukázat skutečné názvy &amp;nástrojů</translation>
-    </message>
-    <message>
-        <source>Alt+I</source>
-        <translation type="obsolete">Alt+I</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1264"/>
