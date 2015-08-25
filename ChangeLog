@@ -4,6 +4,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
+GIT HEAD
+
+* Single/unique application instance control adapted to Qt5/X11.
+  (EXPERIMENTAL)
+
+
 0.3.1  2015-07-19  Summer'15 release frenzy.
 
 * Fixed configure script's Qt include directory lookup for some

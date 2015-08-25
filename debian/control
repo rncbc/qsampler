@@ -5,7 +5,7 @@ Maintainer: Matt Flax <flatmax@pgb.unsw.edu.au>
 Standards-Version: 3.7.2
 Build-Depends: debhelper (>= 5), automake, pkg-config, qtbase5-dev (>= 5.1),
   qtbase5-dev-tools (>= 5.1), qttools5-dev-tools (>= 5.1), qtchooser,
-  liblscp-dev, libgig-dev (>= 3.3.0), libx11-dev, x11proto-core-dev
+  liblscp-dev, libgig-dev (>= 3.3.0), libx11-dev, x11proto-core-dev, libqt5x11extras5-dev (>= 5.1)
 
 Package: qsampler
 Architecture: any
