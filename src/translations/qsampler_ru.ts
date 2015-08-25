@@ -2,53 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru">
 <context>
-    <name>MidiInstrumentsModel</name>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Название</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Карта</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Банк</translation>
-    </message>
-    <message>
-        <source>Prog</source>
-        <translation type="obsolete">Программа</translation>
-    </message>
-    <message>
-        <source>Engine</source>
-        <translation type="obsolete">Движок</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="obsolete">Файл</translation>
-    </message>
-    <message>
-        <source>Nr</source>
-        <translation type="obsolete">№</translation>
-    </message>
-    <message>
-        <source>Vol</source>
-        <translation type="obsolete">Громкость</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation type="obsolete">Режим</translation>
-    </message>
-    <message>
-        <source>Could not get current list of MIDI instrument mappings.
-
-Sorry.</source>
-        <translation type="obsolete">Не удалось получить актуальный список привязок инструментов MIDI.
-
-Извините.</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../qsamplerChannel.cpp" line="94"/>
@@ -308,18 +261,6 @@ Sorry.</source>
         <translation>Устройства MIDI</translation>
     </message>
     <message>
-        <source>Persistent</source>
-        <translation type="obsolete">Непрерывно</translation>
-    </message>
-    <message>
-        <source>On Demand Hold</source>
-        <translation type="obsolete"> </translation>
-    </message>
-    <message>
-        <source>On Demand</source>
-        <translation type="obsolete">По требованию</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptions.cpp" line="272"/>
         <source>Usage: %1 [options] [session-file]
 
@@ -327,10 +268,6 @@ Sorry.</source>
         <translation>Использование: %1 [ключи] [файл-сеанса]
 
 </translation>
-    </message>
-    <message>
-        <source>Option -h requires an argument (hostname).</source>
-        <translation type="obsolete">Ключу -h нужен аргумент (имя хоста).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="319"/>
@@ -419,18 +356,6 @@ Do you want to apply the changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Apply</source>
-        <translation type="obsolete">Применить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelForm.cpp" line="492"/>
         <source>Instrument files</source>
         <translation>Файлы инструментов</translation>
@@ -497,14 +422,6 @@ Are you sure?</source>
 %1
 
 Вы уверены?</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">&amp;OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">О&amp;тменить</translation>
     </message>
     <message>
         <location filename="../qsamplerDeviceForm.cpp" line="302"/>
@@ -589,18 +506,6 @@ Do you want to apply the changes?</source>
 
 Вы хотите учесть эти изменения?</translation>
     </message>
-    <message>
-        <source>Apply</source>
-        <translation type="obsolete">Применить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
 </context>
 <context>
     <name>QSampler::InstrumentListForm</name>
@@ -636,14 +541,6 @@ Are you sure?</source>
         <location filename="../qsamplerInstrumentListForm.cpp" line="300"/>
         <source>Don&apos;t ask this again</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
     </message>
 </context>
 <context>
@@ -792,14 +689,6 @@ Do you want to replace it?</source>
 Заменить его?</translation>
     </message>
     <message>
-        <source>Replace</source>
-        <translation type="obsolete">Заменить</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="877"/>
         <source>The current session has been changed:
 
@@ -811,14 +700,6 @@ Do you want to save the changes?</source>
 &quot;%1&quot;
 
 Вы хотите сохранить эти изменения?</translation>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="obsolete">Сохранить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="933"/>
@@ -923,10 +804,6 @@ Do you want to reset the sampler engine now?</source>
 Вы хотите перезапустить движок сэмплера?</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation type="obsolete">Сбросить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="1445"/>
         <source>Could not reset sampler instance.
 
@@ -958,10 +835,6 @@ Do you want to restart the connection now?</source>
 клиента и сервера?</translation>
     </message>
     <message>
-        <source>Restart</source>
-        <translation type="obsolete">Перезапустить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="1570"/>
         <source>About to remove channel:
 
@@ -973,10 +846,6 @@ Are you sure?</source>
 %1
 
 Вы уверены?</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="689"/>
@@ -1126,14 +995,6 @@ Maybe it is already started.</source>
 Возможно, он уже запущен.</translation>
     </message>
     <message>
-        <source>Stop</source>
-        <translation type="obsolete">Остановить</translation>
-    </message>
-    <message>
-        <source>Kill</source>
-        <translation type="obsolete">Убить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerMainForm.cpp" line="2785"/>
         <source>Server is starting...</source>
         <translation>Запускается сервер...</translation>
@@ -1156,22 +1017,6 @@ Sorry.</source>
         <location filename="../qsamplerMainForm.cpp" line="2815"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Что делать с движком</translation>
-    </message>
-    <message>
-        <source>You have the option to keep the sampler backend (LinuxSampler)
-running in the background. The sampler would continue to work
-according to your current sampler session and you could alter the
-sampler session at any time by relaunching QSampler.
-
-Do you want LinuxSampler to stop or to keep running in
-the background?</source>
-        <translation type="obsolete">Вы можете оставить движок сэмплера (LinuxSampler)
-работающим в фоновом режиме. Сэмплер продолжит
-работать с текущим сеансом, и при следующем запуске
-QSampler вы сможете изменить параметры сеанса.
-
-Хотите ли вы остановить LinuxSampler или же оставить
-его работающим в фоновом режиме?</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2830"/>
@@ -1252,65 +1097,6 @@ Do you want LinuxSampler to stop?</source>
     </message>
 </context>
 <context>
-    <name>QSampler::MidiInstrumentsModel</name>
-    <message>
-        <source>Persistent</source>
-        <translation type="obsolete">Непрерывно</translation>
-    </message>
-    <message>
-        <source>On Demand Hold</source>
-        <translation type="obsolete"> </translation>
-    </message>
-    <message>
-        <source>On Demand</source>
-        <translation type="obsolete">По требованию</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Название</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Карта</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Банк</translation>
-    </message>
-    <message>
-        <source>Prog</source>
-        <translation type="obsolete">Программа</translation>
-    </message>
-    <message>
-        <source>Engine</source>
-        <translation type="obsolete">Движок</translation>
-    </message>
-    <message>
-        <source>File</source>
-        <translation type="obsolete">Файл</translation>
-    </message>
-    <message>
-        <source>Nr</source>
-        <translation type="obsolete">№</translation>
-    </message>
-    <message>
-        <source>Vol</source>
-        <translation type="obsolete">Громкость</translation>
-    </message>
-    <message>
-        <source>Mode</source>
-        <translation type="obsolete">Режим</translation>
-    </message>
-    <message>
-        <source>Could not get current list of MIDI instrument mappings.
-
-Sorry.</source>
-        <translation type="obsolete">Не удалось получить актуальный список привязок инструментов MIDI.
-
-Извините.</translation>
-    </message>
-</context>
-<context>
     <name>QSampler::OptionsForm</name>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="252"/>
@@ -1347,18 +1133,6 @@ Do you want to apply the changes?</source>
         <translation>Некоторые параметры были изменены.
 
 Вы хотите применить изменения?</translation>
-    </message>
-    <message>
-        <source>Apply</source>
-        <translation type="obsolete">Применить</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="obsolete">Отказаться</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="424"/>
@@ -1585,14 +1359,6 @@ Do you want to apply the changes?</source>
         <source>Audio routing table</source>
         <translation>Таблица маршрутизации звука</translation>
     </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">&amp;OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">О&amp;тменить</translation>
-    </message>
 </context>
 <context>
     <name>qsamplerChannelFxForm</name>
@@ -1681,10 +1447,6 @@ MIDI Controller:</source>
         <translation>&amp;Канал</translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="obsolete">Alt+к</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="122"/>
         <location filename="../qsamplerChannelStrip.ui" line="166"/>
         <location filename="../qsamplerChannelStrip.ui" line="228"/>
@@ -1712,10 +1474,6 @@ MIDI Controller:</source>
         <translation>Статус загрузки инструмента</translation>
     </message>
     <message>
-        <source>MIDI Activity</source>
-        <translation type="obsolete">Активность MIDI</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="203"/>
         <source>MIDI activity</source>
         <translation type="unfinished"></translation>
@@ -1731,10 +1489,6 @@ MIDI Controller:</source>
         <translation>&amp;Тихо</translation>
     </message>
     <message>
-        <source>Alt+M</source>
-        <translation type="obsolete">Alt+т</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="266"/>
         <source>Channel solo</source>
         <translation>Солирование канала</translation>
@@ -1743,10 +1497,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerChannelStrip.ui" line="269"/>
         <source>&amp;Solo</source>
         <translation>&amp;Соло</translation>
-    </message>
-    <message>
-        <source>Alt+S</source>
-        <translation type="obsolete">Alt+с</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="291"/>
@@ -1770,10 +1520,6 @@ MIDI Controller:</source>
         <translation>&amp;Эффекты</translation>
     </message>
     <message>
-        <source>Alt+F</source>
-        <translation type="obsolete">Alt+э</translation>
-    </message>
-    <message>
         <location filename="../qsamplerChannelStrip.ui" line="357"/>
         <source>Edit channel&apos;s instrument</source>
         <translation>Изменить инструмент канала</translation>
@@ -1782,10 +1528,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerChannelStrip.ui" line="360"/>
         <source>&amp;Edit</source>
         <translation>&amp;Изменить</translation>
-    </message>
-    <message>
-        <source>Alt+E</source>
-        <translation type="obsolete">Alt+и</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="385"/>
@@ -1856,10 +1598,6 @@ MIDI Controller:</source>
         <translation>О&amp;бновить</translation>
     </message>
     <message>
-        <source>Alt+R</source>
-        <translation type="obsolete">Alt+б</translation>
-    </message>
-    <message>
         <location filename="../qsamplerDeviceForm.ui" line="290"/>
         <source>Create device</source>
         <translation>Создать устройство</translation>
@@ -1870,10 +1608,6 @@ MIDI Controller:</source>
         <translation>&amp;Создать</translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="obsolete">Alt+с</translation>
-    </message>
-    <message>
         <location filename="../qsamplerDeviceForm.ui" line="303"/>
         <source>Delete device</source>
         <translation>Удалить устройство</translation>
@@ -1882,10 +1616,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerDeviceForm.ui" line="306"/>
         <source>&amp;Delete</source>
         <translation>&amp;Удалить</translation>
-    </message>
-    <message>
-        <source>Alt+D</source>
-        <translation type="obsolete">Alt+у</translation>
     </message>
     <message>
         <location filename="../qsamplerDeviceForm.ui" line="316"/>
@@ -2025,22 +1755,6 @@ MIDI Controller:</source>
         <source>Browse for instrument filename</source>
         <translation>Указать файл инструмента</translation>
     </message>
-    <message>
-        <source>O&amp;K</source>
-        <translation type="obsolete">&amp;OK</translation>
-    </message>
-    <message>
-        <source>Alt+K</source>
-        <translation type="obsolete">Alt+о</translation>
-    </message>
-    <message>
-        <source>C&amp;ancel</source>
-        <translation type="obsolete">О&amp;тменить</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation type="obsolete">Alt+т</translation>
-    </message>
 </context>
 <context>
     <name>qsamplerInstrumentListForm</name>
@@ -2048,10 +1762,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerInstrumentListForm.ui" line="35"/>
         <source>Qsampler: Instruments</source>
         <translation>Qsampler: Инструменты</translation>
-    </message>
-    <message>
-        <source>&amp;Context</source>
-        <translation type="obsolete">&amp;Контекст</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="57"/>
@@ -2062,10 +1772,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerInstrumentListForm.ui" line="60"/>
         <source>New</source>
         <translation>Создать</translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation type="obsolete">Вставить</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="63"/>
@@ -2700,14 +2406,6 @@ MIDI Controller:</source>
         <translation>Параметры Qsampler</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Отменить</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="68"/>
         <source>&amp;Server</source>
         <translation>&amp;Сервер</translation>
@@ -2761,10 +2459,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerOptionsForm.ui" line="236"/>
         <source>&amp;Start server locally</source>
         <translation>&amp;Запускать сервер локально</translation>
-    </message>
-    <message>
-        <source>Alt+S</source>
-        <translation type="obsolete">Alt+з</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="255"/>
@@ -2868,10 +2562,6 @@ MIDI Controller:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Alt+M</source>
-        <translation type="obsolete">Alt+ф</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="560"/>
         <source>&amp;Tuning</source>
         <translation>&amp;Настройка</translation>
@@ -2928,10 +2618,6 @@ MIDI Controller:</source>
         <translation>&amp;Шрифт...</translation>
     </message>
     <message>
-        <source>Alt+F</source>
-        <translation type="obsolete">Alt+ш</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="806"/>
         <source>Whether to refresh the channels view automatically</source>
         <translation>Обновлять ли втоматически вид каналов</translation>
@@ -2940,10 +2626,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerOptionsForm.ui" line="809"/>
         <source>&amp;Auto refresh:</source>
         <translation>&amp;Автообновление:</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation type="obsolete">Alt+а</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="822"/>
@@ -2974,10 +2656,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerOptionsForm.ui" line="912"/>
         <source>Display shiny glass light &amp;effect</source>
         <translation>Показывать отблеск на &amp;дисплее канала</translation>
-    </message>
-    <message>
-        <source>Alt+E</source>
-        <translation type="obsolete">Alt+д</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="928"/>
@@ -3030,10 +2708,6 @@ MIDI Controller:</source>
         <translation>&amp;Подтверждать удаление</translation>
     </message>
     <message>
-        <source>Alt+C</source>
-        <translation type="obsolete">Alt+п</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="1108"/>
         <source>&amp;Number of recent files:</source>
         <translation>&amp;Запоминаемых сеансов:</translation>
@@ -3054,10 +2728,6 @@ MIDI Controller:</source>
         <translation>Окна &amp;всегда наверху</translation>
     </message>
     <message>
-        <source>Alt+K</source>
-        <translation type="obsolete">Alt+в</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="1184"/>
         <source>Whether to capture standard output (stdout/stderr) into messages window</source>
         <translation>Захватывать ли стандартные потоки (stdout/stderr) в панель сообщений</translation>
@@ -3066,10 +2736,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerOptionsForm.ui" line="1187"/>
         <source>Capture standard &amp;output</source>
         <translation>Захватывать &amp;системные потоки сообщений</translation>
-    </message>
-    <message>
-        <source>Alt+O</source>
-        <translation type="obsolete">Alt+с</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1216"/>
@@ -3082,10 +2748,6 @@ MIDI Controller:</source>
         <translation>По&amp;казывать полный путь к файлам сеансов</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation type="obsolete">Alt+к</translation>
-    </message>
-    <message>
         <location filename="../qsamplerOptionsForm.ui" line="1248"/>
         <source>Whether to show the actual instrument names as read from instrument file (using libgig)</source>
         <translation>Показывать ли названия инструментов, считанные из метаданных файлов (при помощи libgig)</translation>
@@ -3094,10 +2756,6 @@ MIDI Controller:</source>
         <location filename="../qsamplerOptionsForm.ui" line="1251"/>
         <source>Show actual &amp;instrument names</source>
         <translation>Показывать названия инс&amp;трументов</translation>
-    </message>
-    <message>
-        <source>Alt+I</source>
-        <translation type="obsolete">Alt+т</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1264"/>

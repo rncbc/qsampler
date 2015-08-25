@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.3.1.3, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.3.1.4, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -48,6 +48,12 @@ AC_ARG_ENABLE(libgig,
   AC_HELP_STRING([--enable-libgig], [enable libgig interface (default=yes)]),
   [ac_libgig="$enableval"],
   [ac_libgig="yes"])
+
+# Enable X11 unique/single instance.
+AC_ARG_ENABLE(xunique,
+  AC_HELP_STRING([--enable-xunique], [enable X11 unique/single instance (default=yes)]),
+  [ac_xunique="$enableval"],
+  [ac_xunique="yes"])
 
 # Enable debugger stack-trace option (assumes --enable-debug).
 AC_ARG_ENABLE(stacktrace,
@@ -418,6 +424,11 @@ if test "x$ac_round" = "xyes"; then
    AC_DEFINE(CONFIG_ROUND, 1, [Define if round is available.])
 fi
 
+# Check for X11 unique/single instance.
+if test "x$ac_xunique" = "xyes"; then
+   AC_DEFINE(CONFIG_XUNIQUE, 1, [Define if X11 unique/single instance is enabled.])
+fi
+
 # Check for debugging stack-trace.
 if test "x$ac_stacktrace" = "xyes"; then
    AC_DEFINE(CONFIG_STACKTRACE, 1, [Define if debugger stack-trace is enabled.])
@@ -486,6 +497,7 @@ echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_channel_midi_eve
 echo "  LSCP device MIDI event support . . . . . . . . . .: $ac_device_midi_event"
 echo "  LSCP runtime max. voices / disk streams support  .: $ac_max_voices"
 echo
+echo "  X11 Unique/Single instance . . . . . . . . . . . .: $ac_xunique"
 echo "  Debugger stack-trace (gdb) . . . . . . . . . . . .: $ac_stacktrace"
 echo
 echo "  Install prefix . . . . . . . . . . . . . . . . . .: $ac_prefix"
