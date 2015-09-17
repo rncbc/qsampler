@@ -370,26 +370,26 @@ void Options::loadWidgetGeometry ( QWidget *pWidget, bool bVisible )
 	// Try to restore old form window positioning.
 	if (pWidget) {
 		m_settings.beginGroup("/Geometry/" + pWidget->objectName());
+	#if QT_VERSION >= 0x050000
 		const QByteArray& geometry
 			= m_settings.value("/geometry").toByteArray();
-		if (!geometry.isEmpty()) {
+		if (!geometry.isEmpty())
 			pWidget->restoreGeometry(geometry);
-		} else {
-		#if 1//--LOAD_OLD_GEOMETRY
-			QPoint wpos;
-			QSize  wsize;
-			wpos.setX(m_settings.value("/x", -1).toInt());
-			wpos.setY(m_settings.value("/y", -1).toInt());
-			wsize.setWidth(m_settings.value("/width", -1).toInt());
-			wsize.setHeight(m_settings.value("/height", -1).toInt());
-			if (wpos.x() > 0 && wpos.y() > 0)
-				pWidget->move(wpos);
-			if (wsize.width() > 0 && wsize.height() > 0)
-				pWidget->resize(wsize);
-			else
-		#endif
-			pWidget->adjustSize();
-		}
+		else
+	#else//--LOAD_OLD_GEOMETRY
+		QPoint wpos;
+		QSize  wsize;
+		wpos.setX(m_settings.value("/x", -1).toInt());
+		wpos.setY(m_settings.value("/y", -1).toInt());
+		wsize.setWidth(m_settings.value("/width", -1).toInt());
+		wsize.setHeight(m_settings.value("/height", -1).toInt());
+		if (wpos.x() > 0 && wpos.y() > 0)
+			pWidget->move(wpos);
+		if (wsize.width() > 0 && wsize.height() > 0)
+			pWidget->resize(wsize);
+		else
+	#endif
+		pWidget->adjustSize();
 		if (!bVisible)
 			bVisible = m_settings.value("/visible", false).toBool();
 		if (bVisible)
@@ -408,7 +408,9 @@ void Options::saveWidgetGeometry ( QWidget *pWidget, bool bVisible )
 	// only save the form geometry while its up and visible)
 	if (pWidget) {
 		m_settings.beginGroup("/Geometry/" + pWidget->objectName());
-	#if 0//--SAVE_OLD_GEOMETRY
+	#if QT_VERSION >= 0x050000
+		m_settings.setValue("/geometry", pWidget->saveGeometry());
+	#else//--SAVE_OLD_GEOMETRY
 		const QPoint& wpos  = pWidget->pos();
 		const QSize&  wsize = pWidget->size();
 		m_settings.setValue("/x", wpos.x());
@@ -416,7 +418,6 @@ void Options::saveWidgetGeometry ( QWidget *pWidget, bool bVisible )
 		m_settings.setValue("/width", wsize.width());
 		m_settings.setValue("/height", wsize.height());
 	#endif
-		m_settings.setValue("/geometry", pWidget->saveGeometry());
 		if (!bVisible) bVisible = pWidget->isVisible();
 		m_settings.setValue("/visible", bVisible);
 		m_settings.endGroup();
