@@ -287,7 +287,7 @@ Sorry.</source>
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="582"/>
+        <location filename="../qsamplerOptions.cpp" line="583"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>
