@@ -287,7 +287,7 @@ Promiňte.</translation>
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="583"/>
+        <location filename="../qsamplerOptions.cpp" line="584"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>
