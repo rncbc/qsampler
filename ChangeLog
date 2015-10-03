@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+* Messages standard output capture has been improved again, now
+  in both ways a non-blocking pipe may get. (EXPERIMENTAL)
+
 * Single/unique application instance control adapted to Qt5/X11.
   (EXPERIMENTAL)
 

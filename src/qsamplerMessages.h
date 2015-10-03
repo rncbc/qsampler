@@ -1,7 +1,7 @@
 // qsamplerMessages.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -79,6 +79,9 @@ protected:
 	// Message executives.
 	void appendMessagesLine(const QString& s);
 	void appendMessagesLog(const QString& s);
+
+	// Set stdout/stderr blocking mode.
+	bool stdoutBlock(int fd, bool bBlock) const;
 
 protected slots:
 
