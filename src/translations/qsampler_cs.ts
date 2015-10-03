@@ -1090,12 +1090,12 @@ Chcete zastavit LinuxSampler?</translation>
         <translation>Hlášení</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="238"/>
+        <location filename="../qsamplerMessages.cpp" line="251"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Vedení zápisu zastaveno --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="248"/>
+        <location filename="../qsamplerMessages.cpp" line="261"/>
         <source>Logging started --- %1 ---</source>
         <translation>Vedení zápisu spuštěno --- %1 ---</translation>
     </message>
