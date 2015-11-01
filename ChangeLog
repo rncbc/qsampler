@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+* Prevent x11extras module from use on non-X11/Unix plaforms.
+
 * Messages standard output capture has been improved again, now
   in both ways a non-blocking pipe may get. (EXPERIMENTAL)
 
