@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.3.1.11, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.3.1.12, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -9,7 +9,7 @@ AC_CONFIG_FILES(Makefile qsampler.spec src/src.pri src/qsampler.desktop)
 AC_PREFIX_DEFAULT(/usr/local)
 ac_prefix=$prefix
 if test "x$ac_prefix" = "xNONE"; then
-    ac_prefix=$ac_default_prefix
+   ac_prefix=$ac_default_prefix
 fi
 AC_SUBST(ac_prefix)
 AC_DEFINE_UNQUOTED(CONFIG_PREFIX, ["$ac_prefix"], [Default installation prefix.])
