@@ -6,6 +6,7 @@ Comment=Qsampler is a LinuxSampler Qt GUI Interface
 Exec=@ac_prefix@/bin/qsampler
 Icon=qsampler
 Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
+Keywords=Audio;MIDI;ALSA;JACK;LinuxSampler;GigaSampler;SoundFont;Synthesizer;Sampler;GIG;SF2;SFZ;Qt;
 Terminal=false
 Type=Application
 X-SuSE-translate=true
