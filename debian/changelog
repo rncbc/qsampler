@@ -1,3 +1,10 @@
+qsampler (0.4.0-17+svn1) unreleased; urgency=low
+
+  * Assigned linuxsampler-devel@lists.sourceforge.net as maintainer of this
+    package.
+
+ -- Christian Schoenebeck <cuse@users.sourceforge.net>  Wed, 06 Apr 2016 21:44:44 +0200
+
 qsampler (0.4.0-17) unstable; urgency=low
 
   * Spring'16 release frenzy.
