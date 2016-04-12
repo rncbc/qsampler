@@ -1,4 +1,4 @@
-qsampler (0.4.0-17+svn1) unreleased; urgency=low
+qsampler (0.4.0.2) unreleased; urgency=low
 
   * Assigned linuxsampler-devel@lists.sourceforge.net as maintainer of this
     package.
