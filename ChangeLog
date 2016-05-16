@@ -10,6 +10,9 @@ GIT HEAD
   given that's the build default anyway (suggestion by Guido
   Scholz, while for Qtractor, thanks).
 
+* Automake: set environment variable GCC_COLORS=auto to allow GCC to
+  auto detect whether it (sh/c)ould output its messages in color.
+
 
 0.4.0  2016-04-05  Spring'16 release frenzy.
 

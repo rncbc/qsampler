@@ -80,6 +80,8 @@ export QMAKE = @ac_qmake@
 export LUPDATE = @ac_lupdate@
 export LRELEASE = @ac_lrelease@
 
+# let GCC auto detect whether it (sh/c)ould output its messages in color
+export GCC_COLORS=auto
 
 all:	$(target)
 
