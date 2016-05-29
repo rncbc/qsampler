@@ -56,11 +56,7 @@ AC_ARG_ENABLE(stacktrace,
 
 
 # Standard installation base dirs.
-if test "$cross_compiling" = yes; then
-  ac_with_paths=""
-else
-  ac_with_paths="/usr /usr/local"
-fi
+ac_with_paths=""
 
 # Set for alternate Qt4/5 installation dir.
 AC_ARG_WITH(qt4,
