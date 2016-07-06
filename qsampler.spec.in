@@ -4,6 +4,10 @@
 
 %define _prefix	@ac_prefix@
 
+%if %{defined fedora}
+%define debug_package %{nil}
+%endif
+
 Summary:	A LinuxSampler Qt GUI interface
 Name:		%{name}
 Version:	%{version}
