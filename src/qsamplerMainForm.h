@@ -1,7 +1,7 @@
 // qsamplerMainForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -131,11 +131,15 @@ protected slots:
 
 protected:
 
+	void addChannelStrip();
+	void removeChannelStrip();
+
 	bool queryClose();
 	void closeEvent(QCloseEvent* pCloseEvent);
 	void dragEnterEvent(QDragEnterEvent *pDragEnterEvent);
 	void dropEvent(QDropEvent *pDropEvent);
-	void customEvent(QEvent* pCustomEvent);
+	void customEvent(QEvent *pCustomEvent);
+	void resizeEvent(QResizeEvent *);
 	bool newSession();
 	bool openSession();
 	bool saveSession(bool bPrompt);
@@ -170,6 +174,7 @@ private:
 	QSocketNotifier *m_pUsr1Notifier;
 	QString m_sFilename;
 	int m_iUntitled;
+	int m_iDirtySetup;
 	int m_iDirtyCount;
 	lscp_client_t *m_pClient;
 	QProcess *m_pServer;

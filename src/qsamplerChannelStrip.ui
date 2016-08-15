@@ -3,7 +3,7 @@
  <author>rncbc aka Rui Nuno Capela</author>
  <comment>qsampler - A LinuxSampler Qt GUI Interface.
 
-   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -27,8 +27,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>815</width>
-    <height>61</height>
+    <width>640</width>
+    <height>64</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,8 +44,7 @@
    <string>Qsampler: Channel</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="qsampler.qrc">
-    <normaloff>:/images/qsamplerChannel.png</normaloff>:/images/qsamplerChannel.png</iconset>
+   <iconset resource="qsampler.qrc">:/images/qsamplerChannel.png</iconset>
   </property>
   <layout class="QHBoxLayout">
    <property name="spacing">
@@ -59,7 +58,7 @@
      <property name="minimumSize">
       <size>
        <width>100</width>
-       <height>0</height>
+       <height>22</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -75,8 +74,7 @@
       <string>&amp;Channel</string>
      </property>
      <property name="icon">
-      <iconset resource="qsampler.qrc">
-       <normaloff>:/images/qsamplerChannel.png</normaloff>:/images/qsamplerChannel.png</iconset>
+      <iconset resource="qsampler.qrc">:/images/qsamplerChannel.png</iconset>
      </property>
     </widget>
    </item>
@@ -274,17 +272,11 @@
     </widget>
    </item>
    <item>
-    <widget class="QSlider" name="VolumeSlider">
+    <widget class="QSlider" name="ChannelVolumeSlider">
      <property name="minimumSize">
       <size>
        <width>100</width>
        <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32767</width>
-       <height>32</height>
       </size>
      </property>
      <property name="toolTip">
@@ -305,7 +297,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QSpinBox" name="VolumeSpinBox">
+    <widget class="QSpinBox" name="ChannelVolumeSpinBox">
      <property name="minimumSize">
       <size>
        <width>60</width>
@@ -330,7 +322,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="FxPushButton">
+    <widget class="QPushButton" name="ChannelFxPushButton">
      <property name="maximumSize">
       <size>
        <width>48</width>
@@ -375,12 +367,6 @@
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>32767</width>
-       <height>24</height>
-      </size>
-     </property>
      <property name="toolTip">
       <string>Least buffer fill stream usage (%)</string>
      </property>
@@ -399,8 +385,8 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>32767</width>
-       <height>32</height>
+       <width>64</width>
+       <height>48</height>
       </size>
      </property>
      <property name="toolTip">
@@ -433,8 +419,9 @@
   <tabstop>ChannelSetupPushButton</tabstop>
   <tabstop>ChannelMutePushButton</tabstop>
   <tabstop>ChannelSoloPushButton</tabstop>
-  <tabstop>VolumeSlider</tabstop>
-  <tabstop>VolumeSpinBox</tabstop>
+  <tabstop>ChannelVolumeSlider</tabstop>
+  <tabstop>ChannelVolumeSpinBox</tabstop>
+  <tabstop>ChannelFxPushButton</tabstop>
   <tabstop>ChannelEditPushButton</tabstop>
  </tabstops>
  <resources>

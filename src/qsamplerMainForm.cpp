@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -195,6 +195,7 @@ MainForm::MainForm ( QWidget *pParent )
 
 	// We'll start clean.
 	m_iUntitled   = 0;
+	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
 
 	m_pServer = NULL;
@@ -478,6 +479,7 @@ void MainForm::setup ( Options *pOptions )
 	updateMessagesFont();
 	updateMessagesLimit();
 	updateMessagesCapture();
+
 	// Set the visibility signal.
 	QObject::connect(m_pMessages,
 		SIGNAL(visibilityChanged(bool)),
@@ -543,7 +545,6 @@ bool MainForm::queryClose (void)
 				|| m_ui.channelsToolbar->isVisible());
 			m_pOptions->bStatusbar = statusBar()->isVisible();
 			// Save the dock windows state.
-			const QString sDockables = saveState().toBase64().data();
 			m_pOptions->settings().setValue("/Layout/DockWindows", saveState());
 			// And the children, and the main windows state,.
 			m_pOptions->saveWidgetGeometry(m_pDeviceForm);
@@ -586,7 +587,7 @@ void MainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 }
 
 
-void MainForm::dropEvent ( QDropEvent* pDropEvent )
+void MainForm::dropEvent ( QDropEvent *pDropEvent )
 {
 	// Accept externally originated drops only...
 	if (pDropEvent->source())
@@ -642,7 +643,7 @@ void MainForm::customEvent ( QEvent* pEvent )
 				updateAllChannelStrips(true);
 				break;
 			case LSCP_EVENT_CHANNEL_INFO: {
-				int iChannelID = pLscpEvent->data().toInt();
+				const int iChannelID = pLscpEvent->data().toInt();
 				ChannelStrip *pChannelStrip = channelStrip(iChannelID);
 				if (pChannelStrip)
 					channelStripChanged(pChannelStrip);
@@ -691,6 +692,14 @@ void MainForm::customEvent ( QEvent* pEvent )
 					.arg(pLscpEvent->data()), "#996699");
 		}
 	}
+}
+
+
+// Window resize event handler.
+void MainForm::resizeEvent ( QResizeEvent * )
+{
+	if (m_pOptions->bAutoArrange)
+		channelsArrange();
 }
 
 
@@ -762,7 +771,7 @@ MainForm *MainForm::getInstance (void)
 // Format the displayable session filename.
 QString MainForm::sessionName ( const QString& sFilename )
 {
-	bool bCompletePath = (m_pOptions && m_pOptions->bCompletePath);
+	const bool bCompletePath = (m_pOptions && m_pOptions->bCompletePath);
 	QString sSessionName = sFilename;
 	if (sSessionName.isEmpty())
 		sSessionName = tr("Untitled") + QString::number(m_iUntitled);
@@ -896,10 +905,12 @@ bool MainForm::closeSession ( bool bForce )
 	if (bClose) {
 		// Remove all channel strips from sight...
 		m_pWorkspace->setUpdatesEnabled(false);
-		QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
-		for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		const QList<QMdiSubWindow *>& wlist
+			= m_pWorkspace->subWindowList();
+		const int iStripCount = wlist.count();
+		for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 			ChannelStrip *pChannelStrip = NULL;
-			QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+			QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 			if (pMdiSubWindow)
 				pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 			if (pChannelStrip) {
@@ -1021,7 +1032,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
 	// Write the file.
-	int  iErrors = 0;
+	int iErrors = 0;
 	QTextStream ts(&file);
 	ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
 	ts << "# " << tr("Version")
@@ -1133,7 +1144,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	QMap<int, int> midiInstrumentMap;
 	int *piMaps = ::lscp_list_midi_instrument_maps(m_pClient);
 	for (int iMap = 0; piMaps && piMaps[iMap] >= 0; iMap++) {
-		int iMidiMap = piMaps[iMap];
+		const int iMidiMap = piMaps[iMap];
 		const char *pszMapName
 			= ::lscp_get_midi_instrument_map_name(m_pClient, iMidiMap);
 		ts << "# " << tr("MIDI instrument map") << " " << iMap;
@@ -1200,67 +1211,69 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 #endif	// CONFIG_MIDI_INSTRUMENT
 
 	// Sampler channel mapping.
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip) {
 			Channel *pChannel = pChannelStrip->channel();
 			if (pChannel) {
-				ts << "# " << tr("Channel") << " " << iChannel << endl;
+				const int iChannelID = pChannel->channelID();
+				ts << "# " << tr("Channel") << " " << iChannelID << endl;
 				ts << "ADD CHANNEL" << endl;
 				if (audioDeviceMap.isEmpty()) {
-					ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannel
+					ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID
 						<< " " << pChannel->audioDriver() << endl;
 				} else {
-					ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannel
+					ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannelID
 						<< " " << audioDeviceMap[pChannel->audioDevice()] << endl;
 				}
 				if (midiDeviceMap.isEmpty()) {
-					ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannel
+					ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID
 						<< " " << pChannel->midiDriver() << endl;
 				} else {
-					ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannel
+					ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannelID
 						<< " " << midiDeviceMap[pChannel->midiDevice()] << endl;
 				}
-				ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannel
+				ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID
 					<< " " << pChannel->midiPort() << endl;
-				ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannel << " ";
+				ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
 				if (pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
 					ts << "ALL";
 				else
 					ts << pChannel->midiChannel();
 				ts << endl;
 				ts << "LOAD ENGINE " << pChannel->engineName()
-					<< " " << iChannel << endl;
+					<< " " << iChannelID << endl;
 				if (pChannel->instrumentStatus() < 100) ts << "# ";
 				ts << "LOAD INSTRUMENT NON_MODAL '"
 					<< pChannel->instrumentFile() << "' "
-					<< pChannel->instrumentNr() << " " << iChannel << endl;
+					<< pChannel->instrumentNr() << " " << iChannelID << endl;
 				ChannelRoutingMap::ConstIterator audioRoute;
 				for (audioRoute = pChannel->audioRouting().begin();
 						audioRoute != pChannel->audioRouting().end();
 							++audioRoute) {
-					ts << "SET CHANNEL AUDIO_OUTPUT_CHANNEL " << iChannel
+					ts << "SET CHANNEL AUDIO_OUTPUT_CHANNEL " << iChannelID
 						<< " " << audioRoute.key()
 						<< " " << audioRoute.value() << endl;
 				}
-				ts << "SET CHANNEL VOLUME " << iChannel
+				ts << "SET CHANNEL VOLUME " << iChannelID
 					<< " " << pChannel->volume() << endl;
 				if (pChannel->channelMute())
-					ts << "SET CHANNEL MUTE " << iChannel << " 1" << endl;
+					ts << "SET CHANNEL MUTE " << iChannelID << " 1" << endl;
 				if (pChannel->channelSolo())
-					ts << "SET CHANNEL SOLO " << iChannel << " 1" << endl;
+					ts << "SET CHANNEL SOLO " << iChannelID << " 1" << endl;
 			#ifdef CONFIG_MIDI_INSTRUMENT
 				if (pChannel->midiMap() >= 0) {
-					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannel
+					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannelID
 						<< " " << midiInstrumentMap[pChannel->midiMap()] << endl;
 				}
 			#endif
 			#ifdef CONFIG_FXSEND
-				int iChannelID = pChannel->channelID();
 				int *piFxSends = ::lscp_list_fxsends(m_pClient, iChannelID);
 				for (int iFxSend = 0;
 						piFxSends && piFxSends[iFxSend] >= 0;
@@ -1268,7 +1281,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 					lscp_fxsend_info_t *pFxSendInfo	= ::lscp_get_fxsend_info(
 						m_pClient, iChannelID, piFxSends[iFxSend]);
 					if (pFxSendInfo) {
-						ts << "CREATE FX_SEND " << iChannel
+						ts << "CREATE FX_SEND " << iChannelID
 							<< " " << pFxSendInfo->midi_controller;
 						if (pFxSendInfo->name)
 							ts << " '" << pFxSendInfo->name << "'";
@@ -1278,13 +1291,13 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 								piRouting && piRouting[iAudioSrc] >= 0;
 									iAudioSrc++) {
 							ts << "SET FX_SEND AUDIO_OUTPUT_CHANNEL "
-								<< iChannel
+								<< iChannelID
 								<< " " << iFxSend
 								<< " " << iAudioSrc
 								<< " " << piRouting[iAudioSrc] << endl;
 						}
 					#ifdef CONFIG_FXSEND_LEVEL
-						ts << "SET FX_SEND LEVEL " << iChannel
+						ts << "SET FX_SEND LEVEL " << iChannelID
 							<< " " << iFxSend
 							<< " " << pFxSendInfo->level << endl;
 					#endif
@@ -1371,7 +1384,7 @@ void MainForm::fileOpenRecent (void)
 	// Retrive filename index from action data...
 	QAction *pAction = qobject_cast<QAction *> (sender());
 	if (pAction && m_pOptions) {
-		int iIndex = pAction->data().toInt();
+		const int iIndex = pAction->data().toInt();
 		if (iIndex >= 0 && iIndex < m_pOptions->recentFiles.count()) {
 			QString sFilename = m_pOptions->recentFiles[iIndex];
 			// Check if we can safely close the current session...
@@ -1518,6 +1531,13 @@ void MainForm::fileExit (void)
 // Add a new sampler channel.
 void MainForm::editAddChannel (void)
 {
+	++m_iDirtySetup;
+	addChannelStrip();
+	--m_iDirtySetup;
+}
+
+void MainForm::addChannelStrip (void)
+{
 	if (m_pClient == NULL)
 		return;
 
@@ -1552,6 +1572,13 @@ void MainForm::editAddChannel (void)
 
 // Remove current sampler channel.
 void MainForm::editRemoveChannel (void)
+{
+	++m_iDirtySetup;
+	removeChannelStrip();
+	--m_iDirtySetup;
+}
+
+void MainForm::removeChannelStrip (void)
 {
 	if (m_pClient == NULL)
 		return;
@@ -1597,11 +1624,12 @@ void MainForm::editRemoveChannel (void)
 	if (!pChannel->removeChannel())
 		return;
 
-	// We'll be dirty, for sure...
-	m_iDirtyCount++;
-
 	// Just delete the channel strip.
 	destroyChannelStrip(pChannelStrip);
+
+	// We'll be dirty, for sure...
+	m_iDirtyCount++;
+	stabilizeForm();
 }
 
 
@@ -1659,10 +1687,12 @@ void MainForm::editResetAllChannels (void)
 	// Invoque the channel strip procedure,
 	// for all channels out there...
 	m_pWorkspace->setUpdatesEnabled(false);
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
@@ -1773,25 +1803,25 @@ void MainForm::viewOptions (void)
 		if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
 			m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
 		// To track down deferred or immediate changes.
-		QString sOldServerHost      = m_pOptions->sServerHost;
-		int     iOldServerPort      = m_pOptions->iServerPort;
-		int     iOldServerTimeout   = m_pOptions->iServerTimeout;
-		bool    bOldServerStart     = m_pOptions->bServerStart;
-		QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
-		bool    bOldMessagesLog     = m_pOptions->bMessagesLog;
-		QString sOldMessagesLogPath = m_pOptions->sMessagesLogPath;
-		QString sOldDisplayFont     = m_pOptions->sDisplayFont;
-		bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
-		int     iOldMaxVolume       = m_pOptions->iMaxVolume;
-		QString sOldMessagesFont    = m_pOptions->sMessagesFont;
-		bool    bOldKeepOnTop       = m_pOptions->bKeepOnTop;
-		bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
-		int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
-		int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
-		bool    bOldCompletePath    = m_pOptions->bCompletePath;
-		bool    bOldInstrumentNames = m_pOptions->bInstrumentNames;
-		int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
-		int     iOldBaseFontSize    = m_pOptions->iBaseFontSize;
+		const QString sOldServerHost      = m_pOptions->sServerHost;
+		const int     iOldServerPort      = m_pOptions->iServerPort;
+		const int     iOldServerTimeout   = m_pOptions->iServerTimeout;
+		const bool    bOldServerStart     = m_pOptions->bServerStart;
+		const QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
+		const bool    bOldMessagesLog     = m_pOptions->bMessagesLog;
+		const QString sOldMessagesLogPath = m_pOptions->sMessagesLogPath;
+		const QString sOldDisplayFont     = m_pOptions->sDisplayFont;
+		const bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
+		const int     iOldMaxVolume       = m_pOptions->iMaxVolume;
+		const QString sOldMessagesFont    = m_pOptions->sMessagesFont;
+		const bool    bOldKeepOnTop       = m_pOptions->bKeepOnTop;
+		const bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
+		const int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
+		const int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
+		const bool    bOldCompletePath    = m_pOptions->bCompletePath;
+		const bool    bOldInstrumentNames = m_pOptions->bInstrumentNames;
+		const int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
+		const int     iOldBaseFontSize    = m_pOptions->iBaseFontSize;
 		// Load the current setup settings.
 		pOptionsForm->setup(m_pOptions);
 		// Show the setup dialog...
@@ -1860,31 +1890,23 @@ void MainForm::viewOptions (void)
 void MainForm::channelsArrange (void)
 {
 	// Full width vertical tiling
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
 	int y = 0;
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
-		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
-		if (pMdiSubWindow)
-			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
-		if (pChannelStrip) {
-		/*  if (pChannelStrip->testWState(WState_Maximized | WState_Minimized)) {
-				// Prevent flicker...
-				pChannelStrip->hide();
-				pChannelStrip->showNormal();
-			}   */
-			pChannelStrip->adjustSize();
-			int iWidth  = m_pWorkspace->width();
-			if (iWidth < pChannelStrip->width())
-				iWidth = pChannelStrip->width();
-		//  int iHeight = pChannelStrip->height()
-		//		+ pChannelStrip->parentWidget()->baseSize().height();
-			int iHeight = pChannelStrip->parentWidget()->frameGeometry().height();
-			pChannelStrip->parentWidget()->setGeometry(0, y, iWidth, iHeight);
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
+		if (pMdiSubWindow) {
+			pMdiSubWindow->adjustSize();
+			int iWidth = m_pWorkspace->width();
+			if (iWidth < pMdiSubWindow->width())
+				iWidth = pMdiSubWindow->width();
+			const int iHeight = pMdiSubWindow->frameGeometry().height();
+			pMdiSubWindow->setGeometry(0, y, iWidth, iHeight);
 			y += iHeight;
 		}
 	}
@@ -2029,9 +2051,10 @@ void MainForm::stabilizeForm (void)
 
 	// Update the main menu state...
 	ChannelStrip *pChannelStrip = activeChannelStrip();
-	bool bHasClient = (m_pOptions != NULL && m_pClient != NULL);
-	bool bHasChannel = (bHasClient && pChannelStrip != NULL);
-	bool bHasChannels = (bHasClient && m_pWorkspace->subWindowList().count() > 0);
+	const QList<QMdiSubWindow *>& wlist = m_pWorkspace->subWindowList();
+	const bool bHasClient = (m_pOptions != NULL && m_pClient != NULL);
+	const bool bHasChannel = (bHasClient && pChannelStrip != NULL);
+	const bool bHasChannels = (bHasClient && wlist.count() > 0);
 	m_ui.fileNewAction->setEnabled(bHasClient);
 	m_ui.fileOpenAction->setEnabled(bHasClient);
 	m_ui.fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
@@ -2111,7 +2134,7 @@ void MainForm::volumeChanged ( int iVolume )
 		m_pVolumeSpinBox->setValue(iVolume);
 
 	// Do it as commanded...
-	float fVolume = 0.01f * float(iVolume);
+	const float fVolume = 0.01f * float(iVolume);
 	if (::lscp_set_volume(m_pClient, fVolume) == LSCP_OK)
 		appendMessages(QObject::tr("Volume: %1.").arg(fVolume));
 	else
@@ -2146,7 +2169,7 @@ void MainForm::channelStripChanged ( ChannelStrip *pChannelStrip )
 void MainForm::updateSession (void)
 {
 #ifdef CONFIG_VOLUME
-	int iVolume = ::lroundf(100.0f * ::lscp_get_volume(m_pClient));
+	const int iVolume = ::lroundf(100.0f * ::lscp_get_volume(m_pClient));
 	m_iVolumeChanging++;
 	m_pVolumeSlider->setValue(iVolume);
 	m_pVolumeSpinBox->setValue(iVolume);
@@ -2154,7 +2177,7 @@ void MainForm::updateSession (void)
 #endif
 #ifdef CONFIG_MIDI_INSTRUMENT
 	// FIXME: Make some room for default instrument maps...
-	int iMaps = ::lscp_get_midi_instrument_maps(m_pClient);
+	const int iMaps = ::lscp_get_midi_instrument_maps(m_pClient);
 	if (iMaps < 0)
 		appendMessagesClient("lscp_get_midi_instrument_maps");
 	else if (iMaps < 1) {
@@ -2181,6 +2204,10 @@ void MainForm::updateSession (void)
 
 void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 {
+	// Skip if setting up a new channel strip...
+	if (m_iDirtySetup > 0)
+		return;
+
 	// Retrieve the current channel list.
 	int *piChannelIDs = ::lscp_list_channels(m_pClient);
 	if (piChannelIDs == NULL) {
@@ -2202,18 +2229,21 @@ void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 			channelsArrange();
 		// remove dead channel strips
 		if (bRemoveDeadStrips) {
-			QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
-			for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+			const QList<QMdiSubWindow *>& wlist
+				= m_pWorkspace->subWindowList();
+			const int iStripCount = wlist.count();
+			for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 				ChannelStrip *pChannelStrip = NULL;
-				QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+				QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 				if (pMdiSubWindow)
 					pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 				if (pChannelStrip) {
 					bool bExists = false;
-					for (int j = 0; piChannelIDs[j] >= 0; ++j) {
-						if (!pChannelStrip->channel())
+					for (int iChannel = 0; piChannelIDs[iChannel] >= 0; ++iChannel) {
+						Channel *pChannel = pChannelStrip->channel();
+						if (pChannel == NULL)
 							break;
-						if (piChannelIDs[j] == pChannelStrip->channel()->channelID()) {
+						if (piChannelIDs[iChannel] == pChannel->channelID()) {
 							// strip exists, don't touch it
 							bExists = true;
 							break;
@@ -2238,7 +2268,7 @@ void MainForm::updateRecentFiles ( const QString& sFilename )
 		return;
 
 	// Remove from list if already there (avoid duplicates)
-	int iIndex = m_pOptions->recentFiles.indexOf(sFilename);
+	const int iIndex = m_pOptions->recentFiles.indexOf(sFilename);
 	if (iIndex >= 0)
 		m_pOptions->recentFiles.removeAt(iIndex);
 	// Put it to front...
@@ -2277,13 +2307,18 @@ void MainForm::updateRecentFilesMenu (void)
 void MainForm::updateInstrumentNames (void)
 {
 	// Full channel list update...
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
-		ChannelStrip *pChannelStrip = (ChannelStrip *) wlist.at(iChannel);
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
+		ChannelStrip *pChannelStrip = NULL;
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
+		if (pMdiSubWindow)
+			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
 			pChannelStrip->updateInstrumentName(true);
 	}
@@ -2300,20 +2335,23 @@ void MainForm::updateDisplayFont (void)
 	// Check if display font is legal.
 	if (m_pOptions->sDisplayFont.isEmpty())
 		return;
+
 	// Realize it.
 	QFont font;
 	if (!font.fromString(m_pOptions->sDisplayFont))
 		return;
 
 	// Full channel list update...
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
@@ -2327,14 +2365,16 @@ void MainForm::updateDisplayFont (void)
 void MainForm::updateDisplayEffect (void)
 {
 	// Full channel list update...
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
@@ -2358,14 +2398,16 @@ void MainForm::updateMaxVolume (void)
 #endif
 
 	// Full channel list update...
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return;
 
 	m_pWorkspace->setUpdatesEnabled(false);
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip)
@@ -2507,7 +2549,8 @@ ChannelStrip *MainForm::createChannelStrip ( Channel *pChannel )
 		pChannelStrip->setDisplayEffect(m_pOptions->bDisplayEffect);
 		// We'll need a display font.
 		QFont font;
-		if (font.fromString(m_pOptions->sDisplayFont))
+		if (!m_pOptions->sDisplayFont.isEmpty() &&
+			font.fromString(m_pOptions->sDisplayFont))
 			pChannelStrip->setDisplayFont(font);
 		// Maximum allowed volume setting.
 		pChannelStrip->setMaxVolume(m_pOptions->iMaxVolume);
@@ -2549,8 +2592,6 @@ void MainForm::destroyChannelStrip ( ChannelStrip *pChannelStrip )
 	// Do we auto-arrange?
 	if (m_pOptions && m_pOptions->bAutoArrange)
 		channelsArrange();
-
-	stabilizeForm();
 }
 
 
@@ -2566,18 +2607,19 @@ ChannelStrip *MainForm::activeChannelStrip (void)
 
 
 // Retrieve a channel strip by index.
-ChannelStrip *MainForm::channelStripAt ( int iChannel )
+ChannelStrip *MainForm::channelStripAt ( int iStrip )
 {
 	if (!m_pWorkspace) return NULL;
 
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return NULL;
 
-	if (iChannel < 0 || iChannel >= wlist.size())
+	if (iStrip < 0 || iStrip >= wlist.count())
 		return NULL;
 
-	QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+	QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 	if (pMdiSubWindow)
 		return static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 	else
@@ -2588,13 +2630,15 @@ ChannelStrip *MainForm::channelStripAt ( int iChannel )
 // Retrieve a channel strip by sampler channel id.
 ChannelStrip *MainForm::channelStrip ( int iChannelID )
 {
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
 		return NULL;
 
-	for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+	const int iStripCount = wlist.count();
+	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 		ChannelStrip *pChannelStrip = NULL;
-		QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 		if (pChannelStrip) {
@@ -2616,12 +2660,14 @@ void MainForm::channelsMenuAboutToShow (void)
 	m_ui.channelsMenu->addAction(m_ui.channelsArrangeAction);
 	m_ui.channelsMenu->addAction(m_ui.channelsAutoArrangeAction);
 
-	QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
+	const QList<QMdiSubWindow *>& wlist
+		= m_pWorkspace->subWindowList();
 	if (!wlist.isEmpty()) {
 		m_ui.channelsMenu->addSeparator();
-		for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+		const int iStripCount = wlist.count();
+		for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 			ChannelStrip *pChannelStrip = NULL;
-			QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+			QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 			if (pMdiSubWindow)
 				pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 			if (pChannelStrip) {
@@ -2630,7 +2676,7 @@ void MainForm::channelsMenuAboutToShow (void)
 					this, SLOT(channelsMenuActivated()));
 				pAction->setCheckable(true);
 				pAction->setChecked(activeChannelStrip() == pChannelStrip);
-				pAction->setData(iChannel);
+				pAction->setData(iStrip);
 			}
 		}
 	}
@@ -2695,7 +2741,7 @@ void MainForm::timerSlot (void)
 			ChannelStrip *pChannelStrip = iter.next();
 			// If successfull, remove from pending list...
 			if (pChannelStrip->updateChannelInfo()) {
-				int iChannelStrip = m_changedStrips.indexOf(pChannelStrip);
+				const int iChannelStrip = m_changedStrips.indexOf(pChannelStrip);
 				if (iChannelStrip >= 0)
 					m_changedStrips.removeAt(iChannelStrip);
 			}
@@ -2706,10 +2752,12 @@ void MainForm::timerSlot (void)
 			if (m_iTimerSlot >= m_pOptions->iAutoRefreshTime)  {
 				m_iTimerSlot = 0;
 				// Update the channel stream usage for each strip...
-				QList<QMdiSubWindow *> wlist = m_pWorkspace->subWindowList();
-				for (int iChannel = 0; iChannel < (int) wlist.count(); ++iChannel) {
+				const QList<QMdiSubWindow *>& wlist
+					= m_pWorkspace->subWindowList();
+				const int iStripCount = wlist.count();
+				for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
 					ChannelStrip *pChannelStrip = NULL;
-					QMdiSubWindow *pMdiSubWindow = wlist.at(iChannel);
+					QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 					if (pMdiSubWindow)
 						pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 					if (pChannelStrip && pChannelStrip->isVisible())
@@ -2762,15 +2810,13 @@ void MainForm::startServer (void)
 	bForceServerStop = true;
 
 	// Setup stdout/stderr capture...
-//	if (m_pOptions->bStdoutCapture) {
-		m_pServer->setProcessChannelMode(QProcess::ForwardedChannels);
-		QObject::connect(m_pServer,
-			SIGNAL(readyReadStandardOutput()),
-			SLOT(readServerStdout()));
-		QObject::connect(m_pServer,
-			SIGNAL(readyReadStandardError()),
-			SLOT(readServerStdout()));
-//	}
+	m_pServer->setProcessChannelMode(QProcess::ForwardedChannels);
+	QObject::connect(m_pServer,
+		SIGNAL(readyReadStandardOutput()),
+		SLOT(readServerStdout()));
+	QObject::connect(m_pServer,
+		SIGNAL(readyReadStandardError()),
+		SLOT(readServerStdout()));
 
 	// The unforgiveable signal communication...
 	QObject::connect(m_pServer,

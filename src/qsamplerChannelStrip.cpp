@@ -1,7 +1,7 @@
 // qsamplerChannelStrip.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -111,16 +111,16 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	QObject::connect(m_ui.ChannelSoloPushButton,
 		SIGNAL(toggled(bool)),
 		SLOT(channelSolo(bool)));
-	QObject::connect(m_ui.VolumeSlider,
+	QObject::connect(m_ui.ChannelVolumeSlider,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
-	QObject::connect(m_ui.VolumeSpinBox,
+	QObject::connect(m_ui.ChannelVolumeSpinBox,
 		SIGNAL(valueChanged(int)),
 		SLOT(volumeChanged(int)));
 	QObject::connect(m_ui.ChannelEditPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelEdit()));
-	QObject::connect(m_ui.FxPushButton,
+	QObject::connect(m_ui.ChannelFxPushButton,
 		SIGNAL(clicked()),
 		SLOT(channelFxEdit()));
 
@@ -237,6 +237,7 @@ QFont ChannelStrip::displayFont (void) const
 	return m_ui.EngineNameTextLabel->font();
 }
 
+
 void ChannelStrip::setDisplayFont ( const QFont & font )
 {
 	m_ui.EngineNameTextLabel->setFont(font);
@@ -272,8 +273,8 @@ void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 void ChannelStrip::setMaxVolume ( int iMaxVolume )
 {
 	m_iDirtyChange++;
-	m_ui.VolumeSlider->setRange(0, iMaxVolume);
-	m_ui.VolumeSpinBox->setRange(0, iMaxVolume);
+	m_ui.ChannelVolumeSlider->setRange(0, iMaxVolume);
+	m_ui.ChannelVolumeSpinBox->setRange(0, iMaxVolume);
 	m_iDirtyChange--;
 }
 
@@ -285,7 +286,7 @@ bool ChannelStrip::channelSetup (void)
 		return false;
 
 	// Invoke the channel setup dialog.
-	bool bResult = m_pChannel->channelSetup(this);
+	const bool bResult = m_pChannel->channelSetup(this);
 	// Notify that this channel has changed.
 	if (bResult)
 		emit channelChanged(this);
@@ -301,7 +302,7 @@ bool ChannelStrip::channelMute ( bool bMute )
 		return false;
 
 	// Invoke the channel mute method.
-	bool bResult = m_pChannel->setChannelMute(bMute);
+	const bool bResult = m_pChannel->setChannelMute(bMute);
 	// Notify that this channel has changed.
 	if (bResult)
 		emit channelChanged(this);
@@ -317,7 +318,7 @@ bool ChannelStrip::channelSolo ( bool bSolo )
 		return false;
 
 	// Invoke the channel solo method.
-	bool bResult = m_pChannel->setChannelSolo(bSolo);
+	const bool bResult = m_pChannel->setChannelSolo(bSolo);
 	// Notify that this channel has changed.
 	if (bResult)
 		emit channelChanged(this);
@@ -363,6 +364,7 @@ bool ChannelStrip::channelFxEdit (void)
 	return bResult;
 }
 
+
 // Channel reset slot.
 bool ChannelStrip::channelReset (void)
 {
@@ -370,7 +372,7 @@ bool ChannelStrip::channelReset (void)
 		return false;
 
 	// Invoke the channel reset method.
-	bool bResult = m_pChannel->channelReset();
+	const bool bResult = m_pChannel->channelReset();
 	// Notify that this channel has changed.
 	if (bResult)
 		emit channelChanged(this);
@@ -443,6 +445,7 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 	return true;
 }
 
+
 void ChannelStrip::instrumentListPopupItemClicked ( QAction *action )
 {
 	if (!action) return;
@@ -453,6 +456,7 @@ void ChannelStrip::instrumentListPopupItemClicked ( QAction *action )
 		emit channelChanged(this);
 	}
 }
+
 
 // Do the dirty volume change.
 bool ChannelStrip::updateChannelVolume (void)
@@ -468,8 +472,8 @@ bool ChannelStrip::updateChannelVolume (void)
 
 	// Flag it here, to avoid infinite recursion.
 	m_iDirtyChange++;
-	m_ui.VolumeSlider->setValue(iVolume);
-	m_ui.VolumeSpinBox->setValue(iVolume);
+	m_ui.ChannelVolumeSlider->setValue(iVolume);
+	m_ui.ChannelVolumeSpinBox->setValue(iVolume);
 	m_iDirtyChange--;
 
 	return true;
@@ -487,12 +491,12 @@ bool ChannelStrip::updateChannelInfo (void)
 		return true;
 
 	// Update strip caption.
-	QString sText = m_pChannel->channelName();
+	const QString& sText = m_pChannel->channelName();
 	setWindowTitle(sText);
 	m_ui.ChannelSetupPushButton->setText('&' + sText);
 
 	// Check if we're up and connected.
-	MainForm* pMainForm = MainForm::getInstance();
+	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm->client() == NULL)
 		return false;
 
@@ -544,7 +548,7 @@ bool ChannelStrip::updateChannelInfo (void)
 
 #ifdef CONFIG_MUTE_SOLO
 	// Mute/Solo button state coloring...
-	bool bMute = m_pChannel->channelMute();
+	const bool bMute = m_pChannel->channelMute();
 	const QColor& rgbButton = pal.color(QPalette::Button);
 	const QColor& rgbButtonText = pal.color(QPalette::ButtonText);
 	pal.setColor(QPalette::Foreground, rgbFore);
@@ -552,7 +556,7 @@ bool ChannelStrip::updateChannelInfo (void)
 	pal.setColor(QPalette::ButtonText, bMute ? Qt::darkYellow : rgbButtonText);
 	m_ui.ChannelMutePushButton->setPalette(pal);
 	m_ui.ChannelMutePushButton->setDown(bMute);
-	bool bSolo = m_pChannel->channelSolo();
+	const bool bSolo = m_pChannel->channelSolo();
 	pal.setColor(QPalette::Button, bSolo ? Qt::cyan : rgbButton);	
 	pal.setColor(QPalette::ButtonText, bSolo ? Qt::darkCyan : rgbButtonText);
 	m_ui.ChannelSoloPushButton->setPalette(pal);
@@ -583,15 +587,15 @@ bool ChannelStrip::updateChannelUsage (void)
 		return false;
 
 	// Get current channel voice count.
-	int iVoiceCount  = ::lscp_get_channel_voice_count(
+	const int iVoiceCount  = ::lscp_get_channel_voice_count(
 		pMainForm->client(), m_pChannel->channelID());
-// Get current stream count.
-	int iStreamCount = ::lscp_get_channel_stream_count(
+	// Get current stream count.
+	const int iStreamCount = ::lscp_get_channel_stream_count(
 		pMainForm->client(), m_pChannel->channelID());
 	// Get current channel buffer fill usage.
 	// As benno has suggested this is the percentage usage
 	// of the least filled buffer stream...
-	int iStreamUsage = ::lscp_get_channel_stream_usage(
+	const int iStreamUsage = ::lscp_get_channel_stream_usage(
 		pMainForm->client(), m_pChannel->channelID());;
 
 	// Update the GUI elements...

@@ -6,7 +6,10 @@ ChangeLog
 
 GIT HEAD
 
-- Dropped the --enable-qt5 from configure as found redundant
+* Fixed a race condition on creating sampler channels that ended
+  in duplicate channel strips; also fixed channel auto-arrange.
+  
+* Dropped the --enable-qt5 from configure as found redundant
   given that's the build default anyway (suggestion by Guido
   Scholz, while for Qtractor, thanks).
 

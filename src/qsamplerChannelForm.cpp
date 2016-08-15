@@ -1,7 +1,7 @@
 // qsamplerChannelForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 
 	m_pDeviceForm = NULL;
 
-	int iRowHeight = m_ui.AudioRoutingTable->fontMetrics().height() + 4;
+	const int iRowHeight = m_ui.AudioRoutingTable->fontMetrics().height() + 4;
 	m_ui.AudioRoutingTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
 	m_ui.AudioRoutingTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 
@@ -81,6 +81,9 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 	QObject::connect(m_ui.EngineNameComboBox,
 		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
+	QObject::connect(m_ui.InstrumentFileComboBox,
+		SIGNAL(editTextChanged(const QString&)),
+		SLOT(updateInstrumentName()));
 	QObject::connect(m_ui.InstrumentFileComboBox,
 		SIGNAL(activated(const QString&)),
 		SLOT(updateInstrumentName()));
@@ -123,6 +126,7 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 	QObject::connect(m_ui.AudioDeviceToolButton,
 		SIGNAL(clicked()),
 		SLOT(setupAudioDevice()));
+
 	QObject::connect(&m_routingModel,
 		SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
 		SLOT(optionsChanged()));
@@ -179,6 +183,16 @@ void ChannelForm::setup ( Channel *pChannel )
 
 	// Load combo box history...
 	pOptions->loadComboBoxHistory(m_ui.InstrumentFileComboBox);
+	// Remove non-existant instrument file-paths...
+	int i = m_ui.InstrumentFileComboBox->count() - 1;
+	while (i >= 0) {
+		const QString& sInstrumentFile
+			= m_ui.InstrumentFileComboBox->itemText(i);
+		if (sInstrumentFile.isEmpty()
+			|| !QFileInfo(sInstrumentFile).exists())
+			m_ui.InstrumentFileComboBox->removeItem(i);
+		else --i;
+	}
 
 	// Populate Engines list.
 	const char **ppszEngines = ::lscp_list_available_engines(pMainForm->client());
@@ -236,7 +250,7 @@ void ChannelForm::setup ( Channel *pChannel )
 	m_ui.InstrumentNrComboBox->setCurrentIndex(iInstrumentNr);
 
 	// MIDI input device...
-	Device midiDevice(Device::Midi, m_pChannel->midiDevice());
+	const Device midiDevice(Device::Midi, m_pChannel->midiDevice());
 	// MIDI input driver...
 	QString sMidiDriver = midiDevice.driverName();
 	if (sMidiDriver.isEmpty() || bNew)
@@ -278,12 +292,12 @@ void ChannelForm::setup ( Channel *pChannel )
 			sMapName);
 	}
 	// It might be no maps around...
-	bool bMidiMapEnabled = (m_ui.MidiMapComboBox->count() > 0);
+	const bool bMidiMapEnabled = (m_ui.MidiMapComboBox->count() > 0);
 	m_ui.MidiMapTextLabel->setEnabled(bMidiMapEnabled);
 	m_ui.MidiMapComboBox->setEnabled(bMidiMapEnabled);
 
 	// Audio output device...
-	Device audioDevice(Device::Audio, m_pChannel->audioDevice());
+	const Device audioDevice(Device::Audio, m_pChannel->audioDevice());
 	// Audio output driver...
 	QString sAudioDriver = audioDevice.driverName();
 	if (sAudioDriver.isEmpty() || bNew)
@@ -319,11 +333,14 @@ void ChannelForm::setup ( Channel *pChannel )
 		QObject::tr(sInstrumentNrToolTip.toUtf8().data())
 	);
 
+#if 0
 	// As convenient, make it ready on stabilizeForm() for
 	// prompt acceptance, if we got the minimum required...
-/*	if (sEngineName != Channel::noEngineName() &&
+	if (sEngineName != Channel::noEngineName() &&
 		sInstrumentFile != Channel::noInstrumentName())
-		m_iDirtyCount++; */
+		m_iDirtyCount++;
+#endif
+
 	// Done.
 	m_iDirtySetup--;
 	stabilizeForm();
@@ -361,7 +378,7 @@ void ChannelForm::accept (void)
 				iErrors++;
 		} else {
 			Device *pDevice = NULL;
-			int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
+			const int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
 			if (iAudioItem >= 0 && iAudioItem < m_audioDevices.count())
 				pDevice = m_audioDevices.at(iAudioItem);
 			ChannelRoutingMap routingMap = m_routingModel.routingMap();
@@ -385,7 +402,7 @@ void ChannelForm::accept (void)
 				iErrors++;
 		} else {
 			Device *pDevice = NULL;
-			int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
+			const int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
 			if (iMidiItem >= 0 && iMidiItem < m_midiDevices.count())
 				pDevice = m_midiDevices.at(iMidiItem);
 			if (pDevice == NULL)
@@ -570,7 +587,6 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	const QString sDriverName = sMidiDriver.toUpper();
 
 	// Save current device id.
-	// Save current device id.
 	int iDeviceID = 0;
 	Device *pDevice = NULL;
 	int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
@@ -586,8 +602,7 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 
 	// Populate with the current ones...
 	const QPixmap midiPixmap(":/images/midi2.png");
-	int *piDeviceIDs = Device::getDevices(pMainForm->client(),
-		Device::Midi);
+	int *piDeviceIDs = Device::getDevices(pMainForm->client(), Device::Midi);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
 		pDevice = new Device(Device::Midi, piDeviceIDs[i]);
 		if (pDevice->driverName().toUpper() == sDriverName) {
@@ -600,7 +615,7 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	}
 
 	// Do proper enabling...
-	bool bEnabled = !m_midiDevices.isEmpty();
+	const bool bEnabled = !m_midiDevices.isEmpty();
 	if (bEnabled) {
 		// Select the previous current device...
 		iMidiItem = 0;
@@ -642,7 +657,7 @@ void ChannelForm::selectMidiDeviceItem ( int iMidiItem )
 		pDevice = m_midiDevices.at(iMidiItem);
 	if (pDevice) {
 		const DeviceParamMap& params = pDevice->params();
-		int iPorts = params["PORTS"].value.toInt();
+		const int iPorts = params["PORTS"].value.toInt();
 		m_ui.MidiPortTextLabel->setEnabled(iPorts > 0);
 		m_ui.MidiPortSpinBox->setEnabled(iPorts > 0);
 		if (iPorts > 0)
@@ -666,7 +681,7 @@ void ChannelForm::selectMidiDevice ( int iMidiItem )
 void ChannelForm::setupMidiDevice (void)
 {
 	Device *pDevice = NULL;
-	int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
+	const int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
 	if (iMidiItem >= 0 && iMidiItem < m_midiDevices.count())
 		pDevice = m_midiDevices.at(iMidiItem);
 	setupDevice(pDevice,
@@ -715,7 +730,7 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	}
 
 	// Do proper enabling...
-	bool bEnabled = !m_audioDevices.isEmpty();
+	const bool bEnabled = !m_audioDevices.isEmpty();
 	if (bEnabled) {
 		// Select the previous current device...
 		iAudioItem = 0;
@@ -781,7 +796,7 @@ void ChannelForm::selectAudioDevice ( int iAudioItem )
 void ChannelForm::setupAudioDevice (void)
 {
 	Device *pDevice = NULL;
-	int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
+	const int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
 	if (iAudioItem >= 0 && iAudioItem < m_audioDevices.count())
 		pDevice = m_audioDevices.at(iAudioItem);
 	setupDevice(pDevice,
@@ -814,14 +829,12 @@ void ChannelForm::optionsChanged (void)
 // Stabilize current form state.
 void ChannelForm::stabilizeForm (void)
 {
-	const bool bValid =
-		m_ui.EngineNameComboBox->currentIndex() >= 0 &&
-		m_ui.EngineNameComboBox->currentText()
-			!= Channel::noEngineName();
-#if 0
-	const QString& sPath = InstrumentFileComboBox->currentText();
+	bool bValid = m_ui.EngineNameComboBox->currentIndex() >= 0 &&
+		m_ui.EngineNameComboBox->currentText() != Channel::noEngineName();
+
+	const QString& sPath = m_ui.InstrumentFileComboBox->currentText();
 	bValid = bValid && !sPath.isEmpty() && QFileInfo(sPath).exists();
-#endif
+
 	m_ui.DialogButtonBox->button(
 		QDialogButtonBox::Ok)->setEnabled(m_iDirtyCount > 0 && bValid);
 }
