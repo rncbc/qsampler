@@ -2,7 +2,9 @@
 Name=@PACKAGE_NAME@
 Version=1.0
 GenericName=LinuxSampler GUI
+GenericName[fr]=Interface graphique pour LinuxSampler
 Comment=Qsampler is a LinuxSampler Qt GUI Interface
+Comment[fr]=Qsampler est une interface graphique Qt pour LinuxSampler
 Exec=@ac_prefix@/bin/qsampler
 Icon=qsampler
 Categories=Audio;AudioVideo;Midi;X-Alsa;X-Jack;Qt;
