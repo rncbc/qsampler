@@ -47,12 +47,6 @@
    <iconset resource="qsampler.qrc">:/images/qsamplerChannel.png</iconset>
   </property>
   <layout class="QHBoxLayout">
-   <property name="spacing">
-    <number>4</number>
-   </property>
-   <property name="margin">
-    <number>4</number>
-   </property>
    <item>
     <widget class="QPushButton" name="ChannelSetupPushButton">
      <property name="minimumSize">
@@ -88,8 +82,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>180</width>
-       <height>0</height>
+       <width>240</width>
+       <height>48</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -354,9 +348,25 @@
     </widget>
    </item>
    <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Preferred</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>8</width>
+       <height>22</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <widget class="QProgressBar" name="StreamUsageProgressBar">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -364,7 +374,7 @@
      <property name="minimumSize">
       <size>
        <width>64</width>
-       <height>0</height>
+       <height>22</height>
       </size>
      </property>
      <property name="toolTip">
@@ -380,13 +390,13 @@
      <property name="minimumSize">
       <size>
        <width>48</width>
-       <height>0</height>
+       <height>22</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>64</width>
-       <height>48</height>
+       <height>32</height>
       </size>
      </property>
      <property name="toolTip">
@@ -412,9 +422,25 @@
      </property>
     </widget>
    </item>
+   <item>
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeType" >
+      <enum>QSizePolicy::Preferred</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>8</width>
+       <height>22</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
- <layoutdefault spacing="0" margin="0"/>
+ <layoutdefault spacing="4" margin="4"/>
  <tabstops>
   <tabstop>ChannelSetupPushButton</tabstop>
   <tabstop>ChannelMutePushButton</tabstop>

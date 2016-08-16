@@ -1,7 +1,7 @@
 // qsamplerFxSendList.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -30,53 +30,60 @@
 
 namespace QSampler {
 
-FxSendsModel::FxSendsModel(int SamplerChannelID, QObject* pParent) : QAbstractListModel(pParent) {
-	m_SamplerChannelID = SamplerChannelID;
+
+FxSendsModel::FxSendsModel ( int iChannelID, QObject* pParent )
+	: QAbstractListModel(pParent)
+{
+	m_iChannelID = iChannelID;
 	cleanRefresh();
 }
 
-int FxSendsModel::rowCount(const QModelIndex& /*parent*/) const {
-	return m_FxSends.size();
+
+int FxSendsModel::rowCount ( const QModelIndex& /*parent*/ ) const
+{
+	return m_fxSends.size();
 }
 
-QVariant FxSendsModel::data(const QModelIndex& index, int role) const {
+
+QVariant FxSendsModel::data ( const QModelIndex& index, int role ) const
+{
 	if (!index.isValid())
 		return QVariant();
 
 	switch (role) {
 		case Qt::DisplayRole:
-			return m_FxSends[index.row()].name();
+			return m_fxSends[index.row()].name();
 			break;
 		case Qt::ToolTipRole:
-			if (m_FxSends[index.row()].deletion())
+			if (m_fxSends[index.row()].deletion())
 				return QString(
 					"Scheduled for deletion. Click on 'Apply' to actually "
 					"destroy FX Send."
 				);
-			return (m_FxSends[index.row()].isNew()) ?
+			return (m_fxSends[index.row()].isNew()) ?
 						QString(
 							"New FX send. Click on 'Apply' to actually "
 							"perform creation."
 						) :
 						QString("FX Send ID ") +
-						QString::number(m_FxSends[index.row()].id());
+						QString::number(m_fxSends.at(index.row()).id());
 			break;
 		case Qt::ForegroundRole:
-			if (m_FxSends[index.row()].deletion())
+			if (m_fxSends.at(index.row()).deletion())
 				return QBrush(Qt::red);
-			if (m_FxSends[index.row()].isNew())
+			if (m_fxSends.at(index.row()).isNew())
 				return QBrush(Qt::green);
 			break;
 		case Qt::DecorationRole:
-			if (m_FxSends[index.row()].deletion())
+			if (m_fxSends.at(index.row()).deletion())
 				return QIcon(":/images/formRemove.png");
-			if (m_FxSends[index.row()].isNew())
+			if (m_fxSends.at(index.row()).isNew())
 				return QIcon(":/images/itemNew.png");
-			if (m_FxSends[index.row()].isModified())
+			if (m_fxSends.at(index.row()).isModified())
 				return QIcon(":/images/formEdit.png");
 			return QIcon(":/images/itemFile.png");
 		case Qt::FontRole: {
-			if (m_FxSends[index.row()].isModified()) {
+			if (m_fxSends.at(index.row()).isModified()) {
 				QFont font;
 				font.setBold(true);
 				return font;
@@ -86,24 +93,27 @@ QVariant FxSendsModel::data(const QModelIndex& index, int role) const {
 		default:
 			return QVariant();
 	}
+
 	return QVariant();
 }
 
-bool FxSendsModel::setData(
-	const QModelIndex& index, const QVariant& value, int /*role*/)
+
+bool FxSendsModel::setData (
+	const QModelIndex& index, const QVariant& value, int /*role*/ )
 {
 	if (!index.isValid())
 		return false;
 
-	m_FxSends[index.row()].setName(value.toString());
+	m_fxSends[index.row()].setName(value.toString());
 	emit dataChanged(index, index);
 	emit fxSendsDirtyChanged(true);
 
 	return true;
 }
 
-QVariant FxSendsModel::headerData(int section, Qt::Orientation /*orientation*/,
-	int role) const
+
+QVariant FxSendsModel::headerData (
+	int section, Qt::Orientation /*orientation*/, int role ) const
 {
 	if (role == Qt::DisplayRole && section == 0)
 		return QString("FX Send Name");
@@ -111,16 +121,20 @@ QVariant FxSendsModel::headerData(int section, Qt::Orientation /*orientation*/,
 		return QVariant();
 }
 
-Qt::ItemFlags FxSendsModel::flags(const QModelIndex& /*index*/) const {
+
+Qt::ItemFlags FxSendsModel::flags ( const QModelIndex& /*index*/) const
+{
 	return Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-FxSend* FxSendsModel::addFxSend() {
+
+FxSend *FxSendsModel::addFxSend (void)
+{
 #if CONFIG_FXSEND
-	FxSend fxSend(m_SamplerChannelID);
+	FxSend fxSend(m_iChannelID);
 	fxSend.setName("New FX Send");
-	m_FxSends.push_back(fxSend);
-	QModelIndex index = createIndex(m_FxSends.size() - 1, 0);
+	m_fxSends.push_back(fxSend);
+	createIndex(m_fxSends.size() - 1, 0);
 #if QT_VERSION < 0x050000
 	QAbstractListModel::reset();
 #else
@@ -128,21 +142,25 @@ FxSend* FxSendsModel::addFxSend() {
 	QAbstractListModel::endResetModel();
 #endif
 	emit fxSendsDirtyChanged(true);
-	return &m_FxSends.last();
-#else // CONFIG_FXSEND
+	return &m_fxSends.last();
+#else
 	return NULL;
 #endif // CONFIG_FXSEND
 }
 
-FxSend* FxSendsModel::fxSend(const QModelIndex& index) {
+
+FxSend *FxSendsModel::fxSend ( const QModelIndex& index )
+{
 	if (!index.isValid())
 		return NULL;
 
-	return &m_FxSends[index.row()];
+	return &m_fxSends[index.row()];
 }
 
-void FxSendsModel::removeFxSend(const QModelIndex& index) {
-	FxSend* pFxSend = fxSend(index);
+
+void FxSendsModel::removeFxSend ( const QModelIndex& index )
+{
+	FxSend *pFxSend = fxSend(index);
 	if (!pFxSend) return;
 	pFxSend->setDeletion(true);
 #if QT_VERSION < 0x050000
@@ -154,14 +172,16 @@ void FxSendsModel::removeFxSend(const QModelIndex& index) {
 	emit fxSendsDirtyChanged(true);
 }
 
-void FxSendsModel::cleanRefresh() {
-	m_FxSends.clear();
-	QList<int> sends = FxSend::allFxSendsOfSamplerChannel(m_SamplerChannelID);
+
+void FxSendsModel::cleanRefresh (void)
+{
+	m_fxSends.clear();
+	const QList<int>& sends = FxSend::allFxSendsOfSamplerChannel(m_iChannelID);
 	for (int i = 0; i < sends.size(); ++i) {
-		const int iFxSendId = sends[i]; 
-		FxSend fxSend(m_SamplerChannelID, iFxSendId);
+		const int iFxSendId = sends.at(i);
+		FxSend fxSend(m_iChannelID, iFxSendId);
 		fxSend.getFromSampler();
-		m_FxSends.push_back(fxSend);
+		m_fxSends.push_back(fxSend);
 	}
 #if QT_VERSION < 0x050000
 	QAbstractListModel::reset();
@@ -172,21 +192,27 @@ void FxSendsModel::cleanRefresh() {
 	emit fxSendsDirtyChanged(false);
 }
 
-void FxSendsModel::onExternalModifiication(const QModelIndex& index) {
+
+void FxSendsModel::onExternalModifiication ( const QModelIndex& index )
+{
 	if (!index.isValid()) return;
 	emit dataChanged(index, index);
 	emit fxSendsDirtyChanged(true);
 }
 
-void FxSendsModel::applyToSampler() {
-	for (int i = 0; i < m_FxSends.size(); ++i)
-		m_FxSends[i].applyToSampler();
+
+void FxSendsModel::applyToSampler (void)
+{
+	for (int i = 0; i < m_fxSends.size(); ++i)
+		m_fxSends[i].applyToSampler();
 
 	// make a clean refresh
 	// (throws out all FxSend objects marked for deletion)
 	cleanRefresh();
 }
 
+
 } // namespace QSampler
+
 
 // end of qsamplerFxSendList.cpp

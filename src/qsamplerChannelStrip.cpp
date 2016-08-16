@@ -682,7 +682,10 @@ void ChannelStrip::setSelected ( bool bSelected )
 		pal.setColor(QPalette::Background, color.dark(150));
 		pal.setColor(QPalette::Foreground, color.light(150));
 	}
-	QWidget::setPalette(pal);
+
+	QWidget *pParentWidget = QWidget::parentWidget();
+	if (pParentWidget)
+		pParentWidget->setPalette(pal);
 }
 
 

@@ -1,7 +1,7 @@
 // qsamplerFxSendList.h
 //
 /****************************************************************************
-   Copyright (C) 2010-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -23,18 +23,21 @@
 #ifndef __qsamplerFxSendList_h
 #define __qsamplerFxSendList_h
 
-#include <QAbstractListModel>
+#include "qsamplerFxSend.h"
+
 #include <lscp/client.h>
 
-#include "qsamplerFxSend.h"
+#include <QAbstractListModel>
 
 namespace QSampler {
 
 class FxSendsModel : public QAbstractListModel
 {
 	Q_OBJECT
+
 public:
-	FxSendsModel(int SamplerChannelID, QObject* pParent = NULL);
+
+	FxSendsModel(int iChannelID, QObject *pParent = NULL);
 
 	// Overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent) const;
@@ -46,24 +49,28 @@ public:
 	Qt::ItemFlags flags(const QModelIndex& index) const;
 
 	// Own methods
-	FxSend* addFxSend();
-	FxSend* fxSend(const QModelIndex& index);
+	FxSend *addFxSend();
+	FxSend *fxSend(const QModelIndex& index);
 	void removeFxSend(const QModelIndex& index);
 
 signals:
+
 	void fxSendsDirtyChanged(bool);
 
 public slots:
+
 	void cleanRefresh();
 	void applyToSampler();
+
 	// not pretty, but more efficient than wiring connections for each element
 	void onExternalModifiication(const QModelIndex& index);
 
 private:
+
 	typedef QList<FxSend> FxSendsList;
 
-	int         m_SamplerChannelID;
-	FxSendsList m_FxSends;
+	int m_iChannelID;
+	FxSendsList m_fxSends;
 };
 
 } // namespace QSampler
