@@ -28,7 +28,6 @@
 #include <lscp/client.h>
 
 class QProcess;
-class QMdiArea;
 class QMdiSubWindow;
 class QSocketNotifier;
 class QSpinBox;
@@ -37,6 +36,7 @@ class QLabel;
 
 namespace QSampler {
 
+class Workspace;
 class Options;
 class Messages;
 class Channel;
@@ -57,10 +57,10 @@ public:
 	MainForm(QWidget *pParent = NULL);
 	~MainForm();
 
-	void setup(Options* pOptions);
+	void setup(Options *pOptions);
 
-	Options* options() const;
-	lscp_client_t* client() const;
+	Options *options() const;
+	lscp_client_t *client() const;
 
 	QString sessionName(const QString& sFilename);
 
@@ -76,9 +76,11 @@ public:
 	ChannelStrip *channelStripAt(int iChannel);
 	ChannelStrip *channelStrip(int iChannelID);
 
+	void channelsArrangeAuto();
 	void contextMenuEvent(QContextMenuEvent *pEvent);
+	void sessionDirty();
 
-	static MainForm* getInstance();
+	static MainForm *getInstance();
 
 public slots:
 
@@ -107,6 +109,13 @@ public slots:
 	void channelsAutoArrange(bool bOn);
 	void helpAboutQt();
 	void helpAbout();
+
+	void stabilizeForm();
+
+protected slots:
+
+	void updateRecentFilesMenu();
+
 	void volumeChanged(int iVolume);
 	void channelStripChanged(ChannelStrip *pChannelStrip);
 	void channelsMenuAboutToShow();
@@ -114,14 +123,8 @@ public slots:
 	void timerSlot();
 	void readServerStdout();
 	void processServerExit();
-	void sessionDirty();
-	void stabilizeForm();
 
 	void handle_sigusr1();
-
-protected slots:
-
-	void updateRecentFilesMenu();
 
 	// Channel strip activation/selection.
 	void activateStrip(QMdiSubWindow *pMdiSubWindow);
@@ -139,7 +142,6 @@ protected:
 	void dragEnterEvent(QDragEnterEvent *pDragEnterEvent);
 	void dropEvent(QDropEvent *pDropEvent);
 	void customEvent(QEvent *pCustomEvent);
-	void resizeEvent(QResizeEvent *);
 	bool newSession();
 	bool openSession();
 	bool saveSession(bool bPrompt);
@@ -157,6 +159,7 @@ protected:
 	void updateMessagesCapture();
 	void updateViewMidiDeviceStatusMenu();
 	void updateAllChannelStrips(bool bRemoveDeadStrips);
+
 	void startSchedule(int iStartDelay);
 	void stopSchedule();
 	void startServer();
@@ -170,7 +173,7 @@ private:
 
 	Options *m_pOptions;
 	Messages *m_pMessages;
-	QMdiArea *m_pWorkspace;
+	Workspace *m_pWorkspace;
 	QSocketNotifier *m_pUsr1Notifier;
 	QString m_sFilename;
 	int m_iUntitled;

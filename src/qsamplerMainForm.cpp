@@ -123,7 +123,7 @@ static void qsampler_sigusr1_handler ( int /* signo */ )
 
 
 //-------------------------------------------------------------------------
-// qsampler -- namespace
+// QSampler -- namespace
 
 
 namespace QSampler {
@@ -143,8 +143,7 @@ namespace QSampler {
 
 
 //-------------------------------------------------------------------------
-// LscpEvent -- specialty for LSCP callback comunication.
-
+// QSampler::LscpEvent -- specialty for LSCP callback comunication.
 
 class LscpEvent : public QEvent
 {
@@ -159,8 +158,8 @@ public:
 	}
 
 	// Accessors.
-	lscp_event_t event() { return m_event; }
-	QString&     data()  { return m_data;  }
+	lscp_event_t  event() { return m_event; }
+	const QString& data() { return m_data;  }
 
 private:
 
@@ -172,10 +171,30 @@ private:
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Main window form implementation.
+// QSampler::Workspace -- Main window workspace (MDI Area) decl.
+
+class Workspace : public QMdiArea
+{
+public:
+
+	Workspace(MainForm *pMainForm) : QMdiArea(pMainForm) {}
+
+protected:
+
+	void resizeEvent(QResizeEvent *)
+	{
+		MainForm *pMainForm = static_cast<MainForm *> (parentWidget());
+		if (pMainForm)
+			pMainForm->channelsArrangeAuto();
+	}
+};
+
+
+//-------------------------------------------------------------------------
+// QSampler::MainForm -- Main window form implementation.
 
 // Kind of singleton reference.
-MainForm* MainForm::g_pMainForm = NULL;
+MainForm *MainForm::g_pMainForm = NULL;
 
 MainForm::MainForm ( QWidget *pParent )
 	: QMainWindow(pParent)
@@ -270,7 +289,7 @@ MainForm::MainForm ( QWidget *pParent )
 #endif
 
 	// Make it an MDI workspace.
-	m_pWorkspace = new QMdiArea(this);
+	m_pWorkspace = new Workspace(this);
 	m_pWorkspace->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	m_pWorkspace->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	// Set the activation connection.
@@ -695,14 +714,6 @@ void MainForm::customEvent ( QEvent* pEvent )
 }
 
 
-// Window resize event handler.
-void MainForm::resizeEvent ( QResizeEvent * )
-{
-	if (m_pOptions->bAutoArrange)
-		channelsArrange();
-}
-
-
 // LADISH Level 1 -- SIGUSR1 signal handler.
 void MainForm::handle_sigusr1 (void)
 {
@@ -742,7 +753,7 @@ void MainForm::contextMenuEvent( QContextMenuEvent *pEvent )
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Brainless public property accessors.
+// QSampler::MainForm -- Brainless public property accessors.
 
 // The global options settings property.
 Options *MainForm::options (void) const
@@ -766,7 +777,7 @@ MainForm *MainForm::getInstance (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Session file stuff.
+// QSampler::MainForm -- Session file stuff.
 
 // Format the displayable session filename.
 QString MainForm::sessionName ( const QString& sFilename )
@@ -1360,7 +1371,7 @@ void MainForm::sessionDirty (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- File Action slots.
+// QSampler::MainForm -- File Action slots.
 
 // Create a new sampler session.
 void MainForm::fileNew (void)
@@ -1526,7 +1537,7 @@ void MainForm::fileExit (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Edit Action slots.
+// QSampler::MainForm -- Edit Action slots.
 
 // Add a new sampler channel.
 void MainForm::editAddChannel (void)
@@ -1561,8 +1572,7 @@ void MainForm::addChannelStrip (void)
 	}
 
 	// Do we auto-arrange?
-	if (m_pOptions && m_pOptions->bAutoArrange)
-		channelsArrange();
+	channelsArrangeAuto();
 
 	// Make that an overall update.
 	m_iDirtyCount++;
@@ -1703,7 +1713,7 @@ void MainForm::editResetAllChannels (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- View Action slots.
+// QSampler::MainForm -- View Action slots.
 
 // Show/hide the main program window menubar.
 void MainForm::viewMenubar ( bool bOn )
@@ -1884,7 +1894,7 @@ void MainForm::viewOptions (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Channels action slots.
+// QSampler::MainForm -- Channels action slots.
 
 // Arrange channel strips.
 void MainForm::channelsArrange (void)
@@ -1926,13 +1936,19 @@ void MainForm::channelsAutoArrange ( bool bOn )
 	m_pOptions->bAutoArrange = bOn;
 
 	// If on, update whole workspace...
-	if (m_pOptions->bAutoArrange)
+	channelsArrangeAuto();
+}
+
+
+void MainForm::channelsArrangeAuto (void)
+{
+	if (m_pOptions && m_pOptions->bAutoArrange)
 		channelsArrange();
 }
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Help Action slots.
+// QSampler::MainForm -- Help Action slots.
 
 // Show information about the Qt toolkit.
 void MainForm::helpAboutQt (void)
@@ -2039,7 +2055,7 @@ void MainForm::helpAbout (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Main window stabilization.
+// QSampler::MainForm -- Main window stabilization.
 
 void MainForm::stabilizeForm (void)
 {
@@ -2191,8 +2207,7 @@ void MainForm::updateSession (void)
 	updateAllChannelStrips(false);
 
 	// Do we auto-arrange?
-	if (m_pOptions && m_pOptions->bAutoArrange)
-		channelsArrange();
+	channelsArrangeAuto();
 
 	// Remember to refresh devices and instruments...
 	if (m_pInstrumentListForm)
@@ -2225,8 +2240,7 @@ void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 				createChannelStrip(new Channel(piChannelIDs[iChannel]));
 		}
 		// Do we auto-arrange?
-		if (m_pOptions && m_pOptions->bAutoArrange)
-			channelsArrange();
+		channelsArrangeAuto();
 		// remove dead channel strips
 		if (bRemoveDeadStrips) {
 			const QList<QMdiSubWindow *>& wlist
@@ -2418,7 +2432,7 @@ void MainForm::updateMaxVolume (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Messages window form handlers.
+// QSampler::MainForm -- Messages window form handlers.
 
 // Messages output methods.
 void MainForm::appendMessages( const QString& s )
@@ -2530,7 +2544,7 @@ void MainForm::updateMessagesCapture (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- MDI channel strip management.
+// QSampler::MainForm -- MDI channel strip management.
 
 // The channel strip creation executive.
 ChannelStrip *MainForm::createChannelStrip ( Channel *pChannel )
@@ -2590,8 +2604,7 @@ void MainForm::destroyChannelStrip ( ChannelStrip *pChannelStrip )
 	delete pMdiSubWindow;
 
 	// Do we auto-arrange?
-	if (m_pOptions && m_pOptions->bAutoArrange)
-		channelsArrange();
+	channelsArrangeAuto();
 }
 
 
@@ -2700,7 +2713,7 @@ void MainForm::channelsMenuActivated (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Timer stuff.
+// QSampler::MainForm -- Timer stuff.
 
 // Set the pseudo-timer delay schedule.
 void MainForm::startSchedule ( int iStartDelay )
@@ -2773,7 +2786,7 @@ void MainForm::timerSlot (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Server stuff.
+// QSampler::MainForm -- Server stuff.
 
 // Start linuxsampler server...
 void MainForm::startServer (void)
@@ -2937,7 +2950,7 @@ void MainForm::processServerExit (void)
 
 
 //-------------------------------------------------------------------------
-// qsamplerMainForm -- Client stuff.
+// QSampler::MainForm -- Client stuff.
 
 // The LSCP client callback procedure.
 lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/,
