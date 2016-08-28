@@ -191,7 +191,7 @@ void ChannelForm::setup ( Channel *pChannel )
 		if (sInstrumentFile.isEmpty()
 			|| !QFileInfo(sInstrumentFile).exists())
 			m_ui.InstrumentFileComboBox->removeItem(i);
-		else --i;
+		--i;
 	}
 
 	// Populate Engines list.
