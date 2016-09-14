@@ -4,7 +4,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+0.4.1  2016-09-14  End of Summer'16 release.
 
 * Fixed a race condition on creating sampler channels that ended
   in duplicate channel strips; also fixed channel auto-arrange.
