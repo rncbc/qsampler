@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.4.1.1, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.4.1.2, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -127,6 +127,7 @@ AC_PROG_CXXCPP
 # Checks for languages.
 AC_LANG_CPLUSPLUS
 
+# Check for pkg-config.
 PKG_PROG_PKG_CONFIG
 
 # Check for proper flags.
@@ -285,16 +286,20 @@ if test "x$ac_round" = "xyes"; then
 fi
 
 # Check for mandatory libraries.
-AC_CHECK_LIB(lscp, main, [ac_liblscp="yes"], [ac_liblscp="no"])
-if test "x$ac_liblscp" = "xno"; then
-   AC_MSG_ERROR([LSCP library not found.])
+PKG_CHECK_MODULES([LSCP], [lscp], [ac_liblscp="yes"], [ac_liblscp="no"])
+if test "x$ac_liblscp" = "xyes"; then
+   AC_DEFINE(CONFIG_LIBLSCP, 1, [Define if liblscp is available.])
+   ac_cflags="$ac_cflags $LSCP_CFLAGS"
+   ac_libs="$ac_libs $LSCP_LIBS"
+else
+   AC_MSG_ERROR([*** LSCP library not found (liblscp).])
 fi
-ac_libs="$ac_libs -llscp"
+
 case "{$host}" in
-     *mingw*)
-     ac_libs="$ac_libs -lws2_32"
-     LIBS="$LIBS -lws2_32"
-     ;;
+   *mingw*)
+   ac_libs="$ac_libs -lws2_32"
+   LIBS="$LIBS -lws2_32"
+   ;;
 esac
 
 AC_CACHE_CHECK([for instrument_name in lscp_channel_info_t],
@@ -412,16 +417,16 @@ fi
 
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
-   PKG_CHECK_MODULES(LIBGIG, gig >= 3.3.0, [ac_libgig="yes"], [ac_libgig="no"])
-   if test "x$ac_libgig" = "xyes"; then
-      AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
-      AC_SUBST(LIBGIG_CFLAGS)
-      AC_SUBST(LIBGIG_LIBS)
-      ac_cflags="$ac_cflags $LIBGIG_CFLAGS"
-      ac_libs="$ac_libs $LIBGIG_LIBS"
-      AC_DEFINE(CONFIG_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
-      ac_libgig_setautoload="yes"
-   fi
+   PKG_CHECK_MODULES([GIG], [gig >= 3.3.0], [ac_libgig="yes"], [ac_libgig="no"])
+fi
+if test "x$ac_libgig" = "xyes"; then
+   AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
+   ac_cflags="$ac_cflags $GIG_CFLAGS"
+   ac_libs="$ac_libs $GIG_LIBS"
+   AC_DEFINE(CONFIG_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
+   ac_libgig_setautoload="yes"
+else
+   AC_MSG_WARN([*** GIG library not found (libgig).])
 fi
 
 # Check for round math function.
@@ -446,9 +451,7 @@ if test "x$ac_cv_lib_X11_main" = "xyes"; then
 fi
 
 AC_SUBST(ac_libs)
-AC_SUBST(ac_incpath)
-AC_SUBST(ac_cflags)
-AC_SUBST(ac_ldflags)
+
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -466,6 +469,11 @@ if test "x$ac_libgig" = "xyes"; then
       AC_DEFINE(CONFIG_LIBGIG_SF2, 1, [Define if libgig/SF.h is available.])
    fi
 fi
+
+AC_SUBST(ac_incpath)
+AC_SUBST(ac_cflags)
+AC_SUBST(ac_ldflags)
+
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_C_CONST
