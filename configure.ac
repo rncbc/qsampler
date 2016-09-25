@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.4.1.2, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.4.1.3, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -435,33 +435,11 @@ if test "x$ac_round" = "xyes"; then
    AC_DEFINE(CONFIG_ROUND, 1, [Define if round is available.])
 fi
 
-# Check for X11 unique/single instance.
-if test "x$ac_xunique" = "xyes"; then
-   AC_DEFINE(CONFIG_XUNIQUE, 1, [Define if X11 unique/single instance is enabled.])
-fi
-
-# Check for debugging stack-trace.
-if test "x$ac_stacktrace" = "xyes"; then
-   AC_DEFINE(CONFIG_STACKTRACE, 1, [Define if debugger stack-trace is enabled.])
-fi
-
-# Some recent distros (eg. fedora, debian) require this.
-if test "x$ac_cv_lib_X11_main" = "xyes"; then
-   ac_libs="$ac_libs -lX11"
-fi
-
-AC_SUBST(ac_libs)
-
 
 # Checks for header files.
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(fcntl.h sys/ioctl.h unistd.h signal.h sys/socket.h)
-
-AC_CHECK_HEADER(lscp/client.h, [ac_lscp_h="yes"], [ac_lscp_h="no"])
-if test "x$ac_lscp_h" = "xno"; then
-   AC_MSG_ERROR([LSCP headers not found.])
-fi
 
 if test "x$ac_libgig" = "xyes"; then
    AC_CHECK_HEADER(libgig/SF.h, [ac_libgig_sf2="yes"], [ac_libgig_sf2="no"])
@@ -470,9 +448,24 @@ if test "x$ac_libgig" = "xyes"; then
    fi
 fi
 
-AC_SUBST(ac_incpath)
+# Check for X11 unique/single instance.
+if test "x$ac_xunique" = "xyes"; then
+   AC_DEFINE(CONFIG_XUNIQUE, 1, [Define if X11 unique/single instance is enabled.])
+   # Some recent distros (eg. fedora, debian) require this.
+   if test "x$ac_cv_lib_X11_main" = "xyes"; then
+      ac_libs="$ac_libs -lX11"
+   fi
+fi
+
+# Check for debugging stack-trace.
+if test "x$ac_stacktrace" = "xyes"; then
+   AC_DEFINE(CONFIG_STACKTRACE, 1, [Define if debugger stack-trace is enabled.])
+fi
+
 AC_SUBST(ac_cflags)
 AC_SUBST(ac_ldflags)
+AC_SUBST(ac_incpath)
+AC_SUBST(ac_libs)
 
 
 # Checks for typedefs, structures, and compiler characteristics.
