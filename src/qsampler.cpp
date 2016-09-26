@@ -33,6 +33,14 @@
 #include <QDir>
 #endif
 
+#ifndef CONFIG_PREFIX
+#define CONFIG_PREFIX	"/usr/local"
+#endif
+
+#ifndef CONFIG_DATADIR
+#define CONFIG_DATADIR	CONFIG_PREFIX "/share"
+#endif
+
 #if WIN32
 #define RELATIVE_LOCALE_DIR "/share/locale"
 #elif defined(__APPLE__)
