@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(Qsampler, 0.4.1.5, rncbc@rncbc.org, qsampler)
+AC_INIT(Qsampler, 0.4.1.6, rncbc@rncbc.org, qsampler)
 
 AC_CONFIG_SRCDIR(src/qsampler.cpp)
 AC_CONFIG_HEADERS(src/config.h)
@@ -451,11 +451,15 @@ fi
 # Check for X11 unique/single instance.
 if test "x$ac_xunique" = "xyes"; then
    AC_DEFINE(CONFIG_XUNIQUE, 1, [Define if X11 unique/single instance is enabled.])
+   if test "x$ac_qt4" = "xno"; then
+      ac_qx11extras="x11extras"
+   fi
    # Some recent distros (eg. fedora, debian) require this.
    if test "x$ac_cv_lib_X11_main" = "xyes"; then
       ac_libs="$ac_libs -lX11"
    fi
 fi
+AC_SUBST(ac_qx11extras)
 
 # Check for debugging stack-trace.
 if test "x$ac_stacktrace" = "xyes"; then
