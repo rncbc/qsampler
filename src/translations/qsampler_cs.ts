@@ -283,11 +283,16 @@ Promiňte.</translation>
         <location filename="../qsamplerOptions.cpp" line="340"/>
         <source>Qt: %1
 </source>
-        <translation>Qt: %1
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="584"/>
+        <location filename="../qsamplerOptions.cpp" line="342"/>
+        <source>%1: %2  (%3)
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="588"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>
