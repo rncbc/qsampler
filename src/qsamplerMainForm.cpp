@@ -1049,7 +1049,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	ts << "# " << tr("Version")
 	<< ": " QSAMPLER_VERSION << endl;
 	ts << "# " << tr("Build")
-	<< ": " __DATE__ " " __TIME__ << endl;
+	<< ": " CONFIG_BUILD_DATE << endl;
 	ts << "#"  << endl;
 	ts << "# " << tr("File")
 	<< ": " << QFileInfo(sFilename).fileName() << endl;
@@ -1965,7 +1965,7 @@ void MainForm::helpAbout (void)
 	sText += "<b>" QSAMPLER_TITLE " - " + tr(QSAMPLER_SUBTITLE) + "</b><br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" QSAMPLER_VERSION "</b><br />\n";
-	sText += "<small>" + tr("Build") + ": " __DATE__ " " __TIME__ "</small><br />\n";
+	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
 #ifdef CONFIG_DEBUG
 	sText += "<small><font color=\"red\">";
 	sText += tr("Debugging option enabled.");
