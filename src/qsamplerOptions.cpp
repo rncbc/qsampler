@@ -162,7 +162,7 @@ void Options::saveOptions (void)
 {
 	// Make program version available in the future.
 	m_settings.beginGroup("/Program");
-	m_settings.setValue("/Version", QSAMPLER_VERSION);
+	m_settings.setValue("/Version", CONFIG_BUILD_VERSION);
 	m_settings.endGroup();
 
 	// And go into general options group.
@@ -341,7 +341,7 @@ bool Options::parse_args ( const QStringList& args )
 				.arg(qVersion());
 			out << QObject::tr("%1: %2  (%3)\n")
 				.arg(QSAMPLER_TITLE)
-				.arg(QSAMPLER_VERSION)
+				.arg(CONFIG_BUILD_VERSION)
 				.arg(CONFIG_BUILD_DATE);
 		#ifdef CONFIG_LIBGIG
 			out << QString("%1: %2\n")

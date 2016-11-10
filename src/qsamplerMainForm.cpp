@@ -1047,7 +1047,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	QTextStream ts(&file);
 	ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
 	ts << "# " << tr("Version")
-	<< ": " QSAMPLER_VERSION << endl;
+	<< ": " CONFIG_BUILD_VERSION << endl;
 	ts << "# " << tr("Build")
 	<< ": " CONFIG_BUILD_DATE << endl;
 	ts << "#"  << endl;
@@ -1964,7 +1964,7 @@ void MainForm::helpAbout (void)
 	QString sText = "<p>\n";
 	sText += "<b>" QSAMPLER_TITLE " - " + tr(QSAMPLER_SUBTITLE) + "</b><br />\n";
 	sText += "<br />\n";
-	sText += tr("Version") + ": <b>" QSAMPLER_VERSION "</b><br />\n";
+	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
 	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
 #ifdef CONFIG_DEBUG
 	sText += "<small><font color=\"red\">";
