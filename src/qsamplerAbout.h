@@ -25,7 +25,6 @@
 #include "config.h"
 
 #define QSAMPLER_TITLE        PACKAGE_NAME
-#define QSAMPLER_VERSION      PACKAGE_VERSION
 
 #define QSAMPLER_SUBTITLE     "A LinuxSampler Qt GUI Interface"
 #define QSAMPLER_WEBSITE      "http://qsampler.sourceforge.net"
