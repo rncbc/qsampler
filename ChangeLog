@@ -4,15 +4,14 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+0.4.2  2016-11-14  A Fall'16 release.
 
-- Fixed a potential crash on the singleton/unique application
+* Fixed a potential crash on the singleton/unique application
   instance setup.
 
-- Almost complete overhaul on the configure script command
+* Almost complete overhaul on the configure script command
   line options, wrt. installation directories specification,
   eg. --prefix, --bindir, --libdir, --datadir and --mandir.
-  (EXPERIMENTAL)
 
 
 0.4.1  2016-09-14  End of Summer'16 release.
@@ -48,7 +47,7 @@ GIT HEAD
 * Prefer Qt5 over Qt4 by default with configure script.
 
 * A new top-level widget window geometry state save and restore
-  sub-routine is now in effect. (EXPERIMENTAL)
+  sub-routine is now in effect.
 
 * Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
 
@@ -337,7 +336,7 @@ GIT HEAD
 * Minor fixing on the initial messages dock-window height.
 
 * Audio output channel routing configuration finally hits
-  the sampler channel dialog, at last! (EXPERIMENTAL).
+  the sampler channel dialog, at last!
 
 * All widget captions changed to include proper application
   title name prefix.
@@ -390,7 +389,7 @@ GIT HEAD
 
 0.1.0   2005-05-23  Device configuration breakthrough.
 
-* Device configuration is now complete (EXPERIMENTAL).
+* Device configuration is now complete.
 
 * [bug #9] Fixed for a LSCP command syntax convention
   consistency, regarding the enumeration of available
