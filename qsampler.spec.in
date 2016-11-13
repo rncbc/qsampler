@@ -40,7 +40,7 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %prep
 %setup
-[ -f Makefile.git ] && %__make -f Makefile.git
+[ -x ./autogen.sh ] && ./autogen.sh
 
 %build
 %configure
