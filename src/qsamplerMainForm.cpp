@@ -2002,6 +2002,11 @@ void MainForm::helpAbout (void)
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
 //	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
+	if (!list.isEmpty()) {
+		sText += "<small><font color=\"red\">";
+		sText += list.join("<br />\n");
+		sText += "</font></small>";
+	}
 	sText += "<br />\n";
 	sText += tr("Using") + ": ";
 	sText += ::lscp_client_package();
@@ -2014,12 +2019,6 @@ void MainForm::helpAbout (void)
 	sText += gig::libraryVersion().c_str();
 #endif
 	sText += "<br />\n";
-	if (!list.isEmpty()) {
-		sText += "<br />\n";
-		sText += "<small><font color=\"red\">";
-		sText += list.join("<br />\n");
-		sText += "</font></small><br />\n";
-	}
 	sText += "<br />\n";
 	sText += tr("Website") + ": <a href=\"" QSAMPLER_WEBSITE "\">" QSAMPLER_WEBSITE "</a><br />\n";
 	sText += "<br />\n";
