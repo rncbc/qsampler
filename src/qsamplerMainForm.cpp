@@ -1046,10 +1046,8 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	int iErrors = 0;
 	QTextStream ts(&file);
 	ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
-	ts << "# " << tr("Version")
-	<< ": " CONFIG_BUILD_VERSION << endl;
-	ts << "# " << tr("Build")
-	<< ": " CONFIG_BUILD_DATE << endl;
+	ts << "# " << tr("Version") << ": " CONFIG_BUILD_VERSION << endl;
+//	ts << "# " << tr("Build") << ": " CONFIG_BUILD_DATE << endl;
 	ts << "#"  << endl;
 	ts << "# " << tr("File")
 	<< ": " << QFileInfo(sFilename).fileName() << endl;
@@ -1960,72 +1958,55 @@ void MainForm::helpAboutQt (void)
 // Show information about application program.
 void MainForm::helpAbout (void)
 {
+	QStringList list;
+#ifdef CONFIG_DEBUG
+	list << tr("Debugging option enabled.");
+#endif
+#ifndef CONFIG_LIBGIG
+	list << tr("GIG (libgig) file support disabled.");
+#endif
+#ifndef CONFIG_INSTRUMENT_NAME
+	list << tr("LSCP (liblscp) instrument_name support disabled.");
+#endif
+#ifndef CONFIG_MUTE_SOLO
+	list << tr("Sampler channel Mute/Solo support disabled.");
+#endif
+#ifndef CONFIG_AUDIO_ROUTING
+	list << tr("LSCP (liblscp) audio_routing support disabled.");
+#endif
+#ifndef CONFIG_FXSEND
+	list << tr("Sampler channel Effect Sends support disabled.");
+#endif
+#ifndef CONFIG_VOLUME
+	list << tr("Global volume support disabled.");
+#endif
+#ifndef CONFIG_MIDI_INSTRUMENT
+	list << tr("MIDI instrument mapping support disabled.");
+#endif
+#ifndef CONFIG_EDIT_INSTRUMENT
+	list << tr("Instrument editing support disabled.");
+#endif
+#ifndef CONFIG_EVENT_CHANNEL_MIDI
+	list << tr("Channel MIDI event support disabled.");
+#endif
+#ifndef CONFIG_EVENT_DEVICE_MIDI
+	list << tr("Device MIDI event support disabled.");
+#endif
+#ifndef CONFIG_MAX_VOICES
+	list << tr("Runtime max. voices / disk streams support disabled.");
+#endif
+
 	// Stuff the about box text...
 	QString sText = "<p>\n";
 	sText += "<b>" QSAMPLER_TITLE " - " + tr(QSAMPLER_SUBTITLE) + "</b><br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
-	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
-#ifdef CONFIG_DEBUG
-	sText += "<small><font color=\"red\">";
-	sText += tr("Debugging option enabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_LIBGIG
-	sText += "<small><font color=\"red\">";
-	sText += tr("GIG (libgig) file support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_INSTRUMENT_NAME
-	sText += "<small><font color=\"red\">";
-	sText += tr("LSCP (liblscp) instrument_name support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_MUTE_SOLO
-	sText += "<small><font color=\"red\">";
-	sText += tr("Sampler channel Mute/Solo support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_AUDIO_ROUTING
-	sText += "<small><font color=\"red\">";
-	sText += tr("LSCP (liblscp) audio_routing support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_FXSEND
-	sText += "<small><font color=\"red\">";
-	sText += tr("Sampler channel Effect Sends support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_VOLUME
-	sText += "<small><font color=\"red\">";
-	sText += tr("Global volume support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_MIDI_INSTRUMENT
-	sText += "<small><font color=\"red\">";
-	sText += tr("MIDI instrument mapping support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_EDIT_INSTRUMENT
-	sText += "<small><font color=\"red\">";
-	sText += tr("Instrument editing support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_EVENT_CHANNEL_MIDI
-	sText += "<small><font color=\"red\">";
-	sText += tr("Channel MIDI event support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_EVENT_DEVICE_MIDI
-	sText += "<small><font color=\"red\">";
-	sText += tr("Device MIDI event support disabled.");
-	sText += "</font></small><br />";
-#endif
-#ifndef CONFIG_MAX_VOICES
-	sText += "<small><font color=\"red\">";
-	sText += tr("Runtime max. voices / disk streams support disabled.");
-	sText += "</font></small><br />";
-#endif
+//	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
+	if (!list.isEmpty()) {
+		sText += "<small><font color=\"red\">";
+		sText += list.join("<br />\n");
+		sText += "</font></small>";
+	}
 	sText += "<br />\n";
 	sText += tr("Using") + ": ";
 	sText += ::lscp_client_package();
