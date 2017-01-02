@@ -1,13 +1,14 @@
 This package was debianized by Matt Flax <flatmax@Matt.Flax> on
 Fri,  3 Jun 2005 15:23:03 +1000.
 
-It was downloaded from http://qmidinet.sourceforge.net
+You can get the latest sources from http://www.linuxsampler.org
 
 Upstream Author: Rui Nuno Capela <rncbc@rncbc.org>
 
 Copyright:
 
-   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
 License:
 
