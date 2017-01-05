@@ -280,7 +280,7 @@ Sorry.</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="587"/>
+        <location filename="../qsamplerOptions.cpp" line="586"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>
