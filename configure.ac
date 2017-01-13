@@ -336,6 +336,9 @@ if test "x$ac_liblscp" = "xyes"; then
    AC_DEFINE(CONFIG_LIBLSCP, 1, [Define if liblscp is available.])
    ac_cflags="$ac_cflags $LSCP_CFLAGS"
    ac_libs="$ac_libs $LSCP_LIBS"
+   CFLAGS="$CFLAGS $LSCP_CFLAGS"
+   CPPFLAGS="$CPPFLAGS $LSCP_CFLAGS"
+   LIBS="$LIBS $LSCP_LIBS"
 else
    AC_MSG_ERROR([*** LSCP library not found (liblscp).])
 fi
@@ -468,6 +471,9 @@ if test "x$ac_libgig" = "xyes"; then
    AC_DEFINE(CONFIG_LIBGIG, 1, [Define if libgig is available.])
    ac_cflags="$ac_cflags $GIG_CFLAGS"
    ac_libs="$ac_libs $GIG_LIBS"
+   CFLAGS="$CFLAGS $GIG_CFLAGS"
+   CPPFLAGS="$CPPFLAGS $GIG_CFLAGS"
+   LIBS="$LIBS $GIG_LIBS"
    AC_DEFINE(CONFIG_LIBGIG_SETAUTOLOAD, 1, [Define if libgig provides gig::File::SetAutoLoad() method.])
    ac_libgig_setautoload="yes"
 else
