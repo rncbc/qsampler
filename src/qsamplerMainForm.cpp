@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -2801,7 +2801,7 @@ void MainForm::startServer (void)
 
 	// OK. Let's build the startup process...
 	m_pServer = new QProcess();
-	bForceServerStop = true;
+	m_bForceServerStop = true;
 
 	// Setup stdout/stderr capture...
 	m_pServer->setProcessChannelMode(QProcess::ForwardedChannels);
@@ -2845,7 +2845,7 @@ void MainForm::startServer (void)
 
 
 // Stop linuxsampler server...
-void MainForm::stopServer (bool bInteractive)
+void MainForm::stopServer ( bool bInteractive )
 {
 	// Stop client code.
 	stopClient();
@@ -2859,14 +2859,13 @@ void MainForm::stopServer (bool bInteractive)
 			"sampler session at any time by relaunching QSampler.\n\n"
 			"Do you want LinuxSampler to stop?"),
 			QMessageBox::Yes | QMessageBox::No,
-			QMessageBox::Yes) == QMessageBox::No)
-		{
-			bForceServerStop = false;
+			QMessageBox::Yes) == QMessageBox::No) {
+			m_bForceServerStop = false;
 		}
 	}
 
 	// And try to stop server.
-	if (m_pServer && bForceServerStop) {
+	if (m_pServer && m_bForceServerStop) {
 		appendMessages(tr("Server is stopping..."));
 		if (m_pServer->state() == QProcess::Running) {
 		#if defined(WIN32)
@@ -2906,7 +2905,7 @@ void MainForm::processServerExit (void)
 	if (m_pMessages)
 		m_pMessages->flushStdoutBuffer();
 
-	if (m_pServer && bForceServerStop) {
+	if (m_pServer && m_bForceServerStop) {
 		if (m_pServer->state() != QProcess::NotRunning) {
 			appendMessages(tr("Server is being forced..."));
 			// Force final server shutdown...
@@ -2983,6 +2982,7 @@ bool MainForm::startClient (void)
 		stabilizeForm();
 		return false;
 	}
+
 	// Just set receive timeout value, blindly.
 	::lscp_client_set_timeout(m_pClient, m_pOptions->iServerTimeout);
 	appendMessages(
