@@ -1,7 +1,7 @@
 // qsamplerMainForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -181,7 +181,7 @@ private:
 	int m_iDirtyCount;
 	lscp_client_t *m_pClient;
 	QProcess *m_pServer;
-	bool bForceServerStop;
+	bool m_bForceServerStop;
 	int m_iStartDelay;
 	int m_iTimerDelay;
 	int m_iTimerSlot;
