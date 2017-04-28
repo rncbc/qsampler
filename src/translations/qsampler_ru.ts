@@ -1006,27 +1006,27 @@ Sorry.</source>
         <translation>Что делать с движком</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2870"/>
+        <location filename="../qsamplerMainForm.cpp" line="2869"/>
         <source>Server is stopping...</source>
         <translation>Останавливается сервер...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2911"/>
+        <location filename="../qsamplerMainForm.cpp" line="2910"/>
         <source>Server is being forced...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2922"/>
+        <location filename="../qsamplerMainForm.cpp" line="2921"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Сервер был остановлен со статусом выхода %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2966"/>
+        <location filename="../qsamplerMainForm.cpp" line="2965"/>
         <source>Client connecting...</source>
         <translation>Устанавливается соединения клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2978"/>
+        <location filename="../qsamplerMainForm.cpp" line="2977"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
