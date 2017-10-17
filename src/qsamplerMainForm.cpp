@@ -91,7 +91,7 @@ static inline long lroundf ( float x )
 
 
 // All winsock apps needs this.
-#if defined(WIN32)
+#if defined(_WIN32)
 static WSADATA _wsaData;
 #endif
 
@@ -324,7 +324,7 @@ MainForm::MainForm ( QWidget *pParent )
 	m_statusItem[QSAMPLER_STATUS_SESSION] = pLabel;
 	statusBar()->addWidget(pLabel);
 
-#if defined(WIN32)
+#if defined(_WIN32)
 	WSAStartup(MAKEWORD(1, 1), &_wsaData);
 #endif
 
@@ -425,7 +425,7 @@ MainForm::~MainForm()
 	// Do final processing anyway.
 	processServerExit();
 
-#if defined(WIN32)
+#if defined(_WIN32)
 	WSACleanup();
 #endif
 
@@ -2868,7 +2868,7 @@ void MainForm::stopServer ( bool bInteractive )
 	if (m_pServer && m_bForceServerStop) {
 		appendMessages(tr("Server is stopping..."));
 		if (m_pServer->state() == QProcess::Running) {
-		#if defined(WIN32)
+		#if defined(_WIN32)
 			// Try harder...
 			m_pServer->kill();
 		#else
