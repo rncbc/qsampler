@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@
 #include <QDateTime>
 #include <QIcon>
 
-#if !defined(WIN32)
+#if !defined(_WIN32)
 #include <unistd.h>
 #include <fcntl.h>
 #endif
@@ -116,7 +116,7 @@ Messages::~Messages (void)
 // Set stdout/stderr blocking mode.
 bool Messages::stdoutBlock ( int fd, bool bBlock ) const
 {
-#if !defined(WIN32)
+#if !defined(_WIN32)
 	const int iFlags = ::fcntl(fd, F_GETFL, 0);
 	const bool bNonBlock = bool(iFlags & O_NONBLOCK);
 	if (bBlock && bNonBlock)
@@ -132,7 +132,7 @@ bool Messages::stdoutBlock ( int fd, bool bBlock ) const
 // Own stdout/stderr socket notifier slot.
 void Messages::stdoutNotify ( int fd )
 {
-#if !defined(WIN32)
+#if !defined(_WIN32)
 	// Set non-blocking reads, if not already...
 	const bool bBlock = stdoutBlock(fd, false);
 	// Read as much as is available...
@@ -190,7 +190,7 @@ void Messages::setCaptureEnabled ( bool bCapture )
 	// Flush current buffer.
 	flushStdoutBuffer();
 
-#if !defined(WIN32)
+#if !defined(_WIN32)
 	// Destroy if already enabled.
 	if (!bCapture && m_pStdoutNotifier) {
 		delete m_pStdoutNotifier;

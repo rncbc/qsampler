@@ -1,7 +1,7 @@
 // qsamplerUtilities.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -34,9 +34,9 @@ struct lscpVersion_t {
 };
 
 QString lscpEscapePath(const QString& sPath);
-QString lscpEscapedPathToPosix(QString path);
-QString lscpEscapeText(const QString& txt);
-QString lscpEscapedTextToRaw(QString txt);
+QString lscpEscapedPathToPosix(const QString& sPath);
+QString lscpEscapeText(const QString& sText);
+QString lscpEscapedTextToRaw(const QString& sText);
 
 lscpVersion_t getRemoteLscpVersion();
 
