@@ -41,7 +41,7 @@
 #define CONFIG_DATADIR	CONFIG_PREFIX "/share"
 #endif
 
-#if defined(_WIN32)
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 #define RELATIVE_LOCALE_DIR "/share/locale"
 #elif defined(__APPLE__)
 #define RELATIVE_LOCALE_DIR "/../Resources"

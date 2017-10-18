@@ -115,7 +115,7 @@ QString lscpEscapePath ( const QString& sPath )
 				!(c >= '0' && c <= '9') &&
 				!(c >= 'a' && c <= 'z') &&
 				!(c >= 'A' && c <= 'Z') &&
-			#if defined(_WIN32)
+			#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
 				!(c == ':') &&
 			#endif
 				!(c == pathSeparator)

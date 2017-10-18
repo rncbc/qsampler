@@ -34,7 +34,7 @@
 #include <QDateTime>
 #include <QIcon>
 
-#if !defined(_WIN32)
+#if !defined(__WIN32__) && !defined(_WIN32) && !defined(WIN32)
 #include <unistd.h>
 #include <fcntl.h>
 #endif
@@ -116,7 +116,7 @@ Messages::~Messages (void)
 // Set stdout/stderr blocking mode.
 bool Messages::stdoutBlock ( int fd, bool bBlock ) const
 {
-#if !defined(_WIN32)
+#if !defined(__WIN32__) && !defined(_WIN32) && !defined(WIN32)
 	const int iFlags = ::fcntl(fd, F_GETFL, 0);
 	const bool bNonBlock = bool(iFlags & O_NONBLOCK);
 	if (bBlock && bNonBlock)
@@ -132,7 +132,7 @@ bool Messages::stdoutBlock ( int fd, bool bBlock ) const
 // Own stdout/stderr socket notifier slot.
 void Messages::stdoutNotify ( int fd )
 {
-#if !defined(_WIN32)
+#if !defined(__WIN32__) && !defined(_WIN32) && !defined(WIN32)
 	// Set non-blocking reads, if not already...
 	const bool bBlock = stdoutBlock(fd, false);
 	// Read as much as is available...
@@ -190,7 +190,7 @@ void Messages::setCaptureEnabled ( bool bCapture )
 	// Flush current buffer.
 	flushStdoutBuffer();
 
-#if !defined(_WIN32)
+#if !defined(__WIN32__) && !defined(_WIN32) && !defined(WIN32)
 	// Destroy if already enabled.
 	if (!bCapture && m_pStdoutNotifier) {
 		delete m_pStdoutNotifier;
