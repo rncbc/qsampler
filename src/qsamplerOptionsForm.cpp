@@ -255,7 +255,7 @@ void OptionsForm::setup ( Options *pOptions )
 	else
 		m_ui.MaxVoicesSpinBox->setToolTip(
 			tr("The max. amount of voices the sampler shall process "
-			   "simultaniously.")
+			   "simultaneously.")
 		);
 
 	m_ui.MaxStreamsSpinBox->setEnabled(bMaxStreamsSupported);
@@ -268,7 +268,7 @@ void OptionsForm::setup ( Options *pOptions )
 	else
 		m_ui.MaxStreamsSpinBox->setToolTip(
 			tr("The max. amount of disk streams the sampler shall process "
-			   "simultaniously.")
+			   "simultaneously.")
 		);
 #else
 	m_ui.MaxVoicesSpinBox->setEnabled(false);
