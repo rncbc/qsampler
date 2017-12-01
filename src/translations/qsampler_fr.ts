@@ -2180,8 +2180,8 @@ Contrôleur MIDI :</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="445"/>
-        <source>viewToolbars</source>
-        <translation>Barre d&apos;outils</translation>
+        <source>Toolbar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="448"/>
