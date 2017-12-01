@@ -442,7 +442,7 @@
     <string>&amp;Toolbar</string>
    </property>
    <property name="iconText" >
-    <string>viewToolbars</string>
+    <string>Toolbar</string>
    </property>
    <property name="toolTip" >
     <string>Show/hide toolbar</string>
