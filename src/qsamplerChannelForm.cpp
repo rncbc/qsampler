@@ -326,9 +326,9 @@ void ChannelForm::setup ( Channel *pChannel )
 
 	const QString sInstrumentNrToolTip =
 		(pOptions->bInstrumentNames) ?
-			"Select an instrument of the file" :
+			tr("Select an instrument of the file" :
 			"You might want to enable instrument name retrieval in the "
-			"settings dialog";
+			"settings dialog");
 	m_ui.InstrumentNrComboBox->setToolTip(
 		QObject::tr(sInstrumentNrToolTip.toUtf8().data())
 	);
