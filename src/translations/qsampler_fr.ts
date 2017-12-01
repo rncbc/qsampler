@@ -74,7 +74,7 @@ Navré.</translation>
     <message>
         <location filename="../qsamplerChannel.cpp" line="384"/>
         <source>MIDI map: %1.</source>
-        <translation>Carte MIDI : %1.</translation>
+        <translation>Cartographie MIDI : %1.</translation>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="412"/>
@@ -157,17 +157,17 @@ Vous pourriez vouloir mettre à jour liblscp et recompiler QSampler ensuite.</tr
     <message>
         <location filename="../qsamplerChannel.cpp" line="972"/>
         <source>(No engine)</source>
-        <translation>(Pas de moteur)</translation>
+        <translation>(pas de moteur)</translation>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="977"/>
         <source>(No instrument)</source>
-        <translation>(Pas d&apos;instrument)</translation>
+        <translation>(pas d&apos;instrument)</translation>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="981"/>
         <source>(Loading instrument...)</source>
-        <translation>(Chargement de l&apos;instrument...)</translation>
+        <translation>(chargement de l&apos;instrument...)</translation>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="1063"/>
@@ -505,7 +505,7 @@ Souhaitez-vous appliquer les changements ?</translation>
     <message>
         <location filename="../qsamplerInstrumentListForm.cpp" line="60"/>
         <source>Instrument Map</source>
-        <translation>Carte d&apos;instrument</translation>
+        <translation>Cartographie d&apos;instrument</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.cpp" line="160"/>
@@ -524,7 +524,7 @@ Souhaitez-vous appliquer les changements ?</translation>
 %1
 
 Are you sure?</source>
-        <translation>Sur le point d&apos;effacer l&apos;entrée de carte d&apos;instrument :
+        <translation>Sur le point d&apos;effacer l&apos;entrée de cartographie d&apos;instrument :
 
 %1
 
@@ -561,7 +561,7 @@ Are you sure?</source>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="157"/>
         <source>Map</source>
-        <translation>Carte</translation>
+        <translation>Cartograpie</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="158"/>
@@ -613,7 +613,7 @@ Navré.</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="260"/>
         <source>Master volume</source>
-        <translation>Volume maître</translation>
+        <translation>Volume général</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="305"/>
@@ -786,7 +786,7 @@ Do you want to reset the sampler engine now?</source>
 tous les périphériques et configurations de canal.
 
 Veuillez noter que cette opération pourrait engendrer
-une interruption temporaire MIDI et Audio.
+une interruption temporaire MIDI et audio.
 
 Souhaitez-vous réinitialiser le moteur de l&apos;échantillonneur maintenant ?</translation>
     </message>
@@ -813,11 +813,11 @@ Please note that this operation may cause
 temporary MIDI and Audio disruption.
 
 Do you want to restart the connection now?</source>
-        <source>Les nouveaux paramètres seront effectifs après
-le redémarrage de la connection client/server.
+        <translation>Les nouveaux paramètres seront effectifs après
+le redémarrage de la connexion client/serveur.
 
 Veuillez noter que cette opération pourrait engendrer
-une interruption temporaire MIDI et Audio.
+une interruption temporaire MIDI et audio.
 
 Souhaitez-vous redémarrer la connexion maintenant ?</translation>
     </message>
@@ -921,22 +921,22 @@ que lors du prochain démarrage de ce programme.</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2011"/>
         <source>Using</source>
-        <translation>Utilisation</translation>
+        <translation>Utilisation </translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2023"/>
         <source>Website</source>
-        <translation>Site sur la toile</translation>
+        <translation>Site sur la toile </translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2029"/>
         <source>This program is free software; you can redistribute it and/or modify it</source>
-        <translation>Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou le modifier</translation>
+        <translation>Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou le</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2030"/>
         <source>under the terms of the GNU General Public License version 2 or later.</source>
-        <translation>en accord avec les termes de la licence GNU GPL version 2 ou ultérieure.</translation>
+        <translation>modifier en accord avec les termes de la licence GNU GPL version 2 ou ultérieure.</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2034"/>
@@ -1061,9 +1061,9 @@ according to your current sampler session and you could alter the
 sampler session at any time by relaunching QSampler.
 
 Do you want LinuxSampler to stop?</source>
-        <translation>Vous avez la possiblité de conserver l&apos;arrière-plan de
-l&apos;échantillonneur (LinuxSampler) en arrière-plan. L&apos;échantillonneur continuerait
-à fonctionner en fonction de votre session d&apos;échantillonnage actuelle, et vous
+        <translation>Vous avez la possiblité de conserver l&apos;échantillonneur
+(LinuxSampler) en arrière-plan. L&apos;échantillonneur continuerait à
+fonctionner en fonction de votre session d&apos;échantillonnage actuelle, et vous
 pourrez modifier la session d&apos;échantillonnage à tout moment en relançant QSampler.
 
 Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
@@ -1098,12 +1098,12 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="257"/>
         <source>The max. amount of voices the sampler shall process simultaniously.</source>
-        <translation>La quantité max. des voix que l&apos;échantillonneur devra traité simultanément.</translation>
+        <translation>La quantité max. des voix que l&apos;échantillonneur devra traiter simultanément.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="270"/>
         <source>The max. amount of disk streams the sampler shall process simultaniously.</source>
-        <translation>La quantité max. des flux de disque que l&apos;échantillonneur devra traité simultanément.</translation>
+        <translation>La quantité max. des flux de disque que l&apos;échantillonneur devra traiter simultanément.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="277"/>
@@ -1146,7 +1146,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="77"/>
         <source>Browse for instrument filename</source>
-        <translation>Naviguer vers le nom de fichier d&apos;instrument</translation>
+        <translation>Naviguer vers un nom de fichier d&apos;instrument</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="104"/>
@@ -1196,7 +1196,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="273"/>
         <source>&amp;Map:</source>
-        <translation>&amp;Carte :</translation>
+        <translation>&amp;Cartographie :</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="289"/>
@@ -1207,7 +1207,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="321"/>
         <source>Instrument map</source>
-        <translation>Carte d&apos;instrument</translation>
+        <translation>Cartographie d&apos;instrument</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="346"/>
@@ -1338,7 +1338,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="603"/>
         <source>Audio output device setup</source>
-        <translation>Paramètrage de périphérique de sortie audio</translation>
+        <translation>Paramétrage de périphérique de sortie audio</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="650"/>
@@ -1429,7 +1429,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="65"/>
         <source>Channel setup</source>
-        <translation>Paramètrage de canal</translation>
+        <translation>Paramétrage de canal</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="68"/>
@@ -1565,7 +1565,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerDeviceForm.ui" line="156"/>
         <source>Driver type name</source>
-        <translation>Type de nom du pilote</translation>
+        <translation>Nom du type de pilote</translation>
     </message>
     <message>
         <location filename="../qsamplerDeviceForm.ui" line="196"/>
@@ -1615,7 +1615,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerDeviceForm.ui" line="319"/>
         <source>Close</source>
-        <translation>Ferme</translation>
+        <translation>Fermer</translation>
     </message>
 </context>
 <context>
@@ -1653,7 +1653,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerInstrumentForm.ui" line="128"/>
         <source>&amp;Map:</source>
-        <translation>&amp;Carte :</translation>
+        <translation>&amp;Cartographie :</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentForm.ui" line="144"/>
@@ -1834,7 +1834,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerMainForm.ui" line="110"/>
         <source>MIDI Device Status</source>
-        <translation>Staus du périphérique MIDI</translation>
+        <translation>Status du périphérique MIDI</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="127"/>
@@ -1985,7 +1985,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerMainForm.ui" line="274"/>
         <source>Restart instance</source>
-        <translation>Spustit znovu řízení</translation>
+        <translation>Redémarrer l&apos;instance</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="277"/>
@@ -2100,22 +2100,22 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerMainForm.ui" line="382"/>
         <source>&amp;Setup Channel...</source>
-        <translation>&amp;Paramètrage du canal...</translation>
+        <translation>&amp;Paramétrage du canal...</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="385"/>
         <source>Setup</source>
-        <translation>Paramètrage</translation>
+        <translation>Paramétrage</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="388"/>
         <source>Setup channel</source>
-        <translation>Paramètrage du canal</translation>
+        <translation>Paramétrage du canal</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="391"/>
         <source>Setup current sampler channel</source>
-        <translation>Paramètrage du canal actuel de l&apos;échantillonneur</translation>
+        <translation>Paramétrage du canal actuel de l&apos;échantillonneur</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="394"/>
@@ -2175,7 +2175,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerMainForm.ui" line="442"/>
         <source>&amp;Toolbar</source>
-        <translation>Barre d&apos;ou&amp;til</translation>
+        <translation>Barre d&apos;ou&amp;tils</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="445"/>
@@ -2403,7 +2403,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="86"/>
         <source>Settings</source>
-        <translation>Paramètrages</translation>
+        <translation>Paramétrages</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="107"/>
@@ -2433,7 +2433,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="197"/>
         <source>localhost</source>
-        <translation>hôte local</translation>
+        <translation>localhost</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="211"/>
@@ -2478,7 +2478,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="395"/>
         <source>Receive timeout in milliseconds</source>
-        <translation>Reçu d&apos;expiration en millisecondes</translation>
+        <translation>Délai d&apos;expiration en millisecondes</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="398"/>
@@ -2499,7 +2499,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="491"/>
         <source>Messages log file</source>
-        <translation>Fichier journal de messages</translation>
+        <translation>Fichier du journal de messages</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="522"/>
@@ -2564,22 +2564,22 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="587"/>
         <source>Maximum number of voices:</source>
-        <translation>Nombre maximun de voix :</translation>
+        <translation>Nombre maximum de voix :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="606"/>
         <source>Maximum number of voices</source>
-        <translation>Nombre maximun de voix</translation>
+        <translation>Nombre maximum de voix</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="635"/>
         <source>Maximum number of disk streams:</source>
-        <translation>Nombre maximun de flux de disque :</translation>
+        <translation>Nombre maximum de flux de disque :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="654"/>
         <source>Maximum number of disk streams</source>
-        <translation>Nombre maximun de flux de disque</translation>
+        <translation>Nombre maximum de flux de disque</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="689"/>
@@ -2675,7 +2675,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1046"/>
         <source>The maximum number of message lines to keep in view</source>
-        <translation>Nombre maximum de lignes de message à conserver affiché</translation>
+        <translation>Nombre maximum de lignes de message à conserver affichées</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1049"/>
@@ -2705,7 +2705,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1130"/>
         <source>The maximum number of recent files to keep in menu</source>
-        <translation>Le nombre maximum de fichiers récent à conserver dans le menu</translation>
+        <translation>Le nombre maximum de fichiers récents à conserver dans le menu</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1152"/>
@@ -2730,7 +2730,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1216"/>
         <source>Whether to show the complete directory path of loaded session files</source>
-        <translation>Ukázat úplnou cestu k adresáři s nahranými soubory se sessionmi</translation>
+        <translation>Si l&apos;on montre le chemin complet du répertoire des fichiers-session chargés</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1219"/>
@@ -2740,12 +2740,12 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1248"/>
         <source>Whether to show the actual instrument names as read from instrument file (using libgig)</source>
-        <translation>Si on montre les noms d&apos;instrument actuel comme lu depuis le fichier d&apos;instrument (en utilisant libgig)</translation>
+        <translation>Si on montre les noms des instruments courants en les lisant depuis le fichier d&apos;instrument (en utilisant libgig)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1251"/>
         <source>Show actual &amp;instrument names</source>
-        <translation>Montrer les noms d&apos;&amp;instrument actuel</translation>
+        <translation>Montrer les noms des &amp;instruments courants</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1264"/>
@@ -2755,7 +2755,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1283"/>
         <source>Base application font size (pt.)</source>
-        <translation>Taille de base(pt.) de police d&apos;application</translation>
+        <translation>Taille de police de base (pt.) pour l&apos;application</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1290"/>
