@@ -1063,8 +1063,9 @@ sampler session at any time by relaunching QSampler.
 Do you want LinuxSampler to stop?</source>
         <translation>Vous avez la possiblité de conserver l&apos;échantillonneur
 (LinuxSampler) en arrière-plan. L&apos;échantillonneur continuerait à
-fonctionner en fonction de votre session d&apos;échantillonnage actuelle, et vous
-pourrez modifier la session d&apos;échantillonnage à tout moment en relançant QSampler.
+fonctionner en fonction de votre session d&apos;échantillonnage actuelle,
+et vous pourrez modifier la session d&apos;échantillonnage à tout moment
+en relançant QSampler.
 
 Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
     </message>
