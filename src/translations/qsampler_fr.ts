@@ -1503,7 +1503,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="327"/>
         <source>Edit Channel&apos;s Effect Settings</source>
-        <translation>Éditez les paramètres d&apos;effet du canal</translation>
+        <translation>Éditer les paramètres d&apos;effet du canal</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="330"/>
@@ -1513,7 +1513,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="343"/>
         <source>Edit channel&apos;s instrument</source>
-        <translation>Éditez l&apos;instrument de canal</translation>
+        <translation>Éditer l&apos;instrument de canal</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="346"/>
