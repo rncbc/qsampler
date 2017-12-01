@@ -67,6 +67,7 @@ RESOURCES += \
 
 TRANSLATIONS += \
 	translations/qsampler_cs.ts \
+	translations/qsampler_fr.ts \
 	translations/qsampler_ru.ts
 
 
