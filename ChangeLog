@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- French (fr) translation added by Olivier Humbert
+  (qsampler_fr.ts).
+
 - Desktop entry specification file is now finally independent
   from build/configure template chains.
 
