@@ -2176,7 +2176,7 @@ MIDI Controller:</source>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="445"/>
-        <source>viewToolbars</source>
+        <source>Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>

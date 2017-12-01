@@ -2179,8 +2179,8 @@ hloubky MIDI:</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="445"/>
-        <source>viewToolbars</source>
-        <translation>Zobrazit pruh s nástroji</translation>
+        <source>Toolbar</source>
+        <translation>Pruh s nástroji</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="448"/>
