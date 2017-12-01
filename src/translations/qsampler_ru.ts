@@ -306,6 +306,16 @@ Sorry.</source>
 <context>
     <name>QSampler::ChannelForm</name>
     <message>
+        <location filename="../qsamplerChannelForm.cpp" line="329"/>
+        <source>Select an instrument of the file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerChannelForm.cpp" line="330"/>
+        <source>You might want to enable instrument name retrieval in the settings dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qsamplerChannelForm.cpp" line="434"/>
         <source>Some channel settings could not be set.
 
