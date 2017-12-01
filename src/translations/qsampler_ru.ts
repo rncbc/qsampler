@@ -1103,12 +1103,12 @@ Do you want LinuxSampler to stop?</source>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="257"/>
-        <source>The max. amount of voices the sampler shall process simultaniously.</source>
+        <source>The max. amount of voices the sampler shall process simultaneously.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="270"/>
-        <source>The max. amount of disk streams the sampler shall process simultaniously.</source>
+        <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

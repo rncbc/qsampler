@@ -1108,13 +1108,13 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="257"/>
-        <source>The max. amount of voices the sampler shall process simultaniously.</source>
-        <translation>La quantité max. des voix que l&apos;échantillonneur devra traiter simultanément.</translation>
+        <source>The max. amount of voices the sampler shall process simultaneously.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="270"/>
-        <source>The max. amount of disk streams the sampler shall process simultaniously.</source>
-        <translation>La quantité max. des flux de disque que l&apos;échantillonneur devra traiter simultanément.</translation>
+        <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="277"/>
@@ -2191,7 +2191,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerMainForm.ui" line="445"/>
         <source>Toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Barre d&apos;outils</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.ui" line="448"/>
