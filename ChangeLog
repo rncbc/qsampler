@@ -4,7 +4,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+0.5.0  2017-12-12  An Autumn'17 release.
 
 - French (fr) translation added by Olivier Humbert
   (qsampler_fr.ts).
