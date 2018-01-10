@@ -155,6 +155,9 @@ AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_CXXCPP
 
+# Checks for languages.
+AC_LANG_CPLUSPLUS
+
 # Check for pkg-config.
 PKG_PROG_PKG_CONFIG
 
@@ -181,38 +184,41 @@ if test "x$ac_arch" = "xx86_64"; then
    ac_libdirs="$ac_libdirs lib64"
 fi
 
+CFLAGS="-fPIC $CFLAGS"
+CPPFLAGS="-fPIC $CPPFLAGS"
+
 # Prepend alternate dependencies paths.
 for X in $ac_with_paths; do
   if test -d $X/bin; then
-    ac_path="$X/bin:$ac_path"
+     ac_path="$X/bin:$ac_path"
   fi
   if test -d $X/include; then
-    CFLAGS="-I$X/include $CFLAGS "
-    CPPFLAGS="-I$X/include $CPPFLAGS"
-    ac_incpath="$X/include $ac_incpath"
+     CFLAGS="-I$X/include $CFLAGS "
+     CPPFLAGS="-I$X/include $CPPFLAGS"
+     ac_incpath="$X/include $ac_incpath"
   fi
   for Y in $ac_libdirs; do
-    if test -d $X/$Y; then
-      LIBS="-L$X/$Y $LIBS"
-      ac_libs="-L$X/$Y $ac_libs"
-    fi
+     if test -d $X/$Y; then
+        LIBS="-L$X/$Y $LIBS"
+        ac_libs="-L$X/$Y $ac_libs"
+     fi
   done
 done
 
 # A common error message:
 ac_errmsg="not found in current PATH. Maybe QT development environment isn't available."
 
-if test "x$ac_qt4" = "xyes"; then
-   AC_PATH_TOOL(ac_qmake, qmake-qt4, [no], $ac_path)
-else
-   AC_PATH_TOOL(ac_qmake, qmake-qt5, [no], $ac_path)
-fi
+# Check for proper qmake path/version alternatives.
+AC_PATH_TOOL(ac_qmake, qmake, [no], $ac_path)
+
 if test "x$ac_qmake" = "xno"; then
-   AC_PATH_TOOL(ac_cv_qmake, qmake, [no], $ac_path)
-   ac_qmake=$ac_cv_qmake
-fi
-if test "x$ac_qmake" = "xno"; then
-   AC_MSG_ERROR([qmake $ac_errmsg])
+   if test "x$ac_qt4" = "xyes"; then
+      AC_PATH_TOOL(ac_cv_qmake, qmake-qt4, [no], $ac_path)
+      ac_qmake=$ac_cv_qmake
+   else
+      AC_PATH_TOOL(ac_cv_qmake, qmake-qt5, [no], $ac_path)
+      ac_qmake=$ac_cv_qmake
+   fi
 fi
 
 # Check for proper Qt major version.
@@ -223,10 +229,20 @@ AC_CACHE_CHECK([for Qt major version], [ac_cv_qt_version_major], [
 ac_qt_version_major=$ac_cv_qt_version_major
 if test "x$ac_qt4" = "xyes"; then
    if test $ac_qt_version_major -ne 4; then
-      AC_MSG_ERROR([qmake-qt4 $ac_errmsg (qt4-devel)])
+      AC_PATH_TOOL(ac_cv_qmake, qmake-qt4, [no], $ac_path)
+      ac_qmake=$ac_cv_qmake
    fi
 else
    if test $ac_qt_version_major -ne 5; then
+      AC_PATH_TOOL(ac_cv_qmake, qmake-qt5, [no], $ac_path)
+      ac_qmake=$ac_cv_qmake
+   fi
+fi
+
+if test "x$ac_qmake" = "xno"; then
+   if test "x$ac_qt4" = "xyes"; then
+      AC_MSG_ERROR([qmake-qt4 $ac_errmsg (qt4-devel)])
+   else
       AC_MSG_ERROR([qmake-qt5 $ac_errmsg (qt5-devel)])
    fi
 fi
