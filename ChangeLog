@@ -6,6 +6,8 @@ ChangeLog
 
 GIT HEAD
 
+* Fixed device management dialog not responding to user changes.
+
 - A little hardening on the configure (autoconf) macro side.
 
 
