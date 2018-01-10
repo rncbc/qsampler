@@ -460,7 +460,7 @@ Jste si jistý?</translation>
 <context>
     <name>QSampler::DeviceParamDelegate</name>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1190"/>
+        <location filename="../qsamplerDevice.cpp" line="1192"/>
         <source>(none)</source>
         <translation>(žádný)</translation>
     </message>
