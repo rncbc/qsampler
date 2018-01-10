@@ -1110,6 +1110,7 @@ QWidget* ChannelRoutingDelegate::createEditor ( QWidget *pParent,
 	pComboBox->addItems(item.options);
 	pComboBox->setCurrentIndex(item.selection);
 	pComboBox->setEnabled(true);
+	pComboBox->setEditable(true);
 	pComboBox->setGeometry(option.rect);
 	return pComboBox;
 }
