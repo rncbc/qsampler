@@ -1171,7 +1171,6 @@ QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
 		Qt::DisplayRole).value<DeviceParameterRow>();
 
 	const bool bEnabled = (r.alive) ? !r.param.fix : true;
-	const bool bFix = r.param.fix;
 
 	QString val = (r.alive) ? r.param.value : r.param.defaultv;
 
@@ -1184,7 +1183,6 @@ QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
 				if (val != QString::null)
 					pCheckBox->setChecked(val.toLower() == "true");
 				pCheckBox->setEnabled(bEnabled);
-				pCheckBox->setCheckable(!bFix);
 				return pCheckBox;
 			} else if (r.param.possibilities.count() > 0) {
 				QStringList opts = r.param.possibilities;
@@ -1197,7 +1195,6 @@ QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
 				else
 					pComboBox->setCurrentIndex(pComboBox->findText(val));
 				pComboBox->setEnabled(bEnabled);
-				pComboBox->setEditable(!bFix);
 				return pComboBox;
 			} else if (r.param.type == LSCP_TYPE_INT && bEnabled) {
 				QSpinBox *pSpinBox = new QSpinBox(pParent);
@@ -1210,11 +1207,9 @@ QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
 						r.param.range_max.toInt() : (1 << 24) // or better a higher default max value ?
 				);
 				pSpinBox->setValue(val.toInt());
-				pSpinBox->setReadOnly(bFix);
 				return pSpinBox;
 			} else if (bEnabled) {
 				QLineEdit *pLineEdit = new QLineEdit(val, pParent);
-				pLineEdit->setReadOnly(bFix);
 				return pLineEdit;
 			} else {
 				QLabel *pLabel = new QLabel(val, pParent);

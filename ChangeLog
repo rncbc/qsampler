@@ -4,9 +4,9 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-SVN trunk:
+GIT HEAD
 
-* Fixed device management dialog not responding to user changes.
+- A little hardening on the configure (autoconf) macro side.
 
 
 0.5.0  2017-12-12  An Autumn'17 release.
