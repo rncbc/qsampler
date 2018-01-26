@@ -451,7 +451,7 @@ bool Device::createDevice (void)
 	}
 
 	// Free used parameter array.
-	delete pParams;
+	delete[] pParams;
 
 	// Show result.
 	if (m_iDeviceID >= 0) {
@@ -639,7 +639,7 @@ int Device::refreshParam ( const QString& sParam )
 	}
 
 	// Free used parameter array.
-	delete pDepends;
+	delete[] pDepends;
 
 	// Return whether the parameters has been changed...
 	return iRefresh;
