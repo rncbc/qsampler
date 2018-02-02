@@ -10,6 +10,8 @@ GIT HEAD
 
 - A little hardening on the configure (autoconf) macro side.
 
+- Fixed minor memory leak in device management dialog.
+
 
 0.5.0  2017-12-12  An Autumn'17 release.
 
