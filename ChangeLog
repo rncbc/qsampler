@@ -12,6 +12,8 @@ GIT HEAD
 
 - Fixed minor memory leak in device management dialog.
 
+- Fixed unnecessary latency when closing app.
+
 
 0.5.0  2017-12-12  An Autumn'17 release.
 

@@ -2864,6 +2864,8 @@ void MainForm::stopServer ( bool bInteractive )
 		}
 	}
 
+	bool bGraceWait = true;
+
 	// And try to stop server.
 	if (m_pServer && m_bForceServerStop) {
 		appendMessages(tr("Server is stopping..."));
@@ -2874,16 +2876,20 @@ void MainForm::stopServer ( bool bInteractive )
 		#else
 			// Try softly...
 			m_pServer->terminate();
+			bool bFinished = m_pServer->waitForFinished(QSAMPLER_TIMER_MSECS * 1000);
+			if (bFinished) bGraceWait = false;
 		#endif
 		}
 	}	// Do final processing anyway.
 	else processServerExit();
 
 	// Give it some time to terminate gracefully and stabilize...
-	QTime t;
-	t.start();
-	while (t.elapsed() < QSAMPLER_TIMER_MSECS)
-		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+	if (bGraceWait) {
+		QTime t;
+		t.start();
+		while (t.elapsed() < QSAMPLER_TIMER_MSECS)
+			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+	}
 }
 
 
