@@ -1015,27 +1015,27 @@ Navré.</translation>
         <translation>Le décès de l&apos;arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2869"/>
+        <location filename="../qsamplerMainForm.cpp" line="2871"/>
         <source>Server is stopping...</source>
         <translation>Le serveur s&apos;arrête...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2910"/>
+        <location filename="../qsamplerMainForm.cpp" line="2916"/>
         <source>Server is being forced...</source>
         <translation>Le serveur est en train d&apos;être forcé...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2921"/>
+        <location filename="../qsamplerMainForm.cpp" line="2927"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Le serveur a été arrêté avec un status de sortie %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2965"/>
+        <location filename="../qsamplerMainForm.cpp" line="2971"/>
         <source>Client connecting...</source>
         <translation>Connexion du client...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2977"/>
+        <location filename="../qsamplerMainForm.cpp" line="2983"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1044,22 +1044,22 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2989"/>
+        <location filename="../qsamplerMainForm.cpp" line="2995"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation>La réception de l&apos;expiration du client est réglée à %1 msec.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3028"/>
+        <location filename="../qsamplerMainForm.cpp" line="3034"/>
         <source>Client connected.</source>
         <translation>Client connecté.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3061"/>
+        <location filename="../qsamplerMainForm.cpp" line="3067"/>
         <source>Client disconnecting...</source>
         <translation>Déconnexion du client...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3099"/>
+        <location filename="../qsamplerMainForm.cpp" line="3105"/>
         <source>Client disconnected.</source>
         <translation>Client déconnecté.</translation>
     </message>

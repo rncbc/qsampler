@@ -1016,27 +1016,27 @@ Sorry.</source>
         <translation>Что делать с движком</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2869"/>
+        <location filename="../qsamplerMainForm.cpp" line="2871"/>
         <source>Server is stopping...</source>
         <translation>Останавливается сервер...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2910"/>
+        <location filename="../qsamplerMainForm.cpp" line="2916"/>
         <source>Server is being forced...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2921"/>
+        <location filename="../qsamplerMainForm.cpp" line="2927"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Сервер был остановлен со статусом выхода %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2965"/>
+        <location filename="../qsamplerMainForm.cpp" line="2971"/>
         <source>Client connecting...</source>
         <translation>Устанавливается соединения клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2977"/>
+        <location filename="../qsamplerMainForm.cpp" line="2983"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1045,22 +1045,22 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2989"/>
+        <location filename="../qsamplerMainForm.cpp" line="2995"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3028"/>
+        <location filename="../qsamplerMainForm.cpp" line="3034"/>
         <source>Client connected.</source>
         <translation>Клиент соединился.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3061"/>
+        <location filename="../qsamplerMainForm.cpp" line="3067"/>
         <source>Client disconnecting...</source>
         <translation>Выполняется отсоединение клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3099"/>
+        <location filename="../qsamplerMainForm.cpp" line="3105"/>
         <source>Client disconnected.</source>
         <translation>Клиент отсоединен.</translation>
     </message>
