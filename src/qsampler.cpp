@@ -1,7 +1,7 @@
 // qsampler.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -168,15 +168,22 @@ public:
 		}
 	#ifdef CONFIG_X11
 	#ifdef CONFIG_XUNIQUE
- 		// Instance uniqueness initialization...
-		m_pDisplay = QX11Info::display();
-		m_aUnique  = XInternAtom(m_pDisplay, QSAMPLER_XUNIQUE, false);
-		XGrabServer(m_pDisplay);
-		m_wOwner = XGetSelectionOwner(m_pDisplay, m_aUnique);
-		XUngrabServer(m_pDisplay);
+		m_pDisplay = NULL;
+		m_aUnique = 0;
+		m_wOwner = 0;
 	#if QT_VERSION >= 0x050100
 		m_pXcbEventFilter = new qsamplerXcbEventFilter(this);
 		installNativeEventFilter(m_pXcbEventFilter);
+		if (QX11Info::isPlatformX11()) {
+	#endif
+			// Instance uniqueness initialization...
+			m_pDisplay = QX11Info::display();
+			m_aUnique  = XInternAtom(m_pDisplay, QSAMPLER_XUNIQUE, false);
+			XGrabServer(m_pDisplay);
+			m_wOwner = XGetSelectionOwner(m_pDisplay, m_aUnique);
+			XUngrabServer(m_pDisplay);
+	#if QT_VERSION >= 0x050100
+		}
 	#endif
 	#endif	// CONFIG_XUNIQUE
 	#endif	// CONFIG_X11
