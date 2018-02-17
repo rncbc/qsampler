@@ -6,7 +6,10 @@ ChangeLog
 
 GIT HEAD
 
-* Fixed device management dialog not responding to user changes.
+- Disable singleton/unique application instance setup logic
+  when the display server platform is not X11. (EXPERIMENTAL)
+
+- Fixed device management dialog not responding to user changes.
 
 - A little hardening on the configure (autoconf) macro side.
 
