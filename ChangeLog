@@ -4,10 +4,10 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+0.5.1  2018-05-21  Pre-LAC2018 release frenzy.
 
 - Disable singleton/unique application instance setup logic
-  when the display server platform is not X11. (EXPERIMENTAL)
+  when the display server platform is not X11.
 
 - Fixed device management dialog not responding to user changes.
 
