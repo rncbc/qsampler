@@ -308,12 +308,12 @@ Navré.</translation>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="329"/>
         <source>Select an instrument of the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez un instrument du fichier</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="330"/>
         <source>You might want to enable instrument name retrieval in the settings dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pourriez souhaiter activer la récupération du nom d&apos;instrument dans le dialogue des paramètres</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="434"/>
@@ -1104,17 +1104,17 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
         <location filename="../qsamplerOptionsForm.cpp" line="252"/>
         <location filename="../qsamplerOptionsForm.cpp" line="265"/>
         <source>This parameter is not supported by the current sampler version in use.</source>
-        <translation>Ce paramètre n&apos;est pas supporté par la version de l&apos;échantillonneur actuell en utilisation.</translation>
+        <translation>Ce paramètre n&apos;est pas supporté par la version de l&apos;échantillonneur actuel en utilisation.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="257"/>
         <source>The max. amount of voices the sampler shall process simultaneously.</source>
-        <translation type="unfinished"></translation>
+        <translation>La quantité maximum de voix que l&apos;échantillonneur peut traiter simultanément.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="270"/>
         <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
-        <translation type="unfinished"></translation>
+        <translation>La quantité maximum de flux de disque que l&apos;échantillonneur peut traiter simultanément.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="277"/>
