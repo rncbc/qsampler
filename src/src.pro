@@ -120,6 +120,8 @@ unix {
 	mimetypes_scalable.files += mimetypes/application-x-$${NAME}-session.svg
 }
 
+QT += widgets
+
 win32 {
 
 	CONFIG(debug, debug|release): CONFIG += console
@@ -131,10 +133,4 @@ macx {
 
 	QMAKE_MAC_SDK = $$(SDKROOT)
 	CONFIG += $$(QMAKE_ARCHS)
-}
-
-
-# QT5 support
-!lessThan(QT_MAJOR_VERSION, 5) {
-	QT += widgets
 }
