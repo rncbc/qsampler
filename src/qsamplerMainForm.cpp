@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -866,6 +866,7 @@ bool MainForm::saveSession ( bool bPrompt )
 		// Enforce .lscp extension...
 		if (QFileInfo(sFilename).suffix().isEmpty())
 			sFilename += ".lscp";
+	#if 0
 		// Check if already exists...
 		if (sFilename != m_sFilename && QFileInfo(sFilename).exists()) {
 			if (QMessageBox::warning(this,
@@ -878,6 +879,7 @@ bool MainForm::saveSession ( bool bPrompt )
 				== QMessageBox::No)
 				return false;
 		}
+	#endif
 	}
 
 	// Save it right away.
@@ -1060,16 +1062,19 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	// It is assumed that this new kind of device+session file
 	// will be loaded from a complete initialized server...
 	int *piDeviceIDs;
-	int  iDevice;
+	int  i, iDevice;
 	ts << "RESET" << endl;
 
 	// Audio device mapping.
-	QMap<int, int> audioDeviceMap;
+	QMap<int, int> audioDeviceMap; iDevice = 0;
 	piDeviceIDs = Device::getDevices(m_pClient, Device::Audio);
-	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
-		ts << endl;
-		Device device(Device::Audio, piDeviceIDs[iDevice]);
+	for (i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; ++i) {
+		Device device(Device::Audio, piDeviceIDs[i]);
+		// Avoid plug-in driver devices...
+		if (device.driverName().toUpper() == "PLUGIN")
+			continue;
 		// Audio device specification...
+		ts << endl;
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
@@ -1100,18 +1105,21 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 			iPort++;
 		}
 		// Audio device index/id mapping.
-		audioDeviceMap[device.deviceID()] = iDevice;
+		audioDeviceMap.insert(device.deviceID(), iDevice++);
 		// Try to keep it snappy :)
 		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 
 	// MIDI device mapping.
-	QMap<int, int> midiDeviceMap;
+	QMap<int, int> midiDeviceMap; iDevice = 0;
 	piDeviceIDs = Device::getDevices(m_pClient, Device::Midi);
-	for (iDevice = 0; piDeviceIDs && piDeviceIDs[iDevice] >= 0; iDevice++) {
-		ts << endl;
-		Device device(Device::Midi, piDeviceIDs[iDevice]);
+	for (i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; ++i) {
+		Device device(Device::Midi, piDeviceIDs[i]);
+		// Avoid plug-in driver devices...
+		if (device.driverName().toUpper() == "PLUGIN")
+			continue;
 		// MIDI device specification...
+		ts << endl;
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
 			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
@@ -1142,7 +1150,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 			iPort++;
 		}
 		// MIDI device index/id mapping.
-		midiDeviceMap[device.deviceID()] = iDevice;
+		midiDeviceMap.insert(device.deviceID(), iDevice++);
 		// Try to keep it snappy :)
 		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
@@ -1210,7 +1218,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 			iErrors++;
 		}
 		// MIDI strument index/id mapping.
-		midiInstrumentMap[iMidiMap] = iMap;
+		midiInstrumentMap.insert(iMidiMap, iMap);
 	}
 	// Check for errors...
 	if (piMaps == NULL && ::lscp_client_get_errno(m_pClient)) {
@@ -1219,7 +1227,8 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	}
 #endif	// CONFIG_MIDI_INSTRUMENT
 
-	// Sampler channel mapping.
+	// Sampler channel mapping...
+	int iChannelID = 0;
 	const QList<QMdiSubWindow *>& wlist
 		= m_pWorkspace->subWindowList();
 	const int iStripCount = wlist.count();
@@ -1231,7 +1240,14 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		if (pChannelStrip) {
 			Channel *pChannel = pChannelStrip->channel();
 			if (pChannel) {
-				const int iChannelID = pChannel->channelID();
+				// Avoid "artifial" plug-in devices...
+				const int iAudioDevice = pChannel->audioDevice();
+				if (!audioDeviceMap.contains(iAudioDevice))
+					continue;
+				const int iMidiDevice = pChannel->midiDevice();
+				if (!midiDeviceMap.contains(iMidiDevice))
+					continue;
+				// Go for regular, canonical devices...
 				ts << "# " << tr("Channel") << " " << iChannelID << endl;
 				ts << "ADD CHANNEL" << endl;
 				if (audioDeviceMap.isEmpty()) {
@@ -1239,14 +1255,14 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 						<< " " << pChannel->audioDriver() << endl;
 				} else {
 					ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannelID
-						<< " " << audioDeviceMap[pChannel->audioDevice()] << endl;
+						<< " " << audioDeviceMap.value(iAudioDevice) << endl;
 				}
 				if (midiDeviceMap.isEmpty()) {
 					ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID
 						<< " " << pChannel->midiDriver() << endl;
 				} else {
 					ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannelID
-						<< " " << midiDeviceMap[pChannel->midiDevice()] << endl;
+						<< " " << midiDeviceMap.value(iMidiDevice) << endl;
 				}
 				ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID
 					<< " " << pChannel->midiPort() << endl;
@@ -1277,9 +1293,10 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				if (pChannel->channelSolo())
 					ts << "SET CHANNEL SOLO " << iChannelID << " 1" << endl;
 			#ifdef CONFIG_MIDI_INSTRUMENT
-				if (pChannel->midiMap() >= 0) {
+				const int iMidiMap = pChannel->midiMap();
+				if (midiInstrumentMap.contains(iMidiMap)) {
 					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannelID
-						<< " " << midiInstrumentMap[pChannel->midiMap()] << endl;
+						<< " " << midiInstrumentMap.value(iMidiMap) << endl;
 				}
 			#endif
 			#ifdef CONFIG_FXSEND
@@ -1318,6 +1335,8 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				}
 			#endif
 				ts << endl;
+				// Go for next channel...
+				++iChannelID;
 			}
 		}
 		// Try to keep it snappy :)
