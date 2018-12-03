@@ -1,7 +1,7 @@
 // qsamplerChannelForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -28,6 +28,8 @@
 #include "qsamplerDevice.h"
 #include "qsamplerChannel.h"
 #include "qsamplerDeviceForm.h"
+
+#include <QHash>
 
 
 namespace QSampler {
@@ -83,8 +85,8 @@ private:
 	Channel* m_pChannel;
 	int m_iDirtySetup;
 	int m_iDirtyCount;
-	QList<Device *> m_audioDevices;
-	QList<Device *> m_midiDevices;
+	QHash<int, Device *> m_audioDevices;
+	QHash<int, Device *> m_midiDevices;
 	DeviceForm* m_pDeviceForm;
 	ChannelRoutingModel m_routingModel;
 	ChannelRoutingDelegate m_routingDelegate;
