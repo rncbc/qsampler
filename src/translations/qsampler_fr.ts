@@ -306,17 +306,17 @@ Navré.</translation>
 <context>
     <name>QSampler::ChannelForm</name>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="329"/>
+        <location filename="../qsamplerChannelForm.cpp" line="327"/>
         <source>Select an instrument of the file</source>
         <translation>Sélectionnez un instrument du fichier</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="330"/>
+        <location filename="../qsamplerChannelForm.cpp" line="328"/>
         <source>You might want to enable instrument name retrieval in the settings dialog</source>
         <translation>Vous pourriez souhaiter activer la récupération du nom d&apos;instrument dans le dialogue des paramètres</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="434"/>
+        <location filename="../qsamplerChannelForm.cpp" line="438"/>
         <source>Some channel settings could not be set.
 
 Sorry.</source>
@@ -325,12 +325,12 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="460"/>
+        <location filename="../qsamplerChannelForm.cpp" line="464"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="461"/>
+        <location filename="../qsamplerChannelForm.cpp" line="465"/>
         <source>Some channel settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -339,37 +339,37 @@ Do you want to apply the changes?</source>
 Souhaitez-vous appliquer les modifications ?</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="500"/>
+        <location filename="../qsamplerChannelForm.cpp" line="504"/>
         <source>GIG Instrument files</source>
         <translation>Fichiers instrument GIG</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="502"/>
+        <location filename="../qsamplerChannelForm.cpp" line="506"/>
         <source>SFZ Instrument files</source>
         <translation>Fichiers instrument SFZ</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="504"/>
+        <location filename="../qsamplerChannelForm.cpp" line="508"/>
         <source>SF2 Instrument files</source>
         <translation>Fichiers instrument SF2</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="505"/>
+        <location filename="../qsamplerChannelForm.cpp" line="509"/>
         <source>All files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="509"/>
+        <location filename="../qsamplerChannelForm.cpp" line="513"/>
         <source>Instrument files</source>
         <translation>Fichiers instruments</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="634"/>
+        <location filename="../qsamplerChannelForm.cpp" line="631"/>
         <source>(New MIDI %1 device)</source>
         <translation>(Nouveau périphérique MIDI %1)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="749"/>
+        <location filename="../qsamplerChannelForm.cpp" line="744"/>
         <source>(New Audio %1 device)</source>
         <translation>(Nouveau périphérique audio %1)</translation>
     </message>

@@ -1,7 +1,7 @@
 // qsamplerChannelForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -267,9 +267,8 @@ void ChannelForm::setup ( Channel *pChannel )
 	}
 	selectMidiDriverItem(sMidiDriver);
 	if (!bNew) {
-		m_ui.MidiDeviceComboBox->setItemText(
-			m_ui.MidiDeviceComboBox->currentIndex(),
-			midiDevice.deviceName());
+		m_ui.MidiDeviceComboBox->setCurrentIndex(
+			m_ui.MidiDeviceComboBox->findData(midiDevice.deviceID()));
 	}
 	selectMidiDeviceItem(m_ui.MidiDeviceComboBox->currentIndex());
 	// MIDI input port...
@@ -314,9 +313,8 @@ void ChannelForm::setup ( Channel *pChannel )
 	}
 	selectAudioDriverItem(sAudioDriver);
 	if (!bNew) {
-		m_ui.AudioDeviceComboBox->setItemText(
-			m_ui.AudioDeviceComboBox->currentIndex(),
-			audioDevice.deviceName());
+		m_ui.AudioDeviceComboBox->setCurrentIndex(
+			m_ui.AudioDeviceComboBox->findData(audioDevice.deviceID()));
 	}
 	selectAudioDeviceItem(m_ui.AudioDeviceComboBox->currentIndex());
 
@@ -379,8 +377,11 @@ void ChannelForm::accept (void)
 		} else {
 			Device *pDevice = NULL;
 			const int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
-			if (iAudioItem >= 0 && iAudioItem < m_audioDevices.count())
-				pDevice = m_audioDevices.at(iAudioItem);
+			if (iAudioItem >= 0) {
+				const int iAudioDevice
+					= m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
+				pDevice = m_audioDevices.value(iAudioDevice, NULL);
+			}
 			ChannelRoutingMap routingMap = m_routingModel.routingMap();
 			if (pDevice == NULL)
 				iErrors++;
@@ -403,8 +404,11 @@ void ChannelForm::accept (void)
 		} else {
 			Device *pDevice = NULL;
 			const int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
-			if (iMidiItem >= 0 && iMidiItem < m_midiDevices.count())
-				pDevice = m_midiDevices.at(iMidiItem);
+			if (iMidiItem >= 0) {
+				const int iMidiDevice
+					= m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
+				pDevice = m_midiDevices.value(iMidiDevice, NULL);
+			}
 			if (pDevice == NULL)
 				iErrors++;
 			else if (!m_pChannel->setMidiDevice(pDevice->deviceID()))
@@ -588,12 +592,9 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 
 	// Save current device id.
 	int iDeviceID = 0;
-	Device *pDevice = NULL;
 	int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
-	if (iMidiItem >= 0 && iMidiItem < m_midiDevices.count())
-		pDevice = m_midiDevices.at(iMidiItem);
-	if (pDevice)
-		iDeviceID = pDevice->deviceID();
+	if (iMidiItem >= 0)
+		iDeviceID = m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
 
 	// Clean maplist.
 	m_ui.MidiDeviceComboBox->clear();
@@ -601,14 +602,19 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	m_midiDevices.clear();
 
 	// Populate with the current ones...
+	Device *pDevice = NULL;
 	const QPixmap midiPixmap(":/images/midi2.png");
 	int *piDeviceIDs = Device::getDevices(pMainForm->client(), Device::Midi);
-	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
+	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; ++i) {
 		pDevice = new Device(Device::Midi, piDeviceIDs[i]);
 		if (pDevice->driverName().toUpper() == sDriverName) {
-			m_ui.MidiDeviceComboBox->insertItem(0,
+			const int iMidiDevice = pDevice->deviceID();
+			m_ui.MidiDeviceComboBox->addItem(
 				midiPixmap, pDevice->deviceName());
-			m_midiDevices.append(pDevice);
+			m_ui.MidiDeviceComboBox->setItemData(i, iMidiDevice);
+			m_midiDevices.insert(iMidiDevice, pDevice);
+			if (iMidiDevice == iDeviceID)
+				iMidiItem = i;
 		} else {
 			delete pDevice;
 		}
@@ -618,23 +624,14 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	const bool bEnabled = !m_midiDevices.isEmpty();
 	if (bEnabled) {
 		// Select the previous current device...
-		iMidiItem = 0;
-		QListIterator<Device *> iter(m_midiDevices);
-		while (iter.hasNext()) {
-			pDevice = iter.next();
-			if (pDevice->deviceID() == iDeviceID) {
-				m_ui.MidiDeviceComboBox->setCurrentIndex(iMidiItem);
-				selectMidiDeviceItem(iMidiItem);
-				break;
-			}
-			iMidiItem++;
-		}
+		m_ui.MidiDeviceComboBox->setCurrentIndex(iMidiItem);
+		selectMidiDeviceItem(iMidiItem);
 	} else {
 		m_ui.MidiDeviceComboBox->insertItem(0,
 			tr("(New MIDI %1 device)").arg(sMidiDriver));
 	}
-	m_ui.MidiDeviceTextLabel->setEnabled(bEnabled);
-	m_ui.MidiDeviceComboBox->setEnabled(bEnabled);
+//	m_ui.MidiDeviceTextLabel->setEnabled(bEnabled);
+//	m_ui.MidiDeviceComboBox->setEnabled(bEnabled);
 }
 
 
@@ -653,8 +650,11 @@ void ChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 void ChannelForm::selectMidiDeviceItem ( int iMidiItem )
 {
 	Device *pDevice = NULL;
-	if (iMidiItem >= 0 && iMidiItem < m_midiDevices.count())
-		pDevice = m_midiDevices.at(iMidiItem);
+	if (iMidiItem >= 0) {
+		const int iMidiDevice
+			= m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
+		pDevice = m_midiDevices.value(iMidiDevice, NULL);
+	}
 	if (pDevice) {
 		const DeviceParamMap& params = pDevice->params();
 		const int iPorts = params["PORTS"].value.toInt();
@@ -682,8 +682,11 @@ void ChannelForm::setupMidiDevice (void)
 {
 	Device *pDevice = NULL;
 	const int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
-	if (iMidiItem >= 0 && iMidiItem < m_midiDevices.count())
-		pDevice = m_midiDevices.at(iMidiItem);
+	if (iMidiItem >= 0) {
+		const int iMidiDevice
+			= m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
+		pDevice = m_midiDevices.value(iMidiDevice, NULL);
+	}
 	setupDevice(pDevice,
 		Device::Midi, m_ui.MidiDriverComboBox->currentText());
 }
@@ -702,12 +705,9 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 
 	// Save current device id.
 	int iDeviceID = 0;
-	Device *pDevice = NULL;
 	int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
-	if (iAudioItem >= 0 && iAudioItem < m_audioDevices.count())
-		pDevice = m_audioDevices.at(iAudioItem);
-	if (pDevice)
-		iDeviceID = pDevice->deviceID();
+	if (iAudioItem >= 0)
+		iDeviceID = m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
 
 	// Clean maplist.
 	m_ui.AudioDeviceComboBox->clear();
@@ -715,15 +715,19 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	m_audioDevices.clear();
 
 	// Populate with the current ones...
+	Device *pDevice = NULL;
 	const QPixmap audioPixmap(":/images/audio2.png");
-	int *piDeviceIDs = Device::getDevices(pMainForm->client(),
-		Device::Audio);
-	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; i++) {
+	int *piDeviceIDs = Device::getDevices(pMainForm->client(), Device::Audio);
+	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; ++i) {
 		pDevice = new Device(Device::Audio, piDeviceIDs[i]);
 		if (pDevice->driverName().toUpper() == sDriverName) {
-			m_ui.AudioDeviceComboBox->insertItem(0,
+			const int iAudioDevice = pDevice->deviceID();
+			m_ui.AudioDeviceComboBox->addItem(
 				audioPixmap, pDevice->deviceName());
-			m_audioDevices.append(pDevice);
+			m_ui.AudioDeviceComboBox->setItemData(i, iAudioDevice);
+			m_audioDevices.insert(iAudioDevice, pDevice);
+			if (iAudioDevice == iDeviceID)
+				iAudioItem = i;
 		} else {
 			delete pDevice;
 		}
@@ -733,24 +737,14 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	const bool bEnabled = !m_audioDevices.isEmpty();
 	if (bEnabled) {
 		// Select the previous current device...
-		iAudioItem = 0;
-		QListIterator<Device *> iter(m_audioDevices);
-		while (iter.hasNext()) {
-			pDevice = iter.next();
-			if (pDevice->deviceID() == iDeviceID) {
-				m_ui.AudioDeviceComboBox->setCurrentIndex(iAudioItem);
-				selectAudioDeviceItem(iAudioItem);
-				break;
-			}
-			iAudioItem++;
-		}
+		m_ui.AudioDeviceComboBox->setCurrentIndex(iAudioItem);
+		selectAudioDeviceItem(iAudioItem);
 	} else {
 		m_ui.AudioDeviceComboBox->insertItem(0,
 			tr("(New Audio %1 device)").arg(sAudioDriver));
-		//m_ui.AudioRoutingTable->setNumRows(0);
 	}
-	m_ui.AudioDeviceTextLabel->setEnabled(bEnabled);
-	m_ui.AudioDeviceComboBox->setEnabled(bEnabled);
+//	m_ui.AudioDeviceTextLabel->setEnabled(bEnabled);
+//	m_ui.AudioDeviceComboBox->setEnabled(bEnabled);
 	m_ui.AudioRoutingTable->setEnabled(bEnabled);
 }
 
@@ -770,8 +764,11 @@ void ChannelForm::selectAudioDriver ( const QString& sAudioDriver )
 void ChannelForm::selectAudioDeviceItem ( int iAudioItem )
 {
 	Device *pDevice = NULL;
-	if (iAudioItem >= 0 && iAudioItem < m_audioDevices.count())
-		pDevice = m_audioDevices.at(iAudioItem);
+	if (iAudioItem >= 0) {
+		const int iAudioDevice
+			= m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
+		pDevice = m_audioDevices.value(iAudioDevice, NULL);
+	}
 	if (pDevice) {
 		// Refresh the audio routing table.
 		m_routingModel.refresh(pDevice, m_pChannel->audioRouting());
@@ -797,8 +794,11 @@ void ChannelForm::setupAudioDevice (void)
 {
 	Device *pDevice = NULL;
 	const int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
-	if (iAudioItem >= 0 && iAudioItem < m_audioDevices.count())
-		pDevice = m_audioDevices.at(iAudioItem);
+	if (iAudioItem >= 0) {
+		const int iAudioDevice
+			= m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
+		pDevice = m_audioDevices.value(iAudioDevice, NULL);
+	}
 	setupDevice(pDevice,
 		Device::Audio, m_ui.AudioDriverComboBox->currentText());
 }

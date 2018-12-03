@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Fixed MIDI and Audio device selection on the common sampler
+  channel settings dialog. (EXPERIMENTAL)
+
 - Old deprecated Qt4 build support is no more.
 
 - AppStream metadata updated to be the most compliant with
