@@ -6,6 +6,9 @@ ChangeLog
 
 GIT HEAD
 
+- Avoid saving plug-in sampler channels and related devices
+  to regular LSCP (*.lscp) session files. (EXPERIMENTAL)
+
 - Fixed MIDI and Audio device selection on the common sampler
   channel settings dialog. (EXPERIMENTAL)
 
