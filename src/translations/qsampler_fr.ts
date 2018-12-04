@@ -369,7 +369,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
         <translation>(Nouveau périphérique MIDI %1)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.cpp" line="744"/>
+        <location filename="../qsamplerChannelForm.cpp" line="745"/>
         <source>(New Audio %1 device)</source>
         <translation>(Nouveau périphérique audio %1)</translation>
     </message>
@@ -1155,217 +1155,209 @@ Souhaitez-vous appliquer les modifications ?</translation>
         <translation>Qsampler : Canal</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="153"/>
+        <location filename="../qsamplerChannelForm.ui" line="168"/>
         <source>Browse for instrument filename</source>
         <translation>Naviguer vers un nom de fichier d&apos;instrument</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="194"/>
+        <location filename="../qsamplerChannelForm.ui" line="209"/>
         <source>Instrument name</source>
         <translation>Nome d&apos;instrument</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="49"/>
+        <location filename="../qsamplerChannelForm.ui" line="64"/>
         <source>&amp;Engine:</source>
         <translation>Mot&amp;eur :</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="71"/>
+        <location filename="../qsamplerChannelForm.ui" line="86"/>
         <source>Engine name</source>
         <translation>Nom du moteur</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="94"/>
-        <source>&amp;Filename:</source>
-        <translation>Nom de &amp;fichier :</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerChannelForm.ui" line="166"/>
+        <location filename="../qsamplerChannelForm.ui" line="181"/>
         <source>&amp;Instrument:</source>
         <translation>&amp;Instrument :</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="122"/>
+        <location filename="../qsamplerChannelForm.ui" line="137"/>
         <source>Instrument filename</source>
         <translation>Nom de fichier d&apos;instrument</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="203"/>
+        <location filename="../qsamplerChannelForm.ui" line="218"/>
         <source>MIDI / Input</source>
         <translation>MIDI / entrée</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="247"/>
+        <location filename="../qsamplerChannelForm.ui" line="462"/>
         <source>MIDI input device</source>
         <translation>Périphérique d&apos;entrée MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="275"/>
+        <location filename="../qsamplerChannelForm.ui" line="490"/>
         <source>MIDI input device setup</source>
         <translation>Paramétrage de périphérique d&apos;entrée MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="290"/>
+        <location filename="../qsamplerChannelForm.ui" line="503"/>
         <source>&amp;Map:</source>
         <translation>&amp;Cartographie :</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="672"/>
-        <source>&amp;Device:</source>
-        <translation>&amp;Périphérique :</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerChannelForm.ui" line="345"/>
+        <location filename="../qsamplerChannelForm.ui" line="525"/>
         <source>Instrument map</source>
         <translation>Cartographie d&apos;instrument</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="736"/>
-        <source>&amp;Type:</source>
-        <translation>&amp;Type :</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerChannelForm.ui" line="409"/>
+        <location filename="../qsamplerChannelForm.ui" line="270"/>
         <source>MIDI input driver type</source>
         <translation>Type de pilote d&apos;entrée MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="306"/>
+        <location filename="../qsamplerChannelForm.ui" line="440"/>
+        <location filename="../qsamplerChannelForm.ui" line="626"/>
         <source>De&amp;vice:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="370"/>
+        <location filename="../qsamplerChannelForm.ui" line="236"/>
+        <location filename="../qsamplerChannelForm.ui" line="569"/>
         <source>T&amp;ype:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="432"/>
+        <location filename="../qsamplerChannelForm.ui" line="109"/>
+        <source>Filena&amp;me:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerChannelForm.ui" line="293"/>
         <source>&amp;Port:</source>
         <translation>&amp;Port :</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="448"/>
+        <location filename="../qsamplerChannelForm.ui" line="309"/>
         <source>MIDI input port number</source>
         <translation>Numéro de port d&apos;entrée MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="455"/>
+        <location filename="../qsamplerChannelForm.ui" line="316"/>
         <source>&amp;Channel:</source>
         <translation>&amp;Canal :</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="471"/>
+        <location filename="../qsamplerChannelForm.ui" line="332"/>
         <source>MIDI input channel</source>
         <translation>Canal d&apos;entrée MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="475"/>
+        <location filename="../qsamplerChannelForm.ui" line="336"/>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="480"/>
+        <location filename="../qsamplerChannelForm.ui" line="341"/>
         <source>2</source>
         <translation>2</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="485"/>
+        <location filename="../qsamplerChannelForm.ui" line="346"/>
         <source>3</source>
         <translation>3</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="490"/>
+        <location filename="../qsamplerChannelForm.ui" line="351"/>
         <source>4</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="495"/>
+        <location filename="../qsamplerChannelForm.ui" line="356"/>
         <source>5</source>
         <translation>5</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="500"/>
+        <location filename="../qsamplerChannelForm.ui" line="361"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="505"/>
+        <location filename="../qsamplerChannelForm.ui" line="366"/>
         <source>7</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="510"/>
+        <location filename="../qsamplerChannelForm.ui" line="371"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="515"/>
+        <location filename="../qsamplerChannelForm.ui" line="376"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="520"/>
+        <location filename="../qsamplerChannelForm.ui" line="381"/>
         <source>10</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="525"/>
+        <location filename="../qsamplerChannelForm.ui" line="386"/>
         <source>11</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="530"/>
+        <location filename="../qsamplerChannelForm.ui" line="391"/>
         <source>12</source>
         <translation>12</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="535"/>
+        <location filename="../qsamplerChannelForm.ui" line="396"/>
         <source>13</source>
         <translation>13</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="540"/>
+        <location filename="../qsamplerChannelForm.ui" line="401"/>
         <source>14</source>
         <translation>14</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="545"/>
+        <location filename="../qsamplerChannelForm.ui" line="406"/>
         <source>15</source>
         <translation>15</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="550"/>
+        <location filename="../qsamplerChannelForm.ui" line="411"/>
         <source>16</source>
         <translation>16</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="555"/>
+        <location filename="../qsamplerChannelForm.ui" line="416"/>
         <source>All</source>
         <translation>Tous</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="568"/>
+        <location filename="../qsamplerChannelForm.ui" line="551"/>
         <source>Audio / Output</source>
         <translation>Audio / sortie</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="629"/>
+        <location filename="../qsamplerChannelForm.ui" line="648"/>
         <source>Audio output device</source>
         <translation>Périphérique de sortie audio</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="657"/>
+        <location filename="../qsamplerChannelForm.ui" line="676"/>
         <source>Audio output device setup</source>
         <translation>Paramétrage de périphérique de sortie audio</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="711"/>
+        <location filename="../qsamplerChannelForm.ui" line="603"/>
         <source>Audio output driver type</source>
         <translation>Type de pilote de sortie audio</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannelForm.ui" line="766"/>
+        <location filename="../qsamplerChannelForm.ui" line="701"/>
         <source>Audio routing table</source>
         <translation>Table de routage audio</translation>
     </message>
