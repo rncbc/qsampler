@@ -629,6 +629,7 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	} else {
 		m_ui.MidiDeviceComboBox->insertItem(0,
 			tr("(New MIDI %1 device)").arg(sMidiDriver));
+		m_ui.MidiDeviceComboBox->setItemData(0, -1);
 	}
 //	m_ui.MidiDeviceTextLabel->setEnabled(bEnabled);
 //	m_ui.MidiDeviceComboBox->setEnabled(bEnabled);
@@ -742,6 +743,7 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	} else {
 		m_ui.AudioDeviceComboBox->insertItem(0,
 			tr("(New Audio %1 device)").arg(sAudioDriver));
+		m_ui.AudioDeviceComboBox->setItemData(0, -1);
 	}
 //	m_ui.AudioDeviceTextLabel->setEnabled(bEnabled);
 //	m_ui.AudioDeviceComboBox->setEnabled(bEnabled);
