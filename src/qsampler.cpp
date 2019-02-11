@@ -1,7 +1,7 @@
 // qsampler.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -435,7 +435,9 @@ int main ( int argc, char **argv )
 #endif
 #endif
 	qsamplerApplication app(argc, argv);
-
+#if QT_VERSION >= 0x050600
+	app.setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 	#if defined(__APPLE__)  //  Toshi Nagata 20080105
 	{
 		//  Set the plugin path to @exetutable_path/../plugins
