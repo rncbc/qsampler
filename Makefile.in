@@ -6,6 +6,7 @@ target  = src/$(name)
 
 headers = \
 	src/config.h \
+	src/qsampler.h \
 	src/qsamplerAbout.h \
 	src/qsamplerOptions.h \
 	src/qsamplerChannel.h \

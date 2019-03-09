@@ -10,6 +10,7 @@ include(src.pri)
 #DEFINES += DEBUG
 
 HEADERS += config.h \
+	qsampler.h \
 	qsamplerAbout.h \
 	qsamplerOptions.h \
 	qsamplerChannel.h \
