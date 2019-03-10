@@ -195,8 +195,6 @@ bool qsamplerApplication::setup (void)
 #ifdef CONFIG_XUNIQUE
 #if QT_VERSION < 0x050000
 #ifdef CONFIG_X11
-	if (!QX11Info::isPlatformX11())
-		return false;
 	m_pDisplay = QX11Info::display();
 	if (m_pDisplay) {
 		QString sUnique = QSAMPLER_XUNIQUE;
@@ -299,7 +297,9 @@ bool qsamplerApplication::setup (void)
 	}
 	return !bServer;
 #endif
-#endif	// CONFIG_XUNIQUE
+#else
+	return false;
+#endif	// !CONFIG_XUNIQUE
 }
 
 
