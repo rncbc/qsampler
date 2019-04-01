@@ -1,7 +1,13 @@
 Qsampler - A LinuxSampler Qt GUI Interface
-------------------------------------------
+~------------------------------------------
 
 ChangeLog
+
+
+GIT HEAD
+
+- Re-defined all main application UNIX signal handling.
+  (EXPERIMENTAL)
 
 
 0.5.4  2019-03-11  Pre-LAC2019 Release Frenzy.
