@@ -1,7 +1,7 @@
 // qsamplerMainForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -125,6 +125,7 @@ protected slots:
 	void processServerExit();
 
 	void handle_sigusr1();
+	void handle_sigterm();
 
 	// Channel strip activation/selection.
 	void activateStrip(QMdiSubWindow *pMdiSubWindow);
@@ -174,7 +175,8 @@ private:
 	Options *m_pOptions;
 	Messages *m_pMessages;
 	Workspace *m_pWorkspace;
-	QSocketNotifier *m_pUsr1Notifier;
+	QSocketNotifier *m_pSigusr1Notifier;
+	QSocketNotifier *m_pSigtermNotifier;
 	QString m_sFilename;
 	int m_iUntitled;
 	int m_iDirtySetup;
