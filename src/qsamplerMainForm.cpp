@@ -68,10 +68,6 @@ const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
 }
 #endif
 
-#ifdef HAVE_SIGNAL_H
-#include <signal.h>
-#endif
-
 #ifdef CONFIG_LIBGIG
 #include <gig.h>
 #endif
