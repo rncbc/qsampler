@@ -1218,18 +1218,18 @@ Souhaitez-vous appliquer les modifications ?</translation>
         <location filename="../qsamplerChannelForm.ui" line="440"/>
         <location filename="../qsamplerChannelForm.ui" line="626"/>
         <source>De&amp;vice:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Périphérique :</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="236"/>
         <location filename="../qsamplerChannelForm.ui" line="569"/>
         <source>T&amp;ype:</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;ype :</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="109"/>
         <source>Filena&amp;me:</source>
-        <translation type="unfinished"></translation>
+        <translation>No&amp;m de fichier</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="293"/>
