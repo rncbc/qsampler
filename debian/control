@@ -1,8 +1,8 @@
 Source: qsampler
-Section: sound
+Section: contrib/sound
 Priority: optional
 Maintainer: LinuxSampler Developers <linuxsampler-devel@lists.sourceforge.net>
-Standards-Version: 3.7.2
+Standards-Version: 3.9.7
 Build-Depends: debhelper (>= 5), automake, pkg-config,
   qtchooser, qtbase5-dev (>= 5.1), qtbase5-dev-tools (>= 5.1),
   qttools5-dev-tools (>= 5.1), liblscp-dev, libgig-dev (>= 3.3.0)
