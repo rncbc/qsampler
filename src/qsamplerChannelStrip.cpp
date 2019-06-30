@@ -1,7 +1,7 @@
 // qsamplerChannelStrip.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -596,7 +596,7 @@ bool ChannelStrip::updateChannelUsage (void)
 	// As benno has suggested this is the percentage usage
 	// of the least filled buffer stream...
 	const int iStreamUsage = ::lscp_get_channel_stream_usage(
-		pMainForm->client(), m_pChannel->channelID());;
+		pMainForm->client(), m_pChannel->channelID());
 
 	// Update the GUI elements...
 	m_ui.StreamUsageProgressBar->setValue(iStreamUsage);
@@ -679,8 +679,8 @@ void ChannelStrip::setSelected ( bool bSelected )
 	QPalette pal;
 	if (bSelected) {
 		const QColor& color = pal.midlight().color();
-		pal.setColor(QPalette::Background, color.dark(150));
-		pal.setColor(QPalette::Foreground, color.light(150));
+		pal.setColor(QPalette::Background, color.darker(150));
+		pal.setColor(QPalette::Foreground, color.lighter(150));
 	}
 
 	QWidget *pParentWidget = QWidget::parentWidget();

@@ -1,7 +1,7 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -45,12 +45,6 @@ DeviceParam::DeviceParam ( lscp_param_info_t *pParamInfo,
 }
 
 
-// Default destructor.
-DeviceParam::~DeviceParam (void)
-{
-}
-
-
 // Initializer.
 void DeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 	const char *pszValue )
@@ -65,11 +59,11 @@ void DeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 	if (pParamInfo->description)
 		description = pParamInfo->description;
 	else
-		description = QString::null;
+		description.clear();
 
-	mandatory = (bool) pParamInfo->mandatory;
-	fix = (bool) pParamInfo->fix;
-	multiplicity = (bool) pParamInfo->multiplicity;
+	mandatory = bool(pParamInfo->mandatory);
+	fix = bool(pParamInfo->fix);
+	multiplicity = bool(pParamInfo->multiplicity);
 
 	depends.clear();
 	for (int i = 0; pParamInfo->depends && pParamInfo->depends[i]; i++)
@@ -78,17 +72,17 @@ void DeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 	if (pParamInfo->defaultv)
 		defaultv = pParamInfo->defaultv;
 	else
-		defaultv = QString::null;
+		defaultv.clear();
 
 	if (pParamInfo->range_min)
 		range_min = pParamInfo->range_min;
 	else
-		range_min = QString::null;
+		range_min.clear();
 
 	if (pParamInfo->range_max)
 		range_max = pParamInfo->range_max;
 	else
-		range_max = QString::null;
+		range_max.clear();
 
 	possibilities.clear();
 	for (int i = 0; pParamInfo->possibilities && pParamInfo->possibilities[i]; i++)
@@ -98,7 +92,7 @@ void DeviceParam::setParam ( lscp_param_info_t *pParamInfo,
 	if (pszValue)
 		value = pszValue;
 	else
-		value = QString::null;
+		value.clear();
 }
 
 
@@ -167,12 +161,12 @@ void Device::setDevice ( DeviceType deviceType, int iDeviceID )
 			appendMessagesClient("lscp_get_midi_device_info");
 		break;
 	case Device::None:
-		m_sDeviceType = QString::null;
+		m_sDeviceType.clear();
 		break;
 	}
 	// If we're bogus, bail out...
 	if (pDeviceInfo == NULL) {
-		m_sDriverName = QString::null;
+		m_sDriverName.clear();
 		m_sDeviceName = QObject::tr("New %1 device").arg(m_sDeviceType);
 		return;
 	}
@@ -336,7 +330,7 @@ bool Device::setParam ( const QString& sParam,
 
 	// If the device already exists, things get immediate...
 	int iRefresh = 0;
-	if (m_iDeviceID >= 0 && sValue != QString::null) {
+	if (m_iDeviceID >= 0 && !sValue.isEmpty()) {
 
 		// we need temporary byte arrrays with the final strings, because
 		// i.e. QString::toUtf8() only returns a temporary object and the
@@ -416,7 +410,7 @@ bool Device::createDevice (void)
 
 	DeviceParamMap::ConstIterator iter;
 	for (iter = m_params.begin(); iter != m_params.end(); ++iter) {
-		if (iter.value().value == QString::null) continue;
+		if (iter.value().value.isEmpty()) continue;
 		finalKeys.push_back(iter.key().toUtf8());
 		finalVals.push_back(iter.value().value.toUtf8());
 	}
@@ -790,7 +784,7 @@ void DevicePort::setDevicePort ( int iPortID )
 
 	// If we're bogus, bail out...
 	if (pPortInfo == NULL) {
-		m_sPortName = QString::null;
+		m_sPortName.clear();
 		return;
 	}
 
@@ -1181,7 +1175,7 @@ QWidget* DeviceParamDelegate::createEditor ( QWidget *pParent,
 		case 1: {
 			if (r.param.type == LSCP_TYPE_BOOL) {
 				QCheckBox *pCheckBox = new QCheckBox(pParent);
-				if (val != QString::null)
+				if (!val.isEmpty())
 					pCheckBox->setChecked(val.toLower() == "true");
 				pCheckBox->setEnabled(bEnabled);
 				pCheckBox->setCheckable(!bFix);

@@ -1,7 +1,7 @@
 // qsamplerDevice.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2012, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -60,8 +60,6 @@ public:
 	// Constructor.
 	DeviceParam(lscp_param_info_t *pParamInfo = NULL,
 		const char *pszValue = NULL);
-	// Default destructor.
-	~DeviceParam();
 
 	// Initializer.
 	void setParam(lscp_param_info_t *pParamInfo,
