@@ -852,7 +852,7 @@ bool MainForm::newSession (void)
 	m_iUntitled++;
 
 	// Stabilize form.
-	m_sFilename = QString::null;
+	m_sFilename = QString();
 	m_iDirtyCount = 0;
 	appendMessages(tr("New session: \"%1\".").arg(sessionName(m_sFilename)));
 	stabilizeForm();
@@ -3109,7 +3109,7 @@ bool MainForm::startClient (void)
 	if (!m_pOptions->sSessionFile.isEmpty()) {
 		// Just load the prabably startup session...
 		if (loadSessionFile(m_pOptions->sSessionFile)) {
-			m_pOptions->sSessionFile = QString::null;
+			m_pOptions->sSessionFile = QString();
 			return true;
 		}
 	}

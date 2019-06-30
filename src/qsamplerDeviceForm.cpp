@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -424,7 +424,7 @@ void DeviceForm::selectDevice ()
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
 	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM) {
 		m_deviceType = Device::None;
-		m_ui.DeviceNameTextLabel->setText(QString::null);
+		m_ui.DeviceNameTextLabel->setText(QString());
 		m_deviceParamModel.clear();
 		m_ui.DevicePortComboBox->clear();
 		m_devicePortParamModel.clear();

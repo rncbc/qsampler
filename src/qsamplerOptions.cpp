@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -299,7 +299,7 @@ bool Options::parse_args ( const QStringList& args )
 		}
 
 		QString sArg = args.at(i);
-		QString sVal = QString::null;
+		QString sVal;
 		const int iEqual = sArg.indexOf("=");
 		if (iEqual >= 0) {
 			sVal = sArg.right(sArg.length() - iEqual - 1);

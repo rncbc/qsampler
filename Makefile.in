@@ -82,8 +82,6 @@ export QMAKE = @ac_qmake@
 export LUPDATE = @ac_lupdate@
 export LRELEASE = @ac_lrelease@
 
-# let GCC auto detect whether it (sh/c)ould output its messages in color
-export GCC_COLORS=auto
 
 all:	$(target)
 
@@ -95,8 +93,8 @@ $(name).mak:	$(name).pro
 	@$(QMAKE) -o $(name).mak $(name).pro
 
 
-translations_lupdate:	$(name).pro
-	@$(LUPDATE) -verbose -no-obsolete $(name).pro
+translations_lupdate:	$(translation_sources)
+	@$(LUPDATE) -verbose -no-obsolete -recursive src -ts $(translation_sources)
 
 translations_lrelease:	translations_lupdate $(translations_targets)
 

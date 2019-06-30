@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2014, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -237,7 +237,7 @@ bool Channel::setInstrument ( const QString& sInstrumentFile, int iInstrumentNr 
 	m_sInstrumentFile = sInstrumentFile;
 	m_iInstrumentNr = iInstrumentNr;
 #ifdef CONFIG_INSTRUMENT_NAME
-	m_sInstrumentName = QString::null;  // We'll get it, maybe later, on channel_info...
+	m_sInstrumentName.clear();  // We'll get it, maybe later, on channel_info...
 #else
 	m_sInstrumentName = getInstrumentName(sInstrumentFile, iInstrumentNr, true);
 #endif
@@ -632,10 +632,10 @@ bool Channel::updateChannelInfo (void)
 #endif
 	// Some sanity checks.
 	if (m_sEngineName == "NONE" || m_sEngineName.isEmpty())
-		m_sEngineName = QString::null;
+		m_sEngineName.clear();
 	if (m_sInstrumentFile == "NONE" || m_sInstrumentFile.isEmpty()) {
-		m_sInstrumentFile = QString::null;
-		m_sInstrumentName = QString::null;
+		m_sInstrumentFile.clear();
+		m_sInstrumentName.clear();
 	}
 
 	// Time for device info grabbing...
