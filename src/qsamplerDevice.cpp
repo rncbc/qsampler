@@ -1012,7 +1012,7 @@ void AbstractDeviceParamModel::refresh (
 	m_pParams   = pParams;
 	m_bEditable = bEditable;
 	// inform the outer world (QTableView) that our data changed
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	QAbstractTableModel::reset();
 #else
 	QAbstractTableModel::beginResetModel();
@@ -1025,7 +1025,7 @@ void AbstractDeviceParamModel::clear (void)
 {
 	m_pParams = NULL;
 	// inform the outer world (QTableView) that our data changed
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	QAbstractTableModel::reset();
 #else
 	QAbstractTableModel::beginResetModel();

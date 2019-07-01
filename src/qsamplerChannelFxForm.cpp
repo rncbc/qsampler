@@ -129,7 +129,7 @@ ChannelFxForm::ChannelFxForm (
 	ChannelRoutingDelegate* pRoutingDelegate =
 		new ChannelRoutingDelegate(m_ui.audioRoutingTable);
 	m_ui.audioRoutingTable->setItemDelegate(pRoutingDelegate);
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	m_ui.audioRoutingTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 #else
 	m_ui.audioRoutingTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);

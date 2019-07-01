@@ -1076,7 +1076,7 @@ void ChannelRoutingModel::refresh ( Device *pDevice,
 	m_pDevice = pDevice;
 	m_routing = routing;
 	// inform the outer world (QTableView) that our data changed
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	QAbstractTableModel::reset();
 #else
 	QAbstractTableModel::beginResetModel();
