@@ -135,7 +135,7 @@ FxSend *FxSendsModel::addFxSend (void)
 	fxSend.setName("New FX Send");
 	m_fxSends.push_back(fxSend);
 	createIndex(m_fxSends.size() - 1, 0);
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	QAbstractListModel::reset();
 #else
 	QAbstractListModel::beginResetModel();
@@ -163,7 +163,7 @@ void FxSendsModel::removeFxSend ( const QModelIndex& index )
 	FxSend *pFxSend = fxSend(index);
 	if (!pFxSend) return;
 	pFxSend->setDeletion(true);
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	QAbstractListModel::reset();
 #else
 	QAbstractListModel::beginResetModel();
@@ -183,7 +183,7 @@ void FxSendsModel::cleanRefresh (void)
 		fxSend.getFromSampler();
 		m_fxSends.push_back(fxSend);
 	}
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	QAbstractListModel::reset();
 #else
 	QAbstractListModel::beginResetModel();

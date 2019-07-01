@@ -296,14 +296,14 @@ void InstrumentListModel::refresh (void)
 
 void InstrumentListModel::beginReset (void)
 {
-#if QT_VERSION >= 0x040600
+#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
 	QAbstractItemModel::beginResetModel();
 #endif
 }
 
 void InstrumentListModel::endReset (void)
 {
-#if QT_VERSION >= 0x040600
+#if QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)
 	QAbstractItemModel::endResetModel();
 #else
 	QAbstractItemModel::reset();
@@ -346,7 +346,7 @@ InstrumentListView::InstrumentListView ( QWidget *pParent )
 
 	QHeaderView *pHeader = QTreeView::header();
 	pHeader->setDefaultAlignment(Qt::AlignLeft);
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 	pHeader->setMovable(false);
 #endif
 	pHeader->setStretchLastSection(true);

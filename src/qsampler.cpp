@@ -56,7 +56,7 @@
 
 #define QSAMPLER_XUNIQUE "qsamplerApplication"
 
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
 
 #include <unistd.h> /* for gethostname() */
@@ -134,7 +134,7 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 		}
 	}
 #ifdef CONFIG_XUNIQUE
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
 	m_pDisplay = NULL;
 	m_aUnique = 0;
@@ -152,7 +152,7 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 qsamplerApplication::~qsamplerApplication (void)
 {
 #ifdef CONFIG_XUNIQUE
-#if QT_VERSION >= 0x050000
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 	if (m_pServer) {
 		m_pServer->close();
 		delete m_pServer;
@@ -174,7 +174,7 @@ void qsamplerApplication::setMainWidget ( QWidget *pWidget )
 {
 	m_pWidget = pWidget;
 #ifdef CONFIG_XUNIQUE
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
 	m_wOwner = m_pWidget->winId();
 	if (m_pDisplay && m_wOwner) {
@@ -193,7 +193,7 @@ void qsamplerApplication::setMainWidget ( QWidget *pWidget )
 bool qsamplerApplication::setup (void)
 {
 #ifdef CONFIG_XUNIQUE
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
 	m_pDisplay = QX11Info::display();
 	if (m_pDisplay) {
@@ -304,7 +304,7 @@ bool qsamplerApplication::setup (void)
 
 
 #ifdef CONFIG_XUNIQUE
-#if QT_VERSION < 0x050000
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
 
 void qsamplerApplication::x11PropertyNotify ( Window w )
@@ -459,7 +459,7 @@ int main ( int argc, char **argv )
 #endif
 #endif
 	qsamplerApplication app(argc, argv);
-#if QT_VERSION >= 0x050600
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
 	app.setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 	#if defined(__APPLE__)  //  Toshi Nagata 20080105
@@ -494,7 +494,7 @@ int main ( int argc, char **argv )
 	// Dark themes grayed/disabled color group fix...
 	QPalette pal(app.palette());
 	if (pal.base().color().value() < 0x7f) {
-	#if QT_VERSION >= 0x050000
+	#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 		const QColor& color = pal.window().color();
 		const int iGroups = int(QPalette::Active | QPalette::Inactive) + 1;
 		for (int i = 0; i < iGroups; ++i) {
