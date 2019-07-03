@@ -185,27 +185,27 @@ Můžete chtít povýšit liblscp a sestavit QSampler později znovu.</translati
         <translation>kanál fx posílá...</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="158"/>
+        <location filename="../qsamplerDevice.cpp" line="152"/>
         <source>Audio</source>
         <translation>Zvuk</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="164"/>
+        <location filename="../qsamplerDevice.cpp" line="158"/>
         <source>MIDI</source>
         <translation>MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="176"/>
+        <location filename="../qsamplerDevice.cpp" line="170"/>
         <source>New %1 device</source>
         <translation>Nové zařízení %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="183"/>
+        <location filename="../qsamplerDevice.cpp" line="177"/>
         <source>Device %1</source>
         <translation>Zařízení %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="379"/>
+        <location filename="../qsamplerDevice.cpp" line="373"/>
         <source>Could not set device parameter value.
 
 Sorry.</source>
@@ -214,12 +214,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="460"/>
+        <location filename="../qsamplerDevice.cpp" line="454"/>
         <source>created.</source>
         <translation>vytvořeno.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="462"/>
+        <location filename="../qsamplerDevice.cpp" line="456"/>
         <source>Could not create device.
 
 Sorry.</source>
@@ -228,12 +228,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="498"/>
+        <location filename="../qsamplerDevice.cpp" line="492"/>
         <source>deleted.</source>
         <translation>smazáno.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="501"/>
+        <location filename="../qsamplerDevice.cpp" line="495"/>
         <source>Could not delete device.
 
 Sorry.</source>
@@ -242,7 +242,7 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="897"/>
+        <location filename="../qsamplerDevice.cpp" line="891"/>
         <source>Could not set %1 parameter value.
 
 Sorry.</source>
@@ -251,12 +251,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="920"/>
+        <location filename="../qsamplerDevice.cpp" line="914"/>
         <source>Audio Devices</source>
         <translation>Zvuková zařízení</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="924"/>
+        <location filename="../qsamplerDevice.cpp" line="918"/>
         <source>MIDI Devices</source>
         <translation>Zařízení MIDI</translation>
     </message>
@@ -288,17 +288,17 @@ Promiňte.</translation>
 <context>
     <name>QSampler::AbstractDeviceParamModel</name>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1004"/>
+        <location filename="../qsamplerDevice.cpp" line="998"/>
         <source>Parameter</source>
         <translation>Parametr</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1005"/>
+        <location filename="../qsamplerDevice.cpp" line="999"/>
         <source>Value</source>
         <translation>Hodnota</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1006"/>
+        <location filename="../qsamplerDevice.cpp" line="1000"/>
         <source>Description</source>
         <translation>Popis</translation>
     </message>
@@ -460,7 +460,7 @@ Jste si jistý?</translation>
 <context>
     <name>QSampler::DeviceParamDelegate</name>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1192"/>
+        <location filename="../qsamplerDevice.cpp" line="1186"/>
         <source>(none)</source>
         <translation>(žádný)</translation>
     </message>
