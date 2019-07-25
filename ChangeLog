@@ -4,6 +4,11 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
+GIT HEAD
+
+- Make sure compiler flags comply to c++11 as standard.
+
+
 0.5.6  2019-07-12  A Summer'19 Release.
 
 - Updated for the newer Qt5 translation tools (>= 5.13).
