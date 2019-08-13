@@ -1,7 +1,7 @@
 // qsamplerInstrumentForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2010, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -57,7 +57,7 @@ InstrumentForm::InstrumentForm ( QWidget *pParent )
 	m_ui.setupUi(this);
 
 	// Initialize locals.
-	m_pInstrument = NULL;
+	m_pInstrument = nullptr;
 
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
@@ -120,18 +120,18 @@ void InstrumentForm::setup ( Instrument *pInstrument )
 	m_iDirtyCount = 0;
 	m_iDirtyName  = 0;
 
-	if (m_pInstrument == NULL)
+	if (m_pInstrument == nullptr)
 		return;
 
 	// Check if we're up and connected.
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// It can be a brand new channel, remember?
@@ -249,11 +249,11 @@ void InstrumentForm::nameChanged ( const QString& /* sName */ )
 void InstrumentForm::openInstrumentFile (void)
 {
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// FIXME: the instrument file filters should be restricted,
@@ -286,11 +286,11 @@ void InstrumentForm::openInstrumentFile (void)
 void InstrumentForm::updateInstrumentName (void)
 {
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// TODO: this better idea would be to use libgig
@@ -324,17 +324,17 @@ void InstrumentForm::instrumentNrChanged (void)
 // Accept settings (OK button slot).
 void InstrumentForm::accept (void)
 {
-	if (m_pInstrument == NULL)
+	if (m_pInstrument == nullptr)
 		return;
 
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	if (m_iDirtyCount > 0) {

@@ -44,7 +44,7 @@ class ChannelStrip : public QWidget
 
 public:
 
-	ChannelStrip(QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+	ChannelStrip(QWidget* pParent = nullptr, Qt::WindowFlags wflags = 0);
 	~ChannelStrip();
 
 	void setup(Channel *pChannel);

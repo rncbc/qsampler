@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -143,11 +143,11 @@ void InstrumentListForm::closeEvent ( QCloseEvent * /*pCloseEvent*/ )
 void InstrumentListForm::refreshInstruments (void)
 {
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// Get/save current map selection...
@@ -174,11 +174,11 @@ void InstrumentListForm::refreshInstruments (void)
 void InstrumentListForm::activateMap ( int iMap )
 {
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	int iMidiMap = iMap - 1;
@@ -227,7 +227,7 @@ void InstrumentListForm::editInstrument ( const QModelIndex& index )
 
 	Instrument *pInstrument
 		= static_cast<Instrument *> (index.internalPointer());
-	if (pInstrument == NULL)
+	if (pInstrument == nullptr)
 		return;
 
 	// Save current key values...
@@ -271,11 +271,11 @@ void InstrumentListForm::deleteInstrument (void)
 
 	Instrument *pInstrument
 		= static_cast<Instrument *> (index.internalPointer());
-	if (pInstrument == NULL)
+	if (pInstrument == nullptr)
 		return;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	// Prompt user if this is for real...

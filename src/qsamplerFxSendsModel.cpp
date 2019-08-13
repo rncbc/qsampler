@@ -1,7 +1,7 @@
 // qsamplerFxSendList.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2016, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -144,7 +144,7 @@ FxSend *FxSendsModel::addFxSend (void)
 	emit fxSendsDirtyChanged(true);
 	return &m_fxSends.last();
 #else
-	return NULL;
+	return nullptr;
 #endif // CONFIG_FXSEND
 }
 
@@ -152,7 +152,7 @@ FxSend *FxSendsModel::addFxSend (void)
 FxSend *FxSendsModel::fxSend ( const QModelIndex& index )
 {
 	if (!index.isValid())
-		return NULL;
+		return nullptr;
 
 	return &m_fxSends[index.row()];
 }

@@ -206,7 +206,7 @@ class ChannelRoutingModel : public QAbstractTableModel
 	Q_OBJECT
 public:
 
-	ChannelRoutingModel(QObject* pParent = NULL);
+	ChannelRoutingModel(QObject* pParent = nullptr);
 
 	// overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -245,7 +245,7 @@ class ChannelRoutingDelegate : public QItemDelegate
 
 public:
 
-	ChannelRoutingDelegate(QObject* pParent = NULL);
+	ChannelRoutingDelegate(QObject* pParent = nullptr);
 
 	QWidget* createEditor(QWidget *pParent,
 		const QStyleOptionViewItem& option, const QModelIndex& index) const;

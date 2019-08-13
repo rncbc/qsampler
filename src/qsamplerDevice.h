@@ -58,12 +58,12 @@ class DeviceParam
 public:
 
 	// Constructor.
-	DeviceParam(lscp_param_info_t *pParamInfo = NULL,
-		const char *pszValue = NULL);
+	DeviceParam(lscp_param_info_t *pParamInfo = nullptr,
+		const char *pszValue = nullptr);
 
 	// Initializer.
 	void setParam(lscp_param_info_t *pParamInfo,
-		const char *pszValue = NULL);
+		const char *pszValue = nullptr);
 
 	// Info structure field members.
 	lscp_type_t	type;
@@ -263,7 +263,7 @@ class AbstractDeviceParamModel : public QAbstractTableModel
 
 public:
 
-	AbstractDeviceParamModel(QObject *pParent = NULL);
+	AbstractDeviceParamModel(QObject *pParent = nullptr);
 
 	// Overridden methods from subclass(es)
 	int rowCount(const QModelIndex& parent = QModelIndex()) const;
@@ -293,7 +293,7 @@ class DeviceParamModel : public AbstractDeviceParamModel
 
 public:
 
-	DeviceParamModel(QObject *pParent = NULL);
+	DeviceParamModel(QObject *pParent = nullptr);
 
 	// Overridden methods from subclass(es)
 	QVariant data(const QModelIndex &index, int role) const;
@@ -351,7 +351,7 @@ class DeviceParamDelegate : public QItemDelegate
 
 public:
 
-	DeviceParamDelegate(QObject *pParent = NULL);
+	DeviceParamDelegate(QObject *pParent = nullptr);
 
 	QWidget* createEditor(QWidget *pParent,
 		const QStyleOptionViewItem& option, const QModelIndex& index) const;

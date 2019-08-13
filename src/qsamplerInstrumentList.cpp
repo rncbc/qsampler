@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -112,7 +112,7 @@ QVariant InstrumentListModel::data (
 QModelIndex InstrumentListModel::index (
 	int row, int col, const QModelIndex& /*parent*/ ) const
 {
-	const Instrument *pInstr = NULL;
+	const Instrument *pInstr = nullptr;
 
 	if (m_iMidiMap == LSCP_MIDI_MAP_ALL) {
 		int nrows = 0;
@@ -216,7 +216,7 @@ const Instrument *InstrumentListModel::addInstrument (
 		list.insert(i, pInstr);
 	} else {
 		delete pInstr;
-		pInstr = NULL;
+		pInstr = nullptr;
 	}
 
 	return pInstr;
@@ -264,9 +264,9 @@ void InstrumentListModel::resortInstrument ( Instrument *pInstrument )
 void InstrumentListModel::refresh (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -287,7 +287,7 @@ void InstrumentListModel::refresh (void)
 
 	QApplication::restoreOverrideCursor();
 
-	if (pInstrs == NULL && ::lscp_client_get_errno(pMainForm->client())) {
+	if (pInstrs == nullptr && ::lscp_client_get_errno(pMainForm->client())) {
 		pMainForm->appendMessagesClient("lscp_list_midi_instruments");
 		pMainForm->appendMessagesError(
 			tr("Could not get current list of MIDI instrument mappings.\n\nSorry."));

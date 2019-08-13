@@ -47,8 +47,8 @@ DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 	m_iDirtyCount = 0;
 	m_bNewDevice  = false;
 	m_deviceType  = Device::None;
-	m_pAudioItems = NULL;
-	m_pMidiItems  = NULL;
+	m_pAudioItems = nullptr;
+	m_pMidiItems  = nullptr;
 	// No exclusive mode as default.
 	m_deviceTypeMode = Device::None;
 
@@ -192,7 +192,7 @@ void DeviceForm::setDevice ( Device *pDevice )
 		deviceType = pDevice->deviceType();
 
 	// Get the device view root item...
-	DeviceItem *pRootItem = NULL;
+	DeviceItem *pRootItem = nullptr;
 	switch (deviceType) {
 	case Device::Audio:
 		pRootItem = m_pAudioItems;
@@ -205,11 +205,11 @@ void DeviceForm::setDevice ( Device *pDevice )
 	}
 
 	// Is the root present?
-	if (pRootItem == NULL)
+	if (pRootItem == nullptr)
 		return;
 
 	// So there's no device huh?
-	if (pDevice == NULL) {
+	if (pDevice == nullptr) {
 		m_ui.DeviceListView->setCurrentItem(pRootItem);
 		return;
 	}
@@ -233,18 +233,18 @@ void DeviceForm::setDevice ( Device *pDevice )
 void DeviceForm::createDevice (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	QTreeWidgetItem *pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	// About a brand new device instance...
 	Device device(((DeviceItem *) pItem)->device());
 	if (device.createDevice()) {
 		// Now it depends on the device type...
-		DeviceItem *pRootItem = NULL;
+		DeviceItem *pRootItem = nullptr;
 		switch (device.deviceType()) {
 		case Device::Audio:
 			pRootItem = m_pAudioItems;
@@ -271,11 +271,11 @@ void DeviceForm::createDevice (void)
 void DeviceForm::deleteDevice (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	Device& device = ((DeviceItem *) pItem)->device();
@@ -325,7 +325,7 @@ void DeviceForm::deleteDevice (void)
 void DeviceForm::refreshDevices (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	// Avoid nested changes.
@@ -334,8 +334,8 @@ void DeviceForm::refreshDevices (void)
 	//
 	// (Re)Load complete device configuration data ...
 	//
-	m_pAudioItems = NULL;
-	m_pMidiItems = NULL;
+	m_pAudioItems = nullptr;
+	m_pMidiItems = nullptr;
 	m_ui.DeviceListView->clear();
 	if (pMainForm->client()) {
 		int *piDeviceIDs;
@@ -390,7 +390,7 @@ void DeviceForm::selectDriver ( const QString& sDriverName )
 	//
 
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	Device& device = ((DeviceItem *) pItem)->device();
@@ -411,7 +411,7 @@ void DeviceForm::selectDriver ( const QString& sDriverName )
 void DeviceForm::selectDevice ()
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	if (m_iDirtySetup > 0)
@@ -422,7 +422,7 @@ void DeviceForm::selectDevice ()
 	//
 
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM) {
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM) {
 		m_deviceType = Device::None;
 		m_ui.DeviceNameTextLabel->setText(QString());
 		m_deviceParamModel.clear();
@@ -520,11 +520,11 @@ void DeviceForm::selectDevicePort ( int iPort )
 	//
 
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	Device& device = ((DeviceItem *) pItem)->device();
-	DevicePort *pPort = NULL;
+	DevicePort *pPort = nullptr;
 	if (iPort >= 0 && iPort < device.ports().count())
 		pPort = device.ports().at(iPort);
 	if (pPort) {
@@ -551,7 +551,7 @@ void DeviceForm::changeDeviceParam ( int iRow, int iCol )
 
 /* we do that in the model class now ...
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	Device& device = ((DeviceItem *) pItem)->device();
@@ -590,16 +590,16 @@ void DeviceForm::changeDevicePortParam ( int iRow, int iCol )
 
 /* we do that in the model class now ...
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	if (pItem == NULL || pItem->type() != QSAMPLER_DEVICE_ITEM)
+	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)
 		return;
 
 	Device& device = ((DeviceItem *) pItem)->device();
 
 	int iPort = m_ui.DevicePortComboBox->currentIndex();
-	DevicePort *pPort = NULL;
+	DevicePort *pPort = nullptr;
 	if (iPort >= 0 && iPort < device.ports().count())
 		pPort = device.ports().at(iPort);
-	if (pPort == NULL)
+	if (pPort == nullptr)
 		return;
 
 	// Table 1st column has the parameter name;
@@ -626,19 +626,19 @@ void DeviceForm::changeDevicePortParam ( int iRow, int iCol )
 void DeviceForm::deviceListViewContextMenu ( const QPoint& pos )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
 
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->itemAt(pos);
-	if (pItem == NULL)
+	if (pItem == nullptr)
 		return;
 
 	// Build the device context menu...
 	QMenu menu(this);
 	QAction *pAction;
 
-	bool bClient = (pMainForm->client() != NULL);
-	bool bEnabled = (pItem != NULL);
+	bool bClient = (pMainForm->client() != nullptr);
+	bool bEnabled = (pItem != nullptr);
 	pAction = menu.addAction(
 		QIcon(":/images/deviceCreate.png"),
 		tr("&Create device"), this, SLOT(createDevice()));
@@ -662,8 +662,8 @@ void DeviceForm::stabilizeForm (void)
 {
 	MainForm* pMainForm = MainForm::getInstance();
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
-	bool bClient = (pMainForm && pMainForm->client() != NULL);
-	bool bEnabled = (pItem != NULL);
+	bool bClient = (pMainForm && pMainForm->client() != nullptr);
+	bool bEnabled = (pItem != nullptr);
 	m_ui.DeviceNameTextLabel->setEnabled(bEnabled && !m_bNewDevice);
 	m_ui.DriverNameTextLabel->setEnabled(bEnabled &&  m_bNewDevice);
 	m_ui.DriverNameComboBox->setEnabled(bEnabled && m_bNewDevice);

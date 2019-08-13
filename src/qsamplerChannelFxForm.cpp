@@ -1,7 +1,7 @@
 // qsamplerChannelFxForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -113,7 +113,7 @@ ChannelFxForm::ChannelFxForm (
 
 	m_pSamplerChannel = pSamplerChannel;
 
-	m_pAudioDevice = NULL;
+	m_pAudioDevice = nullptr;
 
 	FxSendsModel* pModel =
 		new FxSendsModel(m_pSamplerChannel->channelID(), m_ui.SendsListView);
@@ -246,11 +246,11 @@ void ChannelFxForm::onFxSendSelection(const QModelIndex& index) {
 	// clear routing model
 	ChannelRoutingModel* pRoutingModel =
 		(ChannelRoutingModel*) m_ui.audioRoutingTable->model();
-	pRoutingModel->refresh(NULL, ChannelRoutingMap());
+	pRoutingModel->refresh(nullptr, ChannelRoutingMap());
 	pRoutingModel->routingMap().clear(); // Reset routing change map.
 	if (m_pAudioDevice) {
 		delete m_pAudioDevice;
-		m_pAudioDevice = NULL;
+		m_pAudioDevice = nullptr;
 	}
 
 	if (!pFxSend) return;

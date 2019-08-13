@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ class InstrumentListForm : public QMainWindow
 
 public:
 
-	InstrumentListForm(QWidget *pParent = NULL, Qt::WindowFlags wflags = 0);
+	InstrumentListForm(QWidget *pParent = nullptr, Qt::WindowFlags wflags = 0);
 	~InstrumentListForm();
 
 public slots:
