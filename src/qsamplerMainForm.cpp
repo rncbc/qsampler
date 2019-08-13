@@ -202,7 +202,7 @@ protected:
 // QSampler::MainForm -- Main window form implementation.
 
 // Kind of singleton reference.
-MainForm *MainForm::g_pMainForm = NULL;
+MainForm *MainForm::g_pMainForm = nullptr;
 
 MainForm::MainForm ( QWidget *pParent )
 	: QMainWindow(pParent)
@@ -213,20 +213,20 @@ MainForm::MainForm ( QWidget *pParent )
 	g_pMainForm = this;
 
 	// Initialize some pointer references.
-	m_pOptions = NULL;
+	m_pOptions = nullptr;
 
 	// All child forms are to be created later, not earlier than setup.
-	m_pMessages = NULL;
-	m_pInstrumentListForm = NULL;
-	m_pDeviceForm = NULL;
+	m_pMessages = nullptr;
+	m_pInstrumentListForm = nullptr;
+	m_pDeviceForm = nullptr;
 
 	// We'll start clean.
 	m_iUntitled   = 0;
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
 
-	m_pServer = NULL;
-	m_pClient = NULL;
+	m_pServer = nullptr;
+	m_pClient = nullptr;
 
 	m_iStartDelay = 0;
 	m_iTimerDelay = 0;
@@ -255,7 +255,7 @@ MainForm::MainForm ( QWidget *pParent )
 	sigemptyset(&sigusr1.sa_mask);
 	sigusr1.sa_flags = 0;
 	sigusr1.sa_flags |= SA_RESTART;
-	::sigaction(SIGUSR1, &sigusr1, NULL);
+	::sigaction(SIGUSR1, &sigusr1, nullptr);
 
 	// Initialize file descriptors for SIGTERM socket notifier.
 	::socketpair(AF_UNIX, SOCK_STREAM, 0, g_fdSigterm);
@@ -272,8 +272,8 @@ MainForm::MainForm ( QWidget *pParent )
 	sigemptyset(&sigterm.sa_mask);
 	sigterm.sa_flags = 0;
 	sigterm.sa_flags |= SA_RESTART;
-	::sigaction(SIGTERM, &sigterm, NULL);
-	::sigaction(SIGQUIT, &sigterm, NULL);
+	::sigaction(SIGTERM, &sigterm, nullptr);
+	::sigaction(SIGQUIT, &sigterm, nullptr);
 
 	// Ignore SIGHUP/SIGINT signals.
 	::signal(SIGHUP, SIG_IGN);
@@ -281,8 +281,8 @@ MainForm::MainForm ( QWidget *pParent )
 
 #else	// HAVE_SIGNAL_H
 
-	m_pSigusr1Notifier = NULL;
-	m_pSigtermNotifier = NULL;
+	m_pSigusr1Notifier = nullptr;
+	m_pSigtermNotifier = nullptr;
 	
 #endif	// !HAVE_SIGNAL_H
 
@@ -493,7 +493,7 @@ MainForm::~MainForm()
 #endif
 
 	// Pseudo-singleton reference shut-down.
-	g_pMainForm = NULL;
+	g_pMainForm = nullptr;
 }
 
 
@@ -630,7 +630,7 @@ void MainForm::closeEvent ( QCloseEvent *pCloseEvent )
 void MainForm::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
 	// Accept external drags only...
-	if (pDragEnterEvent->source() == NULL
+	if (pDragEnterEvent->source() == nullptr
 		&& pDragEnterEvent->mimeData()->hasUrls()) {
 		pDragEnterEvent->accept();
 	} else {
@@ -654,7 +654,7 @@ void MainForm::dropEvent ( QDropEvent *pDropEvent )
 			if (QFileInfo(sPath).exists()) {
 				// Try to create a new channel from instrument file...
 				Channel *pChannel = new Channel();
-				if (pChannel == NULL)
+				if (pChannel == nullptr)
 					return;
 				// Start setting the instrument filename...
 				pChannel->setInstrument(sPath, 0);
@@ -864,7 +864,7 @@ bool MainForm::newSession (void)
 // Open an existing sampler session.
 bool MainForm::openSession (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return false;
 
 	// Ask for the filename to open...
@@ -890,7 +890,7 @@ bool MainForm::openSession (void)
 // Save current sampler session with another name.
 bool MainForm::saveSession ( bool bPrompt )
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return false;
 
 	QString sFilename = m_sFilename;
@@ -968,7 +968,7 @@ bool MainForm::closeSession ( bool bForce )
 			= m_pWorkspace->subWindowList();
 		const int iStripCount = wlist.count();
 		for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-			ChannelStrip *pChannelStrip = NULL;
+			ChannelStrip *pChannelStrip = nullptr;
 			QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 			if (pMdiSubWindow)
 				pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -993,7 +993,7 @@ bool MainForm::closeSession ( bool bForce )
 // Load a session from specific file path.
 bool MainForm::loadSessionFile ( const QString& sFilename )
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return false;
 
 	// Open and read from real file.
@@ -1069,7 +1069,7 @@ bool MainForm::loadSessionFile ( const QString& sFilename )
 // Save current session to specific file path.
 bool MainForm::saveSessionFile ( const QString& sFilename )
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return false;
 
 	// Check whether server is apparently OK...
@@ -1259,7 +1259,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		}
 		ts << endl;
 		// Check for errors...
-		if (pInstrs == NULL && ::lscp_client_get_errno(m_pClient)) {
+		if (pInstrs == nullptr && ::lscp_client_get_errno(m_pClient)) {
 			appendMessagesClient("lscp_list_midi_instruments");
 			iErrors++;
 		}
@@ -1267,7 +1267,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		midiInstrumentMap.insert(iMidiMap, iMap);
 	}
 	// Check for errors...
-	if (piMaps == NULL && ::lscp_client_get_errno(m_pClient)) {
+	if (piMaps == nullptr && ::lscp_client_get_errno(m_pClient)) {
 		appendMessagesClient("lscp_list_midi_instrument_maps");
 		iErrors++;
 	}
@@ -1279,7 +1279,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		= m_pWorkspace->subWindowList();
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -1488,7 +1488,7 @@ void MainForm::fileSaveAs (void)
 // Reset the sampler instance.
 void MainForm::fileReset (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	// Ask user whether he/she want's an internal sampler reset...
@@ -1544,7 +1544,7 @@ void MainForm::fileReset (void)
 // Restart the client/server instance.
 void MainForm::fileRestart (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	bool bRestart = true;
@@ -1612,12 +1612,12 @@ void MainForm::editAddChannel (void)
 
 void MainForm::addChannelStrip (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	// Just create the channel instance...
 	Channel *pChannel = new Channel();
-	if (pChannel == NULL)
+	if (pChannel == nullptr)
 		return;
 
 	// Before we show it up, may be we'll
@@ -1653,15 +1653,15 @@ void MainForm::editRemoveChannel (void)
 
 void MainForm::removeChannelStrip (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	ChannelStrip *pChannelStrip = activeChannelStrip();
-	if (pChannelStrip == NULL)
+	if (pChannelStrip == nullptr)
 		return;
 
 	Channel *pChannel = pChannelStrip->channel();
-	if (pChannel == NULL)
+	if (pChannel == nullptr)
 		return;
 
 	// Prompt user if he/she's sure about this...
@@ -1709,11 +1709,11 @@ void MainForm::removeChannelStrip (void)
 // Setup current sampler channel.
 void MainForm::editSetupChannel (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	ChannelStrip *pChannelStrip = activeChannelStrip();
-	if (pChannelStrip == NULL)
+	if (pChannelStrip == nullptr)
 		return;
 
 	// Just invoque the channel strip procedure.
@@ -1724,11 +1724,11 @@ void MainForm::editSetupChannel (void)
 // Edit current sampler channel.
 void MainForm::editEditChannel (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	ChannelStrip *pChannelStrip = activeChannelStrip();
-	if (pChannelStrip == NULL)
+	if (pChannelStrip == nullptr)
 		return;
 
 	// Just invoque the channel strip procedure.
@@ -1739,11 +1739,11 @@ void MainForm::editEditChannel (void)
 // Reset current sampler channel.
 void MainForm::editResetChannel (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	ChannelStrip *pChannelStrip = activeChannelStrip();
-	if (pChannelStrip == NULL)
+	if (pChannelStrip == nullptr)
 		return;
 
 	// Just invoque the channel strip procedure.
@@ -1754,7 +1754,7 @@ void MainForm::editResetChannel (void)
 // Reset all sampler channels.
 void MainForm::editResetAllChannels (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	// Invoque the channel strip procedure,
@@ -1764,7 +1764,7 @@ void MainForm::editResetAllChannels (void)
 		= m_pWorkspace->subWindowList();
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -1826,7 +1826,7 @@ void MainForm::viewMessages ( bool bOn )
 // Show/hide the MIDI instrument list-view form.
 void MainForm::viewInstruments (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	if (m_pInstrumentListForm) {
@@ -1845,7 +1845,7 @@ void MainForm::viewInstruments (void)
 // Show/hide the device configurator form.
 void MainForm::viewDevices (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	if (m_pDeviceForm) {
@@ -1864,7 +1864,7 @@ void MainForm::viewDevices (void)
 // Show options dialog.
 void MainForm::viewOptions (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	OptionsForm* pOptionsForm = new OptionsForm(this);
@@ -1992,7 +1992,7 @@ void MainForm::channelsArrange (void)
 // Auto-arrange channel strips.
 void MainForm::channelsAutoArrange ( bool bOn )
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	// Toggle the auto-arrange flag.
@@ -2114,15 +2114,15 @@ void MainForm::stabilizeForm (void)
 	// Update the main menu state...
 	ChannelStrip *pChannelStrip = activeChannelStrip();
 	const QList<QMdiSubWindow *>& wlist = m_pWorkspace->subWindowList();
-	const bool bHasClient = (m_pOptions != NULL && m_pClient != NULL);
-	const bool bHasChannel = (bHasClient && pChannelStrip != NULL);
+	const bool bHasClient = (m_pOptions != nullptr && m_pClient != nullptr);
+	const bool bHasChannel = (bHasClient && pChannelStrip != nullptr);
 	const bool bHasChannels = (bHasClient && wlist.count() > 0);
 	m_ui.fileNewAction->setEnabled(bHasClient);
 	m_ui.fileOpenAction->setEnabled(bHasClient);
 	m_ui.fileSaveAction->setEnabled(bHasClient && m_iDirtyCount > 0);
 	m_ui.fileSaveAsAction->setEnabled(bHasClient);
 	m_ui.fileResetAction->setEnabled(bHasClient);
-	m_ui.fileRestartAction->setEnabled(bHasClient || m_pServer == NULL);
+	m_ui.fileRestartAction->setEnabled(bHasClient || m_pServer == nullptr);
 	m_ui.editAddChannelAction->setEnabled(bHasClient);
 	m_ui.editRemoveChannelAction->setEnabled(bHasChannel);
 	m_ui.editSetupChannelAction->setEnabled(bHasChannel);
@@ -2271,7 +2271,7 @@ void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 
 	// Retrieve the current channel list.
 	int *piChannelIDs = ::lscp_list_channels(m_pClient);
-	if (piChannelIDs == NULL) {
+	if (piChannelIDs == nullptr) {
 		if (::lscp_client_get_errno(m_pClient)) {
 			appendMessagesClient("lscp_list_channels");
 			appendMessagesError(
@@ -2293,7 +2293,7 @@ void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 				= m_pWorkspace->subWindowList();
 			const int iStripCount = wlist.count();
 			for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-				ChannelStrip *pChannelStrip = NULL;
+				ChannelStrip *pChannelStrip = nullptr;
 				QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 				if (pMdiSubWindow)
 					pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2301,7 +2301,7 @@ void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 					bool bExists = false;
 					for (int iChannel = 0; piChannelIDs[iChannel] >= 0; ++iChannel) {
 						Channel *pChannel = pChannelStrip->channel();
-						if (pChannel == NULL)
+						if (pChannel == nullptr)
 							break;
 						if (piChannelIDs[iChannel] == pChannel->channelID()) {
 							// strip exists, don't touch it
@@ -2324,7 +2324,7 @@ void MainForm::updateAllChannelStrips ( bool bRemoveDeadStrips )
 // Update the recent files list and menu.
 void MainForm::updateRecentFiles ( const QString& sFilename )
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	// Remove from list if already there (avoid duplicates)
@@ -2339,7 +2339,7 @@ void MainForm::updateRecentFiles ( const QString& sFilename )
 // Update the recent files list and menu.
 void MainForm::updateRecentFilesMenu (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	// Time to keep the list under limits.
@@ -2375,7 +2375,7 @@ void MainForm::updateInstrumentNames (void)
 	m_pWorkspace->setUpdatesEnabled(false);
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2389,7 +2389,7 @@ void MainForm::updateInstrumentNames (void)
 // Force update of the channels display font.
 void MainForm::updateDisplayFont (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	// Check if display font is legal.
@@ -2410,7 +2410,7 @@ void MainForm::updateDisplayFont (void)
 	m_pWorkspace->setUpdatesEnabled(false);
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2433,7 +2433,7 @@ void MainForm::updateDisplayEffect (void)
 	m_pWorkspace->setUpdatesEnabled(false);
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2447,7 +2447,7 @@ void MainForm::updateDisplayEffect (void)
 // Force update of the channels maximum volume setting.
 void MainForm::updateMaxVolume (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 #ifdef CONFIG_VOLUME
@@ -2466,7 +2466,7 @@ void MainForm::updateMaxVolume (void)
 	m_pWorkspace->setUpdatesEnabled(false);
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2537,7 +2537,7 @@ void MainForm::appendMessagesError( const QString& sText )
 // This is a special message format, just for client results.
 void MainForm::appendMessagesClient( const QString& s )
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	appendMessagesColor(s + QString(": %1 (errno=%2)")
@@ -2552,7 +2552,7 @@ void MainForm::appendMessagesClient( const QString& s )
 // Force update of the messages font.
 void MainForm::updateMessagesFont (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	if (m_pMessages && !m_pOptions->sMessagesFont.isEmpty()) {
@@ -2566,7 +2566,7 @@ void MainForm::updateMessagesFont (void)
 // Update messages window line limit.
 void MainForm::updateMessagesLimit (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	if (m_pMessages) {
@@ -2581,7 +2581,7 @@ void MainForm::updateMessagesLimit (void)
 // Enablement of the messages capture feature.
 void MainForm::updateMessagesCapture (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	if (m_pMessages)
@@ -2595,13 +2595,13 @@ void MainForm::updateMessagesCapture (void)
 // The channel strip creation executive.
 ChannelStrip *MainForm::createChannelStrip ( Channel *pChannel )
 {
-	if (m_pClient == NULL || pChannel == NULL)
-		return NULL;
+	if (m_pClient == nullptr || pChannel == nullptr)
+		return nullptr;
 
 	// Add a new channel itema...
 	ChannelStrip *pChannelStrip = new ChannelStrip();
-	if (pChannelStrip == NULL)
-		return NULL;
+	if (pChannelStrip == nullptr)
+		return nullptr;
 
 	// Set some initial channel strip options...
 	if (m_pOptions) {
@@ -2642,7 +2642,7 @@ void MainForm::destroyChannelStrip ( ChannelStrip *pChannelStrip )
 {
 	QMdiSubWindow *pMdiSubWindow
 		= static_cast<QMdiSubWindow *> (pChannelStrip->parentWidget());
-	if (pMdiSubWindow == NULL)
+	if (pMdiSubWindow == nullptr)
 		return;
 
 	// Just delete the channel strip.
@@ -2661,28 +2661,28 @@ ChannelStrip *MainForm::activeChannelStrip (void)
 	if (pMdiSubWindow)
 		return static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 	else
-		return NULL;
+		return nullptr;
 }
 
 
 // Retrieve a channel strip by index.
 ChannelStrip *MainForm::channelStripAt ( int iStrip )
 {
-	if (!m_pWorkspace) return NULL;
+	if (!m_pWorkspace) return nullptr;
 
 	const QList<QMdiSubWindow *>& wlist
 		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
-		return NULL;
+		return nullptr;
 
 	if (iStrip < 0 || iStrip >= wlist.count())
-		return NULL;
+		return nullptr;
 
 	QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 	if (pMdiSubWindow)
 		return static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 	else
-		return NULL;
+		return nullptr;
 }
 
 
@@ -2692,11 +2692,11 @@ ChannelStrip *MainForm::channelStrip ( int iChannelID )
 	const QList<QMdiSubWindow *>& wlist
 		= m_pWorkspace->subWindowList();
 	if (wlist.isEmpty())
-		return NULL;
+		return nullptr;
 
 	const int iStripCount = wlist.count();
 	for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-		ChannelStrip *pChannelStrip = NULL;
+		ChannelStrip *pChannelStrip = nullptr;
 		QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 		if (pMdiSubWindow)
 			pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2708,7 +2708,7 @@ ChannelStrip *MainForm::channelStrip ( int iChannelID )
 	}
 
 	// Not found.
-	return NULL;
+	return nullptr;
 }
 
 
@@ -2725,7 +2725,7 @@ void MainForm::channelsMenuAboutToShow (void)
 		m_ui.channelsMenu->addSeparator();
 		const int iStripCount = wlist.count();
 		for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-			ChannelStrip *pChannelStrip = NULL;
+			ChannelStrip *pChannelStrip = nullptr;
 			QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 			if (pMdiSubWindow)
 				pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2747,7 +2747,7 @@ void MainForm::channelsMenuActivated (void)
 {
 	// Retrive channel index from action data...
 	QAction *pAction = qobject_cast<QAction *> (sender());
-	if (pAction == NULL)
+	if (pAction == nullptr)
 		return;
 
 	ChannelStrip *pChannelStrip = channelStripAt(pAction->data().toInt());
@@ -2778,7 +2778,7 @@ void MainForm::stopSchedule (void)
 // Timer slot funtion.
 void MainForm::timerSlot (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	// Is it the first shot on server start after a few delay?
@@ -2815,7 +2815,7 @@ void MainForm::timerSlot (void)
 					= m_pWorkspace->subWindowList();
 				const int iStripCount = wlist.count();
 				for (int iStrip = 0; iStrip < iStripCount; ++iStrip) {
-					ChannelStrip *pChannelStrip = NULL;
+					ChannelStrip *pChannelStrip = nullptr;
 					QMdiSubWindow *pMdiSubWindow = wlist.at(iStrip);
 					if (pMdiSubWindow)
 						pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
@@ -2837,7 +2837,7 @@ void MainForm::timerSlot (void)
 // Start linuxsampler server...
 void MainForm::startServer (void)
 {
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return;
 
 	// Aren't already a client, are we?
@@ -2992,7 +2992,7 @@ void MainForm::processServerExit (void)
 			tr("Server was stopped with exit status %1.")
 			.arg(m_pServer->exitStatus()));
 		delete m_pServer;
-		m_pServer = NULL;
+		m_pServer = nullptr;
 	}
 
 	// Again, make status visible stable.
@@ -3008,7 +3008,7 @@ lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/,
 	lscp_event_t event, const char *pchData, int cchData, void *pvData )
 {
 	MainForm* pMainForm = (MainForm *) pvData;
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return LSCP_FAILED;
 
 	// ATTN: DO NOT EVER call any GUI code here,
@@ -3025,7 +3025,7 @@ lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/,
 bool MainForm::startClient (void)
 {
 	// Have it a setup?
-	if (m_pOptions == NULL)
+	if (m_pOptions == nullptr)
 		return false;
 
 	// Aren't we already started, are we?
@@ -3039,7 +3039,7 @@ bool MainForm::startClient (void)
 	m_pClient = ::lscp_client_create(
 		m_pOptions->sServerHost.toUtf8().constData(),
 		m_pOptions->iServerPort, qsampler_client_callback, this);
-	if (m_pClient == NULL) {
+	if (m_pClient == nullptr) {
 		// Is this the first try?
 		// maybe we need to start a local server...
 		if ((m_pServer && m_pServer->state() == QProcess::Running)
@@ -3125,7 +3125,7 @@ bool MainForm::startClient (void)
 // Stop client...
 void MainForm::stopClient (void)
 {
-	if (m_pClient == NULL)
+	if (m_pClient == nullptr)
 		return;
 
 	// Log prepare here.
@@ -3157,7 +3157,7 @@ void MainForm::stopClient (void)
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_INFO);
 	::lscp_client_unsubscribe(m_pClient, LSCP_EVENT_CHANNEL_COUNT);
 	::lscp_client_destroy(m_pClient);
-	m_pClient = NULL;
+	m_pClient = nullptr;
 
 	// Hard-notify instrumnet and device configuration forms,
 	// if visible, that we're running out...
@@ -3177,7 +3177,7 @@ void MainForm::stopClient (void)
 // Channel strip activation/selection.
 void MainForm::activateStrip ( QMdiSubWindow *pMdiSubWindow )
 {
-	ChannelStrip *pChannelStrip = NULL;
+	ChannelStrip *pChannelStrip = nullptr;
 	if (pMdiSubWindow)
 		pChannelStrip = static_cast<ChannelStrip *> (pMdiSubWindow->widget());
 	if (pChannelStrip)

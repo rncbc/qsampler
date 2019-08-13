@@ -40,7 +40,7 @@ class DeviceForm : public QDialog
 
 public:
 
-	DeviceForm(QWidget *pParent = NULL, Qt::WindowFlags wflags = 0);
+	DeviceForm(QWidget *pParent = nullptr, Qt::WindowFlags wflags = 0);
 	~DeviceForm();
 
 	void setDeviceTypeMode(Device::DeviceType deviceType);

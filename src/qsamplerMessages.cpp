@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -63,7 +63,7 @@ Messages::Messages ( QWidget *pParent )
 	QDockWidget::setObjectName("qsamplerMessages");
 
 	// Intialize stdout capture stuff.
-	m_pStdoutNotifier = NULL;
+	m_pStdoutNotifier = nullptr;
 	m_fdStdout[QSAMPLER_MESSAGES_FDREAD]  = QSAMPLER_MESSAGES_FDNIL;
 	m_fdStdout[QSAMPLER_MESSAGES_FDWRITE] = QSAMPLER_MESSAGES_FDNIL;
 
@@ -81,7 +81,7 @@ Messages::Messages ( QWidget *pParent )
 	m_iMessagesLines = 0;
 	setMessagesLimit(QSAMPLER_MESSAGES_MAXLINES);
 
-	m_pMessagesLog = NULL;
+	m_pMessagesLog = nullptr;
 
 	// Prepare the dockable window stuff.
 	QDockWidget::setWidget(m_pMessagesTextView);
@@ -182,7 +182,7 @@ void Messages::flushStdoutBuffer (void)
 // Stdout capture accessors.
 bool Messages::isCaptureEnabled (void)
 {
-	return (m_pStdoutNotifier != NULL);
+	return (m_pStdoutNotifier != nullptr);
 }
 
 void Messages::setCaptureEnabled ( bool bCapture )
@@ -194,7 +194,7 @@ void Messages::setCaptureEnabled ( bool bCapture )
 	// Destroy if already enabled.
 	if (!bCapture && m_pStdoutNotifier) {
 		delete m_pStdoutNotifier;
-		m_pStdoutNotifier = NULL;
+		m_pStdoutNotifier = nullptr;
 		// Close the notification pipes.
 		if (m_fdStdout[QSAMPLER_MESSAGES_FDREAD] != QSAMPLER_MESSAGES_FDNIL) {
 			::close(m_fdStdout[QSAMPLER_MESSAGES_FDREAD]);
@@ -202,7 +202,7 @@ void Messages::setCaptureEnabled ( bool bCapture )
 		}
 	}
 	// Are we going to make up the capture?
-	if (bCapture && m_pStdoutNotifier == NULL && ::pipe(m_fdStdout) == 0) {
+	if (bCapture && m_pStdoutNotifier == nullptr && ::pipe(m_fdStdout) == 0) {
 		::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDOUT_FILENO);
 		::dup2(m_fdStdout[QSAMPLER_MESSAGES_FDWRITE], STDERR_FILENO);
 		m_pStdoutNotifier = new QSocketNotifier(
@@ -242,7 +242,7 @@ void Messages::setMessagesLimit ( int iMessagesLimit )
 // Messages logging stuff.
 bool Messages::isLogging (void) const
 {
-	return (m_pMessagesLog != NULL);
+	return (m_pMessagesLog != nullptr);
 }
 
 void Messages::setLogging ( bool bEnabled, const QString& sFilename )
@@ -252,7 +252,7 @@ void Messages::setLogging ( bool bEnabled, const QString& sFilename )
 			.arg(QDateTime::currentDateTime().toString()));
 		m_pMessagesLog->close();
 		delete m_pMessagesLog;
-		m_pMessagesLog = NULL;
+		m_pMessagesLog = nullptr;
 	}
 
 	if (bEnabled) {
@@ -262,7 +262,7 @@ void Messages::setLogging ( bool bEnabled, const QString& sFilename )
 				.arg(QDateTime::currentDateTime().toString()));
 		} else {
 			delete m_pMessagesLog;
-			m_pMessagesLog = NULL;
+			m_pMessagesLog = nullptr;
 		}
 	}
 }

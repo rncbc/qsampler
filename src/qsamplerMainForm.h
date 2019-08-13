@@ -54,7 +54,7 @@ class MainForm : public QMainWindow
 
 public:
 
-	MainForm(QWidget *pParent = NULL);
+	MainForm(QWidget *pParent = nullptr);
 	~MainForm();
 
 	void setup(Options *pOptions);

@@ -1,7 +1,7 @@
 // qsamplerUtilities.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2017, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -219,9 +219,9 @@ lscpVersion_t getRemoteLscpVersion (void)
     lscpVersion_t result = { 0, 0 };
 
     MainForm* pMainForm = MainForm::getInstance();
-    if (pMainForm == NULL)
+    if (pMainForm == nullptr)
         return result;
-    if (pMainForm->client() == NULL)
+    if (pMainForm->client() == nullptr)
         return result;
 
     lscp_server_info_t* pServerInfo =

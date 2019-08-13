@@ -1,7 +1,7 @@
 // qsamplerChannelForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2018, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 	m_ui.setupUi(this);
 
 	// Initialize locals.
-	m_pChannel = NULL;
+	m_pChannel = nullptr;
 
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
@@ -56,7 +56,7 @@ ChannelForm::ChannelForm ( QWidget* pParent )
 //	m_midiDevices.setAutoDelete(true);
 //	m_audioDevices.setAutoDelete(true);
 
-	m_pDeviceForm = NULL;
+	m_pDeviceForm = nullptr;
 
 	const int iRowHeight = m_ui.AudioRoutingTable->fontMetrics().height() + 4;
 	m_ui.AudioRoutingTable->verticalHeader()->setDefaultSectionSize(iRowHeight);
@@ -142,7 +142,7 @@ ChannelForm::~ChannelForm()
 {
 	if (m_pDeviceForm)
 		delete m_pDeviceForm;
-	m_pDeviceForm = NULL;
+	m_pDeviceForm = nullptr;
 
 	qDeleteAll(m_midiDevices);
 	m_midiDevices.clear();
@@ -160,7 +160,7 @@ void ChannelForm::setup ( Channel *pChannel )
 	m_iDirtySetup = 0;
 	m_iDirtyCount = 0;
 
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	// It can be a brand new channel, remember?
@@ -169,13 +169,13 @@ void ChannelForm::setup ( Channel *pChannel )
 
 	// Check if we're up and connected.
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// Avoid nested changes.
@@ -348,17 +348,17 @@ void ChannelForm::setup ( Channel *pChannel )
 // Accept settings (OK button slot).
 void ChannelForm::accept (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// Flush any pending editing...
@@ -375,15 +375,15 @@ void ChannelForm::accept (void)
 			if (!m_pChannel->setAudioDriver(m_ui.AudioDriverComboBox->currentText()))
 				iErrors++;
 		} else {
-			Device *pDevice = NULL;
+			Device *pDevice = nullptr;
 			const int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
 			if (iAudioItem >= 0) {
 				const int iAudioDevice
 					= m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
-				pDevice = m_audioDevices.value(iAudioDevice, NULL);
+				pDevice = m_audioDevices.value(iAudioDevice, nullptr);
 			}
 			ChannelRoutingMap routingMap = m_routingModel.routingMap();
-			if (pDevice == NULL)
+			if (pDevice == nullptr)
 				iErrors++;
 			else if (!m_pChannel->setAudioDevice(pDevice->deviceID()))
 				iErrors++;
@@ -402,14 +402,14 @@ void ChannelForm::accept (void)
 			if (!m_pChannel->setMidiDriver(m_ui.MidiDriverComboBox->currentText()))
 				iErrors++;
 		} else {
-			Device *pDevice = NULL;
+			Device *pDevice = nullptr;
 			const int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
 			if (iMidiItem >= 0) {
 				const int iMidiDevice
 					= m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
-				pDevice = m_midiDevices.value(iMidiDevice, NULL);
+				pDevice = m_midiDevices.value(iMidiDevice, nullptr);
 			}
-			if (pDevice == NULL)
+			if (pDevice == nullptr)
 				iErrors++;
 			else if (!m_pChannel->setMidiDevice(pDevice->deviceID()))
 				iErrors++;
@@ -487,13 +487,13 @@ void ChannelForm::reject (void)
 void ChannelForm::openInstrumentFile (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// FIXME: the instrument file filters should be restricted,
@@ -527,13 +527,13 @@ void ChannelForm::openInstrumentFile (void)
 void ChannelForm::updateInstrumentName (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	Options *pOptions = pMainForm->options();
-	if (pOptions == NULL)
+	if (pOptions == nullptr)
 		return;
 
 	// Finally this better idea would be to use libgig
@@ -555,13 +555,13 @@ void ChannelForm::setupDevice ( Device *pDevice,
 	const QString& sDriverName )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	// Create the device form if not already...
-	if (m_pDeviceForm == NULL) {
+	if (m_pDeviceForm == nullptr) {
 		m_pDeviceForm = new DeviceForm(this, Qt::Dialog);
 		m_pDeviceForm->setAttribute(Qt::WA_ShowModal);
 		QObject::connect(m_pDeviceForm, SIGNAL(devicesChanged()),
@@ -583,9 +583,9 @@ void ChannelForm::setupDevice ( Device *pDevice,
 void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	const QString sDriverName = sMidiDriver.toUpper();
@@ -602,7 +602,7 @@ void ChannelForm::selectMidiDriverItem ( const QString& sMidiDriver )
 	m_midiDevices.clear();
 
 	// Populate with the current ones...
-	Device *pDevice = NULL;
+	Device *pDevice = nullptr;
 	const QPixmap midiPixmap(":/images/midi2.png");
 	int *piDeviceIDs = Device::getDevices(pMainForm->client(), Device::Midi);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; ++i) {
@@ -650,11 +650,11 @@ void ChannelForm::selectMidiDriver ( const QString& sMidiDriver )
 // Select MIDI device item.
 void ChannelForm::selectMidiDeviceItem ( int iMidiItem )
 {
-	Device *pDevice = NULL;
+	Device *pDevice = nullptr;
 	if (iMidiItem >= 0) {
 		const int iMidiDevice
 			= m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
-		pDevice = m_midiDevices.value(iMidiDevice, NULL);
+		pDevice = m_midiDevices.value(iMidiDevice, nullptr);
 	}
 	if (pDevice) {
 		const DeviceParamMap& params = pDevice->params();
@@ -681,12 +681,12 @@ void ChannelForm::selectMidiDevice ( int iMidiItem )
 // MIDI device options.
 void ChannelForm::setupMidiDevice (void)
 {
-	Device *pDevice = NULL;
+	Device *pDevice = nullptr;
 	const int iMidiItem = m_ui.MidiDeviceComboBox->currentIndex();
 	if (iMidiItem >= 0) {
 		const int iMidiDevice
 			= m_ui.MidiDeviceComboBox->itemData(iMidiItem).toInt();
-		pDevice = m_midiDevices.value(iMidiDevice, NULL);
+		pDevice = m_midiDevices.value(iMidiDevice, nullptr);
 	}
 	setupDevice(pDevice,
 		Device::Midi, m_ui.MidiDriverComboBox->currentText());
@@ -697,9 +697,9 @@ void ChannelForm::setupMidiDevice (void)
 void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return;
 
 	const QString sDriverName = sAudioDriver.toUpper();
@@ -716,7 +716,7 @@ void ChannelForm::selectAudioDriverItem ( const QString& sAudioDriver )
 	m_audioDevices.clear();
 
 	// Populate with the current ones...
-	Device *pDevice = NULL;
+	Device *pDevice = nullptr;
 	const QPixmap audioPixmap(":/images/audio2.png");
 	int *piDeviceIDs = Device::getDevices(pMainForm->client(), Device::Audio);
 	for (int i = 0; piDeviceIDs && piDeviceIDs[i] >= 0; ++i) {
@@ -765,11 +765,11 @@ void ChannelForm::selectAudioDriver ( const QString& sAudioDriver )
 // Select Audio device item.
 void ChannelForm::selectAudioDeviceItem ( int iAudioItem )
 {
-	Device *pDevice = NULL;
+	Device *pDevice = nullptr;
 	if (iAudioItem >= 0) {
 		const int iAudioDevice
 			= m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
-		pDevice = m_audioDevices.value(iAudioDevice, NULL);
+		pDevice = m_audioDevices.value(iAudioDevice, nullptr);
 	}
 	if (pDevice) {
 		// Refresh the audio routing table.
@@ -794,12 +794,12 @@ void ChannelForm::selectAudioDevice ( int iAudioItem )
 // Audio device options.
 void ChannelForm::setupAudioDevice (void)
 {
-	Device *pDevice = NULL;
+	Device *pDevice = nullptr;
 	const int iAudioItem = m_ui.AudioDeviceComboBox->currentIndex();
 	if (iAudioItem >= 0) {
 		const int iAudioDevice
 			= m_ui.AudioDeviceComboBox->itemData(iAudioItem).toInt();
-		pDevice = m_audioDevices.value(iAudioDevice, NULL);
+		pDevice = m_audioDevices.value(iAudioDevice, nullptr);
 	}
 	setupDevice(pDevice,
 		Device::Audio, m_ui.AudioDriverComboBox->currentText());

@@ -1,6 +1,7 @@
 // qsamplerFxSend.cpp
 //
 /****************************************************************************
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -174,7 +175,7 @@ bool FxSend::applyToSampler() {
 			::lscp_create_fxsend(
 				pMainForm->client(),
 				m_iSamplerChannelID,
-				m_MidiCtrl, NULL
+				m_MidiCtrl, nullptr
 			);
 		if (result == -1) {
 			pMainForm->appendMessagesClient("lscp_create_fxsend");

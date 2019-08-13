@@ -1,7 +1,7 @@
 // qsamplerInstrument.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2007, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -163,9 +163,9 @@ bool Instrument::mapInstrument (void)
 #ifdef CONFIG_MIDI_INSTRUMENT
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	if (m_iMap < 0 || m_iBank < 0 || m_iProg < 0)
@@ -222,9 +222,9 @@ bool Instrument::unmapInstrument (void)
 		return false;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	lscp_midi_instrument_t instr;
@@ -256,9 +256,9 @@ bool Instrument::getInstrument (void)
 		return false;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	lscp_midi_instrument_t instr;
@@ -269,7 +269,7 @@ bool Instrument::getInstrument (void)
 
 	lscp_midi_instrument_info_t *pInstrInfo
 		= ::lscp_get_midi_instrument_info(pMainForm->client(), &instr);
-	if (pInstrInfo == NULL) {
+	if (pInstrInfo == nullptr) {
 		pMainForm->appendMessagesClient("lscp_get_midi_instrument_info");
 		return false;
 	}
@@ -319,14 +319,14 @@ QStringList Instrument::getMapNames (void)
 	QStringList maps;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return maps;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return maps;
 
 #ifdef CONFIG_MIDI_INSTRUMENT
 	int *piMaps = ::lscp_list_midi_instrument_maps(pMainForm->client());
-	if (piMaps == NULL) {
+	if (piMaps == nullptr) {
 		if (::lscp_client_get_errno(pMainForm->client()))
 			pMainForm->appendMessagesClient("lscp_list_midi_instruments");
 	} else {
@@ -347,15 +347,15 @@ QString Instrument::getMapName ( int iMidiMap )
 	QString sMapName;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return sMapName;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return sMapName;
 
 #ifdef CONFIG_MIDI_INSTRUMENT
 	const char *pszMapName
 		= ::lscp_get_midi_instrument_map_name(pMainForm->client(), iMidiMap);
-	if (pszMapName == NULL) {
+	if (pszMapName == nullptr) {
 		pszMapName = " -";
 		if (::lscp_client_get_errno(pMainForm->client()))
 			pMainForm->appendMessagesClient("lscp_get_midi_instrument_name");

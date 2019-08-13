@@ -63,11 +63,11 @@ namespace QSampler {
 
 // MIDI activity pixmap common resources.
 int      ChannelStrip::g_iMidiActivityRefCount = 0;
-QPixmap *ChannelStrip::g_pMidiActivityLedOn    = NULL;
-QPixmap *ChannelStrip::g_pMidiActivityLedOff   = NULL;
+QPixmap *ChannelStrip::g_pMidiActivityLedOn    = nullptr;
+QPixmap *ChannelStrip::g_pMidiActivityLedOff   = nullptr;
 
 // Channel strip activation/selection.
-ChannelStrip *ChannelStrip::g_pSelectedStrip = NULL;
+ChannelStrip *ChannelStrip::g_pSelectedStrip = nullptr;
 
 ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	: QWidget(pParent, wflags)
@@ -75,10 +75,10 @@ ChannelStrip::ChannelStrip ( QWidget* pParent, Qt::WindowFlags wflags )
 	m_ui.setupUi(this);
 
 	// Initialize locals.
-	m_pChannel     = NULL;
+	m_pChannel     = nullptr;
 	m_iDirtyChange = 0;
 	m_iErrorCount  = 0;
-	m_instrumentListPopupMenu = NULL;
+	m_instrumentListPopupMenu = nullptr;
 
 	if (++g_iMidiActivityRefCount == 1) {
 		g_pMidiActivityLedOn  = new QPixmap(":/images/ledon1.png");
@@ -135,15 +135,15 @@ ChannelStrip::~ChannelStrip (void)
 	// Destroy existing channel descriptor.
 	if (m_pChannel)
 		delete m_pChannel;
-	m_pChannel = NULL;
+	m_pChannel = nullptr;
 
 	if (--g_iMidiActivityRefCount == 0) {
 		if (g_pMidiActivityLedOn)
 			delete g_pMidiActivityLedOn;
-		g_pMidiActivityLedOn = NULL;
+		g_pMidiActivityLedOn = nullptr;
 		if (g_pMidiActivityLedOff)
 			delete g_pMidiActivityLedOff;
-		g_pMidiActivityLedOff = NULL;
+		g_pMidiActivityLedOff = nullptr;
 	}
 }
 
@@ -151,12 +151,12 @@ ChannelStrip::~ChannelStrip (void)
 // Window drag-n-drop event handlers.
 void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	bool bAccept = false;
 
-	if (pDragEnterEvent->source() == NULL) {
+	if (pDragEnterEvent->source() == nullptr) {
 		const QMimeData *pMimeData = pDragEnterEvent->mimeData();
 		if (pMimeData && pMimeData->hasUrls()) {
 			QListIterator<QUrl> iter(pMimeData->urls());
@@ -180,7 +180,7 @@ void ChannelStrip::dragEnterEvent ( QDragEnterEvent* pDragEnterEvent )
 
 void ChannelStrip::dropEvent ( QDropEvent* pDropEvent )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	if (pDropEvent->source())
@@ -282,7 +282,7 @@ void ChannelStrip::setMaxVolume ( int iMaxVolume )
 // Channel setup dialog slot.
 bool ChannelStrip::channelSetup (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Invoke the channel setup dialog.
@@ -298,7 +298,7 @@ bool ChannelStrip::channelSetup (void)
 // Channel mute slot.
 bool ChannelStrip::channelMute ( bool bMute )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Invoke the channel mute method.
@@ -314,7 +314,7 @@ bool ChannelStrip::channelMute ( bool bMute )
 // Channel solo slot.
 bool ChannelStrip::channelSolo ( bool bSolo )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Invoke the channel solo method.
@@ -330,7 +330,7 @@ bool ChannelStrip::channelSolo ( bool bSolo )
 // Channel edit slot.
 void ChannelStrip::channelEdit (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	m_pChannel->editChannel();
@@ -368,7 +368,7 @@ bool ChannelStrip::channelFxEdit (void)
 // Channel reset slot.
 bool ChannelStrip::channelReset (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Invoke the channel reset method.
@@ -384,7 +384,7 @@ bool ChannelStrip::channelReset (void)
 // Update the channel instrument name.
 bool ChannelStrip::updateInstrumentName ( bool bForce )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Do we refresh the actual name?
@@ -439,7 +439,7 @@ bool ChannelStrip::updateInstrumentName ( bool bForce )
 
 	if (!bShowInstrumentPopup && m_instrumentListPopupMenu) {
 		delete m_instrumentListPopupMenu;
-		m_instrumentListPopupMenu = NULL;
+		m_instrumentListPopupMenu = nullptr;
 	}
 
 	return true;
@@ -461,7 +461,7 @@ void ChannelStrip::instrumentListPopupItemClicked ( QAction *action )
 // Do the dirty volume change.
 bool ChannelStrip::updateChannelVolume (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Convert...
@@ -483,7 +483,7 @@ bool ChannelStrip::updateChannelVolume (void)
 // Update whole channel info state.
 bool ChannelStrip::updateChannelInfo (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	// Check for error limit/recycle...
@@ -497,7 +497,7 @@ bool ChannelStrip::updateChannelInfo (void)
 
 	// Check if we're up and connected.
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	// Read actual channel information.
@@ -575,11 +575,11 @@ bool ChannelStrip::updateChannelInfo (void)
 // Update whole channel usage state.
 bool ChannelStrip::updateChannelUsage (void)
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return false;
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	// This only makes sense on fully loaded channels...
@@ -611,7 +611,7 @@ bool ChannelStrip::updateChannelUsage (void)
 // Volume change slot.
 void ChannelStrip::volumeChanged ( int iVolume )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	// Avoid recursion.
@@ -634,7 +634,7 @@ void ChannelStrip::volumeChanged ( int iVolume )
 // Context menu event handler.
 void ChannelStrip::contextMenuEvent( QContextMenuEvent *pEvent )
 {
-	if (m_pChannel == NULL)
+	if (m_pChannel == nullptr)
 		return;
 
 	// We'll just show up the main form's edit menu (thru qsamplerChannel).
@@ -673,7 +673,7 @@ void ChannelStrip::setSelected ( bool bSelected )
 		g_pSelectedStrip = this;
 	} else {
 		if (g_pSelectedStrip == this)
-			g_pSelectedStrip = NULL;
+			g_pSelectedStrip = nullptr;
 	}
 
 	QPalette pal;

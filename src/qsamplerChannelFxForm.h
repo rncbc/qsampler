@@ -1,7 +1,7 @@
 // qsamplerChannelFxForm.h
 //
 /****************************************************************************
-   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ namespace QSampler {
 class ChannelFxForm : public QDialog {
 	Q_OBJECT
 public:
-	ChannelFxForm(Channel* pSamplerChannel, QWidget* pParent = NULL, Qt::WindowFlags wflags = 0);
+	ChannelFxForm(Channel* pSamplerChannel, QWidget* pParent = nullptr, Qt::WindowFlags wflags = 0);
 	~ChannelFxForm();
 
 protected slots:

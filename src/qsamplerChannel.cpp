@@ -80,9 +80,9 @@ Channel::~Channel (void)
 bool Channel::addChannel (void)
 {
 	MainForm* pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	// Are we a new channel?
@@ -105,9 +105,9 @@ bool Channel::addChannel (void)
 bool Channel::removeChannel (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL)
+	if (pMainForm->client() == nullptr)
 		return false;
 
 	// Are we an existing channel?
@@ -155,9 +155,9 @@ const QString& Channel::engineName (void) const
 bool Channel::loadEngine ( const QString& sEngineName )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sEngineName == sEngineName)
 		return true;
@@ -203,9 +203,9 @@ int Channel::instrumentStatus (void) const
 bool Channel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (!QFileInfo(sInstrumentFile).exists())
 		return false;
@@ -256,9 +256,9 @@ const QString& Channel::midiDriver (void) const
 bool Channel::setMidiDriver ( const QString& sMidiDriver )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sMidiDriver == sMidiDriver)
 		return true;
@@ -285,9 +285,9 @@ int Channel::midiDevice (void) const
 bool Channel::setMidiDevice ( int iMidiDevice )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiDevice == iMidiDevice)
 		return true;
@@ -313,9 +313,9 @@ int Channel::midiPort (void) const
 bool Channel::setMidiPort ( int iMidiPort )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiPort == iMidiPort)
 		return true;
@@ -341,9 +341,9 @@ int Channel::midiChannel (void) const
 bool Channel::setMidiChannel ( int iMidiChannel )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiChannel == iMidiChannel)
 		return true;
@@ -369,9 +369,9 @@ int Channel::midiMap (void) const
 bool Channel::setMidiMap ( int iMidiMap )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iMidiMap == iMidiMap)
 		return true;
@@ -397,9 +397,9 @@ int Channel::audioDevice (void) const
 bool Channel::setAudioDevice ( int iAudioDevice )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_iAudioDevice == iAudioDevice)
 		return true;
@@ -425,9 +425,9 @@ const QString& Channel::audioDriver (void) const
 bool Channel::setAudioDriver ( const QString& sAudioDriver )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_sAudioDriver == sAudioDriver)
 		return true;
@@ -454,9 +454,9 @@ float Channel::volume (void) const
 bool Channel::setVolume ( float fVolume )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && m_fVolume == fVolume)
 		return true;
@@ -482,9 +482,9 @@ bool Channel::channelMute (void) const
 bool Channel::setChannelMute ( bool bMute )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && ((m_bMute && bMute) || (!m_bMute && !bMute)))
 		return true;
@@ -512,9 +512,9 @@ bool Channel::channelSolo (void) const
 bool Channel::setChannelSolo ( bool bSolo )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 && ((m_bSolo && bSolo) || (!m_bSolo && !bSolo)))
 		return true;
@@ -542,9 +542,9 @@ int Channel::audioChannel ( int iAudioOut ) const
 bool Channel::setAudioChannel ( int iAudioOut, int iAudioIn )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 	if (m_iInstrumentStatus == 100 &&
 			m_audioRouting[iAudioOut] == iAudioIn)
@@ -584,14 +584,14 @@ void Channel::updateInstrumentName (void)
 bool Channel::updateChannelInfo (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 
 	// Read channel information.
 	lscp_channel_info_t *pChannelInfo = ::lscp_get_channel_info(pMainForm->client(), m_iChannelID);
-	if (pChannelInfo == NULL) {
+	if (pChannelInfo == nullptr) {
 		appendMessagesClient("lscp_get_channel_info");
 		appendMessagesError(QObject::tr("Could not get channel information.\n\nSorry."));
 		return false;
@@ -643,7 +643,7 @@ bool Channel::updateChannelInfo (void)
 	const QString sNone = QObject::tr("(none)");
 	// Audio device driver type.
 	pDeviceInfo = ::lscp_get_audio_device_info(pMainForm->client(), m_iAudioDevice);
-	if (pDeviceInfo == NULL) {
+	if (pDeviceInfo == nullptr) {
 		appendMessagesClient("lscp_get_audio_device_info");
 		m_sAudioDriver = sNone;
 	} else {
@@ -651,7 +651,7 @@ bool Channel::updateChannelInfo (void)
 	}
 	// MIDI device driver type.
 	pDeviceInfo = ::lscp_get_midi_device_info(pMainForm->client(), m_iMidiDevice);
-	if (pDeviceInfo == NULL) {
+	if (pDeviceInfo == nullptr) {
 		appendMessagesClient("lscp_get_midi_device_info");
 		m_sMidiDriver = sNone;
 	} else {
@@ -678,9 +678,9 @@ bool Channel::updateChannelInfo (void)
 bool Channel::channelReset (void)
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 
 	if (::lscp_reset_channel(pMainForm->client(), m_iChannelID) != LSCP_OK) {
@@ -700,9 +700,9 @@ bool Channel::editChannel (void)
 #ifdef CONFIG_EDIT_INSTRUMENT
 
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
-	if (pMainForm->client() == NULL || m_iChannelID < 0)
+	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
 
 	if (::lscp_edit_channel_instrument(pMainForm->client(), m_iChannelID)
@@ -741,7 +741,7 @@ bool Channel::editChannel (void)
 bool Channel::channelSetup ( QWidget *pParent )
 {
 	MainForm *pMainForm = MainForm::getInstance();
-	if (pMainForm == NULL)
+	if (pMainForm == nullptr)
 		return false;
 
 	bool bResult = false;
@@ -987,7 +987,7 @@ QString Channel::loadingInstrument (void) {
 //                                 (used for QTableView)
 
 ChannelRoutingModel::ChannelRoutingModel ( QObject *pParent )
-	: QAbstractTableModel(pParent), m_pDevice(NULL)
+	: QAbstractTableModel(pParent), m_pDevice(nullptr)
 {
 }
 
@@ -1099,10 +1099,10 @@ QWidget* ChannelRoutingDelegate::createEditor ( QWidget *pParent,
 	const QStyleOptionViewItem & option, const QModelIndex& index ) const
 {
 	if (!index.isValid())
-		return NULL;
+		return nullptr;
 
 	if (index.column() != 0)
-		return NULL;
+		return nullptr;
 
 	ChannelRoutingItem item = index.model()->data(index, Qt::DisplayRole).value<ChannelRoutingItem>();
 

@@ -1,8 +1,8 @@
 // qsamplerDeviceStatusForm.cpp
 //
 /****************************************************************************
+   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
-   Copyright (C) 2010-2013, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -42,8 +42,8 @@ namespace QSampler {
 
 // MIDI activity pixmap common resources.
 int      MidiActivityLED::g_iMidiActivityRefCount = 0;
-QPixmap *MidiActivityLED::g_pMidiActivityLedOn    = NULL;
-QPixmap *MidiActivityLED::g_pMidiActivityLedOff   = NULL;
+QPixmap *MidiActivityLED::g_pMidiActivityLedOn    = nullptr;
+QPixmap *MidiActivityLED::g_pMidiActivityLedOff   = nullptr;
 
 
 MidiActivityLED::MidiActivityLED ( QString sText, QWidget *pParent )
@@ -71,10 +71,10 @@ MidiActivityLED::~MidiActivityLED (void)
 	if (--g_iMidiActivityRefCount == 0) {
 		if (g_pMidiActivityLedOn)
 			delete g_pMidiActivityLedOn;
-		g_pMidiActivityLedOn = NULL;
+		g_pMidiActivityLedOn = nullptr;
 		if (g_pMidiActivityLedOff)
 			delete g_pMidiActivityLedOff;
-		g_pMidiActivityLedOff = NULL;
+		g_pMidiActivityLedOff = nullptr;
 	}
 }
 
@@ -192,7 +192,7 @@ DeviceStatusForm *DeviceStatusForm::getInstance ( int iDeviceID )
 {
 	std::map<int, DeviceStatusForm *>::iterator iter
 		= g_instances.find(iDeviceID);
-	return ((iter != g_instances.end()) ? iter->second : NULL);
+	return ((iter != g_instances.end()) ? iter->second : nullptr);
 }
 
 
@@ -244,7 +244,7 @@ void DeviceStatusForm::onDevicesChanged (void)
 					wflags |= Qt::Tool;
 				// Create the form, giving it the device id.
 				DeviceStatusForm *pStatusForm
-					= new DeviceStatusForm(*it, NULL, wflags);
+					= new DeviceStatusForm(*it, nullptr, wflags);
 				g_instances[*it] = pStatusForm;
 			}
 		}

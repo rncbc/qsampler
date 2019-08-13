@@ -1,7 +1,7 @@
 // qsamplerOptionsForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	m_ui.setupUi(this);
 
 	// No settings descriptor initially (the caller will set it).
-	m_pOptions = NULL;
+	m_pOptions = nullptr;
 
 	// Initialize dirty control state.
 	m_iDirtySetup = 0;

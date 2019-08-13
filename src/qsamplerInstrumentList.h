@@ -1,7 +1,7 @@
 // qsamplerInstrumentList.h
 //
 /****************************************************************************
-   Copyright (C) 2003-2015, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ class InstrumentListModel : public QAbstractItemModel
 public:
 
 	// Constructor.
-	InstrumentListModel(QObject *pParent = NULL);
+	InstrumentListModel(QObject *pParent = nullptr);
 
 	// Destructor.
 	~InstrumentListModel();
@@ -101,7 +101,7 @@ class InstrumentListView : public QTreeView
 public:
 
 	// Constructor.
-	InstrumentListView(QWidget *pParent = NULL);
+	InstrumentListView(QWidget *pParent = nullptr);
 
 	// Destructor.
 	~InstrumentListView();
