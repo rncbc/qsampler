@@ -286,15 +286,15 @@ bool Options::parse_args ( const QStringList& args )
 {
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
-	int iCmdArgs = 0;
 	const int argc = args.count();
+	int iCmdArgs = 0;
 
-	for (int i = 1; i < argc; i++) {
+	for (int i = 1; i < argc; ++i) {
 
 		if (iCmdArgs > 0) {
 			sSessionFile += " ";
 			sSessionFile += args.at(i);
-			iCmdArgs++;
+			++iCmdArgs;
 			continue;
 		}
 
@@ -321,7 +321,7 @@ bool Options::parse_args ( const QStringList& args )
 			}
 			sServerHost = sVal;
 			if (iEqual < 0)
-				i++;
+				++i;
 		}
 		else if (sArg == "-p" || sArg == "--port") {
 			if (sVal.isNull()) {
@@ -330,7 +330,7 @@ bool Options::parse_args ( const QStringList& args )
 			}
 			iServerPort = sVal.toInt();
 			if (iEqual < 0)
-				i++;
+				++i;
 		}
 		else if (sArg == "-?" || sArg == "--help") {
 			print_usage(args.at(0));
@@ -356,7 +356,7 @@ bool Options::parse_args ( const QStringList& args )
 			// If we don't have one by now,
 			// this will be the startup sesion file...
 			sSessionFile += sArg;
-			iCmdArgs++;
+			++iCmdArgs;
 		}
 	}
 
