@@ -80,6 +80,11 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 	: QApplication(argc, argv),
 		m_pQtTranslator(nullptr), m_pMyTranslator(nullptr), m_pWidget(nullptr)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
+	QApplication::setApplicationName(QSAMPLER_TITLE);
+	QApplication::setApplicationDisplayName(
+		QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE));
+#endif
 	// Load translation support.
 	QLocale loc;
 	if (loc.language() != QLocale::C) {
@@ -458,10 +463,11 @@ int main ( int argc, char **argv )
 	::signal(SIGBUS,  stacktrace);
 #endif
 #endif
-	qsamplerApplication app(argc, argv);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
-	app.setAttribute(Qt::AA_EnableHighDpiScaling);
+	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
+	qsamplerApplication app(argc, argv);
+
 	#if defined(__APPLE__)  //  Toshi Nagata 20080105
 	{
 		//  Set the plugin path to @exetutable_path/../plugins
