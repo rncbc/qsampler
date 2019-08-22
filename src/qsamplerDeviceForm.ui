@@ -34,7 +34,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle" >
-   <string>Qsampler: Devices</string>
+   <string>Devices</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="qsampler.qrc" >:/images/qsamplerDevice.png</iconset>

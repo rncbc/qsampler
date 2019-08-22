@@ -281,7 +281,7 @@ void InstrumentListForm::deleteInstrument (void)
 	// Prompt user if this is for real...
 	Options *pOptions = pMainForm->options();
 	if (pOptions && pOptions->bConfirmRemove) {
-		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sTitle = tr("Warning");
 		const QString& sText = tr(
 			"About to delete instrument map entry:\n\n"
 			"%1\n\n"
