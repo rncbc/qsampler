@@ -35,7 +35,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Qsampler: Channel</string>
+   <string>Channel</string>
   </property>
   <property name="windowIcon">
    <iconset resource="qsampler.qrc">:/images/qsamplerChannel.png</iconset>

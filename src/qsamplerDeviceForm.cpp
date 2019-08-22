@@ -283,7 +283,7 @@ void DeviceForm::deleteDevice (void)
 	// Prompt user if this is for real...
 	Options *pOptions = pMainForm->options();
 	if (pOptions && pOptions->bConfirmRemove) {
-		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sTitle = tr("Warning");
 		const QString& sText = tr(
 			"About to delete device:\n\n"
 			"%1\n\n"

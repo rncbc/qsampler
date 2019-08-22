@@ -869,7 +869,7 @@ bool MainForm::openSession (void)
 
 	// Ask for the filename to open...
 	QString sFilename = QFileDialog::getOpenFileName(this,
-		QSAMPLER_TITLE ": " + tr("Open Session"), // Caption.
+		tr("Open Session"),                       // Caption.
 		m_pOptions->sSessionDir,                  // Start here.
 		tr("LSCP Session files") + " (*.lscp)"    // Filter (LSCP files)
 	);
@@ -902,7 +902,7 @@ bool MainForm::saveSession ( bool bPrompt )
 			sFilename = m_pOptions->sSessionDir;
 		// Prompt the guy...
 		sFilename = QFileDialog::getSaveFileName(this,
-			QSAMPLER_TITLE ": " + tr("Save Session"), // Caption.
+			tr("Save Session"),                       // Caption.
 			sFilename,                                // Start here.
 			tr("LSCP Session files") + " (*.lscp)"    // Filter (LSCP files)
 		);
@@ -916,7 +916,7 @@ bool MainForm::saveSession ( bool bPrompt )
 		// Check if already exists...
 		if (sFilename != m_sFilename && QFileInfo(sFilename).exists()) {
 			if (QMessageBox::warning(this,
-				QSAMPLER_TITLE ": " + tr("Warning"),
+				tr("Warning"),
 				tr("The file already exists:\n\n"
 				"\"%1\"\n\n"
 				"Do you want to replace it?")
@@ -941,7 +941,7 @@ bool MainForm::closeSession ( bool bForce )
 	// Are we dirty enough to prompt it?
 	if (m_iDirtyCount > 0) {
 		switch (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("Warning"),
 			tr("The current session has been changed:\n\n"
 			"\"%1\"\n\n"
 			"Do you want to save the changes?")
@@ -1493,7 +1493,7 @@ void MainForm::fileReset (void)
 
 	// Ask user whether he/she want's an internal sampler reset...
 	if (m_pOptions && m_pOptions->bConfirmReset) {
-		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sTitle = tr("Warning");
 		const QString& sText = tr(
 			"Resetting the sampler instance will close\n"
 			"all device and channel configurations.\n\n"
@@ -1552,7 +1552,7 @@ void MainForm::fileRestart (void)
 	// Ask user whether he/she want's a complete restart...
 	// (if we're currently up and running)
 	if (m_pOptions && m_pOptions->bConfirmRestart) {
-		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sTitle = tr("Warning");
 		const QString& sText = tr(
 			"New settings will be effective after\n"
 			"restarting the client/server connection.\n\n"
@@ -1666,7 +1666,7 @@ void MainForm::removeChannelStrip (void)
 
 	// Prompt user if he/she's sure about this...
 	if (m_pOptions && m_pOptions->bConfirmRemove) {
-		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Warning");
+		const QString& sTitle = tr("Warning");
 		const QString& sText = tr(
 			"About to remove channel:\n\n"
 			"%1\n\n"
@@ -1906,7 +1906,7 @@ void MainForm::viewOptions (void)
 				(!bOldKeepOnTop     &&  m_pOptions->bKeepOnTop)     ||
 				(iOldBaseFontSize   !=  m_pOptions->iBaseFontSize)) {
 				QMessageBox::information(this,
-					QSAMPLER_TITLE ": " + tr("Information"),
+					tr("Information"),
 					tr("Some settings may be only effective\n"
 					"next time you start this program."));
 				updateMessagesCapture();
@@ -2096,7 +2096,7 @@ void MainForm::helpAbout (void)
 	sText += "</small>";
 	sText += "</p>\n";
 
-	QMessageBox::about(this, tr("About") + " " QSAMPLER_TITLE, sText);
+	QMessageBox::about(this, tr("About"), sText);
 }
 
 
@@ -2109,7 +2109,7 @@ void MainForm::stabilizeForm (void)
 	QString sSessionName = sessionName(m_sFilename);
 	if (m_iDirtyCount > 0)
 		sSessionName += " *";
-	setWindowTitle(tr(QSAMPLER_TITLE " - [%1]").arg(sSessionName));
+	setWindowTitle(sSessionName);
 
 	// Update the main menu state...
 	ChannelStrip *pChannelStrip = activeChannelStrip();
@@ -2514,7 +2514,7 @@ void MainForm::appendMessagesError( const QString& sText )
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 
 	if (m_pOptions && m_pOptions->bConfirmError) {
-		const QString& sTitle = QSAMPLER_TITLE ": " + tr("Error");
+		const QString& sTitle = tr("Error");
 	#if 0
 		QMessageBox::critical(this, sTitle, sText, QMessageBox::Cancel);
 	#else
@@ -2847,7 +2847,7 @@ void MainForm::startServer (void)
 	// Is the server process instance still here?
 	if (m_pServer) {
 		if (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("Warning"),
 			tr("Could not start the LinuxSampler server.\n\n"
 			"Maybe it is already started."),
 			QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Ok) {
@@ -2917,7 +2917,7 @@ void MainForm::stopServer ( bool bInteractive )
 
 	if (m_pServer && bInteractive) {
 		if (QMessageBox::question(this,
-			QSAMPLER_TITLE ": " + tr("The backend's fate ..."),
+			tr("The backend's fate ..."),
 			tr("You have the option to keep the sampler backend (LinuxSampler)\n"
 			"running in the background. The sampler would continue to work\n"
 			"according to your current sampler session and you could alter the\n"

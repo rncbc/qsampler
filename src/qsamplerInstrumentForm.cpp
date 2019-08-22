@@ -269,7 +269,7 @@ void InstrumentForm::openInstrumentFile (void)
 	const QString& filter = filters.join(";;");
 
 	QString sInstrumentFile = QFileDialog::getOpenFileName(this,
-		QSAMPLER_TITLE ": " + tr("Instrument files"), // Caption.
+		tr("Instrument files"),   // Caption.
 		pOptions->sInstrumentDir, // Start here.
 		filter                    // File filter.
 	);
@@ -373,7 +373,7 @@ void InstrumentForm::reject (void)
 	// Check if there's any pending changes...
 	if (m_iDirtyCount > 0) {
 		switch (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("Warning"),
 			tr("Some channel settings have been changed.\n\n"
 			"Do you want to apply the changes?"),
 			QMessageBox::Apply |

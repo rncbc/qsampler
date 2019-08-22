@@ -34,7 +34,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle" >
-   <string>Qsampler: MIDI Instrument</string>
+   <string>Instrument</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="qsampler.qrc" >:/images/qsamplerInstrument.png</iconset>

@@ -356,9 +356,9 @@ bool ChannelStrip::channelFxEdit (void)
 	}
 #else // CONFIG_FXSEND
 	QMessageBox::critical(this,
-		QSAMPLER_TITLE ": " + tr("Unavailable"),
-			tr("Sorry, QSampler was built without FX send support!\n\n"
-			   "(Make sure you have a recent liblscp when recompiling QSampler)"));
+		tr("Unavailable"),
+		tr("Sorry, QSampler was built without FX send support!\n\n"
+		"(Make sure you have a recent liblscp when recompiling QSampler)"));
 #endif // CONFIG_FXSEND
 
 	return bResult;

@@ -31,7 +31,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Qsampler: Options</string>
+   <string>Options</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="qsampler.qrc" >

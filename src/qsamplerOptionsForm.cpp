@@ -356,7 +356,7 @@ void OptionsForm::reject (void)
 	// Check if there's any pending changes...
 	if (m_iDirtyCount > 0) {
 		switch (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("Warning"),
 			tr("Some settings have been changed.\n\n"
 			"Do you want to apply the changes?"),
 			QMessageBox::Apply |

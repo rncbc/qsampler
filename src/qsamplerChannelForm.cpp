@@ -165,7 +165,7 @@ void ChannelForm::setup ( Channel *pChannel )
 
 	// It can be a brand new channel, remember?
 	const bool bNew = (m_pChannel->channelID() < 0);
-	setWindowTitle(QSAMPLER_TITLE ": " + m_pChannel->channelName());
+	setWindowTitle(m_pChannel->channelName());
 
 	// Check if we're up and connected.
 	MainForm *pMainForm = MainForm::getInstance();
@@ -461,7 +461,7 @@ void ChannelForm::reject (void)
 	// Check if there's any pending changes...
 	if (m_iDirtyCount > 0) {
 		switch (QMessageBox::warning(this,
-			QSAMPLER_TITLE ": " + tr("Warning"),
+			tr("Warning"),
 			tr("Some channel settings have been changed.\n\n"
 			"Do you want to apply the changes?"),
 			QMessageBox::Apply |
@@ -510,7 +510,7 @@ void ChannelForm::openInstrumentFile (void)
 	const QString& filter = filters.join(";;");
 
 	QString sInstrumentFile = QFileDialog::getOpenFileName(this,
-		QSAMPLER_TITLE ": " + tr("Instrument files"), // Caption.
+		tr("Instrument files"),   // Caption.
 		pOptions->sInstrumentDir, // Start here.
 		filter                    // File filter.
 	);

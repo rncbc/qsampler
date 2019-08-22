@@ -32,7 +32,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Qsampler: Instruments</string>
+   <string>Instruments</string>
   </property>
   <property name="windowIcon">
    <iconset resource="qsampler.qrc">:/images/qsamplerInstrument.png</iconset>
