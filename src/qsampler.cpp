@@ -82,8 +82,8 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 	QApplication::setApplicationName(QSAMPLER_TITLE);
-	QApplication::setApplicationDisplayName(
-		QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE));
+	QApplication::setApplicationDisplayName(QSAMPLER_TITLE);
+	//	QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE));
 #endif
 	// Load translation support.
 	QLocale loc;
