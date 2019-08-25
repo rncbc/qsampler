@@ -10,16 +10,6 @@ link_directories (
   ${QT_LIBRARY_DIR}
 )
 
-if (CONFIG_LIBLSCP)
-  include_directories (${LSCP_INCLUDE_DIRS})
-  link_directories (${LSCP_LIBRARY_DIRS})
-endif ()
-
-if (CONFIG_LIBGIG)
-  include_directories (${GIG_INCLUDE_DIRS})
-  link_directories (${GIG_LIBRARY_DIRS})
-endif ()
-
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set (ac_prefix ${CMAKE_INSTALL_PREFIX})
@@ -125,7 +115,15 @@ if (UNIX AND NOT APPLE)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qsampler.desktop
      DESTINATION share/applications)
   install (FILES images/qsampler.png
-     DESTINATION share/pixmaps)
+     DESTINATION share/icons/hicolor/32x32/apps)
+  install (FILES images/qsampler.svg
+     DESTINATION share/icons/hicolor/scalable/apps)
   install (FILES appdata/qsampler.appdata.xml
      DESTINATION share/metainfo)
+  install (FILES mimetypes/qsampler.xml
+     DESTINATION share/mime/packages)
+  install (FILES mimetypes/application-x-qsampler-session.png
+     DESTINATION share/icons/hicolor/32x32/mimetypes)
+  install (FILES mimetypes/application-x-qsampler-session.svg
+     DESTINATION share/icons/hicolor/scalable/mimetypes)
 endif ()
