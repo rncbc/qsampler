@@ -61,7 +61,12 @@ if (POLICY CMP0075)
 endif ()
 
 # Check for Qt
-find_package (Qt5 REQUIRED NO_MODULE COMPONENTS Core Gui Widgets Network)
+find_package (Qt5 REQUIRED NO_MODULE COMPONENTS Core Gui Widgets)
+
+if (CONFIG_XUNIQUE)
+  find_package (Qt5 REQUIRED NO_MODULE COMPONENTS Network)
+endif ()
+
 find_package (Qt5LinguistTools)
 
 include (GNUInstallDirs)
@@ -174,8 +179,9 @@ macro (SHOW_OPTION text value)
   endif ()
 endmacro ()
 
-message     ("  ${PACKAGE_NAME} ${PACKAGE_VERSION}\n")
-message     ("  Build target . . . . . . . . . . . . . . . . . . .: ${CONFIG_BUILD_TYPE}\n")
+
+message   ("\n  ${PACKAGE_NAME} ${PACKAGE_VERSION}")
+message   ("\n  Build target . . . . . . . . . . . . . . . . . . .: ${CONFIG_BUILD_TYPE}\n")
 show_option ("  LSCP instrument name support . . . . . . . . . . ." CONFIG_INSTRUMENT_NAME)
 show_option ("  LSCP mute/solo support . . . . . . . . . . . . . ." CONFIG_MUTE_SOLO)
 show_option ("  LSCP MIDI instrument support . . . . . . . . . . ." CONFIG_MIDI_INSTRUMENT)
@@ -193,9 +199,8 @@ endif ()
 show_option ("  LSCP channel MIDI event support  . . . . . . . . ." CONFIG_EVENT_CHANNEL_MIDI)
 show_option ("  LSCP device MIDI event support . . . . . . . . . ." CONFIG_EVENT_DEVICE_MIDI)
 show_option ("  LSCP runtime max. voices / disk streams support  ." CONFIG_MAX_VOICES)
-message ("")
+message     ("")
 show_option ("  Unique/Single instance support . . . . . . . . . ." CONFIG_XUNIQUE)
 show_option ("  Debugger stack-trace (gdb) . . . . . . . . . . . ." CONFIG_STACKTRACE)
-message     ("")
-message     ("  Install prefix . . . . . . . . . . . . . . . . . .: ${CMAKE_INSTALL_PREFIX}\n")
-message     ("Now type 'make', followed by 'make install' as root.\n")
+message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CMAKE_INSTALL_PREFIX}")
+message   ("\nNow type 'make', followed by 'make install' as root.\n")

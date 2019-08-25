@@ -10,16 +10,6 @@ link_directories (
   ${QT_LIBRARY_DIR}
 )
 
-if (CONFIG_LIBLSCP)
-  include_directories (${LSCP_INCLUDE_DIRS})
-  link_directories (${LSCP_LIBRARY_DIRS})
-endif ()
-
-if (CONFIG_LIBGIG)
-  include_directories (${GIG_INCLUDE_DIRS})
-  link_directories (${GIG_LIBRARY_DIRS})
-endif ()
-
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set (ac_prefix ${CMAKE_INSTALL_PREFIX})
@@ -115,17 +105,29 @@ if (CONFIG_LIBGIG)
   target_link_libraries (qsampler ${GIG_LIBRARIES})
 endif ()
 
-qt5_use_modules (qsampler Core Gui Widgets Network)
+qt5_use_modules (qsampler Core Gui Widgets)
+
+if (CONFIG_XUNIQUE)
+  qt5_use_modules (qsampler Network)
+endif ()
 
 if (UNIX AND NOT APPLE)
-  install (TARGETS qsampler
-     RUNTIME DESTINATION bin)
+  install (TARGETS qsampler RUNTIME
+     DESTINATION ${CMAKE_INSTALL_BINDIR})
   install (FILES ${QM_FILES}
-     DESTINATION share/qsampler/translations)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/qsampler/translations)
   install (FILES ${CMAKE_CURRENT_BINARY_DIR}/qsampler.desktop
-     DESTINATION share/applications)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install (FILES images/qsampler.png
-     DESTINATION share/pixmaps)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
+  install (FILES images/qsampler.svg
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
   install (FILES appdata/qsampler.appdata.xml
-     DESTINATION share/metainfo)
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+  install (FILES mimetypes/qsampler.xml
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
+  install (FILES mimetypes/application-x-qsampler-session.png
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/mimetypes)
+  install (FILES mimetypes/application-x-qsampler-session.svg
+     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/mimetypes)
 endif ()
