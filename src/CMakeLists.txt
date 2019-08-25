@@ -3,17 +3,22 @@ include_directories (
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${QT_INCLUDES}
-  ${LSCP_INCLUDEDIR}
 )
-
-if (CONFIG_LIBGIG)
-  include_directories ( ${GIG_INCLUDEDIR} )
-endif ()
 
 link_directories (
   ${CMAKE_CURRENT_BINARY_DIR}
   ${QT_LIBRARY_DIR}
 )
+
+if (CONFIG_LIBLSCP)
+  include_directories (${LSCP_INCLUDE_DIRS})
+  link_directories (${LSCP_LIBRARY_DIRS})
+endif ()
+
+if (CONFIG_LIBGIG)
+  include_directories (${GIG_INCLUDE_DIRS})
+  link_directories (${GIG_LIBRARY_DIRS})
+endif ()
 
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
