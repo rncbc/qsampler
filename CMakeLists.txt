@@ -23,7 +23,7 @@ if (GIT_DESCRIBE_RESULT EQUAL 0)
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   if (GIT_REVPARSE_RESULT EQUAL 0 AND NOT GIT_REVPARSE_OUTPUT STREQUAL "master")
     set (VERSION "${VERSION} [${GIT_REVPARSE_OUTPUT}]")
-  endif ()  
+  endif ()
 endif ()
 
 set (PACKAGE_NAME "Qsampler")
@@ -35,14 +35,14 @@ set (PACKAGE_TARNAME "qsampler")
 set (CONFIG_BUILD_VERSION "${PACKAGE_VERSION}")
 
 if (CMAKE_BUILD_TYPE)
-  set (CONFIG_BUILD_TYPE CMAKE_BUILD_TYPE)
+  set (CONFIG_BUILD_TYPE ${CMAKE_BUILD_TYPE})
 else ()
   set (CONFIG_BUILD_TYPE "release")
 endif ()
 
-set (CONFIG_DEBUG)
+set (CONFIG_DEBUG 0)
 if (CONFIG_BUILD_TYPE MATCHES "debug")
-  set(CONFIG_DEBUG 1)
+  set (CONFIG_DEBUG 1)
 endif ()
 
 set (CONFIG_PREFIX "${CMAKE_INSTALL_PREFIX}")
@@ -62,6 +62,7 @@ option (CONFIG_XUNIQUE "Enable unique/single instance (default=yes)" 1)
 
 # Enable debugger stack-trace option (assumes --enable-debug).
 option (CONFIG_STACKTRACE "Enable debugger stack-trace (default=no)" 0)
+
 
 # Fix for new CMAKE_REQUIRED_LIBRARIES policy.
 if (POLICY CMP0075)
@@ -112,6 +113,7 @@ set (CONFIG_LIBLSCP ${LSCP_FOUND})
 if (CONFIG_LIBLSCP)
   include_directories (${LSCP_INCLUDE_DIRS})
   link_directories (${LSCP_LIBRARY_DIRS})
+# link_libraries (${LSCP_LIBRARIES})
   set (CMAKE_REQUIRED_LIBRARIES "${LSCP_LIBRARIES};${CMAKE_REQUIRED_LIBRARIES}")
   # Check for for instrument_name in lscp_channel_info_t.
   check_include_file (lscp/client.h CONFIG_INSTRUMENT_NAME)
@@ -180,9 +182,9 @@ install (FILES qsampler.fr.1 DESTINATION ${CMAKE_INSTALL_MANDIR}/fr/man1 RENAME 
 # Configuration status
 macro (SHOW_OPTION text value)
   if (${value})
-    message("${text}: yes")
+    message ("${text}: yes")
   else ()
-    message("${text}: no")
+    message ("${text}: no")
   endif ()
 endmacro ()
 
