@@ -12,8 +12,6 @@ link_directories (
 
 configure_file (cmake_config.h ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-set (ac_prefix ${CMAKE_INSTALL_PREFIX})
-
 configure_file (qsampler.desktop ${CMAKE_CURRENT_BINARY_DIR}/qsampler.desktop)
 
 set (HEADERS
@@ -96,20 +94,20 @@ add_executable (qsampler
   ${SOURCES}
 )
 
-target_link_libraries (qsampler
-  ${QT_LIBRARIES}
-  ${LSCP_LIBRARIES}
-)
-
-if (CONFIG_LIBGIG)
-  target_link_libraries (qsampler ${GIG_LIBRARIES})
-endif ()
-
-qt5_use_modules (qsampler Core Gui Widgets)
+target_link_libraries (qsampler PRIVATE Qt5::Widgets)
 
 if (CONFIG_XUNIQUE)
-  qt5_use_modules (qsampler Network)
+  target_link_libraries (qsampler PRIVATE Qt5::Network)
 endif ()
+
+if (CONFIG_LIBLSCP)
+  target_link_libraries (qsampler PRIVATE ${LSCP_LIBRARIES})
+endif ()
+
+if (CONFIG_LIBGIG)
+  target_link_libraries (qsampler PRIVATE ${GIG_LIBRARIES})
+endif ()
+
 
 if (UNIX AND NOT APPLE)
   install (TARGETS qsampler RUNTIME
