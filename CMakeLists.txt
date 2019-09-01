@@ -12,7 +12,7 @@ execute_process (
   OUTPUT_STRIP_TRAILING_WHITESPACE)
 if (GIT_DESCRIBE_RESULT EQUAL 0)
   set (VERSION "${GIT_DESCRIBE_OUTPUT}")
-  string (REGEX REPLACE "^[^_vV]+" "" VERSION "${VERSION}")
+  string (REGEX REPLACE "^[^_]+"   "" VERSION "${VERSION}")
   string (REGEX REPLACE "^[_vV]+"  "" VERSION "${VERSION}")
   string (REGEX REPLACE "-g"   "git." VERSION "${VERSION}")
   string (REGEX REPLACE "[_|-]+"  "." VERSION "${VERSION}")
@@ -70,10 +70,10 @@ if (POLICY CMP0075)
 endif ()
 
 # Check for Qt
-find_package (Qt5 REQUIRED NO_MODULE COMPONENTS Core Gui Widgets)
+find_package (Qt5 REQUIRED COMPONENTS Core Gui Widgets)
 
 if (CONFIG_XUNIQUE)
-  find_package (Qt5 REQUIRED NO_MODULE COMPONENTS Network)
+  find_package (Qt5 REQUIRED COMPONENTS Network)
 endif ()
 
 find_package (Qt5LinguistTools)
