@@ -1224,7 +1224,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="38"/>
         <source>Channel</source>
-        <translation type="unfinished">Canal</translation>
+        <translation>Canal</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="109"/>
@@ -1462,7 +1462,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="44"/>
         <source>Channel</source>
-        <translation type="unfinished">Canal</translation>
+        <translation>Canal</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="136"/>
@@ -1630,7 +1630,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerInstrumentForm.ui" line="37"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentForm.ui" line="60"/>
@@ -1758,7 +1758,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="35"/>
         <source>Instruments</source>
-        <translation type="unfinished">Instruments</translation>
+        <translation>Instruments</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="57"/>
@@ -2556,7 +2556,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="34"/>
         <source>Options</source>
-        <translation type="unfinished">Options</translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="572"/>
