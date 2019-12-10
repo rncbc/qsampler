@@ -19,14 +19,17 @@
         <file>images/fileSave.png</file>
         <file>images/formAccept.png</file>
         <file>images/formEdit.png</file>
+        <file>images/formOpen.png</file>
         <file>images/formRefresh.png</file>
         <file>images/formReject.png</file>
         <file>images/formRemove.png</file>
+        <file>images/formSave.png</file>
         <file>images/itemFile.png</file>
         <file>images/itemGroup.png</file>
         <file>images/itemGroupNew.png</file>
         <file>images/itemGroupOpen.png</file>
         <file>images/itemNew.png</file>
+        <file>images/itemReset.png</file>
         <file>images/ledoff1.png</file>
         <file>images/ledon1.png</file>
         <file>images/midi1.png</file>

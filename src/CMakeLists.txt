@@ -27,6 +27,7 @@ set (HEADERS
   qsamplerChannelForm.h
   qsamplerChannelFxForm.h
   qsamplerOptionsForm.h
+  qsamplerPaletteForm.h
   qsamplerMainForm.h
 )
 
@@ -49,6 +50,7 @@ set (SOURCES
   qsamplerChannelForm.cpp
   qsamplerChannelFxForm.cpp
   qsamplerOptionsForm.cpp
+  qsamplerPaletteForm.cpp
   qsamplerMainForm.cpp
 )
 
@@ -60,6 +62,7 @@ set (FORMS
   qsamplerChannelForm.ui
   qsamplerChannelFxForm.ui
   qsamplerOptionsForm.ui
+  qsamplerPaletteForm.ui
   qsamplerMainForm.ui
 )
 
