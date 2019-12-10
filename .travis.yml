@@ -20,7 +20,7 @@ before_install:
 - sudo apt-get update -qq
 
 install:
-- sudo apt-get install -qq qt512base qt512tools; source /opt/qt512/bin/qt512-env.sh
+- sudo apt-get install -qq qt512base qt512tools libgl-dev; source /opt/qt512/bin/qt512-env.sh
 - sudo apt-get install -qq liblscp-dev libgig-dev
 
 before_script:
