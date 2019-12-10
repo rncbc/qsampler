@@ -261,7 +261,7 @@ Sorry.</source>
         <translation>Устройства MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="275"/>
+        <location filename="../qsamplerOptions.cpp" line="287"/>
         <source>Usage: %1 [options] [session-file]
 
 </source>
@@ -270,19 +270,27 @@ Sorry.</source>
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="322"/>
+        <location filename="../qsamplerOptions.cpp" line="334"/>
         <source>Option -h requires an argument (host).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="331"/>
+        <location filename="../qsamplerOptions.cpp" line="343"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="601"/>
+        <location filename="../qsamplerOptions.cpp" line="613"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QSampler</name>
+    <message>
+        <location filename="../qsamplerOptionsForm.cpp" line="39"/>
+        <source>(default)</source>
+        <translation type="unfinished">(по умолчанию)</translation>
     </message>
 </context>
 <context>
@@ -1096,34 +1104,45 @@ Do you want LinuxSampler to stop?</source>
 <context>
     <name>QSampler::OptionsForm</name>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="252"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="265"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="267"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="280"/>
         <source>This parameter is not supported by the current sampler version in use.</source>
         <translation>Этот параметр не поддерживается используемой версией сэмплера.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="257"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="272"/>
         <source>The max. amount of voices the sampler shall process simultaneously.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="270"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="285"/>
         <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="277"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="280"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="292"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="295"/>
         <source>QSampler was built without support for this parameter.</source>
         <translation>QSampler был собран без поддержки этого параметра.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="359"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="380"/>
+        <source>Information</source>
+        <translation type="unfinished">Справка</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.cpp" line="381"/>
+        <source>Some settings may be only effective
+next time you start this application.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.cpp" line="417"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="360"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="418"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1132,14 +1151,94 @@ Do you want to apply the changes?</source>
 Вы хотите применить изменения?</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="424"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="482"/>
         <source>Messages Log</source>
         <translation>Журнал сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="426"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="484"/>
         <source>Log files</source>
         <translation>Файлы журналов</translation>
+    </message>
+</context>
+<context>
+    <name>QSampler::PaletteForm</name>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="323"/>
+        <source>Import File - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="326"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="392"/>
+        <source>Palette files (*.%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="327"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="393"/>
+        <source>All files (*.*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="379"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="802"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="810"/>
+        <source>Warning - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="380"/>
+        <source>Could not import from file:
+
+%1
+
+Sorry.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="389"/>
+        <source>Export File - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="803"/>
+        <source>Some settings have been changed.
+
+Do you want to discard the changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="811"/>
+        <source>Some settings have been changed:
+
+&quot;%1&quot;.
+
+Do you want to save the changes?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QSampler::PaletteForm::PaletteModel</name>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="1042"/>
+        <source>Color Role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="1045"/>
+        <source>Active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="1048"/>
+        <source>Inactive</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="1051"/>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2389,411 +2488,557 @@ MIDI Controller:</source>
 <context>
     <name>qsamplerOptionsForm</name>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="68"/>
+        <location filename="../qsamplerOptionsForm.ui" line="911"/>
         <source>&amp;Server</source>
         <translation>&amp;Сервер</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="86"/>
+        <location filename="../qsamplerOptionsForm.ui" line="929"/>
         <source>Settings</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="107"/>
+        <location filename="../qsamplerOptionsForm.ui" line="959"/>
         <source>&amp;Host:</source>
         <translation>&amp;Хост:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="135"/>
+        <location filename="../qsamplerOptionsForm.ui" line="987"/>
         <source>LinuxSampler server listener port number</source>
         <translation>Номер порта для LinuxSampler</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="142"/>
+        <location filename="../qsamplerOptionsForm.ui" line="994"/>
         <source>8888</source>
         <translation>8888</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="162"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1014"/>
         <source>&amp;Port:</source>
         <translation>&amp;Порт:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="190"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1042"/>
         <source>LinuxSampler server host name or address</source>
         <translation>Название или адрес узла LinuxSampler</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="197"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1049"/>
         <source>localhost</source>
         <translation>localhost</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="211"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1063"/>
         <source>&amp;Command line:</source>
         <translation>&amp;Командная строка:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="233"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1085"/>
         <source>Whether to start the LinuxSampler server on local machine</source>
         <translation>Запускать ли сервер LinuxSampler на локальной машине</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="236"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1088"/>
         <source>&amp;Start server locally</source>
         <translation>&amp;Запускать сервер локально</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="255"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1107"/>
         <source>Command line to start LinuxSampler server locally</source>
         <translation>Команда локального запуска LinuxSampler</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="262"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1114"/>
         <source>linuxsampler</source>
         <translation>linuxsampler</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="276"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1128"/>
         <source>Start &amp;delay:</source>
         <translation>З&amp;адержка старта:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="310"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1162"/>
         <source>Delay time in seconds after server startup</source>
         <translation>Задержка в секундах перед стартом сервера</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="313"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1165"/>
         <source> secs</source>
         <translation>с</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="395"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1247"/>
         <source>Receive timeout in milliseconds</source>
         <translation>Время ожидания в миллисекундах</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="398"/>
-        <location filename="../qsamplerOptionsForm.ui" line="853"/>
+        <location filename="../qsamplerOptionsForm.ui" line="592"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1250"/>
         <source> msec</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="423"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1275"/>
         <source>&amp;Timeout:</source>
         <translation>&amp;Время ожидания:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="464"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1316"/>
         <source>Logging</source>
         <translation>Ведение журнала</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="491"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1352"/>
         <source>Messages log file</source>
         <translation>Файл с журналом сообщений LinuxSampler</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="522"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1383"/>
         <source>Browse for the messages log file location</source>
         <translation>Указать расположение файла журнала</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="525"/>
+        <location filename="../qsamplerOptionsForm.ui" line="725"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1386"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="538"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1399"/>
         <source>Whether to activate a messages logging to file.</source>
         <translation>Включать ли функцию ведения журнала в файле</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="541"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1402"/>
         <source>&amp;Messages log file:</source>
         <translation>&amp;Файл с журналом:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1168"/>
+        <location filename="../qsamplerOptionsForm.ui" line="350"/>
         <source>Whether to ask for session reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1171"/>
+        <location filename="../qsamplerOptionsForm.ui" line="353"/>
         <source>&amp;Confirm session reset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1200"/>
+        <location filename="../qsamplerOptionsForm.ui" line="382"/>
         <source>Whether to ask for session restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1203"/>
+        <location filename="../qsamplerOptionsForm.ui" line="385"/>
         <source>&amp;Confirm session restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1232"/>
+        <location filename="../qsamplerOptionsForm.ui" line="414"/>
         <source>Whether to show session errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1235"/>
+        <location filename="../qsamplerOptionsForm.ui" line="417"/>
         <source>&amp;Confirm session errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="560"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1413"/>
         <source>&amp;Tuning</source>
         <translation>&amp;Настройка</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="34"/>
+        <location filename="../qsamplerOptionsForm.ui" line="35"/>
         <source>Options</source>
         <translation type="unfinished">Параметры</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="572"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1431"/>
         <source>Limits</source>
         <translation>Пределы</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="587"/>
-        <source>Maximum number of voices:</source>
-        <translation>Максимальное число голосов:</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerOptionsForm.ui" line="606"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1547"/>
         <source>Maximum number of voices</source>
         <translation>Максимальное число голосов</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="635"/>
-        <source>Maximum number of disk streams:</source>
-        <translation>Максимальное число дисковых потоков:</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerOptionsForm.ui" line="654"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1598"/>
         <source>Maximum number of disk streams</source>
         <translation>Максимальное число дисковых потоков</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="689"/>
+        <location filename="../qsamplerOptionsForm.ui" line="444"/>
         <source>&amp;Display</source>
         <translation>&amp;Интерфейс</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="701"/>
+        <location filename="../qsamplerOptionsForm.ui" line="462"/>
         <source>Channels</source>
         <translation>Каналы</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="740"/>
+        <location filename="../qsamplerOptionsForm.ui" line="501"/>
         <source>Sample channel display font display</source>
         <translation>Пример отображения шрифта в канале</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="771"/>
+        <location filename="../qsamplerOptionsForm.ui" line="532"/>
         <source>Select font for the channel display</source>
         <translation>Выберите шрифт для отображения канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="774"/>
-        <location filename="../qsamplerOptionsForm.ui" line="998"/>
+        <location filename="../qsamplerOptionsForm.ui" line="148"/>
+        <location filename="../qsamplerOptionsForm.ui" line="535"/>
         <source>&amp;Font...</source>
         <translation>&amp;Шрифт...</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="806"/>
+        <location filename="../qsamplerOptionsForm.ui" line="567"/>
         <source>Whether to refresh the channels view automatically</source>
         <translation>Обновлять ли втоматически вид каналов</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="809"/>
+        <location filename="../qsamplerOptionsForm.ui" line="570"/>
         <source>&amp;Auto refresh:</source>
         <translation>&amp;Автообновление:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="822"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1446"/>
         <source>Maximum &amp;volume:</source>
         <translation>Макс. &amp;громкость:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="850"/>
+        <location filename="../qsamplerOptionsForm.ui" line="589"/>
         <source>Time in milliseconds between each auto-refresh cycle</source>
         <translation>Время между циклами автообновления в миллисекундах </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="884"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1474"/>
         <source>Upper limit for the sampler channel volume setting</source>
         <translation>Верхний предел громкости каждого канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="887"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1477"/>
         <source> %</source>
         <translation> %</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="909"/>
+        <location filename="../qsamplerOptionsForm.ui" line="617"/>
         <source>Whether to enable a shiny glass light effect on the channel display</source>
         <translation>Показывать ли отблеск на «стекле» с индикаторами канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="912"/>
+        <location filename="../qsamplerOptionsForm.ui" line="620"/>
         <source>Display shiny glass light &amp;effect</source>
         <translation>Показывать отблеск на &amp;дисплее канала</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="928"/>
+        <location filename="../qsamplerOptionsForm.ui" line="78"/>
         <source>Messages</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="967"/>
+        <location filename="../qsamplerOptionsForm.ui" line="60"/>
+        <source>&amp;General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="117"/>
         <source>Sample messages text font display</source>
         <translation>Пример использования выбранного шрифта для сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="995"/>
+        <location filename="../qsamplerOptionsForm.ui" line="145"/>
         <source>Select font for the messages text display</source>
         <translation>Выберите шрифт для вывода сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1030"/>
+        <location filename="../qsamplerOptionsForm.ui" line="180"/>
         <source>Whether to keep a maximum number of lines in the messages window</source>
         <translation>Устанавливать ли максимальный предел строк в панели сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1033"/>
+        <location filename="../qsamplerOptionsForm.ui" line="183"/>
         <source>&amp;Messages limit:</source>
         <translation>П&amp;редел строк сообщений:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1046"/>
+        <location filename="../qsamplerOptionsForm.ui" line="196"/>
         <source>The maximum number of message lines to keep in view</source>
         <translation>Максимальное количество видимых в панели сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1049"/>
+        <location filename="../qsamplerOptionsForm.ui" line="199"/>
         <source> lines</source>
         <translation>строк</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1077"/>
+        <location filename="../qsamplerOptionsForm.ui" line="227"/>
         <source>Other</source>
         <translation>Прочее</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1092"/>
+        <location filename="../qsamplerOptionsForm.ui" line="242"/>
         <source>Whether to ask for confirmation on removals</source>
         <translation>Спрашивать подтверждение при удалении каналов</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1095"/>
+        <location filename="../qsamplerOptionsForm.ui" line="245"/>
         <source>&amp;Confirm removals</source>
         <translation>&amp;Подтверждать удаление</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1108"/>
+        <location filename="../qsamplerOptionsForm.ui" line="274"/>
         <source>&amp;Number of recent files:</source>
         <translation>&amp;Запоминаемых сеансов:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1130"/>
+        <location filename="../qsamplerOptionsForm.ui" line="296"/>
         <source>The maximum number of recent files to keep in menu</source>
         <translation>Максимальное число сеансов, перечисляемых как недавно открывавшихся</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1152"/>
+        <location filename="../qsamplerOptionsForm.ui" line="318"/>
         <source>Whether to keep all child windows on top of the main window</source>
         <translation>Показывать ли все окна прграммы всегда над основным ее окном</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1155"/>
+        <location filename="../qsamplerOptionsForm.ui" line="321"/>
         <source>&amp;Keep child windows always on top</source>
         <translation>Окна &amp;всегда наверху</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1184"/>
+        <location filename="../qsamplerOptionsForm.ui" line="334"/>
         <source>Whether to capture standard output (stdout/stderr) into messages window</source>
         <translation>Захватывать ли стандартные потоки (stdout/stderr) в панель сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1187"/>
+        <location filename="../qsamplerOptionsForm.ui" line="337"/>
         <source>Capture standard &amp;output</source>
         <translation>Захватывать &amp;системные потоки сообщений</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1216"/>
+        <location filename="../qsamplerOptionsForm.ui" line="366"/>
         <source>Whether to show the complete directory path of loaded session files</source>
         <translation>Показывать ли расположение загруженного файла сеанса в файловой системе</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1219"/>
+        <location filename="../qsamplerOptionsForm.ui" line="369"/>
         <source>Show complete &amp;path of session files</source>
         <translation>По&amp;казывать полный путь к файлам сеансов</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1248"/>
+        <location filename="../qsamplerOptionsForm.ui" line="398"/>
         <source>Whether to show the actual instrument names as read from instrument file (using libgig)</source>
         <translation>Показывать ли названия инструментов, считанные из метаданных файлов (при помощи libgig)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1251"/>
+        <location filename="../qsamplerOptionsForm.ui" line="401"/>
         <source>Show actual &amp;instrument names</source>
         <translation>Показывать названия инс&amp;трументов</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1264"/>
+        <location filename="../qsamplerOptionsForm.ui" line="636"/>
+        <source>Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="657"/>
+        <source>&amp;Color palette theme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="676"/>
+        <source>Custom color palette theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="688"/>
+        <source>Wonton Soup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="693"/>
+        <source>KXStudio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="722"/>
+        <source>Manage custom color palette themes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="751"/>
+        <source>&amp;Widget style theme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="767"/>
+        <source>Custom widget style theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="807"/>
+        <source>Defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="838"/>
         <source>&amp;Base font size:</source>
         <translation>К&amp;егль шрифта в GUI:</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1283"/>
+        <location filename="../qsamplerOptionsForm.ui" line="857"/>
         <source>Base application font size (pt.)</source>
         <translation>Кегль шрифта в интерфейсе (в пунктах)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1290"/>
+        <location filename="../qsamplerOptionsForm.ui" line="1525"/>
+        <source>Maximum &amp;number of voices:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="1576"/>
+        <source>Maximum number of disk &amp;streams:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptionsForm.ui" line="683"/>
+        <location filename="../qsamplerOptionsForm.ui" line="774"/>
+        <location filename="../qsamplerOptionsForm.ui" line="864"/>
         <source>(default)</source>
         <translation>(по умолчанию)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1295"/>
+        <location filename="../qsamplerOptionsForm.ui" line="869"/>
         <source>6</source>
         <translation>6</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1300"/>
+        <location filename="../qsamplerOptionsForm.ui" line="874"/>
         <source>7</source>
         <translation>7</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1305"/>
+        <location filename="../qsamplerOptionsForm.ui" line="879"/>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1310"/>
+        <location filename="../qsamplerOptionsForm.ui" line="884"/>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1315"/>
+        <location filename="../qsamplerOptionsForm.ui" line="889"/>
         <source>10</source>
         <translation>10</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1320"/>
+        <location filename="../qsamplerOptionsForm.ui" line="894"/>
         <source>11</source>
         <translation>11</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.ui" line="1325"/>
+        <location filename="../qsamplerOptionsForm.ui" line="899"/>
         <source>12</source>
         <translation>12</translation>
+    </message>
+</context>
+<context>
+    <name>qsamplerPaletteForm</name>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="41"/>
+        <source>Color Themes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="47"/>
+        <source>Name</source>
+        <translation type="unfinished">Название</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="65"/>
+        <source>Current color palette name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="78"/>
+        <source>Save current color palette name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="81"/>
+        <source>Save</source>
+        <translation type="unfinished">Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="91"/>
+        <source>Delete current color palette name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="94"/>
+        <source>Delete</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="107"/>
+        <source>Palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="119"/>
+        <source>Current color palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="129"/>
+        <source>Generate:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="145"/>
+        <source>Base color to generate palette</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="152"/>
+        <source>Reset all current palette colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="155"/>
+        <source> Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="178"/>
+        <source>Import a custom color theme (palette) from file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="181"/>
+        <source>Import...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="191"/>
+        <source>Export a custom color theme (palette) to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="194"/>
+        <source>Export...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.ui" line="217"/>
+        <source>Show Details</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

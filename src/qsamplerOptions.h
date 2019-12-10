@@ -91,6 +91,9 @@ public:
 	bool    bInstrumentNames;
 	int     iBaseFontSize;
 
+	QString sCustomColorTheme;
+	QString sCustomStyleTheme;
+
 	// View options...
 	bool    bMenubar;
 	bool    bToolbar;

@@ -25,12 +25,18 @@
 #include "qsamplerAbout.h"
 #include "qsamplerOptions.h"
 
+#include "qsamplerPaletteForm.h"
+
 #include <QMessageBox>
 #include <QFontDialog>
 #include <QFileDialog>
 
+#include <QStyleFactory>
 
 namespace QSampler {
+
+// Default (empty/blank) name.
+static const char *g_pszDefName = QT_TR_NOOP("(default)");
 
 //-------------------------------------------------------------------------
 // QSampler::OptionsForm -- Options form implementation.
@@ -132,6 +138,15 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 		SLOT(optionsChanged()));
 	QObject::connect(m_ui.InstrumentNamesCheckBox,
 		SIGNAL(stateChanged(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.CustomColorThemeComboBox,
+		SIGNAL(activated(int)),
+		SLOT(optionsChanged()));
+	QObject::connect(m_ui.CustomColorThemeToolButton,
+		SIGNAL(clicked()),
+		SLOT(editCustomColorThemes()));
+	QObject::connect(m_ui.CustomStyleThemeComboBox,
+		SIGNAL(activated(int)),
 		SLOT(optionsChanged()));
 	QObject::connect(m_ui.BaseFontSizeComboBox,
 		SIGNAL(editTextChanged(const QString&)),
@@ -281,6 +296,10 @@ void OptionsForm::setup ( Options *pOptions )
 	);
 #endif // CONFIG_MAX_VOICES
 
+	// Custom display options...
+	resetCustomColorThemes(m_pOptions->sCustomColorTheme);
+	resetCustomStyleThemes(m_pOptions->sCustomStyleTheme);
+
 	// Done.
 	m_iDirtySetup--;
 	stabilizeForm();
@@ -323,6 +342,45 @@ void OptionsForm::accept (void)
 		m_pOptions->bInstrumentNames = m_ui.InstrumentNamesCheckBox->isChecked();
 		m_pOptions->iMaxRecentFiles  = m_ui.MaxRecentFilesSpinBox->value();
 		m_pOptions->iBaseFontSize  = m_ui.BaseFontSizeComboBox->currentText().toInt();
+		// Custom color/style theme options...
+		const QString sOldCustomStyleTheme = m_pOptions->sCustomStyleTheme;
+		if (m_ui.CustomStyleThemeComboBox->currentIndex() > 0)
+			m_pOptions->sCustomStyleTheme = m_ui.CustomStyleThemeComboBox->currentText();
+		else
+			m_pOptions->sCustomStyleTheme.clear();
+		const QString sOldCustomColorTheme = m_pOptions->sCustomColorTheme;
+		if (m_ui.CustomColorThemeComboBox->currentIndex() > 0)
+			m_pOptions->sCustomColorTheme = m_ui.CustomColorThemeComboBox->currentText();
+		else
+			m_pOptions->sCustomColorTheme.clear();
+		// Check whether restart is needed or whether
+		// custom options maybe set up immediately...
+		int iNeedRestart = 0;
+		if (m_pOptions->sCustomStyleTheme != sOldCustomStyleTheme) {
+			if (m_pOptions->sCustomStyleTheme.isEmpty()) {
+				++iNeedRestart;
+			} else {
+				QApplication::setStyle(
+					QStyleFactory::create(m_pOptions->sCustomStyleTheme));
+			}
+		}
+		if (m_pOptions->sCustomColorTheme != sOldCustomColorTheme) {
+			if (m_pOptions->sCustomColorTheme.isEmpty()) {
+				++iNeedRestart;
+			} else {
+				QPalette pal;
+				if (PaletteForm::namedPalette(
+						&m_pOptions->settings(), m_pOptions->sCustomColorTheme, pal))
+					QApplication::setPalette(pal);
+			}
+		}
+		// Show restart message if needed...
+		if (iNeedRestart > 0) {
+			QMessageBox::information(this,
+				tr("Information"),
+				tr("Some settings may be only effective\n"
+				"next time you start this application."));
+		}
 		// Reset dirty flag.
 		m_iDirtyCount = 0;
 	}
@@ -491,6 +549,71 @@ void OptionsForm::maxStreamsChanged(int /*iMaxStreams*/)
 	bMaxStreamsModified = true;
 	optionsChanged();
 }
+
+
+// Custom color palette theme manager.
+void OptionsForm::editCustomColorThemes (void)
+{
+	PaletteForm form(this);
+	form.setSettings(&m_pOptions->settings());
+
+	QString sCustomColorTheme;
+	int iDirtyCustomColorTheme = 0;
+
+	const int iCustomColorTheme
+		= m_ui.CustomColorThemeComboBox->currentIndex();
+	if (iCustomColorTheme > 0) {
+		sCustomColorTheme = m_ui.CustomColorThemeComboBox->itemText(
+			iCustomColorTheme);
+		form.setPaletteName(sCustomColorTheme);
+	}
+
+	if (form.exec() == QDialog::Accepted) {
+		sCustomColorTheme = form.paletteName();
+		++iDirtyCustomColorTheme;
+	}
+
+	if (iDirtyCustomColorTheme > 0 || form.isDirty()) {
+		resetCustomColorThemes(sCustomColorTheme);
+		optionsChanged();
+	}
+}
+
+
+// Custom color palette themes settler.
+void OptionsForm::resetCustomColorThemes (
+	const QString& sCustomColorTheme )
+{
+	m_ui.CustomColorThemeComboBox->clear();
+	m_ui.CustomColorThemeComboBox->addItem(
+		tr(g_pszDefName));
+	m_ui.CustomColorThemeComboBox->addItems(
+		PaletteForm::namedPaletteList(&m_pOptions->settings()));
+
+	int iCustomColorTheme = 0;
+	if (!sCustomColorTheme.isEmpty())
+		iCustomColorTheme = m_ui.CustomColorThemeComboBox->findText(
+			sCustomColorTheme);
+	m_ui.CustomColorThemeComboBox->setCurrentIndex(iCustomColorTheme);
+}
+
+
+// Custom widget style themes settler.
+void OptionsForm::resetCustomStyleThemes (
+	const QString& sCustomStyleTheme )
+{
+	m_ui.CustomStyleThemeComboBox->clear();
+	m_ui.CustomStyleThemeComboBox->addItem(
+		tr(g_pszDefName));
+	m_ui.CustomStyleThemeComboBox->addItems(QStyleFactory::keys());
+
+	int iCustomStyleTheme = 0;
+	if (!sCustomStyleTheme.isEmpty())
+		iCustomStyleTheme = m_ui.CustomStyleThemeComboBox->findText(
+			sCustomStyleTheme);
+	m_ui.CustomStyleThemeComboBox->setCurrentIndex(iCustomStyleTheme);
+}
+
 
 } // namespace QSampler
 

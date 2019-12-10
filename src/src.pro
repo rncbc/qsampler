@@ -29,6 +29,7 @@ HEADERS += config.h \
 	qsamplerChannelForm.h \
 	qsamplerChannelFxForm.h \
 	qsamplerOptionsForm.h \
+	qsamplerPaletteForm.h \
 	qsamplerMainForm.h
 
 SOURCES += \
@@ -50,6 +51,7 @@ SOURCES += \
 	qsamplerChannelForm.cpp \
 	qsamplerChannelFxForm.cpp \
 	qsamplerOptionsForm.cpp \
+	qsamplerPaletteForm.cpp \
 	qsamplerMainForm.cpp
 
 FORMS += \
@@ -60,6 +62,7 @@ FORMS += \
 	qsamplerChannelForm.ui \
 	qsamplerChannelFxForm.ui \
 	qsamplerOptionsForm.ui \
+	qsamplerPaletteForm.ui \
 	qsamplerMainForm.ui
 
 RESOURCES += \

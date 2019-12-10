@@ -51,14 +51,24 @@ protected slots:
 	void reject();
 
 	void optionsChanged();
-	void stabilizeForm();
 
 	void browseMessagesLogPath();
 	void chooseDisplayFont();
 	void chooseMessagesFont();
 	void toggleDisplayEffect(bool bOn);
+
+	void editCustomColorThemes();
+
 	void maxVoicesChanged(int iMaxVoices);
 	void maxStreamsChanged(int iMaxStreams);
+
+protected:
+
+	// Custom color/style themes settlers.
+	void resetCustomColorThemes(const QString& sCustomColorTheme);
+	void resetCustomStyleThemes(const QString& sCustomStyleTheme);
+
+	void stabilizeForm();
 
 private:
 

@@ -25,6 +25,7 @@ headers = \
 	src/qsamplerChannelForm.h \
 	src/qsamplerChannelFxForm.h \
 	src/qsamplerOptionsForm.h \
+	src/qsamplerPaletteForm.h \
 	src/qsamplerMainForm.h
 
 sources = \
@@ -46,6 +47,7 @@ sources = \
 	src/qsamplerChannelForm.cpp \
 	src/qsamplerChannelFxForm.cpp \
 	src/qsamplerOptionsForm.cpp \
+	src/qsamplerPaletteForm.cpp \
 	src/qsamplerMainForm.cpp
 
 forms = \
@@ -56,6 +58,7 @@ forms = \
 	src/qsamplerChannelForm.ui \
 	src/qsamplerChannelFxForm.ui \
 	src/qsamplerOptionsForm.ui \
+	src/qsamplerPaletteForm.ui \
 	src/qsamplerMainForm.ui
 
 resources = \

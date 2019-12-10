@@ -117,6 +117,12 @@ void Options::loadOptions (void)
 #endif
 	m_settings.endGroup();
 
+	// Load custom options...
+	m_settings.beginGroup("/Custom");
+	sCustomColorTheme = m_settings.value("/ColorTheme").toString();
+	sCustomStyleTheme = m_settings.value("/StyleTheme").toString();
+	m_settings.endGroup();
+
 	// And go into view options group.
 	m_settings.beginGroup("/View");
 	bMenubar     = m_settings.value("/Menubar", true).toBool();
@@ -207,6 +213,12 @@ void Options::saveOptions (void)
 	m_settings.setValue("/MaxRecentFiles", iMaxRecentFiles);
 	m_settings.setValue("/BaseFontSize", iBaseFontSize);
 	m_settings.setValue("/InstrumentNames", bInstrumentNames);
+	m_settings.endGroup();
+
+	// Save custom options...
+	m_settings.beginGroup("/Custom");
+	m_settings.setValue("/ColorTheme", sCustomColorTheme);
+	m_settings.setValue("/StyleTheme", sCustomStyleTheme);
 	m_settings.endGroup();
 
 	// View options group.
