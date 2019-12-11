@@ -286,14 +286,6 @@ Navré.</translation>
     </message>
 </context>
 <context>
-    <name>QSampler</name>
-    <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="39"/>
-        <source>(default)</source>
-        <translation type="unfinished">(défaut)</translation>
-    </message>
-</context>
-<context>
     <name>QSampler::AbstractDeviceParamModel</name>
     <message>
         <location filename="../qsamplerDevice.cpp" line="998"/>
@@ -1109,45 +1101,45 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
 <context>
     <name>QSampler::OptionsForm</name>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="267"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="280"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="274"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="287"/>
         <source>This parameter is not supported by the current sampler version in use.</source>
         <translation>Ce paramètre n&apos;est pas supporté par la version de l&apos;échantillonneur actuel en utilisation.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="272"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="279"/>
         <source>The max. amount of voices the sampler shall process simultaneously.</source>
         <translation>La quantité maximum de voix que l&apos;échantillonneur peut traiter simultanément.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="285"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="292"/>
         <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
         <translation>La quantité maximum de flux de disque que l&apos;échantillonneur peut traiter simultanément.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="292"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="295"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="299"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="302"/>
         <source>QSampler was built without support for this parameter.</source>
         <translation>QSampler a été construit sans le support pour ce paramètre.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="380"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="387"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="381"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="388"/>
         <source>Some settings may be only effective
 next time you start this application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="417"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="424"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="418"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="425"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1156,12 +1148,12 @@ Do you want to apply the changes?</source>
 Souhaitez-vous appliquer les modifications ?</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="482"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="489"/>
         <source>Messages Log</source>
         <translation>Journal de messages</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="484"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="491"/>
         <source>Log files</source>
         <translation>Fichiers de journaux</translation>
     </message>
