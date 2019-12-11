@@ -1101,45 +1101,45 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
 <context>
     <name>QSampler::OptionsForm</name>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="274"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="287"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="269"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="282"/>
         <source>This parameter is not supported by the current sampler version in use.</source>
         <translation>Ce paramètre n&apos;est pas supporté par la version de l&apos;échantillonneur actuel en utilisation.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="279"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="274"/>
         <source>The max. amount of voices the sampler shall process simultaneously.</source>
         <translation>La quantité maximum de voix que l&apos;échantillonneur peut traiter simultanément.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="292"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="287"/>
         <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
         <translation>La quantité maximum de flux de disque que l&apos;échantillonneur peut traiter simultanément.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="299"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="302"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="294"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="297"/>
         <source>QSampler was built without support for this parameter.</source>
         <translation>QSampler a été construit sans le support pour ce paramètre.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="387"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="382"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="388"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="383"/>
         <source>Some settings may be only effective
 next time you start this application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="424"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="419"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="425"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="420"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1148,12 +1148,12 @@ Do you want to apply the changes?</source>
 Souhaitez-vous appliquer les modifications ?</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="489"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="484"/>
         <source>Messages Log</source>
         <translation>Journal de messages</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="491"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="486"/>
         <source>Log files</source>
         <translation>Fichiers de journaux</translation>
     </message>
@@ -2905,6 +2905,7 @@ Contrôleur MIDI :</translation>
         <location filename="../qsamplerOptionsForm.ui" line="683"/>
         <location filename="../qsamplerOptionsForm.ui" line="774"/>
         <location filename="../qsamplerOptionsForm.ui" line="864"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="38"/>
         <source>(default)</source>
         <translation>(défaut)</translation>
     </message>
