@@ -286,14 +286,6 @@ Promiňte.</translation>
     </message>
 </context>
 <context>
-    <name>QSampler</name>
-    <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="39"/>
-        <source>(default)</source>
-        <translation type="unfinished">(výchozí)</translation>
-    </message>
-</context>
-<context>
     <name>QSampler::AbstractDeviceParamModel</name>
     <message>
         <location filename="../qsamplerDevice.cpp" line="998"/>
@@ -1108,45 +1100,45 @@ Chcete zastavit LinuxSampler?</translation>
 <context>
     <name>QSampler::OptionsForm</name>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="267"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="280"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="274"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="287"/>
         <source>This parameter is not supported by the current sampler version in use.</source>
         <translation>Tento parametr není podporován současnou používanou verzí sampleru.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="272"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="279"/>
         <source>The max. amount of voices the sampler shall process simultaneously.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="285"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="292"/>
         <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="292"/>
-        <location filename="../qsamplerOptionsForm.cpp" line="295"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="299"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="302"/>
         <source>QSampler was built without support for this parameter.</source>
         <translation>QSampler byl sestaven bez podpory pro tento parametr.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="380"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="387"/>
         <source>Information</source>
         <translation type="unfinished">Informace</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="381"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="388"/>
         <source>Some settings may be only effective
 next time you start this application.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="417"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="424"/>
         <source>Warning</source>
         <translation>Varování</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="418"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="425"/>
         <source>Some settings have been changed.
 
 Do you want to apply the changes?</source>
@@ -1155,12 +1147,12 @@ Do you want to apply the changes?</source>
 Chcete použít změny?</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="482"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="489"/>
         <source>Messages Log</source>
         <translation>Zápis hlášení</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptionsForm.cpp" line="484"/>
+        <location filename="../qsamplerOptionsForm.cpp" line="491"/>
         <source>Log files</source>
         <translation>Soubory s hlášeními</translation>
     </message>
