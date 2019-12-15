@@ -1164,7 +1164,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="323"/>
         <source>Import File - %1</source>
-         <translation>Importer le fichier - %1</translation>
+        <translation>Importer le fichier - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="326"/>
@@ -1192,7 +1192,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
 %1
 
 Sorry.</source>
-        <translation>Impossible d'importer depuis le fichier :
+        <translation>Impossible d&apos;importer depuis le fichier :
 
 %1
 
@@ -1246,7 +1246,7 @@ Souhaitez-vous sauvegarder les modifications ?</translation>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1051"/>
         <source>Disabled</source>
-        <ttranslation>Désactivé</translation>
+        <translation>Désactivé</translation>
     </message>
 </context>
 <context>
