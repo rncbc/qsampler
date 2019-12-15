@@ -1125,13 +1125,14 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="382"/>
         <source>Information</source>
-        <translation type="unfinished">Information</translation>
+        <translation>Informations</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="383"/>
         <source>Some settings may be only effective
 next time you start this application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains paramètres peuvent n&apos;être effectifs
+qu&apos;après le prochain démarrage de cette application.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="419"/>
@@ -1163,26 +1164,26 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="323"/>
         <source>Import File - %1</source>
-        <translation type="unfinished"></translation>
+         <translation>Importer le fichier - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="326"/>
         <location filename="../qsamplerPaletteForm.cpp" line="392"/>
         <source>Palette files (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de palette (*.%1)</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="327"/>
         <location filename="../qsamplerPaletteForm.cpp" line="393"/>
         <source>All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="379"/>
         <location filename="../qsamplerPaletteForm.cpp" line="802"/>
         <location filename="../qsamplerPaletteForm.cpp" line="810"/>
         <source>Warning - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Attention - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="380"/>
@@ -1191,19 +1192,25 @@ Souhaitez-vous appliquer les modifications ?</translation>
 %1
 
 Sorry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d'importer depuis le fichier :
+
+%1
+
+Navré.</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="389"/>
         <source>Export File - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter le fichier - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="803"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains paramètres ont été modifié.
+
+Souhaitez-vous abandonner les modifications ?</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="811"/>
@@ -1212,7 +1219,11 @@ Do you want to discard the changes?</source>
 &quot;%1&quot;.
 
 Do you want to save the changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Certains paramètres ont été modifié.
+
+&quot;%1&quot;.
+
+Souhaitez-vous sauvegarder les modifications ?</translation>
     </message>
 </context>
 <context>
@@ -1220,22 +1231,22 @@ Do you want to save the changes?</source>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1042"/>
         <source>Color Role</source>
-        <translation type="unfinished"></translation>
+        <translation>Role de couleur</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1045"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Actif</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1048"/>
         <source>Inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>Inactif</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1051"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <ttranslation>Désactivé</translation>
     </message>
 </context>
 <context>
@@ -2739,7 +2750,7 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="60"/>
         <source>&amp;General</source>
-        <translation type="unfinished"></translation>
+        <translation>Général</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="117"/>
@@ -2839,47 +2850,47 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="636"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personnalisé</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="657"/>
         <source>&amp;Color palette theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème de palette de &amp;couleur :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="676"/>
         <source>Custom color palette theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Theme de palette de couleur personnalisé</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="688"/>
         <source>Wonton Soup</source>
-        <translation type="unfinished"></translation>
+        <translation>Soupe Wonton</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="693"/>
         <source>KXStudio</source>
-        <translation type="unfinished"></translation>
+        <translation>KXstudio</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="722"/>
         <source>Manage custom color palette themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Gérer les thèmes de palette de couleur personnalisés</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="751"/>
         <source>&amp;Widget style theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème de style de &amp;widget :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="767"/>
         <source>Custom widget style theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème de style de widget personnalisé :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="807"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="838"/>
@@ -2894,12 +2905,12 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1525"/>
         <source>Maximum &amp;number of voices:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nombre maximum de voix :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1576"/>
         <source>Maximum number of disk &amp;streams:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre maximum de flux de di&amp;sques :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="683"/>
@@ -2950,92 +2961,92 @@ Contrôleur MIDI :</translation>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="41"/>
         <source>Color Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Thèmes de couleur</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="47"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="65"/>
         <source>Current color palette name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de la palette de couleur actuelle</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="78"/>
         <source>Save current color palette name</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder le nom de la palette de couleur actuelle</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="81"/>
         <source>Save</source>
-        <translation type="unfinished">Sauvegarder</translation>
+        <translation>Sauvegarder</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="91"/>
         <source>Delete current color palette name</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer le nom de la palette de couleur actuelle</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="94"/>
         <source>Delete</source>
-        <translation type="unfinished">Effacer</translation>
+        <translation>Effacer</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="107"/>
         <source>Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Palette</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="119"/>
         <source>Current color palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Palette de couleur actuelle</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="129"/>
         <source>Generate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Générer :</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="145"/>
         <source>Base color to generate palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Couleur de base pour générer la palette</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="152"/>
         <source>Reset all current palette colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser toutes les couleurs de la palette actuelle</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="155"/>
         <source> Reset</source>
-        <translation type="unfinished"></translation>
+        <translation> Réinitialiser</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="178"/>
         <source>Import a custom color theme (palette) from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer un thème (palette) de couleur personnalisé depuis un fichier</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="181"/>
         <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importer...</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="191"/>
         <source>Export a custom color theme (palette) to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter un thème (palette) de couleur personnalisé vers un fichier</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="194"/>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Exporter...</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="217"/>
         <source>Show Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les détails</translation>
     </message>
 </context>
 </TS>
