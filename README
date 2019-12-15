@@ -14,8 +14,10 @@ open source multimedia operating systems. Thanks to various kernel patches
 and the Jack Audio Connection Kit, Linux is currently able to deliver rock
 solid sub-5 millisecond MIDI-to-Audio response.
 
-Homepage: http://qsampler.sourceforge.net
-See also: http://www.linuxsampler.org
+Homepage: https://qsampler.sourceforge.io
+          http://qsampler.sourceforge.net
+
+See also: https://www.linuxsampler.org
 
 License: GNU General Public License (GPL)
 
@@ -29,15 +31,15 @@ The software requirements for build and runtime are listed as follows:
 
   - Qt framework, C++ class library and tools for
         cross-platform application and UI development
-        http://qt.io/
+        https://qt.io/
 
   - liblscp, C library for LinuxSampler control protocol API.
-        http://www.linuxsampler.org/
+        https://www.linuxsampler.org/
 
   Optional (opted-in at build time):
 
   - libgig, C++ library for loading and modifying Gigasampler and DLS files.
-        http://www.linuxsampler.org/libgig/
+        https://www.linuxsampler.org/libgig/
 
 
 Installation
@@ -83,7 +85,7 @@ Bugs
 ----
 
 Plenty as this is still alpha software. Bug reports should be posted on
-LinuxSampler bug tracker (http://bugs.linuxsampler.org).
+LinuxSampler bug tracker (https://bugs.linuxsampler.org).
 
 
 Support
@@ -92,11 +94,11 @@ Support
 Qsampler is open source free software. For bug reports, feature requests,
 discussion forums, mailling lists, or any other matter related to the
 development of this piece of software, please use the LinuxSampler project
-site (http://www.linuxsampler.org).
+site (https://www.linuxsampler.org).
 
 
 Enjoy.
 
 rncbc aka Rui Nuno Capela
 rncbc at rncbc dot org
-http://www.rncbc.org
+https://www.rncbc.org
