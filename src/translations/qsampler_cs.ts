@@ -272,12 +272,12 @@ Promiňte.</translation>
     <message>
         <location filename="../qsamplerOptions.cpp" line="334"/>
         <source>Option -h requires an argument (host).</source>
-        <translation type="unfinished"></translation>
+        <translation>Volba -h vyžaduje argument (server).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="343"/>
         <source>Option -p requires an argument (port).</source>
-        <translation>Volba -p vyžaduje argument (název přípojky - brány).</translation>
+        <translation>Volba -p vyžaduje argument (název přípojky - brány; port).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="613"/>
@@ -308,12 +308,12 @@ Promiňte.</translation>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="327"/>
         <source>Select an instrument of the file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vybrat nástroj souboru</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="328"/>
         <source>You might want to enable instrument name retrieval in the settings dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Získání názvu nástroje povolíte v dialogu nastavení</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="438"/>
@@ -341,22 +341,22 @@ Chcete použít změny?</translation>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="504"/>
         <source>GIG Instrument files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s nástroji GIG</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="506"/>
         <source>SFZ Instrument files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s nástroji SFZ</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="508"/>
         <source>SF2 Instrument files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s nástroji SF2</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="509"/>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Všechny soubory</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.cpp" line="513"/>
@@ -393,7 +393,7 @@ Chcete použít změny?</translation>
     <message>
         <location filename="../qsamplerChannelStrip.cpp" line="419"/>
         <source>Instruments</source>
-        <translation type="unfinished">Nástroje</translation>
+        <translation>Nástroje</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.cpp" line="521"/>
@@ -429,7 +429,7 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerDeviceForm.cpp" line="302"/>
         <source>Don&apos;t ask this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Neptat se znovu</translation>
     </message>
     <message>
         <location filename="../qsamplerDeviceForm.cpp" line="464"/>
@@ -470,7 +470,7 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerDeviceStatusForm.cpp" line="125"/>
         <source>%1 Status</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Stav</translation>
     </message>
 </context>
 <context>
@@ -478,17 +478,17 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerInstrumentForm.cpp" line="264"/>
         <source>GIG Instrument files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s nástroji GIG</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentForm.cpp" line="266"/>
         <source>SFZ Instrument files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s nástroji SFZ</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentForm.cpp" line="268"/>
         <source>SF2 Instrument files</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s nástroji SF2</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentForm.cpp" line="272"/>
@@ -543,7 +543,7 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerInstrumentListForm.cpp" line="300"/>
         <source>Don&apos;t ask this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Neptat se znovu</translation>
     </message>
 </context>
 <context>
@@ -551,69 +551,69 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="98"/>
         <source>Persistent</source>
-        <translation type="unfinished">Trvalý</translation>
+        <translation>Trvalý</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="99"/>
         <source>On Demand Hold</source>
-        <translation type="unfinished">Držení na požádání</translation>
+        <translation>Držení na požádání</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="100"/>
         <source>On Demand</source>
-        <translation type="unfinished">Na požádání</translation>
+        <translation>Na požádání</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="156"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="157"/>
         <source>Map</source>
-        <translation type="unfinished">Přiřazení</translation>
+        <translation>Přiřazení</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="158"/>
         <source>Bank</source>
-        <translation type="unfinished">Banka</translation>
+        <translation>Banka</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="159"/>
         <source>Prog</source>
-        <translation type="unfinished">Program</translation>
+        <translation>Program</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="160"/>
         <source>Engine</source>
-        <translation type="unfinished">Stroj</translation>
+        <translation>Stroj</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="161"/>
         <source>File</source>
-        <translation type="unfinished">Soubor</translation>
+        <translation>Soubor</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="162"/>
         <source>Nr</source>
-        <translation type="unfinished">Číslo</translation>
+        <translation>Číslo</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="163"/>
         <source>Vol</source>
-        <translation type="unfinished">Hlasitost</translation>
+        <translation>Hlasitost</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="164"/>
         <source>Mode</source>
-        <translation type="unfinished">Režim</translation>
+        <translation>Režim</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentList.cpp" line="293"/>
         <source>Could not get current list of MIDI instrument mappings.
 
 Sorry.</source>
-        <translation type="unfinished">Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
+        <translation>Nepodařilo se získat nynější seznam přiřazení MIDI nástrojů.
 
 Promiňte.</translation>
     </message>
@@ -847,14 +847,14 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="742"/>
         <source>LSCP Event: %1 data: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Událost LSCP: %1 data: %2</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="1506"/>
         <location filename="../qsamplerMainForm.cpp" line="1565"/>
         <location filename="../qsamplerMainForm.cpp" line="1678"/>
         <source>Don&apos;t ask this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Neptat se znovu</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="1899"/>
@@ -979,7 +979,7 @@ Promiňte.</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2499"/>
         <source>Don&apos;t show this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Neukazovat znovu</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2819"/>
@@ -1108,12 +1108,12 @@ Chcete zastavit LinuxSampler?</translation>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="274"/>
         <source>The max. amount of voices the sampler shall process simultaneously.</source>
-        <translation type="unfinished"></translation>
+        <translation>Největší počet hlasů, které vzorkovač (sampler) má souběžně zpracovat.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="287"/>
         <source>The max. amount of disk streams the sampler shall process simultaneously.</source>
-        <translation type="unfinished"></translation>
+        <translation>Největší počet diskových proudů, které vzorkovač (sampler) má souběžně zpracovat.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="294"/>
@@ -1124,13 +1124,14 @@ Chcete zastavit LinuxSampler?</translation>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="382"/>
         <source>Information</source>
-        <translation type="unfinished">Informace</translation>
+        <translation>Informace</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="383"/>
         <source>Some settings may be only effective
 next time you start this application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Některá nastavení se projeví až tehdy,
+když příště spustíte tento program.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.cpp" line="419"/>
@@ -1162,26 +1163,26 @@ Chcete použít změny?</translation>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="323"/>
         <source>Import File - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést soubor - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="326"/>
         <location filename="../qsamplerPaletteForm.cpp" line="392"/>
         <source>Palette files (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubory s paletami (*.%1)</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="327"/>
         <location filename="../qsamplerPaletteForm.cpp" line="393"/>
         <source>All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Všechny soubory (*.*)</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="379"/>
         <location filename="../qsamplerPaletteForm.cpp" line="802"/>
         <location filename="../qsamplerPaletteForm.cpp" line="810"/>
         <source>Warning - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Varování - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="380"/>
@@ -1190,19 +1191,25 @@ Chcete použít změny?</translation>
 %1
 
 Sorry.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodařilo se zavést ze souboru.
+
+%1
+
+Promiňte.</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="389"/>
         <source>Export File - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést soubor - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="803"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Některá nastavení byla změněna.
+
+Chcete zahodit změny?</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="811"/>
@@ -1211,7 +1218,11 @@ Do you want to discard the changes?</source>
 &quot;%1&quot;.
 
 Do you want to save the changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Některá nastavení byla změněna:
+
+&quot;%1&quot;
+
+Chcete uložit změny?</translation>
     </message>
 </context>
 <context>
@@ -1219,22 +1230,22 @@ Do you want to save the changes?</source>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1042"/>
         <source>Color Role</source>
-        <translation type="unfinished"></translation>
+        <translation>Barevná role</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1045"/>
         <source>Active</source>
-        <translation type="unfinished"></translation>
+        <translation>Činný</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1048"/>
         <source>Inactive</source>
-        <translation type="unfinished"></translation>
+        <translation>Nečinný</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="1051"/>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakázáno</translation>
     </message>
 </context>
 <context>
@@ -1303,23 +1314,23 @@ Do you want to save the changes?</source>
         <location filename="../qsamplerChannelForm.ui" line="440"/>
         <location filename="../qsamplerChannelForm.ui" line="626"/>
         <source>De&amp;vice:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Zařízení:</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="236"/>
         <location filename="../qsamplerChannelForm.ui" line="569"/>
         <source>T&amp;ype:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Typ:</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="38"/>
         <source>Channel</source>
-        <translation type="unfinished">Kanál</translation>
+        <translation>Kanál</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="109"/>
         <source>Filena&amp;me:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Název souboru:</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelForm.ui" line="293"/>
@@ -1552,7 +1563,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="44"/>
         <source>Channel</source>
-        <translation type="unfinished">Kanál</translation>
+        <translation>Kanál</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="136"/>
@@ -1567,7 +1578,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="195"/>
         <source>MIDI activity</source>
-        <translation type="unfinished"></translation>
+        <translation>Činnost MIDI</translation>
     </message>
     <message>
         <location filename="../qsamplerChannelStrip.ui" line="239"/>
@@ -1720,7 +1731,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerInstrumentForm.ui" line="37"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Nástroj</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentForm.ui" line="60"/>
@@ -1848,7 +1859,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="35"/>
         <source>Instruments</source>
-        <translation type="unfinished">Nástroje</translation>
+        <translation>Nástroje</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="57"/>
@@ -1863,7 +1874,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="63"/>
         <source>Ins</source>
-        <translation type="unfinished"></translation>
+        <translation>Nástroj</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="71"/>
@@ -1893,7 +1904,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="91"/>
         <source>Del</source>
-        <translation type="unfinished"></translation>
+        <translation>Del</translation>
     </message>
     <message>
         <location filename="../qsamplerInstrumentListForm.ui" line="99"/>
@@ -2612,32 +2623,32 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="350"/>
         <source>Whether to ask for session reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádat o potvrzení při vynulování sezení</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="353"/>
         <source>&amp;Confirm session reset</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Potvrdit vynulování sezení</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="382"/>
         <source>Whether to ask for session restart</source>
-        <translation type="unfinished"></translation>
+        <translation>Žádat o potvrzení při restartování sezení</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="385"/>
         <source>&amp;Confirm session restart</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Potvrdit restartování sezení</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="414"/>
         <source>Whether to show session errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat chyby sezení</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="417"/>
         <source>&amp;Confirm session errors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Potvrdit ukázání chyb sezení</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1413"/>
@@ -2647,7 +2658,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="35"/>
         <source>Options</source>
-        <translation type="unfinished">Volby</translation>
+        <translation>Volby</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1431"/>
@@ -2738,7 +2749,7 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="60"/>
         <source>&amp;General</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Obecné</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="117"/>
@@ -2838,47 +2849,49 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="636"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlastní</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="657"/>
         <source>&amp;Color palette theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Motiv palety barev:</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="676"/>
         <source>Custom color palette theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlastní motiv palety barev</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="688"/>
         <source>Wonton Soup</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>DO NOT TRANSLATE</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="693"/>
         <source>KXStudio</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>DO NOT TRANSLATE</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="722"/>
         <source>Manage custom color palette themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Spravovat vlastní motivy palety barev</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="751"/>
         <source>&amp;Widget style theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Motiv stylu &amp;prvku:</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="767"/>
         <source>Custom widget style theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlastní motiv stylu prvku</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="807"/>
         <source>Defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Výchozí</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="838"/>
@@ -2893,12 +2906,12 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1525"/>
         <source>Maximum &amp;number of voices:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nejvyšší &amp;počet hlasů:</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="1576"/>
         <source>Maximum number of disk &amp;streams:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nejvyšší počet diskových &amp;proudů:</translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="683"/>
@@ -2949,92 +2962,92 @@ hloubky MIDI:</translation>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="41"/>
         <source>Color Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Barevné motivy</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="47"/>
         <source>Name</source>
-        <translation type="unfinished">Název</translation>
+        <translation>Název</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="65"/>
         <source>Current color palette name</source>
-        <translation type="unfinished"></translation>
+        <translation>Název nynější palety barev</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="78"/>
         <source>Save current color palette name</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit název nynější palety barev</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="81"/>
         <source>Save</source>
-        <translation type="unfinished">Uložit</translation>
+        <translation>Uložit</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="91"/>
         <source>Delete current color palette name</source>
-        <translation type="unfinished"></translation>
+        <translation>Smazat název nynější palety barev</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="94"/>
         <source>Delete</source>
-        <translation type="unfinished">Smazat</translation>
+        <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="107"/>
         <source>Palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Paleta</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="119"/>
         <source>Current color palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Nynější paleta barev</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="129"/>
         <source>Generate:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vytvořit:</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="145"/>
         <source>Base color to generate palette</source>
-        <translation type="unfinished"></translation>
+        <translation>Základní barva pro vytvoření palety</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="152"/>
         <source>Reset all current palette colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastavit všechny barvy palety barev na výchozí</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="155"/>
         <source> Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Obnovit výchozí</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="178"/>
         <source>Import a custom color theme (palette) from file</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést vlastní barevný motiv (paleta) ze souboru</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="181"/>
         <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zavést...</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="191"/>
         <source>Export a custom color theme (palette) to file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést vlastní barevný motiv (paleta) do souboru</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="194"/>
         <source>Export...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyvést...</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.ui" line="217"/>
         <source>Show Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat podrobnosti</translation>
     </message>
 </context>
 </TS>

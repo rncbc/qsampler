@@ -2850,12 +2850,14 @@ MIDI Controller:</source>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="688"/>
         <source>Wonton Soup</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>DO NOT TRANSLATE</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="693"/>
         <source>KXStudio</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>DO NOT TRANSLATE</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qsamplerOptionsForm.ui" line="722"/>
