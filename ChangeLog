@@ -19,6 +19,9 @@ GIT HEAD
   aka. Pedro López-Cabanillas, while on qmidinet,
   thanks). (EXPERIMENTAL)
 
+- Fixed crash when a device disappeared on server side
+  (caused by iterator invalidation).
+
 
 0.6.0  2019-10-17  An Autumn'19 Release.
 

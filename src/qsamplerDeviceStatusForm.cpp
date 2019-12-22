@@ -221,12 +221,13 @@ void DeviceStatusForm::onDevicesChanged (void)
 			= Device::getDeviceIDs(pMainForm->client(), Device::Midi);
 		// hide and delete status forms whose device has been destroyed
 		std::map<int, DeviceStatusForm *>::iterator iter = g_instances.begin();
-		for ( ; iter != g_instances.end(); ++iter) {
+		while (iter != g_instances.end()) {
 			if (deviceIDs.find(iter->first) == deviceIDs.end()) {
 				iter->second->hide();
 				delete iter->second;
-				g_instances.erase(iter);
-			}
+				// postfix increment here to avoid iterator invalidation (crash)
+				g_instances.erase(iter++);
+			} else ++iter;
 		}
 		// create status forms for new devices
 		std::set<int>::iterator it = deviceIDs.begin();
