@@ -22,6 +22,9 @@ GIT HEAD
 - Fixed crash when a device disappeared on server side
   (caused by iterator invalidation).
 
+- If connection to server aborted, try to automatically
+  reconnect (if server was not started by QSampler).
+
 
 0.6.0  2019-10-17  An Autumn'19 Release.
 

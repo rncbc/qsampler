@@ -123,6 +123,7 @@ protected slots:
 	void timerSlot();
 	void readServerStdout();
 	void processServerExit();
+	void doAutoReconnectClient();
 
 	void handle_sigusr1();
 	void handle_sigterm();
@@ -165,8 +166,9 @@ protected:
 	void stopSchedule();
 	void startServer();
 	void stopServer(bool bInteractive = false);
-	bool startClient();
+	bool startClient(bool bReconnectOnly = false);
 	void stopClient();
+	void startAutoReconnectClient();
 
 private:
 

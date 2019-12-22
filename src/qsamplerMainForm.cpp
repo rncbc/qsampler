@@ -2792,6 +2792,17 @@ void MainForm::timerSlot (void)
 				}
 			}
 		}
+
+#if CONFIG_LSCP_CLIENT_CONNECTION_LOST
+		// If we lost connection to server: Try to automatically reconnect if we
+		// did not start the server.
+		//
+		// TODO: If we started the server, then we might inform the user that
+		// the server probably crashed and asking user ONCE whether we should
+		// restart the server.
+		if (lscp_client_connection_lost(m_pClient) && !m_pServer)
+			startAutoReconnectClient();
+#endif // CONFIG_LSCP_CLIENT_CONNECTION_LOST
 	}
 
 	// Register the next timer slot.
@@ -2990,7 +3001,7 @@ lscp_status_t qsampler_client_callback ( lscp_client_t */*pClient*/,
 
 
 // Start our almighty client...
-bool MainForm::startClient (void)
+bool MainForm::startClient (bool bReconnectOnly)
 {
 	// Have it a setup?
 	if (m_pOptions == nullptr)
@@ -3011,9 +3022,15 @@ bool MainForm::startClient (void)
 		// Is this the first try?
 		// maybe we need to start a local server...
 		if ((m_pServer && m_pServer->state() == QProcess::Running)
-			|| !m_pOptions->bServerStart) {
-			appendMessagesError(
-				tr("Could not connect to server as client.\n\nSorry."));
+			|| !m_pOptions->bServerStart || bReconnectOnly)
+		{
+			// if this method is called from doAutoReconnect() then don't bother
+			// user with an error message
+			if (!bReconnectOnly) {
+				appendMessagesError(
+					tr("Could not connect to server as client.\n\nSorry.")
+				);
+			}
 		} else {
 			startServer();
 		}
@@ -3139,6 +3156,18 @@ void MainForm::stopClient (void)
 
 	// Make visible status.
 	stabilizeForm();
+}
+
+void MainForm::startAutoReconnectClient() {
+	stopClient();
+	appendMessages("Trying to reconnect.");
+	QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(doAutoReconnectClient()));
+}
+
+void MainForm::doAutoReconnectClient() {
+	bool success = startClient(true);
+	if (!success)
+		QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(doAutoReconnectClient()));
 }
 
 

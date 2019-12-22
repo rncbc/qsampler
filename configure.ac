@@ -457,6 +457,11 @@ if test "x$ac_max_voices" = "xyes"; then
   AC_DEFINE(CONFIG_MAX_VOICES, 1, [Define if max. voices / streams is available.])
 fi
 
+AC_CHECK_LIB(lscp, lscp_client_connection_lost, [ac_lscp_conn_lost="yes"], [ac_lscp_conn_lost="no"])
+if test "x$ac_lscp_conn_lost" = "xyes"; then
+  AC_DEFINE(CONFIG_LSCP_CLIENT_CONNECTION_LOST, 1, [Define if liblscp function lscp_client_connection_lost() is available.])
+fi
+
 # Check for optional libraries.
 if test "x$ac_libgig" = "xyes"; then
    PKG_CHECK_MODULES([GIG], [gig >= 3.3.0], [ac_libgig="yes"], [ac_libgig="no"])
@@ -549,6 +554,7 @@ fi
 echo "  LSCP channel MIDI event support  . . . . . . . . .: $ac_channel_midi_event"
 echo "  LSCP device MIDI event support . . . . . . . . . .: $ac_device_midi_event"
 echo "  LSCP runtime max. voices / disk streams support  .: $ac_max_voices"
+echo "  LSCP connection loss support . . . . . . . . . . .: $ac_lscp_conn_lost"
 echo
 echo "  Unique/Single instance support . . . . . . . . . .: $ac_xunique"
 echo "  Debugger stack-trace (gdb) . . . . . . . . . . . .: $ac_stacktrace"
