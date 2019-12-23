@@ -4,6 +4,15 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
+GIT HEAD
+
+- If connection to server aborted, try to automatically
+  reconnect (if server was not started by QSampler).
+
+- Fixed crash when a device disappeared on server side
+  (caused by iterator invalidation).
+
+
 0.6.1  2019-12-22  The Winter'19 Release.
 
 - Custom color (palette) theme editor introduced; color
