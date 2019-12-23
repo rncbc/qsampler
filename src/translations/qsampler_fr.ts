@@ -674,7 +674,7 @@ Navré.</translation>
         <location filename="../qsamplerMainForm.cpp" line="1489"/>
         <location filename="../qsamplerMainForm.cpp" line="1548"/>
         <location filename="../qsamplerMainForm.cpp" line="1662"/>
-        <location filename="../qsamplerMainForm.cpp" line="2818"/>
+        <location filename="../qsamplerMainForm.cpp" line="2829"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -982,7 +982,7 @@ Navré.</translation>
         <translation>Ne plus afficher</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2819"/>
+        <location filename="../qsamplerMainForm.cpp" line="2830"/>
         <source>Could not start the LinuxSampler server.
 
 Maybe it is already started.</source>
@@ -991,12 +991,12 @@ Maybe it is already started.</source>
 Peut être est-il déjà démarré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2858"/>
+        <location filename="../qsamplerMainForm.cpp" line="2869"/>
         <source>Server is starting...</source>
         <translation>Le serveur démarre...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2864"/>
+        <location filename="../qsamplerMainForm.cpp" line="2875"/>
         <source>Could not start server.
 
 Sorry.</source>
@@ -1005,37 +1005,37 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2871"/>
+        <location filename="../qsamplerMainForm.cpp" line="2882"/>
         <source>Server was started with PID=%1.</source>
         <translation>Le serveur a été démarré avec PID=%1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2888"/>
+        <location filename="../qsamplerMainForm.cpp" line="2899"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Le décès de l&apos;arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2904"/>
+        <location filename="../qsamplerMainForm.cpp" line="2915"/>
         <source>Server is stopping...</source>
         <translation>Le serveur s&apos;arrête...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2949"/>
+        <location filename="../qsamplerMainForm.cpp" line="2960"/>
         <source>Server is being forced...</source>
         <translation>Le serveur est en train d&apos;être forcé...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2960"/>
+        <location filename="../qsamplerMainForm.cpp" line="2971"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Le serveur a été arrêté avec un status de sortie %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3004"/>
+        <location filename="../qsamplerMainForm.cpp" line="3015"/>
         <source>Client connecting...</source>
         <translation>Connexion du client...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3016"/>
+        <location filename="../qsamplerMainForm.cpp" line="3031"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1044,27 +1044,27 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3028"/>
+        <location filename="../qsamplerMainForm.cpp" line="3045"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation>La réception de l&apos;expiration du client est réglée à %1 msec.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3067"/>
+        <location filename="../qsamplerMainForm.cpp" line="3084"/>
         <source>Client connected.</source>
         <translation>Client connecté.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3100"/>
+        <location filename="../qsamplerMainForm.cpp" line="3117"/>
         <source>Client disconnecting...</source>
         <translation>Déconnexion du client...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3138"/>
+        <location filename="../qsamplerMainForm.cpp" line="3155"/>
         <source>Client disconnected.</source>
         <translation>Client déconnecté.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2889"/>
+        <location filename="../qsamplerMainForm.cpp" line="2900"/>
         <source>You have the option to keep the sampler backend (LinuxSampler)
 running in the background. The sampler would continue to work
 according to your current sampler session and you could alter the
