@@ -58,6 +58,8 @@
 #include <QTimer>
 #include <QDateTime>
 
+#include <QElapsedTimer>
+
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QMimeData>
 #endif
@@ -2929,9 +2931,9 @@ void MainForm::stopServer ( bool bInteractive )
 
 	// Give it some time to terminate gracefully and stabilize...
 	if (bGraceWait) {
-		QTime t;
-		t.start();
-		while (t.elapsed() < QSAMPLER_TIMER_MSECS)
+		QElapsedTimer timer;
+		timer.start();
+		while (timer.elapsed() < QSAMPLER_TIMER_MSECS)
 			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
 }
@@ -2961,9 +2963,9 @@ void MainForm::processServerExit (void)
 			// Force final server shutdown...
 			m_pServer->kill();
 			// Give it some time to terminate gracefully and stabilize...
-			QTime t;
-			t.start();
-			while (t.elapsed() < QSAMPLER_TIMER_MSECS)
+			QElapsedTimer timer;
+			timer.start();
+			while (timer.elapsed() < QSAMPLER_TIMER_MSECS)
 				QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 		}
 		// Force final server shutdown...
