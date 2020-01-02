@@ -1064,6 +1064,11 @@ Promiňte.</translation>
         <translation>Klient odpojen.</translation>
     </message>
     <message>
+        <location filename="../qsamplerMainForm.cpp" line="3165"/>
+        <source>Trying to reconnect...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qsamplerMainForm.cpp" line="2900"/>
         <source>You have the option to keep the sampler backend (LinuxSampler)
 running in the background. The sampler would continue to work
