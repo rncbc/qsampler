@@ -1,8 +1,8 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
-   Copyright (C) 2007,2008,2015 Christian Schoenebeck
+   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2007-2019 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -2793,7 +2793,7 @@ void MainForm::timerSlot (void)
 			}
 		}
 
-#if CONFIG_LSCP_CLIENT_CONNECTION_LOST
+	#if CONFIG_LSCP_CLIENT_CONNECTION_LOST
 		// If we lost connection to server: Try to automatically reconnect if we
 		// did not start the server.
 		//
@@ -2802,7 +2802,7 @@ void MainForm::timerSlot (void)
 		// restart the server.
 		if (lscp_client_connection_lost(m_pClient) && !m_pServer)
 			startAutoReconnectClient();
-#endif // CONFIG_LSCP_CLIENT_CONNECTION_LOST
+	#endif // CONFIG_LSCP_CLIENT_CONNECTION_LOST
 	}
 
 	// Register the next timer slot.
@@ -3024,8 +3024,8 @@ bool MainForm::startClient (bool bReconnectOnly)
 		if ((m_pServer && m_pServer->state() == QProcess::Running)
 			|| !m_pOptions->bServerStart || bReconnectOnly)
 		{
-			// if this method is called from doAutoReconnect() then don't bother
-			// user with an error message
+			// if this method is called from autoReconnectClient()
+			// then don't bother user with an error message...
 			if (!bReconnectOnly) {
 				appendMessagesError(
 					tr("Could not connect to server as client.\n\nSorry.")
@@ -3158,16 +3158,20 @@ void MainForm::stopClient (void)
 	stabilizeForm();
 }
 
-void MainForm::startAutoReconnectClient() {
+
+void MainForm::startAutoReconnectClient (void)
+{
 	stopClient();
-	appendMessages("Trying to reconnect.");
-	QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(doAutoReconnectClient()));
+	appendMessages(tr("Trying to reconnect..."));
+	QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(autoReconnectClient()));
 }
 
-void MainForm::doAutoReconnectClient() {
-	bool success = startClient(true);
-	if (!success)
-		QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(doAutoReconnectClient()));
+
+void MainForm::autoReconnectClient (void)
+{
+	const bool bSuccess = startClient(true);
+	if (!bSuccess)
+		QTimer::singleShot(QSAMPLER_TIMER_MSECS, this, SLOT(autoReconnectClient()));
 }
 
 
