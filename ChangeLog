@@ -6,11 +6,17 @@ ChangeLog
 
 GIT HEAD
 
+- Ditching deprecated QTime methods for QElapsedTimer's
+  (in compliance to Qt >= 5.14.0). (EXPERIMENTAL)
+
 - If connection to server aborted, try to automatically
   reconnect (if server was not started by QSampler).
 
 - Fixed crash when a device disappeared on server side
   (caused by iterator invalidation).
+
+- Bumped copyright headers into the New Year (2020).
+
 
 
 0.6.1  2019-12-22  The Winter'19 Release.
@@ -25,8 +31,7 @@ GIT HEAD
 - When using autotools and ./configure --with-qt=...,
   it is also necessary to adjust the PKG_CONFIG_PATH
   environment variable (after a merge request by plcl
-  aka. Pedro López-Cabanillas, while on qmidinet,
-  thanks).
+  aka. Pedro López-Cabanillas, while on qmidinet).
 
 
 0.6.0  2019-10-17  An Autumn'19 Release.
