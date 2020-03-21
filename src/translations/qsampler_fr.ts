@@ -1066,7 +1066,7 @@ Navré.</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="3167"/>
         <source>Trying to reconnect...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tentative de reconnection...</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2902"/>
