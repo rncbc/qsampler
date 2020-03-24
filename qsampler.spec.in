@@ -1,7 +1,7 @@
 #
 # spec file for package qsampler
 #
-# Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+# Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
 # Copyright (C) 2007,2008,2015 Christian Schoenebeck
 #
 # All modifications and additions to the file contributed by third parties
@@ -18,7 +18,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 40
+%define release 42
 
 %define _prefix	@ac_prefix@
 
@@ -97,6 +97,8 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %{_datadir}/man/man1/%{name}*.1.gz
 
 %changelog
+* Tue Mar 24 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.6.2
+- Spring'20 release.
 * Sun Dec 22 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.6.1
 - Winter'19 release.
 * Thu Oct 17 2019 Rui Nuno Capela <rncbc@rncbc.org> 0.6.0
