@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -44,8 +44,7 @@ namespace QSampler {
 // QSampler::InstrumentListForm -- Instrument map list form implementation.
 //
 
-InstrumentListForm::InstrumentListForm (
-	QWidget* pParent, Qt::WindowFlags wflags )
+InstrumentListForm::InstrumentListForm ( QWidget *pParent, Qt::WindowFlags wflags )
 	: QMainWindow(pParent, wflags)
 {
 	m_ui.setupUi(this);

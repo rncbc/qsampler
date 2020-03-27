@@ -1,7 +1,7 @@
 // qsamplerChannelFxForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -105,9 +105,8 @@ static const char* _midiControllerName(int iMidiCtrl) {
 
 namespace QSampler {
 
-ChannelFxForm::ChannelFxForm (
-	Channel* pSamplerChannel, QWidget* pParent, Qt::WindowFlags wflags )
-	: QDialog(pParent, wflags)
+ChannelFxForm::ChannelFxForm ( Channel *pSamplerChannel, QWidget *pParent )
+	: QDialog(pParent)
 {
 	m_ui.setupUi(this);
 

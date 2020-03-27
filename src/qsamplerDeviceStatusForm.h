@@ -42,7 +42,7 @@ class MidiActivityLED : public QLabel
 
 public:
 
-	MidiActivityLED(QString sText = QString(), QWidget *pParent = 0);
+	MidiActivityLED(QString sText = QString(), QWidget *pParent = nullptr);
 	~MidiActivityLED();
 
 	void midiActivityLedOn();
@@ -68,8 +68,8 @@ class DeviceStatusForm : public QWidget
 
 public:
 
-	DeviceStatusForm(int DeviceID,
-		QWidget* pParent = nullptr, Qt::WindowFlags wflags = 0);
+	DeviceStatusForm(int DeviceID, QWidget *pParent = nullptr,
+		Qt::WindowFlags wflags = Qt::WindowFlags());
 	~DeviceStatusForm();
 
 	QAction *visibleAction();

@@ -513,22 +513,22 @@ Souhaitez-vous appliquer les changements ?</translation>
 <context>
     <name>QSampler::InstrumentListForm</name>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="60"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="59"/>
         <source>Instrument Map</source>
         <translation>Cartographie d&apos;instrument</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="160"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="159"/>
         <source>(All)</source>
         <translation>(Tous)</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="284"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="283"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="285"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="284"/>
         <source>About to delete instrument map entry:
 
 %1
@@ -541,7 +541,7 @@ Are you sure?</source>
 Êtes-vous sûr(e) ?</translation>
     </message>
     <message>
-        <location filename="../qsamplerInstrumentListForm.cpp" line="300"/>
+        <location filename="../qsamplerInstrumentListForm.cpp" line="299"/>
         <source>Don&apos;t ask this again</source>
         <translation>Ne pas redemander</translation>
     </message>

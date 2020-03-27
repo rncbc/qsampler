@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ class DeviceForm : public QDialog
 
 public:
 
-	DeviceForm(QWidget *pParent = nullptr, Qt::WindowFlags wflags = 0);
+	DeviceForm(QWidget *pParent = nullptr, Qt::WindowFlags wflags = Qt::WindowFlags());
 	~DeviceForm();
 
 	void setDeviceTypeMode(Device::DeviceType deviceType);

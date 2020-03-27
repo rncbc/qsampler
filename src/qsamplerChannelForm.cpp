@@ -1,7 +1,7 @@
 // qsamplerChannelForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -562,7 +562,7 @@ void ChannelForm::setupDevice ( Device *pDevice,
 
 	// Create the device form if not already...
 	if (m_pDeviceForm == nullptr) {
-		m_pDeviceForm = new DeviceForm(this, Qt::Dialog);
+		m_pDeviceForm = new DeviceForm(this);
 		m_pDeviceForm->setAttribute(Qt::WA_ShowModal);
 		QObject::connect(m_pDeviceForm, SIGNAL(devicesChanged()),
 			this, SLOT(updateDevices()));
