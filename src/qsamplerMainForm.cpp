@@ -70,6 +70,12 @@ const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
 }
 #endif
 
+// Deprecated QTextStreamFunctions/Qt namespaces workaround.
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#define endl	Qt::endl
+#endif
+
+
 #ifdef CONFIG_LIBGIG
 #include <gig.h>
 #endif
@@ -1091,23 +1097,23 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	// Write the file.
 	int iErrors = 0;
 	QTextStream ts(&file);
-	ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << Qt::endl;
-	ts << "# " << tr("Version") << ": " CONFIG_BUILD_VERSION << Qt::endl;
-//	ts << "# " << tr("Build") << ": " CONFIG_BUILD_DATE << Qt::endl;
-	ts << "#"  << Qt::endl;
+	ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
+	ts << "# " << tr("Version") << ": " CONFIG_BUILD_VERSION << endl;
+//	ts << "# " << tr("Build") << ": " CONFIG_BUILD_DATE << endl;
+	ts << "#"  << endl;
 	ts << "# " << tr("File")
-	<< ": " << QFileInfo(sFilename).fileName() << Qt::endl;
+	<< ": " << QFileInfo(sFilename).fileName() << endl;
 	ts << "# " << tr("Date")
 	<< ": " << QDate::currentDate().toString("MMM dd yyyy")
-	<< " "  << QTime::currentTime().toString("hh:mm:ss") << Qt::endl;
-	ts << "#"  << Qt::endl;
-	ts << Qt::endl;
+	<< " "  << QTime::currentTime().toString("hh:mm:ss") << endl;
+	ts << "#"  << endl;
+	ts << endl;
 
 	// It is assumed that this new kind of device+session file
 	// will be loaded from a complete initialized server...
 	int *piDeviceIDs;
 	int  i, iDevice;
-	ts << "RESET" << Qt::endl;
+	ts << "RESET" << endl;
 
 	// Audio device mapping.
 	QMap<int, int> audioDeviceMap; iDevice = 0;
@@ -1118,9 +1124,9 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		if (device.driverName().toUpper() == "PLUGIN")
 			continue;
 		// Audio device specification...
-		ts << Qt::endl;
+		ts << endl;
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
-			<< " " << tr("Device") << " " << iDevice << Qt::endl;
+			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE AUDIO_OUTPUT_DEVICE " << device.driverName();
 		DeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
@@ -1130,7 +1136,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 			if (param.value.isEmpty()) ts << "# ";
 			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
-		ts << Qt::endl;
+		ts << endl;
 		// Audio channel parameters...
 		int iPort = 0;
 		QListIterator<DevicePort *> iter(device.ports());
@@ -1144,7 +1150,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET AUDIO_OUTPUT_CHANNEL_PARAMETER " << iDevice
 					<< " " << iPort << " " << portParam.key()
-					<< "='" << param.value << "'" << Qt::endl;
+					<< "='" << param.value << "'" << endl;
 			}
 			iPort++;
 		}
@@ -1163,9 +1169,9 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		if (device.driverName().toUpper() == "PLUGIN")
 			continue;
 		// MIDI device specification...
-		ts << Qt::endl;
+		ts << endl;
 		ts << "# " << device.deviceTypeName() << " " << device.driverName()
-			<< " " << tr("Device") << " " << iDevice << Qt::endl;
+			<< " " << tr("Device") << " " << iDevice << endl;
 		ts << "CREATE MIDI_INPUT_DEVICE " << device.driverName();
 		DeviceParamMap::ConstIterator deviceParam;
 		for (deviceParam = device.params().begin();
@@ -1175,7 +1181,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 			if (param.value.isEmpty()) ts << "# ";
 			ts << " " << deviceParam.key() << "='" << param.value << "'";
 		}
-		ts << Qt::endl;
+		ts << endl;
 		// MIDI port parameters...
 		int iPort = 0;
 		QListIterator<DevicePort *> iter(device.ports());
@@ -1189,7 +1195,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				if (param.fix || param.value.isEmpty()) ts << "# ";
 				ts << "SET MIDI_INPUT_PORT_PARAMETER " << iDevice
 				<< " " << iPort << " " << portParam.key()
-				<< "='" << param.value << "'" << Qt::endl;
+				<< "='" << param.value << "'" << endl;
 			}
 			iPort++;
 		}
@@ -1198,7 +1204,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		// Try to keep it snappy :)
 		QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 	}
-	ts << Qt::endl;
+	ts << endl;
 
 #ifdef CONFIG_MIDI_INSTRUMENT
 	// MIDI instrument mapping...
@@ -1211,11 +1217,11 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 		ts << "# " << tr("MIDI instrument map") << " " << iMap;
 		if (pszMapName)
 			ts << " - " << pszMapName;
-		ts << Qt::endl;
+		ts << endl;
 		ts << "ADD MIDI_INSTRUMENT_MAP";
 		if (pszMapName)
 			ts << " '" << pszMapName << "'";
-		ts << Qt::endl;
+		ts << endl;
 		// MIDI instrument mapping...
 		lscp_midi_instrument_t *pInstrs
 			= ::lscp_list_midi_instruments(m_pClient, iMidiMap);
@@ -1246,7 +1252,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				}
 				if (pInstrInfo->name)
 					ts << " '" << pInstrInfo->name << "'";
-				ts << Qt::endl;
+				ts << endl;
 			}	// Check for errors...
 			else if (::lscp_client_get_errno(m_pClient)) {
 				appendMessagesClient("lscp_get_midi_instrument_info");
@@ -1255,7 +1261,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 			// Try to keep it snappy :)
 			QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 		}
-		ts << Qt::endl;
+		ts << endl;
 		// Check for errors...
 		if (pInstrs == nullptr && ::lscp_client_get_errno(m_pClient)) {
 			appendMessagesClient("lscp_list_midi_instruments");
@@ -1289,55 +1295,55 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 				if (!midiDeviceMap.contains(iMidiDevice))
 					continue;
 				// Go for regular, canonical devices...
-				ts << "# " << tr("Channel") << " " << iChannelID << Qt::endl;
-				ts << "ADD CHANNEL" << Qt::endl;
+				ts << "# " << tr("Channel") << " " << iChannelID << endl;
+				ts << "ADD CHANNEL" << endl;
 				if (audioDeviceMap.isEmpty()) {
 					ts << "SET CHANNEL AUDIO_OUTPUT_TYPE " << iChannelID
-						<< " " << pChannel->audioDriver() << Qt::endl;
+						<< " " << pChannel->audioDriver() << endl;
 				} else {
 					ts << "SET CHANNEL AUDIO_OUTPUT_DEVICE " << iChannelID
-						<< " " << audioDeviceMap.value(iAudioDevice) << Qt::endl;
+						<< " " << audioDeviceMap.value(iAudioDevice) << endl;
 				}
 				if (midiDeviceMap.isEmpty()) {
 					ts << "SET CHANNEL MIDI_INPUT_TYPE " << iChannelID
-						<< " " << pChannel->midiDriver() << Qt::endl;
+						<< " " << pChannel->midiDriver() << endl;
 				} else {
 					ts << "SET CHANNEL MIDI_INPUT_DEVICE " << iChannelID
-						<< " " << midiDeviceMap.value(iMidiDevice) << Qt::endl;
+						<< " " << midiDeviceMap.value(iMidiDevice) << endl;
 				}
 				ts << "SET CHANNEL MIDI_INPUT_PORT " << iChannelID
-					<< " " << pChannel->midiPort() << Qt::endl;
+					<< " " << pChannel->midiPort() << endl;
 				ts << "SET CHANNEL MIDI_INPUT_CHANNEL " << iChannelID << " ";
 				if (pChannel->midiChannel() == LSCP_MIDI_CHANNEL_ALL)
 					ts << "ALL";
 				else
 					ts << pChannel->midiChannel();
-				ts << Qt::endl;
+				ts << endl;
 				ts << "LOAD ENGINE " << pChannel->engineName()
-					<< " " << iChannelID << Qt::endl;
+					<< " " << iChannelID << endl;
 				if (pChannel->instrumentStatus() < 100) ts << "# ";
 				ts << "LOAD INSTRUMENT NON_MODAL '"
 					<< pChannel->instrumentFile() << "' "
-					<< pChannel->instrumentNr() << " " << iChannelID << Qt::endl;
+					<< pChannel->instrumentNr() << " " << iChannelID << endl;
 				ChannelRoutingMap::ConstIterator audioRoute;
 				for (audioRoute = pChannel->audioRouting().begin();
 						audioRoute != pChannel->audioRouting().end();
 							++audioRoute) {
 					ts << "SET CHANNEL AUDIO_OUTPUT_CHANNEL " << iChannelID
 						<< " " << audioRoute.key()
-						<< " " << audioRoute.value() << Qt::endl;
+						<< " " << audioRoute.value() << endl;
 				}
 				ts << "SET CHANNEL VOLUME " << iChannelID
-					<< " " << pChannel->volume() << Qt::endl;
+					<< " " << pChannel->volume() << endl;
 				if (pChannel->channelMute())
-					ts << "SET CHANNEL MUTE " << iChannelID << " 1" << Qt::endl;
+					ts << "SET CHANNEL MUTE " << iChannelID << " 1" << endl;
 				if (pChannel->channelSolo())
-					ts << "SET CHANNEL SOLO " << iChannelID << " 1" << Qt::endl;
+					ts << "SET CHANNEL SOLO " << iChannelID << " 1" << endl;
 			#ifdef CONFIG_MIDI_INSTRUMENT
 				const int iMidiMap = pChannel->midiMap();
 				if (midiInstrumentMap.contains(iMidiMap)) {
 					ts << "SET CHANNEL MIDI_INSTRUMENT_MAP " << iChannelID
-						<< " " << midiInstrumentMap.value(iMidiMap) << Qt::endl;
+						<< " " << midiInstrumentMap.value(iMidiMap) << endl;
 				}
 			#endif
 			#ifdef CONFIG_FXSEND
@@ -1352,7 +1358,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 							<< " " << pFxSendInfo->midi_controller;
 						if (pFxSendInfo->name)
 							ts << " '" << pFxSendInfo->name << "'";
-						ts << Qt::endl;
+						ts << endl;
 						int *piRouting = pFxSendInfo->audio_routing;
 						for (int iAudioSrc = 0;
 								piRouting && piRouting[iAudioSrc] >= 0;
@@ -1361,12 +1367,12 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 								<< iChannelID
 								<< " " << iFxSend
 								<< " " << iAudioSrc
-								<< " " << piRouting[iAudioSrc] << Qt::endl;
+								<< " " << piRouting[iAudioSrc] << endl;
 						}
 					#ifdef CONFIG_FXSEND_LEVEL
 						ts << "SET FX_SEND LEVEL " << iChannelID
 							<< " " << iFxSend
-							<< " " << pFxSendInfo->level << Qt::endl;
+							<< " " << pFxSendInfo->level << endl;
 					#endif
 					}	// Check for errors...
 					else if (::lscp_client_get_errno(m_pClient)) {
@@ -1375,7 +1381,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 					}
 				}
 			#endif
-				ts << Qt::endl;
+				ts << endl;
 				// Go for next channel...
 				++iChannelID;
 			}
@@ -1385,9 +1391,9 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	}
 
 #ifdef CONFIG_VOLUME
-	ts << "# " << tr("Global volume level") << Qt::endl;
-	ts << "SET VOLUME " << ::lscp_get_volume(m_pClient) << Qt::endl;
-	ts << Qt::endl;
+	ts << "# " << tr("Global volume level") << endl;
+	ts << "SET VOLUME " << ::lscp_get_volume(m_pClient) << endl;
+	ts << endl;
 #endif
 
 	// Ok. we've wrote it.
