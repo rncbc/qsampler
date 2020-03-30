@@ -35,6 +35,10 @@
 #include "qsamplerOptionsForm.h"
 #include "qsamplerDeviceStatusForm.h"
 
+#include "qsamplerPaletteForm.h"
+
+#include <QStyleFactory>
+
 #include <QMdiArea>
 #include <QMdiSubWindow>
 
@@ -1874,40 +1878,70 @@ void MainForm::viewOptions (void)
 		if (m_pOptions->sMessagesFont.isEmpty() && m_pMessages)
 			m_pOptions->sMessagesFont = m_pMessages->messagesFont().toString();
 		// To track down deferred or immediate changes.
-		const QString sOldServerHost      = m_pOptions->sServerHost;
-		const int     iOldServerPort      = m_pOptions->iServerPort;
-		const int     iOldServerTimeout   = m_pOptions->iServerTimeout;
-		const bool    bOldServerStart     = m_pOptions->bServerStart;
-		const QString sOldServerCmdLine   = m_pOptions->sServerCmdLine;
-		const bool    bOldMessagesLog     = m_pOptions->bMessagesLog;
-		const QString sOldMessagesLogPath = m_pOptions->sMessagesLogPath;
-		const QString sOldDisplayFont     = m_pOptions->sDisplayFont;
-		const bool    bOldDisplayEffect   = m_pOptions->bDisplayEffect;
-		const int     iOldMaxVolume       = m_pOptions->iMaxVolume;
-		const QString sOldMessagesFont    = m_pOptions->sMessagesFont;
-		const bool    bOldKeepOnTop       = m_pOptions->bKeepOnTop;
-		const bool    bOldStdoutCapture   = m_pOptions->bStdoutCapture;
-		const int     bOldMessagesLimit   = m_pOptions->bMessagesLimit;
+		const QString sOldServerHost       = m_pOptions->sServerHost;
+		const int     iOldServerPort       = m_pOptions->iServerPort;
+		const int     iOldServerTimeout    = m_pOptions->iServerTimeout;
+		const bool    bOldServerStart      = m_pOptions->bServerStart;
+		const QString sOldServerCmdLine    = m_pOptions->sServerCmdLine;
+		const bool    bOldMessagesLog      = m_pOptions->bMessagesLog;
+		const QString sOldMessagesLogPath  = m_pOptions->sMessagesLogPath;
+		const QString sOldDisplayFont      = m_pOptions->sDisplayFont;
+		const bool    bOldDisplayEffect    = m_pOptions->bDisplayEffect;
+		const int     iOldMaxVolume        = m_pOptions->iMaxVolume;
+		const QString sOldMessagesFont     = m_pOptions->sMessagesFont;
+		const bool    bOldKeepOnTop        = m_pOptions->bKeepOnTop;
+		const bool    bOldStdoutCapture    = m_pOptions->bStdoutCapture;
+		const int     bOldMessagesLimit    = m_pOptions->bMessagesLimit;
 		const int     iOldMessagesLimitLines = m_pOptions->iMessagesLimitLines;
-		const bool    bOldCompletePath    = m_pOptions->bCompletePath;
-		const bool    bOldInstrumentNames = m_pOptions->bInstrumentNames;
-		const int     iOldMaxRecentFiles  = m_pOptions->iMaxRecentFiles;
-		const int     iOldBaseFontSize    = m_pOptions->iBaseFontSize;
+		const bool    bOldCompletePath     = m_pOptions->bCompletePath;
+		const bool    bOldInstrumentNames  = m_pOptions->bInstrumentNames;
+		const int     iOldMaxRecentFiles   = m_pOptions->iMaxRecentFiles;
+		const int     iOldBaseFontSize     = m_pOptions->iBaseFontSize;
+		const QString sOldCustomStyleTheme = m_pOptions->sCustomStyleTheme;
+		const QString sOldCustomColorTheme = m_pOptions->sCustomColorTheme;
 		// Load the current setup settings.
 		pOptionsForm->setup(m_pOptions);
 		// Show the setup dialog...
 		if (pOptionsForm->exec()) {
 			// Warn if something will be only effective on next run.
+			int iNeedRestart = 0;
 			if (( bOldStdoutCapture && !m_pOptions->bStdoutCapture) ||
-				(!bOldStdoutCapture &&  m_pOptions->bStdoutCapture) ||
-				( bOldKeepOnTop     && !m_pOptions->bKeepOnTop)     ||
+				(!bOldStdoutCapture &&  m_pOptions->bStdoutCapture)) {
+				updateMessagesCapture();
+				++iNeedRestart;
+			}
+			if (( bOldKeepOnTop     && !m_pOptions->bKeepOnTop)     ||
 				(!bOldKeepOnTop     &&  m_pOptions->bKeepOnTop)     ||
 				(iOldBaseFontSize   !=  m_pOptions->iBaseFontSize)) {
-				QMessageBox::information(this,
-					tr("Information"),
-					tr("Some settings may be only effective\n"
-					"next time you start this program."));
-				updateMessagesCapture();
+				++iNeedRestart;
+			}
+			// Check whether restart is needed or whether
+			// custom options maybe set up immediately...
+			if (m_pOptions->sCustomStyleTheme != sOldCustomStyleTheme) {
+			#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+				++iNeedRestart;
+			#else		
+				if (m_pOptions->sCustomStyleTheme.isEmpty()) {
+					++iNeedRestart;
+				} else {
+					QApplication::setStyle(
+						QStyleFactory::create(m_pOptions->sCustomStyleTheme));
+				}
+			#endif
+			}
+			if (m_pOptions->sCustomColorTheme != sOldCustomColorTheme) {
+			#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+				++iNeedRestart;
+			#else
+				if (m_pOptions->sCustomColorTheme.isEmpty()) {
+					++iNeedRestart;
+				} else {
+					QPalette pal;
+					if (PaletteForm::namedPalette(
+							&m_pOptions->settings(), m_pOptions->sCustomColorTheme, pal))
+						QApplication::setPalette(pal);
+				}
+			#endif
 			}
 			// Check wheather something immediate has changed.
 			if (( bOldMessagesLog && !m_pOptions->bMessagesLog) ||
@@ -1935,6 +1969,13 @@ void MainForm::viewOptions (void)
 				(!bOldMessagesLimit &&  m_pOptions->bMessagesLimit) ||
 				(iOldMessagesLimitLines !=  m_pOptions->iMessagesLimitLines))
 				updateMessagesLimit();
+			// Show restart needed message...
+			if (iNeedRestart > 0) {
+				QMessageBox::information(this,
+					tr("Information"),
+					tr("Some settings may be only effective\n"
+					"next time you start this program."));
+			}
 			// And now the main thing, whether we'll do client/server recycling?
 			if ((sOldServerHost != m_pOptions->sServerHost) ||
 				(iOldServerPort != m_pOptions->iServerPort) ||
