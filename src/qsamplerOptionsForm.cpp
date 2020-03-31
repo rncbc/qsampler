@@ -357,7 +357,7 @@ void OptionsForm::accept (void)
 		m_iDirtyCount = 0;
 	}
 
-	// if the user modified the limits, apply them to the sampler
+	// If the user modified the limits, apply them to the sampler
 	// (and store it later in qsampler's configuration)
 	if (bMaxVoicesModified && m_ui.MaxVoicesSpinBox->isEnabled())
 		m_pOptions->setMaxVoices(m_ui.MaxVoicesSpinBox->value());

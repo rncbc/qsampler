@@ -88,7 +88,7 @@ Navré.</translation>
     </message>
     <message>
         <location filename="../qsamplerChannel.cpp" line="469"/>
-        <location filename="../qsamplerMainForm.cpp" line="2238"/>
+        <location filename="../qsamplerMainForm.cpp" line="2230"/>
         <source>Volume: %1.</source>
         <translation>Volume : %1.</translation>
     </message>
@@ -627,13 +627,13 @@ Navré.</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="348"/>
-        <location filename="../qsamplerMainForm.cpp" line="2196"/>
+        <location filename="../qsamplerMainForm.cpp" line="2188"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="364"/>
-        <location filename="../qsamplerMainForm.cpp" line="2210"/>
+        <location filename="../qsamplerMainForm.cpp" line="2202"/>
         <source>MOD</source>
         <translation>MOD</translation>
     </message>
@@ -674,7 +674,7 @@ Navré.</translation>
         <location filename="../qsamplerMainForm.cpp" line="1501"/>
         <location filename="../qsamplerMainForm.cpp" line="1560"/>
         <location filename="../qsamplerMainForm.cpp" line="1674"/>
-        <location filename="../qsamplerMainForm.cpp" line="2878"/>
+        <location filename="../qsamplerMainForm.cpp" line="2870"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -732,7 +732,7 @@ Navré.</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="1105"/>
-        <location filename="../qsamplerMainForm.cpp" line="2105"/>
+        <location filename="../qsamplerMainForm.cpp" line="2097"/>
         <source>Version</source>
         <translation>Version</translation>
     </message>
@@ -857,114 +857,114 @@ Are you sure?</source>
         <translation>Ne pas redemander</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1975"/>
+        <location filename="../qsamplerMainForm.cpp" line="1967"/>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="1976"/>
+        <location filename="../qsamplerMainForm.cpp" line="1968"/>
         <source>Some settings may be only effective
 next time you start this program.</source>
         <translation>Certains parapètres pourraient n&apos;être effectif
 que lors du prochain démarrage de ce programme.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2065"/>
+        <location filename="../qsamplerMainForm.cpp" line="2057"/>
         <source>Debugging option enabled.</source>
         <translation>Option de débogage activée.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2068"/>
+        <location filename="../qsamplerMainForm.cpp" line="2060"/>
         <source>GIG (libgig) file support disabled.</source>
         <translation>Support de fichier GIG (libgig) désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2071"/>
+        <location filename="../qsamplerMainForm.cpp" line="2063"/>
         <source>LSCP (liblscp) instrument_name support disabled.</source>
         <translation>Support de l&apos;instrument_name LSCP (liblscp) désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2074"/>
+        <location filename="../qsamplerMainForm.cpp" line="2066"/>
         <source>Sampler channel Mute/Solo support disabled.</source>
         <translation>Support du muet/solo de canal de l&apos;échantillonneur désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2077"/>
+        <location filename="../qsamplerMainForm.cpp" line="2069"/>
         <source>LSCP (liblscp) audio_routing support disabled.</source>
         <translation>Support de l&apos;audio_routing LSCP (liblscp) désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2080"/>
+        <location filename="../qsamplerMainForm.cpp" line="2072"/>
         <source>Sampler channel Effect Sends support disabled.</source>
         <translation>Support des envois d&apos;effet de canal désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2083"/>
+        <location filename="../qsamplerMainForm.cpp" line="2075"/>
         <source>Global volume support disabled.</source>
         <translation>Support du volume global désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2086"/>
+        <location filename="../qsamplerMainForm.cpp" line="2078"/>
         <source>MIDI instrument mapping support disabled.</source>
         <translation>Support de la cartographie d&apos;instrument MIDI désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2089"/>
+        <location filename="../qsamplerMainForm.cpp" line="2081"/>
         <source>Instrument editing support disabled.</source>
         <translation>Support de l&apos;édition d&apos;instrument désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2092"/>
+        <location filename="../qsamplerMainForm.cpp" line="2084"/>
         <source>Channel MIDI event support disabled.</source>
         <translation>Support d&apos;événement MIDI de canal désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2095"/>
+        <location filename="../qsamplerMainForm.cpp" line="2087"/>
         <source>Device MIDI event support disabled.</source>
         <translation>Support d&apos;événement MIDI de périphérique désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2098"/>
+        <location filename="../qsamplerMainForm.cpp" line="2090"/>
         <source>Runtime max. voices / disk streams support disabled.</source>
         <translation>Support des flux de disque / voix maximum d&apos;exécution désactivé.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2113"/>
+        <location filename="../qsamplerMainForm.cpp" line="2105"/>
         <source>Using</source>
         <translation>Utilisation </translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2125"/>
+        <location filename="../qsamplerMainForm.cpp" line="2117"/>
         <source>Website</source>
         <translation>Site sur la toile </translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2131"/>
+        <location filename="../qsamplerMainForm.cpp" line="2123"/>
         <source>This program is free software; you can redistribute it and/or modify it</source>
         <translation>Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou le</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2132"/>
+        <location filename="../qsamplerMainForm.cpp" line="2124"/>
         <source>under the terms of the GNU General Public License version 2 or later.</source>
         <translation>modifier en accord avec les termes de la licence GNU GPL version 2 ou ultérieure.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2136"/>
+        <location filename="../qsamplerMainForm.cpp" line="2128"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2284"/>
+        <location filename="../qsamplerMainForm.cpp" line="2276"/>
         <source>Chromatic</source>
         <translation>Chromatique</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2286"/>
+        <location filename="../qsamplerMainForm.cpp" line="2278"/>
         <source>Drum Kits</source>
         <translation>Kits de batterie</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2315"/>
+        <location filename="../qsamplerMainForm.cpp" line="2307"/>
         <source>Could not get current list of channels.
 
 Sorry.</source>
@@ -972,17 +972,17 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2539"/>
+        <location filename="../qsamplerMainForm.cpp" line="2531"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2548"/>
+        <location filename="../qsamplerMainForm.cpp" line="2540"/>
         <source>Don&apos;t show this again</source>
         <translation>Ne plus afficher</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2879"/>
+        <location filename="../qsamplerMainForm.cpp" line="2871"/>
         <source>Could not start the LinuxSampler server.
 
 Maybe it is already started.</source>
@@ -991,12 +991,12 @@ Maybe it is already started.</source>
 Peut être est-il déjà démarré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2918"/>
+        <location filename="../qsamplerMainForm.cpp" line="2910"/>
         <source>Server is starting...</source>
         <translation>Le serveur démarre...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2924"/>
+        <location filename="../qsamplerMainForm.cpp" line="2916"/>
         <source>Could not start server.
 
 Sorry.</source>
@@ -1005,37 +1005,37 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2931"/>
+        <location filename="../qsamplerMainForm.cpp" line="2923"/>
         <source>Server was started with PID=%1.</source>
         <translation>Le serveur a été démarré avec PID=%1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2948"/>
+        <location filename="../qsamplerMainForm.cpp" line="2940"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Le décès de l&apos;arrière-plan...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2964"/>
+        <location filename="../qsamplerMainForm.cpp" line="2956"/>
         <source>Server is stopping...</source>
         <translation>Le serveur s&apos;arrête...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3009"/>
+        <location filename="../qsamplerMainForm.cpp" line="3001"/>
         <source>Server is being forced...</source>
         <translation>Le serveur est en train d&apos;être forcé...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3020"/>
+        <location filename="../qsamplerMainForm.cpp" line="3012"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Le serveur a été arrêté avec un status de sortie %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3064"/>
+        <location filename="../qsamplerMainForm.cpp" line="3056"/>
         <source>Client connecting...</source>
         <translation>Connexion du client...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3080"/>
+        <location filename="../qsamplerMainForm.cpp" line="3072"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1044,32 +1044,32 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3094"/>
+        <location filename="../qsamplerMainForm.cpp" line="3086"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation>La réception de l&apos;expiration du client est réglée à %1 msec.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3133"/>
+        <location filename="../qsamplerMainForm.cpp" line="3125"/>
         <source>Client connected.</source>
         <translation>Client connecté.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3166"/>
+        <location filename="../qsamplerMainForm.cpp" line="3158"/>
         <source>Client disconnecting...</source>
         <translation>Déconnexion du client...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3204"/>
+        <location filename="../qsamplerMainForm.cpp" line="3196"/>
         <source>Client disconnected.</source>
         <translation>Client déconnecté.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3214"/>
+        <location filename="../qsamplerMainForm.cpp" line="3206"/>
         <source>Trying to reconnect...</source>
         <translation>Tentative de reconnection...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2949"/>
+        <location filename="../qsamplerMainForm.cpp" line="2941"/>
         <source>You have the option to keep the sampler backend (LinuxSampler)
 running in the background. The sampler would continue to work
 according to your current sampler session and you could alter the
@@ -1155,31 +1155,31 @@ Souhaitez-vous appliquer les modifications ?</translation>
 <context>
     <name>QSampler::PaletteForm</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="326"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="319"/>
         <source>Import File - %1</source>
         <translation>Importer le fichier - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="329"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="395"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="322"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="388"/>
         <source>Palette files (*.%1)</source>
         <translation>Fichiers de palette (*.%1)</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="330"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="396"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="323"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="389"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="382"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="815"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="823"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="375"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="808"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="816"/>
         <source>Warning - %1</source>
         <translation>Attention - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="383"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="376"/>
         <source>Could not import from file:
 
 %1
@@ -1192,12 +1192,12 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="392"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="385"/>
         <source>Export File - %1</source>
         <translation>Exporter le fichier - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="816"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="809"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
@@ -1206,7 +1206,7 @@ Do you want to discard the changes?</source>
 Souhaitez-vous abandonner les modifications ?</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="824"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="817"/>
         <source>Some settings have been changed:
 
 &quot;%1&quot;.
@@ -1222,22 +1222,22 @@ Souhaitez-vous sauvegarder les modifications ?</translation>
 <context>
     <name>QSampler::PaletteForm::PaletteModel</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1055"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1048"/>
         <source>Color Role</source>
         <translation>Role de couleur</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1058"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1051"/>
         <source>Active</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1061"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1054"/>
         <source>Inactive</source>
         <translation>Inactif</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1064"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1057"/>
         <source>Disabled</source>
         <translation>Désactivé</translation>
     </message>
