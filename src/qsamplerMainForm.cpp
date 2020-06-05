@@ -74,14 +74,13 @@ const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
 }
 #endif
 
+#ifdef CONFIG_LIBGIG
+#include <gig.h>
+#endif
+
 // Deprecated QTextStreamFunctions/Qt namespaces workaround.
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
 #define endl	Qt::endl
-#endif
-
-
-#ifdef CONFIG_LIBGIG
-#include <gig.h>
 #endif
 
 // Needed for lroundf()
