@@ -752,7 +752,7 @@ void MainForm::customEvent ( QEvent* pEvent )
 			default:
 				appendMessagesColor(tr("LSCP Event: %1 data: %2")
 					.arg(::lscp_event_to_text(pLscpEvent->event()))
-					.arg(pLscpEvent->data()), Qt::darkMagenta);
+					.arg(pLscpEvent->data()), "#996699");
 		}
 	}
 }
@@ -1032,7 +1032,7 @@ bool MainForm::loadSessionFile ( const QString& sFilename )
 				!= LSCP_OK) {
 				appendMessagesColor(QString("%1(%2): %3")
 					.arg(QFileInfo(sFilename).fileName()).arg(iLine)
-					.arg(sCommand.simplified()), Qt::darkYellow);
+					.arg(sCommand.simplified()), "#996633");
 				appendMessagesClient("lscp_client_query");
 				iErrors++;
 			}
@@ -2555,7 +2555,7 @@ void MainForm::appendMessagesClient( const QString& s )
 
 	appendMessagesColor(s + QString(": %1 (errno=%2)")
 		.arg(::lscp_client_get_result(m_pClient))
-		.arg(::lscp_client_get_errno(m_pClient)), Qt::darkRed);
+		.arg(::lscp_client_get_errno(m_pClient)), "#996666");
 
 	// Make it look responsive...:)
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -2907,7 +2907,7 @@ void MainForm::startServer (void)
 	args.removeAt(0);
 
 	appendMessages(tr("Server is starting..."));
-	appendMessagesColor(m_pOptions->sServerCmdLine, Qt::darkMagenta);
+	appendMessagesColor(m_pOptions->sServerCmdLine, "#990099");
 
 	// Go linuxsampler, go...
 	m_pServer->start(sCommand, args);
