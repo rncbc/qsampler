@@ -752,7 +752,7 @@ void MainForm::customEvent ( QEvent* pEvent )
 			default:
 				appendMessagesColor(tr("LSCP Event: %1 data: %2")
 					.arg(::lscp_event_to_text(pLscpEvent->event()))
-					.arg(pLscpEvent->data()), "#996699");
+					.arg(pLscpEvent->data()), Qt::darkMagenta);
 		}
 	}
 }
@@ -1032,7 +1032,7 @@ bool MainForm::loadSessionFile ( const QString& sFilename )
 				!= LSCP_OK) {
 				appendMessagesColor(QString("%1(%2): %3")
 					.arg(QFileInfo(sFilename).fileName()).arg(iLine)
-					.arg(sCommand.simplified()), "#996633");
+					.arg(sCommand.simplified()), Qt::darkYellow);
 				appendMessagesClient("lscp_client_query");
 				iErrors++;
 			}
@@ -2494,7 +2494,7 @@ void MainForm::updateMaxVolume (void)
 // QSampler::MainForm -- Messages window form handlers.
 
 // Messages output methods.
-void MainForm::appendMessages( const QString& s )
+void MainForm::appendMessages ( const QString& s )
 {
 	if (m_pMessages)
 		m_pMessages->appendMessages(s);
@@ -2502,26 +2502,26 @@ void MainForm::appendMessages( const QString& s )
 	statusBar()->showMessage(s, 3000);
 }
 
-void MainForm::appendMessagesColor( const QString& s, const QString& c )
+void MainForm::appendMessagesColor ( const QString& s, const QColor& rgb )
 {
 	if (m_pMessages)
-		m_pMessages->appendMessagesColor(s, c);
+		m_pMessages->appendMessagesColor(s, rgb);
 
 	statusBar()->showMessage(s, 3000);
 }
 
-void MainForm::appendMessagesText( const QString& s )
+void MainForm::appendMessagesText ( const QString& s )
 {
 	if (m_pMessages)
 		m_pMessages->appendMessagesText(s);
 }
 
-void MainForm::appendMessagesError( const QString& sText )
+void MainForm::appendMessagesError ( const QString& s )
 {
 	if (m_pMessages)
 		m_pMessages->show();
 
-	appendMessagesColor(sText.simplified(), "#ff0000");
+	appendMessagesColor(s.simplified(), Qt::red);
 
 	// Make it look responsive...:)
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -2534,7 +2534,7 @@ void MainForm::appendMessagesError( const QString& sText )
 		QMessageBox mbox(this);
 		mbox.setIcon(QMessageBox::Critical);
 		mbox.setWindowTitle(sTitle);
-		mbox.setText(sText);
+		mbox.setText(s);
 		mbox.setStandardButtons(QMessageBox::Cancel);
 		QCheckBox cbox(tr("Don't show this again"));
 		cbox.setChecked(false);
@@ -2555,7 +2555,7 @@ void MainForm::appendMessagesClient( const QString& s )
 
 	appendMessagesColor(s + QString(": %1 (errno=%2)")
 		.arg(::lscp_client_get_result(m_pClient))
-		.arg(::lscp_client_get_errno(m_pClient)), "#996666");
+		.arg(::lscp_client_get_errno(m_pClient)), Qt::darkRed);
 
 	// Make it look responsive...:)
 	QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -2907,7 +2907,7 @@ void MainForm::startServer (void)
 	args.removeAt(0);
 
 	appendMessages(tr("Server is starting..."));
-	appendMessagesColor(m_pOptions->sServerCmdLine, "#990099");
+	appendMessagesColor(m_pOptions->sServerCmdLine, Qt::darkMagenta);
 
 	// Go linuxsampler, go...
 	m_pServer->start(sCommand, args);

@@ -26,7 +26,7 @@
 #include <QDockWidget>
 
 class QSocketNotifier;
-class QTextEdit;
+class QTextBrowser;
 class QFile;
 
 namespace QSampler {
@@ -52,7 +52,7 @@ public:
 
 	// Message font accessors.
 	QFont messagesFont();
-	void setMessagesFont(const QFont & font);
+	void setMessagesFont(const QFont& font);
 
 	// Maximum number of message lines accessors.
 	int messagesLimit();
@@ -64,7 +64,7 @@ public:
 
 	// The main utility methods.
 	void appendMessages(const QString& s);
-	void appendMessagesColor(const QString& s, const QString &c);
+	void appendMessagesColor(const QString& s, const QColor& rgb);
 	void appendMessagesText(const QString& s);
 
 	// Stdout capture functions.
@@ -83,6 +83,9 @@ protected:
 	// Set stdout/stderr blocking mode.
 	bool stdoutBlock(int fd, bool bBlock) const;
 
+	// Split stdout/stderr into separate lines...
+	void processStdoutBuffer();
+
 protected slots:
 
 	// Stdout capture slot.
@@ -96,7 +99,7 @@ private:
 	int m_iMessagesHigh;
 
 	// The textview main widget.
-	QTextEdit *m_pMessagesTextView;
+	QTextBrowser *m_pMessagesTextView;
 
 	// Stdout capture variables.
 	QSocketNotifier *m_pStdoutNotifier;

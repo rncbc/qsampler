@@ -26,11 +26,10 @@
 #include <QSocketNotifier>
 
 #include <QFile>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QTextCursor>
 #include <QTextStream>
 #include <QTextBlock>
-#include <QScrollBar>
 #include <QDateTime>
 #include <QIcon>
 
@@ -74,13 +73,13 @@ Messages::Messages ( QWidget *pParent )
 	m_fdStdout[QSAMPLER_MESSAGES_FDWRITE] = QSAMPLER_MESSAGES_FDNIL;
 
 	// Create local text view widget.
-	m_pMessagesTextView = new QTextEdit(this);
+	m_pMessagesTextView = new QTextBrowser(this);
 //  QFont font(m_pMessagesTextView->font());
 //  font.setFamily("Fixed");
 //  m_pMessagesTextView->setFont(font);
 	m_pMessagesTextView->setLineWrapMode(QTextEdit::NoWrap);
-	m_pMessagesTextView->setReadOnly(true);
-	m_pMessagesTextView->setUndoRedoEnabled(false);
+//	m_pMessagesTextView->setReadOnly(true);
+//	m_pMessagesTextView->setUndoRedoEnabled(false);
 //	m_pMessagesTextView->setTextFormat(Qt::LogText);
 
 	// Initialize default message limit.
@@ -163,6 +162,11 @@ void Messages::appendStdoutBuffer ( const QString& s )
 {
 	m_sStdoutBuffer.append(s);
 
+	processStdoutBuffer();
+}
+
+void Messages::processStdoutBuffer (void)
+{
 	const int iLength = m_sStdoutBuffer.lastIndexOf('\n');
 	if (iLength > 0) {
 		const QString& sTemp = m_sStdoutBuffer.left(iLength);
@@ -179,7 +183,7 @@ void Messages::appendStdoutBuffer ( const QString& s )
 void Messages::flushStdoutBuffer (void)
 {
 	if (!m_sStdoutBuffer.isEmpty()) {
-		appendMessagesText(m_sStdoutBuffer);
+		processStdoutBuffer();
 		m_sStdoutBuffer.clear();
 	}
 }
@@ -278,7 +282,9 @@ void Messages::setLogging ( bool bEnabled, const QString& sFilename )
 void Messages::appendMessagesLog ( const QString& s )
 {
 	if (m_pMessagesLog) {
-		QTextStream(m_pMessagesLog) << s << endl;
+		QTextStream(m_pMessagesLog)
+			<< QTime::currentTime().toString("hh:mm:ss.zzz")
+			<< ' ' << s << endl;
 		m_pMessagesLog->flush();
 	}
 }
@@ -310,15 +316,13 @@ void Messages::appendMessagesLine ( const QString& s )
 // The main utility methods.
 void Messages::appendMessages ( const QString& s )
 {
-	appendMessagesColor(s, "#999999");
+	appendMessagesColor(s, Qt::gray);
 }
 
-void Messages::appendMessagesColor ( const QString& s, const QString &c )
+void Messages::appendMessagesColor ( const QString& s, const QColor& rgb )
 {
-	const QString& sText
-		= QTime::currentTime().toString("hh:mm:ss.zzz") + ' ' + s;
-	appendMessagesLine("<font color=\"" + c + "\">" + sText + "</font>");
-	appendMessagesLog(sText);
+	appendMessagesLine("<font color=\"" + rgb.name() + "\">" + s + "</font>");
+	appendMessagesLog(s);
 }
 
 void Messages::appendMessagesText ( const QString& s )

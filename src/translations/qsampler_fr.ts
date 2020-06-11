@@ -242,7 +242,7 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="891"/>
+        <location filename="../qsamplerDevice.cpp" line="890"/>
         <source>Could not set %1 parameter value.
 
 Sorry.</source>
@@ -251,12 +251,12 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="914"/>
+        <location filename="../qsamplerDevice.cpp" line="913"/>
         <source>Audio Devices</source>
         <translation>Périphériques audio</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="918"/>
+        <location filename="../qsamplerDevice.cpp" line="917"/>
         <source>MIDI Devices</source>
         <translation>Périphériques MIDI</translation>
     </message>
@@ -288,17 +288,17 @@ Navré.</translation>
 <context>
     <name>QSampler::AbstractDeviceParamModel</name>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="998"/>
+        <location filename="../qsamplerDevice.cpp" line="997"/>
         <source>Parameter</source>
         <translation>Paramètre</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="999"/>
+        <location filename="../qsamplerDevice.cpp" line="998"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1000"/>
+        <location filename="../qsamplerDevice.cpp" line="999"/>
         <source>Description</source>
         <translation>Description</translation>
     </message>
@@ -460,7 +460,7 @@ Are you sure?</source>
 <context>
     <name>QSampler::DeviceParamDelegate</name>
     <message>
-        <location filename="../qsamplerDevice.cpp" line="1186"/>
+        <location filename="../qsamplerDevice.cpp" line="1185"/>
         <source>(none)</source>
         <translation>(aucun)</translation>
     </message>
@@ -1088,17 +1088,17 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
 <context>
     <name>QSampler::Messages</name>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="101"/>
+        <location filename="../qsamplerMessages.cpp" line="100"/>
         <source>Messages</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="257"/>
+        <location filename="../qsamplerMessages.cpp" line="261"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Identification arrêtée --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="267"/>
+        <location filename="../qsamplerMessages.cpp" line="271"/>
         <source>Logging started --- %1 ---</source>
         <translation>Identification démarrée --- %1 ---</translation>
     </message>

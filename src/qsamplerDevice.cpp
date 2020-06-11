@@ -1,7 +1,7 @@
 // qsamplerDevice.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -648,12 +648,11 @@ void Device::appendMessages( const QString& s ) const
 		pMainForm->appendMessages(deviceName() + ' ' + s);
 }
 
-void Device::appendMessagesColor( const QString& s,
-	const QString& c ) const
+void Device::appendMessagesColor( const QString& s,	const QColor& rgb ) const
 {
 	MainForm *pMainForm = MainForm::getInstance();
 	if (pMainForm)
-		pMainForm->appendMessagesColor(deviceName() + ' ' + s, c);
+		pMainForm->appendMessagesColor(deviceName() + ' ' + s, rgb);
 }
 
 void Device::appendMessagesText( const QString& s ) const
