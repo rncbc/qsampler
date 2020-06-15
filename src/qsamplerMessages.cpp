@@ -90,7 +90,7 @@ Messages::Messages ( QWidget *pParent )
 
 	// Prepare the dockable window stuff.
 	QDockWidget::setWidget(m_pMessagesTextView);
-	QDockWidget::setFeatures(QDockWidget::AllDockWidgetFeatures);
+//	QDockWidget::setFeatures(QDockWidget::AllDockWidgetFeatures);
 	QDockWidget::setAllowedAreas(
 		Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 	// Some specialties to this kind of dock window...
