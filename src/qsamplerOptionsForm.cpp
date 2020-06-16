@@ -226,7 +226,7 @@ void OptionsForm::setup ( Options *pOptions )
 		|| !font.fromString(m_pOptions->sMessagesFont))
 		font = QFont("Monospace", 8);
 	pal = m_ui.MessagesFontTextLabel->palette();
-	pal.setColor(QPalette::Background, pal.base().color());
+	pal.setColor(QPalette::Window, pal.base().color());
 	m_ui.MessagesFontTextLabel->setPalette(pal);
 	m_ui.MessagesFontTextLabel->setFont(font);
 	m_ui.MessagesFontTextLabel->setText(font.family()
@@ -498,12 +498,12 @@ void OptionsForm::chooseMessagesFont (void)
 void OptionsForm::toggleDisplayEffect ( bool bOn )
 {
 	QPalette pal;
-	pal.setColor(QPalette::Foreground, Qt::green);
+	pal.setColor(QPalette::WindowText, Qt::green);
 	if (bOn) {
 		QPixmap pm(":/images/displaybg1.png");
-		pal.setBrush(QPalette::Background, QBrush(pm));
+		pal.setBrush(QPalette::Window, QBrush(pm));
 	} else {
-		pal.setColor(QPalette::Background, Qt::black);
+		pal.setColor(QPalette::Window, Qt::black);
 	}
 	m_ui.DisplayFontTextLabel->setPalette(pal);
 

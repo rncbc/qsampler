@@ -251,17 +251,17 @@ void ChannelStrip::setDisplayFont ( const QFont & font )
 void ChannelStrip::setDisplayEffect ( bool bDisplayEffect )
 {
 	QPalette pal;
-	pal.setColor(QPalette::Foreground, Qt::yellow);
+	pal.setColor(QPalette::WindowText, Qt::yellow);
 	pal.setColor(QPalette::ButtonText, Qt::yellow);
 	m_ui.EngineNameTextLabel->setPalette(pal);
 	m_ui.MidiPortChannelTextLabel->setPalette(pal);
-	pal.setColor(QPalette::Foreground, Qt::green);
+	pal.setColor(QPalette::WindowText, Qt::green);
 	pal.setColor(QPalette::ButtonText, Qt::green);
 	if (bDisplayEffect) {
 		QPixmap pm(":/images/displaybg1.png");
-		pal.setBrush(QPalette::Background, QBrush(pm));
+		pal.setBrush(QPalette::Window, QBrush(pm));
 	} else {
-		pal.setColor(QPalette::Background, Qt::black);
+		pal.setColor(QPalette::Window, Qt::black);
 	}
 	m_ui.ChannelInfoFrame->setPalette(pal);
 	m_ui.InstrumentNamePushButton->setPalette(pal);
@@ -525,12 +525,12 @@ bool ChannelStrip::updateChannelInfo (void)
 
 	// Common palette...
 	QPalette pal;
-	const QColor& rgbFore = pal.color(QPalette::Foreground);
+	const QColor& rgbFore = pal.color(QPalette::WindowText);
 
 	// Instrument status...
 	const int iInstrumentStatus = m_pChannel->instrumentStatus();
 	if (iInstrumentStatus < 0) {
-		pal.setColor(QPalette::Foreground, Qt::red);
+		pal.setColor(QPalette::WindowText, Qt::red);
 		m_ui.InstrumentStatusTextLabel->setPalette(pal);
 		m_ui.InstrumentStatusTextLabel->setText(
 			tr("ERR%1").arg(iInstrumentStatus));
@@ -539,7 +539,7 @@ bool ChannelStrip::updateChannelInfo (void)
 	}
 
 	// All seems normal...
-	pal.setColor(QPalette::Foreground,
+	pal.setColor(QPalette::WindowText,
 		iInstrumentStatus < 100 ? Qt::yellow : Qt::green);
 	m_ui.InstrumentStatusTextLabel->setPalette(pal);
 	m_ui.InstrumentStatusTextLabel->setText(
@@ -551,7 +551,7 @@ bool ChannelStrip::updateChannelInfo (void)
 	const bool bMute = m_pChannel->channelMute();
 	const QColor& rgbButton = pal.color(QPalette::Button);
 	const QColor& rgbButtonText = pal.color(QPalette::ButtonText);
-	pal.setColor(QPalette::Foreground, rgbFore);
+	pal.setColor(QPalette::WindowText, rgbFore);
 	pal.setColor(QPalette::Button, bMute ? Qt::yellow : rgbButton);
 	pal.setColor(QPalette::ButtonText, bMute ? Qt::darkYellow : rgbButtonText);
 	m_ui.ChannelMutePushButton->setPalette(pal);
@@ -679,8 +679,8 @@ void ChannelStrip::setSelected ( bool bSelected )
 	QPalette pal;
 	if (bSelected) {
 		const QColor& color = pal.midlight().color();
-		pal.setColor(QPalette::Background, color.darker(150));
-		pal.setColor(QPalette::Foreground, color.lighter(150));
+		pal.setColor(QPalette::Window, color.darker(150));
+		pal.setColor(QPalette::WindowText, color.lighter(150));
 	}
 
 	QWidget *pParentWidget = QWidget::parentWidget();

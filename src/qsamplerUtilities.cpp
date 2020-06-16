@@ -1,7 +1,7 @@
 // qsamplerUtilities.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
-#include <QRegExp>
+#include <QRegularExpression>
 
 
 using namespace QSampler;
@@ -89,7 +89,7 @@ QString lscpEscapePath ( const QString& sPath )
 	// replace POSIX path escape sequences (%HH) by LSCP escape sequences (\xHH)
 	// TODO: missing code for other systems like Windows
 	{
-		QRegExp regexp("%[0-9a-fA-F][0-9a-fA-F]");
+		QRegularExpression regexp("%[0-9a-fA-F][0-9a-fA-F]");
 		for (int i = path.indexOf(regexp); i >= 0; i = path.indexOf(regexp, i + 4))
 			path.replace(i, 1, "\\x");
 	}
@@ -100,7 +100,7 @@ QString lscpEscapePath ( const QString& sPath )
 	// replace all non-basic characters by LSCP escape sequences
 	{
 		const char pathSeparator = '/';
-		QRegExp regexp(QRegExp::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
+		QRegularExpression regexp(QRegularExpression::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
 		for (int i = 0; i < int(path.length()); i++) {
 			// first skip all previously added LSCP escape sequences
 			if (path.indexOf(regexp, i) == i) {
@@ -146,7 +146,7 @@ QString lscpEscapedPathToPosix ( const QString& sPath )
 		path.replace(i, 1, "%%");
 
 	// resolve LSCP hex escape sequences (\xHH)
-	QRegExp regexp(QRegExp::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
+	QRegularExpression regexp(QRegularExpression::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
 	for (int i = path.indexOf(regexp); i >= 0; i = path.indexOf(regexp, i + 4)) {
 		const QString sHex = path.mid(i + 2, 2).toLower();
 		// the slash has to be escaped for POSIX as well
@@ -203,7 +203,7 @@ QString lscpEscapedTextToRaw ( const QString& sText )
 	QString text(sText);
 
 	// resolve LSCP hex escape sequences (\xHH)
-	QRegExp regexp(QRegExp::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
+	QRegularExpression regexp(QRegularExpression::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
 	for (int i = text.indexOf(regexp); i >= 0; i = text.indexOf(regexp, i + 4)) {
 		const QString sHex = text.mid(i + 2, 2).toLower();
 		// decode into raw ASCII character
