@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -28,7 +28,10 @@
 #include <QComboBox>
 
 #include <QApplication>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
+#endif
 
 #include <lscp/client.h>
 
@@ -396,8 +399,10 @@ void Options::loadWidgetGeometry ( QWidget *pWidget, bool bVisible )
 			QWidget *pParent = pWidget->parentWidget();
 			if (pParent)
 				pParent = pParent->window();
+		#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 			if (pParent == nullptr)
 				pParent = QApplication::desktop();
+		#endif
 			if (pParent) {
 				QRect wrect(pWidget->geometry());
 				wrect.moveCenter(pParent->geometry().center());

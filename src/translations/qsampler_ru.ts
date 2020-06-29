@@ -261,7 +261,7 @@ Sorry.</source>
         <translation>Устройства MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="287"/>
+        <location filename="../qsamplerOptions.cpp" line="290"/>
         <source>Usage: %1 [options] [session-file]
 
 </source>
@@ -270,17 +270,17 @@ Sorry.</source>
 </translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="334"/>
+        <location filename="../qsamplerOptions.cpp" line="337"/>
         <source>Option -h requires an argument (host).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="343"/>
+        <location filename="../qsamplerOptions.cpp" line="346"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="613"/>
+        <location filename="../qsamplerOptions.cpp" line="618"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>
