@@ -2,7 +2,7 @@ project(QSAMPLER)
 
 cmake_minimum_required(VERSION 3.1)
 
-set (VERSION "0.6.3")
+set (VERSION "0.9.0")
 
 set (CONFIG_VERSION ${VERSION})
 execute_process (
