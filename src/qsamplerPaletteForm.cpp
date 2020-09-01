@@ -1238,7 +1238,7 @@ void PaletteForm::ColorButton::paintEvent ( QPaintEvent *event )
 	QPushButton::paintEvent(event);
 
 	QStyleOptionButton opt;
-	opt.init(this);
+	opt.initFrom(this);
 
 	const QRect& rect
 		= style()->subElementRect(QStyle::SE_PushButtonContents, &opt, this);

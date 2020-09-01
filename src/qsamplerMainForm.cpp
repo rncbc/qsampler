@@ -46,7 +46,6 @@
 #include <QProcess>
 #include <QMessageBox>
 
-#include <QRegExp>
 #include <QTextStream>
 #include <QFileDialog>
 #include <QFileInfo>
