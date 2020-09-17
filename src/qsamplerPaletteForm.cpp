@@ -170,8 +170,11 @@ PaletteForm::~PaletteForm (void)
 void PaletteForm::setPalette ( const QPalette& pal )
 {
 	m_palette = pal;
-
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	const uint mask = pal.resolveMask();
+#else
 	const uint mask = pal.resolve();
+#endif
 	for (int i = 0; g_colorRoles[i].key; ++i) {
 		if ((mask & (1 << i)) == 0) {
 			const QPalette::ColorRole cr = QPalette::ColorRole(i);
@@ -183,7 +186,11 @@ void PaletteForm::setPalette ( const QPalette& pal )
 				m_parentPalette.brush(QPalette::Disabled, cr));
 		}
 	}
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	m_palette.setResolveMask(mask);
+#else
 	m_palette.resolve(mask);
+#endif
 
 	updateGenerateButton();
 
@@ -338,7 +345,11 @@ void PaletteForm::importButtonClicked (void)
 		if (!name.isEmpty()) {
 			QPalette pal;
 			int result = 0;
+		#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			uint mask = pal.resolveMask();
+		#else
 			uint mask = pal.resolve();
+		#endif
 			settings.beginGroup(name + '/');
 			QStringListIterator iter(settings.childKeys());
 			while (iter.hasNext()) {
@@ -355,7 +366,11 @@ void PaletteForm::importButtonClicked (void)
 					++result;
 				}
 			}
+		#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			pal.setResolveMask(mask);
+		#else
 			pal.resolve(mask);
+		#endif
 			settings.endGroup();
 			if (result > 0) {
 				saveNamedPalette(name, pal);
@@ -512,7 +527,9 @@ bool PaletteForm::namedPalette (
 	QSettings *settings, const QString& name, QPalette& pal, bool fixup )
 {
 	int result = 0;
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	uint mask = pal.resolveMask();
+#else
 	uint mask = pal.resolve();
 #endif
 
@@ -575,9 +592,7 @@ bool PaletteForm::namedPalette (
 		pal.setColor(QPalette::Active,   QPalette::LinkVisited, QColor(64, 128, 255));
 		pal.setColor(QPalette::Inactive, QPalette::LinkVisited, QColor(64, 128, 255));
 		pal.setColor(QPalette::Disabled, QPalette::LinkVisited, QColor(54, 76, 119));
-	#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 		mask = 0;
-	#endif
 		++result;
 	}
 	else
@@ -639,9 +654,7 @@ bool PaletteForm::namedPalette (
 		pal.setColor(QPalette::Active,   QPalette::LinkVisited, QColor(230, 100, 230));
 		pal.setColor(QPalette::Inactive, QPalette::LinkVisited, QColor(230, 100, 230));
 		pal.setColor(QPalette::Disabled, QPalette::LinkVisited, QColor(74, 34, 74));
-	#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 		mask = 0;
-	#endif
 		++result;
 	}
 	else
@@ -659,9 +672,7 @@ bool PaletteForm::namedPalette (
 				pal.setColor(QPalette::Active,   cr, QColor(clist.at(0)));
 				pal.setColor(QPalette::Inactive, cr, QColor(clist.at(1)));
 				pal.setColor(QPalette::Disabled, cr, QColor(clist.at(2)));
-			#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 				mask &= ~(1 << int(cr));
-			#endif
 				++result;
 			}
 		}
@@ -700,7 +711,9 @@ bool PaletteForm::namedPalette (
 		++result;
 	}
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	pal.setResolveMask(mask);
+#else
 	pal.resolve(mask);
 #endif
 	return (result > 0);
@@ -942,7 +955,11 @@ QVariant PaletteForm::PaletteModel::data ( const QModelIndex& index, int role ) 
 		if (role == Qt::DisplayRole)
 			return m_roleNames.value(QPalette::ColorRole(index.row()));
 		if (role == Qt::EditRole) {
+		#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+			const uint mask = m_palette.resolveMask();
+		#else
 			const uint mask = m_palette.resolve();
+		#endif
 			return bool(mask & (1 << index.row()));
 		}
 	}
@@ -1005,7 +1022,11 @@ bool PaletteForm::PaletteModel::setData (
 	}
 
 	if (index.column() == 0 && role == Qt::EditRole) {
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		uint mask = m_palette.resolveMask();
+	#else
 		uint mask = m_palette.resolve();
+	#endif
 		const bool masked = value.value<bool>();
 		const int i = index.row();
 		if (masked) {
@@ -1020,7 +1041,11 @@ bool PaletteForm::PaletteModel::setData (
 				m_parentPalette.brush(QPalette::Disabled, cr));
 			mask &= ~(1 << i);
 		}
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+		m_palette.setResolveMask(mask);
+	#else
 		m_palette.resolve(mask);
+	#endif
 		emit paletteChanged(m_palette);
 		const QModelIndex& index_end = PaletteModel::index(i, 3);
 		emit dataChanged(index, index_end);

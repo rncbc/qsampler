@@ -1154,31 +1154,31 @@ Chcete použít změny?</translation>
 <context>
     <name>QSampler::PaletteForm</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="319"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="326"/>
         <source>Import File - %1</source>
         <translation>Zavést soubor - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="322"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="388"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="329"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="403"/>
         <source>Palette files (*.%1)</source>
         <translation>Soubory s paletami (*.%1)</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="323"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="389"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="330"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="404"/>
         <source>All files (*.*)</source>
         <translation>Všechny soubory (*.*)</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="375"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="808"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="816"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="390"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="821"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="829"/>
         <source>Warning - %1</source>
         <translation>Varování - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="376"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="391"/>
         <source>Could not import from file:
 
 %1
@@ -1191,12 +1191,12 @@ Sorry.</source>
 Promiňte.</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="385"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="400"/>
         <source>Export File - %1</source>
         <translation>Vyvést soubor - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="809"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="822"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
@@ -1205,7 +1205,7 @@ Do you want to discard the changes?</source>
 Chcete zahodit změny?</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="817"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="830"/>
         <source>Some settings have been changed:
 
 &quot;%1&quot;.
@@ -1221,22 +1221,22 @@ Chcete uložit změny?</translation>
 <context>
     <name>QSampler::PaletteForm::PaletteModel</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1048"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1073"/>
         <source>Color Role</source>
         <translation>Barevná role</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1051"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1076"/>
         <source>Active</source>
         <translation>Činný</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1054"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1079"/>
         <source>Inactive</source>
         <translation>Nečinný</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1057"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1082"/>
         <source>Disabled</source>
         <translation>Zakázáno</translation>
     </message>
