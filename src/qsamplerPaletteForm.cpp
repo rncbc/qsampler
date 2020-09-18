@@ -527,9 +527,7 @@ bool PaletteForm::namedPalette (
 	QSettings *settings, const QString& name, QPalette& pal, bool fixup )
 {
 	int result = 0;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-	uint mask = pal.resolveMask();
-#else
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	uint mask = pal.resolve();
 #endif
 
@@ -592,7 +590,9 @@ bool PaletteForm::namedPalette (
 		pal.setColor(QPalette::Active,   QPalette::LinkVisited, QColor(64, 128, 255));
 		pal.setColor(QPalette::Inactive, QPalette::LinkVisited, QColor(64, 128, 255));
 		pal.setColor(QPalette::Disabled, QPalette::LinkVisited, QColor(54, 76, 119));
+	#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 		mask = 0;
+	#endif
 		++result;
 	}
 	else
@@ -654,7 +654,9 @@ bool PaletteForm::namedPalette (
 		pal.setColor(QPalette::Active,   QPalette::LinkVisited, QColor(230, 100, 230));
 		pal.setColor(QPalette::Inactive, QPalette::LinkVisited, QColor(230, 100, 230));
 		pal.setColor(QPalette::Disabled, QPalette::LinkVisited, QColor(74, 34, 74));
+	#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 		mask = 0;
+	#endif
 		++result;
 	}
 	else
@@ -672,7 +674,9 @@ bool PaletteForm::namedPalette (
 				pal.setColor(QPalette::Active,   cr, QColor(clist.at(0)));
 				pal.setColor(QPalette::Inactive, cr, QColor(clist.at(1)));
 				pal.setColor(QPalette::Disabled, cr, QColor(clist.at(2)));
+			#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 				mask &= ~(1 << int(cr));
+			#endif
 				++result;
 			}
 		}
@@ -711,9 +715,7 @@ bool PaletteForm::namedPalette (
 		++result;
 	}
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-	pal.setResolveMask(mask);
-#else
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 	pal.resolve(mask);
 #endif
 	return (result > 0);

@@ -1168,8 +1168,8 @@ Do you want to apply the changes?</source>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="390"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="821"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="829"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="823"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="831"/>
         <source>Warning - %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1188,14 +1188,14 @@ Sorry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="822"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="824"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="830"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="832"/>
         <source>Some settings have been changed:
 
 &quot;%1&quot;.
@@ -1207,22 +1207,22 @@ Do you want to save the changes?</source>
 <context>
     <name>QSampler::PaletteForm::PaletteModel</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1073"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1075"/>
         <source>Color Role</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1076"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1078"/>
         <source>Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1079"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1081"/>
         <source>Inactive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1082"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1084"/>
         <source>Disabled</source>
         <translation type="unfinished"></translation>
     </message>

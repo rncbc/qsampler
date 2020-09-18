@@ -1172,8 +1172,8 @@ Chcete použít změny?</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="390"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="821"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="829"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="823"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="831"/>
         <source>Warning - %1</source>
         <translation>Varování - %1</translation>
     </message>
@@ -1196,7 +1196,7 @@ Promiňte.</translation>
         <translation>Vyvést soubor - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="822"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="824"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
@@ -1205,7 +1205,7 @@ Do you want to discard the changes?</source>
 Chcete zahodit změny?</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="830"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="832"/>
         <source>Some settings have been changed:
 
 &quot;%1&quot;.
@@ -1221,22 +1221,22 @@ Chcete uložit změny?</translation>
 <context>
     <name>QSampler::PaletteForm::PaletteModel</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1073"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1075"/>
         <source>Color Role</source>
         <translation>Barevná role</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1076"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1078"/>
         <source>Active</source>
         <translation>Činný</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1079"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1081"/>
         <source>Inactive</source>
         <translation>Nečinný</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1082"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1084"/>
         <source>Disabled</source>
         <translation>Zakázáno</translation>
     </message>
