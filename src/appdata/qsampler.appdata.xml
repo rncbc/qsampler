@@ -19,8 +19,8 @@
  </screenshots>
  <launchable type="desktop-id">qsampler.desktop</launchable>
  <provides>
-​  <binary>qsampler</binary>
-​ </provides>
+  <binary>qsampler</binary>
+ </provides>
  <keywords>
   <keyword>Audio</keyword>
   <keyword>MIDI</keyword>
