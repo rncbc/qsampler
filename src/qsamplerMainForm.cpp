@@ -2918,7 +2918,12 @@ void MainForm::startServer (void)
 
 	// Show startup results...
 	appendMessages(
-		tr("Server was started with PID=%1.").arg((long) m_pServer->pid()));
+		tr("Server was started with PID=%1.")
+		#if QT_VERSION < QT_VERSION_CHECK(5, 3, 0)
+			.arg(quint64(m_pServer->pid())));
+		#else
+			.arg(quint64(m_pServer->processId())));
+		#endif
 
 	// Reset (yet again) the timer counters,
 	// but this time is deferred as the user opted.

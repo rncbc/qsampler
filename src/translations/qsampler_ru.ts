@@ -1011,32 +1011,32 @@ Sorry.</source>
         <translation>Сервер запущен с PID=%1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2938"/>
+        <location filename="../qsamplerMainForm.cpp" line="2943"/>
         <source>The backend&apos;s fate ...</source>
         <translation>Что делать с движком</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2954"/>
+        <location filename="../qsamplerMainForm.cpp" line="2959"/>
         <source>Server is stopping...</source>
         <translation>Останавливается сервер...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2999"/>
+        <location filename="../qsamplerMainForm.cpp" line="3004"/>
         <source>Server is being forced...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3010"/>
+        <location filename="../qsamplerMainForm.cpp" line="3015"/>
         <source>Server was stopped with exit status %1.</source>
         <translation>Сервер был остановлен со статусом выхода %1.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3054"/>
+        <location filename="../qsamplerMainForm.cpp" line="3059"/>
         <source>Client connecting...</source>
         <translation>Устанавливается соединения клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3070"/>
+        <location filename="../qsamplerMainForm.cpp" line="3075"/>
         <source>Could not connect to server as client.
 
 Sorry.</source>
@@ -1045,32 +1045,32 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3084"/>
+        <location filename="../qsamplerMainForm.cpp" line="3089"/>
         <source>Client receive timeout is set to %1 msec.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3123"/>
+        <location filename="../qsamplerMainForm.cpp" line="3128"/>
         <source>Client connected.</source>
         <translation>Клиент соединился.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3156"/>
+        <location filename="../qsamplerMainForm.cpp" line="3161"/>
         <source>Client disconnecting...</source>
         <translation>Выполняется отсоединение клиента...</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3194"/>
+        <location filename="../qsamplerMainForm.cpp" line="3199"/>
         <source>Client disconnected.</source>
         <translation>Клиент отсоединен.</translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="3204"/>
+        <location filename="../qsamplerMainForm.cpp" line="3209"/>
         <source>Trying to reconnect...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerMainForm.cpp" line="2939"/>
+        <location filename="../qsamplerMainForm.cpp" line="2944"/>
         <source>You have the option to keep the sampler backend (LinuxSampler)
 running in the background. The sampler would continue to work
 according to your current sampler session and you could alter the
