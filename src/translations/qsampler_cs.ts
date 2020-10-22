@@ -432,27 +432,27 @@ Jste si jistý?</translation>
         <translation>Neptat se znovu</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="464"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="468"/>
         <source>Ch&amp;annel:</source>
         <translation>&amp;Каnál:</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="467"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="471"/>
         <source>P&amp;ort:</source>
         <translation>&amp;Přípojka:</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="644"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
         <source>&amp;Create device</source>
         <translation>&amp;Vytvořit zařízení</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="652"/>
         <source>&amp;Delete device</source>
         <translation>&amp;Smazat zařízení</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="653"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="657"/>
         <source>&amp;Refresh</source>
         <translation>&amp;Obnovit</translation>
     </message>

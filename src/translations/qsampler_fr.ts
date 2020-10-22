@@ -432,27 +432,27 @@ Are you sure?</source>
         <translation>Ne pas redemander</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="464"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="468"/>
         <source>Ch&amp;annel:</source>
         <translation>C&amp;аnal :</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="467"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="471"/>
         <source>P&amp;ort:</source>
         <translation>P&amp;ort :</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="644"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
         <source>&amp;Create device</source>
         <translation>&amp;Créer un périphérique</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="652"/>
         <source>&amp;Delete device</source>
         <translation>&amp;Supprimer un périphérique</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="653"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="657"/>
         <source>&amp;Refresh</source>
         <translation>&amp;Rafraîchir</translation>
     </message>

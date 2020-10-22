@@ -93,8 +93,8 @@ DeviceForm::DeviceForm ( QWidget *pParent, Qt::WindowFlags wflags )
 		SIGNAL(clicked()),
 		SLOT(refreshDevices()));
 	QObject::connect(m_ui.DriverNameComboBox,
-		SIGNAL(activated(const QString&)),
-		SLOT(selectDriver(const QString&)));
+		SIGNAL(activated(int)),
+		SLOT(selectDriver(int)));
 	QObject::connect(m_ui.DevicePortComboBox,
 		SIGNAL(activated(int)),
 		SLOT(selectDevicePort(int)));
@@ -380,7 +380,7 @@ void DeviceForm::refreshDevices (void)
 
 
 // Driver selection slot.
-void DeviceForm::selectDriver ( const QString& sDriverName )
+void DeviceForm::selectDriver ( int iDriver )
 {
 	if (m_iDirtySetup > 0)
 		return;
@@ -388,6 +388,10 @@ void DeviceForm::selectDriver ( const QString& sDriverName )
 	//
 	//  Driver name has changed for a new device...
 	//
+	const QString& sDriverName
+		= m_ui.DriverNameComboBox->itemText(iDriver);
+	if (sDriverName.isEmpty())
+		return;
 
 	QTreeWidgetItem* pItem = m_ui.DeviceListView->currentItem();
 	if (pItem == nullptr || pItem->type() != QSAMPLER_DEVICE_ITEM)

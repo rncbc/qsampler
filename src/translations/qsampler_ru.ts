@@ -432,27 +432,27 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="464"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="468"/>
         <source>Ch&amp;annel:</source>
         <translation>&amp;Канал:</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="467"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="471"/>
         <source>P&amp;ort:</source>
         <translation>&amp;Порт:</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="644"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
         <source>&amp;Create device</source>
         <translation>&amp;Создать устройство</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="648"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="652"/>
         <source>&amp;Delete device</source>
         <translation>&amp;Удалить устройство</translation>
     </message>
     <message>
-        <location filename="../qsamplerDeviceForm.cpp" line="653"/>
+        <location filename="../qsamplerDeviceForm.cpp" line="657"/>
         <source>&amp;Refresh</source>
         <translation>О&amp;бновить</translation>
     </message>

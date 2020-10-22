@@ -52,7 +52,7 @@ public slots:
 	void createDevice();
 	void deleteDevice();
 	void refreshDevices();
-	void selectDriver(const QString& sDriverName);
+	void selectDriver(int iDriver);
 	void selectDevice();
 	void selectDevicePort(int iPort);
 	void changeDeviceParam(int iRow, int iCol);
