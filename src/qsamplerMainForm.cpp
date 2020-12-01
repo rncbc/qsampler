@@ -2100,7 +2100,11 @@ void MainForm::helpAbout (void)
 		sText += "</font></small>";
 	}
 	sText += "<br />\n";
-	sText += tr("Using") + ": ";
+	sText += tr("Using: Qt %1").arg(qVersion());
+#if defined(QT_STATIC)
+	sText += "-static";
+#endif
+	sText += ", ";
 	sText += ::lscp_client_package();
 	sText += " ";
 	sText += ::lscp_client_version();
