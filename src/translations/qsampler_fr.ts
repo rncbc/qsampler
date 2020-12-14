@@ -847,7 +847,7 @@ Are you sure?</source>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2103"/>
         <source>Using: Qt %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisant : Qt %1</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="752"/>
@@ -936,7 +936,7 @@ que lors du prochain démarrage de ce programme.</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2119"/>
         <source>Website</source>
-        <translation>Site sur la toile </translation>
+        <translation>Site ouèbe </translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2125"/>
