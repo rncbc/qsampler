@@ -18,7 +18,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 43
+%define release 44
 
 %define _prefix	@ac_prefix@
 
@@ -100,6 +100,8 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %{_datadir}/man/fr/man1/%{name}.1.gz
 
 %changelog
+* Thu Dec 17 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.9.0
+- Winter'20 release.
 * Fri Jul 31 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.6.3
 - Summer'20 release.
 * Tue Mar 24 2020 Rui Nuno Capela <rncbc@rncbc.org> 0.6.2
