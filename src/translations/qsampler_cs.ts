@@ -847,7 +847,7 @@ Jste si jistý?</translation>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="2103"/>
         <source>Using: Qt %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Používající: Qt %1</translation>
     </message>
     <message>
         <location filename="../qsamplerMainForm.cpp" line="752"/>
