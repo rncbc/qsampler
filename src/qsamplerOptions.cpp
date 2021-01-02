@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -360,9 +360,6 @@ bool Options::parse_args ( const QStringList& args )
 			out << "-static";
 		#endif
 			out << '\n';
-			out << QString("%1: %2\n")
-				.arg(QSAMPLER_TITLE)
-				.arg(CONFIG_BUILD_VERSION);
 		#ifdef CONFIG_LIBGIG
 			out << QString("%1: %2\n")
 				.arg(gig::libraryName().c_str())
@@ -371,6 +368,9 @@ bool Options::parse_args ( const QStringList& args )
 			out << QString("%1: %2\n")
 				.arg(::lscp_client_package())
 				.arg(::lscp_client_version());
+			out << QString("%1: %2\n")
+				.arg(QSAMPLER_TITLE)
+				.arg(CONFIG_BUILD_VERSION);
 			return false;
 		}
 		else {
