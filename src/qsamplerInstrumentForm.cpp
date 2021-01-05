@@ -1,7 +1,7 @@
 // qsamplerInstrumentForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2019, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -32,9 +32,9 @@
 #include <QFileDialog>
 
 // Needed for lroundf()
-#include <math.h>
-
-#ifndef CONFIG_ROUND
+#ifdef CONFIG_ROUND
+#include <cmath>
+#else
 static inline long lroundf ( float x )
 {
 	if (x >= 0.0f)

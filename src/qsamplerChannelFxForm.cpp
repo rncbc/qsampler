@@ -1,7 +1,7 @@
 // qsamplerChannelFxForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2010-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2010-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2008, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
 // let's not reinvent the wheel for audio routing
 #include "qsamplerChannel.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <QAbstractButton>
 #include <QLineEdit>

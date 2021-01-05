@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007-2019 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -74,7 +74,10 @@ const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
 #endif
 
 #ifdef CONFIG_LIBGIG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <gig.h>
+#pragma GCC diagnostic pop
 #endif
 
 // Deprecated QTextStreamFunctions/Qt namespaces workaround.
@@ -83,9 +86,9 @@ const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
 #endif
 
 // Needed for lroundf()
-#include <math.h>
-
-#ifndef CONFIG_ROUND
+#ifdef CONFIG_ROUND
+#include <cmath>
+#else
 static inline long lroundf ( float x )
 {
 	if (x >= 0.0f)

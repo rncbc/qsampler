@@ -36,7 +36,10 @@
 #include <lscp/client.h>
 
 #ifdef CONFIG_LIBGIG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <gig.h>
+#pragma GCC diagnostic pop
 #endif
 
 

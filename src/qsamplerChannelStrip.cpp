@@ -1,7 +1,7 @@
 // qsamplerChannelStrip.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008, 2014 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -42,9 +42,9 @@
 #define QSAMPLER_ERROR_LIMIT	3
 
 // Needed for lroundf()
-#include <math.h>
-
-#ifndef CONFIG_ROUND
+#ifdef CONFIG_ROUND
+#include <cmath>
+#else
 static inline long lroundf ( float x )
 {
 	if (x >= 0.0f)

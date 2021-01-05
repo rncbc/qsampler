@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -31,10 +31,14 @@
 #include <QComboBox>
 
 #ifdef CONFIG_LIBGIG
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "gig.h"
 #ifdef CONFIG_LIBGIG_SF2
+#pragma GCC diagnostic ignored "-Wunused-variable"
 #include "SF.h"
 #endif
+#pragma GCC diagnostic pop
 #endif
 
 namespace QSampler {
