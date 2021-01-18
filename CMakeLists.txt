@@ -1,6 +1,6 @@
-project(qsampler)
+cmake_minimum_required(VERSION 3.10)
 
-cmake_minimum_required(VERSION 3.1)
+project(qsampler)
 
 set (VERSION "0.9.1")
 
@@ -108,7 +108,7 @@ endif ()
 find_package (PkgConfig REQUIRED)
 
 # Check for LSCP libraries.
-pkg_check_modules (LSCP REQUIRED lscp)
+pkg_check_modules (LSCP REQUIRED IMPORTED_TARGET lscp)
 if (LSCP_FOUND)
   set (CONFIG_LIBLSCP 1)
   include_directories (${LSCP_INCLUDE_DIRS})
@@ -182,7 +182,7 @@ endif ()
 
 # Check for GIG libraries.
 if (CONFIG_LIBGIG)
-  pkg_check_modules (GIG gig>=3.3.0)
+  pkg_check_modules (GIG IMPORTED_TARGET gig>=3.3.0)
   if (GIG_FOUND)
     include_directories (${GIG_INCLUDE_DIRS})
     link_directories (${GIG_LIBRARY_DIRS})
