@@ -1093,12 +1093,12 @@ Souhaitez-vous que LinuxSampler s&apos;arrête ?</translation>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="261"/>
+        <location filename="../qsamplerMessages.cpp" line="270"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Identification arrêtée --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="271"/>
+        <location filename="../qsamplerMessages.cpp" line="280"/>
         <source>Logging started --- %1 ---</source>
         <translation>Identification démarrée --- %1 ---</translation>
     </message>
