@@ -1,7 +1,7 @@
 // qsamplerMessages.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -118,6 +118,11 @@ Messages::~Messages (void)
 }
 
 
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
 // Set stdout/stderr blocking mode.
 bool Messages::stdoutBlock ( int fd, bool bBlock ) const
 {
@@ -155,6 +160,10 @@ void Messages::stdoutNotify ( int fd )
 		appendStdoutBuffer(sTemp);
 #endif
 }
+
+#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
+#pragma GCC diagnostic pop
+#endif
 
 
 // Stdout buffer handler -- now splitted by complete new-lines...
