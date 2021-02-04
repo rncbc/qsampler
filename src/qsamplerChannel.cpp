@@ -31,14 +31,18 @@
 #include <QComboBox>
 
 #ifdef CONFIG_LIBGIG
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 #include "gig.h"
 #ifdef CONFIG_LIBGIG_SF2
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #include "SF.h"
 #endif
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic pop
+#endif
 #endif
 
 namespace QSampler {

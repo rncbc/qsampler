@@ -74,10 +74,14 @@ const WindowFlags WindowCloseButtonHint = WindowFlags(0x08000000);
 #endif
 
 #ifdef CONFIG_LIBGIG
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 #include <gig.h>
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic pop
+#endif
 #endif
 
 // Deprecated QTextStreamFunctions/Qt namespaces workaround.

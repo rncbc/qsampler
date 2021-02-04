@@ -36,10 +36,14 @@
 #include <lscp/client.h>
 
 #ifdef CONFIG_LIBGIG
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
 #include <gig.h>
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
 #pragma GCC diagnostic pop
+#endif
 #endif
 
 
