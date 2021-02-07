@@ -1,5 +1,5 @@
-Qsampler - A LinuxSampler Qt GUI Interface
-~------------------------------------------
+Qsampler - A LinuxSampler Qt GUI Interface 
+------------------------------------------
 
 ChangeLog
 
@@ -11,8 +11,8 @@ ChangeLog
 
 0.9.0  2020-12-17  A Winter'20 Release.
 
-- Early fixing to build for Qt >= 6.0.0 and comply
-  with C++17 standard.
+- Early fixing to build for Qt >= 6.0.0 and comply with C++17 
+  standard.
 
 
 0.6.3  2020-07-31  A Summer'20 Release.
@@ -22,17 +22,17 @@ ChangeLog
 
 0.6.2  2020-03-24  A Spring'20 Release.
 
-- Make man page compression reproducible (after request
-  by Jelle van der Waa, while on the Vee-Ones, thanks).
+- Make man page compression reproducible (after request by Jelle
+  van der Waa, while on the Vee-Ones, thanks).
 
-- Ditching deprecated QTime methods for QElapsedTimer's
-  (in compliance to Qt >= 5.14.0).
+- Ditching deprecated QTime methods for QElapsedTimer's (in 
+  compliance to Qt >= 5.14.0).
 
-- If connection to server aborted, try to automatically
-  reconnect (if server was not started by QSampler).
+- If connection to server aborted, try to automatically reconnect 
+  (if server was not started by QSampler).
 
-- Fixed crash when a device disappeared on server side
-  (caused by iterator invalidation).
+- Fixed crash when a device disappeared on server side (caused by 
+  iterator invalidation).
 
 - Bumped copyright headers into the New Year (2020).
 
@@ -40,17 +40,16 @@ ChangeLog
 
 0.6.1  2019-12-22  The Winter'19 Release.
 
-- Custom color (palette) theme editor introduced; color
-  (palette) theme changes are now effective immediately,
-  except on default.
+- Custom color (palette) theme editor introduced; color (palette) 
+  theme changes are now effective immediately, except on default.
 
-- Second attempt to fix the yet non-official though
-  CMake build configuration.
+- Second attempt to fix the yet non-official though CMake build 
+  configuration.
 
-- When using autotools and ./configure --with-qt=...,
-  it is also necessary to adjust the PKG_CONFIG_PATH
-  environment variable (after a merge request by plcl
-  aka. Pedro López-Cabanillas, while on qmidinet).
+- When using autotools and ./configure --with-qt=..., it is also 
+  necessary to adjust the PKG_CONFIG_PATH environment variable
+  (after a merge request by plcl aka. Pedro López-Cabanillas,
+  while on qmidinet).
 
 
 0.6.0  2019-10-17  An Autumn'19 Release.
@@ -78,8 +77,8 @@ ChangeLog
 
 0.5.4  2019-03-11  Pre-LAC2019 Release Frenzy.
 
-- Refactored all singleton/unique application instance
-  setup logic away from X11/Xcb hackery.
+- Refactored all singleton/unique application instance setup logic 
+  away from X11/Xcb hackery.
 
 - HiDPI display screen support (Qt >= 5.6).
 
@@ -88,28 +87,28 @@ ChangeLog
 
 0.5.3  2018-12-06  An End of Autumn'18 Release.
 
-- Avoid saving plug-in sampler channels and related devices
-  to regular LSCP (*.lscp) session files.
+- Avoid saving plug-in sampler channels and related devices to 
+  regular LSCP (*.lscp) session files.
 
-- Fixed MIDI and Audio device selection on the common sampler
+- Fixed MIDI and Audio device selection on the common sampler 
   channel settings dialog.
 
 - Old deprecated Qt4 build support is no more.
 
-- AppStream metadata updated to be the most compliant with
-  latest freedesktop.org specification and recommendation.
+- AppStream metadata updated to be the most compliant with latest 
+  freedesktop.org specification and recommendation.
 
 
 0.5.2  2018-07-22  A Summer'18 Release.
 
-- AppData/AppStream metadata is now settled under an all
-  permisssive license (FSFAP).
+- AppData/AppStream metadata is now settled under an all permisssive 
+  license (FSFAP).
 
 
 0.5.1  2018-05-21  Pre-LAC2018 release frenzy.
 
-- Disable singleton/unique application instance setup logic
-  when the display server platform is not X11.
+- Disable singleton/unique application instance setup logic when
+  the display server platform is not X11.
 
 - Fixed device management dialog not responding to user changes.
 
@@ -122,543 +121,535 @@ ChangeLog
 
 0.5.0  2017-12-12  An Autumn'17 release.
 
-- French (fr) translation added by Olivier Humbert
-  (qsampler_fr.ts).
+- French (fr) translation added by Olivier Humbert (qsampler_fr.ts).
 
-- Desktop entry specification file is now finally independent
-  from build/configure template chains.
+- Desktop entry specification file is now finally independent from 
+  build/configure template chains.
 
-- Updated target path for freedesktop.org's AppStream metainfo
-  file (formerly AppData).
+- Updated target path for freedesktop.org's AppStream metainfo file 
+  (formerly AppData).
 
 
 0.4.3  2017-04-27  Pre-LAC2017 release frenzy.
 
 - Added French man page (by Olivier Humbert, thanks).
 
-- Make builds reproducible byte for byte, by getting rid of
-  the configure build date and time stamps.
+- Make builds reproducible byte for byte, by getting rid of the 
+  configure build date and time stamps.
 
 
 0.4.2  2016-11-14  A Fall'16 release.
 
-* Fixed a potential crash on the singleton/unique application
+- Fixed a potential crash on the singleton/unique application 
   instance setup.
 
-* Almost complete overhaul on the configure script command
+- Almost complete overhaul on the configure script command
   line options, wrt. installation directories specification,
   eg. --prefix, --bindir, --libdir, --datadir and --mandir.
 
 
 0.4.1  2016-09-14  End of Summer'16 release.
 
-* Fixed a race condition on creating sampler channels that ended
+- Fixed a race condition on creating sampler channels that ended
   in duplicate channel strips; also fixed channel auto-arrange.
   
-* Dropped the --enable-qt5 from configure as found redundant
-  given that's the build default anyway (suggestion by Guido
-  Scholz, while for Qtractor, thanks).
+- Dropped the --enable-qt5 from configure as found redundant given 
+  that's the build default anyway (suggestion by Guido Scholz, while 
+  for Qtractor, thanks).
 
-* Automake: set environment variable GCC_COLORS=auto to allow GCC to
+- Automake: set environment variable GCC_COLORS=auto to allow GCC to 
   auto detect whether it (sh/c)ould output its messages in color.
 
 
 0.4.0  2016-04-05  Spring'16 release frenzy.
 
-* Added application keywords to freedesktop.org's AppData.
+- Added application keywords to freedesktop.org's AppData.
 
-* Prevent x11extras module from use on non-X11/Unix plaforms.
+- Prevent x11extras module from use on non-X11/Unix plaforms.
 
-* Messages standard output capture has been improved again, now
+- Messages standard output capture has been improved again, now
   in both ways a non-blocking pipe may get.
 
-* Single/unique application instance control adapted to Qt5/X11.
+- Single/unique application instance control adapted to Qt5/X11.
 
 
 0.3.1  2015-07-19  Summer'15 release frenzy.
 
-* Fixed configure script's Qt include directory lookup for some
+- Fixed configure script's Qt include directory lookup for some 
   64bit Linux flavours.
 
-* Prefer Qt5 over Qt4 by default with configure script.
+- Prefer Qt5 over Qt4 by default with configure script.
 
-* A new top-level widget window geometry state save and restore
+- A new top-level widget window geometry state save and restore 
   sub-routine is now in effect.
 
-* Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
+- Fixed for some strict tests for Qt4 vs. Qt5 configure builds.
 
 
 0.3.0  2015-03-25  Pre-LAC2015 release frenzy.
 
-* Added application description as freedesktop.org's AppData.
+- Added application description as freedesktop.org's AppData.
 
-* Added this "Don't ask/show this again" option to some if not most
+- Added this "Don't ask/show this again" option to some if not most 
   of the nagging warning/error message boxes.
 
-* Mac OS X: Fixed default path of linuxsampler binary.
+- Mac OS X: Fixed default path of linuxsampler binary.
 
-* When closing qsampler and showing the user the dialog whether to
+- When closing qsampler and showing the user the dialog whether to 
   stop the LinuxSampler backend, set the default selection to "Yes".
 
-* Master volume slider now getting proper layout when changing its
+- Master volume slider now getting proper layout when changing its 
   main toolbar orientation.
 
-* Messages standard output capture has been slightly improved
-  as for non-blocking i/o, whenever available.
+- Messages standard output capture has been slightly improved as for 
+  non-blocking i/o, whenever available.
 
-* Adjusted configure check for libgig to detect the new --includedir.
+- Adjusted configure check for libgig to detect the new 
+--includedir.
 
-* A man page has beed added (making up Matt Flax's work on
-  debian, thanks).
+- A man page has beed added (making up Matt Flax's work on debian, 
+  thanks).
 
-* Translations install directory change.
+- Translations install directory change.
 
-* Added support for SF2 instrument names/preset enumeration.
+- Added support for SF2 instrument names/preset enumeration.
 
-* Added instrument list popup on channel strip which shows up when
-  the instrument name is clicked. Allows faster switching among
+- Added instrument list popup on channel strip which shows up when 
+  the instrument name is clicked. Allows faster switching among 
   instruments of the same file.
 
-* Adjusted configure check for libgig to detect its new --libdir
+- Adjusted configure check for libgig to detect its new --libdir 
   (impolitely forcing the user now to have at least libgig 3.3.0).
 
 
 0.2.3  2013-12-31  A fifth of a Jubilee.
 
-* Allow the build system to include an user specified LDFLAGS.
+- Allow the build system to include an user specified LDFLAGS.
 
-* More preparations for Qt5 configure build.
+- More preparations for Qt5 configure build.
 
-* Standard scalable format (SVG) and MIME type icons support for
+- Standard scalable format (SVG) and MIME type icons support for 
   session files (*.lscp) is now being added.
 
-* Preparations for Qt5 migration.
+- Preparations for Qt5 migration.
 
-* Added include <unistd.h> to shut up gcc 4.7 build failures.
+- Added include <unistd.h> to shut up gcc 4.7 build failures.
 
-* Make(ing) -jN parallel builds now available for the masses.
+- Make(ing) -jN parallel builds now available for the masses.
 
-* Fixed Makefile.in handling of installation directories to the
+- Fixed Makefile.in handling of installation directories to the 
   configure script eg. --datadir, --localedir.
 
-* Made lookup of translation files work inside a Mac OS X bundle.
+- Made lookup of translation files work inside a Mac OS X bundle.
 
-* Minor Mac OS X compilation error fix.
+- Minor Mac OS X compilation error fix.
 
-* Debugging stacktrace now applies to all working threads.
+- Debugging stacktrace now applies to all working threads.
 
-* Made lookup of translation files more robust on Windows.
+- Made lookup of translation files more robust on Windows.
 
-* Fixes for cross compiling and building for Windows with configure
+- Fixes for cross compiling and building for Windows with configure 
   and make.
 
-* libX11 is now being added explicitly to the build link phase,
-  as seen necessary on some bleeding-edge distros eg. Fedora 13,
-  Debian 6.
+- libX11 is now being added explicitly to the build link phase, as 
+  seen necessary on some bleeding-edge distros eg. Fedora 13, Debian 
+  6.
 
-* Moving from old deprecated Qt3'ish custom event post handling
-  into regular asynchronous signal/slot strategy.
+- Moving from old deprecated Qt3'ish custom event post handling into 
+  regular asynchronous signal/slot strategy.
 
-* Sampler channel and instrument file requester support for
-  other than GIG engine instrument files (*gig; *.dls) has
-  been added, making roads for the newer SFZ and SF2 engines
-  instrument files (*.sfz; *.sf2).
+- Sampler channel and instrument file requester support for other 
+  than GIG engine instrument files (*gig; *.dls) has been added, 
+  making roads for the newer SFZ and SF2 engines instrument files 
+  (*.sfz; *.sf2).
 
-* General standard dialog buttons layout is now in place.
+- General standard dialog buttons layout is now in place.
 
-* Initial widget geometry and visibility persistence logic has
-  been slightly revised as much to avoid crash failures due to
-  wrong main widget hidden state.
+- Initial widget geometry and visibility persistence logic has been 
+  slightly revised as much to avoid crash failures due to wrong main 
+  widget hidden state.
 
-* General source tree layout and build configuration change.
+- General source tree layout and build configuration change.
 
-* Automatic crash-dump reports, debugger stack-traces (gdb), back-
-  traces, whatever, are being introduced as a brand new configure
-  option (--enable-stacktrace) and default enabled on debug build
+- Automatic crash-dump reports, debugger stack-traces (gdb), back- 
+  traces, whatever, are being introduced as a brand new configure 
+  option (--enable-stacktrace) and default enabled on debug build 
   targets (--enable-debug).
 
-* Attempt to fix broken instrument list model/view on Qt >= 4.6.
+- Attempt to fix broken instrument list model/view on Qt >= 4.6.
 
-* Device parameter spin-box default maximum has been set higher:
-  now at a magic 24-bit limit (16777216) instead of older 16-bit
-  (65536), possibly fixing bug #136.
+- Device parameter spin-box default maximum has been set higher: now 
+  at a magic 24-bit limit (16777216) instead of older 16-bit (65536), 
+  possibly fixing bug #136.
 
-* LADISH Level 1 support has been added: SIGUSR1 signal trap
-  just makes it a shortcut to File/Save.
+- LADISH Level 1 support has been added: SIGUSR1 signal trap just 
+  makes it a shortcut to File/Save.
 
-* MIDI Device Status menu is disabled when no MIDI device exists;
+- MIDI Device Status menu is disabled when no MIDI device exists;
   a menu separator has been added.
 
-* Window manager's close button was found missing from the Devices
+- Window manager's close button was found missing from the Devices 
   and Instruments widgets when on Qt >= 4.5, now fixed.
 
-* MIDI activity indicator on channel strips and MIDI device status
-  widgets is now implemented as a flashing green LED, instead of a
+- MIDI activity indicator on channel strips and MIDI device status 
+  widgets is now implemented as a flashing green LED, instead of a 
   lame green solid background :).
 
-* Global configuration state is now explicitly saved/committed to
+- Global configuration state is now explicitly saved/committed to 
   disk when View/Options... dialog changes are accepted and applied.
 
-* Czech (cs) translation added (by Pavel Fric).
+- Czech (cs) translation added (by Pavel Fric).
 
 
 0.2.2  2009-08-01  New release cycle.
 
-* Russian (qsampler_ru.ts by Alexandre Prokoudine) makes it as
-  brand first translation delivered. Thanks and welcomes whom
-  ever may follow ;)
+- Russian (qsampler_ru.ts by Alexandre Prokoudine) makes it as
+  brand first translation delivered. Thanks and welcomes whom ever
+  may follow ;)
 
-* Converted obsolete QMessageBox forms to standard buttons.
+- Converted obsolete QMessageBox forms to standard buttons.
 
-* Added support for runtime max. voices / disk streams setting
-  (accessible from the "Options..." dialog). Those fine tuning
-  settings will be saved in case the user modified them and
+- Added support for runtime max. voices / disk streams setting 
+  (accessible from the "Options..." dialog). Those fine tuning 
+  settings will be saved in case the user modified them and 
   automatically restored to the sampler when reconnecting to
   a sampler the next time. 
 
-* Grayed/disabled palette color group fix for dark color themes.
+- Grayed/disabled palette color group fix for dark color themes.
 
-* Fait-divers: desktop menu file touched to openSUSE conventions.
+- Fait-divers: desktop menu file touched to openSUSE conventions.
 
-* Due to some trouble with newer Qt >= 4.4 applications regarding
-  font size configuration, a new global user option is now available
-  to the rescue: View/Options... /Display/Other/Base font size
+- Due to some trouble with newer Qt >= 4.4 applications regarding 
+  font size configuration, a new global user option is now available 
+  to the rescue: View/Options... /Display/Other/Base font size 
   (default none).
 
-* Attempt to load Qt's own translation support and get rid of
-  the ever warning startup message, unless built in debug mode.
+- Attempt to load Qt's own translation support and get rid of the 
+  ever warning startup message, unless built in debug mode. 
   (transaction by Guido Scholz, while on qsynth-devel, thanks).
 
-* Only one application instance is now allowed to be up and
-  running, with immediate but graceful termination upon startup
-  iif an already running instance is detected, which will see its
-  main widget shown up automatically (Qt/X11 platform only).
+- Only one application instance is now allowed to be up and running, 
+  with immediate but graceful termination upon startup iif an already 
+  running instance is detected, which will see its main widget shown 
+  up automatically (Qt/X11 platform only).
 
-* Messages file logging makes its first long overdue appearance,
+- Messages file logging makes its first long overdue appearance, 
   with user configurable settings in View/Options.../Server/Logging.
 
-* Bugfix in sampler channel dialog, driver combo boxes' content were
+- Bugfix in sampler channel dialog, driver combo boxes' content were 
   screwed.
 
-* Automatically add & remove channel strips as they were removed
+- Automatically add & remove channel strips as they were removed 
   e.g. by other frontends.
 
-* Refresh device management dialog when device informations changed,
-  e.g. on changes caused by other frontends
-  (fixes segfault on device changes)
+- Refresh device management dialog when device informations changed, 
+  e.g. on changes caused by other frontends (fixes segfault on device 
+  changes)
 
-* Implemented MIDI device activity windows, selectable from the
+- Implemented MIDI device activity windows, selectable from the 
   "View" main menu.
 
-* Implemented MIDI activity indicator on channel strips.
+- Implemented MIDI activity indicator on channel strips.
 
-* Added FX Sends Dialog to Channel Strips.
+- Added FX Sends Dialog to Channel Strips.
 
-* Color pallete fix for the instrument name display in channel
+- Color pallete fix for the instrument name display in channel 
   strip, particularly notorious on Mac OS X builds.
 
-* Added dialog when the application exits which lets the user
-  decide whether to keep the LinuxSampler running or not.
+- Added dialog when the application exits which lets the user decide 
+  whether to keep the LinuxSampler running or not.
 
 
 0.2.1  2007-12-06  Qt4 migration was complete.
 
-* Added recent new support of libgig for retrieving instrument
-  names in avery fast way. If libgig provides this feature, then
-  the respective name retrieval setting in qsampler is enabled by
-  default.
+- Added recent new support of libgig for retrieving instrument names 
+  in avery fast way. If libgig provides this feature, then the 
+  respective name retrieval setting in qsampler is enabled by default.
 
-* The current selected/activated channel-strip is now visually
+- The current selected/activated channel-strip is now visually 
   evident while in the application workspace (highlighting).
 
-* Make View/Menubar and Toolbar shortcuts accessible even though
-  the main menu and toobar are not visible.
+- Make View/Menubar and Toolbar shortcuts accessible even though the 
+  main menu and toobar are not visible.
 
-* Audio routing table is initially hidden in the dialog, when
+- Audio routing table is initially hidden in the dialog, when 
   creating a new sampler channel.
 
-* README requirements and configuration notes update.
+- README requirements and configuration notes update.
 
-* Disable OK button in sampler channel form and MIDI instrument
+- Disable OK button in sampler channel form and MIDI instrument
   form if no valid engine is selected (to avoid bothering newbie
   users with confusing LSCP syntax errors when using the UI the
   first time).
 
-* Fixed creation of devices (don't try to set device parameters
+- Fixed creation of devices (don't try to set device parameters 
   which the user did not touch in the device creation dialog).
 
-* Added Windows file path support.
+- Added Windows file path support.
 
-* Fixed win32/qmakefile and win32/config.h so that it compiles
+- Fixed win32/qmakefile and win32/config.h so that it compiles
   under win32.
 
-* Qt4 port of the application.
+- Qt4 port of the application.
 
 
 0.1.5  2007-10-15 Five months later a fifth is heard.
 
-* Added support for LSCP escape sequences to allow loading and
-  mapping instrument files with special characters in their
-  filename, as well as special characters for instrument names
-  and instrument map names (requires LSCP v1.2 on sampler side).
+- Added support for LSCP escape sequences to allow loading and 
+  mapping instrument files with special characters in their filename, 
+  as well as special characters for instrument names and instrument 
+  map names (requires LSCP v1.2 on sampler side).
 
-* Added new button "Edit" to the channel strips, which probably
-  does exactly what you think it does: it opens an appropriate
-  instrument editor application; the channel instrument editor
-  tool is also accessible from the main menu and toolbar.
+- Added new button "Edit" to the channel strips, which probably does 
+  exactly what you think it does: it opens an appropriate instrument 
+  editor application; the channel instrument editor tool is also 
+  accessible from the main menu and toolbar.
 
-* Application icon is now installed to ${prefix}/share/pixmaps;
+- Application icon is now installed to ${prefix}/share/pixmaps; 
   application desktop entry file is now included in installation;
   spec file (RPM) is now a bit more openSUSE compliant.
 
-* Crash fix on double-clicking on a empty instrument list.
+- Crash fix on double-clicking on a empty instrument list.
 
 
 0.1.4  2007-05-04 Almost another year has gone by.
 
-* Channel button colors have changed: yellow for mute and
-  cyan for solo is now the rule, but note that this color
-  highlighting is only rendered on some widget styles.
+- Channel button colors have changed: yellow for mute and cyan
+  for solo is now the rule, but note that this color highlighting
+  is only rendered on some widget styles.
 
-* Master sampler volume slider/spinbox combo is now featured.
+- Master sampler volume slider/spinbox combo is now featured.
 
-* Initial support for sampler channel FX sends, while saving
-  the session state, only at code-level.
+- Initial support for sampler channel FX sends, while saving the 
+  session state, only at code-level.
 
-* Sampler channel setup dialog does not mandate for valid nor
+- Sampler channel setup dialog does not mandate for valid nor 
   existing instrument file name.
 
-* Revised error verbosity in general and on session load/save;
-  hour-glass wait cursor is now displayed on session load/save;
-  keyboard shortcuts changed on MIDI instruments view context;
+- Revised error verbosity in general and on session load/save; 
+  hour-glass wait cursor is now displayed on session load/save; 
+  keyboard shortcuts changed on MIDI instruments view context; 
   improved channel strip arrangement on session open/load;
   instrument map entry removal confirmation (as optional);
   corrected some tooltip text strings.
 
-* Most top-level widgets were missing the normal-widget flag,
-  which were causing some sticky size behavior while on some
-  window managers.
+- Most top-level widgets were missing the normal-widget flag, which 
+  were causing some sticky size behavior while on some window 
+  managers.
 
-* Added preliminary MIDI instrument mapping support; now
-  with an instrument list widget and editing capabilities;
-  MIDI instrumeent map program numbers are now displayed in
-  the range 1-128, instead of the internal 0-127.
+- Added preliminary MIDI instrument mapping support; now with an 
+  instrument list widget and editing capabilities; MIDI instrumeent 
+  map program numbers are now displayed in the range 1-128, instead
+  of the internal 0-127.
 
-* GPL address update.
+- GPL address update.
 
 
 0.1.3   2006-06-01 Its been a long year isn't it?
 
-* Changed deprecated copyright attribute to license,
-  on qsampler.spec (RPM).
+- Changed deprecated copyright attribute to license, on 
+  qsampler.spec (RPM).
 
-* Added configure support for x86_64 libraries (UNTESTED).
+- Added configure support for x86_64 libraries (UNTESTED).
 
-* Optional specification of alternate liblscp and libgig
-  installation paths have been added to configure command
-  arguments (--with-liblscp, --with-libgig).
+- Optional specification of alternate liblscp and libgig 
+  installation paths have been added to configure command arguments 
+  (--with-liblscp, --with-libgig).
 
-* Whenever the listing of actual instrument names is not an
-  option (e.g. due to lack of libgig support), the whole
-  number of selectable instrument items is now being graciously
-  increased from just the bare 8 (eight) right up through 100
-  (one hundred), on the sampler channel setup dialog.
+- Whenever the listing of actual instrument names is not an option 
+  (e.g. due to lack of libgig support), the whole number of selectable 
+  instrument items is now being graciously increased from just the 
+  bare 8 (eight) right up through 100 (one hundred), on the sampler 
+  channel setup dialog.
 
-* The selection buttons, on the right of the Instrument, Audio
-  and MIDI devices combo-boxes, on the sampler channel dialog,
-  are now expected to be a little better looking than it was
-  before, at least for those Mac OS X eyes.
+- The selection buttons, on the right of the Instrument, Audio and 
+  MIDI devices combo-boxes, on the sampler channel dialog, are now 
+  expected to be a little better looking than it was before, at least 
+  for those Mac OS X eyes.
 
-* Minor fixing on the initial messages dock-window height.
+- Minor fixing on the initial messages dock-window height.
 
-* Audio output channel routing configuration finally hits
-  the sampler channel dialog, at last!
+- Audio output channel routing configuration finally hits the 
+  sampler channel dialog, at last!
 
-* All widget captions changed to include proper application
-  title name prefix.
+- All widget captions changed to include proper application title 
+  name prefix.
 
-* Attempt to bring those aging autoconf templates to date;
-  sample SPEC file for RPM build is now being included and
-  generated at configure time.
+- Attempt to bring those aging autoconf templates to date; sample 
+  SPEC file for RPM build is now being included and generated at 
+  configure time.
 
-* Set to use QApplication::setMainWidget() instead of
-  registering the traditional lastWindowClosed() signal
-  to quit() slot, just to let the -geometry command line
-  argument have some effect on X11.
+- Set to use QApplication::setMainWidget() instead of registering 
+  the traditional lastWindowClosed() signal to quit() slot, just to 
+  let the -geometry command line argument have some effect on X11.
 
-* Added MUTE/SOLO buttons to individual channel strips.
+- Added MUTE/SOLO buttons to individual channel strips.
 
-* Fixed compilation error which occured when Qt was
-  compiled with -no-stl.
+- Fixed compilation error which occured when Qt was compiled with 
+  -no-stl.
 
 
 0.1.2   2005-06-23 Even minor workings needs a rest.
 
-* Fixed output disability when messages limit option is
-  turned off (thanks to Wolfgang Woehl for spotting this
-  one, while on qjackctl).
+- Fixed output disability when messages limit option is turned off 
+  (thanks to Wolfgang Woehl for spotting this one, while on qjackctl).
 
-* Added CHANNEL_INFO event feedback notification handling;
-  minor stream/voice usage auto-refresh cycle optimization.
+- Added CHANNEL_INFO event feedback notification handling; minor 
+  stream/voice usage auto-refresh cycle optimization.
 
 
 0.1.1   2005-06-12 The mantra of bugfixes.
 
-* New improved and full-featured application icon, thanks
-  to Christian Schoenebeck design.
+- New improved and full-featured application icon, thanks to 
+  Christian Schoenebeck design.
 
-* Fixed refresh cycle of channel strips that are found
-  in an error state, which was preventing correct channel
-  info updates.
+- Fixed refresh cycle of channel strips that are found in an error 
+  state, which was preventing correct channel info updates.
 
-* Device configuration now accessible on toolbar. Added
-  buddy text label to device port/channel combobox on the
-  device dialog.
+- Device configuration now accessible on toolbar. Added buddy text 
+  label to device port/channel combobox on the device dialog.
 
-* Include libgig version info on command line request (-v).
+- Include libgig version info on command line request (-v).
 
-* Minor configure and Makefile install fixes, as Debian and
-  Mac OS X specialties. Also, install does the right thing
-  with target file modes (thanks to Matt Flax and Ebrahim
-  Mayat, for pointing these out).
+- Minor configure and Makefile install fixes, as Debian and Mac OS X 
+  specialties. Also, install does the right thing with target file 
+  modes (thanks to Matt Flax and Ebrahim Mayat, for pointing these 
+  out).
 
 
 0.1.0   2005-05-23  Device configuration breakthrough.
 
-* Device configuration is now complete.
+- Device configuration is now complete.
 
-* [bug #9] Fixed for a LSCP command syntax convention
-  consistency, regarding the enumeration of available
-  sampler engines, Audio and MIDI drivers.
+- [bug #9] Fixed for a LSCP command syntax convention consistency, 
+  regarding the enumeration of available sampler engines, Audio and 
+  MIDI drivers.
 
-* [bug #13] Update instrument names list when a new
-  instrument file is select on the channel setup dialog.
+- [bug #13] Update instrument names list when a new instrument file 
+  is select on the channel setup dialog.
 
-* Show appropriate message in channel strip while loading
-  an instrument.
+- Show appropriate message in channel strip while loading an 
+  instrument.
 
-* Show libgig version in About box (in case libgig is used).
+- Show libgig version in About box (in case libgig is used).
 
 
 0.0.5   2005-03-04  Fifth alpha-release.
 
-* Fixed device driver type channel information gathering,
-  which was severely flawed, dropping all channel session
-  configurations to the default audio driver type (which
-  is ALSA) unexpectedly.
+- Fixed device driver type channel information gathering, which was 
+  severely flawed, dropping all channel session configurations to the 
+  default audio driver type (which is ALSA) unexpectedly.
 
-* Channels are now properly renumbered when saving to a
-  session LSCP script, assuming that it should be always
-  loaded from scratch (i.e. zero channels).
+- Channels are now properly renumbered when saving to a session LSCP 
+  script, assuming that it should be always loaded from scratch (i.e. 
+  zero channels).
 
-* Disabled MIDI port setting on channel dialog, and on
-  session file save, as its use is still troublesome.
+- Disabled MIDI port setting on channel dialog, and on session file 
+  save, as its use is still troublesome.
 
-* Added new menu and toolbar option: Reset All Channels.
+- Added new menu and toolbar option: Reset All Channels.
 
-* Channel setup changes are now properly filtered, as for
-  only those settings that are actually changed gets applied;
-  change information are now also posted to messages window.
+- Channel setup changes are now properly filtered, as for only those 
+  settings that are actually changed gets applied; change information 
+  are now also posted to messages window.
 
-* Drag-and-drop of either session files (LSCP scripts) or
-  instrument files (GIG) are now supported. Multiple files
-  drop is allowed, but it only makes sense for instrument
-  files, each one prompting to create a new sampler channel.
+- Drag-and-drop of either session files (LSCP scripts) or instrument 
+  files (GIG) are now supported. Multiple files drop is allowed, but 
+  it only makes sense for instrument files, each one prompting to 
+  create a new sampler channel.
 
-* Drag-and-drop to an existing channel strip is now also
-  featured, allowing the in-place change of the channel
-  sampler instrument file.
+- Drag-and-drop to an existing channel strip is now also featured, 
+  allowing the in-place change of the channel sampler instrument file.
 
-* Actual instrument names are now optionally retrieved
-  from the instrument file, even though libgig is available,
-  avoiding excessively annoying load times while on the
-  channel dialog, when huge instrument files are selected.
+- Actual instrument names are now optionally retrieved from the 
+  instrument file, even though libgig is available, avoiding 
+  excessively annoying load times while on the channel dialog, when 
+  huge instrument files are selected.
 
-* Set to ignore the SIGPIPE ("Broken pipe") signal, where
-  available, as the default handler is usually fatal when
-  a JACK client is zombified abruptly.
+- Set to ignore the SIGPIPE ("Broken pipe") signal, where available, 
+  as the default handler is usually fatal when a JACK client is 
+  zombified abruptly.
 
-* Messages window limit is now enforced only when the line
-  count exceeds in one third the user configured line count
-  maximum; if Qt 3.2.0+ is in use, the QTextView widget is
-  otherwise set to the optimized Qt::LogText format.
+- Messages window limit is now enforced only when the line count 
+  exceeds in one third the user configured line count maximum; if Qt 
+  3.2.0+ is in use, the QTextView widget is otherwise set to the 
+  optimized Qt::LogText format.
 
 
 0.0.4   2004-11-19  Fourth alpha-release.
 
-* Instrument index selection now made via combo box widget;
-  actual instrument names are now properly retrieved from
-  the instrument file, provided if libgig is available.
+- Instrument index selection now made via combo box widget; actual 
+  instrument names are now properly retrieved from the instrument 
+  file, provided if libgig is available.
 
-* Sampler channels strips are just created if, and only if,
-  the respective channel setup dialog is actually accepted,
-  following common user-interface guidelines.
+- Sampler channels strips are just created if, and only if, the 
+  respective channel setup dialog is actually accepted, following 
+  common user-interface guidelines.
 
-* Almost complete rewrite of sampler channel strips internal
-  control structures.
+- Almost complete rewrite of sampler channel strips internal control 
+  structures.
 
-* Sampler reset command action added to menu and toolbar.
+- Sampler reset command action added to menu and toolbar.
 
-* MIDI channel selection is now a dropdown list, allowing
-  the explicit selection for "All" channels input per sampler
-  channel (omni mode).
+- MIDI channel selection is now a dropdown list, allowing the 
+  explicit selection for "All" channels input per sampler channel 
+  (omni mode).
 
-* Channel strip display glass effect has changed background
-  color to black (was green), being now an user option.
+- Channel strip display glass effect has changed background color to 
+  black (was green), being now an user option.
 
-* Minor configure fixes.
+- Minor configure fixes.
 
 
 0.0.3   2004-07-06  Third alpha-release.
 
-* Mon-modal intrument file loading and status support.
+- Mon-modal intrument file loading and status support.
 
-* Effective MIDI input port setting on channel dialog,
-  and on session file save.
+- Effective MIDI input port setting on channel dialog, and on 
+  session file save.
 
-* Channel dialog gets sensible engine and driver defaults
-  on create time.
+- Channel dialog gets sensible engine and driver defaults on create 
+  time.
 
-* Implied channel reset on successful instrument load.
+- Implied channel reset on successful instrument load.
 
 
 0.0.2   2004-06-15  Pre-revolutionary release.
 
-* The channel context menu is also accessible by right-clicking
-  over the empty workspace area.
+- The channel context menu is also accessible by right-clicking over 
+  the empty workspace area.
 
-* Added small wait event loop on qsamplerMainForm::stopServer(),
-  so let local server terminate gracefully and stabilize, and
-  avoiding a probable segfault on exit, which was preventing the
-  correct salvage of settings and configuration.
+- Added small wait event loop on qsamplerMainForm::stopServer(), so 
+  let local server terminate gracefully and stabilize, and avoiding a 
+  probable segfault on exit, which was preventing the correct salvage 
+  of settings and configuration.
 
-* Maximum channel volume percent setting is now a global option,
+- Maximum channel volume percent setting is now a global option, 
   provided to override the default (which is 100%).
 
-* Client/server transaction timeout option upper limit has been
+- Client/server transaction timeout option upper limit has been 
   increased from 5000 to 60000 milliseconds.
 
-* A channel context menu is now featured, by right-clicking over
+- A channel context menu is now featured, by right-clicking over 
   each sampler channel strip.
 
-* Commented SET CHANNEL MIDI_INPUT_PORT command from
+- Commented SET CHANNEL MIDI_INPUT_PORT command from 
   qsamplerMainForm::saveSessionFile(), it has no effect.
 
-* Insert a n #include <unistd.h> on qsamplerMessages.cpp, between
-  a #if !defined(WIN32) clause.
+- Insert a n #include <unistd.h> on qsamplerMessages.cpp, between a 
+  #if !defined(WIN32) clause.
 
-* An initial non zero value (0.8) is now set for volume of every
-  new sampler channel strip.
+- An initial non zero value (0.8) is now set for volume of every new 
+  sampler channel strip.
 
-* The order to load/save and setup channel settings is now as
+- The order to load/save and setup channel settings is now as 
   suggested in the following lines:
 
     SET CHANNEL AUDIO_OUTPUT_TYPE ...
     SET CHANNEL MIDI_INPUT_TYPE ...
-    SET CHANNEL MIDI_INPUT_CHANNEL ...
-    LOAD ENGINE ...
-    LOAD INSTRUMENT ...
-    SET CHANNEL VOLUME ...
+    SET CHANNEL MIDI_INPUT_CHANNEL ... 
+    LOAD ENGINE ... 
+    LOAD INSTRUMENT ... SET CHANNEL VOLUME ...
 
 
 0.0.1   2004-06-05  Primordial alpha release.
