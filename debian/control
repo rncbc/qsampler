@@ -5,6 +5,7 @@ Maintainer: LinuxSampler Developers <linuxsampler-devel@lists.sourceforge.net>
 Build-Depends: debhelper (>= 9), automake, pkg-config,
   qtchooser, qtbase5-dev (>= 5.1), qtbase5-dev-tools (>= 5.1),
   qttools5-dev (>= 5.1), qttools5-dev-tools (>= 5.1),
+  libqt5svg5-dev, libqt5waylandclient5-dev | qtwayland5-dev-tools,
   liblscp-dev, libgig-dev (>= 3.3.0)
 Standards-Version: 3.9.7
 
