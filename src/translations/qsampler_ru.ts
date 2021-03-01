@@ -1088,12 +1088,12 @@ Do you want LinuxSampler to stop?</source>
         <translation>Сообщения</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="270"/>
+        <location filename="../qsamplerMessages.cpp" line="281"/>
         <source>Logging stopped --- %1 ---</source>
         <translation>Ведение журнала остановлено --- %1 ---</translation>
     </message>
     <message>
-        <location filename="../qsamplerMessages.cpp" line="280"/>
+        <location filename="../qsamplerMessages.cpp" line="291"/>
         <source>Logging started --- %1 ---</source>
         <translation>Ведение журнала начато --- %1 ---</translation>
     </message>
