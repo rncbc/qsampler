@@ -59,11 +59,10 @@ the Qt framework using Qt Designer. For the moment it just wraps the client
 interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %prep
-%setup
-[ -x ./autogen.sh ] && ./autogen.sh
+%setup -q
 
 %build
-%configure
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix}
 %__make %{?_smp_mflags}
 
 %install
