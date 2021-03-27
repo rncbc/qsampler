@@ -62,7 +62,7 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 %setup -q
 
 %build
-cmake -DCMAKE_INSTALL_PREFIX=%{_prefix}
+cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} .
 %__make %{?_smp_mflags}
 
 %install
