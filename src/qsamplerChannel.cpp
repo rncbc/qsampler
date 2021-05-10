@@ -582,8 +582,12 @@ const ChannelRoutingMap& Channel::audioRouting (void) const
 void Channel::updateInstrumentName (void)
 {
 #ifndef CONFIG_INSTRUMENT_NAME
+	Options *pOptions = nullptr;
+	MainForm *pMainForm = MainForm::getInstance();
+	if (pMainForm)
+		pOptions = pMainForm->options();
 	m_sInstrumentName = getInstrumentName(m_sInstrumentFile,
-		m_iInstrumentNr, (options() && options()->bInstrumentNames));
+		m_iInstrumentNr, (pOptions && pOptions->bInstrumentNames));
 #endif
 }
 
