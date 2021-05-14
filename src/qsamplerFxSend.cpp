@@ -219,7 +219,7 @@ bool FxSend::applyToSampler() {
 			m_iSamplerChannelID, m_iFxSendID,
 			qsamplerUtilities::lscpEscapeText(
 				m_FxSendName
-			).toUtf8().constData()
+			).constData()
 		);
 	if (result != LSCP_OK) {
 		pMainForm->appendMessagesClient("lscp_set_fxsend_name");

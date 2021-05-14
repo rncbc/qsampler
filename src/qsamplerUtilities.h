@@ -33,10 +33,10 @@ struct lscpVersion_t {
 	int minor;
 };
 
-QString lscpEscapePath(const QString& sPath);
-QString lscpEscapedPathToPosix(const QString& sPath);
-QString lscpEscapeText(const QString& sText);
-QString lscpEscapedTextToRaw(const QString& sText);
+QByteArray lscpEscapePath(const QString& sPath);
+QString lscpEscapedPathToPosix(const char* sPath);
+QByteArray lscpEscapeText(const QString& sText);
+QString lscpEscapedTextToRaw(const char* sText);
 
 lscpVersion_t getRemoteLscpVersion();
 

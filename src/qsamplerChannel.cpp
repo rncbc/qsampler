@@ -225,7 +225,7 @@ bool Channel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr
 	if (::lscp_load_instrument_non_modal(
 			pMainForm->client(),
 			qsamplerUtilities::lscpEscapePath(
-				sInstrumentFile).toUtf8().constData(),
+				sInstrumentFile).constData(),
 			iInstrumentNr, m_iChannelID
 		) != LSCP_OK) {
 		appendMessagesClient("lscp_load_instrument");

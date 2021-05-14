@@ -69,6 +69,10 @@ static int _hexsToNumber ( char hex0, char hex1 )
 	return _hexToNumber(hex1) * 16 + _hexToNumber(hex0);
 }
 
+static bool _isHex ( char hex_digit )
+{
+	return _hexToNumber ( hex_digit ) || hex_digit == '0';
+}
 
 // returns true if the connected LSCP server supports escape sequences
 static bool _remoteSupportsEscapeSequences (void)
@@ -80,52 +84,55 @@ static bool _remoteSupportsEscapeSequences (void)
 
 
 // converts the given file path into a path as expected by LSCP 1.2
-QString lscpEscapePath ( const QString& sPath )
+QByteArray lscpEscapePath ( const QString& sPath )
 {
-	if (!_remoteSupportsEscapeSequences()) return sPath;
+	QByteArray path = sPath.toUtf8();
+	if (!_remoteSupportsEscapeSequences()) return path;
 
-	QString path(sPath);
+        const char pathSeparator = '/';
+	int path_len = path.length();
+	char buf[5];
 
-	// replace POSIX path escape sequences (%HH) by LSCP escape sequences (\xHH)
-	// TODO: missing code for other systems like Windows
-	{
-		QRegularExpression regexp("%[0-9a-fA-F][0-9a-fA-F]");
-		for (int i = path.indexOf(regexp); i >= 0; i = path.indexOf(regexp, i + 4))
-			path.replace(i, 1, "\\x");
-	}
-	// replace POSIX path escape sequence (%%) by its raw character
-	for (int i = path.indexOf("%%"); i >= 0; i = path.indexOf("%%", ++i))
-		path.remove(i, 1);
-
-	// replace all non-basic characters by LSCP escape sequences
-	{
-		const char pathSeparator = '/';
-		QRegularExpression regexp(QRegularExpression::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
-		for (int i = 0; i < int(path.length()); i++) {
-			// first skip all previously added LSCP escape sequences
-			if (path.indexOf(regexp, i) == i) {
+	// Trying single pass to avoid redundant checks on extra run
+	for ( int i = 0; i < path_len; i++ ) {
+		// translate POSIX escape sequences
+		if (path[i] == '%') {
+			// replace POSIX path escape sequences (%HH) by LSCP escape sequences (\xHH)
+			// TODO: missing code for other systems like Windows
+			if (_isHex(path[i+1]) && _isHex(path[i+2])) {
+				path.replace (i, 1, "\\x");
+				path_len++;
 				i += 3;
 				continue;
 			}
-			// now match all non-alphanumerics
-			// (we could exclude much more characters here, but that way
-			// we're sure it just works^TM)
-			const char c = path.at(i).toLatin1();
-			if (
-				!(c >= '0' && c <= '9') &&
-				!(c >= 'a' && c <= 'z') &&
-				!(c >= 'A' && c <= 'Z') &&
-			#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
-				!(c == ':') &&
-			#endif
-				!(c == pathSeparator)
-			) {
-				// convert the non-basic character into a LSCP escape sequence
-				char buf[5];
-				::snprintf(buf, sizeof(buf), "\\x%02x", static_cast<unsigned char>(c));
-				path.replace(i, 1, buf);
-				i += 3;
+			// replace POSIX path escape sequence (%%) by its raw character
+			if (path[i+1] == '%') {
+				path.remove (i, 1);
+				path_len--;
+				continue;
 			}
+			continue;
+		}
+		// replace all non-basic characters by LSCP escape sequences
+		//
+		// match all non-alphanumerics
+		// (we could exclude much more characters here, but that way
+		// we're sure it just works^TM)
+		const char c = path[i];
+		if (
+			!(c >= '0' && c <= '9') &&
+			!(c >= 'a' && c <= 'z') &&
+			!(c >= 'A' && c <= 'Z') &&
+		#if defined(__WIN32__) || defined(_WIN32) || defined(WIN32)
+			!(c == ':') &&
+		#endif
+			!(c == pathSeparator)
+		) {
+			// convertion
+			::snprintf(buf, sizeof(buf), "\\x%02x", static_cast<unsigned char>(c));
+			path = path.replace(i, 1, buf);
+			path_len += 3;
+			i += 3;
 		}
 	}
 
@@ -135,57 +142,67 @@ QString lscpEscapePath ( const QString& sPath )
 
 // converts a path returned by a LSCP command (and may contain escape
 // sequences) into the appropriate POSIX path
-QString lscpEscapedPathToPosix ( const QString& sPath )
+QString lscpEscapedPathToPosix ( const char* sPath )
 {
-	if (!_remoteSupportsEscapeSequences()) return sPath;
+	if (!_remoteSupportsEscapeSequences()) return QString(sPath);
 
-	QString path(sPath);
+	QByteArray path(sPath);
+	int path_len = path.length();
 
-	// first escape all percent ('%') characters for POSIX
-	for (int i = path.indexOf('%'); i >= 0; i = path.indexOf('%', i+2))
-		path.replace(i, 1, "%%");
-
-	// resolve LSCP hex escape sequences (\xHH)
-	QRegularExpression regexp(QRegularExpression::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
-	for (int i = path.indexOf(regexp); i >= 0; i = path.indexOf(regexp, i + 4)) {
-		const QString sHex = path.mid(i + 2, 2).toLower();
-		// the slash has to be escaped for POSIX as well
-		if (sHex == "2f") {
-			path.replace(i, 4, "%2f");
+	char cAscii[2] = "\0";
+	for ( int i = 0; i < path_len; i++) {
+		// first escape all percent ('%') characters for POSIX
+		if (path[i] == '%') {
+			path.insert(i, '%');
+			path_len++;
+			i++;
 			continue;
 		}
-		// all other characters we simply decode
-		char cAscii = _hexsToNumber(sHex.at(1).toLatin1(), sHex.at(0).toLatin1());
-		path.replace(i, 4, cAscii);
+		// resolve LSCP hex escape sequences (\xHH)
+		if (path[i] == '\\' && path[i+1] == 'x' && _isHex(path[i+2]) && _isHex(path[i+3])) {
+			const QByteArray sHex = path.mid(i + 2, 2).toLower();
+			// the slash has to be escaped for POSIX as well
+			if (sHex == "2f") {
+				path.replace(i, 4, "%2f");
+			// all other characters we simply decode
+			} else {
+				cAscii[0] = _hexsToNumber(sHex[1], sHex[0]);
+				path.replace(i, 4, cAscii);
+			}
+			path_len -= 3;
+			continue;
+		}
 	}
 
-	return path;
+	return QString(path);
 }
 
 
 // converts the given text as expected by LSCP 1.2
 // (that is by encoding special characters with LSCP escape sequences)
-QString lscpEscapeText ( const QString& sText )
+QByteArray lscpEscapeText ( const QString& sText )
 {
-	if (!_remoteSupportsEscapeSequences()) return sText;
+	QByteArray text = sText.toUtf8();
+	if (!_remoteSupportsEscapeSequences()) return text;
 
-	QString text(sText);
+	int text_len = text.length();
+	char buf[5];
 
 	// replace all non-basic characters by LSCP escape sequences
-	for (int i = 0; i < int(text.length()); ++i) {
+	for (int i = 0; i < text_len; ++i) {
 		// match all non-alphanumerics
 		// (we could exclude much more characters here, but that way
 		// we're sure it just works^TM)
-		const char c = text.at(i).toLatin1();
+		const char c = text[i];
 		if (
 			!(c >= '0' && c <= '9') &&
 			!(c >= 'a' && c <= 'z') &&
 			!(c >= 'A' && c <= 'Z')
 		) {
 			// convert the non-basic character into a LSCP escape sequence
-			char buf[5];
 			::snprintf(buf, sizeof(buf), "\\x%02x", static_cast<unsigned char>(c));
 			text.replace(i, 1, buf);
+			text_len += 3;
 			i += 3;
 		}
 	}
@@ -196,22 +213,27 @@ QString lscpEscapeText ( const QString& sText )
 
 // converts a text returned by a LSCP command and may contain escape
 // sequences) into raw text, that is with all escape sequences decoded
-QString lscpEscapedTextToRaw ( const QString& sText )
+QString lscpEscapedTextToRaw ( const char* sText )
 {
-	if (!_remoteSupportsEscapeSequences()) return sText;
+	if (!_remoteSupportsEscapeSequences()) return QString(sText);
 
-	QString text(sText);
+	QByteArray text(sText);
+	int text_len = text.length();
+	char sHex[2], cAscii[2] = "\0";
 
 	// resolve LSCP hex escape sequences (\xHH)
-	QRegularExpression regexp(QRegularExpression::escape("\\x") + "[0-9a-fA-F][0-9a-fA-F]");
-	for (int i = text.indexOf(regexp); i >= 0; i = text.indexOf(regexp, i + 4)) {
-		const QString sHex = text.mid(i + 2, 2).toLower();
-		// decode into raw ASCII character
-		char cAscii = _hexsToNumber(sHex.at(1).toLatin1(), sHex.at(0).toLatin1());
-		text.replace(i, 4, cAscii);
+	for (int i = 0; i < text_len; i++) {
+		if (text[i] != '\\' || text[i+1] != 'x') continue;
+
+		sHex[0] = text[i+2], sHex[1] = text[i+3];
+		if (_isHex(sHex[0]) && _isHex(sHex[1])) {
+			cAscii[0] = _hexsToNumber(sHex[1], sHex[0]);
+			text.replace(i, 4, cAscii);
+			text_len -= 3;
+		}
 	}
 
-	return text;
+	return QString(text);
 }
 
 lscpVersion_t getRemoteLscpVersion (void)
