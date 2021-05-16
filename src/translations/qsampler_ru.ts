@@ -108,7 +108,7 @@ Sorry.</source>
         <translation>Звуковой канал: %1 -&gt; %2.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="604"/>
+        <location filename="../qsamplerChannel.cpp" line="608"/>
         <source>Could not get channel information.
 
 Sorry.</source>
@@ -117,17 +117,17 @@ Sorry.</source>
 Извините.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="651"/>
+        <location filename="../qsamplerChannel.cpp" line="655"/>
         <source>(none)</source>
         <translation>(нет)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="699"/>
+        <location filename="../qsamplerChannel.cpp" line="703"/>
         <source>reset.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="719"/>
+        <location filename="../qsamplerChannel.cpp" line="723"/>
         <source>Could not launch an appropriate instrument editor for the given instrument!
 
 Make sure you have an appropriate instrument editor like &apos;gigedit&apos; installed and that it placed its mandatory DLL file into the sampler&apos;s plugin directory.</source>
@@ -136,12 +136,12 @@ Make sure you have an appropriate instrument editor like &apos;gigedit&apos; ins
 Убедитесь, что в системе установлен необходимый редактор вроде gigedit, и что его файл DLL размещен в папке с расширениями сэмплера.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="730"/>
+        <location filename="../qsamplerChannel.cpp" line="734"/>
         <source>edit instrument.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="736"/>
+        <location filename="../qsamplerChannel.cpp" line="740"/>
         <source>Sorry, QSampler was compiled for a version of liblscp which lacks this feature.
 
 You may want to update liblscp and recompile QSampler afterwards.</source>
@@ -150,32 +150,32 @@ You may want to update liblscp and recompile QSampler afterwards.</source>
 Вероятно вам стоит обновить версию liblscp и пересобрать QSampler.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="757"/>
+        <location filename="../qsamplerChannel.cpp" line="761"/>
         <source>setup...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="980"/>
+        <location filename="../qsamplerChannel.cpp" line="984"/>
         <source>(No engine)</source>
         <translation>(нет движка)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="985"/>
+        <location filename="../qsamplerChannel.cpp" line="989"/>
         <source>(No instrument)</source>
         <translation>(нет инструмента)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="989"/>
+        <location filename="../qsamplerChannel.cpp" line="993"/>
         <source>(Loading instrument...)</source>
         <translation>(загружается инструмент...)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1071"/>
+        <location filename="../qsamplerChannel.cpp" line="1075"/>
         <source> Device Channel</source>
         <translation>Канал устройства</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1073"/>
+        <location filename="../qsamplerChannel.cpp" line="1077"/>
         <source>Audio Channel </source>
         <translation>Звуковой канал</translation>
     </message>

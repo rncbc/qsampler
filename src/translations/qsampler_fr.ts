@@ -108,7 +108,7 @@ Navré.</translation>
         <translation>Canal audio : %1 -&gt; %2.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="604"/>
+        <location filename="../qsamplerChannel.cpp" line="608"/>
         <source>Could not get channel information.
 
 Sorry.</source>
@@ -117,17 +117,17 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="651"/>
+        <location filename="../qsamplerChannel.cpp" line="655"/>
         <source>(none)</source>
         <translation>(aucun)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="699"/>
+        <location filename="../qsamplerChannel.cpp" line="703"/>
         <source>reset.</source>
         <translation>réinitialiser.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="719"/>
+        <location filename="../qsamplerChannel.cpp" line="723"/>
         <source>Could not launch an appropriate instrument editor for the given instrument!
 
 Make sure you have an appropriate instrument editor like &apos;gigedit&apos; installed and that it placed its mandatory DLL file into the sampler&apos;s plugin directory.</source>
@@ -136,12 +136,12 @@ Make sure you have an appropriate instrument editor like &apos;gigedit&apos; ins
 Assurez-vous que vous avez un éditeur d&apos;instrument approprié installé comme &apos;gigedit&apos; et qu&apos;il ait placé son fichier DLL nécessaire dans le répertoire de greffon de l&apos;échantillonneur.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="730"/>
+        <location filename="../qsamplerChannel.cpp" line="734"/>
         <source>edit instrument.</source>
         <translation>éditer l&apos;instrument.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="736"/>
+        <location filename="../qsamplerChannel.cpp" line="740"/>
         <source>Sorry, QSampler was compiled for a version of liblscp which lacks this feature.
 
 You may want to update liblscp and recompile QSampler afterwards.</source>
@@ -150,32 +150,32 @@ You may want to update liblscp and recompile QSampler afterwards.</source>
 Vous pourriez vouloir mettre à jour liblscp et recompiler QSampler ensuite.</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="757"/>
+        <location filename="../qsamplerChannel.cpp" line="761"/>
         <source>setup...</source>
         <translation>paramètre...</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="980"/>
+        <location filename="../qsamplerChannel.cpp" line="984"/>
         <source>(No engine)</source>
         <translation>(pas de moteur)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="985"/>
+        <location filename="../qsamplerChannel.cpp" line="989"/>
         <source>(No instrument)</source>
         <translation>(pas d&apos;instrument)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="989"/>
+        <location filename="../qsamplerChannel.cpp" line="993"/>
         <source>(Loading instrument...)</source>
         <translation>(chargement de l&apos;instrument...)</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1071"/>
+        <location filename="../qsamplerChannel.cpp" line="1075"/>
         <source> Device Channel</source>
         <translation> Canal de périphérique</translation>
     </message>
     <message>
-        <location filename="../qsamplerChannel.cpp" line="1073"/>
+        <location filename="../qsamplerChannel.cpp" line="1077"/>
         <source>Audio Channel </source>
         <translation>Canal Audio </translation>
     </message>
