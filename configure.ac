@@ -79,12 +79,12 @@ AC_ARG_ENABLE(qt6,
 if test "x$ac_debug" = "xyes"; then
    AC_DEFINE(CONFIG_DEBUG, 1, [Define if debugging is enabled.])
    ac_stacktrace="yes"
-   ac_debug="debug"
+   ac_build_type="debug"
 else
    ac_stacktrace="no"
-   ac_debug="release"
+   ac_build_type="release"
 fi
-AC_SUBST(ac_debug)
+AC_SUBST(ac_build_type)
 
 
 # Enable libgig availability.
@@ -358,6 +358,10 @@ if test "x$ac_lrelease" = "xno"; then
 fi
 AC_SUBST(ac_lrelease)
 
+if test "x$ac_debug" = "xyes"; then
+  ac_cflags="-g -fsanitize=address -fno-omit-frame-pointer $ac_cflags"
+  ac_libs="$ac_libs -lasan"
+fi
 
 # Checks for libraries.
 AC_CHECK_LIB(m, main)
@@ -393,8 +397,8 @@ esac
 AC_CACHE_CHECK([for instrument_name in lscp_channel_info_t],
   ac_cv_instrument_name, [
   AC_TRY_COMPILE([#include "lscp/client.h"], [
-	lscp_channel_info_t info;
-	info.instrument_name = 0;
+       lscp_channel_info_t info;
+       info.instrument_name = 0;
     ], ac_cv_instrument_name="yes", ac_cv_instrument_name="no")
 ])
 ac_instrument_name=$ac_cv_instrument_name
@@ -405,9 +409,9 @@ fi
 AC_CACHE_CHECK([for mute/solo in lscp_channel_info_t],
   ac_cv_mute_solo, [
   AC_TRY_COMPILE([#include "lscp/client.h"], [
-	lscp_channel_info_t info;
-	info.mute = 0;
-	info.solo = 0;
+       lscp_channel_info_t info;
+       info.mute = 0;
+       info.solo = 0;
     ], ac_cv_mute_solo="yes", ac_cv_mute_solo="no")
 ])
 ac_mute_solo=$ac_cv_mute_solo
@@ -423,7 +427,7 @@ fi
 
 AC_CHECK_LIB(lscp, lscp_map_midi_instrument, [ac_midi_instrument="yes"], [ac_midi_instrument="no"])
 if test "x$ac_midi_instrument" = "xyes"; then
-  AC_DEFINE(CONFIG_MIDI_INSTRUMENT, 1, [Define if MIDI instrument mapping is available.])
+   AC_DEFINE(CONFIG_MIDI_INSTRUMENT, 1, [Define if MIDI instrument mapping is available.])
 fi
 
 AC_CHECK_LIB(lscp, lscp_create_fxsend, [ac_fxsend="yes"], [ac_fxsend="no"])
@@ -432,25 +436,25 @@ if test "x$ac_fxsend" = "xyes"; then
   AC_CACHE_CHECK([for FX send level in lscp_fxsend_info_t],
     ac_cv_fxsend_level, [
     AC_TRY_COMPILE([#include "lscp/client.h"], [
-	  lscp_fxsend_info_t info;
-	  info.level = 0.0f;
+         lscp_fxsend_info_t info;
+         info.level = 0.0f;
       ], ac_cv_fxsend_level="yes", ac_cv_fxsend_level="no")
   ])
   ac_fxsend_level=$ac_cv_fxsend_level
   if test "x$ac_fxsend_level" = "xyes"; then
-	  AC_DEFINE(CONFIG_FXSEND_LEVEL, 1, [Define if FX send level is available.])
+     AC_DEFINE(CONFIG_FXSEND_LEVEL, 1, [Define if FX send level is available.])
   fi
   AC_CHECK_LIB(lscp, lscp_set_fxsend_name, [ac_fxsend_rename="yes"], [ac_fxsend_rename="no"])
   if test "x$ac_fxsend_rename" = "xyes"; then
-	  AC_DEFINE(CONFIG_FXSEND_RENAME, 1, [Define if FX send rename is available.])
+     AC_DEFINE(CONFIG_FXSEND_RENAME, 1, [Define if FX send rename is available.])
   fi
 fi
 
 AC_CACHE_CHECK([for audio_routing array type],
   ac_cv_audio_routing, [
   AC_TRY_COMPILE([#include "lscp/client.h"], [
-    lscp_channel_info_t info;
-    char ch = info.audio_routing[0][0];
+       lscp_channel_info_t info;
+       char ch = info.audio_routing[0][0];
     ], ac_cv_audio_routing="no", ac_cv_audio_routing="yes")
 ])
 ac_audio_routing=$ac_cv_audio_routing
@@ -460,22 +464,22 @@ fi
 
 AC_CHECK_LIB(lscp, lscp_set_volume, [ac_volume="yes"], [ac_volume="no"])
 if test "x$ac_volume" = "xyes"; then
-  AC_DEFINE(CONFIG_VOLUME, 1, [Define if global volume is available.])
+   AC_DEFINE(CONFIG_VOLUME, 1, [Define if global volume is available.])
 fi
 
 AC_CHECK_LIB(lscp, lscp_edit_channel_instrument, [ac_edit_instrument="yes"], [ac_edit_instrument="no"])
 if test "x$ac_edit_instrument" = "xyes"; then
-  AC_DEFINE(CONFIG_EDIT_INSTRUMENT, 1, [Define if instrument editing is available.])
+   AC_DEFINE(CONFIG_EDIT_INSTRUMENT, 1, [Define if instrument editing is available.])
 fi
 
 AC_CACHE_CHECK([for CHANNEL_MIDI LSCP event support in liblscp],
   ac_cv_channel_midi_event, [
   AC_TRY_COMPILE([
-	#include "lscp/client.h"
-	#include "lscp/event.h"
-	], [
-	lscp_event_t ev;
-	ev = LSCP_EVENT_CHANNEL_MIDI;
+       #include "lscp/client.h"
+       #include "lscp/event.h"
+    ], [
+       lscp_event_t ev;
+       ev = LSCP_EVENT_CHANNEL_MIDI;
     ], ac_cv_channel_midi_event="yes", ac_cv_channel_midi_event="no")
 ])
 ac_channel_midi_event=$ac_cv_channel_midi_event
@@ -486,11 +490,11 @@ fi
 AC_CACHE_CHECK([for DEVICE_MIDI LSCP event support in liblscp],
   ac_cv_device_midi_event, [
   AC_TRY_COMPILE([
-	#include "lscp/client.h"
-	#include "lscp/event.h"
-	], [
-	lscp_event_t ev;
-	ev = LSCP_EVENT_DEVICE_MIDI;
+       #include "lscp/client.h"
+       #include "lscp/event.h"
+    ], [
+       lscp_event_t ev;
+       ev = LSCP_EVENT_DEVICE_MIDI;
     ], ac_cv_device_midi_event="yes", ac_cv_device_midi_event="no")
 ])
 ac_device_midi_event=$ac_cv_device_midi_event
@@ -500,12 +504,12 @@ fi
 
 AC_CHECK_LIB(lscp, lscp_get_voices, [ac_max_voices="yes"], [ac_max_voices="no"])
 if test "x$ac_max_voices" = "xyes"; then
-  AC_DEFINE(CONFIG_MAX_VOICES, 1, [Define if max. voices / streams is available.])
+   AC_DEFINE(CONFIG_MAX_VOICES, 1, [Define if max. voices / streams is available.])
 fi
 
 AC_CHECK_LIB(lscp, lscp_client_connection_lost, [ac_lscp_conn_lost="yes"], [ac_lscp_conn_lost="no"])
 if test "x$ac_lscp_conn_lost" = "xyes"; then
-  AC_DEFINE(CONFIG_LSCP_CLIENT_CONNECTION_LOST, 1, [Define if liblscp function lscp_client_connection_lost() is available.])
+   AC_DEFINE(CONFIG_LSCP_CLIENT_CONNECTION_LOST, 1, [Define if liblscp function lscp_client_connection_lost() is available.])
 fi
 
 # Check for optional libraries.
@@ -586,7 +590,7 @@ AC_OUTPUT
 echo
 echo "  $PACKAGE_NAME $ac_build_version (Qt $ac_qt_version)"
 echo
-echo "  Build target . . . . . . . . . . . . . . . . . . .: $ac_debug"
+echo "  Build target . . . . . . . . . . . . . . . . . . .: $ac_build_type"
 echo
 echo "  LSCP instrument name support . . . . . . . . . . .: $ac_instrument_name"
 echo "  LSCP mute/solo support . . . . . . . . . . . . . .: $ac_mute_solo"
