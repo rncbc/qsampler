@@ -132,7 +132,7 @@ endif ()
 
 
 # Find package modules
-find_package (PkgConfig REQUIRED)
+include (FindPkgConfig)
 
 # Check for LSCP libraries.
 pkg_check_modules (LSCP REQUIRED IMPORTED_TARGET lscp)
