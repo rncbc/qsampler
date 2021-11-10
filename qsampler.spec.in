@@ -49,7 +49,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	glibc-devel
 BuildRequires:	gcc-c++
 BuildRequires:	cmake
-%if %{defined fedora} -S .
+%if %{defined fedora}
 %if 0%{qt_major_version} == 6
 BuildRequires:	qt6-qtbase-devel >= 6.1
 BuildRequires:	qt6-qttools-devel
@@ -91,10 +91,11 @@ interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
 %build
 cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -Wno-dev -B build
-%__make %{?_smp_mflags} -C build
+cmake --build build %{?_smp_mflags}
 
 %install
-%__make DESTDIR="%{buildroot}" -C build install
+DESTDIR="%{buildroot}" \
+cmake --install build
 
 %clean
 [ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
