@@ -102,7 +102,7 @@ cmake --install build
 
 %files
 %defattr(-,root,root)
-%doc AUTHORS COPYING ChangeLog README TODO
+%doc README LICENSE TRANSLATORS ChangeLog
 #dir %{_datadir}/mime
 #dir %{_datadir}/mime/packages
 #dir %{_datadir}/applications
