@@ -271,5 +271,4 @@ show_option ("  LSCP runtime max. voices / disk streams support  ." CONFIG_MAX_V
 message     ("")
 show_option ("  Unique/Single instance support . . . . . . . . . ." CONFIG_XUNIQUE)
 show_option ("  Debugger stack-trace (gdb) . . . . . . . . . . . ." CONFIG_STACKTRACE)
-message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}")
-message   ("\nNow type 'make', followed by 'make install' as root.\n")
+message   ("\n  Install prefix . . . . . . . . . . . . . . . . . .: ${CONFIG_PREFIX}\n")
