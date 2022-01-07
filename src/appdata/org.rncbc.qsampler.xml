@@ -17,7 +17,7 @@
    <caption>The main window showing the application in action</caption>
   </screenshot>
  </screenshots>
- <launchable type="desktop-id">qsampler.desktop</launchable>
+ <launchable type="desktop-id">org.rncbc.qsampler.desktop</launchable>
  <provides>
   <binary>qsampler</binary>
  </provides>
@@ -40,4 +40,8 @@
  <project_group>linuxsampler.org</project_group>
  <developer_name>rncbc aka. Rui Nuno Capela</developer_name>
  <update_contact>rncbc@rncbc.org</update_contact>
+ <releases>
+   <release version="0.9.5" date="2022-01-09" urgency="low" />
+ </releases>
+ <content_rating type="oars-1.0"/>
 </component>
