@@ -1,7 +1,7 @@
 // qsampler.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2022, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015,2019 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -41,6 +41,10 @@
 
 #ifndef CONFIG_PREFIX
 #define CONFIG_PREFIX	"/usr/local"
+#endif
+
+#ifndef CONFIG_BINDIR
+#define CONFIG_BINDIR	CONFIG_PREFIX "/bin"
 #endif
 
 #ifndef CONFIG_DATADIR
@@ -121,8 +125,13 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 		if (m_pQtTranslator->load(sLocName, sLocPath)) {
 			QApplication::installTranslator(m_pQtTranslator);
 		} else {
+			sLocPath = QApplication::applicationDirPath();
 		#ifdef RELATIVE_LOCALE_DIR
-			sLocPath = QApplication::applicationDirPath() + RELATIVE_LOCALE_DIR;
+			sLocPath.append(RELATIVE_LOCALE_DIR);
+		#else
+			sLocPath.remove(CONFIG_BINDIR);
+			sLocPath.append(CONFIG_DATADIR "/qjackctl/translations");
+		#endif
 			if (m_pQtTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pQtTranslator);
 			} else {
