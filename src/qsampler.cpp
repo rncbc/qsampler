@@ -130,7 +130,7 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 			sLocPath.append(RELATIVE_LOCALE_DIR);
 		#else
 			sLocPath.remove(CONFIG_BINDIR);
-			sLocPath.append(CONFIG_DATADIR "/qjackctl/translations");
+			sLocPath.append(CONFIG_DATADIR "/qsampler/translations");
 		#endif
 			if (m_pQtTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pQtTranslator);
