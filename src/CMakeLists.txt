@@ -150,23 +150,23 @@ endif ()
 
 if (UNIX AND NOT APPLE)
   install (TARGETS ${PROJECT_NAME} RUNTIME
-     DESTINATION ${CMAKE_INSTALL_BINDIR})
+    DESTINATION ${CMAKE_INSTALL_BINDIR})
   install (FILES ${QM_FILES}
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/translations)
-  install (FILES org.rncbc.${PROJECT_NAME}.desktop
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/translations)
   install (FILES images/${PROJECT_NAME}.png
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/apps)
   install (FILES images/${PROJECT_NAME}.svg
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+  install (FILES appdata/org.rncbc.${PROJECT_NAME}.desktop
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
   install (FILES appdata/org.rncbc.${PROJECT_NAME}.metainfo.xml
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
   install (FILES mimetypes/${PROJECT_NAME}.xml
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/mime/packages)
   install (FILES mimetypes/application-x-${PROJECT_NAME}-session.png
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/mimetypes)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/mimetypes)
   install (FILES mimetypes/application-x-${PROJECT_NAME}-session.svg
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/mimetypes)
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/mimetypes)
 endif ()
 
 if (WIN32)
