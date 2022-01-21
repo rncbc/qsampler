@@ -135,18 +135,15 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 			if (m_pQtTranslator->load(sLocName, sLocPath)) {
 				QApplication::installTranslator(m_pQtTranslator);
 			} else {
-		#endif
-			delete m_pQtTranslator;
-			m_pQtTranslator = nullptr;
-		#ifdef CONFIG_DEBUG
-			qWarning("Warning: no translation found for '%s' locale: %s/%s.qm",
-				loc.name().toUtf8().constData(),
-				sLocPath.toUtf8().constData(),
-				sLocName.toUtf8().constData());
-		#endif
-		#ifdef RELATIVE_LOCALE_DIR
+				delete m_pQtTranslator;
+				m_pQtTranslator = nullptr;
+			#ifdef CONFIG_DEBUG
+				qWarning("Warning: no translation found for '%s' locale: %s/%s.qm",
+					loc.name().toUtf8().constData(),
+					sLocPath.toUtf8().constData(),
+					sLocName.toUtf8().constData());
+			#endif
 			}
-		#endif
 		}
 		// Try own application translation...
 		m_pMyTranslator = new QTranslator(this);
