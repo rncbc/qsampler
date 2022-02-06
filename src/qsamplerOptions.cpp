@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2022, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -27,23 +27,18 @@
 #include <QTextStream>
 #include <QComboBox>
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+#include <QCommandLineParser>
+#include <QCommandLineOption>
+#if defined(Q_OS_WINDOWS)
+#include <QMessageBox>
+#endif
+#endif
+
 #include <QApplication>
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
-#endif
-
-#include <lscp/client.h>
-
-#ifdef CONFIG_LIBGIG
-#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-#include <gig.h>
-#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
-#pragma GCC diagnostic pop
-#endif
 #endif
 
 
@@ -290,29 +285,104 @@ QSettings& Options::settings (void)
 // Command-line argument stuff.
 //
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+
+void Options::show_error( const QString& msg )
+{
+#if defined(Q_OS_WINDOWS)
+	QMessageBox::information(nullptr, QApplication::applicationName(), msg);
+#else
+	const QByteArray tmp = msg.toUtf8() + '\n';
+	::fputs(tmp.constData(), stderr);
+#endif
+}
+
+#else
+
 // Help about command line options.
 void Options::print_usage ( const QString& arg0 )
 {
 	QTextStream out(stderr);
-	out << QObject::tr("Usage: %1 [options] [session-file]\n\n"
-		QSAMPLER_TITLE " - " QSAMPLER_SUBTITLE "\n\n"
-		"Options:\n\n"
-		"  -s, --start\n\tStart linuxsampler server locally\n\n"
-		"  -h, --hostname\n\tSpecify linuxsampler server hostname (default = localhost)\n\n"
-		"  -p, --port\n\tSpecify linuxsampler server port number (default = 8888)\n\n"
-		"  -?, --help\n\tShow help about command line options\n\n"
-		"  -v, --version\n\tShow version information\n\n")
-		.arg(arg0);
+	const QString sEot = "\n\t";
+	const QString sEol = "\n\n";
+
+	out << QObject::tr("Usage: %1 [options] [session-file]").arg(arg0) + sEol;
+	out << QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE) + sEol;
+	out << QObject::tr("Options:") + sEol;
+	out << "  -s, --start" + sEot +
+		QObject::tr("Start linuxsampler server locally.") + sEol;
+	out << "  -n, --hostname" + sEot +
+		QObject::tr("Specify linuxsampler server hostname (default = localhost)") + sEol;
+	out << "  -p, --port" + sEot +
+		QObject::tr("Specify linuxsampler server port number (default = 8888)") + sEol;
+	out << "  -h, --help" + sEot +
+		QObject::tr("Show help about command line options.") + sEol;
+	out << "  -v, --version" + sEot +
+		QObject::tr("Show version information") + sEol;
 }
+
+#endif
 
 
 // Parse command line arguments into m_settings.
 bool Options::parse_args ( const QStringList& args )
 {
+	int iCmdArgs = 0;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+
+	QCommandLineParser parser;
+	parser.setApplicationDescription(
+		QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE));
+
+	parser.addOption({{"s", "start"},
+		QObject::tr("Start linuxsampler server locally.")});
+	parser.addOption({{"n", "hostname"},
+		QObject::tr("Specify linuxsampler server hostname (default = localhost)"), "name"});
+	parser.addOption({{"p", "port"},
+		QObject::tr("Specify linuxsampler server port number (default = 8888)"), "num"});
+	parser.addHelpOption();
+	parser.addVersionOption();
+	parser.addPositionalArgument("session-file",
+		QObject::tr("Session file (.lscp)"),
+		QObject::tr("[session-file]"));
+	parser.process(args);
+
+	if (parser.isSet("start")) {
+		bServerStart = true;
+	}
+
+	if (parser.isSet("hostname")) {
+		const QString& sVal = parser.value("hostname");
+		if (sVal.isEmpty()) {
+			show_error(QObject::tr("Option -n requires an argument (hostname)."));
+			return false;
+		}
+		sServerHost = sVal;
+	}
+
+	if (parser.isSet("port")) {
+		bool bOK = false;
+		const int iVal = parser.value("port").toInt(&bOK);
+		if (!bOK) {
+			show_error(QObject::tr("Option -p requires an argument (port)."));
+			return false;
+		}
+		iServerPort = iVal;
+	}
+
+	foreach(const QString& sArg, parser.positionalArguments()) {
+		if (iCmdArgs > 0)
+			sSessionFile += ' ';
+		sSessionFile += sArg;
+		++iCmdArgs;
+	}
+
+#else
+
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
 	const int argc = args.count();
-	int iCmdArgs = 0;
 
 	for (int i = 1; i < argc; ++i) {
 
@@ -339,9 +409,9 @@ bool Options::parse_args ( const QStringList& args )
 		if (sArg == "-s" || sArg == "--start") {
 			bServerStart = true;
 		}
-		else if (sArg == "-h" || sArg == "--hostname") {
+		else if (sArg == "-n" || sArg == "--hostname") {
 			if (sVal.isNull()) {
-				out << QObject::tr("Option -h requires an argument (host).") + sEol;
+				out << QObject::tr("Option -n requires an argument (hostname).") + sEol;
 				return false;
 			}
 			sServerHost = sVal;
@@ -357,7 +427,7 @@ bool Options::parse_args ( const QStringList& args )
 			if (iEqual < 0)
 				++i;
 		}
-		else if (sArg == "-?" || sArg == "--help") {
+		else if (sArg == "-h" || sArg == "--help") {
 			print_usage(args.at(0));
 			return false;
 		}
@@ -387,6 +457,8 @@ bool Options::parse_args ( const QStringList& args )
 			++iCmdArgs;
 		}
 	}
+
+#endif
 
 	// Alright with argument parsing.
 	return true;

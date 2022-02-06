@@ -261,26 +261,67 @@ Promiňte.</translation>
         <translation>Zařízení MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="297"/>
-        <source>Usage: %1 [options] [session-file]
-
-</source>
-        <translation>Použití: %1 [volby] [soubor sezení]
-
-</translation>
+        <location filename="../qsamplerOptions.cpp" line="309"/>
+        <source>Usage: %1 [options] [session-file]</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="344"/>
-        <source>Option -h requires an argument (host).</source>
-        <translation>Volba -h vyžaduje argument (server).</translation>
+        <location filename="../qsamplerOptions.cpp" line="311"/>
+        <source>Options:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="353"/>
+        <location filename="../qsamplerOptions.cpp" line="313"/>
+        <location filename="../qsamplerOptions.cpp" line="339"/>
+        <source>Start linuxsampler server locally.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="315"/>
+        <location filename="../qsamplerOptions.cpp" line="341"/>
+        <source>Specify linuxsampler server hostname (default = localhost)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="317"/>
+        <location filename="../qsamplerOptions.cpp" line="343"/>
+        <source>Specify linuxsampler server port number (default = 8888)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="319"/>
+        <source>Show help about command line options.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="321"/>
+        <source>Show version information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="347"/>
+        <source>Session file (.lscp)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="348"/>
+        <source>[session-file]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="358"/>
+        <location filename="../qsamplerOptions.cpp" line="414"/>
+        <source>Option -n requires an argument (hostname).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerOptions.cpp" line="368"/>
+        <location filename="../qsamplerOptions.cpp" line="423"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Volba -p vyžaduje argument (název přípojky - brány; port).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="628"/>
+        <location filename="../qsamplerOptions.cpp" line="700"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>
