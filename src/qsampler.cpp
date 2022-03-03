@@ -124,6 +124,10 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 	QApplication::setApplicationName(QSAMPLER_TITLE);
 	QApplication::setApplicationDisplayName(QSAMPLER_TITLE);
 	//	QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 7, 0)
+	QApplication::setDesktopFileName(
+		QString("org.rncbc.%1").arg(PACKAGE_TARNAME));
+#endif
 	QString sVersion(CONFIG_BUILD_VERSION);
 	sVersion += '\n';
 	sVersion += QString("Qt: %1").arg(qVersion());
