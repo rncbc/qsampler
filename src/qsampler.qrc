@@ -1,5 +1,7 @@
 <RCC version="1.0">
     <qresource>
+        <file>images/qsampler.png</file>
+        <file>images/qsampler.svg</file>
         <file>images/audio1.png</file>
         <file>images/audio2.png</file>
         <file>images/channelsArrange.png</file>
@@ -34,7 +36,6 @@
         <file>images/ledon1.png</file>
         <file>images/midi1.png</file>
         <file>images/midi2.png</file>
-        <file>images/qsampler.png</file>
         <file>images/qsamplerChannel.png</file>
         <file>images/qsamplerDevice.png</file>
         <file>images/qsamplerInstrument.png</file>

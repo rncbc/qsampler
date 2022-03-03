@@ -2,24 +2,24 @@
 <!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg472"
    sodipodi:version="0.32"
    width="320"
    height="320"
-   sodipodi:docname="qsampler.svgz"
-   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="qsampler.svg"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
    inkscape:export-filename="/home/rncbc/Media/Image/qsampler_draft3.2.2.png"
    inkscape:export-xdpi="88.059998"
    inkscape:export-ydpi="88.059998"
-   version="1.1">
+   version="1.1"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <metadata
      id="metadata1405">
     <rdf:RDF>
@@ -78,62 +78,14 @@
          offset="1"
          id="stop487" />
     </linearGradient>
-    <radialGradient
-       xlink:href="#linearGradient743"
-       id="radialGradient480"
-       cx="231.45271"
-       cy="366.20547"
-       r="508.57837"
-       fx="231.45271"
-       fy="366.20547"
-       gradientTransform="matrix(0.51694652,0,0,0.44645471,-19.568181,-18.428523)"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       xlink:href="#linearGradient485"
-       id="radialGradient484"
-       cx="316.20163"
-       cy="410.48181"
-       fx="168.43147"
-       fy="559.40643"
-       r="293.25412"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="pad" />
-    <radialGradient
-       xlink:href="#linearGradient646"
-       id="radialGradient489"
-       cx="990.79266"
-       cy="202.91145"
-       r="52.038383"
-       fx="990.44568"
-       fy="200.55925"
-       gradientTransform="scale(0.98198,1.018351)"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="pad" />
-    <linearGradient
-       gradientUnits="userSpaceOnUse"
-       y2="373.43777"
-       x2="239.4511"
-       y1="121.25542"
-       x1="239.45113"
-       gradientTransform="matrix(0.71659119,-0.37399585,0.17304636,0.33156417,-95.624536,86.688328)"
-       id="linearGradient2273"
-       xlink:href="#linearGradient2267"
-       inkscape:collect="always" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient485"
-       id="radialGradient3021"
-       gradientUnits="userSpaceOnUse"
-       spreadMethod="pad"
-       cx="316.60211"
-       cy="410.13586"
-       fx="169.89993"
-       fy="557.98413"
-       r="291.1347" />
     <filter
        id="filter3181"
        style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow">
+       inkscape:label="Drop Shadow"
+       x="-0.047263779"
+       y="-0.042119389"
+       width="1.1042558"
+       height="1.1021225">
       <feFlood
          id="feFlood3183"
          flood-opacity="0.8"
@@ -223,17 +175,23 @@
      inkscape:zoom="2.415625"
      inkscape:cx="160"
      inkscape:cy="160"
-     inkscape:window-width="1680"
-     inkscape:window-height="982"
-     inkscape:window-x="-2"
-     inkscape:window-y="-3"
+     inkscape:window-width="1920"
+     inkscape:window-height="1015"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:current-layer="svg472"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0" />
   <g
      id="g3102"
      style="filter:url(#filter3181)"
