@@ -170,6 +170,10 @@ if (UNIX AND NOT APPLE)
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/32x32/mimetypes)
   install (FILES mimetypes/org.rncbc.${PROJECT_NAME}.application-x-${PROJECT_NAME}-session.svg
     DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/mimetypes)
+  install (FILES man1/${PROJECT_NAME}.1
+    DESTINATION ${CMAKE_INSTALL_MANDIR}/man1)
+  install (FILES man1/${PROJECT_NAME}.fr.1
+    DESTINATION ${CMAKE_INSTALL_MANDIR}/fr/man1 RENAME ${PROJECT_NAME}.1)
 endif ()
 
 if (WIN32)
