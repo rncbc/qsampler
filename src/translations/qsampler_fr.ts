@@ -263,56 +263,56 @@ Navré.</translation>
     <message>
         <location filename="../qsamplerOptions.cpp" line="309"/>
         <source>Usage: %1 [options] [session-file]</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisation : %1 [options] [fichier-de-session]</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="311"/>
         <source>Options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Options :</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="313"/>
         <location filename="../qsamplerOptions.cpp" line="339"/>
         <source>Start linuxsampler server locally.</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrez le serveur linuxsampler localement.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="315"/>
         <location filename="../qsamplerOptions.cpp" line="341"/>
         <source>Specify linuxsampler server hostname (default = localhost)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spécifier le nom d'hôte du serveur linuxsampler (par défaut = localhost)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="317"/>
         <location filename="../qsamplerOptions.cpp" line="343"/>
         <source>Specify linuxsampler server port number (default = 8888)</source>
-        <translation type="unfinished"></translation>
+        <translation>Spécifier le numéro de port du serveur linuxsampler (par défaut = 8888)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="319"/>
         <source>Show help about command line options.</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher l&apos;aide à propos des options en ligne de commande.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="321"/>
         <source>Show version information</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les informations de version</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="347"/>
         <source>Session file (.lscp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de session .(lscp)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="348"/>
         <source>[session-file]</source>
-        <translation type="unfinished"></translation>
+        <translation>[fichier-de-session]<</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="358"/>
         <location filename="../qsamplerOptions.cpp" line="414"/>
         <source>Option -n requires an argument (hostname).</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;option -n nécessite un argument (nom d'hôte).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="368"/>
