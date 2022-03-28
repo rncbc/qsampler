@@ -280,7 +280,7 @@ Navré.</translation>
         <location filename="../qsamplerOptions.cpp" line="315"/>
         <location filename="../qsamplerOptions.cpp" line="341"/>
         <source>Specify linuxsampler server hostname (default = localhost)</source>
-        <translation>Spécifier le nom d'hôte du serveur linuxsampler (par défaut = localhost)</translation>
+        <translation>Spécifier le nom d&apos;hôte du serveur linuxsampler (par défaut = localhost)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="317"/>
@@ -306,13 +306,13 @@ Navré.</translation>
     <message>
         <location filename="../qsamplerOptions.cpp" line="348"/>
         <source>[session-file]</source>
-        <translation>[fichier-de-session]<</translation>
+        <translation>[fichier-de-session]</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="358"/>
         <location filename="../qsamplerOptions.cpp" line="414"/>
         <source>Option -n requires an argument (hostname).</source>
-        <translation>L&apos;option -n nécessite un argument (nom d'hôte).</translation>
+        <translation>L&apos;option -n nécessite un argument (nom d&apos;hôte).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="368"/>
