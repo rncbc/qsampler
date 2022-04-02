@@ -263,56 +263,56 @@ Promiňte.</translation>
     <message>
         <location filename="../qsamplerOptions.cpp" line="309"/>
         <source>Usage: %1 [options] [session-file]</source>
-        <translation type="unfinished"></translation>
+        <translation>Použití: %1 [volby] [soubor se sezením]</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="311"/>
         <source>Options:</source>
-        <translation type="unfinished"></translation>
+        <translation>Volby:</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="313"/>
         <location filename="../qsamplerOptions.cpp" line="339"/>
         <source>Start linuxsampler server locally.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spustit server LinuxSampler místně.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="315"/>
         <location filename="../qsamplerOptions.cpp" line="341"/>
         <source>Specify linuxsampler server hostname (default = localhost)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadat název serveru LinuxSampler (výchozí = localhost)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="317"/>
         <location filename="../qsamplerOptions.cpp" line="343"/>
         <source>Specify linuxsampler server port number (default = 8888)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadat číslo přípojky serveru LinuxSampler (výchozí = 8888)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="319"/>
         <source>Show help about command line options.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat nápovědu k volbám příkazového řádku.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="321"/>
         <source>Show version information</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukázat informace o verzi</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="347"/>
         <source>Session file (.lscp)</source>
-        <translation type="unfinished"></translation>
+        <translation>Soubor se sezením (.lscp)</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="348"/>
         <source>[session-file]</source>
-        <translation type="unfinished"></translation>
+        <translation>[soubor se sezením]</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="358"/>
         <location filename="../qsamplerOptions.cpp" line="414"/>
         <source>Option -n requires an argument (hostname).</source>
-        <translation type="unfinished"></translation>
+        <translation>Volba -n vyžaduje argument (název serveru).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="368"/>

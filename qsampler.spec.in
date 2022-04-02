@@ -18,7 +18,7 @@
 
 %define name    @PACKAGE_TARNAME@
 %define version @PACKAGE_VERSION@
-%define release 50.1
+%define release 50.2
 
 %define _prefix	@ac_prefix@
 
