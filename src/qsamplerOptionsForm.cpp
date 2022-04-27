@@ -48,7 +48,9 @@ OptionsForm::OptionsForm ( QWidget* pParent )
 	: QDialog(pParent)
 {
 	m_ui.setupUi(this);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 1, 0)
+	QDialog::setWindowIcon(QIcon(":/images/qsampler.png"));
+#endif
 	// No settings descriptor initially (the caller will set it).
 	m_pOptions = nullptr;
 
