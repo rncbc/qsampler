@@ -17,6 +17,7 @@ Standards-Version: 3.9.7
 Package: qsampler
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
+  libqt6svg6 (>= 6.1) | libqt5svg5 (>= 5.1),
   qt6-qpa-plugins | base-files (<< 12)
 Description: LinuxSampler GUI frontend based on the Qt toolkit
   Qsampler is a LinuxSampler GUI front-end application written in C++ around
