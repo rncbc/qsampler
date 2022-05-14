@@ -81,10 +81,6 @@ BuildRequires:	libqt5-linguist-devel
 BuildRequires:	liblscp-devel >= 0.5.6
 BuildRequires:	libgig-devel >= 3.3.0
 
-%if 0%{?sle_version} == 150200 && 0%{?is_opensuse}
-BuildRequires:  patchelf
-%endif
-
 %description
 Qsampler is a LinuxSampler GUI front-end application written in C++ around
 the Qt framework using Qt Designer. For the moment it just wraps the client
@@ -100,9 +96,6 @@ cmake --build build %{?_smp_mflags}
 %install
 DESTDIR="%{buildroot}" \
 cmake --install build
-%if 0%{?sle_version} == 150200 && 0%{?is_opensuse}
-patchelf --set-rpath %{_libdir}/libgig %{buildroot}%{_bindir}/%{name}
-%endif
 
 %clean
 [ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
