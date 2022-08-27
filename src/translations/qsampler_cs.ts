@@ -321,7 +321,7 @@ Promiňte.</translation>
         <translation>Volba -p vyžaduje argument (název přípojky - brány; port).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="700"/>
+        <location filename="../qsamplerOptions.cpp" line="704"/>
         <source>Sent fine tuning settings.</source>
         <translation>Poslána nastavení pěkného ladění.</translation>
     </message>
