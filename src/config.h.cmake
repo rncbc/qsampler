@@ -97,7 +97,6 @@
 /* Define if debugger stack-trace is enabled. */
 #cmakedefine CONFIG_STACKTRACE @CONFIG_STACKTRACE@
 
-
 /* Define if Wayland is supported */
 #cmakedefine CONFIG_WAYLAND @CONFIG_WAYLAND@
 
