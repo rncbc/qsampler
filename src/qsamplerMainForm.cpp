@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007-2019 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -2098,8 +2098,8 @@ void MainForm::helpAbout (void)
 #endif
 
 	// Stuff the about box text...
-	QString sText = "<p>\n";
-	sText += "<b>" QSAMPLER_TITLE " - " + tr(QSAMPLER_SUBTITLE) + "</b><br />\n";
+	QString sText = "<h1>" QSAMPLER_TITLE "</h1>\n";
+	sText += "<p>" + tr(QSAMPLER_SUBTITLE) + "<br />\n";
 	sText += "<br />\n";
 	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
 //	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
