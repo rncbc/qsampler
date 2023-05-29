@@ -17,8 +17,8 @@
 #
 
 %define name    qsampler
-%define version	0.9.9
-%define release	53.1
+%define version	0.9.10
+%define release	54.1
 
 %define _prefix	/usr
 
@@ -142,6 +142,8 @@ cmake --install build
 %{_datadir}/man/fr/man1/%{name}.1.gz
 
 %changelog
+* Thu Jun  1 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.10
+- A Spring'23 Release.
 * Thu Mar 23 2023 Rui Nuno Capela <rncbc@rncbc.org> 0.9.9
 - An Early-Spring'23 Release.
 * Wed Dec 28 2022 Rui Nuno Capela <rncbc@rncbc.org> 0.9.8

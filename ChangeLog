@@ -4,7 +4,7 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+0.9.10  2023-06-01  A Spring'23 Release.
 
 - Prepping into the next development cycle (with Qt >= 6.5).
 
