@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2021, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -878,10 +878,11 @@ QStringList Channel::getInstrumentList (
 			// prevent sleepy response time on large .gig files
 			pGig->SetAutoLoad(false);
 		#endif
-			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
+			int iIndex = 0;
+			gig::Instrument *pInstrument = pGig->GetInstrument(iIndex);
 			while (pInstrument) {
 				instlist.append((pInstrument->pInfo)->Name.c_str());
-				pInstrument = pGig->GetNextInstrument();
+				pInstrument = pGig->GetInstrument(++iIndex);
 			}
 			delete pGig;
 			delete pRiff;
@@ -941,14 +942,13 @@ QString Channel::getInstrumentName (
 			pGig->SetAutoLoad(false);
 		#endif
 			int iIndex = 0;
-			gig::Instrument *pInstrument = pGig->GetFirstInstrument();
+			gig::Instrument *pInstrument = pGig->GetInstrument(iIndex);
 			while (pInstrument) {
 				if (iIndex == iInstrumentNr) {
 					sInstrumentName = (pInstrument->pInfo)->Name.c_str();
 					break;
 				}
-				iIndex++;
-				pInstrument = pGig->GetNextInstrument();
+				pInstrument = pGig->GetInstrument(++iIndex);
 			}
 			delete pGig;
 			delete pRiff;
