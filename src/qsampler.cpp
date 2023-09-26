@@ -94,10 +94,10 @@
 
 #ifdef CONFIG_XUNIQUE
 
-#define QSAMPLER_XUNIQUE "qsamplerApplication"
-
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
+
+#define QSAMPLER_XUNIQUE "qsamplerApplication"
 
 #include <unistd.h> /* for gethostname() */
 
@@ -122,20 +122,18 @@
 qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 	: QApplication(argc, argv),
 		m_pQtTranslator(nullptr), m_pMyTranslator(nullptr), m_pWidget(nullptr)
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_XUNIQUE
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
 #ifdef CONFIG_X11
 	, m_pDisplay(nullptr)
 	, m_aUnique(0)
 	, m_wOwner(0)
 #endif	// CONFIG_X11
-#endif	// CONFIG_XUNIQUE
 #else
-#ifdef CONFIG_XUNIQUE
 	, m_pMemory(nullptr)
 	, m_pServer(nullptr)
-#endif	// CONFIG_XUNIQUE
 #endif
+#endif	// CONFIG_XUNIQUE
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0)
 	QApplication::setApplicationName(QSAMPLER_TITLE);
