@@ -65,7 +65,6 @@ BuildRequires:	qtbase6.6-static >= 6.6
 BuildRequires:	qttools6.6-static
 BuildRequires:	qttranslations6.6-static
 BuildRequires:	qtsvg6.6-static
-#BuildRequires:	qtwayland6-static
 %else
 BuildRequires:	cmake(Qt6LinguistTools)
 BuildRequires:	pkgconfig(Qt6Core)
