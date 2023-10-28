@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2022, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -371,7 +371,7 @@ bool Options::parse_args ( const QStringList& args )
 		iServerPort = iVal;
 	}
 
-	foreach(const QString& sArg, parser.positionalArguments()) {
+	for (const QString& sArg : parser.positionalArguments()) {
 		if (iCmdArgs > 0)
 			sSessionFile += ' ';
 		sSessionFile += sArg;
