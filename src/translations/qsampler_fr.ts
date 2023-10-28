@@ -321,7 +321,7 @@ Navré.</translation>
         <translation>L&apos;option -p requiert un argument (le port).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="703"/>
+        <location filename="../qsamplerOptions.cpp" line="702"/>
         <source>Sent fine tuning settings.</source>
         <translation>Envoyer les paramètres d&apos;accordage fin.</translation>
     </message>

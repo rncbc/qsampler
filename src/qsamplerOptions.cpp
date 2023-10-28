@@ -385,14 +385,14 @@ bool Options::parse_args ( const QStringList& args )
 
 	for (int i = 1; i < argc; ++i) {
 
+		QString sArg = args.at(i);
+
 		if (iCmdArgs > 0) {
-			sSessionFile += " ";
-			sSessionFile += args.at(i);
+			sessionFiles.append(QFileInfo(sArg).absoluteFilePath());
 			++iCmdArgs;
 			continue;
 		}
 
-		QString sArg = args.at(i);
 		QString sVal;
 		const int iEqual = sArg.indexOf("=");
 		if (iEqual >= 0) {
@@ -448,8 +448,7 @@ bool Options::parse_args ( const QStringList& args )
 				.arg(QSAMPLER_TITLE)
 				.arg(CONFIG_BUILD_VERSION);
 			return false;
-		}
-		else {
+		} else {
 			// If we don't have one by now,
 			// this will be the startup sesion file...
 			sessionFiles.append(QFileInfo(sArg).absoluteFilePath());
