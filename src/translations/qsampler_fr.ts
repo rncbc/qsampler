@@ -261,40 +261,40 @@ Navré.</translation>
         <translation>Périphériques MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="309"/>
+        <location filename="../qsamplerOptions.cpp" line="311"/>
         <source>Usage: %1 [options] [session-file]</source>
         <translation>Utilisation : %1 [options] [fichier-de-session]</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="311"/>
+        <location filename="../qsamplerOptions.cpp" line="313"/>
         <source>Options:</source>
         <translation>Options :</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="313"/>
+        <location filename="../qsamplerOptions.cpp" line="315"/>
         <location filename="../qsamplerOptions.cpp" line="339"/>
         <source>Start linuxsampler server locally.</source>
         <translation>Démarrez le serveur linuxsampler localement.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="315"/>
+        <location filename="../qsamplerOptions.cpp" line="317"/>
         <location filename="../qsamplerOptions.cpp" line="341"/>
         <source>Specify linuxsampler server hostname (default = localhost)</source>
         <translation>Spécifier le nom d&apos;hôte du serveur linuxsampler (par défaut = localhost)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="317"/>
+        <location filename="../qsamplerOptions.cpp" line="319"/>
         <location filename="../qsamplerOptions.cpp" line="343"/>
         <source>Specify linuxsampler server port number (default = 8888)</source>
         <translation>Spécifier le numéro de port du serveur linuxsampler (par défaut = 8888)</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="319"/>
+        <location filename="../qsamplerOptions.cpp" line="321"/>
         <source>Show help about command line options.</source>
         <translation>Afficher l&apos;aide à propos des options en ligne de commande.</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="321"/>
+        <location filename="../qsamplerOptions.cpp" line="323"/>
         <source>Show version information</source>
         <translation>Afficher les informations de version</translation>
     </message>
@@ -310,18 +310,18 @@ Navré.</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="358"/>
-        <location filename="../qsamplerOptions.cpp" line="414"/>
+        <location filename="../qsamplerOptions.cpp" line="413"/>
         <source>Option -n requires an argument (hostname).</source>
         <translation>L&apos;option -n nécessite un argument (nom d&apos;hôte).</translation>
     </message>
     <message>
         <location filename="../qsamplerOptions.cpp" line="368"/>
-        <location filename="../qsamplerOptions.cpp" line="423"/>
+        <location filename="../qsamplerOptions.cpp" line="422"/>
         <source>Option -p requires an argument (port).</source>
         <translation>L&apos;option -p requiert un argument (le port).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="704"/>
+        <location filename="../qsamplerOptions.cpp" line="703"/>
         <source>Sent fine tuning settings.</source>
         <translation>Envoyer les paramètres d&apos;accordage fin.</translation>
     </message>

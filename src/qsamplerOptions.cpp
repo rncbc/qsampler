@@ -24,7 +24,9 @@
 #include "qsamplerOptions.h"
 #include "qsamplerMainForm.h"
 
+#include <QFileInfo>
 #include <QTextStream>
+
 #include <QComboBox>
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
@@ -327,8 +329,6 @@ void Options::print_usage ( const QString& arg0 )
 // Parse command line arguments into m_settings.
 bool Options::parse_args ( const QStringList& args )
 {
-	int iCmdArgs = 0;
-
 #if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
 
 	QCommandLineParser parser;
@@ -372,13 +372,12 @@ bool Options::parse_args ( const QStringList& args )
 	}
 
 	for (const QString& sArg : parser.positionalArguments()) {
-		if (iCmdArgs > 0)
-			sSessionFile += ' ';
-		sSessionFile += sArg;
-		++iCmdArgs;
+		sessionFiles.append(QFileInfo(sArg).absoluteFilePath());
 	}
 
 #else
+
+	int iCmdArgs = 0;
 
 	QTextStream out(stderr);
 	const QString sEol = "\n\n";
@@ -453,7 +452,7 @@ bool Options::parse_args ( const QStringList& args )
 		else {
 			// If we don't have one by now,
 			// this will be the startup sesion file...
-			sSessionFile += sArg;
+			sessionFiles.append(QFileInfo(sArg).absoluteFilePath());
 			++iCmdArgs;
 		}
 	}
