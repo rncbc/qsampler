@@ -1,7 +1,7 @@
 // qsamplerAbout.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
@@ -24,14 +24,14 @@
 
 #include "config.h"
 
-#define QSAMPLER_TITLE        PACKAGE_NAME
+#define QSAMPLER_TITLE      "Qsampler"
 
-#define QSAMPLER_SUBTITLE     "A LinuxSampler Qt GUI Interface"
-#define QSAMPLER_WEBSITE      "https://qsampler.sourceforge.io"
-#define QSAMPLER_COPYRIGHT    "Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved."
-#define QSAMPLER_COPYRIGHT2   "Copyright (C) 2007-2019, Christian Schoenebeck"
+#define QSAMPLER_SUBTITLE   PROJECT_DESCRIPTION
+#define QSAMPLER_WEBSITE    PROJECT_HOMEPAGE_URL
 
-#define QSAMPLER_DOMAIN       "linuxsampler.org"
+#define QSAMPLER_COPYRIGHT  "Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved."
+#define QSAMPLER_COPYRIGHT2 "Copyright (C) 2007-2019, Christian Schoenebeck"
+#define QSAMPLER_DOMAIN     "linuxsampler.org"
 
 #endif  // __qsamplerAbout_h
 
