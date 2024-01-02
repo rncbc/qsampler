@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#define QSAMPLER_TITLE      "Qsampler"
+#define QSAMPLER_TITLE      PROJECT_TITLE
 
 #define QSAMPLER_SUBTITLE   PROJECT_DESCRIPTION
 #define QSAMPLER_WEBSITE    PROJECT_HOMEPAGE_URL

@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -178,7 +178,7 @@ void Options::saveOptions (void)
 {
 	// Make program version available in the future.
 	m_settings.beginGroup("/Program");
-	m_settings.setValue("/Version", CONFIG_BUILD_VERSION);
+	m_settings.setValue("/Version", PROJECT_VERSION);
 	m_settings.endGroup();
 
 	// And go into general options group.
@@ -446,7 +446,7 @@ bool Options::parse_args ( const QStringList& args )
 				.arg(::lscp_client_version());
 			out << QString("%1: %2\n")
 				.arg(QSAMPLER_TITLE)
-				.arg(CONFIG_BUILD_VERSION);
+				.arg(PROJECT_VERSION);
 			return false;
 		} else {
 			// If we don't have one by now,

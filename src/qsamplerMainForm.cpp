@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007-2019 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -1109,7 +1109,7 @@ bool MainForm::saveSessionFile ( const QString& sFilename )
 	int iErrors = 0;
 	QTextStream ts(&file);
 	ts << "# " << QSAMPLER_TITLE " - " << tr(QSAMPLER_SUBTITLE) << endl;
-	ts << "# " << tr("Version") << ": " CONFIG_BUILD_VERSION << endl;
+	ts << "# " << tr("Version") << ": " PROJECT_VERSION << endl;
 //	ts << "# " << tr("Build") << ": " CONFIG_BUILD_DATE << endl;
 	ts << "#"  << endl;
 	ts << "# " << tr("File")
@@ -2101,7 +2101,7 @@ void MainForm::helpAbout (void)
 	QString sText = "<h1>" QSAMPLER_TITLE "</h1>\n";
 	sText += "<p>" + tr(QSAMPLER_SUBTITLE) + "<br />\n";
 	sText += "<br />\n";
-	sText += tr("Version") + ": <b>" CONFIG_BUILD_VERSION "</b><br />\n";
+	sText += tr("Version") + ": <b>" PROJECT_VERSION "</b><br />\n";
 //	sText += "<small>" + tr("Build") + ": " CONFIG_BUILD_DATE "</small><br />\n";
 	if (!list.isEmpty()) {
 		sText += "<small><font color=\"red\">";

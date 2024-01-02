@@ -1,10 +1,13 @@
 cmake_minimum_required (VERSION 3.13)
 
-project (qsampler
+project (Qsampler
   VERSION 0.9.12
   DESCRIPTION "A LinuxSampler Qt GUI Interface"
   HOMEPAGE_URL "https://qsampler.sourceforge.io"
   LANGUAGES C CXX)
+
+set (PROJECT_TITLE "${PROJECT_NAME}")
+string (TOLOWER "${PROJECT_TITLE}" PROJECT_NAME)
 
 execute_process (
   COMMAND git describe --tags --dirty --abbrev=6
@@ -232,8 +235,7 @@ macro (SHOW_OPTION text value)
   endif ()
 endmacro ()
 
-
-message   ("\n  ${PACKAGE_NAME} ${PACKAGE_VERSION} (Qt ${QT_VERSION})")
+message   ("\n  ${PROJECT_TITLE} ${PROJECT_VERSION} (Qt ${QT_VERSION})")
 message   ("\n  Build target . . . . . . . . . . . . . . . . . . .: ${CONFIG_BUILD_TYPE}\n")
 show_option ("  LSCP instrument name support . . . . . . . . . . ." CONFIG_INSTRUMENT_NAME)
 show_option ("  LSCP mute/solo support . . . . . . . . . . . . . ." CONFIG_MUTE_SOLO)
