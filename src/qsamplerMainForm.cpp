@@ -2134,6 +2134,7 @@ void MainForm::helpAbout (void)
 	sText += tr("This program is free software; you can redistribute it and/or modify it") + "<br />\n";
 	sText += tr("under the terms of the GNU General Public License version 2 or later.");
 	sText += "</small>";
+	sText += "<br />\n";
 	sText += "</p>\n";
 
 	QMessageBox::about(this, tr("About"), sText);
