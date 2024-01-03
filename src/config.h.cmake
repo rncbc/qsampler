@@ -16,6 +16,14 @@
 /* Define to the homepage of this package. */
 #cmakedefine PROJECT_HOMEPAGE_URL "@PROJECT_HOMEPAGE_URL@"
 
+/* Define to the copyright of this package. */
+#cmakedefine PROJECT_COPYRIGHT "@PROJECT_COPYRIGHT@"
+#cmakedefine PROJECT_COPYRIGHT2 "@PROJECT_COPYRIGHT2@"
+
+
+/* Define to the domain of this package. */
+#cmakedefine PROJECT_DOMAIN "@PROJECT_DOMAIN@"
+
 /* Default installation prefix. */
 #cmakedefine CONFIG_PREFIX "@CONFIG_PREFIX@"
 
@@ -93,5 +101,6 @@
 
 /* Define if Wayland is supported */
 #cmakedefine CONFIG_WAYLAND @CONFIG_WAYLAND@
+
 
 #endif /* CONFIG_H */

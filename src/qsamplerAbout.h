@@ -29,9 +29,9 @@
 #define QSAMPLER_SUBTITLE   PROJECT_DESCRIPTION
 #define QSAMPLER_WEBSITE    PROJECT_HOMEPAGE_URL
 
-#define QSAMPLER_COPYRIGHT  "Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved."
-#define QSAMPLER_COPYRIGHT2 "Copyright (C) 2007-2019, Christian Schoenebeck"
-#define QSAMPLER_DOMAIN     "linuxsampler.org"
+#define QSAMPLER_COPYRIGHT  PROJECT_COPYRIGHT
+#define QSAMPLER_COPYRIGHT2 PROJECT_COPYRIGHT2
+#define QSAMPLER_DOMAIN     PROJECT_DOMAIN
 
 #endif  // __qsamplerAbout_h
 
