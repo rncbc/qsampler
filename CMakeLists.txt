@@ -9,6 +9,10 @@ project (Qsampler
 set (PROJECT_TITLE "${PROJECT_NAME}")
 string (TOLOWER "${PROJECT_TITLE}" PROJECT_NAME)
 
+set (PROJECT_COPYRIGHT  "Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.")
+set (PROJECT_COPYRIGHT2 "Copyright (C) 2007-2019, Christian Schoenebeck")
+set (PROJECT_DOMAIN     "linuxsampler.org")
+
 execute_process (
   COMMAND git describe --tags --dirty --abbrev=6
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -33,10 +37,6 @@ if (GIT_DESCRIBE_RESULT EQUAL 0)
   endif ()
   set (PROJECT_VERSION "${GIT_VERSION}")
 endif ()
-
-set (PROJECT_COPYRIGHT  "Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.")
-set (PROJECT_COPYRIGHT2 "Copyright (C) 2007-2019, Christian Schoenebeck")
-set (PROJECT_DOMAIN     "linuxsampler.org")
 
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
