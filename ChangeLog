@@ -4,6 +4,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
+GIT HEAD
+
+- Custom color themes are now file based (*.conf); legacy still
+  preserved ntl. (EXPERIMENTAL)
+
+
 0.9.12  2024-01-24  A Winter'24 Release.
 
 - Updated copyright headers into the New Year (2024).
