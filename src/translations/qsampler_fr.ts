@@ -1196,38 +1196,38 @@ Souhaitez-vous appliquer les modifications ?</translation>
 <context>
     <name>QSampler::PaletteForm</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="346"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="347"/>
         <source>Import File - %1</source>
         <translation>Importer le fichier - %1</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="262"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="349"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="394"/>
-        <source>Palette files (*.%1)</source>
-        <translation>Fichiers de palette (*.%1)</translation>
-    </message>
-    <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="260"/>
-        <source>Save Palette - %1</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="263"/>
         <location filename="../qsamplerPaletteForm.cpp" line="350"/>
         <location filename="../qsamplerPaletteForm.cpp" line="395"/>
+        <source>Palette files (*.%1)</source>
+        <translation>Fichiers de palette (*.%1)</translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="261"/>
+        <source>Save Palette - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsamplerPaletteForm.cpp" line="264"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="351"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="396"/>
         <source>All files (*.*)</source>
         <translation>Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="381"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="757"/>
-        <location filename="../qsamplerPaletteForm.cpp" line="765"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="382"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="758"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="766"/>
         <source>Warning - %1</source>
         <translation>Attention - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="382"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="383"/>
         <source>Could not import from file:
 
 %1
@@ -1240,12 +1240,12 @@ Sorry.</source>
 Navré.</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="391"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="392"/>
         <source>Export File - %1</source>
         <translation>Exporter le fichier - %1</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="758"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="759"/>
         <source>Some settings have been changed.
 
 Do you want to discard the changes?</source>
@@ -1254,7 +1254,7 @@ Do you want to discard the changes?</source>
 Souhaitez-vous abandonner les modifications ?</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="766"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="767"/>
         <source>Some settings have been changed:
 
 &quot;%1&quot;.
@@ -1270,22 +1270,22 @@ Souhaitez-vous sauvegarder les modifications ?</translation>
 <context>
     <name>QSampler::PaletteForm::PaletteModel</name>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1009"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1010"/>
         <source>Color Role</source>
         <translation>Role de couleur</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1012"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1013"/>
         <source>Active</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1015"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1016"/>
         <source>Inactive</source>
         <translation>Inactif</translation>
     </message>
     <message>
-        <location filename="../qsamplerPaletteForm.cpp" line="1018"/>
+        <location filename="../qsamplerPaletteForm.cpp" line="1019"/>
         <source>Disabled</source>
         <translation>Désactivé</translation>
     </message>
