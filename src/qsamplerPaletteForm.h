@@ -1,7 +1,7 @@
 // qsamplerPaletteForm.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -66,9 +66,14 @@ public:
 
 	bool isDirty() const;
 
-	static QStringList namedPaletteList(QSettings *settings);
 	static bool namedPalette(QSettings *settings,
 		const QString& name, QPalette& pal, bool fixup = false);
+	static QStringList namedPaletteList(QSettings *settings);
+
+	static QString namedPaletteConf(
+		QSettings *settings, const QString& name);
+	static void addNamedPaletteConf(
+		QSettings *settings, const QString& name, const QString& filename);
 
 	static QPalette::ColorRole colorRole(const QString& name);
 
@@ -99,10 +104,22 @@ protected:
 
 	void setPalette(const QPalette& pal, const QPalette& parentPal);
 
-	bool namedPalette(const QString& name, QPalette& pal);
-	void saveNamedPalette(const QString& name, const QPalette& pal);
-	void deleteNamedPalette(const QString& name);
-	QStringList namedPaletteList();
+	bool namedPalette(const QString& name, QPalette& pal) const;
+	QStringList namedPaletteList() const;
+
+	QString namedPaletteConf(const QString& name) const;
+	void addNamedPaletteConf(const QString& name, const QString& filename);
+	void deleteNamedPaletteConf(const QString& name);
+
+	static bool loadNamedPaletteConf(
+		const QString& name, const QString& filename, QPalette& pal);
+	static bool saveNamedPaletteConf(
+		const QString& name, const QString& filename, const QPalette& pal);
+
+	static bool loadNamedPalette(
+		QSettings *settings, const QString& name, QPalette& pal);
+	static bool saveNamedPalette(
+		QSettings *settings, const QString& name, const QPalette& pal);
 
 	void updateNamedPaletteList();
 	void updateGenerateButton();
