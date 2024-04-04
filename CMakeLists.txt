@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.13)
 
 project (Qsampler
-  VERSION 0.9.12
+  VERSION 0.9.90
   DESCRIPTION "A LinuxSampler Qt GUI Interface"
   HOMEPAGE_URL "https://qsampler.sourceforge.io"
   LANGUAGES C CXX)
