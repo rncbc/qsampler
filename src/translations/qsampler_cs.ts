@@ -1209,7 +1209,7 @@ Chcete použít změny?</translation>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="261"/>
         <source>Save Palette - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Uložit paletu - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="264"/>
