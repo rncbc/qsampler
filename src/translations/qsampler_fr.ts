@@ -1210,7 +1210,7 @@ Souhaitez-vous appliquer les modifications ?</translation>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="261"/>
         <source>Save Palette - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarder la palette - %1</translation>
     </message>
     <message>
         <location filename="../qsamplerPaletteForm.cpp" line="264"/>
