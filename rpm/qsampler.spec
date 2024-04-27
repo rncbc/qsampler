@@ -12,37 +12,26 @@
 # case the license is the MIT License). An "Open Source License" is a
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
-#
+
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define name    qsampler
-%define version	0.9.90
-%define release	1.1
+Summary:	A LinuxSampler Qt GUI interface
+Name:		qsampler
+Version:	9.9.90
+Release:	1.1
+License:	GPL-2.0-or-later
+Group:		Productivity/Multimedia/Sound/Midi
+Source: 	%{name}-%{version}.tar.gz
+URL:		https://qsampler.sourceforge.io/
+#Packager:	rncbc.org
 
-%define _prefix	/usr
-
-%if %{defined fedora}
-%define debug_package %{nil}
-%endif
 
 %if 0%{?fedora_version} >= 34 || 0%{?suse_version} > 1500 || ( 0%{?sle_version} == 150200 && 0%{?is_opensuse} )
 %define qt_major_version  6
 %else
 %define qt_major_version  5
 %endif
-
-Summary:	A LinuxSampler Qt GUI interface
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
-License:	GPL-2.0+
-Group:		Productivity/Multimedia/Sound/Midi
-Source0:	%{name}-%{version}.tar.gz
-URL:		http://qsampler.sourceforge.net/
-Packager:	rncbc.org
-
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
@@ -89,6 +78,7 @@ Qsampler is a LinuxSampler GUI front-end application written in C++ around
 the Qt framework using Qt Designer. For the moment it just wraps the client
 interface of LinuxSampler Control Protocol (LSCP) (http://www.linuxsampler.org).
 
+
 %prep
 %setup -q
 
@@ -104,11 +94,8 @@ cmake --build build %{?_smp_mflags}
 DESTDIR="%{buildroot}" \
 cmake --install build
 
-%clean
-[ -d "%{buildroot}" -a "%{buildroot}" != "/" ] && %__rm -rf "%{buildroot}"
 
 %files
-%defattr(-,root,root)
 %license LICENSE
 %doc README TRANSLATORS ChangeLog
 #dir %{_datadir}/mime
@@ -141,6 +128,7 @@ cmake --install build
 %{_datadir}/man/man1/%{name}.1.gz
 %{_datadir}/man/fr/man1/%{name}.1.gz
 %{_datadir}/%{name}/palette/*.conf
+
 
 %changelog
 * Wed Apr 10 2024 Rui Nuno Capela <rncbc@rncbc.org> 0.9.90
