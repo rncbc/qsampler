@@ -18,7 +18,7 @@
 
 Summary:	A LinuxSampler Qt GUI interface
 Name:		qsampler
-Version:	9.9.91
+Version:	0.9.91
 Release:	1.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
