@@ -88,19 +88,6 @@ endif ()
 
 add_custom_target (translations ALL DEPENDS ${QM_FILES})
 
-if (WIN32)
-  set (RC_FILE ${CMAKE_CURRENT_SOURCE_DIR}/win32/${PROJECT_NAME}.rc)
-  set (RES_FILE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.res.obj)
-  find_program (WINDRES_EXECUTABLE NAMES windres mingw32-windres i686-mingw32-windres)
-  if (MINGW)
-    exec_program (${WINDRES_EXECUTABLE}
-      ARGS "-i ${RC_FILE} -o ${RES_FILE} --include-dir=${CMAKE_CURRENT_SOURCE_DIR}/images")
-    list (APPEND SOURCES ${RES_FILE})
-  else ()
-    list (APPEND SOURCES ${RC_FILE})
-  endif ()
-endif ()
-
 if (APPLE)
   set (ICON_FILE ${CMAKE_CURRENT_SOURCE_DIR}/images/${PROJECT_NAME}.icns)
   list (APPEND SOURCES ${ICON_FILE})
