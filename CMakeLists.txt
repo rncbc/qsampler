@@ -9,7 +9,7 @@ project (Qsampler
 set (PROJECT_TITLE "${PROJECT_NAME}")
 string (TOLOWER "${PROJECT_TITLE}" PROJECT_NAME)
 
-set (PROJECT_COPYRIGHT  "Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.")
+set (PROJECT_COPYRIGHT  "Copyright (C) 2004-2025, rncbc aka Rui Nuno Capela. All rights reserved.")
 set (PROJECT_COPYRIGHT2 "Copyright (C) 2007-2019, Christian Schoenebeck")
 set (PROJECT_DOMAIN     "linuxsampler.org")
 
