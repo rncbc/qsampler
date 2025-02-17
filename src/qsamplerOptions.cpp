@@ -370,23 +370,21 @@ bool Options::parse_args ( const QStringList& args )
 	}
 
 	if (parser.isSet(versionOption)) {
-		QString sVersion = QString("%1 %2")
+		QString sVersion = QString("%1 %2\n")
 			.arg(QSAMPLER_TITLE)
 			.arg(QCoreApplication::applicationVersion());
-		sVersion += '\n';
 		sVersion += QString("Qt: %1").arg(qVersion());
 	#if defined(QT_STATIC)
 		sVersion += "-static";
 	#endif
 		sVersion += '\n';
-		sVersion += QString("%1: %2")
+		sVersion += QString("%1: %2\n")
 			.arg(::lscp_client_package())
 			.arg(::lscp_client_version());
 	#ifdef CONFIG_LIBGIG
-		sVersion += QString("%1: %2")
+		sVersion += QString("%1: %2\n")
 			.arg(gig::libraryName().c_str())
 			.arg(gig::libraryVersion().c_str());
-		sVersion += '\n';
 	#endif
 		show_error(sVersion);
 		return false;

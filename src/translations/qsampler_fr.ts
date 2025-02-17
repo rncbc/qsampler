@@ -309,19 +309,19 @@ Navré.</translation>
         <translation>[fichier-de-session]</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="402"/>
-        <location filename="../qsamplerOptions.cpp" line="457"/>
+        <location filename="../qsamplerOptions.cpp" line="400"/>
+        <location filename="../qsamplerOptions.cpp" line="455"/>
         <source>Option -n requires an argument (hostname).</source>
         <translation>L&apos;option -n nécessite un argument (nom d&apos;hôte).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="412"/>
-        <location filename="../qsamplerOptions.cpp" line="466"/>
+        <location filename="../qsamplerOptions.cpp" line="410"/>
+        <location filename="../qsamplerOptions.cpp" line="464"/>
         <source>Option -p requires an argument (port).</source>
         <translation>L&apos;option -p requiert un argument (le port).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="746"/>
+        <location filename="../qsamplerOptions.cpp" line="744"/>
         <source>Sent fine tuning settings.</source>
         <translation>Envoyer les paramètres d&apos;accordage fin.</translation>
     </message>

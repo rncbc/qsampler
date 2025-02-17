@@ -309,19 +309,19 @@ Sorry.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="402"/>
-        <location filename="../qsamplerOptions.cpp" line="457"/>
+        <location filename="../qsamplerOptions.cpp" line="400"/>
+        <location filename="../qsamplerOptions.cpp" line="455"/>
         <source>Option -n requires an argument (hostname).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="412"/>
-        <location filename="../qsamplerOptions.cpp" line="466"/>
+        <location filename="../qsamplerOptions.cpp" line="410"/>
+        <location filename="../qsamplerOptions.cpp" line="464"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="746"/>
+        <location filename="../qsamplerOptions.cpp" line="744"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>
