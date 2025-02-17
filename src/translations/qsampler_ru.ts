@@ -261,67 +261,67 @@ Sorry.</source>
         <translation>Устройства MIDI</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="311"/>
+        <location filename="../qsamplerOptions.cpp" line="323"/>
         <source>Usage: %1 [options] [session-file]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="313"/>
+        <location filename="../qsamplerOptions.cpp" line="325"/>
         <source>Options:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="315"/>
-        <location filename="../qsamplerOptions.cpp" line="339"/>
+        <location filename="../qsamplerOptions.cpp" line="327"/>
+        <location filename="../qsamplerOptions.cpp" line="351"/>
         <source>Start linuxsampler server locally.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="317"/>
-        <location filename="../qsamplerOptions.cpp" line="341"/>
+        <location filename="../qsamplerOptions.cpp" line="329"/>
+        <location filename="../qsamplerOptions.cpp" line="353"/>
         <source>Specify linuxsampler server hostname (default = localhost)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="319"/>
-        <location filename="../qsamplerOptions.cpp" line="343"/>
+        <location filename="../qsamplerOptions.cpp" line="331"/>
+        <location filename="../qsamplerOptions.cpp" line="355"/>
         <source>Specify linuxsampler server port number (default = 8888)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="321"/>
+        <location filename="../qsamplerOptions.cpp" line="333"/>
         <source>Show help about command line options.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="323"/>
+        <location filename="../qsamplerOptions.cpp" line="335"/>
         <source>Show version information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="347"/>
+        <location filename="../qsamplerOptions.cpp" line="359"/>
         <source>Session file (.lscp)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="348"/>
+        <location filename="../qsamplerOptions.cpp" line="360"/>
         <source>[session-file]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="358"/>
-        <location filename="../qsamplerOptions.cpp" line="413"/>
+        <location filename="../qsamplerOptions.cpp" line="402"/>
+        <location filename="../qsamplerOptions.cpp" line="457"/>
         <source>Option -n requires an argument (hostname).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="368"/>
-        <location filename="../qsamplerOptions.cpp" line="422"/>
+        <location filename="../qsamplerOptions.cpp" line="412"/>
+        <location filename="../qsamplerOptions.cpp" line="466"/>
         <source>Option -p requires an argument (port).</source>
         <translation>Ключу -p нужен аргумент (номер порта).</translation>
     </message>
     <message>
-        <location filename="../qsamplerOptions.cpp" line="702"/>
+        <location filename="../qsamplerOptions.cpp" line="746"/>
         <source>Sent fine tuning settings.</source>
         <translation type="unfinished"></translation>
     </message>

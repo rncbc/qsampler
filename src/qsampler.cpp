@@ -35,20 +35,6 @@
 #include <QTranslator>
 #include <QLocale>
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
-#include <lscp/client.h>
-#ifdef CONFIG_LIBGIG
-#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#endif
-#include <gig.h>
-#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
-#pragma GCC diagnostic pop
-#endif
-#endif
-#endif
-
 #if defined(__APPLE__)  // Toshi Nagata 20080105
 #include <QDir>
 #endif
@@ -143,23 +129,7 @@ qsamplerApplication::qsamplerApplication ( int& argc, char **argv )
 	QApplication::setDesktopFileName(
 		QString("org.rncbc.%1").arg(PROJECT_NAME));
 #endif
-	QString sVersion(PROJECT_VERSION);
-	sVersion += '\n';
-	sVersion += QString("Qt: %1").arg(qVersion());
-#if defined(QT_STATIC)
-	sVersion += "-static";
-#endif
-	sVersion += '\n';
-#ifdef CONFIG_LIBGIG
-	sVersion += QString("%1: %2")
-		.arg(gig::libraryName().c_str())
-		.arg(gig::libraryVersion().c_str());
-	sVersion += '\n';
-#endif
-	sVersion += QString("%1: %2")
-		.arg(::lscp_client_package())
-		.arg(::lscp_client_version());
-	QApplication::setApplicationVersion(sVersion);
+	QApplication::setApplicationVersion(PROJECT_VERSION);
 #endif
 	// Load translation support.
 	QLocale loc;
@@ -616,7 +586,7 @@ int main ( int argc, char **argv )
 	// Construct default settings; override with command line arguments.
 	QSampler::Options options;
 	if (!options.parse_args(app.arguments())) {
-		app.quit();
+	//	app.quit();
 		return 1;
 	}
 

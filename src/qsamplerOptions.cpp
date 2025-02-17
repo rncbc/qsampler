@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2025, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -41,6 +41,18 @@
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QDesktopWidget>
+#endif
+
+#include <lscp/client.h>
+#ifdef CONFIG_LIBGIG
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+#include <gig.h>
+#if defined(Q_CC_GNU) || defined(Q_CC_MINGW)
+#pragma GCC diagnostic pop
+#endif
 #endif
 
 
@@ -341,12 +353,44 @@ bool Options::parse_args ( const QStringList& args )
 		QObject::tr("Specify linuxsampler server hostname (default = localhost)"), "name"});
 	parser.addOption({{"p", "port"},
 		QObject::tr("Specify linuxsampler server port number (default = 8888)"), "num"});
-	parser.addHelpOption();
-	parser.addVersionOption();
+	const QCommandLineOption& helpOption = parser.addHelpOption();
+	const QCommandLineOption& versionOption = parser.addVersionOption();
 	parser.addPositionalArgument("session-file",
 		QObject::tr("Session file (.lscp)"),
 		QObject::tr("[session-file]"));
-	parser.process(args);
+
+	if (!parser.parse(args)) {
+		show_error(parser.errorText());
+		return false;
+	}
+
+	if (parser.isSet(helpOption)) {
+		show_error(parser.helpText());
+		return false;
+	}
+
+	if (parser.isSet(versionOption)) {
+		QString sVersion = QString("%1 v%2")
+			.arg(QSAMPLER_TITLE)
+			.arg(QCoreApplication::applicationVersion());
+		sVersion += '\n';
+		sVersion += QString("Qt: %1").arg(qVersion());
+	#if defined(QT_STATIC)
+		sVersion += "-static";
+	#endif
+		sVersion += '\n';
+	#ifdef CONFIG_LIBGIG
+		sVersion += QString("%1: %2")
+			.arg(gig::libraryName().c_str())
+			.arg(gig::libraryVersion().c_str());
+		sVersion += '\n';
+	#endif
+		sVersion += QString("%1: %2")
+			.arg(::lscp_client_package())
+			.arg(::lscp_client_version());
+		show_error(sVersion);
+		return false;
+	}
 
 	if (parser.isSet("start")) {
 		bServerStart = true;
@@ -431,6 +475,9 @@ bool Options::parse_args ( const QStringList& args )
 			return false;
 		}
 		else if (sArg == "-v" || sArg == "--version") {
+			out << QString("%1 v%2\n")
+				.arg(QSAMPLER_TITLE)
+				.arg(PROJECT_VERSION);
 			out << QString("Qt: %1").arg(qVersion());
 		#if defined(QT_STATIC)
 			out << "-static";
@@ -444,9 +491,6 @@ bool Options::parse_args ( const QStringList& args )
 			out << QString("%1: %2\n")
 				.arg(::lscp_client_package())
 				.arg(::lscp_client_version());
-			out << QString("%1: %2\n")
-				.arg(QSAMPLER_TITLE)
-				.arg(PROJECT_VERSION);
 			return false;
 		} else {
 			// If we don't have one by now,
