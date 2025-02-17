@@ -370,7 +370,7 @@ bool Options::parse_args ( const QStringList& args )
 	}
 
 	if (parser.isSet(versionOption)) {
-		QString sVersion = QString("%1 v%2")
+		QString sVersion = QString("%1 %2")
 			.arg(QSAMPLER_TITLE)
 			.arg(QCoreApplication::applicationVersion());
 		sVersion += '\n';
@@ -475,7 +475,7 @@ bool Options::parse_args ( const QStringList& args )
 			return false;
 		}
 		else if (sArg == "-v" || sArg == "--version") {
-			out << QString("%1 v%2\n")
+			out << QString("%1 %2\n")
 				.arg(QSAMPLER_TITLE)
 				.arg(PROJECT_VERSION);
 			out << QString("Qt: %1").arg(qVersion());
