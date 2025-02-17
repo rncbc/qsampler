@@ -379,15 +379,15 @@ bool Options::parse_args ( const QStringList& args )
 		sVersion += "-static";
 	#endif
 		sVersion += '\n';
+		sVersion += QString("%1: %2")
+			.arg(::lscp_client_package())
+			.arg(::lscp_client_version());
 	#ifdef CONFIG_LIBGIG
 		sVersion += QString("%1: %2")
 			.arg(gig::libraryName().c_str())
 			.arg(gig::libraryVersion().c_str());
 		sVersion += '\n';
 	#endif
-		sVersion += QString("%1: %2")
-			.arg(::lscp_client_package())
-			.arg(::lscp_client_version());
 		show_error(sVersion);
 		return false;
 	}
@@ -483,14 +483,14 @@ bool Options::parse_args ( const QStringList& args )
 			out << "-static";
 		#endif
 			out << '\n';
+			out << QString("%1: %2\n")
+				.arg(::lscp_client_package())
+				.arg(::lscp_client_version());
 		#ifdef CONFIG_LIBGIG
 			out << QString("%1: %2\n")
 				.arg(gig::libraryName().c_str())
 				.arg(gig::libraryVersion().c_str());
 		#endif
-			out << QString("%1: %2\n")
-				.arg(::lscp_client_package())
-				.arg(::lscp_client_version());
 			return false;
 		} else {
 			// If we don't have one by now,
