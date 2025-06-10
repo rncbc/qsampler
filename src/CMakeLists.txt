@@ -141,6 +141,7 @@ elseif (MINGW)
   target_link_libraries(${PROJECT_NAME} PRIVATE wsock32 ws2_32)
 endif()
 
+
 if (UNIX AND NOT APPLE)
   install (TARGETS ${PROJECT_NAME} RUNTIME
     DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -171,8 +172,43 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 if (WIN32)
-   install (TARGETS ${PROJECT_NAME} RUNTIME
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-   install (FILES ${QM_FILES}
-     DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/translations)
+  install (TARGETS ${PROJECT_NAME} RUNTIME
+    DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install (FILES ${QM_FILES}
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/translations)
+endif ()
+
+if (APPLE)
+  install (TARGETS ${PROJECT_NAME} BUNDLE
+    DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install (FILES ${QM_FILES}
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/translations)
+endif ()
+
+if (WIN32 AND CONFIG_INSTALL_QT)
+  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+  get_filename_component(_qmake_location "${_qmake_executable}" DIRECTORY)
+  find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${_qmake_location}")
+  if (WINDEPLOYQT_EXECUTABLE)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+      COMMAND "${WINDEPLOYQT_EXECUTABLE}"
+              #--verbose=2
+              "$<TARGET_FILE:${PROJECT_NAME}>"
+      COMMENT "Running windeployqt...")
+   endif ()
+endif ()
+
+if (APPLE AND CONFIG_INSTALL_QT)
+  get_target_property(_qmake_executable Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+  get_filename_component(_qmake_location "${_qmake_executable}" DIRECTORY)
+  find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qmake_location}")
+  if (MACDEPLOYQT_EXECUTABLE)
+    add_custom_command(
+      TARGET ${PROJECT_NAME} POST_BUILD
+      COMMAND "${MACDEPLOYQT_EXECUTABLE}"
+              "$<TARGET_BUNDLE_DIR:${PROJECT_NAME}>"
+              -always-overwrite
+              #-verbose=3
+      COMMENT "Running macdeployqt...")
+   endif ()
 endif ()
