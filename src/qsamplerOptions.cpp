@@ -486,6 +486,11 @@ bool Options::parse_args ( const QStringList& args )
 		#if defined(QT_STATIC)
 			out << "-static";
 		#endif
+		#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+			out << ' ' << '(';
+			out << QApplication::platformName();
+			out << ')';
+		#endif
 			out << '\n';
 			out << QString("%1: %2\n")
 				.arg(::lscp_client_package())
