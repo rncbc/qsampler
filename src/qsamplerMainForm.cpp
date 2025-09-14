@@ -2113,6 +2113,12 @@ void MainForm::helpAbout (void)
 #if defined(QT_STATIC)
 	sText += "-static";
 #endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+	sText += ' ';
+	sText += '(';
+	sText += QApplication::platformName();
+	sText += ')';
+#endif
 	sText += ", ";
 	sText += ::lscp_client_package();
 	sText += " ";
