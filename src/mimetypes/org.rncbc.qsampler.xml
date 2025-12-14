@@ -4,5 +4,6 @@
     <sub-class-of type="text/plain"/>
     <comment>Qsampler session (LSCP)</comment>
     <glob pattern="*.lscp"/>
+    <icon name="org.rncbc.qsampler.application-x-qsampler-session"/>
   </mime-type>
 </mime-info>
