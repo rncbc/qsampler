@@ -26,6 +26,8 @@ Source: 	%{name}-%{version}.tar.gz
 URL:		https://qsampler.sourceforge.io/
 #Packager:	rncbc.org
 
+%global debug_package %{nil}
+
 BuildRequires:	coreutils
 BuildRequires:	pkgconfig
 BuildRequires:	glibc-devel
