@@ -1,7 +1,7 @@
 // qsamplerOptions.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2025, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007,2008,2015 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -347,13 +347,19 @@ bool Options::parse_args ( const QStringList& args )
 	parser.setApplicationDescription(
 		QSAMPLER_TITLE " - " + QObject::tr(QSAMPLER_SUBTITLE));
 
-	parser.addOption({{"s", "start"},
+	const QString s_start    = "start";
+	const QString s_hostname = "hostname";
+	const QString s_port     = "port";
+	const QString s_help     = "help";
+
+	parser.addOption({{"s", s_start},
 		QObject::tr("Start linuxsampler server locally.")});
-	parser.addOption({{"n", "hostname"},
+	parser.addOption({{"n", s_hostname},
 		QObject::tr("Specify linuxsampler server hostname (default = localhost)"), "name"});
-	parser.addOption({{"p", "port"},
+	parser.addOption({{"p", s_port},
 		QObject::tr("Specify linuxsampler server port number (default = 8888)"), "num"});
-	const QCommandLineOption& helpOption = parser.addHelpOption();
+	parser.addOption({{"h", s_help},
+		QObject::tr("Displays help on command-line options.")});
 	const QCommandLineOption& versionOption = parser.addVersionOption();
 	parser.addPositionalArgument("session-file",
 		QObject::tr("Session file (.lscp)"),
@@ -364,7 +370,7 @@ bool Options::parse_args ( const QStringList& args )
 		return false;
 	}
 
-	if (parser.isSet(helpOption)) {
+	if (parser.isSet(s_help)) {
 		show_error(parser.helpText());
 		return false;
 	}
@@ -396,12 +402,12 @@ bool Options::parse_args ( const QStringList& args )
 		return false;
 	}
 
-	if (parser.isSet("start")) {
+	if (parser.isSet(s_start)) {
 		bServerStart = true;
 	}
 
-	if (parser.isSet("hostname")) {
-		const QString& sVal = parser.value("hostname");
+	if (parser.isSet(s_hostname)) {
+		const QString& sVal = parser.value(s_hostname);
 		if (sVal.isEmpty()) {
 			show_error(QObject::tr("Option -n requires an argument (hostname)."));
 			return false;
@@ -409,9 +415,9 @@ bool Options::parse_args ( const QStringList& args )
 		sServerHost = sVal;
 	}
 
-	if (parser.isSet("port")) {
+	if (parser.isSet(s_port)) {
 		bool bOK = false;
-		const int iVal = parser.value("port").toInt(&bOK);
+		const int iVal = parser.value(s_port).toInt(&bOK);
 		if (!bOK) {
 			show_error(QObject::tr("Option -p requires an argument (port)."));
 			return false;
