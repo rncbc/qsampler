@@ -325,11 +325,11 @@ void Options::print_usage ( const QString& arg0 )
 	out << QObject::tr("Options:") + sEol;
 	out << "  -s, --start" + sEot +
 		QObject::tr("Start linuxsampler server locally.") + sEol;
-	out << "  -n, --hostname" + sEot +
+	out << "  -n, --hostname <name>" + sEot +
 		QObject::tr("Specify linuxsampler server hostname (default = localhost)") + sEol;
-	out << "  -p, --port" + sEot +
+	out << "  -p, --port <num>" + sEot +
 		QObject::tr("Specify linuxsampler server port number (default = 8888)") + sEol;
-	out << "  -h, --help" + sEot +
+	out << "  -?, --help" + sEot +
 		QObject::tr("Show help about command line options.") + sEol;
 	out << "  -v, --version" + sEot +
 		QObject::tr("Show version information") + sEol;
@@ -358,7 +358,7 @@ bool Options::parse_args ( const QStringList& args )
 		QObject::tr("Specify linuxsampler server hostname (default = localhost)"), "name"});
 	parser.addOption({{"p", s_port},
 		QObject::tr("Specify linuxsampler server port number (default = 8888)"), "num"});
-	parser.addOption({{"h", s_help},
+	parser.addOption({{"?", s_help},
 		QObject::tr("Displays help on command-line options.")});
 	const QCommandLineOption& versionOption = parser.addVersionOption();
 	parser.addPositionalArgument("session-file",
@@ -480,7 +480,7 @@ bool Options::parse_args ( const QStringList& args )
 			if (iEqual < 0)
 				++i;
 		}
-		else if (sArg == "-h" || sArg == "--help") {
+		else if (sArg == "-?" || sArg == "--help") {
 			print_usage(args.at(0));
 			return false;
 		}
