@@ -1,7 +1,7 @@
 // qsamplerInstrumentListForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2003-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2003-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -287,22 +287,25 @@ void InstrumentListForm::deleteInstrument (void)
 			"Are you sure?")
 			.arg(pInstrument->name());
 	 #if 0
-		 if (QMessageBox::warning(this, sTitle, sText,
+		if (QMessageBox::warning(this, sTitle, sText,
 			 QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel)
 			 return;
 	 #else
-		 QMessageBox mbox(this);
-		 mbox.setIcon(QMessageBox::Warning);
-		 mbox.setWindowTitle(sTitle);
-		 mbox.setText(sText);
-		 mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-		 QCheckBox cbox(tr("Don't ask this again"));
-		 cbox.setChecked(false);
-		 cbox.blockSignals(true);
-		 mbox.addButton(&cbox, QMessageBox::ActionRole);
-		 if (mbox.exec() == QMessageBox::Cancel)
+		QMessageBox mbox(this);
+		mbox.setIcon(QMessageBox::Warning);
+		mbox.setWindowTitle(sTitle);
+		mbox.setText(sText);
+		mbox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+		QCheckBox cbox(tr("Don't ask this again"));
+		cbox.setChecked(false);
+		cbox.blockSignals(true);
+		mbox.addButton(&cbox, QMessageBox::ActionRole);
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+		mbox.setOptions(QMessageBox::Option::DontUseNativeDialog);
+	#endif
+		if (mbox.exec() == QMessageBox::Cancel)
 			 return;
-		 if (cbox.isChecked())
+		if (cbox.isChecked())
 			 pOptions->bConfirmRemove = false;
 	 #endif
 	}

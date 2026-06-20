@@ -1,7 +1,7 @@
 // qsamplerMainForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2025, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007-2019 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -1526,6 +1526,9 @@ void MainForm::fileReset (void)
 		cbox.setChecked(false);
 		cbox.blockSignals(true);
 		mbox.addButton(&cbox, QMessageBox::ActionRole);
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+		mbox.setOptions(QMessageBox::Option::DontUseNativeDialog);
+	#endif
 		if (mbox.exec() == QMessageBox::Cancel)
 			return;
 		if (cbox.isChecked())
@@ -1585,6 +1588,9 @@ void MainForm::fileRestart (void)
 		cbox.setChecked(false);
 		cbox.blockSignals(true);
 		mbox.addButton(&cbox, QMessageBox::ActionRole);
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+		mbox.setOptions(QMessageBox::Option::DontUseNativeDialog);
+	#endif
 		if (mbox.exec() == QMessageBox::Cancel)
 			bRestart = false;
 		else
@@ -1698,6 +1704,9 @@ void MainForm::removeChannelStrip (void)
 		cbox.setChecked(false);
 		cbox.blockSignals(true);
 		mbox.addButton(&cbox, QMessageBox::ActionRole);
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+		mbox.setOptions(QMessageBox::Option::DontUseNativeDialog);
+	#endif
 		if (mbox.exec() == QMessageBox::Cancel)
 			return;
 		if (cbox.isChecked())
@@ -2559,6 +2568,9 @@ void MainForm::appendMessagesError ( const QString& s )
 		cbox.setChecked(false);
 		cbox.blockSignals(true);
 		mbox.addButton(&cbox, QMessageBox::ActionRole);
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+		mbox.setOptions(QMessageBox::Option::DontUseNativeDialog);
+	#endif
 		if (mbox.exec() && cbox.isChecked())
 			m_pOptions->bConfirmError = false;
 	#endif

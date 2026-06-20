@@ -1,7 +1,7 @@
 // qsamplerDeviceForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -303,6 +303,9 @@ void DeviceForm::deleteDevice (void)
 		cbox.setChecked(false);
 		cbox.blockSignals(true);
 		mbox.addButton(&cbox, QMessageBox::ActionRole);
+	#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+		mbox.setOptions(QMessageBox::Option::DontUseNativeDialog);
+	#endif
 		if (mbox.exec() == QMessageBox::Cancel)
 			return;
 		if (cbox.isChecked())
