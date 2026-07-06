@@ -4,6 +4,12 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
+GIT HEAD
+
+- Mac: Add missing bundle identifier and bundle name
+  (fixes e.g. issue with file browser dialog).
+
+
 1.0.2  2026-06-02  A Mid-Spring'26 Release.
 
 - Fixed 'mime-info' file to the correct MIME-type icon names.
