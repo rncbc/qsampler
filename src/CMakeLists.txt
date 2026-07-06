@@ -118,7 +118,11 @@ if (WIN32)
 endif ()
 
 if (APPLE)
-  set_target_properties (${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE true)
+  set_target_properties (${PROJECT_NAME} PROPERTIES
+    MACOSX_BUNDLE true
+    MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.linuxsampler.${PROJECT_NAME}
+  )
 endif ()
 
 target_link_libraries (${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Svg)
