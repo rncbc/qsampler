@@ -1,7 +1,7 @@
 // qsamplerPaletteForm.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2024, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -164,6 +164,8 @@ PaletteForm::PaletteForm ( QWidget *parent, const QPalette& pal )
 PaletteForm::~PaletteForm (void)
 {
 	setSettings(nullptr);
+
+	delete p_ui;
 }
 
 
