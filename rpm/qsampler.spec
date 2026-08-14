@@ -18,8 +18,8 @@
 
 Summary:	A LinuxSampler Qt GUI interface
 Name:		qsampler
-Version:	1.0.2
-Release:	3.1
+Version:	1.0.3
+Release:	4.1
 License:	GPL-2.0-or-later
 Group:		Productivity/Multimedia/Sound/Midi
 Source: 	%{name}-%{version}.tar.gz
@@ -118,6 +118,8 @@ cmake --install build
 
 
 %changelog
+* Fri Aug 14 2026 Rui Nuno Capela <rncbc@rncbc.org> 1.0.3
+- A Mid-Summer'26 Release.
 * Tue Jun  2 2026 Rui Nuno Capela <rncbc@rncbc.org> 1.0.2
 - A Mid-Spring'26 Release.
 * Thu Mar 27 2025 Rui Nuno Capela <rncbc@rncbc.org> 1.0.1

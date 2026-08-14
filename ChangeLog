@@ -4,13 +4,13 @@ Qsampler - A LinuxSampler Qt GUI Interface
 ChangeLog
 
 
-GIT HEAD
+1.0.3  2026-08-14  A Mid-Summer'26 Release.
 
 - Mac: Add missing bundle identifier and bundle name
   (fixes e.g. issue with file browser dialog).
 
 - Fixed crash when selecting the "Don't ask this again" option
-  on some message-box prompts. (EXPERIMENTAL)
+  on some message-box prompts.
 
 
 1.0.2  2026-06-02  A Mid-Spring'26 Release.
