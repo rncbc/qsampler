@@ -1,7 +1,7 @@
 // qsamplerChannel.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -203,7 +203,6 @@ struct ChannelRoutingItem {
 
 class ChannelRoutingModel : public QAbstractTableModel
 {
-	Q_OBJECT
 public:
 
 	ChannelRoutingModel(QObject* pParent = nullptr);
@@ -223,8 +222,6 @@ public:
 
 	void clear() { m_routing.clear(); }
 
-public slots:
-
 	void refresh(Device *pDevice,
 		const ChannelRoutingMap& routing);
 
@@ -241,8 +238,6 @@ private:
 
 class ChannelRoutingDelegate : public QItemDelegate
 {
-	Q_OBJECT
-
 public:
 
 	ChannelRoutingDelegate(QObject* pParent = nullptr);

@@ -1,7 +1,7 @@
 // qsamplerDevice.h
 //
 /****************************************************************************
-   Copyright (C) 2004-2020, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -259,8 +259,6 @@ struct DeviceParameterRow {
 
 class AbstractDeviceParamModel : public QAbstractTableModel
 {
-	Q_OBJECT
-
 public:
 
 	AbstractDeviceParamModel(QObject *pParent = nullptr);
@@ -289,8 +287,6 @@ protected:
 
 class DeviceParamModel : public AbstractDeviceParamModel
 {
-	Q_OBJECT
-
 public:
 
 	DeviceParamModel(QObject *pParent = nullptr);
@@ -301,8 +297,6 @@ public:
 		const QVariant& value, int role = Qt::EditRole);
 
 	void clear();
-
-public slots:
 
 	void refresh(Device* pDevice, bool bEditable);
 
@@ -318,8 +312,6 @@ private:
 
 class PortParamModel : public AbstractDeviceParamModel
 {
-	Q_OBJECT
-
 public:
 
 	PortParamModel(QObject *pParent = 0);
@@ -330,8 +322,6 @@ public:
 		const QVariant& value, int role = Qt::EditRole);
 
 	void clear();
-
-public slots:
 
 	void refresh(DevicePort* pPort, bool bEditable);
 
@@ -347,8 +337,6 @@ private:
 
 class DeviceParamDelegate : public QItemDelegate
 {
-	Q_OBJECT
-
 public:
 
 	DeviceParamDelegate(QObject *pParent = nullptr);

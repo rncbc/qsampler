@@ -1,7 +1,7 @@
 // qsamplerChannel.cpp
 //
 /****************************************************************************
-   Copyright (C) 2004-2023, rncbc aka Rui Nuno Capela. All rights reserved.
+   Copyright (C) 2004-2026, rncbc aka Rui Nuno Capela. All rights reserved.
    Copyright (C) 2007, 2008 Christian Schoenebeck
 
    This program is free software; you can redistribute it and/or
@@ -215,7 +215,7 @@ bool Channel::loadInstrument ( const QString& sInstrumentFile, int iInstrumentNr
 		return false;
 	if (pMainForm->client() == nullptr || m_iChannelID < 0)
 		return false;
-	if (!QFileInfo(sInstrumentFile).exists())
+	if (!QFileInfo::exists(sInstrumentFile))
 		return false;
 	if (m_iInstrumentStatus == 100
 		&& m_sInstrumentFile == sInstrumentFile
